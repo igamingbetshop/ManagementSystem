@@ -1,0 +1,23 @@
+@import "variables";
+
+.modal-wrap-div {
+  overflow-y: auto;
+  //height: 550px;
+  padding: 20px;
+}
+
+
+.modal-form {
+
+  grid-template-columns: 1fr 1fr;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  button {
+    margin-left: 10px;
+  }
+}

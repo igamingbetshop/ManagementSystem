@@ -1,0 +1,99 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.AllCompetitions' | translate}}</div>
+
+        <div class="partner-dropdown">
+          <mat-select placeholder="{{'Partners.SelectPartner' | translate}}" [(value)]="partnerId" [disabled]="isRowSelected()"  #part1   (selectionChange)="onPartnerChange(part1.value)">
+            <mat-option value="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+            <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+
+        <div class="input-content">
+          <input matInput  type="number" [(value)] ="priority" #pr placeholder="{{'Common.Order' | translate}}" (input)="onPriorityChange(pr.value)" >
+        </div>
+
+        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected()" class="btn-block add-settings1"   (click)="onAddCompetition()">{{'Sport.AddFavoriteCompetition' | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected1()"  (click)="onRemoveCompetition()">{{'Sport.RemoveCompetition' | translate}}</button>
+
+      </div>
+
+      <div class="grid-content">
+        <ag-grid-angular
+        id="favorites"
+        #agGrid
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData"
+        [suppressCopyRowsToClipboard]="true"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        [paginationAutoPageSize]="paginationAutoPageSize"
+        [pagination]="pagination"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        [components]="frameworkComponents"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        [cacheBlockSize]="cacheBlockSize"
+        (gridReady)="onGridReady($event)"
+        rowSelection="single">
+      >
+    </ag-grid-angular>
+
+        <div class="pages-sizes">
+          <mat-select
+          (selectionChange)="onPageSizeChanged()"
+          [(ngModel)]="cacheBlockSize"
+          [(value)]="defaultPageSize"
+          panelClass="overlay-dropdown small"
+          disableOptionCentering>
+          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        </mat-select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.PartnerFavoritesCompetitions' | translate}}</div>
+        <div>
+          <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected1()"  (click)="onRemoveCompetition()">{{'Sport.RemoveCompetition' | translate}}</button>
+        </div>
+      </div>
+      <div class="grid-content">
+        <ag-grid-angular
+        id="favorites-2"
+        #agGrid1
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData1"
+        [suppressCopyRowsToClipboard]="true"
+        [rowModelType]="rowModelType1"
+        [columnDefs]="columnDefs2"
+        [defaultColDef]="defaultColDef"
+        [components]="frameworkComponents"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        [cacheBlockSize]="cacheBlockSize"
+        (gridReady)="onGridReady1($event)"
+        rowSelection="single">
+        >
+    </ag-grid-angular>
+
+        <div class="pages-sizes">
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,98 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+
+  .content-action {
+    @include action-style;
+
+    .mat-btn {
+      @include mat-btn-style;
+      margin-left: 12px;
+    }
+
+    .closed-text {
+      font-size: 24px;
+      color: $blue-2;
+    }
+
+    .refresh {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .message-sent {
+    height: 630px;
+    overflow: auto;
+
+    .message-content {
+      display: flex;
+      justify-content: flex-start;
+
+      &.left {
+        justify-content: flex-end;
+      }
+
+      .chat-content {
+        border-radius: 4px;
+        margin: 12px 0;
+        max-width: 250px;
+        width: 100%;
+        background-color: $blue-light-4;
+
+        &.left {
+          background-color: $gray-light-2;
+        }
+
+        .message-text {
+          padding: 12px;
+        }
+
+        .info {
+          padding: 12px;
+          text-align: end;
+        }
+      }
+    }
+  }
+
+  .message-send {
+    display: flex;
+    justify-content: flex-end;
+
+    .send-content {
+      text-align: end;
+      max-width: 250px;
+      width: 100%;
+
+      .message-text {
+        display: block;
+        border-radius: 4px;
+        border: 1px solid $blue-5;
+        padding: 12px;
+        outline: none;
+        height: 92px;
+        width: 100%;
+        box-sizing: border-box;
+
+        &:focus {
+          box-shadow: 0 0 10px $black-shadow;
+          border: 1px solid $blue-5;
+        }
+      }
+      .mat-btn {
+        width: 100%;
+        margin-top: 10px;
+        @include mat-btn-style;
+      }
+    }
+  }
+}
+
+
+
+
+

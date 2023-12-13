@@ -1,0 +1,63 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Accounting.BetShopStates' | translate}}</div>
+    <div class="partner-dropdown">
+      <mat-select
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+  </div>
+
+  <div class="grid-content">
+
+    <ag-grid-angular
+    id="teams"
+    #agGrid
+    [class.hide-grid]="loadingUserState"
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [masterDetail]="masterDetail"
+    [detailCellRendererParams]="detailCellRendererParams"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    [paginationPageSize]="cacheBlockSize"
+    [pagination]="pagination"
+    [suppressCopyRowsToClipboard]="true"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    (rowGroupOpened)="onRowGroupOpened($event)"
+    (paginationChanged)="onPaginationChanged($event)"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    (cellEditingStopped)="onCellEditingStopped($event)"
+    (cellClicked)="onCellClicked($event)"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="multiple">
+  </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,25 @@
+<div mat-dialog-title>
+  <span class="title">{{'Partners.CopyWebSiteSettings' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" >
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectFromPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'FromPartnerId'" required (selectionChange)=onChange($event.value)>
+        <mat-option *ngFor="let name of partners" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectMenuItem' | translate}}</mat-label>
+      <mat-select [formControlName]="'MenuItemId'" >
+        <mat-option *ngFor="let name of menus" [value]="name.Id">{{name.Type}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

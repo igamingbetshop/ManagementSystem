@@ -1,0 +1,90 @@
+<div class="container">
+  <div class="main-content">
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.Teasers' | translate}}</div>
+      </div>
+
+      <div class="grid-content">
+        <ag-grid-angular
+          id="teasers"
+          #agGrid
+          class="ag-theme-balham"
+          [headerHeight]="33"
+          [rowHeight]="42"
+          [rowData]="rowData"
+          [rowModelType]="rowModelType"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [suppressCopyRowsToClipboard]="true"
+          [cacheBlockSize]="cacheBlockSize"
+          [components]="frameworkComponents"
+          [sideBar]="sideBar"
+          [animateRows]="true"
+          (filterModified)="onFilterModified($event)"
+          [enableBrowserTooltips]="enableBrowserTooltips"
+          (gridReady)="onGridReady($event)"
+          (cellValueChanged)="onCellValueChanged($event)"
+          (rowSelected)="onRowSelected($event)"
+          [ensureDomOrder]="true"
+          [enableCellTextSelection]="true"
+          rowSelection="single">
+        </ag-grid-angular>
+      </div>
+      <div class="grid-action">
+        <button mat-stroked-button class="mat-btn" (click)="addTeaser('Add', $event)">{{'Sport.AddTeaser' | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected()" (click)="addTeaser('Edit', selectedRow)">
+          {{'Sport.EditTeaser' | translate}}
+        </button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="onClone()">{{'Sport.Clone' | translate}}</button>
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Settings.Settings' | translate}}</div>
+      </div>
+      <div class="grid-content">
+
+        <ag-grid-angular
+          id="market-types-2"
+          #agGridSecond
+          class="ag-theme-balham"
+          [headerHeight]="33"
+          [rowHeight]="42"
+          [rowData]="rowData1"
+          [rowModelType]="rowModelType"
+          [columnDefs]="columnDefs2"
+          [defaultColDef]="defaultColDef"
+          [components]="frameworkComponents"
+          [suppressCopyRowsToClipboard]="true"
+          [sideBar]="sideBar"
+          [animateRows]="true"
+          [cacheBlockSize]="cacheBlockSize"
+          (gridReady)="onGridReady1($event)"
+          (cellValueChanged)="onCellValueChanged1($event)"
+          (rowSelected)="onRowSelected1($event)"
+          [ensureDomOrder]="true"
+          [enableCellTextSelection]="true"
+          rowSelection="single">
+        </ag-grid-angular>
+      </div>
+
+      <div class="grid-action">
+        <button mat-stroked-button class="mat-btn" (click)="addSetting()">{{'Settings.AddSetting' | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected1()" (click)="deleteSetting()">
+          {{'Sport.DeleteSetting' | translate}}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+

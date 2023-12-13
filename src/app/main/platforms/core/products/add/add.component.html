@@ -1,0 +1,82 @@
+<div mat-dialog-title>
+  <span class="title">{{'Products.AddProduct' | translate}} <span *ngIf="parentProductName"> {{parentProductName}} </span> </span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <!-- <mat-form-field *ngIf="parentProductName">
+      <input matInput [(ngModel)]="parentProductName" readonly [ngModelOptions]="{standalone: true}">
+    </mat-form-field> -->
+
+    <mat-form-field>
+      <mat-label>{{'Products.SelectGameProvider' | translate}}</mat-label>
+      <mat-select [formControlName]="'GameProviderId'" [(ngModel)]="gameProviderId" >
+        <mat-option *ngFor="let provider of gameProviders"  [value]="provider.Id">{{provider.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['GameProviderId']?.touched && errorControl['GameProviderId'].errors?.required">
+        {{'Dashboard.provider' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectLanguage' | translate}}</mat-label>
+      <mat-select [formControlName]="'LanguageId'">
+        <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['LanguageId']?.touched && errorControl['LanguageId'].errors?.required">
+        language {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" placeholder="{{'Common.Id' | translate}}" [formControlName]="'Id'">
+      <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.required">
+        {{'Common.Id' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.min">
+        Min 1 {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.SelectState' | translate}}</mat-label>
+      <mat-select [formControlName]="'State'">
+        <mat-option *ngFor="let state of productStates" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
+        {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="{{'Bonuses.Description' | translate}}" [formControlName]="'Description'">
+      <mat-error *ngIf="errorControl['Description']?.touched && errorControl['Description'].errors?.required">
+        {{'Bonuses.Description' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="{{'Bonuses.ExternalId' | translate}}" [formControlName]="'ExternalId'">
+    </mat-form-field>
+
+    <mat-checkbox labelPosition="before" color="primary" [formControlName]="'IsForMobile'">{{'Products.IsForMobile' |
+      translate}}</mat-checkbox>
+    <mat-checkbox labelPosition="before" color="primary" [formControlName]="'IsForDesktop'">{{'Products.IsForDesktop' |
+      translate}}</mat-checkbox>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' |
+    translate}}</button>
+</div>

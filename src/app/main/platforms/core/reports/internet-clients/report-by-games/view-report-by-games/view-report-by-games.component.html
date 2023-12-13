@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../report-by-games']">{{'Reports.ReportByGames' | translate}}</a> / :{{id}}</div>
+  </div>
+  <div class="grid-content">
+    <ag-grid-angular
+      id="report-bets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="multiple">
+    </ag-grid-angular>
+  </div>
+</div>

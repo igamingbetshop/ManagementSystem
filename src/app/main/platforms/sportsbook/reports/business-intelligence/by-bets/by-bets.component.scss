@@ -1,0 +1,208 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+
+  .content-action {
+    @include action-style;
+
+    .stream-btn {
+      color: #fff;
+      border: none;
+      height: 35px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 8px;
+
+      &.live-btn-on {
+        background: $green;
+      }
+
+      &.live-btn-off {
+        background: linear-gradient(180deg, #791711 0%, #B91616 49.48%, #E42A1E 100%)
+      }
+
+      &.live-btn-pending {
+        background: $orange-3;
+      }
+    }
+
+    .custom-dropdown {
+      margin-right: 8px;
+      @include dropdown-style;
+    }
+
+    .date-time-tabs {
+      .tab-btn {
+        margin-right: 8px;
+      }
+
+      @include tab-button-style;
+    }
+
+    .calendar-picker {
+      width: 202px;
+
+      &.start {
+        margin-right: 8px;
+      }
+
+      @include calendar-picker-style;
+    }
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+    }
+  }
+
+  .grid-content {
+    width: 100%;
+    // height: calc(100% - 360px);
+    height: 65%;
+    position: relative;
+
+    &.all-size {
+      height: calc(100% - 11%);
+    }
+
+    ::ng-deep {
+      .ag-paging-panel {
+        align-items: flex-start;
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 8px;
+        height: 70px !important;
+
+        .ag-paging-row-summary-panel {
+          padding-top: 2px;
+        }
+      }
+    }
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+
+        .status-won, .status-cashoutedfully {
+          background-color: $red;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white;
+          }
+        }
+
+        .status-lost
+        {
+          background-color: $green-2;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white;
+          }
+        }
+
+        .status-deleted {
+          background-color: $orange;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white;
+          }
+        }
+
+        .status-uncalculated {
+          //TODO color set
+        }
+
+        .status-returned {
+          //TODO color set
+        }
+
+        .status-notAccepted {
+          //TODO color set
+        }
+
+        .status-cashoutedpartially {
+          //TODO color set
+          background-color: $green-2;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white;
+          }
+
+        }
+
+        .status-waiting {
+          //TODO color set
+        }
+      }
+    }
+
+
+    .additional-bet-info {
+      position: absolute;
+      bottom: 6px;
+      margin-left: 14px;
+      background-color: $blue-light-9;
+      padding: 4px 12px;
+      font-size: 14px;
+    }
+
+    .footer-ag-grid {
+      position: absolute;
+      left: 25%;
+      bottom: 17px;
+      display: flex;
+      align-items: center;
+      width: 75%;
+
+      @include dropdown-style;
+
+      ::ng-deep {
+        .mat-select {
+          height: 26px !important;
+          width: 60px !important;
+          position: absolute;
+          top: -10px;
+        }
+      }
+
+      .match-action {
+        margin-left: auto;
+        order: 2;
+
+        .mat-btn {
+          margin-left: 8px;
+          @include mat-btn-style;
+        }
+      }
+    }
+
+  }
+
+
+  .match-grid {
+    width: 100%;
+    height: 24%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+
+
+
+
+

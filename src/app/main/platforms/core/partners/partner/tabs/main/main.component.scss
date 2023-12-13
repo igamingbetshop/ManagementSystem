@@ -1,0 +1,131 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+      margin-left: 8px;
+    }
+
+    .mat-copy-btn {
+      @include mat-copy-btn-style;
+    }
+  }
+}
+
+ag-grid-angular {
+  width: 100%;
+  height: 100%;
+}
+
+.main-history {
+  padding: 0 15px 15px 15px;
+
+  .edit-icon {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+
+  .grid-history {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 16px;
+
+    div {
+      display: flex;
+      background: white;
+      height: 32px;
+      padding: 0 10px;
+      align-items: center;
+
+      .first-hand {
+        width: 30%;
+        border-right: 1px solid rgb(216, 216, 216);
+      }
+
+      .second-hand {
+        width: 40%;
+        padding: 10px 10px;
+        border-right: 1px solid #d8d8d8;
+      }
+
+      .third-hand {
+        width: 40%;
+      }
+    }
+  }
+
+  .grid-history {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 15px;
+
+    .regex-form {
+      div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: none;
+        margin-bottom: 15px;
+      }
+    }
+
+    div {
+      display: flex;
+      background: white;
+      height: 32px;
+      padding: 0 10px;
+      align-items: center;
+
+      .first-hand {
+        width: 30%;
+        //padding: 10px 10px;
+        border-right: 1px solid rgb(216, 216, 216);
+      }
+
+
+      .second-hand {
+        width: 40%;
+        padding: 10px 10px;
+        border-right: 1px solid #d8d8d8;
+      }
+
+      .third-hand {
+        width: 40%;
+        //padding: 10px 10px;
+      }
+    }
+  }
+
+  .actions2 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: none !important;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+}

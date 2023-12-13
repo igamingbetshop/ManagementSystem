@@ -1,0 +1,64 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-users']">{{'Users.Users' | translate}}</a> / {{'Sport.Markets' | translate}}</div>
+
+  </div>
+
+<div class="main-content">
+  <div class="left-panel">
+    <div class="grid-content">
+      <ag-grid-angular
+      id="finished-markets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (rowSelected)="onRowSelected($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+    </div>
+
+  </div>
+  <div class="right-panel">
+    <div class="grid-content">
+      <ag-grid-angular
+      id="finished-markets-2"
+      #agGrid1
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData1"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs2"
+      [defaultColDef]="defaultColDef"
+      [suppressRowClickSelection]="true"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      (gridReady)="onGridReady1($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+    </div>
+  </div>
+</div>
+
+</div>
+
+

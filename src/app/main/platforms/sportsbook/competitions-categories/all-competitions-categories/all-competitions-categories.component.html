@@ -1,0 +1,54 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Sport.CompetitionTemplates' | translate}}</div>
+    <div class="partner-dropdown">
+      <mat-select
+        (selectionChange)="onSportChange($event.value)"
+        placeholder="{{'Sport.SelectSport' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Sport.SelectSport' | translate}}</mat-option>
+        <mat-option *ngFor="let sport of sports"  [value]="sport.Id">{{sport.Name}}</mat-option>
+      </mat-select>
+    </div>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="addCategory()">{{'ClientCategories.AddCategory' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="clone()">{{'Sport.Clone' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="delete()">{{'Common.Delete' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="all-competitions"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [suppressCopyRowsToClipboard]="true"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [components]="frameworkComponents"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>
+
+
+

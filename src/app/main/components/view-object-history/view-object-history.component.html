@@ -1,0 +1,49 @@
+<div class="main-history">
+  <header>
+    {{ObjectHistory}}
+  </header>
+  <ng-container *ngIf="newData">
+    <div class="grid-history">
+      <div>
+        <div class="first-hand">{{'Id' }}</div>
+        <div class="third-hand">{{newData?.Id}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData.ExpirationTime != oldData.ExpirationTime}">
+        <div class="first-hand">{{'ExpirationTime' }}</div>
+        <div class="third-hand">{{newData.ExpirationTime}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Client Id' }}</div>
+        <div class="third-hand">{{newData?.ClientId}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData.ImagePath != oldData.ImagePath}">
+        <div class="first-hand">{{'Image Path' }}</div>
+        <div class="third-hand">{{newData.ImagePath}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData.DocumentTypeId !=  oldData.DocumentTypeId}">
+        <div class="first-hand">{{'Document Type Id' }}</div>
+        <div class="third-hand">{{newData.DocumentTypeId}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData.LastUpdateTime !=  oldData.LastUpdateTime}">
+        <div class="first-hand">{{'Last Update Time' }}</div>
+        <div class="third-hand">{{newData.LastUpdateTime}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData.Status !=  oldData.Status}">
+        <div class="first-hand">{{'Status' }}</div>
+        <div class="third-hand">{{newData.Status}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData.CreationTime !=  oldData.CreationTime}">
+        <div class="first-hand">{{'Creation Time' }}</div>
+        <div class="third-hand">{{newData.CreationTime}}</div>
+      </div>
+
+    </div>
+  </ng-container>
+</div>

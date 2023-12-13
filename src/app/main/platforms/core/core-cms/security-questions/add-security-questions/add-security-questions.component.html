@@ -1,0 +1,41 @@
+<div mat-dialog-title>
+  <span class="title">{{'Cms.AddSecurityQuestion' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="closeDialog()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <div class="select-content">
+      <div class="dropdown-title">{{'Partners.Partner' | translate}}</div>
+      <mat-select [formControlName]="'PartnerId'"
+                  placeholder="{{'Partners.SelectPartner' | translate}}">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="input-content">
+      <div class="input-title">{{'Clients.NickName' | translate}}</div>
+      <input matInput placeholder="{{'Clients.NickName' | translate}}" [formControlName]="'NickName'">
+    </div>
+    <div class="input-content">
+      <div class="input-title">{{'Cms.QuestionText' | translate}}</div>
+      <input matInput type="text" placeholder="{{'Cms.QuestionText' | translate}}" [formControlName]="'QuestionText'">
+    </div>
+
+    <div class="select-content">
+      <div class="dropdown-title">{{'Common.SelectState' | translate}}</div>
+      <mat-select [formControlName]="'Status'"
+                  placeholder="{{'Common.SelectState' | translate}}">
+        <mat-option *ngFor="let state of states" [value]="state.isActive">{{state.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="closeDialog()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>
+

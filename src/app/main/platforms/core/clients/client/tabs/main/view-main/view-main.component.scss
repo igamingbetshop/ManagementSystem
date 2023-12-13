@@ -1,0 +1,53 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+  }
+}
+
+.main-history {
+  padding: 0 10px 10px 10px;
+  background: $content-bg-color;
+
+  .grid-history {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    .changed {
+      border: 1px solid red;
+    }
+
+    div {
+      display: flex;
+      background: white;
+
+      .first-hand {
+        width: 30%;
+        padding: 10px 10px;
+        background-color: $blue-light-22;
+        border-right: 1px solid rgb(216, 216, 216);
+      }
+
+
+      .second-hand {
+        width: 40%;
+        padding: 10px 10px;
+        border-right: 1px solid #d8d8d8;
+      }
+
+      .third-hand {
+        width: 40%;
+        padding: 10px 10px;
+      }
+    }
+  }
+}

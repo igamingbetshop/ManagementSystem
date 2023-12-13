@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.Sports' | translate}}</div>
+        <div class="title">{{'Sport.UnknownSports' | translate}}</div>        
+      </div>
+
+      <app-unmapped-sports-grid (valueEmitted)="handleValueEmitted($event)"></app-unmapped-sports-grid>
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.Sports' | translate}}</div>
+        <div>
+          <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+
+        </div>
+      </div>
+      <app-mapped-sports-grid (callParent)="mapCompetition()" [isCanNotSelect]="isCanNotSelect"></app-mapped-sports-grid>
+    </div>
+
+  </div>
+</div>
+

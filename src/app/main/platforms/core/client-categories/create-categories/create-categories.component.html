@@ -1,0 +1,30 @@
+<div class="modal-header">
+  {{'Categories.AddCategory' | translate}}
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap-div">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+      <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.required">
+        {{'Common.Id' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'NickName'">
+      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+  <div class="actions">
+    <button mat-raised-button color="primary" (click)="onSubmit()">{{'ClientCategories.CreateCategory' | translate}}</button>
+    <button mat-raised-button color="warn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  </div>
+
+
+</div>
+

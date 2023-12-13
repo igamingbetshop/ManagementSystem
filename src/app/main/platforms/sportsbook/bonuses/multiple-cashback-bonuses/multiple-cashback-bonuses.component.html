@@ -1,0 +1,50 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Sport.MultipleCashbackBonuses' | translate}}</div>
+    <div class="partner-dropdown">
+
+      <mat-select
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+    <button mat-stroked-button class="mat-btn"(click)="addBonus()">{{'Sport.AddBonus' | translate}}</button>  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="multiple-cashback-bonuses"
+    #agGrid
+    [class.hide-grid]="loadingUserState"
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [suppressCopyRowsToClipboard]="true"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressRowClickSelection]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    (columnPinned)="onColumnPinned($event)"
+    (columnMoved)="onColumnMoved($event)"
+    (columnResized)="onColumnResized($event)"
+    (columnVisible)="onColumnVisible($event)"
+    rowSelection="single">
+    >
+  </ag-grid-angular>
+
+  </div>
+</div>

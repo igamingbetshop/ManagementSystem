@@ -1,0 +1,25 @@
+<div mat-dialog-title>
+  <span class="title">{{'Bonuses.AddTriggerToGroup' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" >
+    <mat-form-field>
+      <mat-label>{{'Bonuses.SelectTrigger' | translate}}</mat-label>
+      <mat-select required [ngModel]="triggerSetting?.setting" [ngModelOptions]="{standalone: true}"
+                   (ngModelChange)="triggerSetting.setting = $event">
+        <mat-option *ngFor="let trigger of triggerSetting" [value]="trigger.Id">{{trigger.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Order' | translate}}</mat-label>
+      <input matInput type="number" [ngModel]="triggerSetting?.Order" (ngModelChange)="triggerSetting.Order = $event"
+             [placeholder]="'Common.Order' | translate" required>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submit()">{{'Common.Create'| translate}}</button>
+</div>

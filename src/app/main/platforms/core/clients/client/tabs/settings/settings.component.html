@@ -1,0 +1,485 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title">
+      <a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> / {{clientId}}
+      :{{'Clients.Settings' | translate}}
+    </div>
+    <button mat-stroked-button class="edit-btn" (click)="isReadOnly = false">{{'Common.Edit' | translate}}</button>
+  </div>
+
+
+  <div class="settings">
+    <div class="content-edit">
+      <form class="grid-edit" [class.can-edit]="!isReadOnly" [formGroup]="formGroup">
+
+        <div>
+          <div class="first-hand">{{'Clients.AMLStatus' | translate}}*</div>
+          <div class="second-hand">{{settings?.AMLStatus}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'AMLProhibited'" required>
+              <mat-option *ngFor="let type of amlStatusTypes" [value]="type.Id">{{type.Name}}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.AMLVerified' | translate}}*</div>
+          <div class="second-hand">{{settings?.AMLVerified}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'AMLVerified'">{{'Clients.AMLVerified' |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.BlockedForInactivity' | translate}}*</div>
+          <div class="second-hand">{{settings?.BlockedForInactivity}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'BlockedForInactivity'">{{'Clients.BlockedForInactivity'
+              |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.DocumentExpired' | translate}}</div>
+          <div class="second-hand">{{settings?.DocumentExpired}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'DocumentExpired'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.SelfExcluded' | translate}}</div>
+          <div class="second-hand">{{settings?.SelfExcluded}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'SelfExcluded'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.Younger' | translate}}</div>
+          <div class="second-hand">{{settings?.Younger}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'Younger'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.Restricted' | translate}}</div>
+          <div class="second-hand">{{settings?.Restricted}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'Restricted'" readonly="">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.SystemExcluded' | translate}}</div>
+          <div class="second-hand">{{settings?.SystemExcluded}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'SystemExcluded'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.CautionSuspension' | translate}}</div>
+          <div class="second-hand">{{settings?.CautionSuspension}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'CautionSuspension'">{{'Clients.CautionSuspension'
+              |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.DocumentVerified' | translate}}</div>
+          <div class="second-hand">{{settings?.DocumentVerified}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'DocumentVerified'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.TermsConditionsAcceptanceVersion' | translate}}</div>
+          <div class="second-hand">{{settings?.TermsConditionsAcceptanceVersion.AcceptedAt | date:'dd/MM/yyyy HH:MM' }}
+            - {{settings?.TermsConditionsAcceptanceVersion.Version}}</div>
+          <div class="form-field form-input">
+            <div class="readonly-text">{{settings?.TermsConditionsAcceptanceVersion.AcceptedAt | date:'dd/MM/yyyy HH:MM'
+              }} - {{settings?.TermsConditionsAcceptanceVersion.Version}}</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.JCJStatus' | translate}}</div>
+          <div class="second-hand">{{settings?.JCJProhibited}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'JCJProhibited'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.CasinoLayout' | translate}}*</div>
+          <div class="second-hand">{{settings?.CasinoLayout}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'CasinoLayout'" required>
+              <mat-option *ngFor="let type of casinoLayout" [value]="type.Name">{{type.Name}}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.PasswordChangedDate' | translate}}</div>
+          <div class="second-hand">{{settings?.PasswordChangedDate}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'PasswordChangedDate'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.SessionLimit' | translate}}</div>
+          <div class="second-hand">{{settings?.SessionLimit}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput [formControlName]="'SessionLimit'" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.UnusedAmountWithdrawPercent' | translate}}</div>
+          <div class="second-hand">{{settings?.UnusedAmountWithdrawPercent}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput type="number" [formControlName]="'UnusedAmountWithdrawPercent'">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.PayoutLimit' | translate}}</div>
+          <div class="static-hand">{{settings?.PayoutLimit?.Value}} - {{settings?.PayoutLimit?.CreationDate |
+            date:'dd/MM/yyyy HH:mm'}}</div>
+
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.BlockedForBonuses' | translate}}</div>
+          <div class="second-hand">{{settings?.BlockedForBonuses}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'BlockedForBonuses'">{{'Clients.BlockedForBonuses'
+              |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.AMLPercent' | translate}}</div>
+          <div class="second-hand">{{settings?.AMLPercent}}</div>
+          <div class="form-field form-input">
+            <mat-form-field appearance="none">
+              <input matInput type="number" [formControlName]="'AMLPercent'">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.ExternalStatus' | translate}}</div>
+          <div class="second-hand">{{settings?.ExternalStatus?.Status}} - {{settings?.ExternalStatus?.CheckedAt |
+            date:'dd/MM/yyyy HH:mm'}}</div>
+          <div class="form-field form-input">
+            <div class="readonly-text">{{settings?.ExternalStatus?.Status }} - {{settings?.ExternalStatus?.CheckedAt |
+              date:'dd/MM/yyyy HH:mm'}}</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.PEPSanctioned' | translate}}</div>
+          <div class="second-hand">{{settings?.PEPSanctioned }}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'PEPSanctioned'">{{'Clients.PEPSanctioned' |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.UnderHighRiskCountry' | translate}}</div>
+          <div class="second-hand">{{settings?.UnderHighRiskCountry }}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'UnderHighRiskCountry'">{{'Clients.UnderHighRiskCountry'
+              |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div class="group-row">
+          <div class="first-hand first-hand-group">
+            <span>{{'Clients.VerificationServices' | translate}}</span>
+          </div>
+
+          <div class="static-hand-group">
+            <ng-container *ngFor="let service of settings?.VerificationServices; let i = index">
+              <span>
+                {{service.Status}} - {{service.Name}} - {{service.CheckedAt | date:'dd/MM/yyyy HH:mm'}}
+              </span>
+              <br>
+            </ng-container>
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+
+    <div class="table-content">
+      <table>
+        <tr>
+          <th>{{'Login.Submit' | translate}}</th>
+          <th>{{'Clients.Deposits' | translate}}</th>
+          <th>{{'Clients.Bets' | translate}}</th>
+          <th>{{'Clients.Withdraws' | translate}}</th>
+          <th>{{'Clients.Communications' | translate}}</th>
+        </tr>
+        <tr *ngIf="settings?.AMLProhibited != 2">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr *ngIf="settings?.AMLProhibited == 2">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="settings?.AMLVerified !== 0">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr *ngIf="settings?.AMLVerified === 0">
+          <td class="yes">YES</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.BlockedForInactivity">
+          <td class="yes">YES</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr *ngIf="!settings?.BlockedForInactivity">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.DocumentExpired">
+          <td class="yes">YES</td>
+          <td class="no">NO</td>
+          <td class="yes">YES</td>
+          <td class="no">NO</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr *ngIf="!settings?.DocumentExpired">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.SelfExcluded">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td>YES(Manual)</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr *ngIf="!settings?.SelfExcluded">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.Younger">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr ng-if="!settings?.Younger">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.Restricted">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr *ngIf="!settings?.Restricted">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.SystemExcluded">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td>YES(Manual)</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr *ngIf="!settings?.SystemExcluded">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.CautionSuspension">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr *ngIf="!settings?.CautionSuspension">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.DocumentVerified">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr *ngIf="!settings?.DocumentVerified">
+          <td class="yes">YES</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <!--        TODO need to discuss-->
+        <tr *ngIf="settings?.TermsConditionsAcceptanceVersion.DecimalValue !== 0">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <!--        TODO need to discuss-->
+        <tr *ngIf="settings?.TermsConditionsAcceptanceVersion.DecimalValue === 0">
+          <td class="yes">YES</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr *ngIf="!!settings?.JCJProhibited">
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+          <td class="no">NO</td>
+        </tr>
+        <tr *ngIf="!settings?.JCJProhibited">
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+          <td class="yes">YES</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr>
+          <td class="yes" *ngIf="clientStatuses.isLogin">Login - YES</td>
+          <td class="no" *ngIf="!clientStatuses.isLogin">Login - No</td>
+
+          <td class="yes" *ngIf="clientStatuses.isDeposit">Deposit - YES</td>
+          <td class="no" *ngIf="!clientStatuses.isDeposit">Deposit - No</td>
+
+          <td class="yes" *ngIf="clientStatuses.isBet">Bets - YES</td>
+          <td class="no" *ngIf="!clientStatuses.isBet">Bets - No</td>
+
+          <td class="yes" *ngIf="clientStatuses.isWithdraw">Withdraw - YES</td>
+          <td class="no" *ngIf="!clientStatuses.isWithdraw">Withdraw - No</td>
+
+          <td class="yes" *ngIf="clientStatuses.isCommunications">Communications - YES</td>
+          <td class="no" *ngIf="!clientStatuses.isCommunications">Communications - No</td>
+        </tr>
+        <tr class="spacer"></tr>
+        <tr>
+          <td colspan="2">{{'Clients.Client' | translate}} {{'Status'}}</td>
+          <td colspan="3">{{statusMessage}}</td>
+        </tr>
+        <tr class="spacer"></tr>
+      </table>
+      <div class="actions" *ngIf="!isReadOnly">
+        <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |
+          translate}}</button>
+        <button mat-stroked-button class="mat-cancel-btn" (click)="isReadOnly = true">{{'Common.Cancel' |
+          translate}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>

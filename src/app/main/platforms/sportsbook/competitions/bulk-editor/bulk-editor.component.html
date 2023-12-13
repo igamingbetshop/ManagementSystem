@@ -1,0 +1,14 @@
+<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+
+  <form class="bulk-editor-content" [formGroup]="formGroup">
+    <mat-checkbox class="bulk-checkbox" [formControlName]="'StateSpecified'">{{'Common.State' | translate}}</mat-checkbox>
+    <mat-slide-toggle class="bulk-switch" [formControlName]="'State'"></mat-slide-toggle>
+    <mat-checkbox class="bulk-checkbox" [formControlName]="'CategorySpecified'">{{'Clients.Category' | translate}}</mat-checkbox>
+    <input matInput class="bulk-input" [formControlName]="'CategoryId'" type="number" [placeholder]="'Common.TypeHere' | translate" >
+  </form>
+
+  <div class="bulk-editor-actions">
+    <button class="bulk-cancel-btn" (click)="onCancelBtn()">{{'Common.Cancel' | translate}}</button>
+    <button class="bulk-primary-btn" (click)="openConfirmDialog()">{{'Common.Save' |translate}}</button>
+  </div>
+</div>

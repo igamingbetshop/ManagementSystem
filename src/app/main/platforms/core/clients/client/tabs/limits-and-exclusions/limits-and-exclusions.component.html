@@ -1,0 +1,491 @@
+<div class="container">
+  <div class="content-action">
+    <div class="self-limit-action">
+      <div class="title"><a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> /{{clientId}}:{{'Clients.Limits' | translate}}</div>
+      <span class="title">{{'Clients.SelfLimits' | translate}}</span>
+      <button mat-stroked-button class="edit-btn self-edit" (click)="isEditSelfLimits= true">{{'Common.Edit' | translate}}</button>
+    </div>
+    <div class="system-limits-action">
+      <span class="title">{{'Clients.SystemLimits' | translate}}</span>
+      <button mat-stroked-button class="edit-btn" (click)="isSystemLimitsEdit = true">{{'Common.Edit' | translate}}</button>
+    </div>
+  </div>
+
+  <div class="content-edit">
+    <div class="parent">
+      <div class="left">
+        <form class="grid-edit" [class.can-edit]="isEditSelfLimits" [formGroup]="selfLimitsformGroup">
+          <div>
+            <div class="first-hand header">{{'Common.Name' | translate}}</div>
+            <div class="self-second-hand-content header">
+              <div class="second-hand readonly">{{'Clients.Limit' | translate}}</div>
+              <div class="second-hand readonly">{{'Clients.CreatedDate' | translate}}</div>
+              <div class="second-hand readonly">{{'Clients.ChangeDate' | translate}}</div>
+              <div class="second-hand readonly">{{'Clients.UpdateLimit' | translate}}</div>
+            </div>
+          </div>
+          <div>
+            <div class="first-hand">{{'Clients.DepositLimitDaily' | translate}}</div>
+
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.DepositLimitDaily?.Limit}}</div>
+              <div [formGroupName]="'DepositLimitDaily'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitDaily?.UpdateLimit}}</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.DepositLimitWeekly' | translate}}</div>
+
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.DepositLimitWeekly?.Limit}}</div>
+
+
+              <div [formGroupName]="'DepositLimitWeekly'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="second-hand readonly">{{exclusions?.DepositLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitWeekly?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.DepositLimitMonthly' | translate}} *</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.DepositLimitMonthly?.Limit}}</div>
+              <div [formGroupName]="'DepositLimitMonthly'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.DepositLimitMonthly?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.TotalBetAmountLimitDaily' | translate}}</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.TotalBetAmountLimitDaily?.Limit}}</div>
+
+              <div [formGroupName]="'TotalBetAmountLimitDaily'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitDaily?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.TotalBetAmountLimitWeekly' | translate}}</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.TotalBetAmountLimitWeekly?.Limit}}</div>
+              <div [formGroupName]="'TotalBetAmountLimitWeekly'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitWeekly?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.TotalBetAmountLimitMonthly' | translate}}</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.TotalBetAmountLimitMonthly?.Limit}}</div>
+              <div [formGroupName]="'TotalBetAmountLimitMonthly'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalBetAmountLimitMonthly?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.TotalLossLimitDaily' | translate}}</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.TotalLossLimitDaily?.Limit}}</div>
+              <div [formGroupName]="'TotalLossLimitDaily'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitDaily?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.TotalLossLimitWeekly' | translate}}</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.TotalLossLimitWeekly?.Limit}}</div>
+              <div [formGroupName]="'TotalLossLimitWeekly'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitWeekly?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.TotalLossLimitMonthly' | translate}}</div>
+            <div class="self-second-hand-content">
+              <div class="second-hand">{{exclusions?.TotalLossLimitMonthly?.Limit}}</div>
+              <div [formGroupName]="'TotalLossLimitMonthly'" class="multiple-field-content">
+                <div class="form-field form-input">
+                  <mat-form-field appearance="none">
+                    <input matInput type="number" [formControlName]="'Limit'">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+              <div class="second-hand readonly">{{exclusions?.TotalLossLimitMonthly?.UpdateLimit}}</div>
+            </div>
+
+          </div>
+
+          <hr>
+
+          <div>
+            <div class="first-hand">{{'Clients.SessionLimit' | translate}}</div>
+            <div class="second-hand">{{exclusions?.SessionLimit}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SessionLimit'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SessionLimitDaily' | translate}}</div>
+            <div class="second-hand">{{exclusions?.SessionLimitDaily}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SessionLimitDaily'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SessionLimitWeekly' | translate}}</div>
+            <div class="second-hand">{{exclusions?.SessionLimitWeekly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SessionLimitWeekly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SessionLimitMonthly' | translate}}</div>
+            <div class="second-hand">{{exclusions?.SessionLimitMonthly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SessionLimitMonthly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <div class="actions" *ngIf="isEditSelfLimits">
+              <button mat-stroked-button class="mat-btn" type="submit" (click)="onSelfLimitsSubmit()">{{'Common.Save' | translate}}</button>
+              <button mat-stroked-button class="mat-cancel-btn" (click)="isEditSelfLimits = false;">{{'Common.Cancel' | translate}}</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="right">
+
+        <form class="grid-edit" [class.can-edit]="isSystemLimitsEdit" [formGroup]="systemLimitsformGroup">
+          <div>
+            <div class="first-hand header">{{'Common.Name' | translate}}</div>
+            <div class="first-hand right-header">{{'Common.Value' | translate}}</div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemDepositLimitDaily' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemDepositLimitDaily}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemDepositLimitDaily'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemDepositLimitWeekly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemDepositLimitWeekly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemDepositLimitWeekly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemDepositLimitMonthly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemDepositLimitMonthly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemDepositLimitMonthly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemTotalBetAmountDaily' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemTotalBetAmountLimitDaily}}</div>
+            <div class="form-field form-input">
+
+              <mat-form-field appearance="none">
+                <mat-label>{{'Clients.SystemTotalBetAmountDaily' | translate}}</mat-label>
+                <input matInput type="number" [formControlName]="'SystemTotalBetAmountLimitDaily'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemTotalBetAmountWeekly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemTotalBetAmountLimitWeekly}}</div>
+            <div class="form-field form-input">
+
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemTotalBetAmountLimitWeekly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemTotalBetAmountMonthly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemTotalBetAmountLimitMonthly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemTotalBetAmountLimitMonthly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemTotalLossLimitDaily' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemTotalLossLimitDaily}}</div>
+            <div class="form-field form-input">
+
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemTotalLossLimitDaily'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemTotalLossLimitWeekly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemTotalLossLimitWeekly}}</div>
+            <div class="form-field form-input">
+
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemTotalLossLimitWeekly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemTotalLossLimitMonthly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemTotalLossLimitMonthly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemTotalLossLimitMonthly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemSessionLimit' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemSessionLimit}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemSessionLimit'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemSessionLimitDaily' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemSessionLimitDaily}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemSessionLimitDaily'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemSessionLimitWeekly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemSessionLimitWeekly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemSessionLimitWeekly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div>
+            <div class="first-hand">{{'Clients.SystemSessionLimitMonthly' | translate}} *</div>
+            <div class="second-hand">{{exclusions?.SystemSessionLimitMonthly}}</div>
+            <div class="form-field form-input">
+              <mat-form-field appearance="none">
+                <input matInput type="number" [formControlName]="'SystemSessionLimitMonthly'">
+              </mat-form-field>
+            </div>
+          </div>
+
+
+          <div class="form-actions">
+            <div class="actions" *ngIf="isSystemLimitsEdit">
+              <button mat-stroked-button class="mat-btn" type="submit"
+                      (click)="onSystemimitsSubmit()">{{'Common.Save' | translate}}</button>
+              <button mat-stroked-button class="mat-cancel-btn"
+                      (click)="isSystemLimitsEdit = false;">{{'Common.Cancel'| translate}}</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <br>
+
+  <div class="title">{{'Clients.Exclusions' | translate}}
+  </div>
+
+  <div class="parent">
+    <div class="left">
+
+      <div class="self-exclusion">
+        <div class="first-hand">{{'Clients.SelfExcludedUntil' | translate}}</div>
+        <div class="second-hand">{{selfExcludedUntil}}
+
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!selfExcludedUntil" type="button"
+                  (click)="onDeactivate('REMOVE_SELF_EXCLUCION')">{{'Clients.Deactivate' |translate}}
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="right">
+
+      <div class="self-exclusion">
+        <div class="first-hand">{{'Clients.SystemExcludedUntil' | translate}}</div>
+        <div class="second-hand">{{systemExcludedUntil}}
+
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!systemExcludedUntil" type="button"
+                  (click)="onDeactivate('REMOVE_SYSTEM_EXCLUSION')">{{'Clients.Deactivate' | translate}}
+          </button>
+        </div>
+
+      </div>
+
+      <br>
+      <br>
+
+      <form class="exclusions-form" [formGroup]="exclusionsFormGroup">
+
+        <div class="custom-dropdown">
+          <mat-select (selectionChange)="changeSelectedType($event.value)"
+                      placeholder="{{'Clients.SelectType' | translate}}" disableOptionCentering
+                      [formControlName]="'Type'"
+                      required>
+            <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+          </mat-select>
+        </div>
+
+        <mat-form-field *ngIf="selectedType === 2" class="calendar-picker" appearance="none">
+          <input matInput [matDatepicker]="picker" [formControlName]="'ToDate'" required
+                 (dateChange)="onDateChange($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+            <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="space"></div>
+        <button mat-stroked-button class="mat-btn" type="submit"
+                (click)="onSubmitExclusionsForm()">{{'Clients.Exclude' | translate}}
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+  <br>
+  <br>
+
+</div>

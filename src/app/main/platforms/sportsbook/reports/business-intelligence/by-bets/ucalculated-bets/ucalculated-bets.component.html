@@ -1,0 +1,25 @@
+<div mat-dialog-title>
+  <div class="title">{{'Common.Attention' | translate}} !</div>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <br>
+  <span> {{'Sport.TheFollowingMatchesAreFinished' | translate }} </span>
+  <br>
+  <br>
+
+  <ng-container *ngFor="let match of finishedMatches">
+    <span>{{match.MatchId}}</span> - <span>{{match.BetsCount}}</span>
+  </ng-container>
+
+  <br>
+  <br>
+  <br>
+  <span> {{'Sport.PleaseSettleThemAsSoonAsPossible' | translate }} </span>
+</div>
+
+
+<div mat-dialog-actions>
+  <button class="modal-primary-btn" (click)="close()">Ok</button>
+</div>

@@ -1,0 +1,40 @@
+  <div class="grid-content">
+    <ag-grid-angular
+    id="map-market-types"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressCopyRowsToClipboard]="true"
+    [masterDetail]="masterDetail"
+    [detailCellRendererParams]="detailCellRendererParams"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [components]="frameworkComponents"
+    [sideBar]="sideBar"
+    [pagination]="pagination"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    (rowSelected)="onRowSelected()"
+    (rowGroupOpened)="onRowGroupOpened($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+    </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+  </div>

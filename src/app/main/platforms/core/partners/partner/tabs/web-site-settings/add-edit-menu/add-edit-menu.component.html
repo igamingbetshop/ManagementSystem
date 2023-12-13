@@ -1,0 +1,20 @@
+<div mat-dialog-title>
+  <span class="title" >{{'Partners.EditMenu' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Common.Type' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.StyleType' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.StyleType' | translate" [formControlName]="'StyleType'">
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

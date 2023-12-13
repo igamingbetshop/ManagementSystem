@@ -1,0 +1,41 @@
+@import "mixins";
+
+.sub-title {
+margin: 20px;
+font-size: 16px;
+font-weight: 500;
+line-height: 19px;
+color: $blue-10;
+}
+
+.qr-code {
+    background-color: bisque;
+    width: 170px;
+    height: 161px;
+    top: 348px;
+    left: 875px;
+    border-radius: 6px;
+}
+
+.text {
+    font-size: 16px;
+    color: $blue-light-30;
+    margin: 20px;
+    display: block;
+}
+
+.modal-primary-btn {
+    width: 96%;
+    height: 44px;
+    border-radius: 6px;
+}
+
+.qr {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.question {
+    cursor: pointer;
+}

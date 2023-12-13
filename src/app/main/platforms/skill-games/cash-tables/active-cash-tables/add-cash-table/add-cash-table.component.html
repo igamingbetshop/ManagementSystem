@@ -1,0 +1,70 @@
+<div mat-dialog-title>
+  <div class="title">{{'SkillGames.CreateCashTable' | translate}}</div>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'VirtualGames.SelectGame' | translate}}</mat-label>
+      <mat-select [formControlName]="'GameId'">
+        <mat-option *ngFor="let state of games" [value]="state.Id">{{state.Nickname}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['GameId']?.touched && errorControl['GameId'].errors?.required">
+        {{'SkillGames.Game' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.BetAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Common.BetAmount' | translate" [formControlName]="'BetAmount'">
+      <mat-error *ngIf="errorControl['BetAmount']?.touched && errorControl['BetAmount'].errors?.required">
+        {{'Common.BetAmount' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'SkillGames.Speed' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'SkillGames.Speed' | translate" [formControlName]="'Speed'">
+      <mat-error *ngIf="errorControl['Speed']?.touched && errorControl['Speed'].errors?.required">
+        {{'Speed' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'SkillGames.SelectTableType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'" [(ngModel)]="tableTypes.selectedType.id">
+        <mat-option *ngFor="let state of tableTypes.types" [value]="state.id">{{state.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'SkillGames.TableType' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'SkillGames.NumberOfRounds' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'SkillGames.NumberOfRounds' | translate"
+        [formControlName]="'NumberOfRounds'">
+      <mat-error *ngIf="errorControl['NumberOfRounds']?.touched && errorControl['NumberOfRounds'].errors?.required">
+        {{'SkillGames.NumberOfRounds' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'SkillGames.SelectBackgammonType' | translate}}</mat-label>
+      <mat-select [formControlName]="'UnitId'" [(ngModel)]="backgammonTypes.selectedType.id">
+        <mat-option *ngFor="let state of backgammonTypes.types" [value]="state.id">{{state.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['UnitId']?.touched && errorControl['UnitId'].errors?.required">
+        {{'SkillGames.BackgammonType' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()" [class.disabled]="formGroup.invalid">{{'SkillGames.CreateTable' | translate}}</button>
+</div>

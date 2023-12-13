@@ -1,0 +1,51 @@
+@font-face {
+  font-family: 'iq-soft-icon';
+  src: url("../../assets/fonts/iq_soft_icon.woff") format("woff"),
+  url('../../assets/fonts/iq_soft_icon.ttf') format('truetype'),
+  url('../../assets/fonts/iq_soft_icon.svg') format('svg');
+}
+
+[class^="icon-"], [class*="icon- "] {
+  font-family: "iq-soft-icon" !important;
+  content: attr(data-icon);
+  speak: none;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  font-style: normal;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-user:before {
+  content: '\e900';
+}
+
+.icon-logout:before {
+  content: '\e901';
+}
+
+.icon-filter:before {
+  content: '\e90c';
+}
+
+.icon-quick-find:before {
+  content: '\e90b';
+}
+
+.icon-calendar:before {
+  content: '\e909';
+}
+
+.icon-edit:before {
+  content: '\e903';
+}
+
+.icon-arrow:before {
+  content: '\e907';
+}
+
+//TODO add icon name from svg file
+

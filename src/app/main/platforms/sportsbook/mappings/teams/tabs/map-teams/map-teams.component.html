@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.Teams' | translate}}</div>
+        <div class="title">{{'Sport.UnknownTeams' | translate}}</div>
+      </div>
+
+      <app-unmapped-teams-grid
+        [sports]="sports" 
+        [sportId]="sportId" 
+        [providers]="providers"
+        (valueEmitted)="handleValueEmitted($event)">
+    </app-unmapped-teams-grid>
+
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.Teams' | translate}}</div>
+        
+        <div class="partner-dropdown">
+          <mat-select
+          #spo  (selectionChange)="onSportChange(spo.value)"
+            placeholder="{{'Sport.SelectSport' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option [value]='null'>{{'Sport.SelectSport' | translate}}</mat-option>
+            <mat-option *ngFor="let sport of sports"  [value]="sport.Id">{{sport.Name}}</mat-option>
+          </mat-select>
+        </div>
+
+        <div>
+          <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+        </div>
+      </div>
+
+      <app-mapped-teams-grid
+        [sports]="sports" 
+        [sportId]="sportId"
+        [isCanNotSelect]="isCanNotSelect"
+        (callParent)="mapCompetition()"
+      ></app-mapped-teams-grid>
+    </div>
+
+  </div>
+</div>

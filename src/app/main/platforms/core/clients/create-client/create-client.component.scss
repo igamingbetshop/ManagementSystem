@@ -1,0 +1,15 @@
+.modal-wrap {
+  padding-right: 14px;
+
+  .modal-form {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    max-height: calc(80vh - 91px);
+    min-height: 200px;
+    padding-right: 6px;
+  }
+}
+
+
+

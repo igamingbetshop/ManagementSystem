@@ -1,0 +1,33 @@
+<div class="header"  fxHeight="50px">
+  <div>
+    <h4><span>{{'Sport.ActiveMatches' | translate}}</span>  / :{{'Sport.Markets' | translate}} / {{SelectionId}}</h4>
+  </div>
+  <div><h2><span>{{MatchId}}</span> &nbsp; {{name}}</h2></div>
+  <div class="button-wraper">
+
+  </div>
+</div>
+
+      <ag-grid-angular
+      id="finished-markets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressRowClickSelection]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      rowSelection="single">
+
+    >
+  </ag-grid-angular>
+
+

@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"> <a (click)="onNavigateTo()"> {{announcementId}} {{'Notifications.AnnouncementCahnges' | translate}} / {{id}} </a> </div>
+  </div>
+</div>
+
+<div class="main-history">
+
+  <div class="right-part">
+
+    <div class="header-names">
+      <div class="first-hand">{{'Common.Name' | translate}}</div>
+      <div class="second-hand">{{'Clients.OldValue' | translate}}</div>
+      <div class="third-hand">{{'Clients.NewValue' | translate}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.Id != oldData?.Id}">
+      <div class="first-hand">{{'Clients.Id' | translate}}</div>
+      <div class="second-hand">{{oldData?.Id}}</div>
+      <div class="third-hand">{{newData?.Id}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.UserId != oldData?.UserId}">
+      <div class="first-hand">{{'Clients.UserId' | translate}}</div>
+      <div class="second-hand">{{oldData?.UserId}}</div>
+      <div class="third-hand">{{newData?.UserId}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.ReceiverTypeName != oldData?.ReceiverTypeName}">
+      <div class="first-hand">{{'Clients.ReceiverType' | translate}}</div>
+      <div class="second-hand">{{oldData?.ReceiverTypeName}}</div>
+      <div class="third-hand">{{newData?.ReceiverTypeName}}</div>
+    </div>
+        
+    <div class="single-field" [ngClass]="{'changed': newData?.NickName != oldData?.NickName}">
+      <div class="first-hand">{{'Clients.NickName' | translate}}</div>
+      <div class="second-hand">{{oldData?.NickName}}</div>
+      <div class="third-hand">{{newData?.NickName}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.PartnerName != oldData?.PartnerName}">
+      <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+      <div class="second-hand">{{oldData?.PartnerName}}</div>
+      <div class="third-hand">{{newData?.PartnerName}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.CreationDate != oldData?.CreationDate}">
+      <div class="first-hand">{{'Common.CreationDate' | translate}}</div>
+      <div class="second-hand">{{oldData?.CreationDate}}</div>
+      <div class="third-hand">{{newData?.CreationDate}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.Type != oldData?.Type}">
+      <div class="first-hand">{{'Common.Type' | translate}}</div>
+      <div class="second-hand">{{oldData?.Type}}</div>
+      <div class="third-hand">{{newData?.Type}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.LastUpdateDate != oldData?.LastUpdateDate}">
+      <div class="first-hand">{{'Common.LastUpdateDate' | translate}}</div>
+      <div class="second-hand">{{oldData?.LastUpdateDate}}</div>
+      <div class="third-hand">{{newData?.LastUpdateDate}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.StateName != oldData?.StateName}">
+      <div class="first-hand">{{'Clients.State' | translate}}</div>
+      <div class="second-hand">{{oldData?.StateName}}</div>
+      <div class="third-hand">{{newData?.StateName}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.UserIds != oldData?.UserIds}">
+      <div class="first-hand">{{'Common.UserIds' | translate}}</div>
+      <div class="second-hand">{{oldData?.UserIds}}</div>
+      <div class="third-hand">{{newData?.UserIds}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.segmentesEntites != oldData?.segmentesEntites}">
+      <div class="first-hand">{{'Segments.SegmentIds' | translate}}</div>
+      <div class="second-hand">{{oldData?.segmentesEntites}}</div>
+      <div class="third-hand">{{newData?.segmentesEntites}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.ClientIds != oldData?.ClientIds}">
+      <div class="first-hand">{{'Segments.ClientIds' | translate}}</div>
+      <div class="second-hand">{{oldData?.ClientIds}}</div>
+      <div class="third-hand">{{newData?.ClientIds}}</div>
+    </div>
+
+  </div>
+
+
+</div>

@@ -1,0 +1,424 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.content-edit {
+
+  .grid-edit {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 12px;
+    row-gap: 6px;
+
+    & > div {
+      display: flex;
+      min-height: 46px;
+      align-items: center;
+      column-gap: 6px;
+
+      .first-hand {
+        min-height: 46px;
+        padding: 0 10px;
+        border-radius: 4px;
+        width: 33%;
+        display: flex;
+        align-items: center;
+        background-color:$blue-light-22;
+        color: $black-3;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: 0.04em;
+        text-align: left;
+        // background-image: linear-gradient(to right, $blue-light-10, $white);
+      }
+
+      .second-hand{
+        min-height: 46px;
+        background: $white;
+        border-radius: 4px;
+        width: 64%;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: 0.04em;
+        text-align: left;
+        word-break: break-all;
+        overflow: auto;
+      }
+
+      .static-hand {
+        height: 100%;
+        background: $white;
+        border-radius: 4px;
+        width: 64%;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        margin: 0;
+        box-sizing: border-box;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 19px;
+        letter-spacing: 0.04em;
+        text-align: left;
+
+        .mat-btn {
+          width: 100%;
+          background-color: $blue-2;
+          padding: 0 10px;
+          border: 1px solid transparent;
+    
+          .mat-button-wrapper {
+            color: $white !important;
+          }
+    
+          &.disabled {
+            color: $blue-5 !important;
+            background-color: $blue-light-7;
+            pointer-events: none;
+    
+            .mat-button-wrapper {
+              color: $blue-5 !important;
+            }
+          }
+    
+          &:hover {
+            cursor: pointer;
+            border: 1px solid $blue-5;
+            background: linear-gradient($blue-5, $blue-light-13 50%, $blue-2);
+          }
+        }
+
+      }
+
+    }
+
+    .form-field {
+      display: none;
+    }
+
+    &.can-edit {
+
+      & > div {
+        height: 46px;
+        .second-hand {
+          display: none;
+        }
+
+        .form-field {
+          display: flex;
+        }
+
+        .text-area {
+          width: 64%;
+          height: 100%;
+          background: $white;
+          textarea {
+            height: 100%;
+          }
+        }
+
+        .form-input {
+          background: $white;
+          border-radius: 4px;
+          width: 64%;
+          display: flex;
+          align-items: center;
+          box-sizing: border-box;
+          height: 46px;
+          .mat-form-field {
+            line-height: 0;
+            width: 100%;
+
+            .mat-form-field-wrapper {
+              padding-bottom: 11px !important;
+            }
+          }
+
+          .full-height {
+            padding-right: 12px;
+          }
+
+          input {
+            box-sizing: border-box;
+            width: 100%;
+            font-size: 16px;
+            outline: none;
+            background-color: $white;
+            border-radius: 4px;
+            padding: 0 10px;
+            border: 1px solid $blue-5;
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+
+            &.ng-invalid {
+              border: 1px solid $red;
+            }
+
+            &[readonly] {
+              border: 1px solid transparent;
+            }
+
+            &[disabled] {
+              color: $black;
+            }
+          }
+
+          &.readonly {
+            border: 1px solid transparent;
+          }
+        }
+
+        .form-dropdown {
+          min-height: 46px;
+          background: $white;
+          border-radius: 4px;
+          width: 64%;
+          display: flex;
+          align-items: center;
+          box-sizing: border-box;
+
+          .mat-select {
+            padding: 0 10px;
+            min-height: 46px;
+            cursor: pointer;
+            border: 1px solid $blue-5;
+            display: flex;
+            align-items: center;
+            border-radius: 4px;
+            box-sizing: border-box;
+            word-break: break-all;
+            .mat-select-trigger {
+              -webkit-user-select: none;
+              user-select: none;
+              cursor: pointer;
+              pointer-events: initial;
+              .mat-select-value {
+                color: $black;
+              }
+            }
+
+            .mat-select-value {
+              width: 600px;
+            }
+
+            &.mat-select-disabled {
+              border: 1px solid transparent;
+
+              .mat-select-arrow-wrapper {
+                display: none;
+              }
+            }
+            .mat-select-value-text {
+              word-break: break-all;
+              white-space: nowrap; /* Prevents text from wrapping */
+              overflow: hidden;    /* Hide overflowed text */
+              text-overflow: ellipsis; /* Add ellipsis for overflowed text */
+              /* Add any other styles you need here */
+            }
+          }
+        }
+
+        .form-calendar {
+          width: 64%;
+
+          .mat-form-field {
+            width: 100%;
+            border: 1px solid $blue-5;
+            border-radius: 4px;
+            background-color: $white;
+
+            .mat-form-field-wrapper {
+              padding-bottom: 0 !important;
+
+              input {
+                pointer-events: none;
+                caret-color: transparent;
+              }
+
+              .mat-form-field-flex {
+                display: flex;
+                align-items: center;
+                min-height: 42px;
+
+                .mat-form-field-infix {
+                  border: unset;
+                  line-height: 17px;
+                  padding-left: 10px !important;
+
+                  //temporary solution
+                  input {
+                    pointer-events: none;
+                    caret-color: transparent;
+                  }
+                }
+              }
+            }
+
+            &.mat-focused {
+              border: 1px solid $blue-2;
+            }
+
+            .icon-calendar {
+              font-size: 18px;
+            }
+          }
+        }
+
+        .form-checkbox {
+          width: 64%;
+
+          .mat-checkbox {
+            border: 1px solid $blue-5;
+            min-height: 42px;
+            width: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+            background-color: $white;
+
+            .mat-checkbox-inner-container {
+              width: 18px;
+              height: 18px;
+            }
+
+            &.mat-checkbox-disabled {
+              border: 1px solid transparent;
+
+              &:not(.mat-checkbox-checked) {
+                .mat-checkbox-frame {
+                  border-color: $gray-light-11;
+                }
+              }
+
+              .mat-checkbox-label {
+                color: $black-2;
+              }
+            }
+          }
+
+          .mat-checkbox-checked {
+            &.mat-accent {
+              .mat-checkbox-background {
+                background-color: $blue-5 !important;
+              }
+            }
+          }
+        }
+      }
+    }
+    .group-left-item {
+      position: relative; 
+      border: solid 1px $blue-6;
+      border-right: none;   
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        right: -32px;
+        width: 40px;
+        height: 1px;
+        background-color: #035D8F;
+      }
+    }
+    
+    .group-right-item {
+      position: relative; 
+      border: solid 1px $blue-6;
+      border-left: none;   
+      &::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: -32px;
+        width: 6%;
+        height: 1px;
+        background-color:$blue-6;
+      }
+    }
+  }
+}
+
+// TODO after all changes delete this, use below example
+.form-actions {
+  justify-content: flex-end;
+
+  .actions {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+
+    .mat-btn {
+      background-color: $blue-2;
+      padding: 0 10px;
+      border: 1px solid transparent;
+
+      .mat-button-wrapper {
+        color: $white !important;
+      }
+
+      &.disabled {
+        color: $blue-5 !important;
+        background-color: $blue-light-7;
+        pointer-events: none;
+
+        .mat-button-wrapper {
+          color: $blue-5 !important;
+        }
+      }
+
+      &:hover {
+        cursor: pointer;
+        border: 1px solid $blue-5;
+        background: linear-gradient($blue-5, $blue-light-13 50%, $blue-2);
+      }
+    }
+
+    .mat-cancel-btn {
+      background-color: $white;
+      padding: 0 10px;
+      border: 1px solid transparent;
+
+      .mat-button-wrapper {
+        color: $gray-light-2 !important;
+      }
+
+      &.disabled {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      &:hover {
+        border: 1px solid $blue-5;
+        background: $white;
+
+        .mat-button-wrapper {
+          color: $blue-5 !important;
+        }
+      }
+    }
+  }
+}
+
+// use this new version
+.mat-dialog-header {
+  display: flex;
+
+  span {
+    margin: 0;
+    font-size: 18px;
+    color: $blue-6;
+  }
+
+  mat-icon {
+    margin-left: auto;
+    cursor: pointer;
+    color: $blue-6;
+  }
+}

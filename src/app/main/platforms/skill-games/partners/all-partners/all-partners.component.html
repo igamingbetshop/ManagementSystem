@@ -1,0 +1,38 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Partners.Partners' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="createPartner()">{{'Partners.AddPartner' | translate}}</button>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="partners"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>
+
+
+

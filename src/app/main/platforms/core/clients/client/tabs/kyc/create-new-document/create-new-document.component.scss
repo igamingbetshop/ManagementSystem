@@ -1,0 +1,14 @@
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+::ng-deep {
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
+  .mat-dialog-title {
+    margin: 0;
+  }
+}
+

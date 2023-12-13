@@ -1,0 +1,317 @@
+@import "mixins";
+@import "variables";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .wraper {
+    display: grid;
+    align-items: center;
+    padding: 0px 5;
+
+    //border: 1px solid rgb(218, 27, 27) !important;
+
+    // div {
+    //   flex: 1;
+    // }
+
+    .mat-form-field, .mat-radio-group {
+      flex: 1;
+    }
+
+    .nested {
+      display: flex;
+      align-items: center;
+    }
+
+
+    .add-box-second {
+      position: absolute;
+      right: 941px;
+    }
+
+    .mat-radio-group {
+      margin-bottom: 10px;
+    }
+
+    .check-box {
+      flex: 2;
+
+      ul li {
+        display: inline;
+        margin-left: 5px;
+      }
+    }
+
+    mat-radio-button {
+      margin-left: 10px;
+    }
+  }
+
+  .wraper:first-child {
+    font-size: 16px !important;
+    font-weight: 500 !important;
+  }
+
+  .modal-wrap-div {
+    overflow-y: auto;
+  }
+
+
+  .content-action {
+    @include action-style;
+    height: 60px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+
+    .wraper {
+      display: flex;
+      // justify-content: space-between;
+      align-items: center;
+      padding: 0px 5;
+  
+  
+      //border: 1px solid rgb(218, 27, 27) !important;
+  
+      div {
+        flex: 1;
+  
+      }
+  
+      .mat-form-field, .mat-radio-group {
+        flex: 2;
+      }
+  
+      .nested {
+        display: flex;
+        align-items: center;
+      }
+  
+      .add-box {
+        position: absolute;
+        right: 75px;
+      }
+  
+      .add-box-second {
+        position: absolute;
+        right: 941px;
+      }
+  
+      .mat-radio-group {
+        margin-bottom: 10px;
+      }
+  
+      .check-box {
+        flex: 2;
+  
+        ul li {
+          display: inline;
+          margin-left: 5px;
+        }
+      }
+  
+      mat-radio-button {
+        margin-left: 10px;
+      }
+    }
+  
+    .wraper:first-child {
+      font-size: 16px !important;
+      font-weight: 500 !important;
+    }
+
+
+    .title, .title>a {
+      font-size: 18px;
+      color: $blue-5;
+      padding-bottom: 5px;
+
+    }
+  }
+
+  .content-edit {
+    .grid-edit {
+      .add-content {
+        height: auto;
+
+        &.full-section {
+          width: 100%;
+        }
+
+        .form-input {
+          flex-direction: column;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+mat-icon {
+  cursor: pointer;
+  color: #076192;
+  margin-bottom: 15px;
+  transform: scale(0.8);
+}
+
+.mr-15 {
+  margin-right: 15px !important;
+}
+
+.main-main {
+  background: #EFEFEF;
+  padding: 0 15px 15px 15px;
+  height: 100%;
+
+  .edit-icon {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+
+  .modal-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 50px;
+    grid-row-gap: 25px;
+
+    width: 90%;
+    padding: 0 20px;
+    margin: 0 auto;
+
+    .wraper {
+      display: flex;
+      // justify-content: space-between;
+      align-items: center;
+      padding: 0px 5;
+
+
+      //border: 1px solid rgb(218, 27, 27) !important;
+
+      div {
+        flex: 1;
+
+      }
+
+      .mat-form-field, .mat-radio-group {
+        flex: 2;
+      }
+
+      .nested {
+        display: flex;
+        align-items: center;
+      }
+
+      .add-box {
+        position: absolute;
+        right: 75px;
+      }
+
+      .add-box-second {
+        position: absolute;
+        right: 941px;
+      }
+
+      .mat-radio-group {
+        margin-bottom: 10px;
+      }
+
+      .check-box {
+        flex: 2;
+
+        ul li {
+          display: inline;
+          margin-left: 5px;
+        }
+      }
+
+      mat-radio-button {
+        margin-left: 10px;
+      }
+    }
+
+    .wraper:first-child {
+      font-size: 16px !important;
+      font-weight: 500 !important;
+    }
+
+    .modal-wrap-div {
+      overflow-y: auto;
+    }
+  }
+
+  .grid-history {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    align-items: center;
+
+    div {
+      display: flex;
+      background: white;
+      height: 32px;
+      padding: 0 10px;
+      align-items: center;
+
+
+      .first-hand {
+        width: 20%;
+        border-right: 1px solid rgb(216, 216, 216);
+      }
+
+
+      .second-hand {
+        width: 40%;
+        padding: 10px 10px;
+        border-right: 1px solid #d8d8d8;
+      }
+
+      .third-hand {
+        width: 40%;
+        .mat-radio-button {
+          margin-left: 5px;
+        }
+      }
+      .third-hande {
+        width: 60%;
+      }
+    }
+  }
+
+  .btn-btn-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    button:first-child {
+      margin-right: 10px;
+    }
+  }
+
+  .nested-data { 
+    height: 50px!important;
+  }
+}
+
+

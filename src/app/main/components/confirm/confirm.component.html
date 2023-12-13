@@ -1,0 +1,9 @@
+<div mat-dialog-title>
+  <span class="title">{{'Common.AreYouSure' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn"(click)="ok()">{{'Common.Ok'| translate}}</button>
+</div>

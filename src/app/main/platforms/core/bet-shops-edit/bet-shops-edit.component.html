@@ -1,0 +1,41 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.BetId }">
+
+  <div class="content-action">
+    <div class="title">{{'BetShops.BetShopGroups' | translate}}</div>
+
+    <button mat-stroked-button class="mat-delete-btn" (click)="deleteGroup()">{{'Common.Delete' | translate}}</button>
+
+
+    <button mat-stroked-button class="mat-btn" (click)="addGroup()">{{'BetShops.AddBetShopGroup' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="core-regions"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressCopyRowsToClipboard]="true"
+      [components]="frameworkComponents"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      [autoGroupColumnDef]="autoGroupColumnDef"
+      [treeData]="true"
+      [animateRows]="true"
+      [groupDefaultExpanded]="groupDefaultExpanded"
+      [getDataPath]="getDataPath"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>
+
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.BetId"></router-outlet>
+

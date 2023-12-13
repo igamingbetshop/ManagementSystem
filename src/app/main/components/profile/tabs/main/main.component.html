@@ -1,0 +1,189 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"> {{'Users.User' | translate }} / {{user?.UserName}} </div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{user?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Id'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="second-hand">{{user?.CurrencyId}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'CurrencyId'">
+            <mat-option *ngFor="let currency of currencies" [value]="currency.Id">{{currency.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{user?.UserName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'UserName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Language' | translate}}</div>
+        <div class="second-hand">{{getLanguageNameById()}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'LanguageId'">
+            <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
+        <div class="second-hand">{{user?.FirstName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'FirstName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{getStateNameById()}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            <mat-option *ngFor="let st of States" [value]="st.Id">{{st.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.LastName' | translate}}</div>
+        <div class="second-hand">{{user?.LastName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'LastName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="second-hand">{{getTypeNameById()}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Type'">
+            <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Gender' | translate}}</div>
+        <div class="second-hand">{{getGenderNameById()}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Gender'">
+            <mat-option *ngFor="let gender of genders" [value]="gender.Id">{{gender.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Users.OddsType' | translate}}</div>
+        <div class="second-hand">{{getOddTypeNameById()}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'OddsType'">
+            <mat-option *ngFor="let oddsType of oddsType" [value]="oddsType.Id">{{oddsType.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Password' | translate}}</div>
+        <div class="second-hand">********</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input type="password" matInput [formControlName]="'Password'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Profile.TwoFactorAuthentication' | translate}}</div>
+        <div class="static-hand">
+          <button mat-stroked-button class="mat-btn" [class.disabled]="isTwoFactorEnabled"
+            (click)="onRedirectToTwoFactor()">{{'Profile.Activate' | translate}}</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Profile.DisableTwoFactorAuthentication' | translate}}</div>
+        <div class="static-hand">
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!isTwoFactorEnabled"
+            (click)="onOpenToTwoFactorConfirm()">{{'Profile.Disable' | translate}}</button>
+        </div>
+      </div>
+
+      <div></div>
+      <div></div>
+
+      <div class="form-actions">
+
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' |
+            translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!isSaveActive || formGroup.invalid" type="submit"
+            (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="api-key-content">
+    <mat-form-field>
+      <input matInput [placeholder]="'Api Key'" [(ngModel)]="apiKeyString">
+    </mat-form-field>
+
+    <div>
+      <div class="first-hand"></div>
+      <div class="static-hand">
+        <button mat-stroked-button class="mat-btn" [class.disabled]="apiKeyString == '' "
+          (click)="onSubmitSApiKey()">{{'Segments.ApiKey' | translate}}</button>
+      </div>
+    </div>
+
+  </div>
+
+  <br>
+  <br>
+
+
+  <div class="accounts-container">
+    <table class="accounts-content">
+      <thead>
+        <tr>
+          <th>{{'Common.Id' | translate}}</th>
+          <th>{{'Common.Balance' | translate}}</th>
+          <th>{{'Clients.Currency' | translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of user?.Accounts">
+          <td>{{account.Id}}</td>
+          <td>{{account.Balance}}</td>
+          <td>{{account.CurrencyId}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

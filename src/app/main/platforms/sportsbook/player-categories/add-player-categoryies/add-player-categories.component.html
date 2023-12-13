@@ -1,0 +1,63 @@
+<div mat-dialog-title>
+  <span class="title">{{'ClientCategories.AddCategory' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+      <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.required">
+        {{'Common.Id' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.LimitPercent' | translate" [formControlName]="'LimitPercent'">
+      <mat-error *ngIf="errorControl['LimitPercent']?.touched && errorControl['LimitPercent'].errors?.required">
+        {{'Sport.LimitPercent' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.DelayPercentPrematch' | translate" [formControlName]="'DelayPercentPrematch'">
+      <mat-error *ngIf="errorControl['DelayPercentPrematch']?.touched && errorControl['DelayPercentPrematch'].errors?.required">
+        {{'Sport.DelayPercentPrematch' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.DelayPercentLive' | translate" [formControlName]="'DelayPercentLive'">
+      <mat-error *ngIf="errorControl['DelayPercentLive']?.touched && errorControl['DelayPercentLive'].errors?.required">
+        {{'Sport.DelayPercentLive' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.DelayBetweenBetsPrematch' | translate" [formControlName]="'DelayBetweenBetsPrematch'">
+      <mat-error *ngIf="errorControl['DelayBetweenBetsPrematch']?.touched && errorControl['DelayBetweenBetsPrematch'].errors?.required">
+        {{'Sport.DelayBetweenBetsPrematch' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.DelayBetweenBetsLive' | translate" [formControlName]="'DelayBetweenBetsLive'">
+      <mat-error *ngIf="errorControl['DelayBetweenBetsLive']?.touched && errorControl['DelayBetweenBetsLive'].errors?.required">
+        {{'Sport.DelayBetweenBetsLive' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'ClientCategories.CreateCategory' | translate}}</button>
+</div>

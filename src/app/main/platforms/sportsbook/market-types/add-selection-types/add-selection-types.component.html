@@ -1,0 +1,27 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.AddSelectionType' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Sport.SelectionTypeName' | translate" [formControlName]="'SelectionTypeName'">
+      <mat-error
+        *ngIf="errorControl['SelectionTypeName']?.touched && errorControl['SelectionTypeName'].errors?.required">
+        {{'Sport.SelectionTypeName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Bonuses.Priority' | translate" [formControlName]="'Priority'">
+    </mat-form-field>
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Sport.AddSelectionType' | translate}}</button>
+</div>

@@ -1,0 +1,46 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Bonuses.Common' | translate}}</div>
+
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="cloneBonus()">{{'Bonuses.CloneBonus' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="generalSetup()">{{'Bonuses.GeneralSetup' | translate}}</button>
+
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="deleteItem()">{{'Common.Delete' | translate}}</button>
+
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="users"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [components]="frameworkComponents"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      [detailCellRendererParams]="detailCellRendererParams"
+      [masterDetail]="true"
+      [isRowMaster]="isRowMaster"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>

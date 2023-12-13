@@ -1,0 +1,27 @@
+<div mat-dialog-title>
+  <span class="title">{{'Common.AddCountrytSetting' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCountry' | translate}}</mat-label>
+      <mat-select [formControlName]="'RegionId'" required>
+        <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectStatus' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'" required>
+        <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name | translate}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

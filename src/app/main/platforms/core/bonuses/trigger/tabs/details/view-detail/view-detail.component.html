@@ -1,0 +1,69 @@
+<div class="main-history">
+  <header>
+    {{id}}
+  </header>
+  <div class="grid-history">
+    <div>
+      <div class="first-hand">{{'Common.Id' | translate}}</div>
+      <div class="third-hand">{{newData?.Id}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.MaxAmount != oldData?.MaxAmount}">
+      <div class="first-hand">{{'Bonuses.MaxAmount' | translate}}</div>
+      <div class="third-hand">{{newData?.MaxAmount}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+      <div class="third-hand">{{newData?.PartnerName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.MinAmount != oldData?.MinAmount}">
+      <div class="first-hand">{{'Bonuses.MinAmount' | translate}}</div>
+      <div class="third-hand">{{newData?.MinAmount}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.BonusSettingCodes  != oldData?.BonusSettingCodes}">
+      <div class="first-hand">{{'Bonuses.BonusSettingCodes' | translate}}</div>
+      <div class="third-hand">{{newData?.BonusSettingCodes}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Name != oldData?.Name}">
+      <div class="first-hand">{{'Common.Name' | translate}}</div>
+      <div class="second-hand">{{oldData?.Name}}</div>
+      <div class="third-hand">{{newData?.Name}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Condition  != oldData?.Condition}">
+      <div class="first-hand">{{'Bonuses.Condition' | translate}}</div>
+      <div class="third-hand">{{newData?.Condition}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Percent != oldData?.Percent}">
+      <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
+      <div class="second-hand">{{oldData?.Percent}}</div>
+      <div class="third-hand">{{newData?.Percent}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Description != oldData?.Description}">
+      <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
+      <div class="second-hand">{{oldData?.Description}}</div>
+      <div class="third-hand">{{newData?.Description}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.StartTime != oldData?.StartTime}">
+      <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
+      <div class="second-hand">{{oldData?.StartTime | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="third-hand">{{newData?.StartTime | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.FinishTime != oldData?.FinishTime}">
+      <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
+      <div class="second-hand">{{oldData?.FinishTime | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="third-hand">{{newData?.FinishTime | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Bonuses.TranslationId' | translate}}</div>
+      <div class="third-hand">{{newData?.TranslationId}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'LastUpdateTime' | translate}}</div>
+      <div class="third-hand">{{newData?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Type != oldData?.Type}">
+      <div class="first-hand">{{'Common.Type' | translate}}</div>
+      <div class="second-hand">{{oldData?.Type}}</div>
+      <div class="third-hand">{{newData?.Type}}</div>
+    </div>
+  </div>
+</div>

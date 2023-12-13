@@ -1,0 +1,131 @@
+@import "src/styles/helpers/variables";
+
+.container {
+  z-index: 2;
+  position: fixed;
+  top: 400px;
+  display: flex;
+  right: -250px;
+  transition: right 0.3s ease-in;
+
+  &.opened {
+    right: 1px;
+  }
+
+  .quick-menu-toggle {
+    cursor: pointer;
+    position: absolute;
+    left: -30px;
+    background-color: $blue-light-3;
+    border-radius: 4px 0 0 4px;
+    margin: 0 4px;
+    width: 26px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $blue-light-4;
+    border-right-width: 0;
+
+    .icon {
+      color: $blue-5;
+    }
+
+    .arrow-content {
+      position: absolute;
+      left: -7px;
+      width: 7px;
+      height: 30px;
+      top: 7px;
+      background-color: $blue-light-3;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid $blue-light-4;
+      border-right-width: 0;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 10px;
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-right: 5px solid $blue-5;
+        border-left: 5px solid transparent;
+      }
+
+      &.opened {
+        &::after {
+          left: 5px;
+          border-left: 5px solid $blue-5;
+          border-right: 5px solid transparent;
+        }
+      }
+    }
+  }
+
+  .quick-menu-content {
+    border: 1px solid $blue-light-4;
+    padding: 14px;
+    background-color: $blue-light-3;
+    border-radius: 0 0 0 4px;
+
+    .title {
+      font-size: 14px;
+      padding-bottom: 11px;
+      color: $blue-5;
+
+      &.document {
+        padding-top: 15px;
+      }
+    }
+
+    .field-content {
+      display: flex;
+      margin: 1px 0;
+
+      .input-content {
+        .input {
+          padding: 4px 8px;
+          border-radius: 4px;
+          border: unset;
+          font-size: 14px;
+          outline: none;
+          background-color: $white;
+          border: 1px solid $white;
+          color: $blue-2;
+          width: 164px;
+
+          &::placeholder {
+            color: $blue-light-12;
+          }
+
+          &:focus {
+            border: 1px solid $blue-5;
+          }
+        }
+      }
+
+      .filter-btn {
+        margin-left: 6px;
+        padding: 5px 7px;
+        cursor: pointer;
+        border-radius: 4px;
+        background: linear-gradient($blue-2, $blue-light-13, $blue-5);
+        transition: background-color 0.3s ease-in;
+        color: $white;
+        border: 1px solid transparent;
+
+        &:hover {
+          border: 1px solid $blue-5;
+        }
+
+        &.disabled {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}

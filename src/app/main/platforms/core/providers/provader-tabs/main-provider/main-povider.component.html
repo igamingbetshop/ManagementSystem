@@ -1,0 +1,136 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['/main/platform/providers/all-providers']">{{'Partners.Provider' |
+        translate}}</a> /
+      {{providerId}} / {{'Sport.MainInfo' | translate}} </div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{provider?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Id'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{provider?.Name}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Name'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="second-hand">{{provider?.Type}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Type'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Providers.SessionExpireTime' | translate}}</div>
+        <div class="second-hand">{{provider?.SessionExpireTime}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'SessionExpireTime'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Providers.GameLaunchUrl' | translate}}</div>
+        <div class="second-hand">{{provider?.GameLaunchUrl}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'GameLaunchUrl'">
+          </mat-form-field>
+        </div>
+      </div>
+      <div></div>
+
+      <!-- <div>
+        <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
+        <div class="second-hand" *ngIf="currencySetting?.Type==2">
+          {{'Bonuses.InSet' | translate}}
+        </div>
+        <div class="second-hand" *ngIf="currencySetting?.Type==1">
+          {{'Bonuses.OutOfSet' | translate}}
+        </div>
+
+        <div class="form-field form-checkbox" >
+          <input [value]="2" [ngModel]="currencySetting?.Type" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="1" style="margin-left: 5px;" [ngModel]="currencySetting?.Type" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.SelectCurrency' | translate}}</div>
+        <div class="second-hand">
+          <ng-container *ngFor="let currency of currencesEntites">
+            {{currency}}
+          </ng-container>
+        </div>
+        <div class="form-field form-dropdown" >
+          <mat-select [ngModel]="currencySetting?.CurrencyIds"  multiple [ngModelOptions]="{standalone: true}">
+            <mat-option *ngFor="let Currency of currencies" [value]="Currency.Id">{{Currency.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>  -->
+      
+      <div>
+        <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
+        <div class="second-hand" *ngIf="currencySetting?.Type==2">
+          {{'Bonuses.InSet' | translate}}
+        </div>
+        <div class="second-hand" *ngIf="currencySetting?.Type==1">
+          {{'Bonuses.OutOfSet' | translate}}
+        </div>
+
+        <div class="form-field form-checkbox" [formGroupName]="'CurrencySetting'">
+          <input [value]="2" [formControlName]="'Type'"  type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="1" style="margin-left: 5px;" [formControlName]="'Type'"  type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.SelectCurrency' | translate}}</div>
+        <div class="second-hand">
+          <ng-container *ngFor="let currency of currencesEntites">
+            {{currency}}
+          </ng-container>
+        </div>
+        <div class="form-field form-dropdown" [formGroupName]="'CurrencySetting'">
+          <mat-select [formControlName]="'CurrencyIds'" multiple >
+            <mat-option *ngFor="let Currency of currencies" [value]="Currency.Id">{{Currency.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>  
+
+      <div></div>
+      <div></div>
+      <div></div>
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-raised-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid || formGroup.pristine" type="submit"
+            (click)="onSubmit()">{{'Common.Save' | translate}}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

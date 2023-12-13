@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> / {{clientId}} :{{'Clients.Campaigns' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="addCampaign()">{{'Clients.AddCampaign' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="!selected" (click)="deleteCampaign()">{{'Clients.CancelCampaign' | translate}}</button>
+  </div>
+
+  <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid
+      class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [suppressCopyRowsToClipboard]="true"
+      [defaultColDef]="defaultColDef"
+      [masterDetail]="masterDetail"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [detailCellRendererParams]="detailCellRendererParams"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [sideBar]="sideBar"
+      (gridReady)="onGridReady($event)"
+      (rowGroupOpened)="onRowGroupOpened($event)"
+      (rowSelected)="onRowSelected($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid2
+      class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData2"
+      [rowModelType]="rowModelType"
+      [suppressCopyRowsToClipboard]="true"
+      [columnDefs]="columnDefs2"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      (gridReady)="onNestedGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>
+
+

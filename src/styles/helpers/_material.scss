@@ -1,0 +1,101 @@
+@import "variables.scss";
+//this scss file use for changing global material styles
+
+.overlay-dropdown {
+  top: 30px !important;
+  margin-left: 6px;
+  min-width: 173px !important;
+  border-radius: 12px !important;
+  padding: 10px 8px !important;
+  position: absolute;
+
+  &.small {
+    min-width: 60px !important;
+    bottom: 5px;
+    top: auto !important;
+  }
+
+  &.top {
+    bottom: 10px;
+    top: auto !important;
+  }
+
+  &.right {
+    right: -25px !important;
+  }
+
+  &.language {
+    min-width: 140px !important;
+  }
+
+  &.middle {
+    min-width: 100px !important;
+  }
+
+  &.login {
+    right: -24px;
+    min-width: calc(100% + 26px) !important;
+  }
+
+  .mat-option {
+    padding: 8px 0 8px 4;
+    transition: all 0.3s ease;
+
+    &:hover {
+
+      .mat-option-text {
+        color: $blue-2 !important;
+        text-decoration: underline;
+        text-decoration-color: $blue-2;
+      }
+    }
+
+    &:active {
+      background-color: $blue-light-3 !important;
+      .mat-option-text {
+        color: $blue-5 !important;
+      }
+    }
+
+    .mat-option-text {
+      font-size: 14px;
+      color: $gray-light-6;
+    }
+  }
+
+  &.multiple {
+    margin-left: 30px;
+
+    //.mat-option {
+    //  height: 3em !important;
+    //  line-height: 3em !important;
+    //}
+  }
+}
+
+.cdk-overlay-pane {
+
+  ::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  ::-webkit-scrollbar-track {
+    margin: 12px 0;
+    border-right: 6px solid $white;
+    background-color: $gray-light-5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    margin: 40px 0;
+    border-right: 6px solid $white;
+    background-color: $gray-light-4;
+  }
+}
+
+.mat-stroked-button {
+  &.selected-time {
+    background-color: $blue-light-3 !important;
+    border: 1px solid $blue-light-4 !important;
+    color: $blue-5 !important;
+  }
+}

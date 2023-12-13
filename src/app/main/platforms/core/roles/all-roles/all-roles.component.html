@@ -1,0 +1,73 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Roles.Roles' | translate}}</div>
+
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() "
+            (click)="cloneRole()">{{'Roles.CloneRole' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="AddRole()">{{'Roles.AddRole' | translate}}</button>
+
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <div class="main-content">
+    <div class="left-panel grid-content">
+      <ag-grid-angular
+        id="compatitions"
+        #agGrid
+        [class.hide-grid]="loadingUserState"
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [suppressCopyRowsToClipboard]="true"
+        [rowData]="rowData"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [paginationAutoPageSize]="paginationAutoPageSize"
+        [paginationPageSize]="cacheBlockSize"
+        (paginationChanged)="onPaginationChanged($event)"
+        [pagination]="pagination"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        [components]="frameworkComponents"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        [cacheBlockSize]="cacheBlockSize"
+        (gridReady)="onGridReady($event)"
+        [ensureDomOrder]="true"
+        [enableCellTextSelection]="true"
+        [getContextMenuItems]="getContextMenuItems"
+        (columnPinned)="onColumnPinned($event)"
+        (columnMoved)="onColumnMoved($event)"
+        (columnResized)="onColumnResized($event)"
+        (columnVisible)="onColumnVisible($event)"
+        rowSelection="single">
+      </ag-grid-angular>
+      <div class="pages-sizes">
+        <mat-select
+          (selectionChange)="onPageSizeChanged()"
+          [(ngModel)]="cacheBlockSize"
+          [(value)]="defaultPageSize"
+          panelClass="overlay-dropdown small"
+          disableOptionCentering>
+          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        </mat-select>
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="input-content">
+        <input matInput [placeholder]="'Roles.SearchByRoleName' | translate" [(ngModel)]="filter.Name" (ngModelChange)="searchByFilter()">
+      </div>
+      <div class="permissions-wraper">
+        <div *ngFor=" let permission of permissions" class="checkbox">
+          <mat-checkbox color="primary" #chek [value]="permission.Id"
+                        (change)="onCheckBoxChange($event,permission.Id)">
+            {{permission.Name}}
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

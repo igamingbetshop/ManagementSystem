@@ -1,0 +1,40 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../tickets']">{{'Notifications.Ticket' | translate}}</a>: {{ticketId}}</div>
+    <div class="btn-content">
+      <button *ngIf="status === 1" mat-stroked-button class="mat-btn" (click)="closeTicket()">{{'Notifications.CloseTicket' | translate}}</button>
+      <div *ngIf="status === 2" class="closed-text">{{'Notifications.TicketClosed' | translate}}</div>
+    </div>
+
+    <button  mat-stroked-button class="mat-btn" (click)="refreshTicket()">
+      <mat-icon class="refresh">refresh</mat-icon> {{'Notifications.Refresh' | translate}}
+    </button>
+
+
+  </div>
+
+  <div class="message-action">
+
+  </div>
+
+  <div class="message-sent">
+    <div class="message-content" *ngFor="let message of messages" [class.left]="message.Type === 1">
+      <div class="chat-content" [class.left]="message.Type === 1">
+        <div class="message-text">{{message.Message}}</div>
+        <div class="info">
+          <div>{{message.UserLastName}} - {{message.UserId}}</div>
+          <div>{{message.CreationTime}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="message-send" *ngIf="status === 1">
+    <div class="send-content">
+      <textarea [(ngModel)]="messageText" class="message-text"></textarea>
+      <button (click)="sendMessage()" mat-stroked-button class="mat-btn">send</button>
+    </div>
+  </div>
+</div>
+

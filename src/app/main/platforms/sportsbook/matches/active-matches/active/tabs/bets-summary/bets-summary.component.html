@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> /
+      <span class="match-id">{{matchId}}</span> : {{'Sport.BetsSummary' | translate}} &nbsp; {{name}}  </div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="selectCategories($event.value)"
+        placeholder="{{'Partners.SelectCategory' | translate}}"
+        panelClass="overlay-dropdown multiple"
+        disableOptionCentering multiple>
+        <mat-option *ngFor="let partner of categories" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="selectStatuses($event.value)"
+        placeholder="{{'Bonuses.SelectStatus' | translate}}"
+        panelClass="overlay-dropdown multiple"
+        disableOptionCentering multiple>
+        <mat-option *ngFor="let betStatus of betStatuses" [value]="betStatus.Id">{{betStatus.Name | translate}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="ag-custom-filter" *ngFor = "let filter of filterButtons">
+      <button mat-stroked-button class="mat-btn" (click)="filter.DropdownOpened = !filter.DropdownOpened">
+        {{filter.Label | translate}} <i class="icon-filter" [class.highlight] = "filter?.HighlightIcon" aria-hidden="true"></i>
+      </button>
+      <ag-custom-filter
+        [filter] = "filter"
+        (hideDropdown) = "filter.DropdownOpened = $event"
+        (filterOperation) = "handleFilterOperation($event, filter)"
+        *ngIf="filter.DropdownOpened"
+      ></ag-custom-filter>
+    </div>
+
+    <div class="custom-dropdown middle-dropdown">
+      <mat-select
+        [(ngModel)]="marketConfig.LiveStatus"
+        placeholder="{{'Bonuses.SelectStatus' | translate}}"
+        panelClass="overlay-dropdown middle"
+        disableOptionCentering>
+        <mat-option *ngFor="let liveStatus of liveStatuses" [value]="liveStatus.Status">{{liveStatus.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-btn filter" (click)="getMarketBets()">{{'Common.Go' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="finished-markets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [sideBar]="sideBar"
+      [suppressCopyRowsToClipboard]="true"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="multiple">
+    </ag-grid-angular>
+
+  </div>
+</div>

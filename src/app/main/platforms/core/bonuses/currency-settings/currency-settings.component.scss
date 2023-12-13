@@ -1,0 +1,59 @@
+@import "mixins";
+
+.accounts-container {
+    width: 100%;
+
+  .accounts-content {
+    width: 100%;
+    tr {
+      height: 38px !important;
+    }
+
+    th {
+      background-color: $header-background-color;
+      padding: 0;
+      margin: 0;
+
+      color: white;
+      text-align: left;
+      padding-left: 4px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    td {
+      position: relative;
+      color: $black-3;
+      background-color: $white;
+      text-align: left;
+      height: 42px;
+      .mat-form-field {
+        position: absolute;
+        top: -2px;
+        left: 6px;
+        height: 38px;
+      }
+    }
+
+    .selected-row {
+      background-color: $gray-light-10;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  margin-left: 40%;
+  margin-top: 8px;
+
+  .mat-enable-btn {
+    @include mat-enable-style;
+  }
+
+  .mat-disable-btn {
+    @include mat-delete-style;
+  }
+}

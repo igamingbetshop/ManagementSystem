@@ -1,0 +1,85 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Sport.MarketTypes' | translate}}</div>
+    <div class="partner-dropdown">
+      <mat-select
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="partner-dropdown">
+      <mat-select
+      (selectionChange)="onGameChange($event)"
+        placeholder="{{'SelectGame' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let game of games" [value]="game.Id">{{game.Name}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+<div class="main-content">
+  <div class="left-panel">
+    <div class="grid-content">
+      <ag-grid-angular
+      id="finished-markets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [suppressCopyRowsToClipboard]="true"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [masterDetail]="masterDetail"
+      [detailCellRendererParams]="detailCellRendererParams"
+      [animateRows]="true"
+      [components]="frameworkComponents"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (rowSelected)="onRowSelected($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+    </div>
+
+  </div>
+  <div class="right-panel">
+    <div class="grid-content">
+      <ag-grid-angular
+      id="finished-markets-2"
+      #agGrid1
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true"
+      [rowData]="rowData1"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs2"
+      [defaultColDef]="defaultColDef"
+      [suppressRowClickSelection]="true"
+      [components]="frameworkComponents"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady1($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+    </div>
+  </div>
+</div>
+
+</div>

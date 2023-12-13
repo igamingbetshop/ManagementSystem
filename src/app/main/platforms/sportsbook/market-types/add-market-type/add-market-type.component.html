@@ -1,0 +1,47 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.AddMarketType' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" >
+
+        <mat-form-field>
+          <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
+          <mat-select   [formControlName]="'SportId'">
+            <mat-option *ngFor="let sport of sports"  [value]="sport.Id">{{sport.Name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="errorControl['SportId']?.touched && errorControl['SportId'].errors?.required">
+            {{'Sport.Sport' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput  [placeholder]="'Sport.MarketTypeName' | translate" [formControlName]="'MarketTypeName'">
+          <mat-error *ngIf="errorControl['MarketTypeName']?.touched && errorControl['MarketTypeName'].errors?.required">
+            {{'Sport.MarketTypeName' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput  [placeholder]="'Sport.SelectionTypeName' | translate" [(ngModel)]="selection.SelectionTypeName" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput type="number" [placeholder]="'Bonuses.Priority' | translate" [(ngModel)]="selection.Priority" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+
+        <ul style="list-style-type: none; margin: 0; padding: 0; overflow-y: auto; max-height: 200px">
+          <li *ngFor="let ar of arr; let i = index" ><mat-icon style="cursor: pointer; transform: scale(0.7); color: red;" (click)="delete(i)">close</mat-icon> <span>{{'Common.Name' | translate}}:</span> {{ar.SelectionTypeName}} &nbsp; <span>{{'Bonuses.Priority' | translate}}:</span> {{ar.Priority}}</li>
+       </ul>
+
+        <button mat-stroked-button class="mat-btn" (click)="addSelectionType()" >{{'Sport.AddSelectionType' | translate}}</button>
+
+      </form>
+
+    </div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()" >{{'Sport.AddMarketType' | translate}}</button>
+</div>

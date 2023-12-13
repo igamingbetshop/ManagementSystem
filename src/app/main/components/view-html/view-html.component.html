@@ -1,0 +1,8 @@
+<div mat-dialog-title>
+  <span class="title">{{'Clients.Message' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <div [innerHTML]="message"></div>
+</div>

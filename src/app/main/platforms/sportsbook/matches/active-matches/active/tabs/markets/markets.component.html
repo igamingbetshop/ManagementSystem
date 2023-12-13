@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> /
+          {{MatchId}} : {{'Sport.Markets' | translate}}
+        </div>
+      </div>
+
+      <div class="grid-content">
+        <ag-grid-angular
+        id="active-markets"
+        #agGrid
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData"
+        [rowModelType]="rowModelType"
+        [suppressCopyRowsToClipboard]="true"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        [components]="frameworkComponents"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        [cacheBlockSize]="cacheBlockSize"
+        (gridReady)="onGridReady($event)"
+        (rowSelected)="onRowSelected($event)"
+        (cellValueChanged)="onCellValueChanged1($event)"
+        rowSelection="single">
+        >
+      </ag-grid-angular>
+      </div>
+
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">
+          &nbsp; {{name}}
+        </div>
+        <div>
+          <button mat-stroked-button  class="mat-btn" (click)="AddMarket()">{{'Sport.AddMarket' | translate}}</button>
+        </div>
+        <!-- <div>
+          <button mat-raised-button class="mat-btn" style="margin-right: 10px" (click)="resetMarket()">{{'Sport.ResettleMarket' | translate}}</button>
+        </div> -->
+        <div class="partner-dropdown">
+          <mat-select
+          #part  (selectionChange)="onPartnerChange(part.value)"
+            placeholder="{{'Partners.SelectPartner' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option [value]='null'>{{'Partners.SelectPartner' | translate}}</mat-option>
+            <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+        <div>
+          <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+        </div>
+      </div>
+      <div class="grid-content">
+        <ag-grid-angular
+        id="active-markets-2"
+        #agGrid1
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [suppressCopyRowsToClipboard]="true"
+        [rowData]="rowData1"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs2"
+        [defaultColDef]="defaultColDef"
+        [suppressRowClickSelection]="true"
+        [components]="frameworkComponents"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        [cacheBlockSize]="cacheBlockSize"
+
+        (gridReady)="onGridReady1($event)"
+        rowSelection="single">
+
+        >
+      </ag-grid-angular>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="columns-data">
+    <span> {{'Partners.Count' | translate}}: {{itemsCount}} , &nbsp; {{'Sport.BaseCoefficient' | translate}}: {{baseCoefficientCount}}
+      %, &nbsp;{{'Sport.Coefficient' | translate}}: {{coefficientCount}} %</span>
+  </div>
+</div>

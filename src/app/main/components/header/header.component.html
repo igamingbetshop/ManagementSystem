@@ -1,0 +1,26 @@
+<header class="header-container">
+
+  <div class="logo-box" >
+    <img src="{{imagePath}}" (click)="navigateMain()" alt="logo"/>
+  </div>
+
+  <div *ngIf="showSearchBox" class="search-categories">
+    <input placeholder="Search..." type="text" class="input" [ngModel]="searchedValue"
+           (ngModelChange)="searchData($event)">
+  </div>
+  <div class="clock-cont">{{ currentDateTime  | date:'HH:mm:ss a MMMM d, y z'}}</div>
+  <div class="user-content" routerLink='/main/profile'>{{userName }}</div>
+  <div class="partner-dropdown">
+    <mat-select #matSelect
+                (selectionChange)="changeLanguage($event.value)"
+                (opened)="openMatSelect()"
+                panelClass="overlay-dropdown language"
+                [(value)]="defaultLanguage"
+                disableOptionCentering>
+      <mat-option *ngFor="let langauge of languages" [value]="langauge.Id">{{langauge.Name}}</mat-option>
+    </mat-select>
+  </div>
+
+  <i (click)="authService.logOut()" class="icon-logout" aria-hidden="true"></i>
+
+</header>

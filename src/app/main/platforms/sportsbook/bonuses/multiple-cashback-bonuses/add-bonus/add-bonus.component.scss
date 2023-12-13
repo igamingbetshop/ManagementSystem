@@ -1,0 +1,25 @@
+@import "variables";
+
+.modal-wrap-div {
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modal-form {
+  display: block;
+
+  mat-form-field {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  button {
+    margin-left: 10px;
+  }
+}

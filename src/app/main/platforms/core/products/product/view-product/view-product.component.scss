@@ -1,0 +1,90 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+  }
+    .content-edit { 
+    
+      .grid-edit {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 12px;
+        row-gap: 6px;
+    
+        .first-hand {
+          height: 100%;
+          padding: 0 10px;
+          border-radius: 4px;
+          width: 33%;
+          display: flex;
+          align-items: center;
+          background-color:$blue-light-22;
+          color: $black-3;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0.04em;
+          text-align: left;
+        }
+        
+        .second-hand{
+          height: 100%;
+          background: $white;
+          border-radius: 4px;
+          width: 33%;
+          display: flex;
+          align-items: center;
+          padding: 0 10px;
+          box-sizing: border-box;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0.04em;
+          text-align: left;
+        }
+        
+        .third-hand{
+          height: 100%;
+          background: $white;
+          border-radius: 4px;
+          width: 33%;
+          display: flex;
+          align-items: center;
+          padding: 0 10px;
+          box-sizing: border-box;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0.04em;
+          text-align: left;
+        }
+    
+        .static-hand {
+          height: 100%;
+          background: $white;
+          border-radius: 4px;
+          width: 66%;
+          display: flex;
+          align-items: center;
+          padding-left: 10px;
+          margin: 0;
+          box-sizing: border-box;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 19px;
+          letter-spacing: 0.04em;
+          text-align: left;
+    
+        }
+      }
+    
+    }
+
+}

@@ -1,0 +1,108 @@
+<div class="container">
+    <div class="content-action">
+      <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> / :{{'Sport.Calculation' | translate}}
+        <span class="title-span">{{matchId}}</span> &nbsp; {{name}}
+      </div>
+
+    <div class="custom-dropdown">
+      <mat-select
+      #part  (selectionChange)="onPartnerChange(part.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]='null'>{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+  </div>
+
+  <div class="main-content">
+    <div class="left-panel">
+      <ag-grid-angular
+      id="finished-markets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [suppressCopyRowsToClipboard]="true"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [components]="frameworkComponents"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+    </div>
+
+    <div class="right-panel">
+        <div class="finished-calculation" *ngIf="sportId == 1">
+          <div class="title">{{'Sport.Score' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>Ft</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input [(ngModel)]="result.TR[0].V" [readOnly]="last" (change)="calculateOutcomesScoreChange(0)">
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input [(ngModel)]="result.TR[1].V" [readOnly]="last" (change)="calculateOutcomesScoreChange(1)">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <button mat-raised-button color="warn" (click)="autoCalculate()">{{'Sport.AutomaticCalculation' | translate}}</button>
+        </div>
+        <div class="finished-calculation" *ngIf="sportId == 2">
+          <div class="title">{{'Sport.Basketball' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>{{'Partners.Main' | translate}}</th>
+              <th>Q1</th>
+              <th>Q2</th>
+              <th>Q3</th>
+              <th>Q4</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input [(ngModel)]="result.TR[0].V" [readOnly]="last" (change)="calculateOutcomesScoreChange(0)">
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input [(ngModel)]="result.TR[1].V" [readOnly]="last" (change)="calculateOutcomesScoreChange(1)">
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <button mat-raised-button color="warn" (click)="autoCalculate()">{{'Sport.AutomaticCalculation' | translate}}</button>
+        </div>
+
+    </div>
+
+  </div>
+
+</div>

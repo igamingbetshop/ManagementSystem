@@ -1,0 +1,26 @@
+<div class="main-content">
+  <div class="grid-content">
+    <ag-grid-angular
+      id="map-sport"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (rowSelected)="onRowSelected()"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>

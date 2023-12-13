@@ -1,0 +1,35 @@
+<div mat-dialog-title>
+  <span class="title" >{{'Partners.AddKey' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Common.Name' | translate" [formControlName]="'Name'" required>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.NumericValue' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Partners.NumericValue' | translate" [formControlName]="'NumericValue'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.StringValue' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.StringValue' | translate" [formControlName]="'StringValue'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.DecimalValue' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Partners.DecimalValue' | translate" [formControlName]="'DecimalValue'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.FromDate' | translate}}</mat-label>
+      <input matInput [matDatepicker]="picker" [formControlName]="'DateValue'" (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-checkbox [formControlName]="'BooleanValue'">{{'Partners.BooleanValue' | translate}}</mat-checkbox>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

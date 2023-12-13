@@ -1,0 +1,15 @@
+@import "variables";
+
+.icon {
+  display: flex;
+  .material-icons {
+    font-size: 22px;
+
+    &:hover {
+      cursor: pointer;
+      color: $blue;
+    }
+  }
+}
+
+

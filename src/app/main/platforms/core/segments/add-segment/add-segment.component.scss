@@ -1,0 +1,45 @@
+@import "variables";
+
+.modal-form {
+  overflow-y: auto;
+  max-height: calc(80vh - 91px);
+
+  .wraper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+
+    div {
+      flex: 1;
+    }
+
+    .mat-form-field,.mat-radio-group{
+      flex: 2;
+    }
+
+    .add-box{
+      flex: 0;
+
+      .mat-icon {
+        cursor: pointer;
+      }
+    }
+
+    .mat-radio-group{
+      margin-bottom: 5px;
+    }
+
+    .check-box {
+      flex: 2;
+      ul li {
+        display: inline;
+        margin-left: 5px;
+      }
+    }
+
+    mat-radio-button{
+      margin-left: 10px;
+    }
+  }
+}

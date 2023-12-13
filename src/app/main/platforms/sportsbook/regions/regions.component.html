@@ -1,0 +1,77 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Sport.Regions' | translate}}</div>
+    <div class="partner-dropdown">
+      <mat-select
+        [disabled]="isRowSelected()"
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="addPartnerSettings()">{{'Sport.AddSettings' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="onCreateRegion()">{{'Cms.AddRegion' | translate}}</button>
+
+    <button 
+      mat-stroked-button 
+      class="mat-delete" 
+      [class.disabled]="isCanNotSelect"
+      (click)="onRegionInfoRemove()"
+      >{{'Common.RemoveSettings' | translate}}
+    </button>
+  </div>
+
+  <div class="main-content">
+    
+      <div class="left-panel">
+        <div class="grid-content">
+          <ag-grid-angular
+            id="regions"
+            #agGrid
+            [class.hide-grid]="loadingUserState"
+            class="ag-theme-balham"
+            [headerHeight]="33"
+            [rowHeight]="42"
+            [rowData]="rowData"
+            [rowModelType]="rowModelType"
+            [columnDefs]="columnDefs"
+            [suppressCopyRowsToClipboard]="true"
+            [defaultColDef]="defaultColDef"
+            [masterDetail]="masterDetail"
+            [detailCellRendererParams]="detailCellRendererParams"
+            [enableBrowserTooltips]="enableBrowserTooltips"
+            [sideBar]="sideBar"
+            [animateRows]="true"
+            [components]="frameworkComponents"
+            [enableBrowserTooltips]="enableBrowserTooltips"
+            [cacheBlockSize]="cacheBlockSize"
+            (gridReady)="onGridReady($event)"
+            (rowGroupOpened)="onRowGroupOpened($event)"
+            (cellValueChanged)="onCellValueChanged($event)"
+            [ensureDomOrder]="true"
+            [enableCellTextSelection]="true"
+            (rowSelected)="onRowSelected()"
+            (columnPinned)="onColumnPinned($event)"
+            (columnMoved)="onColumnMoved($event)"
+            (columnResized)="onColumnResized($event)"
+            (columnVisible)="onColumnVisible($event)"
+            rowSelection="single">
+          </ag-grid-angular>
+          </div>
+    
+      </div>
+    
+      <div class="right-panel">
+        <app-regions-info (valueEmitted)="handleValueEmitted($event)"></app-regions-info>
+    
+      </div>
+
+  </div>
+
+</div>
+

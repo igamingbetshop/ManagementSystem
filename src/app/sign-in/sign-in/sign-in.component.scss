@@ -1,0 +1,242 @@
+@import "variables";
+@import "mixins";
+
+.login-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: $blue-5;
+  flex-direction: row;
+  box-sizing: border-box;
+  place-content: center;
+  align-items: center;
+
+  .mat-card {
+    padding: 0 24px 24px 24px;
+    background-color: $gray-light-5;
+    box-shadow: unset;
+    max-width: 452px;
+    width: 100%;
+    box-sizing: border-box;
+
+    .card-header {
+      text-align: center;
+      width: 100%;
+      display: block;
+      padding: 34px 0;
+
+      .name {
+        color: $blue-5;
+        margin-top: 4px;
+      }
+    }
+
+    .login-form {
+      padding: 0 34px 32px 34px;
+      border-radius: 4px;
+      background-color: $white;
+      box-shadow: 0px 4px 4px $black-shadow-3;
+
+      .mat-card-content {
+        margin-bottom: 60px;
+
+        .title {
+          text-align: center;
+          padding: 32px 0 30px 0;
+          color: $blue-6;
+          font-size: 16px;
+        }
+
+        .user-input {
+          position: relative;
+          width: 100%;
+
+          &:before {
+            content: "\e900";
+            position: absolute;
+            font-size: 13px;
+            font-family: "iq-soft-icon";
+            top: 13px;
+            left: 11px;
+            color: $blue-light-24;
+          }
+
+          .mat-error {
+            color: $red;
+            font-size: 12px;
+            position: absolute;
+          }
+        }
+
+        .password-input {
+          position: relative;
+          width: 100%;
+          margin-top: 16px;
+
+          &:before {
+            content: "\e906";
+            position: absolute;
+            font-size: 11px;
+            color: $blue-light-24;
+            font-family: "iq-soft-icon";
+            top: 13px;
+            left: 10px;
+          }
+
+          .mat-icon {
+            position: absolute;
+            top: 9px;
+            right: 1px;
+            font-size: 19px;
+            color: #035D8F;
+          }
+
+          .mat-error {
+            color: $red;
+            font-size: 12px;
+            position: absolute;
+          }
+        }
+
+        .input {
+          width: calc(100% - 32px);
+          height: 34px;
+          color: $blue-6;
+          padding-left: 32px;
+          font-size: 14px;
+          border: 1px solid $blue-light-22;
+          border-radius: 4px;
+          outline: none;
+          background-color: $blue-light-22;
+
+          &::placeholder {
+            color: $blue-6;
+            opacity: 0.5;
+          }
+
+          &.has-error {
+            border: 1px solid $red;
+          }
+
+          &:-webkit-autofill,
+          &:-webkit-autofill:hover,
+          &:-webkit-autofill:focus {
+            -webkit-text-fill-color: $blue-6;
+            -webkit-box-shadow: 0 0 0 1000px $blue-light-22 inset;
+            transition: background-color 5000s ease-in-out 0s;
+          }
+        }
+
+        .partner-dropdown {
+          margin-top: 16px;
+
+          ::ng-deep {
+            .mat-select {
+              height: 38px;
+              border-radius: 4px;
+              display: flex !important;
+              align-items: center;
+              width: calc(100% - 36px);
+              padding: 0 8px 0 32px;
+              background-color: $blue-light-22;
+              position: relative;
+
+              &:before {
+                content: "\e905";
+                position: absolute;
+                font-size: 13px;
+                color: $blue-light-24;
+                font-family: "iq-soft-icon";
+                top: 13px;
+                left: 10px;
+              }
+
+              &[aria-expanded="false"] {
+
+                .mat-select-trigger {
+                  .mat-select-arrow-wrapper {
+                    padding-top: 7px;
+
+                    .mat-select-arrow {
+                      width: 0;
+                      height: 0;
+                      @include dropdownArrow($blue-6, false, 6px);
+                      margin: 0 5px;
+                    }
+                  }
+                }
+              }
+
+              &[aria-expanded="true"] {
+
+                .mat-select-trigger {
+                  .mat-select-arrow-wrapper {
+                    .mat-select-arrow {
+                      @include dropdownArrow($blue-6, true, 6px);
+                      margin: 0 4px 4px 4px;
+                    }
+                  }
+                }
+              }
+
+              .mat-select-trigger {
+                .mat-select-value {
+                  color: $blue-6;
+
+                  .mat-select-placeholder {
+                    color: $blue-6;
+                    opacity: 0.9;
+                  }
+                }
+
+                .mat-select-arrow-wrapper {
+                  .mat-select-arrow {
+                    color: $blue-6;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .btn-content {
+    position: relative;
+
+    .login-btn {
+      width: 100%;
+      padding: 0 10px;
+      height: 42px;
+      background: linear-gradient(#2787B7 0%, #035D8F 100%);
+      cursor: pointer;
+      border: unset;
+
+      ::ng-deep {
+        .mat-button-wrapper {
+          color: $white !important;
+        }
+      }
+
+      &.disabled {
+        opacity: 0.7;
+      }
+
+      &:hover {
+        border: 1px solid $blue-5;
+        background-color: $blue-2;
+      }
+    }
+
+    .mat-error {
+      color: $red;
+      font-size: 12px;
+      position: absolute;
+      left: 0;
+      top: 43px;
+    }
+  }
+}
+

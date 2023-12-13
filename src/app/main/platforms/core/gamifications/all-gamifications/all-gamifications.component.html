@@ -1,0 +1,68 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.gamificationId }">
+  <div class="main-content">
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Clients.Gamification' | translate}}</div>
+    </div>
+    <div class="grid-content">
+      <ag-grid-angular
+        id="compatitions"
+        #agGrid
+        [class.hide-grid]="loadingUserState"
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [suppressCopyRowsToClipboard]="true"
+        [rowData]="rowData"
+        [suppressRowClickSelection]="true"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        [components]="frameworkComponents"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        [cacheBlockSize]="cacheBlockSize"
+        (rowClicked)="onRowClicked($event)"
+        (gridReady)="onGridReady($event)"
+        (columnPinned)="onColumnPinned($event)"
+        (columnMoved)="onColumnMoved($event)"
+        (columnResized)="onColumnResized($event)"
+        (columnVisible)="onColumnVisible($event)"
+        [rowClassRules]="rowClassRules"
+        rowSelection="single">
+    </ag-grid-angular>
+    </div>
+    <div class="grid-action">
+      <button mat-stroked-button class="mat-btn" [disabled]="!this.partnerId" (click)="onAddGamification()">{{'Clients.CreateCharacter' | translate}}</button>
+    </div>
+    </div>
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Clients.Childers' | translate}}</div>
+        <div class="custom-dropdown">
+          <mat-select
+            (selectionChange)="getByPartnerData($event.value)"
+            placeholder="{{'Partners.SelectPartner' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+            <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+        <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+        </div>
+      <app-character-childs 
+        [tableData]="characterChilds" 
+        (childCharakterData)="createChildCharacter($event)"
+        (getParentData)="getRows()"
+        ></app-character-childs>
+        <div class="grid-action">
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!canCreateChild" (click)="onAddChildGamification()">{{'Clients.CreateChildharacter' | translate}}</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.gamificationId"></router-outlet>
+

@@ -1,0 +1,31 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Products.ProductsGroup' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="addGroup()">{{'Bonuses.AddGroup' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [enableGroupEdit] = "true"
+    [autoGroupColumnDef]="autoGroupColumnDef"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [treeData]="true"
+    [animateRows]="true"
+    [cacheBlockSize]="10000"
+    [components]="frameworkComponents"
+    [isServerSideGroup]="isServerSideGroup"
+    [getServerSideGroupKey]="getServerSideGroupKey"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true">
+  </ag-grid-angular>
+  </div>
+</div>

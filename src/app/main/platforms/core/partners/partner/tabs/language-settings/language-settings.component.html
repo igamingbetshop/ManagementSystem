@@ -1,0 +1,46 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.LanguageSettings' | translate}}</div>
+    <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
+  </div>
+
+  <div class="main-content">
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Partners.AllLanguages' | translate}}</div>
+      </div>
+      <app-all-language-settings 
+        [rowData]="this.rowData"
+        (valueEmitted)="handleValueEmitted($event)"
+        (selectedNodes)="selectedNodes($event)"
+        ></app-all-language-settings>
+
+      <div class="grid-action">
+        
+        <form [formGroup]="formGroup">
+          <div class="custom-dropdown">
+            <mat-select [formControlName]="'State'"  placeholder="{{'Common.SelectState' | translate}}">
+              <mat-option *ngFor="let state of statusName" [value]="state.Id">{{state.Name}}</mat-option>
+            </mat-select>
+          </div>
+
+          <button class="btn-success btn-success-dis" 
+                  [disabled]="isCanNotSelect"
+                  (click)="addLanguageToPartner()">{{'Partners.AddSelectedLanguageToPartner' | translate}}
+          </button>
+        </form>
+      </div>
+
+    </div>
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Partners.PartnerLanguages' | translate}}</div>
+      </div>
+      <app-partner-language-settings 
+        [partnersRowData]="partnersRowData"  
+        (editPattnerLanguageSettings)="editLanguageSetting($event)" >
+      </app-partner-language-settings>
+    </div>
+  </div>
+</div>

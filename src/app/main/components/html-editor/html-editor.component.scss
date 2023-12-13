@@ -1,0 +1,29 @@
+@import "variables";
+
+.nav-editor-content {
+  display: flex;
+  margin-bottom: 8px;
+  background-color: $blue-2;
+  border-radius: 4px;
+
+  .nav-tab {
+    width: auto;
+    padding: 6px 12px;
+    color: $white;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &.selected {
+      background-color: $blue-light-22;
+      color: $blue-2;
+    }
+  }
+}
+
+.view-code-content {
+  width: 492px;
+  height: 340px;
+  border: 1px solid $border-color;
+  overflow-y: auto;
+  margin-bottom: 6px;
+}

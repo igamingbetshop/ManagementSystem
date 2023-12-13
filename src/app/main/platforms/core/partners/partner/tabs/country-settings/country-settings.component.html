@@ -1,0 +1,42 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.CountrySettings' | translate}}</div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="getPartnerCountrySettings($event.value)"
+        placeholder="{{ statuses[status - 1].Name | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option *ngFor="let status of statuses" [value]="status.Id" >{{status.Name | translate}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="addCountrySetting()">{{'Common.AddCountrytSetting' | translate}}</button>
+    
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [components]="frameworkComponents"
+      [cacheBlockSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      (gridReady)="onGridReady($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>
+
+

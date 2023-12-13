@@ -1,0 +1,92 @@
+@import "variables";
+@import "mixins";
+
+.header-container {
+  background-image: linear-gradient($blue, $blue-light);
+  padding: 0 36px;
+  box-sizing: border-box;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  height: 64px;
+  color: $white;
+
+  .logo-box {
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .partner-dropdown {
+
+    padding-left: 20px;
+    @include dropdown-style;
+
+    ::ng-deep {
+      .mat-select {
+        width: auto !important;
+        background-color: $blue-light-25 !important;
+        border: 1px solid $blue-light-26;
+      }
+    }
+  }
+
+  .search-categories {
+    position: relative;
+    margin-right: 32px;
+
+    &:before {
+      content: "\e902";
+      position: absolute;
+      font-size: 16px;
+      color: $blue-2;
+      font-family: "iq-soft-icon" !important;
+      top: 10px;
+      left: 10px;
+    }
+
+    .input {
+      width: 260px;
+      height: 32px;
+      color: $blue-2;
+      padding-left: 42px;
+      font-size: 14px;
+      border: 1px solid $blue-2;
+      border-radius: 4px;
+      outline: none;
+
+      &::placeholder {
+        color: $blue-2;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .clock-cont {
+    color: $white;
+  }
+
+  .user-content {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 32px;
+    font-family: "Roboto", sans-serif !important;
+
+    &::before {
+      content: "\e900";
+      font-family: "iq-soft-icon" !important;
+      color: #fff;
+      margin-right: 12px;
+      font-size: 24px;
+    }
+  }
+
+  .icon-logout {
+    cursor: pointer;
+    margin-left: 32px;
+    font-size: 24px;
+    margin-top: 5px;
+  }
+}
+
+

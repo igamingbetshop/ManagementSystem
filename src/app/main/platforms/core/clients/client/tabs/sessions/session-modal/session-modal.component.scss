@@ -1,0 +1,27 @@
+@import "variables.scss";
+
+table {
+  width: 98%;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 8px;
+}
+
+.modal-wrap{
+  overflow-y: auto;
+  background-color: white;
+  // height: auto;
+  max-height: 600px;
+  padding: 0;
+}
+
+th {
+  background-color: $header-background-color;
+  color: white;
+  height: 40px;
+}
+
+tr.mat-header-row{
+  position: sticky;
+  top: 0;
+}

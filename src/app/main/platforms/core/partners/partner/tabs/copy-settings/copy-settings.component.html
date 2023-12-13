@@ -1,0 +1,21 @@
+<div mat-dialog-title>
+  <span class="title">{{ myLable | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectFromPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'FromPartnerId'" required >
+        <mat-option *ngFor="let name of partners" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-stroked-button class="modal-cancel-btn"  (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-stroked-button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

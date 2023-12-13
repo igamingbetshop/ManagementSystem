@@ -1,0 +1,68 @@
+<div class="all-pool-betting">
+
+  <div class="content-action">
+    <div class="title">{{'PoolBetting.AllPoolBetting' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="addRound()">{{'PoolBetting.AddRound' | translate}}</button>
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled] ="isRowSelected()" (click)="deleteRound()">{{'PoolBetting.DeleteRound' | translate}}</button>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="all-bool-betting"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+
+    <div class="custom-pagination">
+      <div class="pages-sizes">
+        <mat-select
+          (selectionChange)="onPageSizeChanged()"
+          [(ngModel)]="cacheBlockSize"
+          [(value)]="defaultPageSize"
+          panelClass="overlay-dropdown small"
+          disableOptionCentering>
+          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        </mat-select>
+      </div>
+
+      <span class="current-paging">
+        <input class="input" type="number" [(ngModel)]="paginationPage" (keypress)="onPaginationGoToPage($event)">
+      </span>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,73 @@
+<div mat-dialog-title>
+    <span class="title">{{'Clients.ViewNote' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <div class="note-content" *ngIf="addNotes">
+    <nav mat-tab-nav-bar class ="tab-content">
+      <a mat-tab-link *ngFor="let type of noteTypes"
+         (click)="addNoteType = type.Id"
+         [active]="addNoteType === type.Id"> {{type.Name}} </a>
+    </nav>
+    <form class="modal-form" [formGroup]="formGroup">
+      <div class="textarea-content">
+        <div class="input-title">{{'Clients.AddNote' | translate}}</div>
+        <textarea rows="4" [placeholder]="'Message' | translate" [formControlName]="'Message'"></textarea>
+      </div>
+    </form>
+
+    <div class="note-action">
+      <button mat-stroked-button class="mat-btn" [class.disabled] = "formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+      <button mat-stroked-button class="mat-cancel-btn" (click)="addNotes = false">{{'Common.Cancel' | translate}}</button>
+    </div>
+  </div>
+
+  <nav mat-tab-nav-bar class ="tab-content">
+    <a mat-tab-link *ngFor="let type of noteTypes"
+       (click)="changeNoteType(type.Id)"
+       [active]="noteType === type.Id"> {{type.Name}} </a>
+  </nav>
+
+  <table>
+    <tr *ngIf ="viewNotes.length > 0">
+      <th>{{'Common.Edit' | translate}}</th>
+      <th>{{'Common.Id' | translate}}</th>
+      <th>{{'Partners.Text' | translate}}</th>
+      <th>{{'Common.State' | translate}}</th>
+      <th>{{'Payments.Date' | translate}}</th>
+      <th>{{'Payments.CreatedBy' | translate}}</th>
+    </tr>
+    <tr *ngFor="let note of viewNotes; let i = index">
+      <td>
+        <mat-icon (click)="editNote(note , i)">edit</mat-icon>
+      </td>
+      <td>{{note.Id}}</td>
+      <td class="message">{{note.Message}}
+        <div *ngIf="isEdit && enableEditIndex == i" class="edited-mode">
+          <textarea rows="2" [(ngModel)]="noteText"></textarea>
+        </div>
+      </td>
+      <td>
+        <div *ngIf="note.State === 1">{{'Bonuses.Active' | translate}}</div>
+        <div *ngIf="note.State === 2">{{'Sport.Deleted' | translate}}</div>
+        <div *ngIf="isEdit && enableEditIndex == i" class="edited-mode">
+          <select [(ngModel)]="stateText" (change)="onChange($event)" class="select-content">
+            <option *ngFor="let state of noteStates" [value]="state.Id">{{state.Text}}</option>
+          </select>
+          <div class="table-action">
+            <button mat-stroked-button class="mat-btn" (click)="saveEditedNote(note)">{{'Common.Save' | translate}}</button>
+            <button mat-stroked-button class="mat-cancel-btn" (click)="cancelEditedNote()">{{'Common.Cancel' | translate}}</button>
+          </div>
+        </div>
+      </td>
+      <td>{{note.LastUpdateTime | date : 'medium'}}</td>
+      <td>{{note.CreatorFirstName}} {{note.CreatorLastName}}</td>
+    </tr>
+  </table>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-stroked-button class="mat-btn" (click)="addNote()">{{'Clients.AddNote' | translate}}</button>
+  <button mat-stroked-button class="mat-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+</div>

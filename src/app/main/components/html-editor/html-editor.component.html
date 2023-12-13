@@ -1,0 +1,26 @@
+<div class="nav-editor-content">
+  <div class="nav-tab" [class.selected]="activeTab  === 'editor'" (click)="activeTab = 'editor'">{{'Crm.Editor' | translate}}</div>
+  <div class="nav-tab" [class.selected]="activeTab  === 'view-code'" (click)="activeTab = 'view-code'">{{'Crm.ViewCode'| translate}}</div>
+</div>
+
+<ng-container [ngSwitch]="activeTab">
+  <ng-container *ngSwitchCase="'editor'">
+    <quill-editor
+      [styles]="styles"
+      [modules]="quillConfig"
+      [disabled] = "disabled"
+      [(ngModel)]="text"
+      (onEditorCreated)="onEditorCreated($event)"
+      (onContentChanged)="onContentChanged($event)">
+    </quill-editor>
+  </ng-container>
+  <ng-container *ngSwitchCase="'view-code'">
+    <div class="view-code-content">
+      {{text}}
+    </div>
+  </ng-container>
+</ng-container>
+
+
+
+

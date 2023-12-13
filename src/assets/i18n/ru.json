@@ -1,0 +1,11 @@
+{
+    "login": {
+      "usernameError": "tttttttttttttttt",
+      "passwordError": "Please provide a valid password",
+      "success": "Success",
+      "submit": "вход"
+    },
+    "clients": {
+        "addClient": "добавить"
+    }
+  }

@@ -1,0 +1,69 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> / {{clientId}} :{{'Clients.Kyc' | translate}}</div>
+
+    <button mat-stroked-button class="mat-btn" (click)="getKYCData()">{{'Clients.Refresh' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="create()">{{'Clients.CreateNewDocument' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="delete()">{{'Common.Delete' | translate}}</button>
+    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+    <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="kyc"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [sideBar]="sideBar"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      [components]="frameworkComponents"
+      (gridReady)="onGridReady($event)"
+      [rowClassRules]="rowClassRules"
+      (rowSelected)="onRowSelected($event)"
+      (rowClicked)="onRowClicked($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid2
+      [class.hide-grid]="loadingUserState"
+      id="kyc-history"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData2"
+      [rowModelType]="rowModelType2"
+      [columnDefs]="columnDefs2"
+      [suppressCopyRowsToClipboard]="true"
+      [defaultColDef]="defaultColDef2"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+</div>

@@ -1,0 +1,63 @@
+<div mat-dialog-title>
+  <span class="title">{{"Client.AddConfig" | translate }}</span>
+  <mat-icon (click)="onClose()">close</mat-icon>
+</div>
+<div mat-dialog-content>
+  {{data.message}}
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" [class.can-edit]="true">
+   
+    <mat-form-field>
+      <mat-label>{{'Common.Type' | translate}}</mat-label>
+      <mat-select [formControlName]="'type'">
+        <mat-option *ngFor="let type of types"  [value]="type">{{type}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['type']?.touched && errorControl['type'].errors?.required">
+        {{'Common.SelectType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Common.Name' | translate" [formControlName]="'name'">
+      <mat-error *ngIf="errorControl['name']?.touched && errorControl['name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-height">
+      <mat-label>{{'Common.Content' | translate}}</mat-label>
+      <textarea matInput [placeholder]="'Common.Content' | translate" [formControlName]="'content'"> </textarea>
+      <mat-error *ngIf="errorControl['content'].touched && errorControl['content'].hasError('required')">
+        {{'Partners.Title' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.TTL' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Common.TTL' | translate" [formControlName]="'ttl'">
+      <mat-error *ngIf="errorControl['ttl']?.touched && errorControl['ttl'].errors?.required">
+        {{'Common.TTL' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="this.formGroup.value.type == 'MX'">
+      <mat-label>{{'Bonuses.Priority' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.Priority' | translate" [formControlName]="'priority'">
+      <mat-error *ngIf="errorControl['priority']?.touched && errorControl['priority'].errors?.required">
+        {{'Bonuses.Priority' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox [formControlName]="'proxied'">{{'Common.Proxied' | translate}}</mat-checkbox>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn"  (click)="onClose()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid" (click)="onSubmit()" >{{'Common.Save' |translate}}</button>
+</div>
+

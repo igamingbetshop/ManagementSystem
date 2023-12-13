@@ -1,0 +1,63 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.AddMarket' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form">
+    <mat-form-field>
+      <mat-label>{{'Sport.SelectMarketType' | translate}}</mat-label>
+      <mat-select  #spo (selectionChange)="selectedMarketType(spo.value)">
+        <mat-option *ngFor="let market of markets" [value]="market.Id">{{market.Name}}</mat-option>
+      </mat-select>
+
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.PointSequence' | translate}}</mat-label>
+      <!--    <input type="number" matInput [formControlName]="'PointSequence'">-->
+      <input type="number" matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.Sequence' | translate}}</mat-label>
+      <!--    <input type="number" matInput [formControlName]="'Sequence'">-->
+      <input type="number" matInput>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.GameSequence' | translate}}</mat-label>
+      <input type="number" matInput>
+    </mat-form-field>
+  </form>
+  <ng-container *ngIf="selectedMarket">
+    <div *ngFor=" let item of selections" class="form-fields">
+      <div>
+        <mat-form-field>
+          <mat-label>{{'Common.Name' | translate}}</mat-label>
+          <input matInput [placeholder]="item.Name" [(ngModel)]="item.Name" [ngModelOptions]="{standalone: true}" disabled>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Sport.Coefficient' | translate}}</mat-label>
+          <input matInput [placeholder]="item.Coefficient" [(ngModel)]="item.Coefficient" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>{{'Sport.LowValue' | translate}}</mat-label>
+          <input matInput [placeholder]="item.LowValue" [(ngModel)]="item.LowValue" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Sport.HighValue' | translate}}</mat-label>
+          <input matInput [placeholder]="item.HighValue" [(ngModel)]="item.HighValue" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Sport.TeamId' | translate}}</mat-label>
+          <input matInput [placeholder]="item.TeamId" [(ngModel)]="item.TeamId" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submit()">{{'Sport.AddMarketType' | translate}}</button>
+</div>

@@ -1,0 +1,13 @@
+<div mat-dialog-title>
+  <span class="title" >{{data.title | translate}}</span>
+  <mat-icon (click)="onClose()">close</mat-icon>
+</div>
+<div class="description">
+  Are you sure you want to delete
+  {{this.title}} ?
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn"  (click)="onClose()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Confirm' | translate}}</button>
+</div>

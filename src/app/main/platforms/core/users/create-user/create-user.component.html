@@ -1,0 +1,108 @@
+<div mat-dialog-title>
+  <span class="title">{{'Users.AddUser' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'" (selectionChange)="getPartnerId($event)">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'" (selectionChange)="getTypeId($event)">
+        <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Clients.UserName' | translate" [formControlName]="'UserName'">
+      <mat-error *ngIf="errorControl['UserName']?.touched && errorControl['UserName'].errors?.required">
+        {{'Clients.UserName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Clients.FirstName' | translate" [formControlName]="'FirstName'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="password" [placeholder]="'Password at least 8 characters'" [formControlName]="'Password'">
+      <mat-error *ngIf="errorControl['Password']?.touched && errorControl['Password'].errors?.required">
+        {{'Clients.Password' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Password']?.touched && errorControl['Password'].errors?.minlength">
+        {{'Clients.Password' | translate}} {{'Errors.MustBeAtLeast8Characters' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Password']?.touched && errorControl['Password'].errors?.pattern">
+        {{'Errors.EnterValidPassword' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Clients.LastName' | translate" [formControlName]="'LastName'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+      <mat-select [formControlName]="'CurrencyId'">
+        <mat-option *ngFor="let currency of currencies" [value]="currency.Id">{{currency.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['CurrencyId']?.touched && errorControl['CurrencyId'].errors?.required">
+        {{'Clients.Currency' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Clients.Email' | translate" [formControlName]="'Email'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.SelectState' | translate}}</mat-label>
+      <mat-select [formControlName]="'State'">
+        <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
+        {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectGender' | translate}}</mat-label>
+      <mat-select [formControlName]="'Gender'">
+        <mat-option [value]="0">{{'Clients.SelectGender' | translate}}</mat-option>
+        <mat-option *ngFor="let gender of genders" [value]="gender.Id">{{gender.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Gender']?.touched && errorControl['Gender'].errors?.required">
+        {{'Common.Gender' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectLanguage' | translate}}</mat-label>
+      <mat-select [formControlName]="'LanguageId'">
+        <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['LanguageId']?.touched && errorControl['LanguageId'].errors?.required">
+        {{'Clients.Language' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()" [disabled]="formGroup.invalid" type="submit">{{'Users.CreateUser' | translate}}</button>
+</div>

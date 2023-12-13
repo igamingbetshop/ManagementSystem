@@ -1,0 +1,18 @@
+.ag-boolean-filter {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 85px;
+  justify-content: space-between;
+
+  div.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    label {
+      display: flex;
+      align-items: center;
+    }
+  }
+}

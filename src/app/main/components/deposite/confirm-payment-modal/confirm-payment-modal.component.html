@@ -1,0 +1,12 @@
+<div mat-dialog-title>
+  <span class="title">View</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="description">
+  You are about to "{{data.RequestName | translate}}" the request. Are you sure?
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">Cancel</button>
+  <button class="modal-primary-btn" (click)="ok()">Ok</button>
+</div>

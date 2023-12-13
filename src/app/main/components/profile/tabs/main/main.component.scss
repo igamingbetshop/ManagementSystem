@@ -1,0 +1,77 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+  }
+
+  // .content-edit gets from helpers/_form-edit.scss
+
+  .accounts-container{
+    width: 49%;
+
+    .accounts-content {
+      width: 100%;
+
+      thead{
+        height: 40px;
+        margin-bottom: 20px ;
+        background-color:$blue-light-22;
+        th{
+          background-color:$blue-light-22;
+          padding: 0;
+          margin: 0;
+          color: #076192;
+        }
+      }
+
+      tbody{
+        tr{
+          td{
+            color: $black-3;
+            background-color: $white;
+            height: 40px;
+            text-align: center;
+            margin-top: 7px;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.api-key-content {
+  padding-top: 16px;
+  .mat-btn {
+    @include mat-btn-style;
+  }
+}
+
+.form-actions {
+  justify-content: flex-end;
+
+  .actions {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+
+    .mat-btn {
+      @include mat-btn-style;
+    }
+
+    .mat-cancel-btn {
+      @include  mat-cancel-btn-style
+    }
+  }
+}
+

@@ -1,0 +1,164 @@
+@import "variables.scss";
+@import "mixins";
+
+.dialog-header {
+  position: relative;
+  padding: 5px 0;
+
+  .mat-dialog-title {
+    margin: 0;
+  }
+
+  .icon {
+    position: absolute;
+    right: -6px;
+    top: -5px;
+    font-size: 25px;
+    cursor: pointer;
+  }
+}
+
+.modal-wrap {
+  overflow: auto;
+  height: 100%;
+
+  .note-content {
+
+    .modal-form {
+      .textarea-content {
+        @include textarea-style;;
+      }
+    }
+
+    .note-action {
+      margin-top: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: flex-end;
+
+      .mat-btn {
+        @include mat-btn-style;
+      }
+
+      .mat-cancel-btn {
+        margin-left: 8px;
+        @include mat-cancel-btn-style;
+      }
+    }
+  }
+
+  table {
+    width: 100%;
+    border-spacing: 0 3px;
+    margin-top: 8px;
+
+    tr:hover {
+      background-color: $blue-light-3;
+      cursor: pointer;
+    }
+
+    th, td {
+      padding: 10px;
+      white-space: normal;
+      word-break: break-word;
+      border: 1px solid transparent;
+      text-align: start;
+    }
+
+    th {
+      background-color: $header-background-color;
+      &:first-child {
+        border-radius: 4px 0 0 4px;
+      }
+
+      &:last-child {
+        border-radius: 0 4px 4px 0;
+      }
+    }
+
+    td {
+      border-bottom: 1px solid $blue-light-4;
+      border-top: 1px solid $blue-light-4;
+
+      &:first-child {
+        border-left: 1px solid $blue-light-4;
+        border-radius: 4px;
+      }
+
+      &:last-child {
+        border-right: 1px solid $blue-light-4;
+        border-radius: 4px;
+      }
+
+      ::ng-deep {
+        .material-icons {
+          margin: 0;
+        }
+      }
+
+      textarea {
+        padding: 8px 14px;
+        border: 1px solid $blue-2;
+        border-radius: 4px;
+        box-sizing: border-box;
+        width: 100% !important;
+        max-height: 600px !important;
+        min-height: 36px;
+        font-size: 16px;
+        outline: none;
+        color: $blue-2;
+        background-color: $white;
+        font-family: "Roboto", sans-serif;
+        resize: vertical;
+
+        &:focus {
+          border: 1px solid $blue-5;
+        }
+      }
+
+      .edited-mode {
+        padding-top: 10px;
+
+        .select-content {
+          width: 100%;
+          border-radius: 4px;
+          padding: 2px 3px;
+        }
+
+        .table-action {
+          display: flex;
+          padding: 10px 0;
+
+          .mat-btn {
+            @include mat-btn-style;
+          }
+
+          .mat-cancel-btn {
+            margin-left: 8px;
+            @include mat-cancel-btn-style;
+          }
+        }
+      }
+
+      &.message {
+        width: 120px;
+      }
+    }
+  }
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+  margin-bottom: 0;
+  padding: 18px 0 0 0;
+  min-height: 28px;
+
+  .mat-cancel-btn {
+    @include mat-cancel-btn-style;
+  }
+
+  .mat-btn {
+    margin-left: 8px;
+    @include mat-btn-style;
+  }
+}

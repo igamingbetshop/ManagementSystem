@@ -1,0 +1,12 @@
+<div class="home-container">
+
+  <div class="categories">
+    <ng-container *ngFor="let section of homeSections">
+      <app-category
+        class="category"
+        [categoryData] = section>
+      </app-category>      
+    </ng-container>
+  </div>
+
+</div>

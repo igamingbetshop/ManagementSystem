@@ -1,0 +1,280 @@
+@import "variables";
+@import "mixins";
+
+.mat-dialog-container {
+  padding: 0 !important;
+}
+
+.mat-dialog-title {
+  display: flex !important;
+  padding: 16px 16px 20px 20px !important;
+  margin-bottom: 0 !important;
+
+  .title {
+    margin: 0;
+    font-size: 18px;
+    color: $blue-2;
+    font-weight: 600;
+  }
+
+  mat-icon {
+    margin-left: auto;
+    cursor: pointer;
+    color: $blue-2;
+    font-size: 29px;
+  }
+}
+
+.modal-wrap {
+  color: $blue-8;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+
+  .field-content {
+    grid-template-columns: 1fr 1fr;
+
+    mat-form-field {
+      margin: 0;
+      width: 46%;
+    }
+
+    .field-content-seccond-child {
+      margin-left: 15px;
+    }
+
+    .calendar-picker {
+      margin: 0;
+      padding: 0;
+
+
+      padding-left: 12px;
+      background-color: $blue-light-22 !important;
+      border: 1px solid #5BA3D3 !important;
+
+
+      .mat-form-field-outline {
+        border: 1px solid #5BA3D3;
+      }
+
+      mat-datepicker-toggle {
+        color: $blue-8 !important;
+      }
+    }
+  }
+
+  .mat-form-field {
+    margin: 2px;
+    padding-left: 12px;
+    height: 48px;
+    background-color: $blue-light-22;
+    border: 1px solid #5BA3D3;
+    border-radius: 6px;
+    color: $blue-2 !important;
+
+    &.ng-invalid {
+      &.ng-touched {
+        border: 1px solid $red-6;
+      }
+    }
+
+    mat-select {
+      color: $blue-8 !important;
+    }
+
+    &::placeholder {
+      color: $blue-8 !important;
+
+      &.ng-invalid {
+        &.ng-touched {
+          color: $red-6 !important;
+        }
+      }
+    }
+
+    color: $blue-8 !important;
+
+    .mat-select-placeholder {
+      color: $blue-8 !important;
+
+      &.ng-invalid {
+        &.ng-touched {
+          color: $red-6 !important;
+        }
+      }
+    }
+
+    .mat-select-value-text {
+      color: $blue-8 !important;
+
+      &.ng-invalid {
+        &.ng-touched {
+          color: $red-6 !important;
+        }
+      }
+    }
+
+    .mat-form-field-label {
+      color: $blue-8 !important;
+
+      &.ng-invalid {
+        &.ng-touched {
+          color: $red-6 !important;
+        }
+      }
+    }
+
+    .mat-select-arrow {
+      color: $blue-8 !important;
+    }
+
+    mat-error {
+      font-size: 12px !important;
+      color: $red-6 !important;
+    }
+  }
+
+  .full-height {
+    height: 100%;
+    background-color: $blue-light-22;
+    border: 1px solid #5BA3D3;
+    margin-bottom: 0!important;
+    padding-bottom: 0!important;
+  }
+
+  mat-select {
+    color: $blue-8 !important;
+
+    &::placeholder {
+      color: $blue-8 !important;
+    }
+  }
+
+  mat-checkbox {
+    color: $blue-8 !important;
+  }
+
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-ripple .mat-ripple-element {
+    background-color: $blue-8 !important;
+  }
+
+  .mat-radio-outer-circle {
+    border: 2px solid $blue-8 !important;
+    background-color: $blue-light-22 !important;
+  }
+
+  .mat-radio-inner-circle {
+    background-color: $blue-8 !important;
+  }
+
+}
+
+.modal-wrap {
+  overflow: auto;
+}
+
+.mat-select-panel {
+  background-color: $blue-light-22 !important;
+}
+
+.mat-option-text {
+  color: $blue-6 !important;
+}
+
+.condition-list {
+  color: $blue-8 !important;
+  display: flex;
+
+  > div {
+    width: 32%;
+  }
+
+  .mat-icon {
+    cursor: pointer;
+    color: $blue-8 !important;
+  }
+}
+
+.condition-action {
+
+  .value-field {
+    width: 150px;
+  }
+
+  .selection-action {
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+
+    .value-field {
+      width: 150px;
+    }
+  }
+
+  .btn-action {
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+
+    .mat-btn {
+      width: 50%;
+      @include mat-btn-style;
+      color: $white;
+    }
+  }
+}
+
+.mat-dialog-actions {
+  position: relative;
+  justify-content: flex-end;
+  margin-bottom: 0 !important;
+  box-shadow: 0px -2px 4px $black-shadow-3;
+  min-height: auto !important;
+  padding: 12px 20px 12px 0 !important;
+  column-gap: 12px;
+
+  .modal-primary-btn {
+    border-radius: 6px;
+    color: $white !important;
+    padding: 0 10px;
+    background: linear-gradient(180deg, $blue-2 0%, $blue-light-13 50%, $blue-5 100%);
+    border: 1px solid transparent !important;
+    height: 34px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 16px;
+
+    &.disabled {
+      background : linear-gradient(180deg, rgba(5, 115, 186, 0.7) 0%, rgba(37, 142, 205, 0.7) 50%, rgba(7, 97, 146, 0.7) 100%);
+      color: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.9;
+    }
+  }
+
+  .modal-cancel-btn {
+    background-color: $white;
+    padding: 0 10px;
+    border: 1px solid $gray-light-2;
+    height: 34px;
+    cursor: pointer;
+    color: $gray-light-2;
+    border-radius: 6px;
+    font-size: 16px;
+    text-transform: uppercase;
+
+    &:hover {
+      border: 1px solid $blue-5;
+      background: $white;
+      color: $blue-5;
+    }
+  }
+}
+
+

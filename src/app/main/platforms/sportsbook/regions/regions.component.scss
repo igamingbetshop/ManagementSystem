@@ -1,0 +1,71 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: 89%;
+  .content-action {
+    @include action-style;
+
+    .partner-dropdown {
+      @include dropdown-style;
+    }
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+    }
+
+    .mat-delete {
+      margin-left: 8px;
+      @include mat-delete-style;
+    }
+
+  }
+
+  .main-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    column-gap: 10px;
+
+    .left-panel {
+      width: 60%;
+    }
+
+    .right-panel {
+      width: 40%;
+    }
+
+    .action-content {
+      @include action-style;
+      .title {
+        &.right {
+          font-size: 17px;
+        }
+      }
+    }
+
+    .grid-content {
+      width: 100%;
+      height: 100%;
+      position: relative;
+
+      ::ng-deep {
+        ag-grid-angular {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .grid-action {
+      display: flex;
+      .mat-btn {
+        margin-right: 8px;
+        @include mat-btn-style;
+      }
+    }
+  }
+
+}

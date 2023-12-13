@@ -1,0 +1,85 @@
+<div mat-dialog-title>
+  <span class="title">{{'Bonuses.AddProductGroup' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+  
+          <mat-form-field>
+            <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+            <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+              {{'Common.NameRequired' | translate}}
+            </mat-error>
+          </mat-form-field>
+  
+  
+          <mat-form-field *ngIf="isParentGroup">
+            <mat-label> {{'Partners.SelectPartner' | translate}}</mat-label>
+            <mat-select   [formControlName]="'Id'">
+              <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.required">
+              Partner required.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'BetShops.MaxCopyCount' | translate}}" [formControlName]="'MaxCopyCount'">
+            <mat-error *ngIf="errorControl['MaxCopyCount']?.touched && errorControl['MaxCopyCount'].errors?.required">
+              {{'BetShops.MaxCopyCount' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'BetShops.MaxWinAmount' | translate}}" [formControlName]="'MaxWinAmount'">
+            <mat-error *ngIf="errorControl['MaxWinAmount']?.touched && errorControl['MaxWinAmount'].errors?.required">
+              {{'BetShops.MaxWinAmount' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'BetShops.MinBetAmount' | translate}}" [formControlName]="'MinBetAmount'">
+            <mat-error *ngIf="errorControl['MinBetAmount']?.touched && errorControl['MinBetAmount'].errors?.required">
+              {{'BetShops.MinBetAmount' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'BetShops.MaxEventCountPerTicket' | translate}}" [formControlName]="'MaxEventCountPerTicket'">
+            <mat-error *ngIf="errorControl['MaxEventCountPerTicket']?.touched && errorControl['MaxEventCountPerTicket'].errors?.required">
+              {{'BetShops.MaxEventCountPerTicket' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'BetShops.CommissionType' | translate}}" [formControlName]="'CommissionType'">
+            <mat-error *ngIf="errorControl['CommissionType']?.touched && errorControl['CommissionType'].errors?.required">
+              {{'BetShops.CommissionType' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+      
+          <mat-form-field>
+            <input matInput type="number" placeholder="{{'BetShops.CommisionRate' | translate}}" [formControlName]="'CommisionRate'">
+            <mat-error *ngIf="errorControl['CommisionRate']?.touched && errorControl['CommisionRate'].errors?.required">
+              {{'BetShops.CommisionRate' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-checkbox labelPosition="before"  color="primary"  [formControlName]="'AnonymousBet'">{{'BetShops.AnonymousBet' | translate}}</mat-checkbox>
+
+          <mat-checkbox labelPosition="before"  color="primary"  [formControlName]="'AllowCashout'">{{'BetShops.AllowCashout' | translate}}</mat-checkbox>
+      
+          <mat-checkbox labelPosition="before"  color="primary"  [formControlName]="'AllowLive'">{{'Sport.AllowLive' | translate}}</mat-checkbox>
+      
+          <mat-checkbox labelPosition="before"  color="primary"  [formControlName]="'UsePin'">{{'BetShops.UsePin' | translate}}</mat-checkbox>
+
+  </form>
+
+  <div *ngIf="!isParentGroup" class="name">{{parentGroupName}}</div>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

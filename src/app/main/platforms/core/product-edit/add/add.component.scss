@@ -1,0 +1,22 @@
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 15px;
+  }
+}
+
+::ng-deep {
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
+}
+
+.name{
+  margin: 15px;
+  color: #076192;
+  font-size: 18px;
+  font-weight: 500;
+}

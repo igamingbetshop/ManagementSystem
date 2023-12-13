@@ -1,0 +1,47 @@
+<div mat-dialog-title>
+  <span class="title">{{'Payments.AddDepositForm' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Payments.SelectBank' | translate}}</mat-label>
+      <mat-select [formControlName]="'BankName'" required (selectionChange)="changeBank()">
+        <mat-option *ngFor="let name of partnerBanks" [value]="name.Id">{{name.BankName}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['BankName'].touched && errorControl['BankName'].hasError('required')">
+        {{'Payments.BankName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Payments.BankAccountNumber' | translate}}</mat-label>
+      <mat-select [formControlName]="'BankAccountNumber'" required>
+        <mat-option *ngFor="let name of selectedBank.Accounts" [value]="name">{{name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['BankAccountNumber'].touched && errorControl['BankAccountNumber'].hasError('required')">
+        {{'Payments.BankAccountNumber' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Payments.Amount' | translate}}</mat-label>
+      <input matInput [formControlName]="'Amount'" [placeholder]="'Payments.Amount' | translate">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Payments.ClientIdOrUsername' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Payments.ClientIdOrUsername' | translate" [formControlName]="'ClientIdentifier'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Payments.Date' | translate}}</mat-label>
+      <input matInput [matDatepicker]="picker" [formControlName]="'TransactionDate'"
+             (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <input type="file" id="Image" (change)="uploadFile($event)">
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

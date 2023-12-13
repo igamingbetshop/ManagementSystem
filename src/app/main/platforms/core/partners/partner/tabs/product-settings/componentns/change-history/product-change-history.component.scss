@@ -1,0 +1,13 @@
+@import "mixins.scss";
+@import "variables.scss";
+.footer-grid {
+  width: 100%;
+  height: 400px;
+
+  ::ng-deep {
+    ag-grid-angular {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

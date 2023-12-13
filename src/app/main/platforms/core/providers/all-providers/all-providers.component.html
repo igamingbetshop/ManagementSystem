@@ -1,0 +1,44 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.providerId }">
+
+
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Providers.Providers' | translate}}</div>
+    <!-- <div>
+      <button mat-stroked-button color="primary"  class="btn-block add-settings" (click)="addProviders()">{{'Providers.AddProvider' | translate}}</button>
+    </div> -->
+    <button mat-stroked-button class="mat-btn" (click)="addProviders()">{{'Providers.AddProvider' |
+      translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="all-providers"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [suppressCopyRowsToClipboard]="true"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+
+
+  </div>
+
+</div>
+</div>
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.providerId
+"></router-outlet>

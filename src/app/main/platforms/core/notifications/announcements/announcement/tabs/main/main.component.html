@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['/main/platform/notifications/announcements']">{{'Notifications.Announcement' | translate}}</a> / {{announcementId}}
+      : {{'Sport.MainInfo' | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Clients.Id' | translate}}</div>
+        <div class="second-hand">{{announcement?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Id'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.NickName' | translate}}</div>
+        <div class="second-hand">{{announcement?.NickName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'NickName'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.UserId' | translate}}</div>
+        <div class="second-hand">{{announcement?.UserId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'UserId'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+        <div class="static-hand">{{announcement?.PartnerName}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.ReceiverType' | translate}}</div>
+        <div class="static-hand">{{announcement?.ReceiverTypeName}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.CreationDate' | translate}}</div>
+        <div class="static-hand">{{announcement?.CreationDate | date:'dd/MM/yyyy'}}</div>
+
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.LastUpdateDate' | translate}}</div>
+        <div class="static-hand">{{announcement?.LastUpdateDate | date:'dd/MM/yyyy'}}</div>
+      </div>
+      
+      <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="static-hand">{{announcement?.TypeName}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{announcement?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            <mat-option *ngFor="let state of clientStates" [value]="state.Id">{{state.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Bonuses.SelectSegment' | translate}}</div>
+        <div class="second-hand">
+          <ng-container *ngFor="let segment of segmentesEntites">{{segment}}</ng-container>
+        </div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'SegmentIds'" multiple>
+            <mat-option *ngFor="let segment of segments" [value]="segment.Id">{{segment.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{ 'Common.UserIds' | translate }}</div>
+        <div class="second-hand">{{ announcement?.UserIds.join(', ') }}</div>
+        <div class="form-field text-area">
+          <textarea matInput [placeholder]="'Common.UserIds' | translate"[formControl]="formGroup.get('UserIds')" (blur)="convertToArray('UserIds')"></textarea>
+      </div>
+      </div>
+      
+      <div>
+        <div class="first-hand">{{ 'Segments.ClientIds' | translate }}</div>
+        <div class="second-hand">{{ announcement?.ClientIds.join(', ') }}</div>
+
+        <div class="form-field text-area">
+          <textarea matInput [placeholder]="'Segments.ClientIds' | translate"  [formControl]="formGroup.get('ClientIds')" (blur)="convertToArray('ClientIds')">
+          </textarea>
+      </div>
+      </div>
+
+      <div></div>
+      <div></div>
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="content-action">
+    <div class="title">{{'Common.History' | translate}}</div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+</div>

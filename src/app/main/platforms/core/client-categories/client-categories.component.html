@@ -1,0 +1,38 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'ClientCategories.ClientCategories' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="addCategory()">{{'ClientCategories.AddCategory' |
+      translate}}</button>
+
+    <button mat-stroked-button class="mat-delete-btn" [disabled]="!isRowSelected" class="btn-block"
+      (click)="onDelete()">{{'Common.Delete' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="users"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [suppressCopyRowsToClipboard]="true"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      (cellClicked)="onCellClicked($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+      </ag-grid-angular>
+  </div>
+</div>

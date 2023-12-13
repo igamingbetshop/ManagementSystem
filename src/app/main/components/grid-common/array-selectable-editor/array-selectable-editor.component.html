@@ -1,0 +1,20 @@
+<div class="contnet">
+    <h2>{{'Categories.AddCategory' | translate}}</h2>
+
+    <button mat-icon-button aria-label="close" (click)="stopEditing(false)">
+        <mat-icon style="margin-top: 16px;">close</mat-icon>
+    </button>
+
+</div>
+
+<mat-select 
+(selectionChange)="onItemChanged($event.value)"
+[value]="items" multiple>
+    <mat-option *ngFor="let option of options" [value]="option.Id">{{ option.Name }}</mat-option>
+</mat-select>
+<br>
+
+<button class="add-btn" (click)="stopEditing(true)" mat-mini-fab aria-label="Example icon button with a filter list icon">
+    <mat-icon>add</mat-icon>
+  </button>
+<br>

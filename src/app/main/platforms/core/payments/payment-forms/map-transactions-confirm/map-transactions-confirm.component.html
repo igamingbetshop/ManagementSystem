@@ -1,0 +1,11 @@
+<div mat-dialog-title>
+  <span class="title">{{'View' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="description">
+  {{'Payments.AreYouSureYouWantToConnectTransactionsWithDifferentAmounts' | translate}}
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.No' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submit()">{{'Common.Yes' | translate}}</button>
+</div>

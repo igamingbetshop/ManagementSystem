@@ -1,0 +1,41 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: 92%;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+  }
+
+  .main-content {
+    width: 100%;
+    height: calc(100% - 9%);
+    display: flex;
+    column-gap: 10px;
+    .left-panel,
+    .right-panel {
+      width: 100%;
+    }
+
+    .action-content {
+      @include action-style;
+      height: 60px;
+
+      .mat-btn {
+        @include mat-btn-style;
+        margin-left: 10px;
+      }
+
+      .title {
+        font-size: 18px;
+        color: $blue-5;
+      }
+    }
+
+  }
+
+}

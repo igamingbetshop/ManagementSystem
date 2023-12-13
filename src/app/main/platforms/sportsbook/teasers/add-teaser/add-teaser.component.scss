@@ -1,0 +1,17 @@
+.modal-wrap {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    max-height: calc(80vh - 91px);
+    min-height: 200px;
+    padding-right: 14px;
+  }
+
+  .field-content {
+    mat-form-field {
+        margin-left: 2px;
+        margin-right: 6px;
+        margin-bottom: 8px;
+    }
+  }
+  

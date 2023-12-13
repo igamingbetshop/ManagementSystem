@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-finished']">{{'Sport.Finished' | translate}}</a> / :
+      {{'Partners.Main' | translate}} {{finishId}} &nbsp; {{name}}</div> 
+    <div>
+    </div>
+    <div class="button-wraper">
+      <button mat-raised-button class="mat-btn" *ngIf="finishMatch['Status'] == 5"
+        (click)="resetMatch(0)">{{'Sport.ResetPreMatch' | translate}}</button>
+      <button mat-raised-button class="mat-btn" *ngIf="finishMatch['Status'] == 5"
+        (click)="resetMatch(1)">{{'Sport.ResetLive' | translate}}</button>
+    </div>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{finishMatch['MatchId']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.SportName' | translate}}</div>
+        <div class="second-hand">{{finishMatch['SportName']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.Number' | translate}}</div>
+        <div class="second-hand">{{finishMatch['Number']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.RegionName' | translate}}</div>
+        <div class="second-hand">{{finishMatch['RegionName']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
+        <div class="second-hand">{{finishMatch['ExternalId']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.CompetitionName' | translate}}</div>
+        <div class="second-hand">{{finishMatch['CompetitionName']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.ProviderId' | translate}}</div>
+        <div class="second-hand">{{finishMatch['ProviderId']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Status' | translate}}</div>
+        <div class="second-hand">{{finishMatch['StatusName']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
+        <div class="second-hand">{{finishMatch['AbsoluteLimit']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.Delay' | translate}}</div>
+        <div class="second-hand">{{finishMatch['Delay']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinPrematchSingle' | translate}}</div>
+        <div class="second-hand">{{finishMatch['MaxWinPrematchSingle']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinPrematchMultiple' | translate}}</div>
+        <div class="second-hand">{{finishMatch['MaxWinPrematchMultiple']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinLiveSingle' | translate}}</div>
+        <div class="second-hand">{{finishMatch['MaxWinLiveSingle']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
+        <div class="second-hand">{{finishMatch['MaxWinLiveMultiple']}}</div>
+      </div>  
+
+      <div>
+        <div class="first-hand">{{'Sport.ResultInfo' | translate}}</div>
+        <div class="second-hand">{{finishMatch['ResultInfo']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.CurrentPhase' | translate}}</div>
+        <div class="second-hand">{{finishMatch['currentPhase']}}</div>
+      </div>
+      
+      <div>
+        <div class="first-hand">{{'Sport.LinkedMatches' | translate}}</div>
+        <div class="second-hand">{{finishMatch['LinkedMatches']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Dashboard.Provider' | translate}}</div>
+        <mat-select [(ngModel)]="finishMatch['ProviderId']" (ngModelChange)="updateProviders()">
+          <mat-option *ngFor="let Provider of Providers" [value]="Provider.Id">{{Provider.Name}}</mat-option>
+        </mat-select>
+      </div>
+    </form>
+  </div>
+</div>

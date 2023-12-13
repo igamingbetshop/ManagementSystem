@@ -1,0 +1,97 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> / {{clientId}} :{{'Clients.Bets' | translate}}</div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="onSelectAccountType($event.value)"
+        placeholder="{{'Clients.SelectAccount' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Clients.SelectAccount' | translate}}</mat-option>
+        <mat-option *ngFor="let account of accounts" [value]="account.Id">{{account.AccountTypeName}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="date-time-tabs">
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
+      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'month'" (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
+      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'week'" (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
+      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
+    </div>
+
+    <mat-form-field class="calendar-picker start" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field class="calendar-picker" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="all-finished"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [sideBar]="sideBar"
+      [suppressRowClickSelection]="true"
+      [columnDefs]="columnDefs"
+      [masterDetail]="masterDetail"
+      [detailCellRendererParams]="detailCellRendererParams"
+      [cacheBlockSize]="cacheBlockSize"
+      [paginationAutoPageSize]="paginationAutoPageSize"
+      [paginationPageSize]="cacheBlockSize"
+      [components]="nestedFrameworkComponents"
+      [pagination]="pagination"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [groupIncludeFooter]="true"
+      [groupIncludeTotalFooter]="true"
+      [defaultColDef]="defaultColDef"
+      (gridReady)="onGridReady($event)"
+      [suppressCopyRowsToClipboard]="true"
+      (rowGroupOpened)="onRowGroupOpened($event)"
+      (rowClicked)="onRowClicked($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="multiple">
+    </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+</div>

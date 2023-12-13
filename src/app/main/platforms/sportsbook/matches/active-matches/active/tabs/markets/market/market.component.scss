@@ -1,0 +1,96 @@
+@import "variables";
+.modal-wrap-div{
+   overflow-y: auto;
+   //height: 550px;
+   padding: 20px;
+}
+
+ag-grid-angular{
+  width: 100%;
+  height: 100%;
+}
+
+.columns-data{
+  margin-top: 15px;
+  display: flex;
+  justify-content: end;
+  span{
+    color: red;
+    margin-right: 50px;
+  }
+}
+
+
+.modal-form
+{
+  margin: 0 auto;
+  grid-template-columns: 1fr 1fr;
+  width: 60%;
+  button
+  {
+    //grid-column: 2 / span 1;
+    //grid-row: 8;
+    // margin-left: 330px;
+    // margin-top: 25px;
+    width: 150px;
+  }
+}
+
+mat-checkbox{
+  grid-row: 6;
+}
+
+ span{
+   color: red;
+ }
+
+mat-form-field{
+  margin-right: 25px;
+  mat-label{
+    color: red;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  input{
+    font-size: 24px;
+  }
+}
+
+.header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  h2{
+    white-space: nowrap;
+
+  }
+}
+
+::ng-deep .ui-grid-cell-contents{
+  border-right: none;
+  border-left: none;
+  padding: 0 5px !important;
+  line-height: 30px;
+  vertical-align: middle;
+}
+
+h4{
+  white-space: nowrap;
+}
+
+.button-wraper{
+
+  button{
+
+    margin-right: 15px;
+  }
+}
+
+::ng-deep .red{
+  color: red;
+}
+::ng-deep .green{
+  color: green;
+}

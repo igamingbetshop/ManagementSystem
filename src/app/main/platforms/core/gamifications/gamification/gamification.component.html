@@ -1,0 +1,138 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['/main/platform/gamifications/all-gamifications']"> {{'Clients.Gamification' |
+        translate}}</a> / {{gamificationId}}</div>
+
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
+
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Clients.Id' | translate}}</div>
+        <div class="second-hand">{{gamification?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Clients.Id' | translate" [formControlName]="'Id'"
+              readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Title' | translate}}</div>
+        <div class="second-hand">{{gamification?.Title}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput readonly="true" [maxLength]="100" [placeholder]="'Clients.Title' | translate" [formControlName]="'Title'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
+        <div class="second-hand">{{gamification?.Description}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" readonly="true" [placeholder]="'Bonuses.Description' | translate"
+              [formControlName]="'Description'">
+          </mat-form-field>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.NickName' | translate}}</div>
+        <div class="second-hand">{{gamification?.NickName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
+              [formControlName]="'NickName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Order' | translate}}</div>
+        <div class="second-hand">{{gamification?.Order}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [maxlength]="2" [placeholder]="'Common.Order' | translate"
+              [formControlName]="'Order'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.SelectPartner' | translate}}</div>
+        <div class="second-hand">{{gamification?.PartnerName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'PartnerId'" placeholder="{{'Partners.SelectPartner' | translate}}">
+            <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Bonuses.SelectStatus' | translate}}</div>
+        <div class="second-hand">{{gamification?.Status === 1 ? "Active" : (gamification?.Status === 2 ? "Inactive" : "")}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Status'" placeholder="{{'Bonuses.SelectStatus' | translate}}">
+            <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+      
+      <div *ngIf="gamification?.Order !== 1"  >
+        <div class="first-hand">{{'Segments.ComplimentaryPoint' | translate}}</div>
+        <div class="second-hand">{{gamification?.CompPoints}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [maxlength]="2" [placeholder]="'Common.CompPoints' | translate"
+              [formControlName]="'CompPoints'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div >
+        <div class="first-hand">{{'Cms.Image' | translate}}</div>
+        <div class="second-hand">{{gamification?.ImageData}}</div>
+        <div class="form-field form-checkbox">
+          <input class="file-input" type="file" (change)="uploadFile($event)">
+        </div>
+      </div>
+
+      <div *ngIf="isEdit">
+        <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
+        <div class="second-hand">{{gamification?.EnvironmentTypeId === 1 ? "Production" : (gamification?.EnvironmentTypeId === 2 ? "Staging" : "")}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'EnvironmentTypeId'">
+            <mat-option *ngFor="let environment of environments"
+              [value]="environment.Id">{{environment.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+
+
+
+      <div></div>
+      <div></div>
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="isEdit = false">{{'Common.Cancel' |
+            translate}}</button>
+            <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save'
+              |translate}}</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+  <img class="img" [src]="image" alt="Avatar Image">
+
+</div>

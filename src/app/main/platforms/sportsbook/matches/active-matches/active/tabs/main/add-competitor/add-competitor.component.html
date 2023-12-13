@@ -1,0 +1,25 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.AddCompetitor' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" [class.can-edit]="true">
+
+    <mat-form-field>
+      <mat-label>{{'Sport.TeamId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Sport.TeamId' | translate" [formControlName]="'TeamId'">
+      <mat-error *ngIf="errorControl['TeamId']?.touched && errorControl['TeamId'].errors?.required">
+        {{'Sport.TeamId' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox [formControlName]="'Display'">{{'Common.Display' | translate}}</mat-checkbox>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn"  (click)="onClose()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid" (click)="onSubmit()" >{{'Common.Save' |translate}}</button>
+</div>

@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.ActiveMatches' | translate}}</div>
+
+        <div class="partner-dropdown">
+          <mat-select placeholder="{{'Partners.SelectPartner' | translate}}" [(value)]="partnerId"   #part1   (selectionChange)="onPartnerChange(part1.value)">
+            <mat-option value="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+            <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+
+        <div class="input-content">
+          <input matInput  type="number" [(value)] ="priority" #pr placeholder="{{'Bonuses.Priority' | translate}}" (input)="onPriorityChange(pr.value)" >
+        </div>
+
+        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="onAddMatch()">{{'Sport.AddMatch' | translate}}</button>
+      </div>
+
+      <div class="grid-content">
+        <ag-grid-angular
+        id="all-active"
+        #agGrid
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData"
+        [suppressCopyRowsToClipboard]="true"
+        [rowModelType]="rowModelType1"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [components]="frameworkComponents"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        (gridReady)="onGridReady($event)"
+        rowSelection="single"
+        >
+      </ag-grid-angular>
+
+      </div>
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.FavoriteMatches' | translate}}</div>
+        <div>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected1()"  (click)="onRemoveMatch()">{{'Sport.RemoveMatch' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" (click)="onGo()">{{'Common.Go' | translate}}</button>
+
+        </div>
+      </div>
+      <div class="grid-content">
+        <ag-grid-angular
+        id="favorites-2"
+        #agGrid1
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData1"
+        [suppressCopyRowsToClipboard]="true"
+        [rowModelType]="rowModelType1"
+        [columnDefs]="columnDefs2"
+        [defaultColDef]="defaultColDef"
+        [components]="frameworkComponents"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        (cellValueChanged)="onCellValueChanged($event)"
+        (gridReady)="onGridReady1($event)"
+        rowSelection="single">
+        >
+    </ag-grid-angular>
+
+      </div>
+    </div>
+
+  </div>
+</div>

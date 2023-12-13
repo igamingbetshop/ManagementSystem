@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-segments']">{{'Segments.Segments' | translate}}</a> / {{segmentId}} : {{'Clients.Clients' | translate}}</div>
+    <button mat-stroked-button class="mat-export-btns" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="segment-clients"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [paginationPageSize]="cacheBlockSize"
+    (paginationChanged)="onPaginationChanged($event)"
+    [pagination]="pagination"
+    [sideBar]="sideBar"
+    [suppressCopyRowsToClipboard]="true"
+    [animateRows]="true"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+
+  <div class="pages-sizes">
+    <mat-select
+      (selectionChange)="onPageSizeChanged()"
+      [(ngModel)]="cacheBlockSize"
+      [(value)]="defaultPageSize"
+      panelClass="overlay-dropdown small"
+      disableOptionCentering>
+      <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+    </mat-select>
+  </div>
+
+  </div>
+</div>

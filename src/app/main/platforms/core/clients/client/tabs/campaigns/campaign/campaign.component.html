@@ -1,0 +1,55 @@
+<div class="main-history">
+  <header>
+    {{id}}
+  </header>
+    <div class="grid-history">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{oldData?.Id}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
+        <div class="second-hand">{{oldData?.ClientId}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.BonusId' | translate}}</div>
+        <div class="second-hand">{{oldData?.BonusId}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.bonusPrize' | translate}}</div>
+        <div class="second-hand">{{oldData?.BonusPrize}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+        <div class="second-hand">{{oldData?.CreationTime | date:'longDate'}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.ValidUntil' | translate}}</div>
+        <div class="second-hand">{{oldData?.ValidUntil | date:'longDate'}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.AwardingTime' | translate}}</div>
+        <div class="second-hand">{{oldData?.AwardingTime | date:'longDate'}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.CalculationTime' | translate}}</div>
+        <div class="second-hand">{{oldData?.CalculationTime | date:'longDate'}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.TriggerId' | translate}}</div>
+        <div class="second-hand">{{oldData?.TriggerId}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Common.Status' | translate}}</div>
+        <div class="second-hand">{{oldData?.Status}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.FinalAmount' | translate}}</div>
+        <div class="second-hand">{{oldData?.FinalAmount}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.TurnoverAmountLeft' | translate}}</div>
+        <div class="second-hand">{{oldData?.TurnoverAmountLeft}}</div>
+      </div>
+    </div>
+</div>

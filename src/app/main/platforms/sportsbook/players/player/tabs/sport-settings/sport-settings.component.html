@@ -1,0 +1,74 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-players']">{{'Sport.Players' | translate}}</a> /&nbsp;{{playerId}} :&nbsp; {{'Sport.SportSettings' | translate}}</div>
+
+    <div class="custom-dropdown">
+      <mat-select [(ngModel)]="selectedSport" placeholder="{{'Sport.SelectSport' | translate}}"  (ngModelChange)="changeSport()">
+        <mat-option *ngFor="let sport of sports" [value]="sport.Id">{{sport.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+
+
+    <div class="input-content">
+
+      <input type="text"
+      placeholder="{{'Sport.SearchCompetition' | translate}}"
+      aria-label="Competitions"
+      matInput
+      [(ngModel)]="competitionId"
+      (ngModelChange)="findData($event)"
+      [matAutocomplete]="auto"
+      [disabled]="!selectedSport" 
+      style="width: 350px;"
+      >
+
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getName.bind(this)">
+        <mat-option *ngFor="let competition of competitions" [value]="competition.Id">
+          {{competition.Name}}  {{competition.RegionName}}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+
+    <div class="custom-dropdown">
+      <mat-select placeholder="{{'Sport.SelectRestriction' | translate}}" [(ngModel)]="selectedRestriction" [disabled]="!selectedSport">
+        <mat-option *ngFor="let restriction of restrictionTypes"
+                    [value]="restriction.Id">{{restriction.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="input-content">
+      <input type="number"
+      placeholder="{{'Bonuses.Value' | translate}}"
+      aria-label="Competitions"
+      matInput
+      [(ngModel)]="selectedValue">
+    </div>
+    
+    <button mat-stroked-button class="mat-btn" (click)="saveSportSettings()">{{'Common.Save' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="getSportSettings()">{{'Common.Go' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="sessions"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [suppressCopyRowsToClipboard]="true"
+    [columnDefs]="columnDefs"
+    [animateRows]="true"
+    [components]="frameworkComponents"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    rowSelection="single">
+  </ag-grid-angular>
+
+  </div>
+</div>

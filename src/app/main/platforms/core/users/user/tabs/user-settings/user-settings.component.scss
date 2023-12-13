@@ -1,0 +1,16 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+  }
+}

@@ -1,0 +1,148 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.bulk-editor-container {
+  padding: 20px 14px 14px 14px;
+  background-color: $blue-light-7;
+  border-radius: 4px;
+  z-index: 1;
+  margin-top: 4px;
+
+  .bulk-editor-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 8px;
+    column-gap: 16px;
+
+    .bulk-checkbox {
+      ::ng-deep {
+
+        .mat-checkbox-checkmark-path {
+          stroke: $blue-5 !important;
+          stroke-width: 3px;
+        }
+
+        .mat-checkbox-inner-container {
+          width: 18px;
+          height: 18px;
+
+          .mat-checkbox-background {
+            background-color: $blue-light-28 !important;
+            border-radius: 2px;
+            border: 3px solid $blue-5;
+          }
+        }
+
+        .mat-checkbox-label {
+          font-size: 14px;
+          color: $white;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 18px;
+          letter-spacing: 0.04em;
+        }
+      }
+    }
+
+    .bulk-switch {
+      margin-left: auto;
+
+      ::ng-deep {
+        .mat-slide-toggle-bar {
+          background-color: $white;
+          height: 14px;
+          width: 30px;
+
+          .mat-slide-toggle-thumb-container {
+            width: 12px;
+            height: 12px;
+            top: 1px;
+            left: 2px;
+          }
+
+          .mat-slide-toggle-thumb {
+            width: 12px;
+            height: 12px;
+            background-color: $blue-5;
+          }
+        }
+      }
+
+      &.mat-checked {
+        ::ng-deep {
+          .mat-slide-toggle-bar {
+
+            .mat-slide-toggle-thumb-container {
+              top: 1px;
+              left: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .bulk-input {
+      width: 110px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 4px;
+      height: 24px;
+      padding: 0 8px;
+      font-weight: 500;
+      font-size: 12px;
+      color: $blue-5;
+    }
+  }
+
+  .bulk-editor-actions {
+    display: flex;
+    column-gap: 8px;
+    padding-top: 18px;
+
+    .bulk-primary-btn {
+      border-radius: 4px;
+      color: rgba(255, 255, 255, 0.7);
+      padding: 0 10px;
+      background: linear-gradient(180deg, rgba(5, 115, 186, 0.7) 0%, rgba(37, 142, 205, 0.7) 50%, rgba(7, 97, 146, 0.7) 100%);;
+      border: 1px solid transparent !important;
+      height: 24px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 50%;
+
+      &.disabled {
+        color: $blue-5 !important;
+        background-color: $blue-light-7;
+        pointer-events: none;
+      }
+
+      &:hover {
+        cursor: pointer;
+        color: $white;
+      }
+    }
+
+    .bulk-cancel-btn {
+      background-color: $blue-light-29;
+      padding: 0 10px;
+      border: 1px solid transparent;
+      height: 24px;
+      cursor: pointer;
+      color: $blue-light-28;
+      border-radius: 4px;
+      font-size: 16px;
+      width: 50%;
+
+      &.disabled {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      &:hover {
+        color: $blue-5;
+      }
+    }
+
+  }
+}
+
+

@@ -1,0 +1,197 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../banners']">{{'Cms.Banners' | translate}}</a> / :{{id}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+
+
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.StartDate' | translate}}</div>
+        <div class="second-hand">{{banner?.StartDate | date:'dd/MM/yyyy'}}</div>
+        <div class="form-field form-calendar">
+          <mat-form-field appearance="none">
+            <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.EndDate' | translate}}</div>
+        <div class="second-hand">{{banner?.EndDate | date:'dd/MM/yyyy'}}</div>
+        <div class="form-field form-calendar">
+          <mat-form-field appearance="none">
+            <input matInput [matDatepicker]="picker1" [formControlName]="'EndDate'">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Body' | translate}}</div>
+        <div class="static-hand">{{banner?.Body}}</div>
+        <!-- <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="150" [placeholder]="'Cms.Body'" [formControlName]="'Body'">
+          </mat-form-field>
+        </div> -->
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Head' | translate}}</div>
+        <div class="static-hand">{{banner?.Head}}</div>
+        <!-- <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Cms.Head' | translate" [formControlName]="'Head'">
+          </mat-form-field>
+        </div> -->
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.NickName' | translate}}</div>
+        <div class="second-hand">{{banner?.NickName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
+              [formControlName]="'NickName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Order' | translate}}</div>
+        <div class="second-hand">{{banner?.Order}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="text" [maxlength]="2" [placeholder]="'Common.Order' | translate"
+              [formControlName]="'Order'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Link' | translate}}</div>
+        <div class="second-hand">{{banner?.Link}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Cms.Link' | translate" [formControlName]="'Link'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="second-hand">{{banner?.Type}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MatchId' | translate}}</div>
+        <div class="second-hand">{{banner?.MatchId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Sport.MatchId' | translate" [formControlName]="'MatchId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.SportId' | translate}}</div>
+        <div class="second-hand">{{banner?.SportId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Sport.SportId' | translate" [formControlName]="'SportId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Visibility' | translate}}</div>
+        <div class="second-hand">{{visibilytyName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Visibility'">
+            <mat-option *ngFor="let banVisType of bannerVisibilityTypes"
+              [value]="banVisType.id">{{banVisType.name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MarketTypeId' | translate}}</div>
+        <div class="second-hand">{{banner?.MarketTypeId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.MarketTypeId' | translate"
+              [formControlName]="'MarketTypeId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.ShowDescription' | translate}}</div>
+        <div class="second-hand">{{banner?.ShowDescription}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'ShowDescription'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.ShowLogin' | translate}}</div>
+        <div class="second-hand">{{banner?.ShowLogin}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'ShowLogin'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.IsEnabled' |translate}}</div>
+        <div class="second-hand">{{banner?.IsEnabled}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsEnabled'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Image' | translate}}</div>
+        <div class="second-hand">{{banner?.Image}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'Image'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="isEdit">
+        <div class="first-hand">{{'Common.UploadFile' | translate}}</div>
+        <div class="second-hand"></div>
+        <div class="form-field form-checkbox">
+          <input type="file" (change)="uploadFile($event)">
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- TODO -->
+  <!-- <img class="img" [src]="image" alt="Image"> -->
+
+
+</div>

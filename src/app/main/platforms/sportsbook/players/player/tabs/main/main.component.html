@@ -1,0 +1,169 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-players']">{{'Sport.Players' | translate}}</a> /&nbsp;{{playerId}} :&nbsp; {{'Sport.MainInfo' | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit] ="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{player?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" readonly [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div>
+        <div class="first-hand">{{'Sport.Categories' | translate}}</div>
+        <div class="second-hand">{{player?.CategoryName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'CategoryId'">
+            <mat-option *ngFor="let Category of Categories" [value]="Category.Id">{{Category.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.NickName' | translate}}</div>
+        <div class="second-hand">{{player?.NickName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Clients.NickName' | translate" readonly [formControlName]="'NickName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.LimitPercent' | translate}}</div>
+        <div class="second-hand">{{player?.LimitPercent}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.LimitPercent' | translate"
+            [formControlName]="'LimitPercent'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.DelayPercentPrematch' | translate}}</div>
+        <div class="second-hand">{{player?.DelayPercentPrematch}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.DelayPercentPrematch' | translate"
+            [formControlName]="'DelayPercentPrematch'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.DelayPercentLive' | translate}}</div>
+        <div class="second-hand">{{player?.DelayPercentLive}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.DelayPercentLive' | translate"
+            [formControlName]="'DelayPercentLive'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.DelayBetweenBetsPrematch' | translate}}</div>
+        <div class="second-hand">{{player?.DelayBetweenBetsPrematch}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.DelayBetweenBetsPrematch' | translate"
+            [formControlName]="'DelayBetweenBetsPrematch'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.DelayBetweenBetsLive' | translate}}</div>
+        <div class="second-hand">{{player?.DelayBetweenBetsLive}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.DelayBetweenBetsLive' | translate"
+            [formControlName]="'DelayBetweenBetsLive'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="second-hand">{{player?.PlayerCurrencyId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Clients.Currency' | translate" readonly
+            [formControlName]="'PlayerCurrencyId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
+        <div class="second-hand">{{player?.ExternalId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Products.ExternalId' | translate" readonly [formControlName]="'ExternalId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.RestrictMaxBet' | translate}}</div>
+        <div class="second-hand">{{player?.RestrictMaxBet}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'RestrictMaxBet'">{{'Sport.RestrictMaxBet' | translate}}</mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+      </div>
+
+      <div></div>
+
+
+      <div class="form-actions">
+
+        <div class="actions" *ngIf = "isEdit">
+
+          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" type="submit" (click)="onSubmit()">
+            {{'Common.Save' | translate}}
+          </button>
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="sessions"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [suppressCopyRowsToClipboard]="true"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+
+</div>
+
+
+
+

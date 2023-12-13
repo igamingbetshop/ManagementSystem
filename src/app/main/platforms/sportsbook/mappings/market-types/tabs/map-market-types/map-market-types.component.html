@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.UnknownMarketTypes' | translate}}</div>
+      </div>
+
+      <app-unmapped-market-types-gird 
+        [sports]="sports"
+        [providers]="providers"
+        (unmappedRowSelected)="handleValueEmitted($event)"
+        (isDetailUnmappedSelected)="handleUnmappedDetaliRow($event)"
+      ></app-unmapped-market-types-gird>
+
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.MarketTypes' | translate}}</div>
+        <div class="partner-dropdown">
+          <mat-select
+          #spo  (selectionChange)="onSportChange(spo.value)"
+            placeholder="{{'Sport.SelectSport' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option [value]='null'>{{'Sport.SelectSport' | translate}}</mat-option>
+            <mat-option *ngFor="let sport of sports"  [value]="sport.Id">{{sport.Name}}</mat-option>
+          </mat-select>
+        </div>
+        <div>
+          <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+        </div>
+      </div>
+
+      <app-mapped-market-types-gird
+        [sports]="sports"
+        (mappedRowSelected)="handleMappedRows($event)"
+        (mappedDetailRowSelected)="handleMappedDetaliRow($event)"
+      ></app-mapped-market-types-gird>
+      
+    </div>
+
+  </div>
+</div>

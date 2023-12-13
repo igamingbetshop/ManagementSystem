@@ -1,0 +1,88 @@
+<div mat-dialog-title>
+  <span class="title">{{'Partners.AddPaymentSetting' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Partners.Partner' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.Partner' | translate" [value]="partner" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPaymentSystem' | translate}}</mat-label>
+      <mat-select [formControlName]="'PaymentSystemId'">
+        <mat-option *ngFor="let name of paymentSystems" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PaymentSystemId'].touched && errorControl['PaymentSystemId'].hasError('required')">
+        {{'Partners.PaymentSystem' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+      <mat-select [formControlName]="'CurrencyId'">
+        <mat-option *ngFor="let name of currencies" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['CurrencyId'].touched && errorControl['CurrencyId'].hasError('required')">
+        {{'Clients.Currency' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.Commission' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Commission'" [formControlName]="'commission'" required>
+      <mat-error *ngIf="errorControl['commission'].touched && errorControl['commission'].hasError('required')">
+        {{'Clients.Commission' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.SelectState' | translate}}</mat-label>
+      <mat-select [formControlName]="'State'">
+        <mat-option *ngFor="let state of statusName" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['State'].touched && errorControl['State'].hasError('required')">
+        {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let type of typeNames" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type'].touched && errorControl['Type'].hasError('required')">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.UserName' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Clients.UserName' | translate" [formControlName]="'UserName'" required>
+      <mat-error *ngIf="errorControl['UserName'].touched && errorControl['UserName'].hasError('required')">
+        {{'Clients.UserName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.Password' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Clients.Password' | translate" [formControlName]="'Password'" required>
+      <mat-error *ngIf="errorControl['Password'].touched && errorControl['Password'].hasError('required')">
+        {{'Clients.Password' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.MinAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MinAmount' | translate" [formControlName]="'MinAmount'" required>
+      <mat-error *ngIf="errorControl['MinAmount'].touched && errorControl['MinAmount'].hasError('required')">
+        {{'Bonuses.MinAmount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.MaxAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MaxAmount' | translate" [formControlName]="'MaxAmount'" required>
+      <mat-error *ngIf="errorControl['MaxAmount'].touched && errorControl['MaxAmount'].hasError('required')">
+        {{'Bonuses.MaxAmount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

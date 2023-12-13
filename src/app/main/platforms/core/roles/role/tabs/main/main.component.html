@@ -1,0 +1,105 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title">
+      <a [routerLink]="['../../all-roles']">{{'Roles.Roles' | translate}}</a> / {{'Sport.MainInfo' | translate}}
+    </div>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [formGroup]="formGroup" [class.can-edit]="true"  (ngSubmit)="onSubmit()">
+  
+
+      <div>
+        <div class="first-hand">{{'Partners.SelectPartner' | translate}}</div>
+        <div class="second-hand"></div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'PartnerId'">
+            <mat-option *ngFor="let partner of partners"
+              [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+  
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand"></div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Name'">
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div>
+        <div class="first-hand">{{'Payments.Comment' | translate}}</div>
+        <div class="second-hand"></div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Comment'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <div class="actions" >
+          <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid" type="submit"
+         >{{'Common.Save' | translate}}</button>
+        </div>
+      </div>
+  
+    </form>
+  </div>
+
+  <div class="content-action">
+    <div class="title">
+      {{'Common.Permissions' | translate}}
+    </div>
+  </div>
+  
+  <div class="permissions-wraper">
+
+    <mat-table [dataSource]="role?.RolePermissions">
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> {{"Common.Id" | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let permission; let i = index">
+          {{ currentIndex + i }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="permissionId">
+        <mat-header-cell *matHeaderCellDef> {{"Common.PermissionName" | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let permission" > {{ permission.Permissionid }} </mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="isSelected">
+        <mat-header-cell *matHeaderCellDef> {{"Common.Select" | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let permission">
+          <mat-checkbox color="primary" [(ngModel)]="permission.isSelected" [disabled]="permission.IsForAll"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+    
+      <ng-container matColumnDef="isForAll">
+        <mat-header-cell *matHeaderCellDef>{{"Common.ForAll" | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let permission">
+          <mat-checkbox color="primary" [(ngModel)]="permission.IsForAll" (ngModelChange)="checkAll(permission)"></mat-checkbox>
+        </mat-cell>
+      </ng-container>
+    
+      <mat-header-row *matHeaderRowDef="['id', 'permissionId', 'isSelected', 'isForAll']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['id', 'permissionId', 'isSelected', 'isForAll']"
+        (click)="onRowClick(row)"
+        [ngClass]="{'selected-row': isRowSelected(row)}"
+      ></mat-row>
+    </mat-table>
+    
+
+  
+  </div>
+</div>
+
+
+
+
+
+

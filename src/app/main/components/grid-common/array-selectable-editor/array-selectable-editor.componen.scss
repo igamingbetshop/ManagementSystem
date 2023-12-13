@@ -1,0 +1,44 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.contnet {
+    display: flex;
+    color: $blue-6 ;
+
+    h2 {
+        margin-left: 10px;
+    }
+    button {
+        margin-left: auto;
+        margin-right: 10px;
+    }
+}
+
+
+mat-select {
+    margin: 10px;
+    width: 200px;
+    height: 30px;
+    font-size: 18px;
+    color: $blue-6 ;
+    border-radius: 4px;
+    border: 1px solid $blue-5;
+    background-color:  $blue-light-2;
+    ::ative {
+      border: 2px solid $blue-6 ;
+    }
+    .mat-select-trigger{
+        .mat-select-value{
+            .mat-select-min-line{
+                color: $blue-6 ;
+            }
+        }
+    }
+
+}
+
+.add-btn {
+    margin-left: 167px!important;
+    background-color: $blue-6;
+    margin: 10px;
+}

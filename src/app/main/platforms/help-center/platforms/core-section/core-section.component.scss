@@ -1,0 +1,16 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+    @include container-style;
+  
+    .content-action {
+      @include action-style;
+  
+      .mat-btn {
+        margin-left: 8px;
+        @include mat-btn-style;
+      }
+    }
+  
+  }

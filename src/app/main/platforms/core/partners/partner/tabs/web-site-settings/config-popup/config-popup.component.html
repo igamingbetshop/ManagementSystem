@@ -1,0 +1,48 @@
+<div class="example-container mat-elevation-z8">
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell class="thead" *matHeaderCellDef class="thead"> {{ 'Common.Name' | translate}} </mat-header-cell>
+      <mat-cell class="tbody" *matCellDef="let element"> {{element.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="type" >
+      <mat-header-cell class="thead" *matHeaderCellDef> {{ 'Common.Type' | translate}} </mat-header-cell>
+      <mat-cell class="tbody" *matCellDef="let element"> {{element.type}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="content">
+      <mat-header-cell class="thead" *matHeaderCellDef>{{'Common.Content' | translate}}</mat-header-cell>
+      <mat-cell class="tbody" *matCellDef="let element"> {{element.content}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="proxied">
+      <mat-header-cell class="thead" *matHeaderCellDef> {{'Common.Proxied' | translate}} </mat-header-cell>
+      <mat-cell class="tbody" *matCellDef="let element"> {{element.proxied}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="created_on">
+      <mat-header-cell class="thead" *matHeaderCellDef> {{'Clients.CreationTime' | translate}} </mat-header-cell>
+      <mat-cell class="tbody" *matCellDef="let element"> {{element.created_on}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <mat-header-cell class="thead" *matHeaderCellDef> {{'Common.Delete' | translate}} </mat-header-cell>
+      <mat-cell class="tbody" *matCellDef="let element">
+        <button mat-icon-button class="icno-btn" (click)="onRowDelete(element.id, element.name )" aria-label="Example icon button with a home icon">
+          <mat-icon>delete</mat-icon>
+        </button>
+       </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-primary-btn" (click)="onAddConfig()">{{'partner.AddRow' |translate}}</button>
+</div>
+
+
+

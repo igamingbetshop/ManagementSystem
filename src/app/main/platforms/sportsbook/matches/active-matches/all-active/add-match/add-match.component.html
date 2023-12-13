@@ -1,0 +1,95 @@
+<div mat-dialog-title>
+  <span class="title"> {{'Sport.AddMatch' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Sport.Sport' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Sport.Sport' | translate" [formControlName]="'SportName'">
+      <mat-error *ngIf="errorControl['SportName']?.touched && errorControl['SportName'].errors?.required">
+        {{'SportName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="competition.RegionName">
+      <mat-label>{{'Sport.Region' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Sport.Region' | translate" [formControlName]="'RegionName'">
+      <mat-error *ngIf="errorControl['RegionName']?.touched && errorControl['RegionName'].errors?.required">
+        {{'RegionName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="competition.Name">
+      <mat-label>{{'Sport.Competition' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Sport.Competition' | translate" [formControlName]="'CompetitionName'">
+      <mat-error *ngIf="errorControl['CompetitionName']?.touched && errorControl['CompetitionName'].errors?.required">
+        {{'CompetitionName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!competition.Name">
+      <mat-label>{{'Sport.Competition' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Sport.Competition' | translate" [formControlName]="'CompetitionId'">
+      <mat-error *ngIf="errorControl['CompetitionId']?.touched && errorControl['CompetitionId'].errors?.required">
+        {{'CompetitionId' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="team-content" *ngFor="let team of TeamIds; let i = index; ">
+      <mat-form-field>
+        <input matInput [placeholder]="'Sport.TeamId' | translate" (keyup)="changeTeam($event.target.value,i)"
+          value="{{team.Value}}">
+      </mat-form-field>
+
+      <mat-icon alt="icon" class="icon" (click)="onRemoveTeam(i)">close</mat-icon>
+    </div>
+
+    <div class="btn-action">
+      <button mat-raised-button class="mat-btn" color="primary" (click)="onAddTeam()">{{'Sport.AddTeam' | translate}}
+      </button>
+    </div>
+
+    <mat-form-field>
+      <mat-label>{{'Sport.SelectProvider' | translate}}</mat-label>
+      <mat-select [formControlName]="'ProviderId'" required>
+        <mat-option *ngFor="let type of providers" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['ProviderId']?.touched && errorControl['ProviderId'].errors?.required">
+        {{'Bonuses.SelectType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+      <mat-form-field class="calendar-picker start" appearance="none">
+        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
+        <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+      </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Products.ExternalId' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Products.ExternalId' | translate" [formControlName]="'ExternalId'">
+      <mat-error *ngIf="errorControl['ExternalId']?.touched && errorControl['ExternalId'].errors?.required">
+        {{'ExternalId' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let type of matchTypes" [value]="type.id">{{type.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['ProviderId']?.touched && errorControl['ProviderId'].errors?.required">
+        {{'Bonuses.SelectType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()" [class.disabled]="formGroup.invalid">{{'Common.Add'| translate}}</button>
+</div>

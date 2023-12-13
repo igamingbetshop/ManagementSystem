@@ -1,0 +1,43 @@
+<div mat-dialog-title>
+  <title class="span">{{'templates.addTemplate' | translate}}</title>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'NickName'">
+      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'ClientInfoType'">
+        <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['ClientInfoType']?.touched && errorControl['ClientInfoType'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Ok' | translate}}</button>
+</div>

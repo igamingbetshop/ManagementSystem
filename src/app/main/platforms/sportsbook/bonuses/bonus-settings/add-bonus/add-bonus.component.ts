@@ -1,0 +1,143 @@
+import {CommonModule} from '@angular/common';
+import {Component, Inject, NgModule, OnInit} from '@angular/core';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {TranslateModule} from "@ngx-translate/core";
+import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {take} from 'rxjs/operators';
+import {SportsbookApiService} from '../../../services/sportsbook-api.service';
+import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+
+
+@Component({
+  selector: 'app-clone-role',
+  templateUrl: './add-bonus.component.html',
+  styleUrls: ['./add-bonus.component.scss']
+})
+export class AddBonusComponent implements OnInit {
+  public formGroup: UntypedFormGroup;
+  public bonusTypes: any[] = [];
+  public bonusChannels: any[] = [];
+  public partners: any[] = [];
+  public bonus: any;
+  public openForAdd;
+  public selectedType;
+
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { partners: any[], bonusTypes: any[], bonusChannels: any[], bonus: any },
+    public dialogRef: MatDialogRef<AddBonusComponent>,
+    private fb: UntypedFormBuilder,
+    private _snackBar: MatSnackBar,
+    private apiService: SportsbookApiService,
+  ) {
+  }
+
+  ngOnInit() {
+    this.partners = this.data.partners;
+    this.bonusTypes = this.data.bonusTypes;
+    this.bonusChannels = this.data.bonusChannels;
+    this.bonus = this.data.bonus;
+    this.openForAdd = !!this.bonus.Id;
+
+
+    this.createForm();
+
+  }
+
+  public createForm() {
+
+    this.formGroup = this.fb.group({
+      PartnerId: [this.bonus.PartnerId],
+      TypeId: [this.bonus.TypeId, [Validators.required]],
+      ChannelId: [this.bonus.ChannelId],
+      Name: [this.bonus.Name, [Validators.required]],
+      SelectionsMinCount: [this.bonus.SelectionsMinCount, [Validators.required]],
+      SelectionsMaxCount: [this.bonus.SelectionsMaxCount],
+      BonusPercent: [this.bonus.BonusPercent],
+      MinCoeff: [this.bonus.MinCoeff],
+      State: [true],
+      TurnoverCount: [this.bonus.TurnoverCount],
+    });
+    if (this.openForAdd) {
+      this.formGroup.controls['TypeId'].disable();
+      this.formGroup.controls['ChannelId'].disable();
+      this.formGroup.controls['SelectionsMinCount'].disable();
+      this.formGroup.controls['SelectionsMaxCount'].disable();
+      this.formGroup.controls['BonusPercent'].disable();
+      this.formGroup.controls['MinCoeff'].disable();
+    }
+
+  }
+
+  get errorControl() {
+    return this.formGroup.controls;
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
+
+  changedType(event) {
+    this.selectedType = event;
+  }
+
+  onSubmit() {
+
+    if (this.formGroup.invalid) {
+      return;
+    }
+    this.bonus.PartnerId = this.formGroup.get('PartnerId').value;
+    this.bonus.Name = this.formGroup.get('Name').value;
+    this.bonus.ChannelId = this.formGroup.get('ChannelId').value;
+    this.bonus.TypeId = this.formGroup.get('TypeId').value;
+    this.bonus.SelectionsMinCount = this.formGroup.get('SelectionsMinCount').value;
+    this.bonus.SelectionsMaxCount = this.formGroup.get('SelectionsMaxCount').value;
+    this.bonus.BonusPercent = this.formGroup.get('BonusPercent').value;
+    this.bonus.MinCoeff = this.formGroup.get('MinCoeff').value;
+    this.bonus.State = this.formGroup.get('State').value;
+    delete this.bonus.LanguageId
+    // if (this.selectedType === 2) {
+    //   this.bonus.TurnoverCount = this.formGroup.get('TurnoverCount').value;
+    // }
+
+    this.apiService.apiPost(this.bonus.Id ? 'bonuses/updatebonussetting' : 'bonuses/addbonussetting', this.bonus)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.Code === 0) {
+          this.dialogRef.close(data.ResponseObject);
+        } else {
+          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        }
+      })
+
+  }
+
+}
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MatIconModule,
+    FlexLayoutModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
+  declarations: [AddBonusComponent]
+})
+export class AddBonusModule {
+
+}
+

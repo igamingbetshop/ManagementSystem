@@ -1,0 +1,81 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Cms.Translations' | translate}}</div>
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="selectObjectType($event.value)"
+        placeholder="{{'Cms.SelectObjectType' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering
+        [value] = "objectTypeId">
+        <mat-option *ngFor="let type of objectTypes" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="selectLanguage($event.value)"
+        placeholder="{{'Clients.SelectLanguage' | translate}}"
+        panelClass="overlay-dropdown multiple"
+        disableOptionCentering
+        [value]="languageModel" [compareWith]="comparer" multiple
+        [disabled] = "!objectTypeId">
+        <mat-option *ngFor="let ln of languages" [value]="ln">{{ln.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="input-content">
+      <input matInput [placeholder]="'Cms.SearchInEnglish' | translate" [(ngModel)]="filter.SearchText" (ngModelChange)="inputChanged($event)">
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="translations-core"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      SubscribeToBets
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [paginationPageSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      (filterModified)="onFilterModified($event)"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (cellEditingStopped)="onCellEditingStopped($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+
+    <div class="custom-pagination">
+      <div class="pages-sizes">
+        <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+      </div>
+
+      <span class="current-paging">
+        <input class="input" type="number" [(ngModel)]="paginationPage" (keypress)="onPaginationGoToPage($event)">
+      </span>
+
+  </div>
+
+</div>

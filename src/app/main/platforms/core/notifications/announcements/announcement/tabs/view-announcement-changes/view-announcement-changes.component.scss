@@ -1,0 +1,91 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+  }
+}
+
+.main-history {
+  padding: 0 10px 10px 10px;
+  background: $content-bg-color;
+  display: flex;
+  width: calc(100% - 20px);
+  column-gap: 10px;
+
+  .right-part {
+    width: calc(100%);
+    display: flex;
+    flex-direction: column;
+    row-gap: 6px;
+
+    .header-names {
+      display: flex;
+      line-height: 42px;
+      height: 42px;
+      column-gap: 1px;
+
+      .first-hand {
+        height: 100%;
+        width: calc(20%);
+        border-radius: 4px;
+        background-color: #a0cad6;
+        padding-left: 10px;
+        box-sizing: border-box;
+        margin-right: 5px;
+      }
+
+      .second-hand, .third-hand {
+        height: 100%;
+        width: 40%;
+        background-color: #a0cad6;
+        padding-left: 10px;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+    }
+  }
+
+  .left-side, .right-part {
+
+    .changed {
+      border: 1px solid $red-5 !important;
+      border-radius: 4px;
+    }
+
+    .single-field {
+      display: flex;
+      border: 1px solid transparent;
+
+      .first-hand {
+        width: 20%;
+        padding: 10px 10px;
+        border-radius: 4px;
+        background-color: $blue-light-22;
+        color: $black-3;
+        margin-right: 6px;
+      }
+
+      .second-hand {
+        width: 40%;
+        padding: 10px 10px;
+        border-right: 1px solid #d8d8d8;
+        background: $white;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
+
+      .third-hand {
+        width: 40%;
+        padding: 10px 10px;
+        background: $white;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-finished']">{{'Sport.Finished' | translate}}</a> / : {{'Sport.Bets' | translate}}
+      <span>{{matchId}}</span> &nbsp; {{name}}
+    </div>
+
+    <div class="header2" fxHeight="50px">
+      <button mat-raised-button class="mat-btn" (click)="getBets()">{{'Common.Go' | translate}}</button>
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [suppressCopyRowsToClipboard]="true"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [sideBar]="sideBar"
+      [suppressRowClickSelection]="true"
+      [columnDefs]="columnDefs"
+      [masterDetail]="masterDetail"
+      [components]="frameworkComponents"
+      [detailCellRendererParams]="detailCellRendererParams"
+      [cacheBlockSize]="cacheBlockSize"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [groupIncludeFooter]="true"
+      [groupIncludeTotalFooter]="true"
+      [defaultColDef]="defaultColDef"
+      (gridReady)="onGridReady($event)"
+      (rowGroupOpened)="onRowGroupOpened($event)"
+      (rowClicked)="onRowClicked($event)"
+      (rowSelected)="onRowSelected($event)"
+      [rowStyle]="rowStyle"
+      [getRowStyle]="getRowStyle"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+  <div class="buttons">
+    <button mat-raised-button class="btn-left" color="warn" (click)="calculateBet()">{{'Sport.CalculateBet' | translate}}</button>
+    <button mat-raised-button class="btn-left" color="warn" (click)="deleteBet()">{{'Sport.DeleteBet' | translate}}</button>
+
+  </div>
+
+</div>

@@ -1,0 +1,85 @@
+@import "mixins.scss";
+@import "mixins";
+
+.dialog-header {
+  position: relative;
+  .mat-dialog-title {
+    margin: 0;
+  }
+
+  .icon {
+    position: absolute;
+    right: -6px;
+    top: -5px;
+    font-size: 25px;
+    cursor: pointer;
+  }
+}
+
+.modal-wrap {
+
+  .modal-form {
+
+    .input-content {
+      @include input-style;
+    }
+
+    .input-color-content {
+      @include input-style;
+
+      ::ng-deep {
+        .color-picker {
+
+          .button-area {
+            display: flex;
+            flex-direction: row-reverse;
+            column-gap: 8px;
+
+            button {
+              padding: 4px 10px;
+              border: unset;
+              border-radius: 4px;
+              color: $white;
+              margin-left: 0;
+
+              &.ok-btn {
+                width: 50%;
+                background-color: $blue-2;
+              }
+
+              &.cancel-btn {
+                width: 50%;
+                background-color: red;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .textarea-content {
+      @include textarea-style;
+    }
+  }
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+  margin-bottom: 0;
+  padding: 18px 0 0 0;
+  min-height: 28px;
+
+  .mat-cancel-btn {
+    @include mat-cancel-btn-style;
+  }
+
+  .mat-btn {
+    margin-left: 8px;
+    @include mat-btn-style;
+  }
+}
+
+
+
+
+

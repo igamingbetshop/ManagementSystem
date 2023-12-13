@@ -1,0 +1,204 @@
+<div class="main-history">
+  <header>
+    {{id}}
+  </header>
+  <div class="edit-icon">
+    <mat-icon (click)="editPaymentSystem()">edit</mat-icon>
+  </div>
+  <div class="grid-history" *ngIf="!isEdit">
+    <div>
+      <div class="first-hand">{{'Common.Id' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.Id}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Common.State' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.StateName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.Partner' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.PartnerName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.Commission' | translate}} %</div>
+      <div class="third-hand">{{paymentSystem?.Commission}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.PaymentSystem' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.PaymentSystemName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.FixedFee' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.FixedFee}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Common.Type' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.TypeName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.CurrencyId}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.LastUpdate' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Bonuses.MinAmount' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.MinAmount}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Bonuses.MaxAmount' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.MaxAmount}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.UserName' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.UserName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.Password' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.Password}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.AllowMultipleClientsPerPaymentInfo' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.AllowMultipleClientsPerPaymentInfo}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.AllowMultiplePaymentInfoes' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.AllowMultiplePaymentInfoes}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.Priority}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Common.Info' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.Info}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.OpenMode' | translate}}</div>
+      <div class="third-hand">{{paymentSystem?.OpenMode}}</div>
+    </div>
+    <div>
+      <select name="countries" id="countries" size="3" style="width: 100%;" disabled>
+        <option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</option>
+      </select>
+    </div>
+    <div>
+      <table>
+        <thead>
+        <tr>
+          <th>{{'Clients.Currency' | translate}}</th>
+          <th>{{'Partners.Rate' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let currencyItem of paymentCurrencies; let i = index">
+        <tr>
+          <td>
+            <input matInput placeholder="{{'Clients.Currency' | translate}}" [(ngModel)]="currencyItem.CurrencyId" disabled>
+          </td>
+          <td>
+            <input matInput *ngIf="!isEditCurrency" type="number" placeholder="{{'Partners.Rate' | translate}}" [(ngModel)]="currencyItem.Rate"
+                   disabled>
+            <input matInput *ngIf="isEditCurrency && enableEditIndex == i" type="number" placeholder="{{'Partners.Rate' | translate}}"
+                   [(ngModel)]="currencyItem.Rate">
+          </td>
+          <mat-icon class="edit-currency-icon" (click)="editPaymentCurrency(currencyItem, i)">edit</mat-icon>
+        </tr>
+        <tr class="buttons" *ngIf="isEditCurrency === true">
+          <td></td>
+          <td>
+            <button mat-raised-button color="primary" (click)="submitCurrency(currencyItem)">{{'Common.Save' | translate}}</button>
+            <button mat-raised-button color="warn" (click)="this.isEditCurrency = false;">{{'Common.Cancel' | translate}}</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="background: none"></div>
+    <div class="buttons">
+      <button mat-stroked-button color="primary" (click)="AddCurrencyRate()">{{'Partners.AddCurrencyRate' | translate}}</button>
+    </div>
+  </div>
+  <form class="grid-history" [formGroup]="formGroup" *ngIf="isEdit">
+    <mat-form-field>
+      <mat-label>{{'Common.Id' | translate}}</mat-label>
+      <input matInput [formControlName]="'Id'" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.State' | translate}}</mat-label>
+      <mat-select required [formControlName]="'State'">
+        <mat-option *ngFor="let state of statusName" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.Partner' | translate}}</mat-label>
+      <input matInput [formControlName]="'PartnerName'" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.Commission' | translate}}</mat-label>
+      <input matInput type="number" required [formControlName]="'Commission'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.PaymentSystem' | translate}}</mat-label>
+      <input matInput [formControlName]="'PaymentSystemName'" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.FixedFee' | translate}}</mat-label>
+      <input matInput type="number" required [formControlName]="'FixedFee'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Type' | translate}}</mat-label>
+      <input matInput [formControlName]="'TypeName'" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.currency' | translate}}</mat-label>
+      <input matInput [formControlName]="'CurrencyId'" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.LastUpdate' | translate}}</mat-label>
+      <input matInput [value]="paymentSystem.LastUpdateTime | date:'dd/MM/yyyy HH:MM'" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.MinAmount' | translate}}</mat-label>
+      <input matInput type="number" required [formControlName]="'MinAmount'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.MaxAmount' | translate}}</mat-label>
+      <input matInput type="number" required [formControlName]="'MaxAmount'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.UserName' | translate}}</mat-label>
+      <input matInput [formControlName]="'UserName'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.Password' | translate}}</mat-label>
+      <input matInput [formControlName]="'Password'">
+    </mat-form-field>
+    <mat-checkbox [formControlName]="'AllowMultipleClientsPerPaymentInfo'">{{'Partners.allowMultipleClientsPerPaymentInfo' | translate}}
+    </mat-checkbox>
+    <mat-checkbox [formControlName]="'AllowMultiplePaymentInfoes'">{{'Partners.allowMultiplePaymentInfoes' | translate}}</mat-checkbox>
+    <mat-form-field>
+      <mat-label>{{'Bonuses.Priority' | translate}}</mat-label>
+      <input matInput [formControlName]="'Priority'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Info' | translate}}</mat-label>
+      <input matInput [formControlName]="'Info'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.openMode' | translate}}</mat-label>
+      <input matInput type="number" [formControlName]="'OpenMode'">
+    </mat-form-field>
+    <div style="background: none">
+      <select size="5" style="width: 100%;" multiple [(ngModel)]="paymentSystem.Countries"
+              [ngModelOptions]="{'standalone': true}">
+        <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
+      </select>
+    </div>
+    <div class="buttons" style="background: none">
+      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" (click)="submit()">{{'Common.Save' | translate}}
+      </button>
+      <button mat-raised-button color="warn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+    </div>
+  </form>
+</div>

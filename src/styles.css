@@ -1,0 +1,145 @@
+/*TODO change to style scss file.*/
+.kyc-status-1 {
+  background: #77bebc !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.kyc-status-2 {
+  background: #D3455B !important;
+  color: white !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.kyc-status-3 {
+  background: white !important;
+  color: black
+}
+
+.kyc-status-4 {
+  background: yellow !important;
+  color: black
+}
+
+.bets-status-1 {
+  background: #b7efc5 !important;
+  color: black !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.bets-status-4 {
+  background: white !important;
+  color: black !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.bets-status-2 {
+  background: #FFCDD2 !important;
+  color: whitesmoke !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.bets-status-3 {
+  background: rgb(238, 238, 77) !important;
+  color: black !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.button-view-1 {
+  background-color: #3f51b5;
+  color: #fff;
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  width: 80px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.button-view-2 {
+  background-color: #3f51b5;
+  color: #fff;
+  padding: 10px;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+  width: 50px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.payment-status-1 {
+  background: white !important;
+  color: black !important;
+}
+
+.payment-status-2 {
+  background: indianred !important;
+  color: white !important;
+}
+
+.payment-status-3 {
+  background: lightgrey !important;
+  color: black !important;
+}
+
+.payment-status-4 {
+  background: lightblue !important;
+  color: black !important;
+}
+
+.payment-status-5 {
+  background: darkgrey !important;
+  color: black !important;
+}
+
+.payment-status-6 {
+  background: indianred !important;
+  color: white !important;
+}
+
+.payment-status-7 {
+  background: lightgreen !important;
+  color: black !important;
+}
+
+.payment-status-8 {
+  background: darkgreen !important;
+  color: white !important;
+}
+
+.payment-status-9 {
+  background: darkred !important;
+  color: black !important;
+}
+
+.payment-status-10 {
+  background: purple !important;
+  color: black !important;
+}
+
+.payment-status-11 {
+  background: yellow !important;
+  color: black !important;
+}
+
+.payment-status-12 {
+  background: darkgreen !important;
+  color: white !important;
+}
+
+.card {
+  background-repeat: no-repeat;
+  background-image: url("assets/images/cards.png");
+  -webkit-box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.3);
+}
+
+

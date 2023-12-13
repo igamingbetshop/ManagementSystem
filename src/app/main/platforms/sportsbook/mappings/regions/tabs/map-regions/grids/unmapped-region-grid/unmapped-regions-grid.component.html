@@ -1,0 +1,27 @@
+<div class="grid-content">
+  <ag-grid-angular
+    id="unmapped-regions-grid"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (rowSelected)="onRowSelected()"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [suppressCopyRowsToClipboard]="true"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+  </ag-grid-angular>
+</div>
+
+ 

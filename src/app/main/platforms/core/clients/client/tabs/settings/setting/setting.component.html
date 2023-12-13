@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"> <a (click)="onNavigateTo()"> {{clientId}} {{'Clients.SettingsCahnges' | translate}} / {{ObjectHistory}} </a> </div>
+  </div>
+</div>
+
+<div class="object-history">
+  <div class="grid-history">
+    <div>
+      <div class="first-hand">{{'Clients.AMLStatus' | translate}}</div>
+      <div class="second-hand">{{oldData.AMLProhibited['StringValue']}}</div>
+      <div class="third-hand">{{newData.AMLProhibited['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.SystemExcluded' | translate}}</div>
+      <div class="third-hand">{{newData.SystemExcluded['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.AMLVerified' | translate}}</div>
+      <div class="second-hand">{{oldData.AMLVerified['StringValue']}}</div>
+      <div class="third-hand">{{newData.AMLVerified['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.CautionSuspension' | translate}}</div>
+      <div class="third-hand">{{newData.CautionSuspension['StringValue']}}</div>
+    </div>
+    <div
+      [ngClass]="{'changed': newData.BlockedForInactivity['StringValue'] != oldData.BlockedForInactivity['StringValue']}">
+      <div class="first-hand">{{'Clients.BlockedForInactivity' | translate}}</div>
+      <div class="second-hand">{{oldData.BlockedForInactivity['StringValue']}}</div>
+      <div class="third-hand">{{newData.BlockedForInactivity['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.DocumentVerified' | translate}}</div>
+      <div class="second-hand">{{oldData.DocumentVerified['StringValue']}}</div>
+      <div class="third-hand">{{newData.DocumentVerified['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.DocumentExpired' | translate}}</div>
+      <div class="second-hand">{{oldData.DocumentExpired['StringValue']}}</div>
+      <div class="third-hand">{{newData.DocumentExpired['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.TermsConditionsAcceptanceVersion' | translate}}</div>
+      <div class="second-hand">{{oldData.TermsConditionsAcceptanceVersion['StringValue']}}</div>
+      <div class="third-hand">{{newData.TermsConditionsAcceptanceVersion['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.SelfExcluded' | translate}}</div>
+      <div class="third-hand">{{newData.SelfExcluded['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.JCJStatus' | translate}}</div>
+      <div class="third-hand">{{newData.JCJProhibited['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.Younger' | translate}}</div>
+      <div class="second-hand">{{oldData.Younger['StringValue']}}</div>
+      <div class="third-hand">{{newData.Younger['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.CasinoLayout' | translate}}</div>
+      <div class="second-hand">{{oldData.CasinoLayout['StringValue']}}</div>
+      <div class="third-hand">{{newData.CasinoLayout['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.Excluded' | translate}}</div>
+      <div class="second-hand">{{oldData.Excluded['StringValue']}}</div>
+      <div class="third-hand">{{newData.Excluded['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.PasswordChangedDate' | translate}}</div>
+      <div class="second-hand">{{oldData.PasswordChangedDate['DateValue'] | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="third-hand">{{newData.PasswordChangedDate['DateValue'] | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.BlockedForBonuses' | translate}}</div>
+      <div class="third-hand">{{newData.BlockedForInactivity['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.SessionLimit' | translate}}</div>
+      <div class="third-hand">{{newData.SessionLimit['StringValue']}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.PayoutLimit' | translate}}</div>
+      <div class="second-hand">{{oldData?.PayoutLimit?.Value}} - {{oldData?.PayoutLimit?.CreationDate | date:'dd/MM/yyyy HH:mm'}}</div>
+      <div class="third-hand">{{newData?.PayoutLimit?.Value}} - {{newData?.PayoutLimit?.CreationDate | date:'dd/MM/yyyy HH:mm'}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.UnusedAmountWithdrawPercent' | translate}}</div>
+      <div class="third-hand">{{newData.UnusedAmountWithdrawPercent['StringValue']}}</div>
+    </div>
+  </div>
+</div>

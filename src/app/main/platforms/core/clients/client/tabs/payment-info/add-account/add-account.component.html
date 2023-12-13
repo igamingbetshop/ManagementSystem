@@ -1,0 +1,47 @@
+<div mat-dialog-title>
+  <span class="title">{{'Clients.Account' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Clients.NickName' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Clients.NickName' | translate" [formControlName]="'NickName'" required>
+      <mat-error *ngIf="errorControl['NickName'].touched && errorControl['NickName'].hasError('required')">
+        {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectBank' | translate}}</mat-label>
+      <mat-select [formControlName]="'BankName'">
+        <mat-option *ngFor="let name of bankNames" [value]="name.Id">{{name.BankName}} - {{name.Id}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectStatus' | translate}}</mat-label>
+      <mat-select [formControlName]="'state'">
+        <mat-option *ngFor="let name of status" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.Iban' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Clients.Iban' | translate" [formControlName]="'Iban'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.BankAccountNumber' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Clients.BankAccountNumber' | translate" [formControlName]="'BankAccountNumber'" required>
+      <mat-error *ngIf="errorControl['BankAccountNumber'].touched && errorControl['BankAccountNumber'].hasError('required')">
+        {{'Clients.BankAccountNumber' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.WalletNumber' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Clients.WalletNumber' | translate" [formControlName]="'WalletNumber'"  required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

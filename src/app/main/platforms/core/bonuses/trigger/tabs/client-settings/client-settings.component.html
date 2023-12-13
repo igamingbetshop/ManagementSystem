@@ -1,0 +1,26 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../triggers']">{{'Bonuses.Triggers' | translate}}</a> / :{{'Bonuses.ClientSettings' | translate}}</div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [suppressCopyRowsToClipboard]="true"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+</div>

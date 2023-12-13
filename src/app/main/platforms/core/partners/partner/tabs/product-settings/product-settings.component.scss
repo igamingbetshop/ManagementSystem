@@ -1,0 +1,258 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .btn-success {
+      background-color: $green;
+      color: #fff;
+      border: none;
+      height: 35px;
+      border-radius: 4px;
+      cursor: pointer;
+      display: block;
+
+      &.all {
+        margin-right: 12px;
+      }
+    }
+
+    .btn-cancel {
+      background-color: $red;
+      color: #fff;
+
+      &.all {
+        margin-right: 12px;
+      }
+
+    }
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+    }
+  }
+
+  .main-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    column-gap: 10px;
+
+    .left-panel, .right-panel {
+      width: 100%;
+    }
+
+    .action-content {
+      @include action-style;
+      height: auto;
+
+      .title {
+        font-size: 18px;
+        color: $blue-5;
+        padding-bottom: 5px;
+      }
+
+      .mat-export-btn {
+        margin-left: 8px;
+        @include mat-export-btn-style;
+        line-height: 20px;
+        margin-bottom: 5px;
+
+        ::ng-deep {
+          .mat-button-wrapper {
+            padding: 0 6px;
+            height: 20px;
+            font-size: 13px;
+
+            &:after {
+              height: 22px;
+            }
+
+            &:before {
+              margin-right: 8px;
+              font-size: 13px;
+            }
+          }
+        }
+      }
+    }
+
+    .grid-content {
+      width: 100%;
+      height: calc(100% - 275px);
+      position: relative;
+
+      ::ng-deep {
+        ag-grid-angular {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .checkbox {
+        position: absolute;
+        top: 13px;
+        z-index: 2;
+        left: 12px;
+
+        ::ng-deep {
+
+          .mat-checkbox-inner-container {
+            width: 16px;
+            height: 16px;
+
+            .mat-checkbox-frame {
+              border: 1px solid black;
+              background-color: white;
+              border-radius: 3px;
+            }
+          }
+        }
+
+        ::ng-deep {
+          .mat-checkbox-checked {
+            .mat-checkbox-layout {
+              .mat-checkbox-inner-container {
+
+                .mat-checkbox-frame {
+                  border: 1px solid #0091EA;
+                }
+
+
+                .mat-checkbox-checkmark-path {
+                  stroke: #0091EA !important;
+                }
+
+                .mat-checkbox-background {
+                  background-color: unset;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .pages-sizes {
+        position: absolute;
+        left: 262px;
+        bottom: 20px;
+        @include dropdown-style;
+
+        ::ng-deep {
+          .mat-select {
+            height: 26px !important;
+            width: 60px !important;
+          }
+        }
+      }
+    }
+
+    .grid-action {
+      display: flex;
+      position: relative;
+      form {
+        display: flex!important;
+      }
+      .input-content {
+        @include input-style;
+
+        max-width: 150px;
+        margin-right: 12px;
+
+        input {
+          background-color: $content-bg-color;
+          border: 1px solid $gray-light-3;
+          color: $gray-light-3;
+
+          &.ng-invalid, &.ng-valid {
+
+            border: 1px solid $blue-2;
+            color: $blue-2;
+            background-color: $white;
+          }
+        }
+      }
+
+      .btn-action {
+        display: inline-block;
+        position: absolute;
+        top: 60px;
+      }
+
+      .select-content {
+        max-width: 200px;
+        vertical-align: top;
+        margin-right: 12px;
+        @include popup-dropdown-style;
+
+
+        ::ng-deep {
+          .mat-select {
+
+            &.mat-select-disabled {
+              background-color: $content-bg-color;
+              border: 1px solid $gray-light-3;
+              color: $gray-light-3;
+            }
+          }
+        }
+      }
+
+      .mat-btn {
+        // display: block;
+        margin-top: 12px;
+        @include mat-btn-style;
+
+        &.right {
+          display: inline-block;
+          margin-right: 12px;
+        }
+      }
+
+      .mat-delete {
+        margin-right: 12px;
+        @include mat-delete-style;
+      }
+    }
+  }
+
+  .footer-grid {
+    width: 100%;
+    height: 400px;
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.btn-success {
+  background-color: $green;
+  color: #fff;
+  border: none;
+  height: 35px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+}
+
+.btn-cancel {
+  background-color: $red;
+  color: #fff;
+}
+
+.btn-success-dis:disabled {
+  background-color: #a3aaa3;
+  opacity: 0.4;
+}
+
+

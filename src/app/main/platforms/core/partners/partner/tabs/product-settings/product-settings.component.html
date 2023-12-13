@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a>/ {{partnerName}}
+      :{{'Partners.ProductSettings' | translate}}</div>
+    <button class="all" mat-stroked-button (click)="allProductsOn()"
+      [ngClass]="{'btn-success': AllProductsState, 'btn-cancel': !AllProductsState}">
+      {{'Partners.AllProducts' | translate}} {{AllProductsState ? "On" : "Off"}}
+    </button>
+    <button mat-stroked-button (click)="partnerProductsOn()"
+      [ngClass]="{'btn-success': PartnerProductState, 'btn-cancel': !PartnerProductState}">
+      {{'Partners.PartnerProducts' | translate}} {{PartnerProductState ? "On" : "Off"}}
+    </button>
+  </div>
+
+  <div class="main-content">
+    <div class="left-panel" *ngIf="AllProductsState">
+      <all-products-settings (onUpdate)="partnerProductsComponent.update()"></all-products-settings>
+    </div>
+
+    <div class="right-panel" *ngIf="PartnerProductState">
+      <partner-products
+        (onRequireHistoryUpdate)="productChangeHistoryComponent.getObjectChangeHistory($event)"></partner-products>
+    </div>
+
+  </div>
+
+  <div class="footer-grid">
+    <product-change-history></product-change-history>
+  </div>
+
+</div>

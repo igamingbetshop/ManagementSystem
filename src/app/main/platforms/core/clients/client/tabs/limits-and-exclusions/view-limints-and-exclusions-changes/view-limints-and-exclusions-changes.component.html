@@ -1,0 +1,346 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"> <a (click)="onNavigateTo()"> {{clientId}} {{'Clients.ClientSelfAndSystemCahnges' | translate}} / {{id}} </a> </div>
+  </div>
+</div>
+
+<div class="main-history">
+
+  <div class="left-side">
+    <div class="header-names">
+      <div class="first-hand">{{'Common.Name' | translate}}</div>
+      <div class="second-hand">{{'Clients.Limit' | translate}}</div>
+      <div class="second-hand">{{'Clients.CreatedDate' | translate}}</div>
+      <div class="second-hand">{{'Clients.ChangeDate' | translate}}</div>
+      <div class="second-hand">{{'Clients.UpdateLimit' | translate}}</div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.DepositLimitDaily' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.DepositLimitDaily?.Limit != oldData?.DepositLimitDaily?.Limit}">
+        <div class="second-hand">{{oldData?.DepositLimitDaily?.Limit}}</div>
+        <div class="third-hand">{{newData?.DepositLimitDaily?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.DepositLimitDaily?.CreatedDate != oldData?.DepositLimitDaily?.CreatedDate}">
+        <div class="second-hand">{{oldData?.DepositLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.DepositLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.DepositLimitDaily?.ChangeDate != oldData?.DepositLimitDaily?.ChangeDate}">
+        <div class="second-hand">{{oldData?.DepositLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.DepositLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.DepositLimitDaily?.UpdateLimit != oldData?.DepositLimitDaily?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.DepositLimitDaily?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.DepositLimitDaily?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.DepositLimitWeekly' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.DepositLimitWeekly?.Limit != oldData?.DepositLimitWeekly?.Limit}">
+        <div class="second-hand">{{oldData?.DepositLimitWeekly?.Limit}}</div>
+        <div class="third-hand">{{newData?.DepositLimitWeekly?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.DepositLimitWeekly?.CreatedDate != oldData?.DepositLimitWeekly?.CreatedDate}">
+        <div class="second-hand">{{oldData?.DepositLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.DepositLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.DepositLimitWeekly?.ChangeDate != oldData?.DepositLimitWeekly?.ChangeDate}">
+        <div class="second-hand">{{oldData?.DepositLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.DepositLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.DepositLimitWeekly?.UpdateLimit != oldData?.DepositLimitWeekly?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.DepositLimitWeekly?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.DepositLimitWeekly?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.DepositLimitMonthly' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.DepositLimitMonthly?.Limit != oldData?.DepositLimitMonthly?.Limit}">
+        <div class="second-hand">{{oldData?.DepositLimitMonthly?.Limit}}</div>
+        <div class="third-hand">{{newData?.DepositLimitMonthly?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.DepositLimitMonthly?.CreatedDate != oldData?.DepositLimitMonthly?.CreatedDate}">
+        <div class="second-hand">{{oldData?.DepositLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.DepositLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.DepositLimitMonthly?.ChangeDate != oldData?.DepositLimitMonthly?.ChangeDate}">
+        <div class="second-hand">{{oldData?.DepositLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.DepositLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.DepositLimitMonthly?.UpdateLimit != oldData?.DepositLimitMonthly?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.DepositLimitMonthly?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.DepositLimitMonthly?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.TotalBetAmountLimitDaily' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitDaily?.Limit != oldData?.TotalBetAmountLimitDaily?.Limit}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitDaily?.Limit}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitDaily?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitDaily?.CreatedDate != oldData?.TotalBetAmountLimitDaily?.CreatedDate}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitDaily?.ChangeDate != oldData?.TotalBetAmountLimitDaily?.ChangeDate}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitDaily?.UpdateLimit != oldData?.TotalBetAmountLimitDaily?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitDaily?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitDaily?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.TotalBetAmountLimitWeekly' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitWeekly?.Limit != oldData?.TotalBetAmountLimitWeekly?.Limit}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitWeekly?.Limit}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitWeekly?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitWeekly?.CreatedDate != oldData?.TotalBetAmountLimitWeekly?.CreatedDate}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitWeekly?.ChangeDate != oldData?.TotalBetAmountLimitWeekly?.ChangeDate}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitWeekly?.UpdateLimit != oldData?.TotalBetAmountLimitWeekly?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitWeekly?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitWeekly?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.TotalBetAmountLimitMonthly' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitMonthly?.Limit != oldData?.TotalBetAmountLimitMonthly?.Limit}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitMonthly?.Limit}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitMonthly?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitMonthly?.CreatedDate != oldData?.TotalBetAmountLimitMonthly?.CreatedDate}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitMonthly?.ChangeDate != oldData?.TotalBetAmountLimitMonthly?.ChangeDate}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalBetAmountLimitMonthly?.UpdateLimit != oldData?.TotalBetAmountLimitMonthly?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.TotalBetAmountLimitMonthly?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.TotalBetAmountLimitMonthly?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.TotalLossLimitDaily' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.TotalLossLimitDaily?.Limit != oldData?.TotalLossLimitDaily?.Limit}">
+        <div class="second-hand">{{oldData?.TotalLossLimitDaily?.Limit}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitDaily?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.TotalLossLimitDaily?.CreatedDate != oldData?.TotalLossLimitDaily?.CreatedDate}">
+        <div class="second-hand">{{oldData?.TotalLossLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitDaily?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalLossLimitDaily?.ChangeDate != oldData?.TotalLossLimitDaily?.ChangeDate}">
+        <div class="second-hand">{{oldData?.TotalLossLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitDaily?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalLossLimitDaily?.UpdateLimit != oldData?.TotalLossLimitDaily?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.TotalLossLimitDaily?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitDaily?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.TotalLossLimitWeekly' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.TotalLossLimitWeekly?.Limit != oldData?.TotalLossLimitWeekly?.Limit}">
+        <div class="second-hand">{{oldData?.TotalLossLimitWeekly?.Limit}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitWeekly?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.TotalLossLimitWeekly?.CreatedDate != oldData?.TotalLossLimitWeekly?.CreatedDate}">
+        <div class="second-hand">{{oldData?.TotalLossLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitWeekly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalLossLimitWeekly?.ChangeDate != oldData?.TotalLossLimitWeekly?.ChangeDate}">
+        <div class="second-hand">{{oldData?.TotalLossLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitWeekly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalLossLimitWeekly?.UpdateLimit != oldData?.TotalLossLimitWeekly?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.TotalLossLimitWeekly?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitWeekly?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <div class="multiple-fields">
+      <div class="first-hand">{{'Clients.TotalLossLimitMonthly' | translate}}</div>
+      <div [ngClass]="{'changed': newData?.TotalLossLimitMonthly?.Limit != oldData?.TotalLossLimitMonthly?.Limit}">
+        <div class="second-hand">{{oldData?.TotalLossLimitMonthly?.Limit}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitMonthly?.Limit}}</div>
+      </div>
+      <div [ngClass]="{'changed': newData?.TotalLossLimitMonthly?.CreatedDate != oldData?.TotalLossLimitMonthly?.CreatedDate}">
+        <div class="second-hand">{{oldData?.TotalLossLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitMonthly?.CreatedDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalLossLimitMonthly?.ChangeDate != oldData?.TotalLossLimitMonthly?.ChangeDate}">
+        <div class="second-hand">{{oldData?.TotalLossLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitMonthly?.ChangeDate | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      </div>
+
+      <div [ngClass]="{'changed': newData?.TotalLossLimitMonthly?.UpdateLimit != oldData?.TotalLossLimitMonthly?.UpdateLimit}">
+        <div class="second-hand">{{oldData?.TotalLossLimitMonthly?.UpdateLimit}}</div>
+        <div class="third-hand">{{newData?.TotalLossLimitMonthly?.UpdateLimit}}</div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SessionLimit != oldData?.SessionLimit}">
+      <div class="first-hand">{{'Clients.SessionLimit' | translate}}</div>
+      <div class="second-hand">{{oldData?.SessionLimit}}</div>
+      <div class="third-hand">{{newData?.SessionLimit}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SessionLimitDaily != oldData?.SessionLimitDaily}">
+      <div class="first-hand">{{'Clients.SessionLimitDaily' | translate}}</div>
+      <div class="second-hand">{{oldData?.SessionLimitDaily}}</div>
+      <div class="third-hand">{{newData?.SessionLimitDaily}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SessionLimitWeekly != oldData?.SessionLimitWeekly}">
+      <div class="first-hand">{{'Clients.SessionLimitWeekly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SessionLimitWeekly}}</div>
+      <div class="third-hand">{{newData?.SessionLimitWeekly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SessionLimitMonthly != oldData?.SessionLimitMonthly}">
+      <div class="first-hand">{{'Clients.SessionLimitMonthly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SessionLimitMonthly}}</div>
+      <div class="third-hand">{{newData?.SessionLimitMonthly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SelfExcludedUntil != oldData?.SelfExcludedUntil}">
+      <div class="first-hand">{{'Clients.SelfExcludedUntil' | translate}}</div>
+      <div class="second-hand">{{oldData?.SelfExcludedUntil | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      <div class="third-hand">{{newData?.SelfExcludedUntil | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+    </div>
+
+  </div>
+
+  <div class="right-part">
+
+    <div class="header-names">
+      <div class="first-hand">{{'Common.Name' | translate}}</div>
+      <div class="second-hand">{{'Clients.OldValue' | translate}}</div>
+      <div class="third-hand">{{'Clients.NewValue' | translate}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemDepositLimitDaily != oldData?.SystemDepositLimitDaily}">
+      <div class="first-hand">{{'Clients.SystemDepositLimitDaily' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemDepositLimitDaily}}</div>
+      <div class="third-hand">{{newData?.SystemDepositLimitDaily}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemDepositLimitWeekly != oldData?.SystemDepositLimitWeekly}">
+      <div class="first-hand">{{'Clients.SystemDepositLimitWeekly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemDepositLimitWeekly}}</div>
+      <div class="third-hand">{{newData?.SystemDepositLimitWeekly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemDepositLimitMonthly != oldData?.SystemDepositLimitMonthly}">
+      <div class="first-hand">{{'Clients.SystemDepositLimitMonthly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemDepositLimitMonthly}}</div>
+      <div class="third-hand">{{newData?.SystemDepositLimitMonthly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemTotalBetAmountLimitDaily != oldData?.SystemTotalBetAmountLimitDaily}">
+      <div class="first-hand">{{'Clients.SystemTotalBetAmountLimitDaily' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemTotalBetAmountLimitDaily}}</div>
+      <div class="third-hand">{{newData?.SystemTotalBetAmountLimitDaily}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemTotalBetAmountLimitWeekly != oldData?.SystemTotalBetAmountLimitWeekly}">
+      <div class="first-hand">{{'Clients.SystemTotalBetAmountLimitWeekly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemTotalBetAmountLimitWeekly}}</div>
+      <div class="third-hand">{{newData?.SystemTotalBetAmountLimitWeekly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemTotalBetAmountLimitMonthly != oldData?.SystemTotalBetAmountLimitMonthly}">
+      <div class="first-hand">{{'Clients.SystemTotalBetAmountLimitMonthly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemTotalBetAmountLimitMonthly}}</div>
+      <div class="third-hand">{{newData?.SystemTotalBetAmountLimitMonthly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemTotalLossLimitDaily != oldData?.SystemTotalLossLimitDaily}">
+      <div class="first-hand">{{'Clients.SystemTotalLossLimitDaily' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemTotalLossLimitDaily}}</div>
+      <div class="third-hand">{{newData?.SystemTotalLossLimitDaily}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemTotalLossLimitWeekly != oldData?.SystemTotalLossLimitWeekly}">
+      <div class="first-hand">{{'Clients.SystemTotalLossLimitWeekly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemTotalLossLimitWeekly}}</div>
+      <div class="third-hand">{{newData?.SystemTotalLossLimitWeekly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemTotalLossLimitMonthly != oldData?.SystemTotalLossLimitMonthly}">
+      <div class="first-hand">{{'Clients.SystemTotalLossLimitMonthly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemTotalLossLimitMonthly}}</div>
+      <div class="third-hand">{{newData?.SystemTotalLossLimitMonthly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemSessionLimit != oldData?.SystemSessionLimit}">
+      <div class="first-hand">{{'Clients.SystemSessionLimit' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemSessionLimit}}</div>
+      <div class="third-hand">{{newData?.SystemSessionLimit}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemSessionLimitDaily != oldData?.SystemSessionLimitDaily}">
+      <div class="first-hand">{{'Clients.SystemSessionLimitDaily' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemSessionLimitDaily}}</div>
+      <div class="third-hand">{{newData?.SystemSessionLimitDaily}}</div>
+    </div>
+
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemSessionLimitWeekly != oldData?.SystemSessionLimitWeekly}">
+      <div class="first-hand">{{'Clients.SystemSessionLimitWeekly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemSessionLimitWeekly}}</div>
+      <div class="third-hand">{{newData?.SystemSessionLimitWeekly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemSessionLimitMonthly != oldData?.SystemSessionLimitMonthly}">
+      <div class="first-hand">{{'Clients.SystemSessionLimitMonthly' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemSessionLimitMonthly}}</div>
+      <div class="third-hand">{{newData?.SystemSessionLimitMonthly}}</div>
+    </div>
+
+    <div class="single-field" [ngClass]="{'changed': newData?.SystemExcludedUntil != oldData?.SystemExcludedUntil}">
+      <div class="first-hand">{{'Clients.SystemExcludedUntil' | translate}}</div>
+      <div class="second-hand">{{oldData?.SystemExcludedUntil | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+      <div class="third-hand">{{newData?.SystemExcludedUntil | date:'dd/MM/yyyy HH:mm:ss'}}</div>
+    </div>
+
+
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+.modal-wrap {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 16px;
+
+  .modal-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+
+    div {
+      flex: 1;
+    }
+
+    .mat-form-field {
+      flex: 2;
+    }
+  }
+
+}
+
+

@@ -1,0 +1,78 @@
+<div mat-dialog-title>
+  <div class="title">
+    <span>{{action | translate}} </span>
+    <span>{{'Partners.SubMenu' | translate}}</span>
+  </div>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <div class="input-content">
+      <div class="input-title">{{'Partners.Title' | translate}}*</div>
+      <input matInput type="text" [placeholder]="'Partners.Title' | translate" [formControlName]="'Title'" required>
+      <mat-error *ngIf="errorControl['Title'].touched && errorControl['Title'].hasError('required')">
+        {{'Partners.Title' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </div>
+
+    <ng-container *ngIf = "menuItem.menuId === styleMenuId && menuItem.Type?.startsWith('#') ; else colorInputRef">
+      <div class="input-color-content" >
+        <div class="input-title">{{'Common.Type' | translate}}</div>
+        <input
+          [placeholder]="'Common.Type' | translate"
+          [value]="color"
+          [(colorPicker)]="color"
+          (colorPickerChange)="onChangeColor($event)"
+          [cpCancelButton]="true"
+          [cpCancelButtonClass]="'cancel-btn'"
+          [cpOKButton]="true"
+          [cpPosition]="'bottom'"
+          [cpOKButtonClass]="'ok-btn'"
+          type="text"/>
+      </div>
+    </ng-container>
+
+    <ng-template #colorInputRef>
+      <div class="input-content" *ngIf = "menuItem.Icon !== styleMenuId">
+        <div class="input-title">{{'Common.Type' | translate}}</div>
+        <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+      </div>
+    </ng-template>
+
+    <div class="textarea-content">
+      <div class="input-title">{{'Partners.StyleType' | translate}}</div>
+      <textarea matInput [placeholder]="'Partners.StyleType' | translate" [formControlName]="'StyleType'"></textarea>
+
+    </div>
+
+    <div class="input-content">
+      <div class="input-title">{{'Partners.Icon' | translate}}</div>
+      <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'" (input)="changeIcon($event)">
+    </div>
+
+    <div class="textarea-content">
+      <div class="input-title">{{'Partners.Href' | translate}}</div>
+      <textarea rows="1" [placeholder]="'Partners.Href' | translate" [formControlName]="'Href'"></textarea>
+    </div>
+
+    <div class="input-content">
+      <div class="input-title">{{'Common.Order' | translate}}*</div>
+      <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'" required>
+      <mat-error *ngIf="errorControl['Order'].touched && errorControl['Order'].hasError('required')">
+        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </div>
+
+    <input type="file" (change)="uploadFile($event)" *ngIf="showFile">
+
+    <mat-checkbox [formControlName]="'OpenInRouting'">{{'Partners.OpenInRouting' | translate}}</mat-checkbox>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled] = "formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

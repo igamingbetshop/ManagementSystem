@@ -1,0 +1,79 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: calc(100% - 62px);
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+  }
+  
+.trigger-groups {
+  position: absolute;
+  margin-top: 20px;
+  top: 100px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.trigger-groups-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.add-trigger-group {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.block-add {
+  margin: 0 10px;
+  position: relative;
+  top: 10px;
+  padding: 10px;
+  div {
+    display: flex;
+    align-items: center;
+  }
+  .mat-icon {
+    cursor: pointer;
+    transform: scale(0.6);
+    margin-right: 7px;
+  }
+  table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+    padding-top: 12px;
+    border-spacing: 0;
+    thead tr th {
+      white-space: normal;
+      word-break: break-word;
+      border-bottom: 1px solid #ddd;
+    }
+    tbody tr td {
+      text-align: center;
+      padding: 10px 0;
+    }
+  }
+}
+
+.list-content {
+  height: calc(100% - 50px);
+  overflow-y: auto;
+}
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+  margin-top: 20px;
+}
+
+}
+

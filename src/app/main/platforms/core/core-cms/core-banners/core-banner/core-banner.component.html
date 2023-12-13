@@ -1,0 +1,262 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../cms/banners']">{{'Cms.Banners' | translate}}</a> / <span>{{id}}</span>
+    </div>
+
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.StartDate' | translate}}</div>
+        <div class="second-hand">{{banner?.StartDate | date:'dd/MM/yyyy'}}</div>
+        <div class="form-field form-calendar">
+          <mat-form-field appearance="none">
+            <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
+            <mat-datepicker-toggle matSuffix [for]="picker">
+              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+            </mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.EndDate' | translate}}</div>
+        <div class="second-hand">{{banner?.EndDate | date:'dd/MM/yyyy'}}</div>
+        <div class="form-field form-calendar">
+          <mat-form-field appearance="none">
+            <input matInput [matDatepicker]="picker1" [formControlName]="'EndDate'">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Body' | translate}}</div>
+        <div class="static-hand">{{banner?.Body}}</div>
+        <!-- <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="150" [placeholder]="'Cms.Body'" [formControlName]="'Body'">
+          </mat-form-field>
+        </div> -->
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Head' | translate}}</div>
+        <div class="static-hand">{{banner?.Head}}</div>
+        <!-- <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Cms.Head' | translate" [formControlName]="'Head'">
+          </mat-form-field>
+        </div> -->
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.NickName' | translate}}</div>
+        <div class="second-hand">{{banner?.NickName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
+              [formControlName]="'NickName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Order' | translate}}</div>
+        <div class="second-hand">{{banner?.Order}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="text" [maxlength]="2" [placeholder]="'Common.Order' | translate"
+              [formControlName]="'Order'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Link' | translate}}</div>
+        <div class="second-hand">{{banner?.Link}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [maxLength]="100" [placeholder]="'Cms.Link' | translate" [formControlName]="'Link'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="second-hand">{{banner?.Type}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Visibility' | translate}}</div>
+        <!-- <div class="second-hand">{{banner?.Visibility}}</div> -->
+        <div class="second-hand">
+          <ng-container *ngFor="let entity of visibilityEntites">{{entity}}</ng-container>
+        </div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Visibility'" multiple>
+            <mat-option *ngFor="let banVisType of bannerVisibilityTypes"
+              [value]="banVisType.id">{{banVisType.name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.Image' | translate}}</div>
+        <div class="second-hand">{{banner?.Image}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'Image'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div [class.group-left-item]="isEdit">
+        <div class="first-hand">{{'Bonuses.ChooseSegment' | translate}}</div>
+        <div class="second-hand" *ngIf="banner?.Segments?.Type==1">
+          {{'Bonuses.InSet' | translate}}
+        </div>
+        <div class="second-hand" *ngIf="banner?.Segments?.Type==2">
+          {{'Bonuses.OutOfSet' | translate}}
+        </div>
+
+        <div class="form-field form-checkbox" [formGroupName]="'Segments'">
+          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+        </div>
+      </div>
+
+      <div [class.group-right-item]="isEdit">
+        <div class="first-hand">{{'Bonuses.SelectSegment' | translate}}</div>
+        <div class="second-hand">
+          <ng-container *ngFor="let segment of segmentesEntites">{{segment}}</ng-container>
+        </div>
+        <div class="form-field form-dropdown" [formGroupName]="'Segments'">
+          <mat-select [formControlName]="'Ids'" multiple>
+            <mat-option *ngFor="let segment of segments" [value]="segment.Id">{{segment.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div  [class.group-left-item]="isEdit">
+        <div class="first-hand">{{'Bonuses.ChooseLanguages' | translate}}</div>
+        <div class="second-hand" *ngIf="banner?.Languages?.Type==1">
+          {{'Bonuses.InSet' | translate}}
+        </div>
+        <div class="second-hand" *ngIf="banner?.Languages?.Type==2">
+          {{'Bonuses.OutOfSet' | translate}}
+        </div>
+
+        <div class="form-field form-checkbox" [formGroupName]="'Languages'">
+          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+        </div>
+      </div>
+
+      <div [class.group-right-item]="isEdit">
+        <div class="first-hand">{{'Clients.SelectLanguage' | translate}}</div>
+        <div class="second-hand">
+          <ng-container *ngFor="let language of languageEntites">
+            {{languageEntites}}
+          </ng-container>
+        </div>
+        <div class="form-field form-dropdown" [formGroupName]="'Languages'">
+          <mat-select [formControlName]="'Names'" multiple>
+            <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.ShowDescription' | translate}}</div>
+        <div class="second-hand">{{banner?.ShowDescription}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'ShowDescription'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.ShowLogin' | translate}}</div>
+        <div class="second-hand">{{banner?.ShowLogin}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'ShowLogin'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.ShowRegistration' |translate}}</div>
+        <div class="second-hand">{{banner?.ShowRegistration}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'ShowRegistration'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Cms.IsEnabled' |translate}}</div>
+        <div class="second-hand">{{banner?.IsEnabled}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsEnabled'"></mat-checkbox>
+        </div>
+      </div>
+
+      
+      <div *ngIf="isEdit">
+        <div class="first-hand">{{'Cms.Size' | translate}}</div>
+        <div class="second-hand">{{banner?.ImageSize}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'ImageSize'">
+            <mat-option *ngFor="let size of sizes" [class.selected]="size.selected"
+              [value]="size.id">{{size.name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div *ngIf="isEdit">
+        <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
+        <div class="second-hand">{{banner?.EnvironmentTypeId}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'EnvironmentTypeId'">
+            <mat-option *ngFor="let environment of environments"
+              [value]="environment.Id">{{environment.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div *ngIf="isEdit">
+        <div class="first-hand">{{'Common.UploadFile' | translate}}</div>
+        <div class="second-hand"></div>
+        <div class="form-field form-checkbox">
+          <input type="file" (change)="uploadFile($event)">
+        </div>
+      </div>
+
+      <div></div>
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <img class="img" [src]="image" alt="Image">
+
+
+</div>

@@ -1,0 +1,36 @@
+<div mat-dialog-title>
+  <span class="title">{{'Currencies.AddCurrency' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+      <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.required">
+        {{'Common.Id' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Partners.Rate' | translate" [formControlName]="'CurrentRate'">
+      <mat-error *ngIf="errorControl['CurrentRate']?.touched && errorControl['CurrentRate'].errors?.required">
+        {{'Partners.Rate' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Partners.Symbol' | translate" [formControlName]="'Symbol'">
+      <mat-error *ngIf="errorControl['Symbol']?.touched && errorControl['Symbol'].errors?.required">
+        {{'Partners.symbol' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()" type="submit">{{'Common.Save' | translate}}</button>
+</div>

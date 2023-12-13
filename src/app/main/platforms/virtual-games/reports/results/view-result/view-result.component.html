@@ -1,0 +1,269 @@
+<div class="header" fxHeight="50px">
+  <div>
+    <h4><a [routerLink]="['../../results']">{{'Reports.Results' | translate}}</a> / {{resultId}}</h4>
+  </div>
+</div>
+<div class="vg-results">
+  <div class="result-head" *ngIf="gameId !== 105">Round Id : {{roundId}}</div>
+  <div *ngIf="gameId === 1 || gameId === 101" style="padding: 20px 30px 0 30px;">
+    <ul id="round-odds-balls" style="list-style: none; width: 600px; padding: 0; margin: 0;">
+      <li *ngFor="let odd of KenoOdds; let i = index"
+          style="float: left; margin: 0; padding: 0;width: 60px; height: 20px; display: inline-block; line-height: 20px;"
+          [ngClass]="{'selected': odd > 0}"><span *ngIf="odd > 0">{{odd}}</span>
+      </li>
+    </ul>
+    <b># {{roundId}}</b>
+    <span *ngFor="let item of outcome">
+            <span>{{item}}</span>
+    </span>
+    <ag-grid-angular
+      id="player-categories"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+  <div *ngIf="gameId === 106 || gameId === 107">
+    <b># {{roundId}}</b>
+    <span *ngFor="let item of outcome">
+      <span>{{item}}</span>
+    </span>
+    <ag-grid-angular
+      id="player-categories2"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+  <div *ngIf="gameId === 108">
+    <div class="player-cards player1-cards player-cards-center" *ngFor="let item of outcome;let i = index">
+      <div class="card" [ngClass]="{'second-card': i == 1}" style="position: absolute" [ngStyle]="getCardPosition(item)"></div>
+      <div class="card second-card" [ngClass]="{'second-card': i == 1}" style="position: absolute" [ngStyle]="getCardPosition(item)"></div>
+    </div>
+    <div *ngFor="let unit of state; let i = index" class="blocks unit-{{i + 1}}" style="margin-bottom:120px">
+      <div class="markets" *ngFor="let market of unit.Markets">
+        <div class="markets-name">{{market.Name}}</div>
+        <div class="selections-block">
+          <div>
+            <div class="selection" *ngFor="let selection of market.Selections" [ngClass]="{'won' : selection.K == 1}">
+              <div class=" selection-name selection-long-name ">{{selection.Name}}</div>
+              <div class="selection-value" *ngIf="selection.K == 0">{{Status < 10 ? 'Fold' : 'Lost'}}</div>
+              <div class="selection-value" *ngIf="selection.K == 1">{{'Won'}}</div>
+              <div class="selection-value" *ngIf="selection.K > 1">{{selection.K}}</div>
+              <div class="selection-value">{{selection.K}}</div>
+            </div>
+          </div>
+
+          <div style="margin-left:10px;">
+            <div class="selection-id-content" *ngFor="let selection of market.Selections">{{selection.TypeId}}</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="gameId === 109">
+    <div class="win-combinations " *ngFor="let item of outcome;let i = index">
+      <div *ngIf="item">
+        <div class="markets-name">{{OutcomeNames[i]}}</div>
+        <div class="selections-block">
+          <div style="float:left">
+            <div class="selection fullWidth">
+              <div class=" selection-name selection-long-name fullWidth">{{item}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="gameId === 2 || gameId === 102">
+    <div *ngFor="let unit of state; let i = index" class="blocks unit-{{i + 1}}" style="margin-bottom:120px">
+      <div class="table-container table{{i + 1}}">
+        <div *ngFor="let selection of unit.Markets[0].Selections | keyvalue" class="table-chair table-chair-{{+selection.key + 1}}"></div>
+        <div *ngFor="let selection of unit.Markets[0].Selections | keyvalue" class="player-cards player{{+selection.key + 1}}-cards">
+          <div *ngFor="let card of selection.value.Info; let i = index" class="card" [ngStyle]="getCardPosition(card)" [ngClass]="{'second-card': i == 1}"></div>
+          <div class="selection" [ngClass]="{selected: selection.value.Selected, won: selection.value.K == 1}">
+            <div class="selection-name">{{i + 1}}{{+selection.key + 1}}</div>
+            <div class="selection-value">{{selection.value.K}}</div>
+          </div>
+          <span style="display:inline-block; margin-left:20px; margin-top:134px; color:black; font-weight:bold">{{selection.value.SelectionId}}</span>
+        </div>
+        <div *ngFor="let tableCard of TableCards | keyvalue: onCompare; let i = index" class="table-cards table-cards{{tableCard.key}}" [ngClass]="{'opened': unit.Info[tableCard.key]}">
+          <div *ngIf="unit.Info[tableCard.key] != null" class="card" [ngStyle]="getCardPosition(unit.Info[tableCard.key])"></div>
+          <div *ngIf="unit.Info[tableCard.key] == null" class="closed-card">{{tableCard.value}}</div>
+        </div>
+        <div class="table"></div>
+        <span class="table-name">{{unit.value?.UnitId + 1}}</span>
+      </div>
+      <div class="win-combinations">
+
+        <div style="float:left">
+          <div class="selection" *ngFor="let selection of unit.Markets[1].Selections"
+               [ngClass]="{'won' : selection.K == 1}">
+            <div class="selection-name">{{selection.Name}}</div>
+            <div class="selection-value" *ngIf="selection.K == 0">{{Status < 10 ? 'Fold' : 'Lost'}}</div>
+            <div class="selection-value" *ngIf="selection.K == 1">{{'Won'}}</div>
+            <div class="selection-value" *ngIf="selection.K > 1">{{selection.K}}</div>
+            <div class="selection-value">{{selection.K}}</div>
+          </div>
+        </div>
+
+        <div style="float:left; margin-left:10px;">
+          <div class="selection-id-content"
+               *ngFor="let selection of unit.Markets[1].Selections">{{selection.SelectionId}}</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="lottery-main-container" *ngIf="gameId === 105">
+    <div class="lottery-unit-details">
+      <div class="edit-icon">
+        <mat-icon (click)="enableEditDrawDate()">edit</mat-icon>
+      </div>
+      <div class="grid-history" >
+        <div>
+          <div class="first-hand">{{'VirtualGames.DrawDate' | translate}}</div>
+          <div class="third-hand" *ngIf="!isEditModeDrawDate">{{data?.drawDate | date:'dd/MM/yyyy HH:mm'}}</div>
+          <div lass="third-hand" *ngIf="isEditModeDrawDate">
+            <mat-form-field>
+              <input matInput [ngxMatDatetimePicker]="picker" [(ngModel)]="CurrentDrawDate" (dateChange)="onDrawDateChange($event)">
+              <mat-datepicker-toggle matSuffix [for]="picker">
+                <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+              </mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div class="buttons" *ngIf="isEditModeDrawDate">
+        <button mat-raised-button color="primary" (click)="saveEditDrawDate()">{{'Common.Save' | translate}}</button>
+        <button mat-raised-button color="warn" (click)="this.isEditModeDrawDate = false;">{{'Common.Cancel' | translate}}</button>
+      </div>
+    </div>
+
+    <div *ngIf="outcome" class="lottery-content">
+      <div class="unit-details market-form">
+        <div class="unit-info">{{'SkillGames.Game' | translate}}: {{state.DisplayName}}</div>
+        <div class="unit-info">{{'VirtualGames.RoundId' | translate}}: {{roundId}}</div>
+      </div>
+      <div *ngFor="let market of outcome; let i = index" class="lottery-market">
+        <span class="market-name">{{market.MarketTypeDisplayName || market.MarketTypeName}}</span>
+        <div class="edit-icon" *ngIf="!market.IsSubmitted">
+          <mat-icon (click)="enableEditing(market)">edit</mat-icon>
+        </div>
+        <form name="form" class="market-form">
+          <div *ngFor="let ticket of market.Tickets; let j = index; trackBy: identify" class="ticket-box">
+            <mat-form-field>
+              <input matInput
+                     pattern="/^\d+$/"
+                     [minLength]="market.Digits"
+                     [maxLength]="market.Digits"
+                     [(ngModel)]="market.Tickets[j]"
+                     [ngModelOptions]="{standalone: true}"
+                     [disabled]="!extra[market?.MarketTypeId]?.isEditMode"
+                     type="text">
+            </mat-form-field>
+          </div>
+        </form>
+        <div *ngIf="!market.IsSubmitted && extra[market.MarketTypeId].isEditMode" class="buttons">
+          <button mat-raised-button color="primary" (click)="save(market)">{{'Common.Save' | translate}}</button>
+          <button mat-raised-button color="warn" (click)="cancel(market)">{{'Common.Cancel' | translate}}</button>
+          <button *ngIf="extra[market.MarketTypeId].completed" mat-raised-button color="primary"
+                  (click)="submit(market)">{{'Submit' | translate}}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="race-main-content" *ngIf="gameId === 3 || gameId === 103">
+
+      <div class="markets-panel markets-{{SelectionsLenght}}">
+
+        <div class="market-top-numbers" style="margin-left:25px; padding-bottom: 81px">
+          <span style="font-size: 20px;">{{'VirtualGames.outcome' | translate}}</span>
+        </div>
+
+        <div class="market-top-numbers">
+          <div *ngFor="let k of SelectionsArr"><strong class="market-number-{{k + 1}}">{{k + 1}}</strong></div>
+        </div>
+
+        <ul class="market" *ngFor="let market of state[0]?.Markets?.slice(0,5); let i = index">
+          <li class="market-name">{{market.Name}}</li>
+          <li *ngFor="let selection of market.Selections"><span class="selection">{{selection.K}}</span><br/><span
+            style="font-weight:bold; padding-left:21px">{{selection.SelectionId}}</span></li>
+        </ul>
+
+        <ul class="market market-vertical">
+          <li class="market-name">{{state[0].Markets[5].Name}}</li>
+          <li *ngFor="let selection of state[0].Markets[5].Selections">
+            <span class="selection-name">{{selection.Name}}</span>
+            <span class="selection">{{selection.K}}</span><br/><span
+            style="font-weight:bold; padding-left:21px">{{selection.SelectionId}}</span>
+          </li>
+        </ul>
+
+        <ul class="market market-vertical market-right">
+          <li class="market-name">{{state[0].Markets[6].Name}}</li>
+          <li *ngFor="let selection of state[0].Markets[6].Selections">
+            <span class="selection-name">{{selection.Name}}</span>
+            <span class="selection">{{selection.K}}</span><br/><span
+            style="font-weight:bold; padding-left:21px">{{selection.SelectionId}}</span>
+          </li>
+        </ul>
+
+        <div class="market-top-numbers">
+          <span *ngFor="let k of SelectionsArr"><strong class="market-number-{{k + 1}}">{{k + 1}}</strong></span>
+        </div>
+        <div class="market-left-numbers">
+          <span *ngFor="let k of SelectionsArr"><strong class="market-number-{{k + 1}}">{{k + 1}}</strong></span>
+        </div>
+        <ul class="market main-market" style="display:block;">
+          <li *ngFor="let selection of MainSelections; let i = index">
+            <span class="selection-empty" *ngIf="MainSelections[i] === false"></span>
+            <span class="selection" *ngIf="MainSelections[i] !== false">{{MainSelections[i].K}}</span><br/><span
+            *ngIf="MainSelections[i] !== false"
+            style="font-weight:bold; padding-left:21px">{{selection.SelectionId}}</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <div *ngIf="gameId === 4 || gameId === 104" style="padding: 20px 30px 0 30px;">
+      <b># {{roundId}}</b>
+      <span>{{outcome}}</span>
+    </div>
+
+  </div>
+</div>

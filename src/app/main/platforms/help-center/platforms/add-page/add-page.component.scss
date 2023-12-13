@@ -1,0 +1,66 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.editor-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: auto;
+  }
+  
+  .menu {
+    width: 100%;
+    background-color: #f0f0f0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    text-align: center;
+  }
+  
+  .ql-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  
+  .quill-editor {
+    width: 100%;
+    quill-editor {
+      width: 100%;
+    }
+  }
+  
+  .file-upload {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .uploaded-content {
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+  
+    img, video {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+    padding: 5px;
+    margin-top: 10px;
+  }
+  
+  .compiled-content {
+    margin-top: 20px;
+  }
+
+  .mat-btn {
+    margin-left: 8px;
+    @include mat-btn-style;
+  }
+  

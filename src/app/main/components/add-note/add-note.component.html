@@ -1,0 +1,33 @@
+<div mat-dialog-title>
+  <div class="title">{{'Common.AddNote' | translate}}</div>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+
+    <mat-form-field *ngIf="objectTypeId == 2">
+      <mat-label>{{'Clients.SelectCommentType' | translate}}</mat-label>
+      <mat-select [formControlName]="'CommentTemplateId'" (selectionChange)="onCommentTypeChange()">
+        <mat-option *ngFor="let comment of comments" [value]="comment.Id">{{comment.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['CommentTemplateId']?.touched && errorControl['CommentTemplateId'].errors?.required">
+        {{'Clients.SelectCommentType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.AddNote' | translate}}</mat-label>
+      <textarea matInput [formControlName]="'Message'" cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+      ></textarea>
+      <mat-error *ngIf="errorControl['Message'].touched && errorControl['Message'].hasError('required')">
+        {{'Clients.NoteRequired' | translate}} 
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">Cancel</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">Add Note</button>
+</div>

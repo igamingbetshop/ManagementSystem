@@ -1,0 +1,38 @@
+<div mat-dialog-title>
+  <span class="title">{{'Providers.AddProvider' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+      <mat-error *ngIf="errorControl['Id']?.touched && errorControl['Id'].errors?.required">
+        {{'Common.Id' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Providers.SessionExpireTime' | translate" [formControlName]="'SessionExpireTime'">
+      <mat-error
+        *ngIf="errorControl['SessionExpireTime']?.touched && errorControl['SessionExpireTime'].errors?.required">
+        {{'Providers.SessionExpireTime' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()" >{{'Common.Save' | translate}}</button>
+</div>

@@ -1,0 +1,27 @@
+<div class="main-content">
+  <div class="grid-content">
+    <ag-grid-angular
+    id="unmapped-phases"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [pagination]="pagination"
+    [sideBar]="sideBar"
+    [suppressCopyRowsToClipboard]="true"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (rowSelected)="onRowSelected()"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+</ag-grid-angular>
+  </div>

@@ -1,0 +1,27 @@
+<div class="contnet">
+    <h2>{{'Bonuses.AddGroup' | translate}}</h2>
+
+    <button mat-icon-button aria-label="close" (click)="stopEditing(false)">
+        <mat-icon style="margin-top: 16px;">close</mat-icon>
+    </button>
+
+</div>
+<div *ngFor="let item of items; let i = index" class="array-item">
+    <div class="Parent">
+        <div class="child1">
+            <span>{{item}} </span>
+        </div>
+        <div class="child2">
+            <button mat-icon-button aria-label="Delete" class="btn-icon" (click)="deleteItem(i)">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>
+<br>
+
+<input matInput type="number" placeholder="Add" (keydown)="onKeyDown($event)" [(ngModel)]="myItem">
+
+<button mat-icon-button aria-label="Add" [disabled]="!myItem" (click)="addItem()">
+    <mat-icon>add</mat-icon>
+</button>

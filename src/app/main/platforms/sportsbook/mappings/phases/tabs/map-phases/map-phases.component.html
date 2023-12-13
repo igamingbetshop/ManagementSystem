@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="main-content">
+
+    <div class="left-panel">
+
+      <div class="action-content">
+        <div class="title">{{'Sport.Phases' | translate}}</div>
+        <div class="title">{{'Sport.PhasesTeams' | translate}}</div>
+      </div>
+      <app-unmaped-phases [sports]="sports" [providers]="providers"
+        (valueEmitted)="handleValueEmitted($event)"></app-unmaped-phases>
+    </div>
+
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.Phases' | translate}}</div>
+
+        <div>
+          <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+        </div>
+      </div>
+      <app-mapped-phases (callParent)="mapCompetition()" [isCanNotSelect]="isCanNotSelect"></app-mapped-phases>
+    </div>
+
+  </div>
+</div>

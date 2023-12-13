@@ -1,0 +1,31 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Roles.Roles' | translate}} / {{'Users.Users' | translate}} </div>
+  </div>
+  
+  <div class="grid-content">
+    <ag-grid-angular
+    id="role-users"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [suppressCopyRowsToClipboard]="true"
+    [rowData]="rowData"
+    [suppressRowClickSelection]="true"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+</div>

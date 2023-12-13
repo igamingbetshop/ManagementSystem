@@ -1,0 +1,96 @@
+<div mat-dialog-title>
+  <span class="title">{{action}} {{'Sport.Teaser' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select
+        [formControlName]="'PartnerId'">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.SelectionsCount' | translate"
+             [formControlName]="'SelectionsCount'">
+      <mat-error *ngIf="errorControl['SelectionsCount']?.touched && errorControl['SelectionsCount'].errors?.required">
+        {{'Sport.SelectionsCount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.MaxOpenSpots' | translate" [formControlName]="'MaxOpenSpots'">
+      <mat-error *ngIf="errorControl['MaxOpenSpots']?.touched && errorControl['MaxOpenSpots'].errors?.required">
+        {{'Sport.MaxOpenSpots' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.BaseCoefficient' | translate"
+             [formControlName]="'BaseCoefficient'">
+      <mat-error *ngIf="errorControl['BaseCoefficient']?.touched && errorControl['BaseCoefficient'].errors?.required">
+        {{'Sport.BaseCoefficient' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Sport.MaxPoint' | translate}}</mat-label>
+      <mat-select (selectionChange)="onMaxPointChange($event.value)"
+                  [formControlName]="'MaxPoint'" required>
+        <mat-option *ngFor="let maxPoint of maxPoints" [value]="maxPoint">{{maxPoint}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="field-content" >
+      <mat-form-field class="input-points" *ngFor="let selectedPoint of selectedPoints; let i = index;">
+        <input matInput type="number" placeholder="{{selectedPoint.Number}} {{'Sport.PointCoefficient' | translate}}"
+               [(ngModel)]="selectedPoint.Value" required
+               [ngModelOptions]="{standalone: true}" [value]="selectedPoint.Value">
+      </mat-form-field>
+    </div>
+    <mat-form-field>
+      <mat-label>{{'Sport.TieRule' | translate}}</mat-label>
+      <mat-select
+        [formControlName]="'TieRule'">
+        <mat-option *ngFor="let tieRule of tieRules" [value]="tieRule.Id">{{tieRule.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{matchStatusName ? matchStatusName : 'Common.MatchStatus' | translate}}</mat-label>
+      <mat-select
+        [formControlName]="'MatchStatus'" #match (selectionChange)="onMatchChange(match.value)">
+        <mat-option *ngFor="let state of matchStatus" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Common.MinCoefficient' | translate"
+             [formControlName]="'MinCoefficient'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Common.MaxCoefficient' | translate"
+             [formControlName]="'MaxCoefficient'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.Status' | translate}}</mat-label>
+      <mat-select
+        [formControlName]="'Status'">
+        <mat-option *ngFor="let state of status" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox [formControlName]="'DropHalfPoints'">{{'Sport.DropHalfPoints' | translate}}</mat-checkbox>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button *ngIf="action === 'Add'" class="modal-primary-btn" (click)="submit()">{{action | translate}} {{'Sport.Teaser' | translate}}</button>
+  <button *ngIf="action === 'Edit'" class="modal-primary-btn" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>
+

@@ -1,0 +1,16 @@
+<div mat-dialog-title>
+  <span class="title">{{originTranslations?.NickName}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <div class="modal-form-translations" *ngFor="let translate of translations">
+    <div class="language">{{translate.Language}}</div>
+    <input matInput type="text" [(ngModel)]="translate.Text">
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

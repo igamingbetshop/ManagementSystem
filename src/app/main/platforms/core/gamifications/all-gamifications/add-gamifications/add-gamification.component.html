@@ -1,0 +1,112 @@
+<div mat-dialog-title>
+  <span class="title">{{'Clients.CreateCharacter' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Partners.Title' | translate}}</mat-label>
+      <input matInput [maxLength]="100" [placeholder]="'Partners.Title' | translate" [formControlName]="'Title'">
+      <mat-error *ngIf="errorControl['Title']?.touched && errorControl['Title'].errors?.required">
+        {{'Partners.Title' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Title']?.touched && errorControl['Title'].errors?.pattern">
+        {{'Partners.Title' | translate}} {{'Errors.EnglishLetters' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-height">
+      <mat-label>{{'Bonuses.Description' | translate}}</mat-label>
+      <textarea matInput [placeholder]="'Bonuses.Description' | translate"
+        [formControlName]="'Description'"> </textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.NickName' | translate}}</mat-label>
+      <input matInput [placeholder]="'Clients.NickName' | translate" [formControlName]="'NickName'">
+      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
+        {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.pattern">
+        {{'Clients.NickName' | translate}} {{'Errors.EnglishLetters' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'" placeholder="{{'Partners.SelectPartner' | translate}}">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.SelectPartner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Bonuses.SelectStatus' | translate}}</mat-label>
+      <mat-select [formControlName]="'Status'" placeholder="{{'Bonuses.SelectStatus' | translate}}">
+        <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Status']?.touched && errorControl['Status'].errors?.required">
+        {{'Bonuses.SelectStatus' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectEnvironments' | translate}}</mat-label>
+      <mat-select [formControlName]="'EnvironmentTypeId'" placeholder="{{'Partners.SelectEnvironments' | translate}}">
+        <mat-option *ngFor="let env of environments" [value]="env.Id">{{env.Name}}</mat-option>
+      </mat-select>
+      <mat-error
+        *ngIf="errorControl['EnvironmentTypeId']?.touched && errorControl['EnvironmentTypeId'].errors?.required">
+        {{'Partners.SelectEnvironments' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="!showCompPoints">
+      <mat-label>{{'Common.Order' | translate}}</mat-label>
+      <input type="number" matInput [maxLength]="100" [placeholder]="'Common.Order' | translate"
+        [formControlName]="'Order'">
+      <mat-error *ngIf="errorControl['Order']?.touched && errorControl['Order'].errors?.required">
+        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Order']?.touched && errorControl['Order'].errors?.pattern">
+        {{'Common.Order' | translate}} {{'Errors.EnglishLetters' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="showCompPoints">
+      <mat-label>{{'Segments.ComplimentaryPoint' | translate}}</mat-label>
+      <input type="number" matInput [maxLength]="100" [placeholder]="'Common.CompPoints' | translate"
+        [formControlName]="'CompPoints'">
+      <mat-error *ngIf="errorControl['CompPoints']?.touched && errorControl['CompPoints'].errors?.required">
+        {{'Segments.ComplimentaryPoint' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['CompPoints']?.touched && errorControl['CompPoints'].errors?.pattern">
+        {{'Segments.ComplimentaryPoint' | translate}} {{'Errors.EnglishLetters' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="space-between">
+      <input class="file-input" type="file" (change)="uploadFile($event)">
+    </div>
+
+    <mat-form-field style="margin-top: 10px;">
+      <mat-label>{{'Cms.Image' | translate}}</mat-label>
+      <input matInput [placeholder]="'Cms.ImageType' | translate" [formControlName]="'ImageExtension'">
+      <mat-error *ngIf="errorControl['ImageExtension']?.touched && errorControl['ImageExtension'].errors?.required">
+        {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()"
+    type="submit">{{'Common.Save' | translate}}</button>
+</div>

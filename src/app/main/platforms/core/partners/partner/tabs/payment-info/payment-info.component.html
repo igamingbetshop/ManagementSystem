@@ -1,0 +1,36 @@
+
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Clients.PaymentSettings' | translate}}</div>
+    <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="openDialog('Add', $event)">{{'Clients.AddAccount' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected()" (click)="openDialog('Edit', selectedRow)">Edit
+      {{'Clients.Account' | translate}}
+    </button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="kyc"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (rowSelected)="onRowSelected($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+</div>
+

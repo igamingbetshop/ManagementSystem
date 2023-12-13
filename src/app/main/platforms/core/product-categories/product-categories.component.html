@@ -1,0 +1,42 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'ProductCategories.ProductCategories' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="addCategory()">{{'ProductCategories.AddCategory' | translate}}</button>
+  </div>
+
+  <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="product-categories"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [suppressRowClickSelection]="true"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [components]="frameworkComponents"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnPinned)="onColumnPinned($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>

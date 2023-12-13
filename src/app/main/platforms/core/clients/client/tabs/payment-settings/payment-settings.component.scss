@@ -1,0 +1,33 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+    }
+  }
+}
+
+.grid-content {
+  width: 100%;
+  height: 400px;
+  padding-top: 12px;
+
+  ::ng-deep {
+    ag-grid-angular {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

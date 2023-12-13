@@ -1,0 +1,40 @@
+<div mat-dialog-title>
+  <div class="title">{{'Clients.SendMailToPlayer' | translate}}</div>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Clients.Subject' | translate}}</mat-label>
+      <input type="text" matInput [formControlName]="'Subject'" required>
+      <mat-error *ngIf="errorControl['Subject'].touched && errorControl['Subject'].hasError('required')">
+        {{'Clients.Subject' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="container-popup">
+
+      <div class="language-content"
+           *ngFor="let item of translationData.Message; let i = index">
+        <div class="language-dropdown" (click)="openedIndex = i">
+          <div>{{item.Language}}</div>
+          <div class="arrow" [class.opened] = "openedIndex == i"></div>
+        </div>
+    
+        <app-html-editor
+          *ngIf = "openedIndex == i"
+          [text] = "item.Text"
+          [styles] = "{height: '250px', marginBottom: '6px'}"
+          (htmlCode)="item.newText = $event">
+        </app-html-editor>
+    
+      </div>
+    
+    </div>
+
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

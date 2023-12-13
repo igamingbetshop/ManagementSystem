@@ -1,0 +1,14 @@
+<div mat-dialog-title>
+  <span class="title">{{'Payments.PleaseGiveABriefReasonForTheCancellation' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <mat-form-field>
+    <mat-label>{{'Payments.Comment' | translate}}</mat-label>
+    <textarea matInput [placeholder]="'Payments.Comment' | translate" required [(ngModel)]="comment" cdkTextareaAutosize></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="!comment" (click)="submit()">{{'Common.Ok' | translate}}</button>
+</div>

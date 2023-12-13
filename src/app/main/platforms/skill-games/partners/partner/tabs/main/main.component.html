@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Main' | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Clients.Id' | translate}}</div>
+        <div class="second-hand">{{partner?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [formControlName]="'Id'" >
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Name' | translate}}</div>
+        <div class="second-hand">{{partner?.Name}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Name'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="second-hand">{{partner?.CurrencyId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'CurrencyId'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div></div>
+      <div></div>
+
+
+
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+
+          <button mat-raised-button  class="mat-btn"  type="submit" [disabled]="formGroup.invalid" type="submit" (click)="onSubmit()">{{'Common.Save' | translate}}
+          </button>
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+        
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+

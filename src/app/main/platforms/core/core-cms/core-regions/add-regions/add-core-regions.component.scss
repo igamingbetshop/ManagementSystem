@@ -1,0 +1,13 @@
+@import "mixins";
+
+.modal-wrap {
+  overflow: auto;
+  .modal-form {
+    .input-content {
+      @include input-style;
+    }
+    .select-content {
+      @include popup-dropdown-style;
+    }
+  }
+}

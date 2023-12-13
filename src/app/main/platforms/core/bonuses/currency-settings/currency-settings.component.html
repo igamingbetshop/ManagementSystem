@@ -1,0 +1,54 @@
+<div class="accounts-container">
+  <table mat-table class="accounts-content" [dataSource]="dataSource">
+
+    <ng-container matColumnDef="currency">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Clients.Currency' | translate }}</th>
+      <td mat-cell *matCellDef="let currency"  [ngClass]="{ 'selected-row': isRowSelected(currency) }">
+        <mat-form-field>
+          <input matInput type="text" [(ngModel)]="currency.CurrencyId" readonly>
+        </mat-form-field>  
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="minAmount">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Bonuses.MinAmount' | translate }}</th>
+      <td mat-cell *matCellDef="let currency" [ngClass]="{ 'selected-row': isRowSelected(currency) }">
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="currency.MinAmount" (blur)="onCurrencyChange(currency)">
+        </mat-form-field>  
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="maxAmount">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Bonuses.MaxAmount' | translate }}</th>
+      <td mat-cell *matCellDef="let currency" [ngClass]="{ 'selected-row': isRowSelected(currency) }">
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="currency.MaxAmount" (blur)="onCurrencyChange(currency)">
+        </mat-form-field> 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="upToAmount">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Bonuses.UpToAmount' | translate }}</th>
+      <td mat-cell *matCellDef="let currency" [ngClass]="{ 'selected-row': isRowSelected(currency) }">
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="currency.UpToAmount" (blur)="onCurrencyChange(currency)">
+        </mat-form-field> 
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> {{ 'Common.Delete' | translate }} </th>
+      <td mat-cell *matCellDef="let row" [ngClass]="{ 'selected-row': isRowSelected(row) }">
+        <button mat-icon-button color="warn" (click)="onDelete(row)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="onRowClick(row)"
+        [ngClass]="{ 'selected-row': isRowSelected(row) }"></tr>
+  </table>
+</div>

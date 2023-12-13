@@ -1,0 +1,65 @@
+<div mat-dialog-title>
+  <span class="title">{{!isEdit ? 'Add Announcement' : 'Edit Announcement'}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field *ngIf="isEdit">
+      <mat-label>{{'Common.Id' | translate}}</mat-label>
+      <input matInput [placeholder]="'Notifications.Id' | translate" [formControlName]="'Id'" readonly>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'" [disabled]="isEdit">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'" [disabled]="isEdit">
+        <mat-option *ngFor="let type of announcementTypes"  [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field >
+      <mat-label>{{'Clients.ReceiverTypeId' | translate}}</mat-label>
+      <mat-select [formControlName]="'ReceiverType'" [disabled]="isEdit">
+        <mat-option *ngFor="let resType of ReceiverTypeIds"  [value]="resType.Id">{{resType.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['ReceiverTypeId']?.touched && errorControl['ReceiverTypeId'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="textarea">
+      <textarea matInput cdkTextareaAutosize placeholder="{{'Clients.NickName' | translate}}"
+        [formControlName]="'NickName'"></textarea>
+      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
+        {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox labelPosition="before"
+      class="chackbox"
+      [formControlName]="'State'"
+      >{{'Bonuses.Active' | translate}}
+    </mat-checkbox>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid"  (click)="onSubmit()">{{!isEdit ? 'Add' : 'Edit'}}</button>
+</div>

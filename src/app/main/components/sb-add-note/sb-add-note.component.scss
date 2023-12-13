@@ -1,0 +1,14 @@
+@import "variables.scss";
+@import "mixins";
+
+
+.mat-dialog-actions {
+  .mat-cancel-btn {
+    @include mat-cancel-btn-style;
+  }
+
+  .mat-btn {
+    margin-left: 8px;
+    @include mat-btn-style;
+  }
+}

@@ -1,0 +1,213 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a (click)="onNavigate()">{{selectedPage}} {{paymentId}}</a>
+    </div>
+  </div>
+
+  <div class="deposit-history">
+    <div>
+      <div class="first-hand">{{'Id' | translate}}</div>
+      <div *ngIf="payment?.Id" class="second-hand">{{payment?.Id}}</div>
+    </div>
+    <div class="bigged">
+      <div>{{'Common.Info' | translate}}</div>
+      <div class="items" *ngFor="let item of paymentInfo | keyvalue">
+        <div *ngIf="item.value">{{item.key}}: {{item.value}}</div>
+      </div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
+      <div *ngIf="payment?.ClientId" class="second-hand">{{payment?.ClientId}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+      <div *ngIf="payment?.PartnerId" class="second-hand">{{partnerName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Payments.Amount' | translate}}</div>
+      <div *ngIf="payment?.Amount" class="second-hand">{{payment?.Amount}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.PaymentSystem' | translate}}</div>
+      <div class="second-hand">{{paymentSystemName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'BetShops.BetShopId' | translate}}</div>
+      <div *ngIf="payment?.BetShopId" class="second-hand">{{payment?.BetShopId}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Common.Status' | translate}}</div>
+      <div *ngIf="payment?.State" class="second-hand">{{paymentStatus}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.Currency' | translate}}Currency</div>
+      <div *ngIf="payment?.CurrencyId" class="second-hand">{{payment?.CurrencyId}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+      <div *ngIf="payment?.CreationTime" class="second-hand">{{payment?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.DocumentVerified' | translate }}</div>
+      <div *ngIf="paymentVerified?.ClientDocumentVerified" class="second-hand">
+        {{paymentVerified?.ClientDocumentVerified}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Payments.CashCode' | translate }}</div>
+      <div *ngIf="payment?.CashCode" class="second-hand">{{payment?.CashCode}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.FirstName' | translate }} / {{'Clients.LastName' | translate }}</div>
+      <div *ngIf="payment?.FirstName || payment?.LastName" class="second-hand">{{payment?.FirstName}}
+        {{payment?.LastName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.MobileNumberVerified' | translate }}</div>
+      <div class="second-hand">{{paymentVerified?.ClientMobileVerified}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.EmailVerified' | translate }}</div>
+      <div class="second-hand">{{paymentVerified?.ClientEmailVerified}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Payments.Parameters' | translate }}</div>
+      <div class="second-hand data-content">
+        <div *ngFor="let item of payment?.ParsedParameters | keyvalue">
+          <div *ngIf="item.value">
+            <span class="key">{{item.key}}: </span> {{item.value}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Products.ExternalId' | translate }}</div>
+      <div *ngIf="payment?.ExternalId" class="second-hand">{{payment?.ExternalId}}</div>
+    </div>
+  </div>
+
+  <div class="deposit-history-second">
+    <div class="withdraw-part" *ngIf="type === '1'">
+      <div class="title secondary">{{'Payments.SelectionPart' | translate}}</div>
+      <div class="selection-content">
+        <mat-form-field>
+          <mat-label>{{'Clients.SelectLanguage' | translate}}</mat-label>
+          <mat-select [(ngModel)]="selectedLanguage">
+            <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{'Payments.SelectComment' | translate}}</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let comment of commentList" [value]="comment.Id">{{comment.Name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+
+      <section class="mail-section">
+        <label>{{'Clients.SendEmail' | translate}}: </label>
+        <mat-checkbox (change)="SendEmail = !SendEmail" class="example-margin"></mat-checkbox>
+      </section>
+    </div>
+
+    <div class="title secondary">{{'Payments.Comment' | translate }}</div>
+
+    <div class="comment-content">
+      <div class="first-hand">
+        <textarea [(ngModel)]="Comment" id="Comment" rows="5" cols="50"></textarea>
+      </div>
+      <div class="second-hand" *ngIf="type === '2' || type === '3'">
+        <button *ngIf="payment?.PaymentSystemId === 1 && payment?.Type === 2" class="mat-btn"
+          mat-stroked-button>{{'Payments.Print' | translate }}</button>
+        <button *ngIf="payment?.PaymentSystemId === 1 && payment?.Type === 2" (click)="cancelDeposit()"
+          class="mat-cancel-btn" mat-stroked-button>{{'Payments.CancelDeposit' | translate}}</button>
+        <button *ngIf="payment?.PaymentSystemId !== 1" class="mat-btn" mat-stroked-button [class.disabled]="paymentStatus == 'Approved' ||
+          paymentStatus ==  'Pay Pending' ||
+          paymentStatus == 'ApprovedManually' " (click)="onApproveDeposite()">{{'Payments.Approve' | translate
+          }}</button>
+      </div>
+      <div class="second-hand" *ngIf="type == 1 &&  this.paymentVerified?.PaymentRequest?.State != 15">
+        <button class="mat-btn" mat-stroked-button *ngFor="let payment of paymentButtons"
+          (click)="openTransactionsModal(payment.Id, payment.Name)">{{payment.Name | translate}}</button>
+      </div>
+    </div>
+
+    <ng-container *ngIf="type == 1 && this.paymentVerified?.PaymentRequest?.State != 15 && this.paymentVerified?.PaymentRequest?.State != 6">
+      <div class="split-container">
+        <br>
+
+        <div class="title secondary">{{ 'Payments.SplitAmount' | translate }}</div>
+        <button class="mat-btn" mat-stroked-button (click)="splitVisible = !splitVisible">
+          {{ !splitVisible ? ('Common.Show' | translate) : ('Common.Hide' | translate) }}
+        </button>
+
+
+        <br>
+        <ng-container *ngIf="splitVisible">
+          <mat-form-field>
+            <label>{{ 'Common.TotalAmount' | translate }}</label>
+            <input matInput placeholder="Total Amount" [(ngModel)]="totalAmount" readonly>
+          </mat-form-field>
+
+          <mat-form-field>
+            <label>{{ 'Common.SplitedAmount' | translate }}</label>
+            <input matInput [(ngModel)]="totalSplitedAmount" readonly>
+          </mat-form-field>
+          <div class="split">
+
+            <div *ngFor="let item of splitedItems; let i = index" class="array-item">
+              <div class="Parent">
+                <div class="child1">
+                  <span>{{ item }} </span>
+                </div>
+                <div class="child2">
+                  <button mat-icon-button aria-label="Delete" class="btn-icon" (click)="deleteItem(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="array-item input-container">
+              <input matInput type="number" placeholder="Add" (keydown)="onKeyDown($event)" [(ngModel)]="mySplitedItem">
+              <button mat-icon-button aria-label="Add" [disabled]="!isAddItemValid()" (click)="addItem()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+
+            <br>
+            <button class="mat-btn" mat-stroked-button [class.disabled]="this.splitedItems.length < 1"
+              (click)="onSplitPayoutRequest()">{{'Common.Submit' | translate }}</button>
+
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+
+  </div>
+  <div class="title secondary">{{'Payments.PaymentRequestsHistory' | translate}}</div>
+
+  <div class="table-content">
+    <table>
+      <tr>
+        <th>{{'Id' | translate}}</th>
+        <th>{{'Payments.CreatedBy' | translate }}</th>
+        <th>{{'Payments.Comment' | translate }}</th>
+        <th>{{'Common.Status' | translate}}</th>
+        <th>{{'Clients.CreationTime' | translate}}</th>
+      </tr>
+
+      <tr *ngFor="let pay of paymentHistory; let i = index">
+        <td>{{pay.Id}}</td>
+        <td>{{pay.FirstName}} {{pay.LastName}}</td>
+        <td>{{pay.Comment}}</td>
+        <td>{{pay.StatusName}}</td>
+        <td>{{pay.CreationTime | date:'dd/MM/yyyy HH:mm'}}</td>
+      </tr>
+
+    </table>
+  </div>
+
+
+</div>

@@ -1,0 +1,34 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-finished']">{{'Sport.Finished' | translate}}</a> / : {{'Sport.Events' | translate}} <span>{{matchId}}</span> &nbsp; {{name}}</div>
+
+    <button mat-stroked-button color="primary" (click)="liveUpdates()"
+    [ngClass]="{'btn-success': liveUpdatesState, 'btn-danger': !liveUpdatesState}">
+{{'Sport.LiveUpdates' | translate}} {{liveUpdatesState ? "On" : "Off"}}
+</button>
+<button mat-stroked-button class="mat-btn" (click)="getEvents()">{{'Common.Go' | translate}}</button>
+
+    
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    #agGrid
+    class="ag-theme-balham"
+    [suppressCopyRowsToClipboard]="true"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+</div>

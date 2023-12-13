@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../finished-tournaments']">{{'SkillGames.FinishedTournaments' | translate}}</a> / :{{id}}</div>
+  </div>
+
+  <div class="tournament-content">
+
+    <ng-container *ngFor = "let rounds of tournamentRounds">
+      <div class="round-title">{{ 'Common.Round' | translate}} {{rounds[0].TournamentRound}}</div>
+      <div class="match" *ngFor = "let match of rounds">
+
+        <div class="player" [ngClass] = "{'won' : match.JoinedPlayerScores[0] > match.JoinedPlayerScores[1], 'left' : match.JoinedPlayerStatuses[0] == 2}">
+          {{match.JoinedPlayerNames[0]}}
+          <span *ngIf = "match.JoinedPlayerBuyins[0]">({{'SkillGames.Buyin' | translate}}) </span>
+          - {{match.JoinedPlayerIds[0]}} -
+          <span *ngIf = "match.JoinedPlayerScores[0] > match.JoinedPlayerScores[1]">{{ 'SkillGames.Won' | translate}}</span>
+          <span *ngIf = "match.JoinedPlayerScores[0] < match.JoinedPlayerScores[1]">{{ 'SkillGames.Lost' | translate}}</span>
+          <span *ngIf = "match.JoinedPlayerStatuses[0] == 2"> / {{ 'SkillGames.Left' | translate}}</span>
+        </div>
+
+        <div class="player" [ngClass] = "{'won' : match.JoinedPlayerScores[0] < match.JoinedPlayerScores[1], 'left' : match.JoinedPlayerStatuses[1] == 2}">
+          {{match.JoinedPlayerNames[1]}}
+          <span *ngIf = "match.JoinedPlayerBuyins[1]">({{'SkillGames.Buyin' | translate}}) </span>
+          - {{match.JoinedPlayerIds[1]}} -
+          <span *ngIf = "match.JoinedPlayerScores[0] < match.JoinedPlayerScores[1]">{{ 'SkillGames.Won' | translate}}</span>
+          <span *ngIf = "match.JoinedPlayerScores[0] > match.JoinedPlayerScores[1]">{{ 'SkillGames.Lost' | translate}}</span>
+          <span *ngIf = "match.JoinedPlayerStatuses[1] == 2"> / {{ 'SkillGames.Left' | translate}}</span>
+        </div>
+
+      </div>
+    </ng-container>
+
+  </div>
+</div>

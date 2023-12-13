@@ -1,0 +1,83 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.CurrencySettings' | translate}}</div>
+    <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
+
+  </div>
+
+
+  <div class="main-content">
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Partners.AllCurrencies' | translate}}</div>
+      </div>
+      <div class="grid-content">
+        <ag-grid-angular
+        id="currency-settings"
+        #agGrid
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [cacheBlockSize]="cacheBlockSize"
+        [components]="frameworkComponents"
+        (gridReady)="onGridReady($event)"
+        [suppressCopyRowsToClipboard]="true"
+        (rowClicked)="onRowClicked($event)"
+        [ensureDomOrder]="true"
+        [enableCellTextSelection]="true"
+        [getContextMenuItems]="getContextMenuItems"
+        rowSelection="single">
+      </ag-grid-angular>
+      </div>
+
+      <div class="grid-action">
+
+        <form [formGroup]="formGroup">
+          <mat-form-field>
+            <mat-label>{{'Common.SelectState' | translate}}</mat-label>
+            <mat-select [formControlName]="'State'" [disabled]="isRowSelected()">
+              <mat-option *ngFor="let state of statusName" [value]="state.Id">{{state.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button class="btn-success btn-success-dis" [disabled]="isRowSelected()"
+                  (click)="addCurrencyToPartner()">{{'Partners.AddSelectedCurrencyToPartner' | translate}}
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Partners.PartnerCurrencies' | translate}}</div>
+      </div>
+      <div class="grid-content">
+        <ag-grid-angular
+        id="currency-settings2"
+        #agGrid1
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData1"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs1"
+        [defaultColDef]="defaultColDef"
+        [cacheBlockSize]="cacheBlockSize"
+        [components]="frameworkComponents"
+        [suppressCopyRowsToClipboard]="true"
+        (gridReady)="onGridReady($event)"
+        (cellValueChanged)="onCellValueChanged($event)"
+        [ensureDomOrder]="true"
+        [enableCellTextSelection]="true"
+        [getContextMenuItems]="getContextMenuItems"
+        rowSelection="single">
+      </ag-grid-angular>
+      </div>
+    </div>
+  </div>
+  </div>

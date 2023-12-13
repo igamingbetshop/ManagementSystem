@@ -1,0 +1,48 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Reports.ReportByLimits' | translate}}</div>
+    <div class="partner-dropdown">
+        <mat-select placeholder="{{'Partners.SelectPartner' | translate}}" [(ngModel)]="partnerId"  (ngModelChange)="go()">
+          <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+          <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+        </mat-select>
+    </div>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="report-by-limits"
+    #agGrid
+    [class.hide-grid]="loadingUserState"
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [suppressRowClickSelection]="true"
+    [defaultColDef]="defaultColDef"
+    [suppressCopyRowsToClipboard]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    (columnPinned)="onColumnPinned($event)"
+    (columnMoved)="onColumnMoved($event)"
+    (columnResized)="onColumnResized($event)"
+    (columnVisible)="onColumnVisible($event)"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+</div>
+
+
+
+

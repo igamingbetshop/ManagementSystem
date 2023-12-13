@@ -1,0 +1,67 @@
+<div class="container">
+
+
+  <div class="content-action">
+    <div class="title">{{'VirtualGames.Games' | translate}}</div>
+  </div>
+
+<mat-grid-list cols="2" rowHeight="670px">
+
+  <mat-grid-tile [colspan]="1">
+
+    <ag-grid-angular
+      id="finished-markets"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [suppressCopyRowsToClipboard]="true"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [components]="frameworkComponents"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (rowSelected)="onRowSelected($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+
+
+  </mat-grid-tile>
+
+  <mat-grid-tile [colspan]="1">
+
+    <ag-grid-angular
+      id="finished-markets-2"
+      #agGrid1
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [suppressCopyRowsToClipboard]="true"
+      [rowHeight]="42"
+      [rowData]="rowData1"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs2"
+      [defaultColDef]="defaultColDef"
+      [suppressRowClickSelection]="true"
+      [components]="frameworkComponents"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (cellValueChanged)="onCellValueChanged($event)"
+      (gridReady)="onGridReady1($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      rowSelection="single">
+    </ag-grid-angular>
+
+  </mat-grid-tile>
+
+</mat-grid-list>
+
+</div>

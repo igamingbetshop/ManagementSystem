@@ -1,0 +1,73 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../commonses']">{{'Bonuses.Commons' | translate}}</a> / :{{'Bonuses.TriggerGroup' | translate}}</div>
+  </div>
+
+  <div class="trigger-groups">
+    <div class="trigger-groups-content">
+      <div class="list-content">
+        <div class="block-add" *ngFor="let triggerGroup of triggerGroups" style="border: 1px solid #c0c0c0;">
+          <div class="add-bg pointer">
+            <mat-icon (click)="openAddTriggerToGroup(triggerGroup)">add_box</mat-icon>
+            {{triggerGroup.Name}} / {{triggerGroup.TypeName}} / Priority -
+            <span (click)="onPriorityChange(triggerGroup.Id)" style="display: flex;">
+              {{ triggerGroup.Priority}}
+            </span> 
+
+            <div style="margin-left: auto;">
+              <mat-icon (click)="onRemoveTriggerGroup(triggerGroup)">restore_from_trash</mat-icon>
+            </div>
+          </div>
+          <table class="table table-condensed">
+            <thead>
+            <tr>
+              <th>{{'Common.Id' | translate}}</th>
+              <th>{{'Common.Name' | translate}}</th>
+              <th>{{'Bonuses.Description' | translate}}</th>
+              <th>{{'Bonuses.BonusSettingCodes' | translate}}</th>
+              <th>{{'Bonuses.StartTime' | translate}}</th>
+              <th>{{'Bonuses.FinishTime' | translate}}</th>
+              <th>{{'Common.Order' | translate}}</th>
+              <th>{{'Bonuses.Percent' | translate}}</th>
+              <th>{{'Common.Type' | translate}}</th>
+              <th>{{'Bonuses.MinAmount' | translate}}</th>
+              <th>{{'Bonuses.MaxAmount' | translate}}</th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let setting of triggerGroup['TriggerSetting']; let i = index">
+              <td> {{setting.Id}}</td>
+              <td> {{setting.Name}}</td>
+              <td> {{setting.Description}}</td>
+              <td> {{setting.BonusSettingCodes}}</td>
+              <td> {{setting.StartTime | date: 'short'}}</td>
+              <td> {{setting.FinishTime | date: 'short'}}</td>
+              <td> {{setting.Order}}</td>
+              <td> {{setting.Percent}}</td>
+              <td> {{setting.TypeName}}</td>
+              <td> {{setting.MinAmount}}</td>
+              <td> {{setting.MaxAmount}}</td>
+              <td style="width: 30px">
+                <div>
+                  <mat-icon (click)="removeTriggerFromGroup(triggerGroup, setting, i)">restore_from_trash</mat-icon>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="buttons" style="background: none">
+          <button mat-raised-button color="primary" (click)="createTriggerGroup()">{{'Bonuses.AddTriggerGroup' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+

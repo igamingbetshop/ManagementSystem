@@ -1,0 +1,61 @@
+
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Providers.Affiliates' | translate}}</div>
+
+    <button [class.hide-grid]="loadingUserState" mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="affilates"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [suppressRowClickSelection]="true"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [components]="frameworkComponents"
+      [paginationPageSize]="cacheBlockSize"
+      (paginationChanged)="onPaginationChanged($event)"
+      [pagination]="pagination"
+      [defaultColDef]="defaultColDef"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+
+    <div class="custom-pagination" [class.hide-grid]="loadingUserState">
+      <div class="pages-sizes">
+        <mat-select
+          (selectionChange)="onPageSizeChanged()"
+          [(ngModel)]="cacheBlockSize"
+          [(value)]="defaultPageSize"
+          panelClass="overlay-dropdown small"
+          disableOptionCentering>
+          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        </mat-select>
+      </div>
+
+      <span class="current-paging">
+        <input class="input" type="number" [(ngModel)]="paginationPage" (keypress)="onPaginationGoToPage($event)">
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div mat-dialog-title>
+  <span class="title">{{'Cms.AddRegion' | translate}} </span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <div class="input-content">
+      <div class="input-title">{{'Common.Name' | translate}}*</div>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </div>
+    <div class="input-content">
+      <div class="input-title">{{'Cms.IsoCode' | translate}}</div>
+      <input matInput [placeholder]="'Cms.IsoCode' | translate" [formControlName]="'IsoCode'">
+      <mat-error *ngIf="errorControl['IsoCode']?.touched && errorControl['IsoCode'].errors?.required">
+        {{'Cms.IsoCode' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </div>
+
+    <div class="select-content">
+      <div class="dropdown-title">{{'Clients.SelectLanguage' | translate}}</div>
+      <mat-select [formControlName]="'LanguageId'" placeholder = "{{'Clients.SelectLanguage' | translate}}">
+        <mat-option *ngFor="let leng of languages" [value]="leng.Id">{{leng.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['LanguageId']?.touched && errorControl['LanguageId'].errors?.required">
+        {{'Clients.Language' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </div>
+
+    <div class="select-content">
+      <div class="dropdown-title">{{'Cms.SelectRegions' | translate}}*</div>
+      <mat-select [formControlName]="'TypeId'" placeholder = "{{'Cms.SelectRegions' | translate}}">
+        <mat-option *ngFor="let region of regions" [value]="region.Id">{{region.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['TypeId']?.touched && errorControl['TypeId'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

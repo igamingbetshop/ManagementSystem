@@ -1,0 +1,48 @@
+<div class="accounts-container">
+  <table mat-table class="accounts-content" [dataSource]="dataSource">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Common.Id' | translate }}</th>
+      <td mat-cell *matCellDef="let account" [ngClass]="{ 'selected-row': isRowSelected(account) }">{{ account.Id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="balance">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Common.Balance' | translate }}</th>
+      <td mat-cell *matCellDef="let account"  [ngClass]="{ 'selected-row': isRowSelected(account) }">{{ account.Balance }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="currency">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Clients.Currency' | translate }}</th>
+      <td mat-cell *matCellDef="let account"  [ngClass]="{ 'selected-row': isRowSelected(account) }">{{ account.CurrencyId }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Common.Type' | translate }}</th>
+      <td mat-cell *matCellDef="let account"  [ngClass]="{ 'selected-row': isRowSelected(account) }">{{ account.AccountTypeName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>{{ 'Common.Status' | translate }}</th>
+      <td mat-cell *matCellDef="let account" [ngClass]="{ 'selected-row': isRowSelected(account) }">{{ account.StatusName }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="onRowClick($event, row)"
+        [ngClass]="{ 'selected-row': isRowSelected(row) }"></tr>
+  </table>
+</div>
+
+<div class="actions">
+  <button mat-stroked-button 
+    class="mat-disable-btn" 
+    [class.disabled]="!isRowSelected(accounts[0]) || this.selection?.selected[0]?.Status === 2"
+    (click)="onActionOnAccount(2)"
+  >{{ 'Profile.Disable' | translate }}</button>
+  <button 
+    mat-stroked-button class="mat-enable-btn" 
+    [class.disabled]="!isRowSelected(accounts[0]) || this.selection?.selected[0]?.Status === 1"
+    (click)="onActionOnAccount(1)"
+  >{{ 'Common.Enable' | translate }}</button>
+</div>
+
+

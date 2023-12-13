@@ -1,0 +1,37 @@
+<div mat-dialog-title>
+  <span class="title">{{'View' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="view-notes-panel">
+  <div class="panel-scroller">
+    <table class="table">
+      <thead>
+      <tr>
+        <th></th>
+        <th>{{'Sport.Till48HoursAP' | translate}}</th>
+        <th>{{'Sport.48_24HoursAP' | translate}}</th>
+        <th>{{'Sport.Last24HoursAP' | translate}}</th>
+        <th>{{'Sport.LiveAP' | translate}}</th>
+        <th>{{'Sport.Till48HoursRL' | translate}}</th>
+        <th>{{'Sport.48_24HoursRL' | translate}}</th>
+        <th>{{'Sport.Last24HoursRL' | translate}}</th>
+        <th>{{'Sport.LiveRL' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of profitInfo">
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}}</td>
+        <td>{{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}</td>
+        <td>{{row[6]}}</td>
+        <td>{{row[7]}}</td>
+        <td>{{row[8]}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

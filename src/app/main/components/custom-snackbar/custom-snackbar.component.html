@@ -1,0 +1,20 @@
+<div class="container" [class.success]="type ==='success'" [class.info]="type === 'info'">
+
+  <div class="close-btn" (click)="closeSnackBar()">
+    <mat-icon>close</mat-icon>
+  </div>
+
+  <div class="content">
+
+    <div class="icon" [class.success]="type === 'success'" [class.info]="type === 'info'">
+      <mat-icon>{{ type === 'success' ? 'check' : type === 'info' ? 'info' : 'close' }}</mat-icon>
+    </div>
+
+    <div class="content-inner">
+      <div class="title">{{type | titlecase}}</div>
+      <div class="description">{{description}}</div>
+    </div>
+
+  </div>
+
+</div>

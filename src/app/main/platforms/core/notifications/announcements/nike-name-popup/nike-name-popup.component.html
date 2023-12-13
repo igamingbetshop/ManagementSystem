@@ -1,0 +1,27 @@
+<div mat-dialog-title>
+  <span class="title">{{'Common.TemplateTranslation' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="container-popup">
+
+  <div class="language-content"
+       *ngFor="let item of translationData.Translations; let i = index">
+    <div class="language-dropdown" (click)="openedIndex = i">
+      <div>{{item.Language}}</div>
+      <div class="arrow" [class.opened] = "openedIndex == i"></div>
+    </div>
+
+    <app-html-editor
+      *ngIf = "openedIndex == i"
+      [text] = "item.Text"
+      [styles] = "{height: '250px', marginBottom: '6px'}"
+      (htmlCode)="item.newText = $event">
+    </app-html-editor>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+</div>

@@ -1,0 +1,104 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.clientId }">
+
+  <div class="content-action">
+    <div class="title">{{'Clients.Clients' | translate}}</div>
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="getByPartnerData($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+    <div class="date-time-tabs">
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='month'" mat-stroked-button (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
+    </div>
+
+    <mat-form-field class="calendar-picker start" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field class="calendar-picker" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="clients"
+      #agGrid
+      class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [paginationPageSize]="cacheBlockSize"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [suppressCopyRowsToClipboard]="true"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      (filterModified)="onFilterModified($event)"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      (rowClicked)="onRowClicked($event)"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="multiple">
+    </ag-grid-angular>
+
+    <div class="custom-pagination">
+      <div class="pages-sizes">
+        <mat-select
+          (selectionChange)="onPageSizeChanged()"
+          [(ngModel)]="cacheBlockSize"
+          [(value)]="defaultPageSize"
+          panelClass="overlay-dropdown small"
+          disableOptionCentering>
+          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        </mat-select>
+      </div>
+
+      <span class="current-paging">
+        <input class="input" type="number" [(ngModel)]="paginationPage" (keypress)="onPaginationGoToPage($event)">
+      </span>
+    </div>
+
+    <div class="btn-action">
+      <button mat-stroked-button class="mat-btn" (click)="sendMailToPlayer()">{{'Clients.SendMailToPlayer' |
+        translate}}</button>
+      <button mat-stroked-button class="mat-btn" (click)="createClient()">{{'Clients.AddClient' | translate}}</button>
+    </div>
+
+  </div>
+</div>
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.clientId"></router-outlet>

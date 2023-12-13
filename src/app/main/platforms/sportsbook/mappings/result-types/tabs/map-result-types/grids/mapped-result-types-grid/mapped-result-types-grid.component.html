@@ -1,0 +1,39 @@
+
+<div class="grid-content">
+  <ag-grid-angular
+    id="map-result-types"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [suppressCopyRowsToClipboard]="true"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressRowClickSelection]="isCanNotSelect"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [pagination]="pagination"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (rowSelected)="onRowSelected()"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+  </ag-grid-angular>
+
+  <div class="pages-sizes">
+    <mat-select
+      (selectionChange)="onPageSizeChanged()"
+      [(ngModel)]="cacheBlockSize"
+      [(value)]="defaultPageSize"
+      panelClass="overlay-dropdown small"
+      disableOptionCentering>
+      <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+    </mat-select>
+  </div>
+</div>

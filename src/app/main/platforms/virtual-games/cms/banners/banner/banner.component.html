@@ -1,0 +1,78 @@
+<div class="header">
+  <div>
+    <h4><a [routerLink]="['../banners']">{{'Cms.Banners' | translate}}</a> / :{{id}}</h4>
+  </div>
+  <div class="part">
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select #part [(ngModel)]="partnerId">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<hr>
+
+<div class="modal-wrap-div">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>{{'Common.StartDate' | translate}}</mat-label>
+      <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.EndDate' | translate}}</mat-label>
+      <input matInput [matDatepicker]="picker1" [formControlName]="'EndDate'">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Cms.Body' | translate" [formControlName]="'Body'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Cms.Head' | translate" [formControlName]="'Head'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Nick Name'" [formControlName]="'NickName'">
+      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
+        {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'">
+      <mat-error *ngIf="errorControl['Order']?.touched && errorControl['Order'].errors?.required">
+        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Cms.Link' | translate" [formControlName]="'Link'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Image'" [formControlName]="'Image'">
+      <mat-error *ngIf="errorControl['Image']?.touched && errorControl['Image'].errors?.required">
+        {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-checkbox labelPosition="before" class="IsEnabled" color="primary"
+                  [formControlName]="'IsEnabled'">{{'Cms.IsEnabled' | translate}}
+    </mat-checkbox>
+    <input type="file" (change)="uploadFile($event)">
+    <mat-error *ngIf="errorControl['ImageData']?.touched && errorControl['ImageData'].errors?.required">
+      {{'Cms.ImageData' | translate}} {{'Errors.Required' | translate}}
+    </mat-error>
+    <button mat-raised-button color="primary" type="submit">{{'Common.Save' | translate}}</button>
+  </form>
+
+
+</div>
+
+
+

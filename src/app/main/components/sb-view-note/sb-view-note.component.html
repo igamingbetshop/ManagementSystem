@@ -1,0 +1,26 @@
+<div mat-dialog-title>
+  <span class="title">{{'Clients.ViewNote' | translate}}</span>
+<mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<table>
+  <tr>
+
+    <th>{{'Common.Id' | translate}}</th>
+    <th>{{'Partners.Text' | translate}}</th>
+    <th>{{'Common.Type' | translate}}</th>
+    <th>{{'Payments.Date' | translate}}</th>
+    <th>{{'Payments.CreatedBy' | translate}}</th>
+  </tr>
+  <tr *ngFor="let note of viewNotes; let i = index">
+    <td>{{note.Id}}</td>
+    <td>{{note.Comment}} </td>
+    <td>{{note.TypeName}}</td>
+    <td>{{note.CreationTime | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+    <td>{{note.UserName}}</td>
+  </tr>
+</table>
+<div mat-dialog-actions>
+  <button mat-stroked-button class="mat-btn" (click)="addNote()">{{'Clients.AddNote' | translate}}</button>
+  <button mat-stroked-button class="mat-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+</div>

@@ -1,0 +1,70 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Settings.Translations' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="uploadTranslations()">Upload translations</button>
+  </div>
+
+  <div class="translations">
+    <div class="translations-content">
+      <div class="table-content">
+        <table>
+          <thead>
+            <th>{{'Common.Id' | translate}}</th>
+            <th>{{'Title' | translate}}</th>
+            <th>{{'Common.Order' | translate}}</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let translation of translations"
+                (click)="selectTranslation(0, translation)"
+                (dblclick)="addEditTranslation('Edit', translation)"
+                [class.selected]="translation.Id === selectedTranslationId">
+              <td>{{translation.Id}}</td>
+              <td>{{translation.Title}}</td>
+              <td>{{translation.Order}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-actions">
+        <div class="count">Count: {{translations.length}}</div>
+        <button mat-stroked-button class="mat-btn" (click)="addEditTranslation('Add', {})">{{'Common.Add' | translate}}</button>
+        <button mat-stroked-button class="mat-delete-btn"  (click)="deleteTranslation()">{{'Common.Delete' | translate}}</button>
+      </div>
+    </div>
+
+    <div class="translations-content sub-translation"  *ngIf="selectedTranslationId">
+      <div class="table-content">
+        <table>
+          <thead>
+            <th>{{'Settings.SubId' | translate}}</th>
+            <th>{{'Settings.SubTitle' | translate}}</th>
+            <th>{{'Settings.SubOrder' | translate}}</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let translationItem of translationItems"
+                (click)="selectTranslationItem(0, translationItem)"
+                (dblclick)="addEditTranslationItem('Edit', translationItem)"
+                [class.selected]="translationItem.Id === selectedTranslationItemId">
+              <td>{{translationItem.Id}}</td>
+              <td (dblclick)="addEditLanguages(translationItem); $event.stopPropagation()">{{translationItem.Title}}</td>
+              <td>{{translationItem.Order}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-actions">
+        <div class="count">Count: {{translationItems.length}}</div>
+        <button mat-stroked-button class="mat-btn" (click)="addEditTranslationItem('Add', {})">{{'Common.Add' | translate}}</button>
+        <button mat-stroked-button class="mat-delete-btn" [class.disabled] = "!selectedTranslationItemId" (click)="deleteTranslationItem()">{{'Common.Delete' | translate}}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+

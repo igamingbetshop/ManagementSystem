@@ -1,0 +1,437 @@
+<div mat-dialog-title>
+  <span class="title">{{'Bonuses.GeneralSetup' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field appearance="none">
+      <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+      <mat-select placeholder="{{'Bonuses.SelectType' | translate}}" [formControlName]="'BonusTypeId'"
+        (selectionChange)="onBonusChange($event.value)" required>
+        <mat-option *ngFor="let name of bonusTypes" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['BonusTypeId']?.touched && errorControl['BonusTypeId'].errors?.required">
+        {{'Bonuses.SelectType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="none">
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select placeholder="{{'Partners.SelectPartner' | translate}}" [formControlName]="'PartnerId'" required>
+        <mat-option *ngFor="let name of partners" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.SelectPartner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="bonusTypeId == 10 || bonusTypeId == 13" appearance="none">
+      <mat-label>{{'Bonuses.WinAccountType' | translate}}</mat-label>
+      <mat-select [formControlName]="'WinAccountTypeId'">
+        <mat-option *ngFor="let name of clientType" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['WinAccountTypeId']?.touched && errorControl['WinAccountTypeId'].errors?.required">
+        {{'Bonuses.SelectAccountType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="bonusTypeId != 14" appearance="none">
+      <mat-label>{{'Bonuses.FinalAccountType' | translate}}</mat-label>
+      <mat-select [formControlName]="'FinalAccountTypeId'">
+        <mat-option *ngFor="let name of finalAccountTypes" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['FinalAccountTypeId']?.touched && errorControl['FinalAccountTypeId'].errors?.required">
+        {{'Bonuses.SelectAccountType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="none">
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Common.Name' | translate" [formControlName]="'Name'" required>
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <ng-container *ngIf="bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14">
+
+      <mat-form-field *ngIf="bonusTypeId != 14" appearance="none">
+        <mat-label>{{'Bonuses.Regularity' | translate}}</mat-label>
+        <mat-select [formControlName]="'Regularity'">
+          <mat-option *ngFor="let regularity of regularitys" [value]="regularity.Id">{{regularity.Name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="errorControl['Regularity']?.touched && errorControl['Regularity'].errors?.required">
+          {{'Bonuses.Regularity' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="bonusTypeId != 14" appearance="none">
+        <mat-label>{{'Bonuses.DayOfWeek' | translate}}</mat-label>
+        <mat-select [formControlName]="'DayOfWeek'">
+          <mat-option *ngFor="let day of days" [value]="day.Id">{{day.Name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="errorControl['DayOfWeek']?.touched && errorControl['DayOfWeek'].errors?.required">
+          {{'Bonuses.DayOfWeek' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="none">
+        <mat-label>{{'Bonuses.ReusingMaxCountInPeriod' | translate}}</mat-label>
+        <input matInput type="number" [placeholder]="'Bonuses.ReusingMaxCountInPeriod' | translate" [formControlName]="'ReusingMaxCountInPeriod'">
+        <mat-error *ngIf="errorControl['ReusingMaxCountInPeriod']?.touched && errorControl['ReusingMaxCountInPeriod'].errors?.required">
+          {{'Bonuses.ReusingMaxCountInPeriod' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+    </ng-container>
+
+    <div class="field-content">
+      <mat-form-field class="calendar-picker start" appearance="none">
+        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'"
+          (dateChange)="onStartDateChange($event)">
+        <mat-datepicker-toggle matSuffix [for]="pickerStart">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+      </mat-form-field>
+
+      <mat-form-field class="calendar-picker field-content-seccond-child" appearance="none" style="margin-left: 15px;">
+        <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishTime'"
+          (dateChange)="onFinishDateChange($event)">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+      </mat-form-field>
+    </div>
+
+    <div class="field-content">
+      <mat-form-field *ngIf="bonusTypeId == 1 || bonusTypeId == 3" appearance="none">
+        <mat-label>{{'Bonuses.PeriodInHours' | translate}}</mat-label>
+        <input matInput type="number" [placeholder]="'Bonuses.PeriodInHours' | translate" [formControlName]="'Period'"
+          [required]="bonusTypeId == 1 || bonusTypeId == 3">
+        <mat-error *ngIf="errorControl['Period']?.touched && errorControl['Period'].errors?.required">
+          {{'Bonuses.PeriodInHours' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field *ngIf="bonusTypeId == 7 || bonusTypeId == 9" appearance="none" class="field-content-seccond-child">
+        <mat-label>{{'Bonuses.PromoCode' | translate}}</mat-label>
+        <input matInput type="text" [placeholder]="'Bonuses.PromoCode' | translate" [formControlName]="'PromoCode'">
+      </mat-form-field>
+    </div>
+
+    <div class="field-content">
+      <mat-form-field *ngIf="bonusTypeId != 5 && bonusTypeId != 14" appearance="none">
+        <mat-label>{{'Bonuses.BonusWinMinAmount' | translate}}</mat-label>
+        <input matInput type="number" min="0" [placeholder]="'Bonuses.BonusWinMinAmount' | translate"
+          [formControlName]="'MinAmount'" required>
+        <mat-error *ngIf="errorControl['MinAmount']?.touched && errorControl['MinAmount'].errors?.required">
+          {{'Bonuses.BonusWinMinAmount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+        <mat-error *ngIf="errorControl['MinAmount']?.touched && errorControl['MinAmount'].errors?.min">
+          {{'Bonuses.BonusWinMinAmount' | translate}} {{'Errors.PositiveNumbers' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="bonusTypeId != 5 && bonusTypeId != 14" appearance="none" class="field-content-seccond-child">
+        <mat-label>{{'Bonuses.BonusWinMaxAmount' | translate}}</mat-label>
+        <input matInput type="number" min="0" [placeholder]="'Bonuses.BonusWinMaxAmount' | translate"
+          [formControlName]="'MaxAmount'" required>
+        <mat-error *ngIf="errorControl['MaxAmount']?.touched && errorControl['MaxAmount'].errors?.required">
+          {{'Bonuses.BonusWinMaxAmount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+        <mat-error *ngIf="errorControl['MaxAmount']?.touched && errorControl['MaxAmount'].errors?.min">
+          {{'Bonuses.BonusWinMinAmount' | translate}} {{'Errors.PositiveNumbers' | translate}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="none">
+      <mat-label>{{'Bonuses.Description' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Bonuses.Description' | translate" [formControlName]="'Description'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.Status' | translate}}</mat-label>
+      <mat-select
+        [formControlName]="'Status'">
+        <mat-option *ngFor="let state of status" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <mat-checkbox [formControlName]="'Status'">{{'Bonuses.Active' | translate}}</mat-checkbox> -->
+    <mat-checkbox *ngIf="bonusTypeId == 12" [formControlName]="'AllowSplit'">{{'Bonuses.AllowSplit' |translate}}</mat-checkbox>
+    <mat-checkbox *ngIf="bonusTypeId == 12" [formControlName]="'RefundRollbacked'">{{'Bonuses.ReturnOnRefund' |translate}}</mat-checkbox>
+    <mat-checkbox *ngIf="bonusTypeId == 10 || bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 13"
+      [formControlName]="'ResetOnWithdraw'">{{'Bonuses.ResetOnWithdraw' | translate}}</mat-checkbox>
+    <mat-checkbox *ngIf="bonusTypeId == 10 || bonusTypeId == 13"
+      [formControlName]="'LinkedCampaign'">{{'Bonuses.LinkedCampaign' | translate}}</mat-checkbox>
+    <mat-checkbox *ngIf="bonusTypeId == 10 || bonusTypeId == 13"
+      [formControlName]="'FreezeBonusBalance'">{{'Bonuses.FreezeBonusBalance' | translate}}</mat-checkbox>
+    <mat-form-field appearance="none">
+      <mat-label>{{'Bonuses.MaxGranted' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MaxGranted' | translate" [formControlName]="'MaxGranted'">
+    </mat-form-field>
+    <mat-form-field appearance="none">
+      <mat-label>{{'Bonuses.MaxReceiversCount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MaxReceiversCount' | translate"
+        [formControlName]="'MaxReceiversCount'">
+    </mat-form-field>
+    <mat-form-field appearance="none"
+      *ngIf="bonusTypeId == 4 ||  bonusTypeId == 6 || bonusTypeId == 7 || bonusTypeId == 9 || bonusTypeId == 10 || bonusTypeId == 13">
+      <mat-label>{{'Bonuses.TurnoverCount' | translate}}</mat-label>
+      <input matInput type="number" min="0" [placeholder]="'Bonuses.TurnoverCount' | translate"
+        [formControlName]="'TurnoverCount'" required>
+      <mat-error *ngIf="errorControl['TurnoverCount']?.touched && errorControl['TurnoverCount'].errors?.required">
+        {{'Bonuses.TurnoverCount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['TurnoverCount']?.touched && errorControl['TurnoverCount'].errors?.min">
+        {{'Bonuses.TurnoverCount' | translate}} {{'Errors.PositiveNumbers' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="bonusTypeId == 1" appearance="none">
+      <mat-label>{{'Bonuses.LinkedBonusId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.LinkedBonusId' | translate"
+        [formControlName]="'LinkedBonusId'">
+    </mat-form-field>
+    <mat-form-field *ngIf="bonusTypeId == 1" appearance="none">
+      <mat-label>{{'Bonuses.AutoApproveMaxAmount' | translate}}</mat-label>
+      <input matInput type="number" min="0" [placeholder]="'Bonuses.AutoApproveMaxAmount' | translate"
+        [formControlName]="'AutoApproveMaxAmount'" required>
+      <mat-error
+        *ngIf="errorControl['AutoApproveMaxAmount']?.touched && errorControl['AutoApproveMaxAmount'].errors?.required">
+        {{'Bonuses.AutoApproveMaxAmount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['TurnoverCount']?.touched && errorControl['TurnoverCount'].errors?.min">
+        {{'Bonuses.AutoApproveMaxAmount' | translate}} {{'Errors.PositiveNumbers' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="none" *ngIf="bonusTypeId == 3 || bonusTypeId == 4 ||  bonusTypeId == 6">
+      <mat-label>{{'Bonuses.Percent' | translate}}</mat-label>
+      <input matInput type="number" min="0" [placeholder]="'Bonuses.Percent' | translate" [formControlName]="'Percent'"
+        required>
+      <mat-error *ngIf="errorControl['Percent']?.touched && errorControl['Percent'].errors?.required">
+        {{'Bonuses.Percent' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Percent']?.touched && errorControl['Percent'].errors?.min">
+        {{'Bonuses.Percent' | translate}} {{'Errors.PositiveNumbers' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="bonusTypeId == 10 || bonusTypeId == 13" appearance="none">
+      <mat-label>{{'Bonuses.PercentFromBonusAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.PercentFromBonusAmount' | translate"
+        [formControlName]="'Percent'">
+    </mat-form-field>
+    <mat-form-field appearance="none" *ngIf="bonusTypeId == 4 || bonusTypeId == 5 ||  bonusTypeId == 9">
+      <mat-label>{{'Common.Info' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Common.Info' | translate" [formControlName]="'Info'">
+    </mat-form-field>
+    <mat-form-field appearance="none" *ngIf="bonusTypeId == 4 || bonusTypeId == 6 ||  bonusTypeId == 9">
+      <mat-label>{{'Bonuses.Sequence' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Bonuses.Sequence' | translate" [formControlName]="'Sequence'">
+    </mat-form-field>
+
+    <mat-form-field appearance="none" *ngIf="bonusTypeId == 10 || bonusTypeId == 13">
+      <mat-label>{{'Bonuses.Priority' | translate}}</mat-label>
+      <input matInput type="number" min="0" [placeholder]="'Priority'" [formControlName]="'Priority'" required>
+      <mat-error *ngIf="errorControl['Priority']?.touched && errorControl['Priority'].errors?.required">
+        {{'Bonuses.Priority' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Priority']?.touched && errorControl['Priority'].errors?.min">
+        {{'Bonuses.Priority' | translate}} {{'Errors.PositiveNumbers' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="none" *ngIf="bonusTypeId >= 10 && bonusTypeId <= 14">
+      <mat-label>{{'Bonuses.ValidForAwarding' | translate}}</mat-label>
+      <input matInput type="number" min="0" [placeholder]="'Bonuses.ValidForAwarding' | translate"
+        [formControlName]="'ValidForAwarding'" required>
+      <mat-error *ngIf="errorControl['ValidForAwarding']?.touched && errorControl['ValidForAwarding'].errors?.required">
+        {{'Bonuses.ValidForAwarding' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['ValidForAwarding']?.touched && errorControl['ValidForAwarding'].errors?.min">
+        {{'Bonuses.ValidForAwarding' | translate}} {{'Errors.PositiveNumbers' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="none" *ngIf="bonusTypeId >= 10 && bonusTypeId <= 14">
+      <mat-label>{{'Bonuses.ValidForSpending' | translate}}</mat-label>
+      <input matInput type="number" min="0" [placeholder]="'Bonuses.ValidForSpending' | translate"
+        [formControlName]="'ValidForSpending'" required>
+      <mat-error *ngIf="errorControl['ValidForSpending']?.touched && errorControl['ValidForSpending'].errors?.required">
+        {{'Bonuses.ValidForAwarding' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['ValidForSpending']?.touched && errorControl['ValidForSpending'].errors?.min">
+        {{'Bonuses.ValidForAwarding' | translate}} {{'Errors.PositiveNumbers' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="none"
+      *ngIf="bonusTypeId == 10 || bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 13">
+      <mat-label>{{'Bonuses.ReusingMaxCount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.ReusingMaxCount' | translate"
+        [formControlName]="'ReusingMaxCount'">
+    </mat-form-field>
+  </form>
+
+  <div class="additionally" *ngIf="bonusTypeId == 12 ||  bonusTypeId == 13 || bonusTypeId == 10">
+
+    <mat-form-field appearance="none">
+      <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+      <mat-select (selectionChange)="addedConditions.selectedGroupType = $event.value">
+        <mat-option *ngFor="let name of addedConditions.groupTypes" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="condition-list" *ngFor="let condition of addedConditions.conditions; let index = index">
+      <div>{{condition?.Condition?.Name}}</div>
+      <div>{{condition?.ConditionType?.NickName}}</div>
+      <div>{{condition?.ConditionValue}}</div>
+      <mat-icon (click)="removeCondition(addedConditions, index)">close</mat-icon>
+    </div>
+    <div class="condition-action">
+      <div class="selection-action">
+        <mat-form-field appearance="none">
+          <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+          <mat-select [ngModel]="addedConditions.selectedCondition"
+            (selectionChange)="addedConditions.selectedCondition = $event.value">
+            <mat-option *ngFor="let name of conditions" [value]="name">{{name.Name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="none">
+          <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+          <mat-select [ngModel]="addedConditions.selectedConditionType"
+            (selectionChange)="addedConditions.selectedConditionType = $event.value">
+            <mat-option *ngFor="let name of conditionTypes" [value]="name">{{name.NickName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="none" class="value-field">
+          <mat-label>{{'Bonuses.Value' | translate}}</mat-label>
+          <input matInput type="text" [placeholder]="'Bonuses.Value' | translate"
+            [ngModel]="addedConditions.selectedConditionValue"
+            (ngModelChange)="this.addedConditions.selectedConditionValue = $event">
+        </mat-form-field>
+      </div>
+
+      <div class="btn-action">
+        <button mat-stroked-button class="mat-btn" (click)="addCondition(addedConditions)"
+          [class.disabled]="!addedConditions.selectedCondition || !addedConditions.selectedConditionType || !this.addedConditions.selectedConditionValue">
+          {{'Common.Add' | translate}}
+        </button>
+        <button mat-stroked-button class="mat-btn" (click)="addGroup(addedConditions)">{{'Bonuses.AddGroup' |
+          translate}}</button>
+      </div>
+
+    </div>
+
+    <div *ngFor="let group of addedConditions.groups; let i = index" class="group-container">
+      <mat-form-field appearance="none">
+        <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+        <mat-select [ngModel]="group.selectedGroupType" (selectionChange)="group.selectedGroupType = $event.value">
+          <mat-option *ngFor="let groupType of group.groupTypes" [value]="groupType.Id">{{groupType.Name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="condition-list" *ngFor="let condition of group.conditions">
+        <div>{{condition.Condition.Name}}</div>
+        <div>{{condition.ConditionType.NickName}}</div>
+        <div>{{condition.ConditionValue}}</div>
+        <mat-icon (click)="removeCondition(group, i)">close</mat-icon>
+      </div>
+
+      <div class="condition-action">
+
+        <div class="selection-action">
+          <mat-form-field appearance="none">
+            <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+            <mat-select [ngModel]="group.selectedCondition" (selectionChange)="group.selectedCondition = $event.value">
+              <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
+              <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="none">
+            <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+            <mat-select [ngModel]="group.selectedConditionType"
+              (selectionChange)="group.selectedConditionType = $event.value">
+              <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
+              <mat-option *ngFor="let conditionType of conditionTypes"
+                [value]="conditionType">{{conditionType.NickName}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="none" class="value-field">
+            <input matInput [placeholder]="'Value'" [ngModel]="group.selectedConditionValue"
+              (ngModelChange)="group.selectedConditionValue = $event">
+          </mat-form-field>
+
+        </div>
+
+        <div class="btn-action">
+          <button mat-stroked-button class="mat-btn" (click)="addCondition(group)"
+            [class.disabled]="!group.selectedCondition || !group.selectedConditionType || !group.selectedConditionValue">{{'Common.Add'
+            | translate}}
+          </button>
+          <button mat-stroked-button class="mat-btn" (click)="addGroup(group)">{{'Bonuses.AddGroup' |
+            translate}}</button>
+          <button mat-stroked-button class="mat-btn" (click)="removeGroup(addedConditions, i)">{{'Bonuses.RemoveGroup' |
+            translate}}</button>
+        </div>
+
+      </div>
+      <div *ngFor="let subgroup of group.groups" class="sub-group-container">
+        <mat-form-field appearance="none">
+          <mat-label>Select</mat-label>
+          <mat-select [ngModel]="subgroup.selectedGroupType"
+            (selectionChange)="subgroup.selectedGroupType = $event.value">
+            <mat-option *ngFor="let groupType of subgroup.groupTypes"
+              [value]="groupType.Id">{{groupType.Name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="condition-list" *ngFor="let condition of subgroup.conditions; let i = index">
+          <div>{{condition.Condition.Name}}</div>
+          <div>{{condition.ConditionType.NickName}}</div>
+          <div>{{condition.ConditionValue}}</div>
+          <mat-icon style="cursor: pointer" (click)="removeCondition(subgroup, i)">close</mat-icon>
+        </div>
+
+        <div class="condition-action">
+          <div class="selection-action">
+            <mat-form-field appearance="none">
+              <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+              <mat-select [ngModel]="subgroup.selectedCondition"
+                (selectionChange)="subgroup.selectedCondition = $event.value">
+                <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
+                <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition.Name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="none">
+              <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+              <mat-select [ngModel]="subgroup.selectedConditionType"
+                (selectionChange)="subgroup.selectedConditionType = $event.value">
+                <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                <mat-option *ngFor="let conditionType of conditionTypes"
+                  [value]="conditionType">{{conditionType.NickName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="none" class="value-field">
+              <input matInput [placeholder]="'Value'" [ngModel]="subgroup.selectedConditionValue"
+                (ngModelChange)="subgroup.selectedConditionValue = $event">
+            </mat-form-field>
+          </div>
+          <div class="btn-action">
+            <button mat-stroked-button class="mat-btn" (click)="addCondition(subgroup)"
+              [class.disabled]="!subgroup.selectedCondition || !subgroup.selectedConditionType || !subgroup.selectedConditionValue">{{'Common.Add'
+              | translate}}
+            </button>
+            <button mat-stroked-button class="mat-btn" (click)="removeGroup(group, i)">{{'Bonuses.RemoveGroup' |
+              translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Create'| translate}}</button>
+</div>

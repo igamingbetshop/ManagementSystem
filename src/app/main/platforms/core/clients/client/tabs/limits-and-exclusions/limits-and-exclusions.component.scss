@@ -1,0 +1,221 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+    display: flex;
+    width: 100%;
+    column-gap: 10px;
+
+    .self-limit-action {
+      width: calc(64% - 5px);
+      display: flex;
+      align-items: center;
+    }
+
+    .system-limits-action {
+      width: calc(36% - 5px);
+      display: flex;
+      align-items: center;
+    }
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+  }
+
+  .parent {
+    display: flex;
+    flex-direction: row;
+
+    .first-hand {
+      &.header {
+        background-color: #a0cad6;
+      }
+
+      &.right-header {
+        background-color: #a0cad6;
+        width: 60%;
+      }
+    }
+
+    .can-edit {
+
+      .self-second-hand-content {
+
+        &.header {
+          .second-hand {
+            background-color: #a0cad6;
+          }
+        }
+
+        .second-hand {
+          display: none !important;
+
+          &.readonly {
+            display: flex !important;
+          }
+        }
+
+        .multiple-field-content {
+          display: flex;
+          width: 80%;
+
+          .form-input {
+            width: 100%;
+            font-size: 15px;
+          }
+
+          ::ng-deep {
+            .mat-form-field-infix {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+
+    .self-second-hand-content {
+      display: flex;
+      width: 75%;
+      height: 100%;
+      column-gap: 4px;
+
+      &.header {
+        .second-hand {
+          background-color: #a0cad6;
+        }
+      }
+
+      .second-hand {
+        display: flex !important;
+
+        &.readonly {
+          display: flex !important;
+        }
+      }
+
+      .multiple-field-content {
+        display: none;
+      }
+    }
+
+    .self-exclusion {
+      display: flex;
+      height: 36px;
+      align-items: center;
+      column-gap: 6px;
+      width: 100%;
+
+      .first-hand {
+        height: 100%;
+        padding: 0 10px;
+        border-radius: 4px;
+        width: 35%;
+        display: flex;
+        align-items: center;
+        background-image: linear-gradient(to right, $blue-light-10, $white);
+      }
+
+      .second-hand {
+        display: flex;
+        height: 100%;
+        background: $white;
+        border-radius: 4px;
+        width: 65%;
+        align-items: center;
+        padding: 0 10px;
+        box-sizing: border-box;
+
+        .mat-btn {
+          @include mat-btn-style;
+          margin-left: auto;
+        }
+      }
+    }
+
+    .title {
+      font-size: 20px;
+      letter-spacing: 0.04em;
+      color: $blue-5;
+      flex: 1;
+    }
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+  }
+
+  .left {
+    width: 64%;
+    padding-right: 10px;
+
+    .grid-edit {
+      & > div {
+        .first-hand {
+          width: 25%;
+        }
+
+        .second-hand {
+          width: 74%;
+        }
+      }
+
+      &.can-edit > div .form-input {
+        width: 74%;
+      }
+
+    }
+  }
+
+  .right {
+    width: 36%;
+  }
+
+  .grid-edit {
+    grid-template-columns: 1fr;
+  }
+
+  .exclusions-form {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+
+    .custom-dropdown {
+      @include dropdown-style;
+    }
+
+    .calendar-picker {
+      margin-left: 8px;
+      width: 202px;
+      @include calendar-picker-style;
+    }
+
+    .space {
+      flex-grow: 1;
+    }
+
+    .mat-btn {
+      @include mat-btn-style;
+    }
+  }
+}
+
+.grid-content {
+  width: 100%;
+  height: 300px;
+  padding-top: 12px;
+
+  ::ng-deep {
+    ag-grid-angular {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+

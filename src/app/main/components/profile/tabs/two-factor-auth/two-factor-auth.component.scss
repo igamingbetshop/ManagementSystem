@@ -1,0 +1,46 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+  }
+  
+  .main {
+      margin-left: 15px;
+      .page-title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 23px;
+      }
+    
+      .sub-title {
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 19px;
+        color: $blue-9;
+      }
+
+      .text {
+        font-size: 16px;
+        margin-top: 10px;
+        line-height: 19px;
+        text-align: left;
+      }
+
+      .mat-btn {
+        @include mat-btn-style;
+        margin-top: 20px;
+        width: 208px;
+        border-radius: 6px
+
+      }
+
+  }
+
+}

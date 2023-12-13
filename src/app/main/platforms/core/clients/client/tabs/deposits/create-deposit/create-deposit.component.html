@@ -1,0 +1,39 @@
+<div mat-dialog-title>
+  <span class="title">{{'Payments.CreateDeposit' | translate}}</span>
+  <mat-icon alt="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Payments.PaymentSystemId' | translate}}</mat-label>
+      <mat-select [formControlName]="'PaymentSystemId'">
+        <mat-option *ngFor="let payment of paymentSystems" [value]="payment.PaymentSystemId">{{payment.PaymentSystemName}}</mat-option>
+      </mat-select>      <mat-error *ngIf="errorControl['ClientId']?.touched && errorControl['ClientId'].errors?.required">
+        {{'Clients.ClientId' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.Amount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Clients.Amount' | translate" [formControlName]="'Amount'">
+      <mat-error *ngIf="errorControl['Amount']?.touched && errorControl['Amount'].errors?.required">
+        {{'Clients.Amount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.ExternalTransactionId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Common.ExternalTransactionId' | translate" [formControlName]="'ExternalTransactionId'">
+      <mat-error
+        *ngIf="errorControl['ExternalTransactionId']?.touched && errorControl['ExternalTransactionId'].errors?.required">
+        {{'Common.ExternalTransactionId' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" type="submit" [disabled]="this.formGroup.invalid" (click)="onSubmit()" >{{'Common.Create' | translate}}</button>
+</div>

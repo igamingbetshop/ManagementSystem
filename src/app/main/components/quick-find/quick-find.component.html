@@ -1,0 +1,78 @@
+<div class="container" (click)="$event.stopPropagation()" [class.opened] = "isQuickLinksOpened">
+  <div class="quick-menu-toggle"  (click)="toggleQuickMenu()">
+    <div class="icon-quick-find" aria-hidden="true"></div>
+    <div class="arrow-content" [class.opened] = "isQuickLinksOpened"></div>
+  </div>
+  <div class="quick-menu-content">
+
+    <div class="client-filter">
+      <div class="title">{{'Clients.Client' | translate}}</div>
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('clientId')" [(ngModel)] = "quickLinksFilter.ClientId"  class="input" type="number" placeholder="{{'Clients.ClientId' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.ClientId" (click)="searchQuickLink('clientId')">{{'Common.Go' | translate}}</button>
+      </div>
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('clientUserName')" [(ngModel)] = "quickLinksFilter.ClientUserName" class="input" type="text" placeholder="{{'Clients.UserName' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.ClientUserName.trim()" (click)="searchQuickLink('clientUserName')">{{'Common.Go' | translate}}</button>
+      </div>
+
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('clientName')" [(ngModel)] = "quickLinksFilter.ClientName" class="input" type="text" placeholder="{{'Clients.ClientName' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.ClientName.trim()" (click)="searchQuickLink('clientName')">{{'Common.Go' | translate}}</button>
+      </div>
+
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('clientEmail')" [(ngModel)] = "quickLinksFilter.ClientEmail" class="input" type="text" placeholder="{{'Clients.Email' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.ClientEmail.trim()" (click)="searchQuickLink('clientEmail')">{{'Common.Go' | translate}}</button>
+      </div>
+
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('MobileNumber')" [(ngModel)] = "quickLinksFilter.MobileNumber" class="input" type="text" placeholder = "{{'Clients.MobileNumber' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.MobileNumber.trim()" (click)="searchQuickLink('MobileNumber')">{{'Common.Go' | translate}}</button>
+      </div>
+
+    </div>
+
+    <div class="client-filter">
+      <div class="title document">{{'Payments.Document' | translate}}</div>
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('depositId')" [(ngModel)] = "quickLinksFilter.DepositId" class="input" type="number" placeholder="{{'Payments.DepositId' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.DepositId" (click)="searchQuickLink('depositId')">{{'Common.Go' | translate}}</button>
+      </div>
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('withdrawId')" [(ngModel)] = "quickLinksFilter.WithdrawId" class="input" type="number" placeholder="{{'Payments.DepositId' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.WithdrawId" (click)="searchQuickLink('withdrawId')">{{'Common.Go' | translate}}</button>
+      </div>
+
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('internetBetId')" [(ngModel)] = "quickLinksFilter.InternetBetId" class="input" type="number" placeholder="{{'Bets.InternetBetId' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.InternetBetId" (click)="searchQuickLink('internetBetId')" >{{'Common.Go' | translate}}</button>
+      </div>
+
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('betShopBetId')" [(ngModel)] = "quickLinksFilter.BetShopBetId" class="input" type="number" placeholder="{{'Bets.BetShopBetId' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.BetShopBetId" (click)="searchQuickLink('betShopBetId')" >{{'Common.Go' | translate}}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+

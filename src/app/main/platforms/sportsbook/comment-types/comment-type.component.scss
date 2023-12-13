@@ -1,0 +1,40 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.comment-type {
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+
+  .comment-type-content {
+    @include action-style;
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .grid-content {
+    width: 100%;
+    height: calc(100% - 92px);
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+
+
+
+

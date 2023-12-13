@@ -1,0 +1,13 @@
+@import "mixins.scss";
+
+.client-id-check {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .mat-btn {
+    margin-left: 15px;
+    @include mat-btn-style;
+  }
+}

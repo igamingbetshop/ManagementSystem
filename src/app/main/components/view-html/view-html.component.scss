@@ -1,0 +1,16 @@
+@import "variables";
+@import "mixins";
+
+.modal-wrap {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  max-height: calc(85vh - 91px);
+  min-height: 200px;
+  padding-right: 6px;
+  margin-bottom: 6px;
+
+  .mat-dialog-title {
+    margin: 0 0 12px 0;
+  }
+}

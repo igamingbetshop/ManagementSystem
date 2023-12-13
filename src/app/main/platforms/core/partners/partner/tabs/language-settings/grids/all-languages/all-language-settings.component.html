@@ -1,0 +1,23 @@
+
+<div class="grid-content">
+  <ag-grid-angular
+    id="all-landuages-settings"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [suppressCopyRowsToClipboard]="true"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    (rowClicked)="onRowClicked($event)"
+    (rowSelected)="onRowSelected()"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+</div>

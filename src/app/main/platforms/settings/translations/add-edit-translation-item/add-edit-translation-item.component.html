@@ -1,0 +1,25 @@
+<div mat-dialog-title>
+  <div class="title">
+    <span>{{action | translate}} </span>
+    <span>{{'translation item' | translate}}</span>
+  </div>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <div class="input-content">
+      <div class="input-title">{{'Title' | translate}}</div>
+      <input matInput [placeholder]="'Title'" [formControlName]="'Title'">
+    </div>
+    <div class="input-content">
+      <div class="input-title">{{'Settings.OrderBy' | translate}}</div>
+      <input matInput type="number" [placeholder]="'Order'" [formControlName]="'Order'">
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

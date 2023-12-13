@@ -1,0 +1,369 @@
+@import "variables.scss";
+@import "mixins.scss";
+
+.category-container {
+
+  .category-header {
+    position: relative;
+    margin: 0 24px;
+
+    @include desktop {
+      margin-left: fluidSizeOnly(24, 16, $media-desktop-size, $media-laptop-size);
+      margin-right: fluidSizeOnly(24, 16, $media-desktop-size, $media-laptop-size);
+    }
+
+    .dark-effect {
+      position: absolute;
+      background-color: $orange-2;
+      width: 100%;
+      height: 50px;
+      top: -3.36px;
+      left: 0;
+      border-radius: 12px;
+      z-index: 1;
+
+      &.Sportsbook {
+        background-color: $blue-4;
+      }
+
+      &.VirtualGames {
+        background-color: $purple-2;
+      }
+
+      &.SkillGames {
+        background-color: $green-2;
+      }
+
+      &.Settings {
+        background-color: $lime-2;
+      }
+
+      &.Help {
+        background-color: $red-2;
+      }
+    }
+
+    .category-header-inner {
+      height: 70.64px;
+      background-color: $orange;
+      display: flex;
+      align-items: center;
+      z-index: 2;
+      position: relative;
+      padding: 0 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 4px 0 $black-shadow;
+
+      @include desktop {
+        height: fluidSizeOnly(70.64, 56, $media-desktop-size, $media-laptop-size);
+      }
+
+      &.Sportsbook {
+        background-color: $blue-3;
+      }
+
+      &.VirtualGames {
+        background-color: $purple;
+      }
+
+      &.SkillGames {
+        background-color: $green;
+      }
+
+      &.Settings {
+        background-color: $lime;
+      }
+
+      &.Help {
+        background-color: $red;
+      }
+
+      .mat-icon {
+        color: $white;
+        font-size: 36px !important;
+        width: 36px;
+        height: 36px;
+      }
+
+      .title {
+        font-size: 22px;
+        color: $white;
+        padding-left: 16px;
+      }
+    }
+  }
+
+  .category-content {
+    width: 100%;
+    height: 298px;
+    background-color: $orange-light;
+    margin-top: -37px;
+    z-index: 1;
+    border-radius: 4px;
+    box-shadow: 0 4px 4px 0 $black-shadow;
+    padding-top: 38px;
+
+    @include desktop {
+      margin-top: fluidSizeOnly(-37, -29.68, $media-desktop-size, $media-laptop-size);
+      height: fluidSizeOnly(298, 210, $media-desktop-size, $media-laptop-size);
+    }
+
+    &.Sportsbook {
+      background-color: $blue-light-2;
+      ::-webkit-scrollbar-thumb {
+        background-color: $blue-3 !important;
+      }
+    }
+
+    &.VirtualGames {
+      background-color: $purple-light !important;
+      ::-webkit-scrollbar-thumb {
+        background-color: $purple;
+      }
+    }
+
+    &.SkillGames {
+      background-color: $green-light !important;
+      ::-webkit-scrollbar-thumb {
+        background-color: $green;
+      }
+    }
+
+    &.Settings {
+      background-color: $lime-light !important;
+      ::-webkit-scrollbar-thumb {
+        background-color: $lime;
+      }
+    }
+
+    &.Help {
+      background-color: $red-light !important;
+      ::-webkit-scrollbar-thumb {
+        background-color: $red;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      margin: 6px 0;
+      background-color: $gray-light-4;
+      border-radius: 2px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: $orange !important;
+      border-radius: 2px;
+    }
+
+    .category-items {
+      overflow: auto;
+      margin: 10px 24px 0 24px;
+      padding: 0;
+      display: grid;
+      grid-template-columns: auto auto;
+      color: $black;
+      list-style: none;
+      max-height: calc(100% - 20px);
+
+      &.nested {
+        grid-template-columns: auto;
+      }
+
+      .item {
+        cursor: pointer;
+        line-height: 19px;
+        margin: 7px 0;
+        position: relative;
+
+        &.Sportsbook {
+          &::before {
+            color: $blue-3;
+          }
+        }
+
+        &.VirtualGames {
+          &::before {
+            color: $purple;
+          }
+        }
+
+        &.SkillGames {
+          &::before {
+            color: $green;
+          }
+        }
+
+        &.Settings {
+          &::before {
+            color: $lime;
+          }
+        }
+
+        &.Help {
+          &::before {
+            color: $red;
+          }
+        }
+
+
+        &::before {
+          content: "\2022";
+          color: $orange-3;
+          display: inline-block;
+          width: 20px;
+          font-size: 23px;
+          vertical-align: middle;
+        }
+
+        .item-name {
+          padding-right: 5px;
+
+          &:hover {
+            text-decoration: underline;
+          }
+
+          &.has-arrow {
+            &::after {
+              content: "";
+              display: inline-block;
+              width: 0;
+              height: 0;
+              border-top: 4px solid $black ;
+              border-right: 4.5px solid transparent;
+              border-left: 4.5px solid transparent;
+              margin-left: 12px;
+              vertical-align: middle;
+              right: -20px;
+            }
+
+            &.opened-menu {
+              &::after {
+                border-bottom: 4px solid $black ;
+                border-top: unset;
+              }
+            }
+          }
+
+
+          &.dynamic {
+            position: relative;
+
+            &.has-arrow {
+              &::after {
+                position: absolute;
+                right: -40px;
+                top: 5px;
+              }
+
+              &.opened-menu {
+                &::after {
+                  border-bottom: 4px solid $black ;
+                  border-top: unset;
+                }
+              }
+            }
+          }
+        }
+
+        .icon-edit {
+          font-size: 16px;
+          padding-left: 3px;
+          position: absolute;
+          top: 2px;
+        }
+      }
+    }
+  }
+}
+
+.nested-home-dropdown {
+  &.mat-menu-panel {
+    padding: 10px 6px 10px 20px;
+    border-radius: 12px;
+    margin-left: -20px;
+    margin-top: 5px;
+    min-height: auto;
+    max-height: 272px;
+    min-width: 256px;
+    overflow: auto;
+
+    .mat-menu-content {
+      padding: 0;
+
+      .dropdown-item {
+        padding: 6px 0;
+        cursor: pointer;
+        font-size: 14px;
+        color: $black;
+        transition: text-decoration 0.3s ease;
+
+        .item-name {
+          padding-right: 5px;
+
+          &:hover {
+            text-decoration: underline;
+          }
+
+          &.has-arrow {
+
+            &.nested {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+
+            &::after {
+              content: "";
+              display: inline-block;
+              width: 0;
+              height: 0;
+              border-top: 4px solid $black ;
+              border-right: 4.5px solid transparent;
+              border-left: 4.5px solid transparent;
+              margin-left: 12px;
+              vertical-align: middle;
+            }
+
+            &.opened-dropdown {
+              &::after {
+                border-bottom: 4px solid $black ;
+                border-top: unset;
+              }
+            }
+          }
+        }
+
+        .nested-items {
+          padding: 6px 0 0 6px;
+          display: none;
+
+          &.show-items {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: $media-laptop) {
+  .category-container {
+
+    .category-header {
+      margin: 0 16px;
+
+      .category-header-inner {
+        height: 56px;
+      }
+    }
+
+    .category-content {
+      margin-top: -29.68px;
+      height: 210px;
+    }
+  }
+}

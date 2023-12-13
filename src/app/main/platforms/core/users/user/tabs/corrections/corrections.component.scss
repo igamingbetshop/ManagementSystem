@@ -1,0 +1,91 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+
+  .content-action {
+    @include action-style;
+    height: 60px;
+    .date-time-tabs {
+
+      .tab-btn {
+        margin-right: 8px;
+      }
+
+      @include tab-button-style;
+    }
+
+    .calendar-picker {
+      width: 202px;
+      &.start {
+        margin-right: 8px;
+      }
+
+      @include calendar-picker-style;
+    }
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+    }
+
+    .mat-export-btn {
+      margin-left: 8px;
+      @include mat-export-btn-style;
+    }
+  }
+
+  .grid-content {
+    width: 100%;
+    height: calc(100% - 300px);
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+
+        .Won {
+          background-color: $red;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white;
+          }
+        }
+
+        .Lost {
+          background-color: $green-2;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white !important;
+          }
+        }
+
+        .Deleted {
+          background-color: $orange;
+          border-radius: 4px;
+
+          .ag-cell-value {
+            color: $white;
+          }
+        }
+      }
+    }
+
+    .pages-sizes {
+      position: absolute;
+      left: 262px;
+      bottom: 20px;
+      @include dropdown-style;
+
+      ::ng-deep {
+        .mat-select {
+          height: 26px !important;
+          width: 60px !important;
+        }
+      }
+    }
+  }
+}

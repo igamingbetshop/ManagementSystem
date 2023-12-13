@@ -1,0 +1,30 @@
+<div class="main-content">
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="mapped-phases"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressRowClickSelection]="isCanNotSelect"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [pagination]="pagination"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (gridReady)="onGridReady($event)"
+    (rowSelected)="onRowSelected()"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single"
+    >
+  </ag-grid-angular>
+
+  </div>
+</div>
+

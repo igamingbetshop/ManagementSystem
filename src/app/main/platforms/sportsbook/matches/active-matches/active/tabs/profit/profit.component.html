@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> / : {{'Sport.Profit' | translate}}
+      <span>{{matchId}}</span> &nbsp; {{name}}
+    </div>
+    <div class="partner-dropdown">
+      <mat-select
+      #part  (selectionChange)="onPartnerChange(part.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]='null'>{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="finished-markets"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [suppressCopyRowsToClipboard]="true"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [components]="frameworkComponents"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    (rowSelected)="onRowSelected($event)"
+    (cellValueChanged)="onCellValueChanged($event)"
+    rowSelection="multiple">
+  </ag-grid-angular>
+  </div>
+
+  <div class="buttons">
+    <button mat-raised-button color="primary" [disabled]="!pageConfig.PartnerId" (click)="addSetting()">{{'Sport.AddSetting' | translate}}</button>
+    <button mat-raised-button color="warn" [disabled]="!pageConfig.PartnerId" (click)="deleteSetting()">{{'Sport.DeleteSetting' | translate}}</button>
+  </div>
+
+</div>

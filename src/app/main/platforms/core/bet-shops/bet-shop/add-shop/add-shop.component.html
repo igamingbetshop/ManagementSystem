@@ -1,0 +1,76 @@
+<div mat-dialog-title>
+  <span class="title">{{'BetShops.AddCashDesk' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+
+    <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.SelectState' | translate}}</mat-label>
+      <mat-select [formControlName]="'State'">
+        <mat-option *ngFor="let state of cashdeskStates" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
+        {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let type of cashdesktypes" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'BetShops.MacAddress' | translate}}</mat-label>
+      <input matInput placeholder="{{'BetShops.MacAddress' | translate}}" [formControlName]="'MacAddress'">
+      <mat-error *ngIf="errorControl['MacAddress']?.touched && errorControl['MacAddress'].errors?.required">
+        {{'BetShops.MacAddress' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'BetShops.EncryptionKey' | translate}}</mat-label>
+      <input matInput placeholder=" {{'BetShops.EncryptionKey' | translate}}: {{'Errors.ShouldBe16Characters' | translate}}" [formControlName]="'EncryptionKey'">
+      <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.required">
+        {{'BetShops.EncryptionKey' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.minlength">
+        {{'BetShops.EncryptionKey' | translate}} {{'Errors.ShouldBe16Characters' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.maxlength">
+        {{'BetShops.EncryptionKey' | translate}} {{'Errors.ShouldBe16Characters' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.Restriction' | translate}}</mat-label>
+      <mat-select [formControlName]="'Restrictions'">
+        <mat-option *ngFor="let restriction of restrictions" [value]="restriction?.Id">{{restriction?.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
+        {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

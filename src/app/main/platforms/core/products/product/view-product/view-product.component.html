@@ -1,0 +1,87 @@
+<div class="container">
+
+  <div class="content-action">
+
+    <div class="title"> {{'Products.Product' | translate}} {{id}}</div>
+
+  </div>
+  <div class="content-edit">
+    <div class="grid-edit">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="static-hand">{{newData?.Id}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.ExternalId != oldData?.ExternalId}">
+        <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
+        <div class="second-hand">{{oldData?.ExternalId}}</div>
+        <div class="third-hand">{{newData?.ExternalId}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.Name != oldData?.Name}">
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{oldData?.Name}}</div>
+        <div class="third-hand">{{newData?.Name}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.StateName != oldData?.StateName}">
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{oldData?.StateName}}</div>
+        <div class="third-hand">{{newData?.StateName}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.Description != oldData?.Description}">
+        <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
+        <div class="second-hand">{{oldData?.Description}}</div>
+        <div class="third-hand">{{newData?.Description}}</div>
+      </div>
+  
+      <div >
+        <div class="first-hand">{{'Products.GameProviderName' | translate}}</div>
+        <div class="static-hand">{{newData?.ProviderName}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.IsForMobile != oldData?.IsForMobile}">
+        <div class="first-hand">{{'Products.IsForMobile' | translate}}</div>
+        <div class="second-hand">{{oldData?.IsForMobile}}</div>
+        <div class="third-hand">{{newData?.IsForMobile}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.IsForDesktop != oldData?.IsForDesktop}">
+        <div class="first-hand">{{'Products.isForDesktop' | translate}}</div>
+        <div class="second-hand">{{oldData?.IsForDesktop}}</div>
+        <div class="third-hand">{{newData?.IsForDesktop}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.HasDemo != oldData?.HasDemo}">
+        <div class="first-hand">{{'Products.HasDemo' | translate}}</div>
+        <div class="second-hand">{{oldData?.HasDemo}}</div>
+        <div class="third-hand">{{newData?.HasDemo}}</div>
+      </div>
+  
+      <div>
+        <div class="first-hand">{{'Products.ParentId' | translate}}</div>
+        <div class="static-hand">{{newData?.ParentId}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.SubproviderId != oldData?.SubproviderId}">
+        <div class="first-hand">{{'Products.SubproviderId' | translate}}</div>
+        <div class="second-hand">{{oldData?.SubproviderId}}</div>
+        <div class="third-hand">{{newData?.SubproviderId}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.MobileImageUrl != oldData?.MobileImageUrl}">
+        <div class="first-hand">{{'Products.MobileImageUrl' | translate}}</div>
+        <div class="static-hand">{{newData?.MobileImageUrl}}</div>
+      </div>
+  
+      <div [ngClass]="{'changed': newData?.WebImageUrl != oldData?.WebImageUrl}">
+        <div class="first-hand">{{'Products.WebImageUrl' | translate}}</div>
+        <div class="static-hand">{{newData?.WebImageUrl}}</div>
+      </div>
+  
+    </div>
+  </div>
+
+</div>
+

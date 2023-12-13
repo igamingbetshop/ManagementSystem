@@ -1,0 +1,34 @@
+
+<div mat-dialog-title>
+  <span class="title">{{'Clients.CreateNewDocument' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <input type="file" id="Image" (change)="uploadFile($event)" required>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectDocumentType' | translate}}</mat-label>
+      <mat-select [formControlName]="'DocumentTypeId'" required>
+        <mat-option *ngFor="let type of documentTypeName" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['DocumentTypeId'].touched && errorControl['DocumentTypeId'].hasError('required')">
+        {{'Clients.documentType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectStatus' | translate}}</mat-label>
+      <mat-select [formControlName]="'State'" required>
+        <mat-option *ngFor="let state of documentStateName" [value]="state.Id">{{state.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['State'].touched && errorControl['State'].hasError('required')">
+        {{'Common.Status' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

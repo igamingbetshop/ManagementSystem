@@ -1,0 +1,72 @@
+<div class="client-table">
+  <table class="table-content">
+    <thead>
+      <tr>
+        <td>{{'SkillGames.PlayerId' | translate}}</td>
+        <td>{{'Clients.PlayerLogin' | translate}}</td>
+        <td>{{'Common.Type' | translate}}</td>
+        <td>{{'Clients.Player' | translate}}</td>
+        <td>{{'Common.Balance' | translate}}</td>
+        <td>{{'Clients.NETGaming' | translate}}</td>
+        <td>{{'Dashboard.GGR' | translate}}</td>
+        <td>{{'Clients.Financials' | translate}}</td>
+        <td>{{'Clients.Risk' | translate}}</td>
+        <td>{{'Sport.Score' | translate}}</td>
+        <td>{{'Clients.BonusRatio' | translate}}</td>
+        <td>{{'Clients.KYCStatus' | translate}}</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{clientInfo?.Id}}</td>
+        <td>{{clientInfo?.UserName}}</td>
+        <td *ngIf="clientInfo?.CategoryName">{{clientInfo?.CategoryName}}</td>
+        <td *ngIf="!clientInfo?.CategoryName">{{clientInfo?.CategoryId}}</td>
+        <td>{{clientInfo?.FirstName}} {{clientInfo?.LastName}}</td>
+        <td  rowspan="2"> 
+          <span class="sm-client-info">{{'Clients.Real' | translate}}: {{clientInfo?.Balance | number:'1.2-2'}} </span> 
+          <span class="sm-client-info">{{'Segments.Bonus' | translate}}: {{clientInfo?.BonusBalance | number:'1.2-2'}}</span>
+          <span class="sm-client-info">{{'Clients.Withdrawable' | translate}}: {{clientInfo?.WithdrawableBalance}}</span>
+        </td>
+        <td>{{clientInfo?.NGR | number:'1.2-2'}}</td>
+        <td>{{clientInfo?.GGR | number:'1.2-2'}}</td>
+        <td rowspan="2">
+          <span class="sm-client-info">{{'Dashboard.Deposits' | translate}}: {{clientInfo?.TotalDepositsCount}}</span>
+          <span class="sm-client-info">{{'Clients.Declines' | translate}}: {{clientInfo?.FailedDepositsCount}}</span>
+          <span class="sm-client-info">{{'Dashboard.Withdrawals' | translate}}: {{clientInfo?.TotalWithdrawalsCount}}</span>
+        </td>
+        <td rowspan="2">
+        <span class="risk-status">
+          <span [style.height]="clientInfo?.Risk + '%'" class="risk-status-progress"></span>
+        </span>
+        </td>
+        <td></td>
+        <td></td>
+        <td *ngIf="clientInfo?.IsDocumentVerified" style="color: green">{{'Clients.Approved' | translate}}</td>
+        <td *ngIf="!clientInfo?.IsDocumentVerified" style="color: red">{{'Clients.NotApproved' | translate}}</td>
+      </tr>
+      <tr>
+        <td>{{'Common.Status' | translate}}: {{clientInfo?.StatusName}}</td>
+        <td *ngIf="clientInfo?.IsOnline === true">{{'Clients.Online' | translate}}</td>
+        <td *ngIf="clientInfo?.IsOnline === false">{{'Clients.Offline' | translate}}</td>
+        <td>{{clientInfo?.RegistrationDate | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+        <td>{{clientInfo?.Email}}</td>
+        <td>
+          {{'Clients.TD' | translate}}: {{clientInfo?.TotalDepositsAmount | number:'1.2-2'}}
+          {{'Clients.TW' | translate}}: {{clientInfo?.TotalWithdrawalsAmount | number:'1.2-2'}}</td>
+        <td>{{'Clients.Rake' | translate}}: {{clientInfo?.Rake}}</td>
+        <td>{{'Clients.Currency' | translate}}: {{clientInfo?.CurrencyId}}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<nav mat-tab-nav-bar class="detail-nav-tabs">
+  <a mat-tab-link *ngFor="let tab of tabs" [routerLink]="tab.route" routerLinkActive [queryParamsHandling]="'merge'"
+     #rla="routerLinkActive" [active]="rla.isActive">{{tab.label | translate}}</a>
+</nav>
+<router-outlet></router-outlet>
+
+

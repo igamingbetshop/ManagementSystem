@@ -1,0 +1,88 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.AddSetting' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Sport.SelectMarketType' | translate}}</mat-label>
+      <mat-select [formControlName]="'MarketTypeId'">
+        <mat-option *ngFor="let market of marketTypes" [value]="market.Id">{{market.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['MarketTypeId'].touched && errorControl['MarketTypeId'].hasError('required')">
+        {{'Sport.MarketType' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.AbsoluteProfitRange' | translate}} 1</mat-label>
+      <input type="number" matInput [formControlName]="'AbsoluteProfitRange1'" required>
+      <mat-error
+        *ngIf="errorControl['AbsoluteProfitRange1'].touched && errorControl['AbsoluteProfitRange1'].hasError('required')">
+        {{'Sport.AbsoluteProfitRange' | translate}} 1 {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.AbsoluteProfitRange' | translate}} 2</mat-label>
+      <input type="number" matInput [formControlName]="'AbsoluteProfitRange2'" required>
+      <mat-error
+        *ngIf="errorControl['AbsoluteProfitRange2'].touched && errorControl['AbsoluteProfitRange2'].hasError('required')">
+        {{'Sport.AbsoluteProfitRange' | translate}} 2 {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.AbsoluteProfitRange' | translate}} 3</mat-label>
+      <input type="number" matInput [formControlName]="'AbsoluteProfitRange3'" required>
+      <mat-error
+        *ngIf="errorControl['AbsoluteProfitRange3'].touched && errorControl['AbsoluteProfitRange3'].hasError('required')">
+        {{'Sport.AbsoluteProfitRange' | translate}} 3 {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.AbsoluteProfitLive' | translate}}</mat-label>
+      <input type="number" matInput [formControlName]="'AbsoluteProfitLive'" required>
+      <mat-error
+        *ngIf="errorControl['AbsoluteProfitLive'].touched && errorControl['AbsoluteProfitLive'].hasError('required')">
+        {{'Sport.AbsoluteProfitLive' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.RelativeLimitRange' | translate}} 1</mat-label>
+      <input type="number" matInput [formControlName]="'RelativeLimitRange1'" required>
+      <mat-error
+        *ngIf="errorControl['RelativeLimitRange1'].touched && errorControl['RelativeLimitRange1'].hasError('required')">
+        {{'Sport.RelativeLimitRange' | translate}} 1 {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.RelativeLimitRange' | translate}} 2</mat-label>
+      <input type="number" matInput [formControlName]="'RelativeLimitRange2'" required>
+      <mat-error
+        *ngIf="errorControl['RelativeLimitRange2'].touched && errorControl['RelativeLimitRange2'].hasError('required')">
+        {{'Sport.RelativeLimitRange' | translate}} 2 {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Sport.RelativeLimitRange' | translate}} 3</mat-label>
+      <input type="number" matInput [formControlName]="'RelativeLimitRange3'" required>
+      <mat-error
+        *ngIf="errorControl['RelativeLimitRange3'].touched && errorControl['RelativeLimitRange3'].hasError('required')">
+        {{'Sport.RelativeLimitRange' | translate}} 3 {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-checkbox  color="primary" [formControlName]="'AllowMultipleBets'">{{'Sport.AllowMultipleBets' | translate}}</mat-checkbox>
+    <mat-form-field>
+      <mat-label>{{'Sport.RelativeLimitLive' | translate}}</mat-label>
+      <input type="number" matInput [formControlName]="'RelativeLimitLive'" required>
+      <mat-error
+        *ngIf="errorControl['RelativeLimitLive'].touched && errorControl['RelativeLimitLive'].hasError('required')">
+        {{'Sport.RelativeLimitLive' | translate}} {{'errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Sport.AddMarketType' | translate}}</button>
+</div>

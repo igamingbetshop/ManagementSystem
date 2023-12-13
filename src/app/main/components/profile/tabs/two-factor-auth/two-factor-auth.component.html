@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"> {{'Users.User' | translate }} / {{userName}} </div>
+  </div>
+
+
+  <div class="main">
+    <div class="page-title"> {{"Profile.RegisterMobileAuthenticatorApp" | translate}} </div>
+  
+    <div class="sub-title">
+      1. {{"Profile.DownloadAuthenticatorOnYourDevice" | translate}}
+    </div>
+  
+    <div class="text">{{"Profile.OtherTwoFactorAuthenticatorApplicationsSuchAsGoogleAuthenticatorMicrosoftAuthenticator" | translate}}</div>
+  
+    <div class="sub-title">
+      2. {{"Profile.CreateAnAccountByScanningThisQRCode" | translate}}
+    </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="onOpenQRPopup()">{{'Profile.TryQRCode' | translate}}</button>
+
+  </div>
+
+  
+
+</div>
+

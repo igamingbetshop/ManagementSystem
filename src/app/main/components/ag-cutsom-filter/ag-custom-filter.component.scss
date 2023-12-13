@@ -1,0 +1,117 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+}
+
+.container {
+  height: calc(100vh - 145px);
+  top: 0;
+  position: absolute;
+
+  .ag-tabs {
+    min-width: 199px;
+  }
+
+  .ag-custom-dropdown {
+
+    ::ng-deep {
+      .mat-select {
+        height: 30px;
+        border-radius: 0;
+        display: flex !important;
+        align-items: center;
+        padding: 0;
+        background-color: transparent;
+        border-bottom: 1px solid $blue-5;
+
+        &[aria-expanded="true"] {
+
+          .mat-select-trigger {
+            .mat-select-arrow-wrapper {
+              .mat-select-arrow {
+                border-bottom: 5px solid $blue-5;
+                border-top: 5px solid transparent;
+                margin: 0 4px 4px 4px;
+              }
+            }
+          }
+        }
+
+        .mat-select-trigger {
+
+          .mat-select-value {
+            color: $blue-5;
+
+            .mat-select-placeholder {
+              color: $blue-5;
+              opacity: 0.9;
+            }
+          }
+
+          .mat-select-arrow-wrapper {
+            .mat-select-arrow {
+              color: $blue-5;
+            }
+          }
+        }
+
+        &.mat-select-disabled {
+          opacity: 0.7;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .ag-input-content {
+    margin-top: 12px;
+    margin-bottom: 8px;
+
+    .ag-custom-input {
+      box-shadow: initial;
+      height: 26px;
+      border-radius: 4px;
+      border: initial;
+      font-size: 14px;
+      color: $blue-2;
+      box-sizing: border-box;
+      width: 100%;
+      outline: none;
+      background-color: $white;
+      opacity: 1;
+      margin: 0;
+
+      &::placeholder {
+        color: $blue-2;
+        opacity: 0.7;
+      }
+
+      &:focus {
+        border: initial;
+      }
+    }
+  }
+
+  .ag-filter-condition {
+    margin-bottom: 4px;
+    .ag-filter-condition-operator {
+      display: flex;
+      align-items: center;
+
+      &.operator-and {
+        margin-right: 4px;
+      }
+
+      .ag-input-field-label {
+        margin: 0 4px;
+      }
+    }
+  }
+}

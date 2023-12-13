@@ -1,0 +1,82 @@
+@use "~ag-grid-community/styles" as ag;
+@include ag.grid-styles((
+  theme: balham,
+  --ag-header-background-color:#0573BA
+));
+@import "helpers/mixins";
+@import "general/general_dir";
+@import "helpers/fonts";
+@import "helpers/variables";
+@import "helpers/ag-grid";
+@import "helpers/icons";
+@import "helpers/material";
+@import "helpers/form-edit";
+@import "helpers/detail-nav-tabs";
+@import "helpers/modal-form";
+
+.mat-menu-content {
+  a.active
+  {
+    background-color: #1375aa;
+    color: rgb(165, 162, 162);
+  }
+}
+
+.mat-form-field-flex > .mat-form-field-infix {
+  padding: 0.4em 0 !important;
+}
+
+.mat-form-field-label-wrapper {
+  top: -1.5em;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.1em) scale(.75);
+  width: 133.33333%;
+}
+
+.modal-header {
+  height: $modal-header-height;
+  border-bottom: 1px solid $border-color;
+  @include flex-between;
+  @include flex-vertical-center;
+  mat-icon{cursor: pointer}
+}
+
+.modal-form {
+  display: grid;
+  grid-gap: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.mat-snack-bar-container {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: transparent !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $blue-light-6 !important;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  margin: 3px 0;
+  background-color: $gray-light-4;
+  border-radius: 5px;
+}

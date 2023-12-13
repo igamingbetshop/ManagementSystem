@@ -1,0 +1,49 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+
+    .custom-dropdown {
+      margin-right: 8px;
+      @include dropdown-style;
+    }
+  }
+
+  // .content-edit gets from helpers/_form-edit.scss
+
+}
+
+.form-actions {
+  justify-content: flex-end;
+
+  .actions {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+
+    .mat-btn {
+      @include mat-btn-style;
+    }
+
+    .mat-cancel-btn {
+      @include  mat-cancel-btn-style
+    }
+  }
+}
+
+
+
+
+
+
+

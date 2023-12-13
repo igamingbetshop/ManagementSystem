@@ -1,0 +1,265 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title">
+      <a [routerLink]="['../../bet-shop-groups']">{{'BetShops.BetShops' | translate}}</a>
+      <a (click)="toRedirectToBetshops()">
+        / {{name}} / {{betShop?.Name}}
+      </a>
+    </div>
+    <button mat-stroked-button class="mat-btn" (click)="AddCashDesk()">{{'BetShops.AddCashDesk' | translate}}
+    </button>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{betShop?.Name}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
+            <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+              {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="second-hand">{{betShop?.CurrencyId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput placeholder="{{'Clients.Currency' | translate}}" [formControlName]="'CurrencyId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Address' | translate}}</div>
+        <div class="second-hand">{{betShop?.Address}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput placeholder="{{'Clients.Address' | translate}}" [formControlName]="'Address'">
+            <mat-error *ngIf="errorControl['Address']?.touched && errorControl['Address'].errors?.required">
+              {{'Clients.Address' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.DefaultLimit' | translate}}</div>
+        <div class="second-hand">{{betShop?.DefaultLimit}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" placeholder="{{'BetShops.DefaultLimit' | translate}}"
+              [formControlName]="'DefaultLimit'">
+            <mat-error *ngIf="errorControl['DefaultLimit']?.touched && errorControl['DefaultLimit'].errors?.required">
+              {{'BetShops.DefaultLimit' | translate}} {{'Errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.Partner' | translate}}</div>
+        <div class="second-hand">{{betShop?.PartnerName}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput placeholder="{{'Partners.Partner' | translate}}" [formControlName]="'PartnerName'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.CurrentLimit' | translate}}</div>
+        <div class="second-hand">{{betShop?.CurrentLimit}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput placeholder="{{'BetShops.CurrentLimit' | translate}}" [formControlName]="'CurrentLimit'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.Group' | translate}}</div>
+        <div class="second-hand">{{betShop?.GroupName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'GroupId'">
+            <mat-option *ngFor="let group of groups" [value]="group?.Id">{{group?.Name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="errorControl['GroupId']?.touched && errorControl['GroupId'].errors?.required">
+            {{'BetShops.Group' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.UpdateTime' | translate}}</div>
+        <div class="second-hand">{{betShop?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'BetShops.UpdateTime' | translate}}" [formControlName]="'LastUpdateTime'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{betShop?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
+            {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.Created' | translate}}</div>
+        <div class="second-hand">{{betShop?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Clients.CreationTime' | translate}}" [formControlName]="'CreationTime'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.PrintLogo' | translate}}</div>
+        <div class="second-hand">{{betShop?.PrintLogo}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox labelPosition="before" color="primary" [formControlName]="'PrintLogo'">{{'BetShops.PrintLogo' |
+            translate}}</mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.BonusPercent' | translate}}</div>
+        <div class="second-hand">{{betShop?.BonusPercent}}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" placeholder="{{'BetShops.BonusPercent' | translate}}"
+            [formControlName]="'BonusPercent'">
+          <mat-error *ngIf="errorControl['BonusPercent']?.touched && errorControl['BonusPercent'].errors?.required">
+            {{'BetShops.BonusPercent' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.AgentId' | translate}}</div>
+        <div class="second-hand">{{betShop?.AgentId}}</div>
+        <div class="form-field form-input">
+          <input matInput type="number"
+            placeholder="{{'Clients.AgentId' | translate}} {{'Errors.Required' | translate}}"
+            [formControlName]="'AgentId'">
+          <mat-error *ngIf="errorControl['AgentId']?.touched && errorControl['AgentId'].errors?.required">
+            {{'Clients.AgentId' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.AnonymousBet' | translate}}</div>
+        <div class="second-hand">{{betShop?.AnonymousBet}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'AnonymousBet'">
+            <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.AllowCashout' | translate}}</div>
+        <div class="second-hand">{{betShop?.AllowCashout}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'AllowCashout'">
+            <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.AllowLive' | translate}}</div>
+        <div class="second-hand">{{betShop?.AllowLive}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'AllowLive'">
+            <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Payments.PaymentSystems' | translate}}</div>
+
+        <div class="second-hand">
+          <ng-container *ngFor="let peyment of paymentSystemsEntites">{{peyment}}</ng-container>
+        </div>
+
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'PaymentSystems'" multiple>
+            <mat-option *ngFor="let payment of paymentSystems" [value]="payment.PaymentSystemId">
+              {{payment.PaymentSystemName}}
+            </mat-option>
+          </mat-select>
+          
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'BetShops.UsePin' | translate}}</div>
+        <div class="second-hand">{{betShop?.UsePin}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'UsePin'">
+            <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div *ngIf="isEdit">
+        <div class="first-hand">{{'Clients.Country' | translate}}</div>
+        <div class="second-hand"></div>
+        <div class="form-field form-dropdown">
+          <mat-select (selectionChange)="onCountryChange($event)">
+            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Region' | translate}}</div>
+        <div class="second-hand">{{betShop?.RegionId}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'RegionId'" (selectionChange)="onCityChange($event)">
+            <mat-option *ngFor="let city of cities" [value]="city.Id">{{city.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+      </div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' |
+            translate}}</button>
+          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" type="submit"
+            (click)="onSubmit()">{{'Save'
+            | translate}}
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular id="core-bet-shop" #agGrid class="ag-theme-balham" [headerHeight]="33" [rowHeight]="42"
+      [suppressCopyRowsToClipboard]="true" [rowData]="rowData" [rowModelType]="rowModelType" [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)" [ensureDomOrder]="true" [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems" rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+</div>

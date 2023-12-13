@@ -1,0 +1,17 @@
+<div class="sidenav-container" [class.isExtended] = "sideNavState">
+
+  <div class="content">
+
+    <mat-nav-list>
+      <a mat-list-item *ngFor = "let homeSection of homeSections; let i = index">
+        <app-left-menu-item
+          [categoryData] = "homeSections[i]"
+          [rootCategoryName] = "homeSection.Name"
+          [linkText] = "linkText">
+        </app-left-menu-item>
+      </a>
+    </mat-nav-list>
+
+    <div class="arrow-content" [class.opened] = "sideNavState" (click)="onSinenavToggle()"></div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="ag-boolean-filter">
+  <div class="actions">
+    <label>
+      <input type="radio" name="state" [(ngModel)]="state" [value]="1"/>
+      True
+    </label>
+    <label>
+      <input type="radio" name="state" [(ngModel)]="state" [value]="2"/>
+      False
+    </label>
+  </div>
+  <div class="ag-filter-apply-panel">
+    <button type="button" (click)="updateFilter()" ref="applyFilterButton" class="ag-standard-button ag-filter-apply-panel-button">
+      Apply
+    </button>
+    <button type="button" (click)="destroyFilter()" ref="resetFilterButton" class="ag-standard-button ag-filter-apply-panel-button">
+      Reset
+    </button>
+  </div>
+</div>

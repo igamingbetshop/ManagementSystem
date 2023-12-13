@@ -1,0 +1,14 @@
+::ng-deep {
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
+  .mat-dialog-title {
+    margin: 0;
+  }
+}
+.grid-history {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding-top: 15px;
+}

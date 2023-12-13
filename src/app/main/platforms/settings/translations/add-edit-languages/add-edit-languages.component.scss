@@ -1,0 +1,38 @@
+@import "mixins";
+
+.modal-wrap {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 16px;
+  padding-left: 20px;
+
+  .modal-form-translations {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+
+    .language {
+      flex: 1;
+      color: $blue-5;
+    }
+
+    input {
+      flex: 2;
+      padding: 8px 14px;
+      border: 1px solid $blue-2;
+      border-radius: 4px;
+      box-sizing: border-box;
+      width: 100%;
+      font-size: 16px;
+      outline: none;
+      color: $blue-5;
+      background-color: $white;
+
+      &:focus {
+        border: 1px solid $blue-5;
+      }
+    }
+  }
+}

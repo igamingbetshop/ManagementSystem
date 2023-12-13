@@ -1,0 +1,43 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.ComplimentaryPointRates' | translate}}</div>
+    <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
+
+    <div class="partner-dropdown">
+      <mat-select
+        #cur
+        (selectionChange)="onCurrencyChange(cur.value)" [(ngModel)]="currency"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let currency of currencies" [value]="currency.Id">{{currency.Id}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      class="ag-theme-balham"
+      style="width: 100%; height: 100%;"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [enableGroupEdit] = "true"
+      [autoGroupColumnDef]="autoGroupColumnDef"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [treeData]="true"
+      [animateRows]="true"
+      [isServerSideGroup]="isServerSideGroup"
+      [getServerSideGroupKey]="getServerSideGroupKey"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+    >
+    </ag-grid-angular>
+  </div>
+
+</div>

@@ -1,0 +1,52 @@
+<div class="main-history">
+  <header>
+    {{id}}
+  </header>
+  <div class="grid-history">
+    <div>
+      <div class="first-hand">{{'Common.Id' | translate}}</div>
+      <div class="third-hand">{{newData?.Id}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.PartnerId' | translate}}</div>
+      <div class="third-hand">{{newData?.PartnerId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.CategoryId != oldData?.CategoryId}">
+      <div class="first-hand">{{'Products.CategoryId' | translate}}</div>
+      <div class="second-hand">{{oldData?.CategoryId}}</div>
+      <div class="third-hand">{{newData?.CategoryId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.State != oldData?.State}">
+      <div class="first-hand">{{'Common.State' | translate}}</div>
+      <div class="second-hand">{{oldData?.StateName}}</div>
+      <div class="third-hand">{{newData?.StateName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.ObjectId' | translate}}</div>
+      <div class="third-hand">{{newData?.ObjectId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Percent != oldData?.Percent}">
+      <div class="first-hand">{{'Partners.Percent' | translate}}</div>
+      <div class="second-hand">{{oldData?.Percent}}</div>
+      <div class="third-hand">{{newData?.Percent}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.ObjectTypeId' | translate}}</div>
+      <div class="third-hand">{{newData?.ObjectTypeId}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.ProductId' | translate}}</div>
+      <div class="third-hand">{{newData?.ProductId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.OpenMode != oldData?.OpenMode}">
+      <div class="first-hand">{{'Partners.OpenMode' | translate}}</div>
+      <div class="second-hand">{{oldData?.OpenMode}}</div>
+      <div class="third-hand">{{newData?.OpenMode}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Rating != oldData?.Rating}">
+      <div class="first-hand">{{'Partners.Rating' | translate}}</div>
+      <div class="second-hand">{{oldData?.Rating}}</div>
+      <div class="third-hand">{{newData?.Rating}}</div>
+    </div>
+  </div>
+</div>

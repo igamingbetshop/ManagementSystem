@@ -1,0 +1,75 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 60px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+
+    .title, .title>a {
+      font-size: 18px;
+      color: $blue-5;
+      padding-bottom: 5px;
+
+    }
+  }
+}
+
+.main-history {
+  padding: 0 15px 15px 15px;
+
+  .edit-icon {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+
+
+  .client-form {
+    background: #efefef;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 16px;
+    padding: 16px;
+
+    header {
+      grid-column: 1 / 5;
+    }
+
+    .actions {
+      grid-column: 1 / 5;
+      display: flex;
+      justify-self: end;
+      gap: 16px;
+    }
+  }
+
+  .actions2 {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: none !important;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+}

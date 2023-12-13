@@ -1,0 +1,762 @@
+.lottery-main-container {
+  .edit-icon {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+
+  .grid-history {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 15px;
+
+    div {
+      display: flex;
+      background: white;
+      height: 32px;
+      padding: 0 10px;
+      align-items: center;
+
+      .first-hand {
+        width: 30%;
+        border-right: 1px solid rgb(216, 216, 216);
+      }
+
+
+      .second-hand {
+        width: 40%;
+        padding: 10px 10px;
+        border-right: 1px solid #d8d8d8;
+      }
+
+      .third-hand {
+        width: 40%;
+      }
+    }
+  }
+}
+
+ag-grid-angular {
+  width: 100%;
+  height: 91%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  div h4 a {
+    color: red;
+    text-decoration: none;
+  }
+}
+
+.vg-results {
+  .lottery-main-container {
+    padding: 15px;
+
+    .lottery-content {
+      .unit-details {
+        display: flex;
+        justify-content: center;
+
+        .unit-info {
+          padding: 10px;
+          font-size: 20px;
+          margin-right: 20px;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .lottery-market {
+      margin-bottom: 42px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 5px;
+      clear: both;
+
+      .market-name {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 10px;
+        font-size: 20px;
+        white-space: nowrap;
+        color: #464646;
+      }
+
+      .market-form {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+    }
+  }
+
+  .result-head {
+    padding: 0 30px;
+    font-weight: bold;
+  }
+
+  .second-card {
+    transform: rotate(15deg);
+    left: 57px !important;
+    top: 3px !important;
+  }
+
+  .player-cards-center {
+    left: 43%;
+  }
+
+  .player-cards {
+    position: absolute;
+    height: 125px;
+    width: 132px;
+    z-index: 5;
+    cursor: pointer;
+  }
+
+  .closed-card, .card {
+    width: 60px;
+    height: 85px;
+  }
+
+  .blocks {
+    height: 520px;
+    position: relative;
+  }
+
+  .win-combinations {
+    float: left;
+    margin: 65px 45px;
+  }
+
+  .markets {
+    float: left;
+    margin: 180px 35px;
+  }
+
+  .markets-name {
+    width: 100px;
+    height: 29px;
+    padding-top: 6px;
+    padding-bottom: 33px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .selection {
+    width: 111px;
+    border: 1px solid #bbbbbb;
+    border-radius: 5px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 20px;
+    cursor: pointer;
+    background: rgb(255, 255, 255);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(234, 234, 234, 1) 100%);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .selection.selected {
+    border-color: #bc972e;
+    background: rgb(234, 198, 102);
+    background: linear-gradient(to bottom, rgba(234, 198, 102, 1) 0%, rgba(231, 179, 21, 1) 100%);
+  }
+
+  .selection.won {
+    background: #27aa5d !important;
+    border-color: #70eda4 !important;
+    box-shadow: 0 0 30px 0 rgba(255, 216, 0, 1);
+  }
+
+  .selection.won .selection-name, .selection.won .selection-value, .selection.selected .selection-name, .selection.selected .selection-value {
+    color: #ffffff;
+  }
+
+  .selection .selection-name {
+    width: 34px;
+    color: #ffffff;
+    background: #2B5A73;
+    border-radius: 5px;
+  }
+
+  .selections-block {
+    height: 500px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .selection .selection-long-name {
+    width: 94px;
+  }
+
+  .selection .selection-value {
+    color: #2c3e50;
+  }
+
+  .selection .selection-name, .selection .selection-value {
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  .win-combinations .selection {
+    margin-bottom: 7px;
+    width: 180px;
+  }
+
+  .markets .selection {
+    margin-bottom: 7px;
+    width: 180px;
+  }
+
+  .fullWidth {
+    width: 100% !important;
+  }
+
+  .markets .selection-name {
+    overflow: hidden;
+    margin-right: 5px;
+  }
+
+  .win-combinations .selection-name {
+    overflow: hidden;
+    margin-right: 5px;
+  }
+
+  .player-cards .selection {
+    position: absolute;
+    top: 80px;
+  }
+
+  .selection-id-content {
+    width: 100px;
+    height: 29px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .selection.won, .fold .selection, .lost .selection, .selection.fold, .selection.lost {
+    cursor: not-allowed;
+  }
+
+  .table-container {
+    float: left;
+    position: relative;
+    width: 750px;
+    height: 100%;
+  }
+
+  .table {
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+  }
+
+  .table-chair {
+    position: absolute;
+    z-index: 3;
+    width: 126px;
+    height: 180px;
+  }
+
+  .table-chair.rotate180 {
+    transform: rotate(180deg);
+  }
+
+  .table-cards {
+    position: absolute;
+    top: 212px;
+    z-index: 6;
+  }
+
+  .table-name {
+    position: absolute;
+    top: 222px;
+    right: 145px;
+    z-index: 5;
+    font-size: 46px;
+    color: #ffffff;
+    font-weight: bold;
+    opacity: 0.1;
+  }
+
+  .table-cards0 {
+    left: 192px;
+  }
+
+  .table-cards1 {
+    left: 270px;
+  }
+
+  .table-cards2 {
+    left: 347px;
+  }
+
+  .table-cards3 {
+    left: 420px;
+  }
+
+  .table-cards4 {
+    left: 491px;
+  }
+
+  .closed-card {
+    line-height: 85px;
+    color: #ffffff;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    zoom: 1;
+    background: rgb(255, 255, 255);
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .table-cards.opened .closed-card {
+    display: none;
+  }
+
+  .player-cards .card {
+    position: absolute;
+    top: 0;
+    left: 2px;
+  }
+
+  .fold, .lost {
+    opacity: 0.5;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  }
+
+  /* Tbale 1 */
+  .table1 .table-chair-1 {
+    left: 220px;
+    top: 0;
+  }
+
+  .table1 .table-chair-2 {
+    left: 420px;
+    top: 0;
+  }
+
+  .table1 .table-chair-3 {
+    left: 220px;
+    top: 336px;
+  }
+
+  .table1 .table-chair-4 {
+    left: 420px;
+    top: 336px;
+  }
+
+  .table1 .player1-cards {
+    left: 218px;
+    top: 47px;
+  }
+
+  .table1 .player2-cards {
+    left: 423px;
+    top: 47px;
+  }
+
+  .table1 .player3-cards {
+    left: 218px;
+    top: 347px;
+  }
+
+  .table1 .player4-cards {
+    left: 423px;
+    top: 347px;
+  }
+
+  /* Table 2 */
+  .table2 .table-chair-1 {
+    left: 152px;
+    top: 0;
+  }
+
+  .table2 .table-chair-2 {
+    left: 316px;
+    top: 0;
+  }
+
+  .table2 .table-chair-3 {
+    left: 470px;
+    top: 0;
+  }
+
+  .table2 .table-chair-4 {
+    left: 152px;
+    top: 336px;
+  }
+
+  .table2 .table-chair-5 {
+    left: 316px;
+    top: 336px;
+  }
+
+  .table2 .table-chair-6 {
+    left: 470px;
+    top: 336px;
+  }
+
+  .table2 .player1-cards {
+    left: 155px;
+    top: 47px;
+  }
+
+  .table2 .player2-cards {
+    left: 316px;
+    top: 47px;
+  }
+
+  .table2 .player3-cards {
+    left: 471px;
+    top: 47px;
+  }
+
+  .table2 .player4-cards {
+    left: 155px;
+    top: 347px;
+  }
+
+  .table2 .player5-cards {
+    left: 316px;
+    top: 347px;
+  }
+
+  .table2 .player6-cards {
+    left: 471px;
+    top: 347px;
+  }
+
+  /* table 3 */
+  .table3 .table-chair-1 {
+    left: 35px;
+    top: 75px;
+  }
+
+  .table3 .table-chair-2 {
+    left: 220px;
+    top: 0;
+  }
+
+  .table3 .table-chair-3 {
+    left: 420px;
+    top: 0;
+  }
+
+  .table3 .table-chair-4 {
+    left: 587px;
+    top: 75px;
+  }
+
+  .table3 .table-chair-5 {
+    left: 43px;
+    top: 284px;
+  }
+
+  .table3 .table-chair-6 {
+    left: 220px;
+    top: 336px;
+  }
+
+  .table3 .table-chair-7 {
+    left: 420px;
+    top: 336px;
+  }
+
+  .table3 .table-chair-8 {
+    left: 571px;
+    top: 285px;
+  }
+
+  .table3 .player1-cards {
+    left: 58px;
+    top: 105px;
+  }
+
+  .table3 .player2-cards {
+    left: 218px;
+    top: 47px;
+  }
+
+  .table3 .player3-cards {
+    left: 423px;
+    top: 47px;
+  }
+
+  .table3 .player4-cards {
+    left: 573px;
+    top: 105px;
+  }
+
+  .table3 .player5-cards {
+    left: 58px;
+    top: 292px;
+  }
+
+  .table3 .player6-cards {
+    left: 218px;
+    top: 347px;
+  }
+
+  .table3 .player7-cards {
+    left: 423px;
+    top: 347px;
+  }
+
+  .table3 .player8-cards {
+    left: 573px;
+    top: 292px;
+  }
+
+  .table1 .table-chair-3, .table1 .table-chair-4, .table2 .table-chair-4, .table2 .table-chair-5, .table2 .table-chair-6, .table3 .table-chair-6, .table3 .table-chair-7 {
+    transform: rotate(180deg) scaleX(-1);
+  }
+
+  .table3 .table-chair-1 {
+    transform: rotate(-55deg);
+  }
+
+  .table3 .table-chair-4 {
+    transform: rotate(55deg);
+  }
+
+  .table3 .table-chair-5 {
+    transform: rotate(-125deg);
+  }
+
+  .table3 .table-chair-8 {
+    transform: rotate(125deg);
+  }
+
+  //tables end
+  /*Virtual races result area start*/
+  .race-main-content {
+    height: 1500px;
+  }
+
+  .markets-panel {
+    float: left;
+    padding-top: 76px;
+
+    ul {
+      list-style: none;
+    }
+  }
+
+  .market {
+    width: auto;
+    display: flex;
+
+    li {
+      float: left;
+      line-height: 32px;
+      padding: 5px;
+    }
+  }
+
+  .market li.market-name {
+    width: 120px;
+    text-align: right;
+  }
+
+  .market-vertical .market-name {
+    line-height: 67px;
+    overflow: hidden;
+    height: 67px;
+  }
+
+  .markets-panel .selection {
+    border: 1px #E6E0C0 solid;
+    height: 32px;
+    width: 70px;
+    line-height: 32px;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+    background: #fbf8e6;
+    background: linear-gradient(to bottom, #fbf8e6 0%, #eae3bc 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbf8e6', endColorstr='#eae3bc', GradientType=0);
+    box-shadow: 0 0 1px 0 rgba(50, 7, 14, 1);
+  }
+
+  .selection-empty {
+    height: 33px;
+    width: 72px;
+    background: #e0d9b1;
+  }
+
+  .markets-panel .selection, .markets-panel .selection-empty {
+    display: inline-block;
+    border-radius: 3px;
+    float: left;
+  }
+
+  .markets-panel .selection-name {
+    display: inline-block;
+    float: left;
+    clear: both;
+  }
+
+  .market-name, .selection-name {
+    font-size: 20px;
+    width: 80px;
+    white-space: nowrap;
+  }
+
+  .market.market-vertical {
+    margin-bottom: 50px;
+  }
+
+  .market.market-vertical .selection {
+    clear: both;
+  }
+
+  .market-vertical.market-right {
+    float: right;
+    margin-right: 15px;
+  }
+
+  .markets-6 {
+    width: 916px;
+  }
+
+  .markets-8 {
+    width: 1161px;
+  }
+
+  .markets-6 .main-market {
+    width: auto;
+  }
+
+  .markets-8 .main-market {
+    width: 1032px;
+  }
+
+  .market-top-numbers {
+    clear: both;
+    margin-left: 154px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .market-top-numbers span {
+    width: 82px;
+  }
+
+  .market-left-numbers {
+    float: left;
+    height: auto;
+    width: 34px;
+    margin-left: 90px;
+    clear: left;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .market-left-numbers span {
+    height: 44px;
+    width: 20px;
+    line-height: 44px;
+  }
+
+  .market-top-numbers span, .market-left-numbers span {
+    display: inline-block;
+    text-align: center;
+  }
+
+  .market-top-numbers strong, .market-left-numbers strong {
+    padding: 5px 12px;
+    border-radius: 5px;
+    color: white;
+  }
+
+  .market-number-1 {
+    background: #af5054;
+  }
+
+  .market-number-2 {
+    background: #6b5e3c;
+  }
+
+  .market-number-3 {
+    background: #cb99af;
+  }
+
+  .market-number-4 {
+    background: #134074;
+  }
+
+  .market-number-5 {
+    background: #b5d99c;
+  }
+
+  .market-number-6 {
+    background: #e65f5c;
+  }
+
+  .market-number-7 {
+    background: #ba7b81;
+  }
+
+  .market-number-8 {
+    background: #36c9c6;
+  }
+
+  .markets-panel {
+    margin-left: 30px;
+  }
+
+  .markets-panel .selection {
+    height: 40px;
+    width: 113px;
+    line-height: 40px;
+    font-size: 24px;
+  }
+
+  .markets-panel .selection-empty {
+    height: 39px;
+    width: 115px;
+  }
+
+  .market-top-numbers span {
+    width: 125px;
+  }
+
+  .market-left-numbers span {
+    height: 57px;
+    line-height: 48px;
+    margin-bottom: 30px;
+    margin-left: 10px;
+  }
+
+  .table-container {
+    height: calc(100% - 35px);
+  }
+}
+

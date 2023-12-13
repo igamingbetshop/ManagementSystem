@@ -1,0 +1,54 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+  }
+
+  .tournament-content {
+    width: 100%;
+
+    .round-title {
+      font-size: 16px;
+      color: $blue-6;
+      padding: 12px 0;
+    }
+
+    .match {
+      display: flex;
+      padding-bottom: 12px;
+      height: 100%;
+      column-gap: 12px;
+      box-sizing: border-box;
+
+      .player {
+        border-radius: 4px;
+        padding: 12px;
+        width: 50%;
+        background-color: $red;
+        color: $white;
+
+        &.won {
+          background-color: $green-2;
+          color: $white;
+        }
+
+        &.left {
+          background-color: $orange-3;
+          color: $white;
+        }
+
+        .score {
+          border-radius: 4px;
+          padding: 2px;
+          background-color: #ffffff;
+          color: $black;
+        }
+      }
+    }
+  }
+}

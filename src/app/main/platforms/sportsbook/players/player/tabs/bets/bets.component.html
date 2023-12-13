@@ -1,0 +1,85 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-players']">{{'Sport.Players' | translate}}</a> /&nbsp;{{playerId}} :&nbsp; {{'Clients.Bets' | translate}}</div>
+
+    <div class="custom-dropdown">
+      <mat-select   #cat  [(ngModel)]="availableBetCategoriesStatus" (selectionChange)="go()">
+        <mat-option *ngFor="let betcategory of availableBetCategories"  [value]="betcategory.status">{{betcategory.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="custom-dropdown">
+      <mat-select   #st  [(ngModel)]="availableStatusesStatus" (selectionChange)="go()">
+        <mat-option *ngFor="let status of availableStatuses"  [value]="status.status">{{status.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+
+    <div class="date-time-tabs">
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='month'" mat-stroked-button (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
+    </div>
+
+    <mat-form-field class="calendar-picker start" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate"   (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field class="calendar-picker" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="report-bets"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    [paginationPageSize]="cacheBlockSize"
+    (paginationChanged)="onPaginationChanged($event)"
+    [pagination]="pagination"
+    [suppressCopyRowsToClipboard]="true"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [masterDetail]="masterDetail"
+    [detailCellRendererParams]="detailCellRendererParams"
+    (gridReady)="onGridReady($event)"
+    (rowClicked)="onRowClicked($event)"
+    rowSelection="multiple">
+  </ag-grid-angular>
+
+  <div class="pages-sizes">
+    <mat-select
+      (selectionChange)="onPageSizeChanged()"
+      [(ngModel)]="cacheBlockSize"
+      [(value)]="defaultPageSize"
+      panelClass="overlay-dropdown small"
+      disableOptionCentering>
+      <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+    </mat-select>
+  </div>
+
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-users']">{{'Users.Users' | translate}}</a> / {{'Users.UsernameMainInfo' | translate}}</div>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit">
+        <div>
+          <div class="first-hand">{{'Common.Id' | translate}}</div>
+          <div class="second-hand">{{user?.Id}}</div>
+        </div>
+        <div>
+          <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+          <div class="second-hand">{{user?.PartnerName}}</div>
+        </div>
+        <div>
+          <div class="first-hand">{{'Clients.NickName' | translate}}</div>
+          <div class="second-hand">{{user?.NickName}}</div>
+        </div>
+        <div>
+          <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+          <div class="second-hand">{{user?.CurrencyId}}</div>
+        </div>
+        <div>
+          <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
+          <div class="second-hand">{{user?.FirstName}}</div>
+        </div>
+        <div>
+          <div class="first-hand">{{'Clients.LastName' | translate}}</div>
+          <div class="second-hand">{{user?.LastName}}</div>
+        </div>
+        <div>
+          <div class="first-hand">{{'Common.Gender' | translate}}</div>
+          <div class="second-hand">{{user?.GenderName}}</div>
+        </div>
+     
+    </form>
+  </div>
+</div>

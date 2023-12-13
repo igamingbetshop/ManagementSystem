@@ -1,0 +1,55 @@
+<div class="ag-theme-balham ag-popup container">
+  <div class="ag-tabs ag-menu ag-popup-child">
+
+    <div class="ag-tabs-header ag-menu-header">
+      <span class="ag-tab ag-tab-selected">
+        <span class="ag-icon ag-icon-filter"></span>
+      </span>
+    </div>
+
+    <div class="ag-tabs-body ag-filter ag-filter-wrapper">
+      <div class="ag-filter">
+        <div class="ag-filter-wrapper">
+          <div *ngFor = "let apiOperation of filter.FilterModel.ApiOperationTypeList; let i = index" class="ag-filter-body-wrapper">
+
+            <div class="ag-filter-condition" *ngIf = " i !== 0">
+              <div class="ag-filter-condition-operator operator-and" (click)="filter.FilterModel.IsAnd = true">
+                <div class="ag-input-wrapper ag-radio-button-input-wrapper " [class.ag-checked] = "filter.FilterModel.IsAnd === true">
+                  <input class="ag-radio-button-input" type="radio">
+                </div>
+                <div class="ag-input-field-label">{{'Sport.And' | translate}}</div>
+              </div>
+
+              <div class="ag-filter-condition-operator" (click)="filter.FilterModel.IsAnd = false">
+                <div class="ag-input-wrapper ag-radio-button-input-wrapper" [class.ag-checked] = "filter.FilterModel.IsAnd === false">
+                  <input class=" ag-radio-button-input" type="radio">
+                </div>
+                <div class="ag-input-field-label">{{'Sport.Or' | translate}}</div>
+              </div>
+            </div>
+
+            <div class="ag-custom-dropdown">
+              <mat-select
+                [(ngModel)]="apiOperation.OperationTypeId"
+                panelClass="overlay-dropdown"
+                disableOptionCentering>
+                <mat-option *ngFor="let filter of filterNumberOptions" [value]="filter.displayKey">{{filter.displayName}}</mat-option>
+              </mat-select>
+            </div>
+
+            <div class="ag-input-content">
+              <input [value]="apiOperation.DecimalValue" (keyup)="onInputKey($event, apiOperation, i)" matInput type="number" class="ag-custom-input" placeholder="Filter...">
+            </div>
+
+          </div>
+          <div class="ag-filter-apply-panel">
+            <button type="button" class="ag-standard-button ag-filter-apply-panel-button" (click)="onSubmit()">{{'Sport.Apply' | translate}}</button>
+            <button type="button" class="ag-standard-button ag-filter-apply-panel-button" (click)="resetFields()">{{'Sport.Reset' | translate}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" (click)="overlayDropdown(false)"></div>

@@ -1,0 +1,40 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 60px;
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+
+    .title, .title>a {
+      font-size: 18px;
+      color: $blue-5;
+      padding-bottom: 5px;
+
+    }
+  }
+}
+
+.form-actions {
+  justify-content: flex-end;
+
+  .actions {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+
+    .mat-btn {
+      @include mat-btn-style;
+    }
+
+    .mat-cancel-btn {
+      @include  mat-cancel-btn-style
+    }
+  }
+}

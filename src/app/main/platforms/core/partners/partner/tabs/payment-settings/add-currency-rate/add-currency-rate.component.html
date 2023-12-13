@@ -1,0 +1,23 @@
+<div mat-dialog-title>
+  <span class="title">{{'Partners.AddPaymentSetting' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+      <mat-select [formControlName]="'CurrencyId'" required>
+        <mat-option *ngFor="let name of currencies" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.Rate' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Partners.Rate' | translate" [formControlName]="'Rate'" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

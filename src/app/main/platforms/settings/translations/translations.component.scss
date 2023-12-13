@@ -1,0 +1,128 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+
+  .content-action {
+    @include action-style;
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .translations {
+    width: 100%;
+    height: calc(100% - 92px);
+    display: flex;
+
+    ::-webkit-scrollbar-thumb {
+      background-color: $blue-light-8;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      margin: 3px 0;
+      background-color: $gray-light-4;
+      border-radius: 5px;
+    }
+
+    .translations-content {
+      width: 50%;
+
+      &.sub-translation {
+        margin-left: 20px;
+      }
+
+      .table-content {
+        height: calc(100% - 60px);
+        overflow-y: auto;
+        padding-right: 5px;
+
+        table {
+          width: 100%;
+          border-spacing: 0 3px;
+
+          tr:hover {
+            background-color: $blue-light-3;
+            cursor: pointer;
+          }
+
+          tr.selected {
+            background-color: $blue-light-3;
+          }
+
+          th, td {
+            padding: 10px;
+            white-space: normal;
+            word-break: break-word;
+            border: 1px solid transparent;
+            text-align: start;
+          }
+
+          th {
+            background-color: $blue-light-6;
+            &:first-child {
+              border-radius: 4px 0 0 4px;
+            }
+
+            &:last-child {
+              border-radius: 0 4px 4px 0;
+            }
+          }
+
+          td {
+            border-bottom: 1px solid $blue-light-4;
+            border-top: 1px solid $blue-light-4;
+
+            &:first-child {
+              border-left: 1px solid $blue-light-4;
+              border-radius: 4px;
+            }
+
+            &:last-child {
+              border-right: 1px solid $blue-light-4;
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+
+      .table-actions {
+        padding-top: 12px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .count {
+          font-size: 16px;
+          color: $blue-2;
+        }
+
+        .mat-btn {
+          margin-left: 8px;
+          @include mat-btn-style;
+        }
+
+        .mat-delete-btn {
+          margin-left: 8px;
+          @include mat-delete-style;
+        }
+      }
+    }
+  }
+}
+
+
+

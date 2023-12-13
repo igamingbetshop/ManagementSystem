@@ -1,0 +1,174 @@
+
+<div class="container">
+  <div class="content-action">
+
+    <div class="title">{{'Reports.ReportByBets' | translate}}</div>
+    <button mat-stroked-button class="stream-btn"
+            [ngClass] = "{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected}"
+
+            (click)="toggleLiveUpdate()">
+      {{isLiveUpdateOn ? ('Reports.LiveUpdatesOff' | translate)  : ('Reports.LiveUpdatesOn' | translate) }}
+    </button>
+
+    <div class="custom-dropdown">
+      <mat-select
+      [(ngModel)]="availableBetCategoriesStatus"
+        (selectionChange)="go()"
+        panelClass="overlay-dropdown"
+        [ngModelOptions]="{standalone: true}"
+        disableOptionCentering>
+        <mat-option *ngFor="let betcategory of availableBetCategories"  [value]="betcategory.status">{{betcategory.Name | translate}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="go()"
+        [(ngModel)]="availableStatusesStatus"
+        [ngModelOptions]="{standalone: true}"
+        [placeholder]="'Clients.SelectStatus' | translate"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option *ngFor="let _status of availableStatuses"  [value]="_status.Status">{{_status.Name | translate}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="date-time-tabs">
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'month'" (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'week'" (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'yesterday'" (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
+    </div>
+
+    <mat-form-field class="calendar-picker start" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="go()">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field class="calendar-picker" appearance="none">
+      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="go()">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+    <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content" [class.all-size] = "!show">
+    <ag-grid-angular
+      id="report-bets"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressCopyRowsToClipboard]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      [paginationPageSize]="cacheBlockSize"
+      (paginationChanged)="onPaginationChanged($event)"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [components]="frameworkComponents"
+      (gridReady)="onGridReady($event)"
+      (rowClicked)="onRowClicked($event)"
+      [ensureDomOrder]="true"
+      [tooltipShowDelay]="tooltipShowDelay"
+      [tooltipHideDelay]="9000"
+      (filterModified)="onFilterModified($event)"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (dragStopped)="onDragStopped($event)"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="multiple"
+      >
+    </ag-grid-angular>
+
+    <div class="additional-bet-info">
+      <span>{{'Reports.SelectionCount' | translate}}: {{betInfo.SelectionCount}}</span>
+      <span *ngIf = "betInfo.Multiway">, {{'Common.Multiway' | translate}}</span>
+      <span *ngIf = "betInfo.SystemOutComeValue">, {{betsCount}}B {{'Reports.SystemOutComeValue' | translate}}: {{betInfo.SystemOutComeValue}}</span>
+      <span *ngIf = "betInfo.TeaserId">, {{'Reports.TeaserId' | translate}}: {{betInfo.TeaserId}}</span>
+      <span *ngIf = "betInfo.Point">, {{'Reports.Point' | translate}}: {{betInfo.Point}}</span>
+      <span *ngIf = "betInfo.Info">, {{'Common.Info' | translate}}: {{betInfo.Info}}</span>
+
+    </div>
+
+    <div class="footer-ag-grid">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+      <div class="match-action">
+        <button mat-stroked-button class="mat-btn" [class.disabled]="(!isRowSelected() || !isUncalculated() ||  isWaiting())" (click)="calculateBet()">{{"Reports.SettleBet" | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="(!isRowSelected() || isUncalculated()) || isBetDeleted() ||  isWaiting() " (click)="recalculateBet()">{{"Reports.ResettleBet" | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="(!isRowSelected() || isUncalculated()) || isBetDeleted() || isWaiting()" (click)="resendBet()">{{"Reports.ResendBet" | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="( !isRowSelected() || isBetDeleted() ||  isWaiting())" (click)="deleteBet()">{{"Reports.DeleteBet" | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="(!isRowSelected() || !isWaiting())" (click)="acceptBet()">{{"Reports.AcceptBet" | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="(!isRowSelected() || !isWaiting())" (click)="rejectBet()" >{{"Reports.RejectBet" | translate}}</button>
+        <button mat-stroked-button class="mat-btn" (click)="showHide()">
+          <mat-icon>
+            {{show ?  "arrow_drop_down" : "arrow_drop_up"}}
+          </mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+</div>
+<div *ngIf="show" class="match-grid">
+
+  <!-- <ag-grid-angular
+    id="report-bets1"
+    #agGrid1
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData1"
+    [rowModelType]="rowModelType1"
+    [columnDefs]="columnDefs1"
+    [suppressCopyRowsToClipboard]="true"
+    [defaultColDef]="defaultColDef1"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [components]="frameworkComponents"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady1($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItemsForBets"
+    rowSelection="single">
+  </ag-grid-angular> -->
+
+  <app-match-grid 
+    [oddsType]="oddsType" 
+    [rowData]="rowData1" 
+    (selectStatus)="this.onSelectStatus($event)"
+    (blockMatch)="this.onBlockMatch($event)"
+    (finishedMatchesMarket)="this.goToFinishedMatchesMarket($event)"
+    ></app-match-grid>
+
+</div>
+

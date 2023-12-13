@@ -1,0 +1,37 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Cms.Regions' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="addRegions()">{{'Cms.AddRegion' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="core-regions"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressCopyRowsToClipboard]="true"
+      [components]="frameworkComponents"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      [autoGroupColumnDef]="autoGroupColumnDef"
+      [treeData]="true"
+      [animateRows]="true"
+      [groupDefaultExpanded]="groupDefaultExpanded"
+      [getDataPath]="getDataPath"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+
+    </ag-grid-angular>
+
+  </div>
+</div>

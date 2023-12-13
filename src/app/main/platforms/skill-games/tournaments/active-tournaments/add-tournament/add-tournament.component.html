@@ -1,0 +1,106 @@
+<div mat-dialog-title>
+  <span class="title">{{'SkillGames.AddTournament' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select #partner (selectionChange)="onPartnerChange(partner.value)" [formControlName]="'PartnerId'">
+        <mat-option [value]="undefined">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'SkillGames.SelectTournamentType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let type of tournamentTypes.types" [value]="type.id">{{type.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'VirtualGames.SelectGame' | translate}}</mat-label>
+      <mat-select [formControlName]="'GameId'">
+        <mat-option *ngFor="let game of games" [value]="game.Id">{{game.Nickname}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'SkillGames.SelectBackgammonType' | translate}}</mat-label>
+      <mat-select [formControlName]="'UnitId'">
+        <mat-option *ngFor="let backgammon of backgammonTypes.types"
+          [value]="backgammon.id">{{backgammon.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.Speed' | translate" [formControlName]="'Speed'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.MinimumPlayersCount' | translate"
+        [formControlName]="'MinimumPlayersCount'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.MaximumPlayersCount' | translate"
+        [formControlName]="'MaximumPlayersCount'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.RoundsCount' | translate"
+        [formControlName]="'NumberOfRounds'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.PrizePool' | translate" [formControlName]="'PrizePool'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.JoinFee' | translate" [formControlName]="'JoinFee'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'SkillGames.Distribution' | translate" [formControlName]="'PoolDistribution'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.BuyInRound' | translate"
+        [formControlName]="'BuyInRound'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'SkillGames.RegularityCount' | translate"
+        [formControlName]="'RegularityCount'">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [placeholder]="'SkillGames.RegularityTime' | translate" [formControlName]="'RegularityTime'">
+    </mat-form-field>
+
+    <div class="picker-content">
+      <mat-form-field class="calendar-picker start" appearance="none">
+        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
+        <mat-label>{{'Clients.StartTime' | translate}}</mat-label>
+        <mat-datepicker-toggle matSuffix [for]="pickerStart">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+      </mat-form-field>
+
+      <mat-form-field class="calendar-picker" appearance="none">
+        <mat-label>{{'SkillGames.AnnounceDate' | translate}}</mat-label>
+        <input matInput [ngxMatDatetimePicker]="pickerOpenTime" [formControlName]="'OpenTime'">
+        <mat-datepicker-toggle matSuffix [for]="pickerOpenTime">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerOpenTime></ngx-mat-datetime-picker>
+      </mat-form-field>
+    </div>
+
+    <label for="file1">{{'SkillGames.LobbyPicture' | translate}}*
+      <input id="file1" [formControlName]="'ImageLobby'" type="file" (change)="uploadFile($event)">
+    </label>
+    <label for="file2">{{'SkillGames.TournamentPicture' | translate}}*
+      <input id="file2" [formControlName]="'ImageTournament'" type="file" (change)="uploadFile2($event)">
+    </label>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' |
+    translate}}</button>
+</div>

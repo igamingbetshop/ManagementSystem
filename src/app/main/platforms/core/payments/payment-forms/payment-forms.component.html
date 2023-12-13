@@ -1,0 +1,105 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Payments.PaymentForms' | translate}}</div>
+
+      <button mat-raised-button color="warn" [disabled]="isRowSelected()" (click)="rejectPaymentRequest()">{{'Common.Cancel' | translate}}</button>
+
+      <button mat-raised-button color="warn" style="margin-left: 8px;" [disabled]="isRowSelected()" (click)="mapTransactions()">{{'Payments.MapTransactions' | translate}}</button>
+
+      <button mat-raised-button [ngClass]="{'btn-success': paymentFormsState, 'btn-danger': !paymentFormsState}"
+              (click)="paymentFormsState = !paymentFormsState">
+        {{'Payments.PaymentForms' | translate}} {{paymentFormsState ? "On" : "Off"}}</button>
+
+      <button mat-raised-button  [ngClass]="{'btn-success': bankTransactionsState, 'btn-danger': !bankTransactionsState}"
+              (click)="bankTransactionsState = !bankTransactionsState">
+        {{'Payments.BankTransactions' | translate}} {{bankTransactionsState ? "On" : "Off"}}</button>
+
+
+    <div class="partner-dropdown">
+      <mat-select
+        [(ngModel)]="selectedAvailableOptions"
+        placeholder="{{'Payments.SelectBank' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Payments.SelectBank' | translate}}</mat-option>
+        <mat-option *ngFor="let state of availableOptions" [value]="state.id">{{state.name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="partner-dropdown">
+      <mat-select
+        [(ngModel)]="partnerId"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+      <ag-grid-angular
+      id="report-bets"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      *ngIf="paymentFormsState"
+      [suppressCopyRowsToClipboard]="true"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [sideBar]="sideBar"
+      (rowSelected)="onRowSelected($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="addDepositForm()">{{'Payments.AddDepositForm' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="addWithdrawForm()">{{'Payments.AddWithdrawForm' | translate}}</button>
+
+    <div class="content-action"  *ngIf="bankTransactionsState">
+      <div class="title">{{'Payments.BankTransactions' | translate}}</div>
+    </div>
+
+  <div class="grid-content"  *ngIf="bankTransactionsState">
+  <ag-grid-angular
+    id="report-bets1"
+    #agGrid1
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [suppressCopyRowsToClipboard]="true"
+    [rowData]="rowData1"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs1"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+
+</div>
+
+
+

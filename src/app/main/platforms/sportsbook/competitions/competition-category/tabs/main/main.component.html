@@ -1,0 +1,176 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-competitions']">{{'Sport.Competitions' | translate}}</a> / :{{'Partners.Main' | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{competition?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Common.Id' | translate" readonly [formControlName]="'Id'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
+        <div class="second-hand">{{competition?.AbsoluteLimit}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.Absolute Limit' | translate" [formControlName]="'AbsoluteLimit'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Clients.Region' | translate}}</div>
+        <div class="second-hand">{{competition?.RegionName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'RegionId'">
+            <mat-option *ngFor="let region of regions" [value]="region.Id">{{region.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.Delay' | translate}}</div>
+        <div class="second-hand">{{competition?.Delay}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.Delay' | translate" [formControlName]="'Delay'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinPrematchSingle' | translate}}</div>
+        <div class="second-hand">{{competition?.MaxWinPrematchSingle}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchSingle' | translate"
+            [formControlName]="'MaxWinPrematchSingle'">          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinPrematchMultiple' | translate}}</div>
+        <div class="second-hand">{{competition?.MaxWinPrematchMultiple}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchMultiple' | translate"
+            [formControlName]="'MaxWinPrematchMultiple'">         
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinLiveSingle' | translate}}</div>
+        <div class="second-hand">{{competition?.MaxWinLiveSingle}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveSingle' | translate" [formControlName]="'MaxWinLiveSingle'">      
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
+        <div class="second-hand">{{competition?.MaxWinLiveMultiple}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveMultiple' | translate" [formControlName]="'MaxWinLiveMultiple'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Dashboard.Provider' | translate}}</div>
+        <div class="second-hand">{{competition?.ProviderName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'ProviderId'">
+            <mat-option *ngFor="let provider of providers" [value]="provider.Id">{{provider.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.AllowMultipleBets' | translate}}</div>
+        <div class="second-hand" *ngIf="!competition?.AllowMultipleBets === null">{{competition?.AllowMultipleBets}}</div>
+        <div class="second-hand" *ngIf="competition?.AllowMultipleBets === null">{{'Sport.None' | translate}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'AllowMultipleBets'">
+            <mat-option *ngFor="let multiple of multipleBets" [value]="multiple.Id">{{multiple.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
+        <div class="second-hand">{{competition?.Priority}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Bonuses.Priority' | translate" [formControlName]="'Priority'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Sport.AllowCashout' | translate}}</div>
+        <div class="second-hand" *ngIf="!competition?.AllowCashout === null">{{competition?.AllowCashout}}</div>
+        <div class="second-hand" *ngIf="competition?.AllowCashout === null">None</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'AllowCashout'">
+            <mat-option *ngFor="let multiple of multipleBets" [value]="multiple.Id">{{multiple.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Products.CategoryId' | translate}}</div>
+        <div class="second-hand">{{competition?.CategoryId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Products.CategoryId' | translate" [formControlName]="'CategoryId'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Partners.Rating' | translate}}</div>
+        <div class="second-hand">{{competition?.Rating}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput type="number" [placeholder]="'Partners.Rating' | translate" [formControlName]="'Rating'">
+          </mat-form-field>
+        </div>
+      </div> 
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{competition?.Enabled}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox labelPosition="before" color="primary" [formControlName]="'Enabled'">{{'Common.State' | translate}}</mat-checkbox>
+        </div>
+      </div>
+
+      <div></div>
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+
+          <div class="buttons" *ngIf="isEdit">
+            <button mat-raised-button class="mat-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+            <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div mat-dialog-title>
+  <span class="title">{{'Roles.CopyRole' | translate}} - {{role.FromRoleName}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <mat-form-field >
+      <input matInput  [placeholder]="'Roles.NewRoleName' | translate" [formControlName]="'NewRoleName'">
+      <mat-error *ngIf="errorControl['NewRoleName']?.touched && errorControl['NewRoleName'].errors?.required">
+        {{'Roles.NewRoleName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-stroked-button class="mat-cancel-btn" (click)="close()">{{'Cancle' | translate}}</button>
+  <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+</div>

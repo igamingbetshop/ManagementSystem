@@ -1,0 +1,33 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../report-by-betshops']">{{'Reports.ReportByBetshops' | translate}}</a> / :{{betShopId}}</div>
+
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="view-report-by-betshops"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [paginationPageSize]="cacheBlockSize"
+    (paginationChanged)="onPaginationChanged($event)"
+    [pagination]="pagination"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    (gridReady)="onGridReady($event)"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="multiple">
+    </ag-grid-angular>
+  </div>
+</div>

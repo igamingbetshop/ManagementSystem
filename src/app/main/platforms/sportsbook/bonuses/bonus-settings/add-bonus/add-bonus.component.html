@@ -1,0 +1,68 @@
+<div mat-dialog-title>
+  <span class="title"> {{!openForAdd ? ('Sport.AddBonus' | translate) : ('Sport.EditBonus' | translate)}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'TypeId'" #spo (selectionChange)="changedType(spo.value)">
+        <mat-option *ngFor="let type of bonusTypes" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['TypeId']?.touched && errorControl['TypeId'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>{{'Sport.SelectBonusChannel' | translate}}</mat-label>
+      <mat-select [formControlName]="'ChannelId'">
+        <mat-option *ngFor="let chanel of bonusChannels" [value]="chanel.Id">{{chanel.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.MinCount' | translate" [formControlName]="'SelectionsMinCount'">
+      <mat-error
+        *ngIf="errorControl['SelectionsMinCount']?.touched && errorControl['SelectionsMinCount'].errors?.required">
+         {{'Sport.MinCount' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="selectedType == 1">
+      <input matInput type="number" [placeholder]="'Sport.SelectionsMaxCount' | translate" [formControlName]="'SelectionsMaxCount'">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="selectedType == 1">
+      <input matInput type="number" [placeholder]="'BetShops.BonusPercent' | translate" [formControlName]="'BonusPercent'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.MinCoeff' | translate" [formControlName]="'MinCoeff'">
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{!openForAdd ? ('Common.Add' | translate) : ('Common.Edit' | translate)}}</button>
+</div>

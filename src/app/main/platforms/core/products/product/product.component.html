@@ -1,0 +1,322 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-products']">{{'Products.Product' | translate}}</a> / {{name}} / {{productId}}
+      </div>
+
+    <button mat-stroked-button class="edit-btn" [class.disable]=""  (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.Id}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Id'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.ExternalId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'ExternalId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.Name}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Name'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            <mat-option *ngFor="let state of productStates" [value]="state.Id">{{state.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.Description}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Description'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.GameProviderName' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.GameProviderName}}</div>
+
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'GameProviderId'">
+            <mat-option *ngFor="let provider of gameProviders" [value]="provider.Id">{{provider.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.ParentId' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.ParentId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'ParentId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.MobileImageUrl' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.MobileImageUrl}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'MobileImageUrl'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.BackgroundImageUrl' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.BackgroundImageUrl}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'BackgroundImageUrl'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.SubproviderId' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.SubproviderId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'SubproviderId'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- <div>
+        <div class="first-hand">{{'Products.CategoryId' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.CategoryId}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'CategoryId'">
+          </mat-form-field>
+        </div>
+      </div> -->
+
+      <div>
+        <div class="first-hand">{{'Products.CategoryId' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.CategoryName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'CategoryId'">
+            <mat-option *ngFor="let category of productCategories" [value]="category.Id">{{category.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="first-hand">{{'Products.WebImageUrl' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.WebImageUrl}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'WebImageUrl'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.IsForMobile' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.IsForMobile}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsForMobile'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.Jackpot' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.HasJackpot}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'HasJackpot'">
+          </mat-form-field>
+        </div>
+      </div>      
+
+      <div>
+        <div class="first-hand">{{'Products.FreeSpinSupport' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.FreeSpinSupport}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'FreeSpinSupport'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.HasDemo' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.HasDemo}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'HasDemo'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.IsForDesktop' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.IsForDesktop}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsForDesktop'"></mat-checkbox>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.MobileImage' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.MobileImage}}</div>
+        <div class="form-field form-checkbox">
+          <input  type="file"  (change)="uploadMobileImage($event)"  [formControlName]="'MobileImage'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.BackgroundImage' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.BackgroundImage}}</div>
+        <div class="form-field form-checkbox">
+          <input  type="file"  (change)="uploadBackgroundImage($event)" [formControlName]="'BackgroundImage'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.WebImage' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.WebImage}}</div>
+        <div class="form-field form-checkbox">
+          <input  type="file"  (change)="uploadWebImage($event)" [formControlName]="'WebImage'">
+        </div>
+      </div>
+
+      <div [class.group-left-item]="isEdit">
+        <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
+        <div class="second-hand" *ngIf="currentProduct?.Countries?.Type==1">
+          {{'Bonuses.InSet' | translate}}
+        </div>
+        <div class="second-hand" *ngIf="currentProduct?.Countries?.Type==2">
+          {{'Bonuses.OutOfSet' | translate}}
+        </div>
+
+        <div class="form-field form-checkbox" [formGroupName]="'Countries'">
+          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+        </div>
+      </div>
+
+      <div [class.group-right-item]="isEdit">
+        <div class="first-hand">{{'Clients.SelectCountry' | translate}}</div>
+        <div class="second-hand" *ngFor="let country of countriesEntites">{{country}}</div>
+        <div class="form-field form-dropdown" [formGroupName]="'Countries'">
+          <mat-select [formControlName]="'Ids'" multiple>
+            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="first-hand">{{'Bonuses.BetValues' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.BetValues}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'BetValues'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Bonuses.Lines' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.Lines}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Lines'" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+<!-- 
+      <div>
+        <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
+        <div class="second-hand" *ngIf="currentProduct?.Currencies?.Type==1">
+          {{'Bonuses.InSet' | translate}}
+        </div>
+        <div class="second-hand" *ngIf="currentProduct?.Currencies?.Type==2">
+          {{'Bonuses.OutOfSet' | translate}}
+        </div>
+
+        <div class="form-field form-checkbox" [formGroupName]="'Currencies'">
+          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.SelectCurrency' | translate}}</div>
+        <div class="second-hand" *ngFor="let currency of currencesEntites">{{currency}}</div>
+        <div class="form-field form-dropdown" [formGroupName]="'Currencies'">
+          <mat-select [formControlName]="'Names'" multiple>
+            <mat-option *ngFor="let Currency of currencies" [value]="Currency.Id">{{Currency.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div> -->
+      
+      <div></div>
+      <div></div>
+      <div></div>
+      <div class="form-actions">
+
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" type="submit"
+          (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="core-product"
+    #agGrid
+    class="ag-theme-balham"
+    [suppressCopyRowsToClipboard]="true"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressRowClickSelection]="true"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+
+</div>
+

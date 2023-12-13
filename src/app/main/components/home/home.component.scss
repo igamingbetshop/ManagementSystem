@@ -1,0 +1,54 @@
+@import "variables.scss";
+@import "mixins.scss";
+
+.home-container {
+  padding: 50px 36px 0 36px;
+  box-sizing: border-box;
+
+  @include desktop {
+    padding-top: fluidSizeOnly(50, 42, $media-desktop-size, $media-laptop-size);
+  }
+
+  .categories {
+    display: grid;
+    gap: 46px;
+    row-gap: 40px;
+    column-gap: 47px;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    @include desktop {
+      row-gap: fluidSizeOnly(40, 30, $media-desktop-size, $media-laptop-size);
+      column-gap: fluidSizeOnly(47, 34, $media-desktop-size, $media-laptop-size);
+    }
+
+    .category {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+}
+
+@media screen and (max-width: $media-laptop) {
+  .home-container {
+
+    .categories {
+      row-gap: 30px;
+      column-gap: 34px;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

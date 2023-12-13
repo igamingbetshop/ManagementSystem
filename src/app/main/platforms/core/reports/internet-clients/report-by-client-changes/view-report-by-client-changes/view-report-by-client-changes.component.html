@@ -1,0 +1,171 @@
+<div class="main-history">
+  <div class="header" fxHeight="50px">
+    <div>
+      <h4><a [routerLink]="['../../report-by-client-changes']">{{'Reports.ReportByClientChanges' | translate}}</a> / :{{id}}</h4>
+    </div>
+  </div>
+  <div class="grid-history">
+    <div>
+      <div class="first-hand">{{'Common.Id' | translate}}</div>
+      <div class="third-hand">{{newData?.Id}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Address != oldData?.Address}">
+      <div class="first-hand">{{'Clients.Address' | translate}}</div>
+      <div class="second-hand">{{oldData?.Address}}</div>
+      <div class="third-hand">{{newData?.Address}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+      <div class="third-hand">{{newData?.PartnerName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.BuildingNumber != oldData?.BuildingNumber}">
+      <div class="first-hand">{{'Clients.BuildingNumber' | translate}}</div>
+      <div class="third-hand">{{newData?.BuildingNumber}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.UserName' | translate}}</div>
+      <div class="third-hand">{{newData?.UserName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Apartment != oldData?.Apartment}">
+      <div class="first-hand">{{'Clients.Apartment' | translate}}</div>
+      <div class="third-hand">{{newData?.Apartment}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.FirstName != oldData?.FirstName}">
+      <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
+      <div class="second-hand">{{oldData?.FirstName}}</div>
+      <div class="third-hand">{{newData?.FirstName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.MobileNumber != oldData?.MobileNumber}">
+      <div class="first-hand">{{'Clients.MobileNumber' | translate}}</div>
+      <div class="second-hand">{{oldData?.MobileNumber}}</div>
+      <div class="third-hand">{{newData?.MobileNumber}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.LastName != oldData?.LastName}">
+      <div class="first-hand">{{'Clients.LastName' | translate}}</div>
+      <div class="second-hand">{{oldData?.LastName}}</div>
+      <div class="third-hand">{{newData?.LastName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.PhoneNumber != oldData?.PhoneNumber}">
+      <div class="first-hand">{{'Clients.PhoneNumber' | translate}}</div>
+      <div class="second-hand">{{oldData?.PhoneNumber}}</div>
+      <div class="third-hand">{{newData?.PhoneNumber}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Email != oldData?.Email}">
+      <div class="first-hand">{{'Clients.Email' | translate}}</div>
+      <div class="third-hand">{{newData?.Email}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.GenderName != oldData?.GenderName}">
+      <div class="first-hand">{{'Common.Gender' | translate}}</div>
+      <div class="second-hand">{{oldData?.GenderName}}</div>
+      <div class="third-hand">{{newData?.GenderName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.LanguageName != oldData?.LanguageName}">
+      <div class="first-hand">{{'Clients.Language' | translate}}</div>
+      <div class="second-hand">{{oldData?.LanguageName}}</div>
+      <div class="third-hand">{{newData?.LanguageName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.CurrencyId != oldData?.CurrencyId}">
+      <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+      <div class="second-hand">{{oldData?.CurrencyId}}</div>
+      <div class="third-hand">{{newData?.CurrencyId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.ZipCode != oldData?.ZipCode}">
+      <div class="first-hand">{{'Clients.ZipCode' | translate}}</div>
+      <div class="third-hand">{{newData?.ZipCode}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.DocumentIssuedBy != oldData?.DocumentIssuedBy}">
+      <div class="first-hand">{{'Clients.IssuedBy' | translate}}</div>
+      <div class="third-hand">{{newData?.DocumentIssuedBy}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.Session' | translate}}</div>
+      <div class="third-hand">{{newData?.Session}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.BirthDate != oldData?.BirthDate}">
+      <div class="first-hand">{{'Clients.BirthDate' | translate}}</div>
+      <div class="second-hand">{{oldData?.BirthDate | date:'longDate'}}</div>
+      <div class="third-hand">{{newData?.BirthDate | date:'longDate'}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.RegionName != oldData?.RegionName}">
+      <div class="first-hand">{{'Clients.Region' | translate}}</div>
+      <div class="third-hand">{{newData?.RegionName}}</div>
+    </div>
+    <div>
+      <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+      <div class="third-hand">{{newData?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.DocumentNumber != oldData?.DocumentNumber}">
+      <div class="first-hand">{{'Clients.DocumentNumber' | translate}}</div>
+      <div class="second-hand">{{oldData?.DocumentNumber}}</div>
+      <div class="third-hand">{{newData?.DocumentNumber}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.IsEmailVerified != oldData?.IsEmailVerified}">
+      <div class="first-hand">{{'Clients.EmailVerified' | translate}}</div>
+      <div class="second-hand">{{oldData?.IsEmailVerified}}</div>
+      <div class="third-hand">{{newData?.IsEmailVerified}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.IsDocumentVerified != oldData?.IsDocumentVerified}">
+      <div class="first-hand">{{'Clients.IsDocumentVerified' | translate}}</div>
+      <div class="second-hand">{{oldData?.IsDocumentVerified}}</div>
+      <div class="third-hand">{{newData?.IsDocumentVerified}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.SendMail != oldData?.SendMail}">
+      <div class="first-hand">{{'Clients.SendMail' | translate}}</div>
+      <div class="second-hand">{{oldData?.SendMail}}</div>
+      <div class="third-hand">{{newData?.SendMail}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.documentTypeName != oldData?.documentTypeName}">
+      <div class="first-hand">{{'Clients.DocumentType' | translate}}</div>
+      <div class="third-hand">{{newData?.documentTypeName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.SendSms != oldData?.SendSms}">
+      <div class="first-hand">{{'Clients.SendSms' | translate}}</div>
+      <div class="second-hand">{{oldData?.SendSms}}</div>
+      <div class="third-hand">{{newData?.SendSms}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.StateName != oldData?.StateName}">
+      <div class="first-hand">{{'Common.State' | translate}}</div>
+      <div class="third-hand">{{newData?.StateName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.SendPromotions != oldData?.SendPromotions}">
+      <div class="first-hand">{{'Clients.SendPromotions' | translate}}</div>
+      <div class="second-hand">{{oldData?.SendPromotions}}</div>
+      <div class="third-hand">{{newData?.SendPromotions}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.Info != oldData?.Info}">
+      <div class="first-hand">{{'Common.Info' | translate}}</div>
+      <div class="third-hand">{{newData?.Info}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.CallToPhone != oldData?.CallToPhone}">
+      <div class="first-hand">{{'Clients.ReceivePhoneCalls' | translate}}</div>
+      <div class="second-hand">{{oldData?.CallToPhone}}</div>
+      <div class="third-hand">{{newData?.CallToPhone}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.RegistrationIp != oldData?.RegistrationIp}">
+      <div class="first-hand">{{'Clients.RegistrationIp' | translate}}</div>
+      <div class="second-hand">{{oldData?.RegistrationIp}}</div>
+      <div class="third-hand">{{newData?.RegistrationIp}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.IsMobileNumberVerified != oldData?.IsMobileNumberVerified}">
+      <div class="first-hand">{{'Clients.MobileVerified' | translate}}</div>
+      <div class="second-hand">{{oldData?.IsMobileNumberVerified}}</div>
+      <div class="third-hand">{{newData?.IsMobileNumberVerified}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.CategoryId != oldData?.CategoryId}">
+      <div class="first-hand">{{'Clients.CategoryName' | translate}}</div>
+      <div class="third-hand">{{newData?.CategoryId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.SecondName != oldData?.SecondName}">
+      <div class="first-hand">{{'Clients.SecondName' | translate}}</div>
+      <div class="third-hand">{{newData?.SecondName}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.AffiliateReferralId != oldData?.AffiliateReferralId}">
+      <div class="first-hand">{{'Clients.AffiliatePlatformId' | translate}}</div>
+      <div class="third-hand">{{newData?.AffiliateReferralId}}</div>
+    </div>
+    <div [ngClass]="{'changed': newData?.SecondSurname != oldData?.SecondSurname}">
+      <div class="first-hand">{{'Clients.SecondSurname' | translate}}</div>
+      <div class="third-hand">{{newData?.SecondSurname}}</div>
+    </div>
+  </div>
+</div>

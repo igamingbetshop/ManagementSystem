@@ -1,0 +1,38 @@
+<div class="grid-history">
+  <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
+  <div class="second-hand">{{client?.FirstName}}</div>
+  <div class="first-hand">{{'Clients.LastName' | translate}}</div>
+  <div class="second-hand">{{client?.LastName}}</div>
+  <div class="first-hand">{{'Clients.Country' | translate}}</div>
+  <div class="second-hand">{{client?.CountryName}}</div>
+  <div class="first-hand">{{'Clients.City' | translate}}</div>
+  <div class="second-hand">{{this.cityName}}</div>
+  <div class="first-hand">{{'Clients.District' | translate}}</div>
+  <div class="second-hand">{{this.districtName}}</div>
+  <div class="first-hand">{{'Clients.Town' | translate}}</div>
+  <div class="second-hand">{{client?.City}}</div>
+  <div class="first-hand">{{'Clients.Address' | translate}}</div>
+  <div class="second-hand">{{client?.Address}}</div>
+  <div class="first-hand">{{'Clients.DocumentNumber' | translate}}</div>
+  <div class="second-hand">{{client?.DocumentNumber}}</div>
+</div>
+<div class="container">
+  <div class="zoom-action" *ngIf="isImage">
+    <div class="zoom-number">{{zoomNumber}}x</div>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="zoomNumber === 1"
+            (click)="decreaseZoomNumber()">-
+    </button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="zoomNumber === 5"
+            (click)="increaseZoomNumber()">+
+    </button>
+  </div>
+  <div #imageArea class="image-content" (mousemove)="moveImage($event)">
+    <ng-container *ngIf="isImage; else resourceRef">
+      <img #image [src]="fileUrl" alt="">
+    </ng-container>
+    <ng-template #resourceRef>
+      <iframe [src]="fileUrl"></iframe>
+    </ng-template>
+  </div>
+
+</div>

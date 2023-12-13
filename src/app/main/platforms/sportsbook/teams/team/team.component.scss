@@ -1,0 +1,36 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .mat-btn {
+      margin-right: 10px;
+      @include mat-btn-style;
+    }
+
+    .edit-btn {
+      @include mat-edit-btn-style;
+    }
+  }
+}
+
+.grid-content {
+  width: 100%;
+  height: calc(100vh - 360px);
+  padding-top: 12px;
+
+  ::ng-deep {
+    ag-grid-angular {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+

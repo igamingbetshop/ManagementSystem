@@ -1,0 +1,50 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../all-providers']">{{'Providers.Providers' | translate}}</a> / {{providerId}}</div>
+
+    <button mat-stroked-button class="mat-btn" (click)="sync()">{{'Providers.Sync' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="provaider"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [suppressCopyRowsToClipboard]="true"
+    [defaultColDef]="defaultColDef"
+    [cacheBlockSize]="cacheBlockSize"
+    [components]="frameworkComponents"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [paginationPageSize]="cacheBlockSize"
+    (paginationChanged)="onPaginationChanged($event)"
+    [pagination]="pagination"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClicked($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+</div>

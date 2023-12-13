@@ -1,0 +1,90 @@
+<div mat-dialog-title>
+  <span class="title">{{action}} {{'Clients.Account' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Payments.BankName' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Payments.BankName' | translate" [formControlName]="'BankName'" required>
+      <mat-error *ngIf="errorControl['BankName'].touched && errorControl['BankName'].hasError('required')">
+        {{'Payments.BankName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.BranchName' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.BranchName' | translate" [formControlName]="'BranchName'">
+      <mat-error *ngIf="errorControl['BranchName'].touched && errorControl['BranchName'].hasError('required')">
+        {{'Partners.BranchName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.BankCode' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.BankCode' | translate" [formControlName]="'BankCode'" required>
+      <mat-error *ngIf="errorControl['BankCode'].touched && errorControl['BankCode'].hasError('required')">
+        {{'Partners.BankCode' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.IBAN' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.IBAN' | translate" [formControlName]="'IBAN'">
+      <mat-error *ngIf="errorControl['IBAN'].touched && errorControl['IBAN'].hasError('required')">
+        {{'Partners.IBAN' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.Accounts' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.Accounts' | translate" [formControlName]="'AccountsStr'">
+      <mat-error *ngIf="errorControl['Accounts'].touched && errorControl['Accounts'].hasError('required')">
+        {{'Partners.Accounts' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.OwnerName' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.OwnerName' | translate" [formControlName]="'OwnerName'">
+      <mat-error *ngIf="errorControl['OwnerName'].touched && errorControl['OwnerName'].hasError('required')">
+        {{'Partners.OwnerName' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Order' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'" required>
+      <mat-error *ngIf="errorControl['Order'].touched && errorControl['Order'].hasError('required')">
+        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let bank of bankInfoTypes" [value]="bank.Id">{{bank.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type'].touched && errorControl['Type'].hasError('required')">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPaymentSystem' | translate}}</mat-label>
+      <mat-select [formControlName]="'PaymentSystemId'">
+        <mat-option *ngFor="let name of paymentSystems" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PaymentSystemId'].touched && errorControl['PaymentSystemId'].hasError('required')">
+        {{'Partners.PaymentSystem' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+      <mat-select [formControlName]="'CurrencyId'">
+        <mat-option *ngFor="let name of currencies" [value]="name.Id">{{name.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['CurrencyId'].touched && errorControl['CurrencyId'].hasError('required')">
+        {{'Clients.Currency' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+      <mat-checkbox [formControlName]="'Active'">{{'Bonuses.Active' | translate}}</mat-checkbox>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

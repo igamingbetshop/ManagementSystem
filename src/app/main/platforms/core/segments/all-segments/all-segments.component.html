@@ -1,0 +1,54 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.segmentId }">
+
+  <div class="content-action">
+    <div class="title">{{'Segments.Segments' | translate}}</div>
+    <div class="partner-dropdown">
+      <mat-select
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="addSegment()">{{'Segments.AddSegment' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="deleteSegment()">{{'Segments.DeleteSegment' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="getPage()">{{'Common.Go' | translate}}</button>
+
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="core-segments"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [sideBar]="sideBar"
+      [suppressCopyRowsToClipboard]="true"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+</div>
+
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.segmentId"></router-outlet>
+
+

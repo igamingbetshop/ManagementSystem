@@ -1,0 +1,35 @@
+<div mat-dialog-title>
+  <div class="title">
+    {{isDisable ? ('Profile.DisableTwoFactorAuthentication' | translate) : 
+                  ('Profile.TwoFactorAuthenticatorCode' | translate) }}
+  </div>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="sub-title">
+  {{ isDisable ? ('Profile.EnterThe6digitsCodeIntoTheTextboxBelowAndThenContinueToDisable' | translate) : 
+                  (('Profile.EnterThe6digitsCodeIntoTheTextboxBelowAndThenContinueToLogin' | translate))
+  }}</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+
+    <mat-form-field>
+      <mat-label>
+        {{'Profile.EnterCode' | translate}}
+      
+      </mat-label>
+      <input matInput type="text" [formControlName]="'Pin'" numbersOnly>
+      <mat-error *ngIf="errorControl['Pin'].touched && errorControl['Pin'].hasError('required')">
+        {{'Profile.PinCodeRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="onSubmit()">
+    {{ isDisable ? ("Profile.Disable" | translate) : 
+    ("Profile.Continue" | translate)
+  }}</button>
+</div>

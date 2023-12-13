@@ -1,0 +1,109 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../../all-segments']">{{'Segments.Segments' | translate}}</a> / :{{'Clients.Settings' | translate}}
+      {{segmentId}} : {{'Sport.MainInfo' | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
+        <div class="second-hand">{{segment?.Priority}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'Priority'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.AlternativeDomain' | translate}}</div>
+        <div class="second-hand">{{segment?.AlternativeDomain}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'AlternativeDomain'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.DepositMinAmount' | translate}}</div>
+        <div class="second-hand">{{segment?.DepositMinAmount}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'DepositMinAmount'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.DepositMaxAmount' | translate}}</div>
+        <div class="second-hand">{{segment?.DepositMaxAmount}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'DepositMaxAmount'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.WithdrawMinAmount' | translate}}</div>
+        <div class="second-hand">{{segment?.WithdrawMinAmount}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'WithdrawMinAmount'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.WithdrawMaxAmount' | translate}}</div>
+        <div class="second-hand">{{segment?.WithdrawMaxAmount}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'WithdrawMaxAmount'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+        <div class="second-hand">{{segment?.CreationTime}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'CreationTime'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.LastUpdateTime' | translate}}</div>
+        <div class="second-hand">{{segment?.LastUpdateTime}}</div>
+        <div class="form-field form-input">
+          <mat-form-field appearance="none">
+            <input matInput [formControlName]="'LastUpdateTime'">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+      </div>
+      <div>
+      </div>
+      <div>
+      </div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" type="submit" (click)="onSubmit()">{{'Common.Save' | translate}}
+          </button>
+          
+         </div>
+      </div>
+    </form>
+  </div>
+</div>

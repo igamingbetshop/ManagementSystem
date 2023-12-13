@@ -1,0 +1,217 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.MatchId }">
+
+  <div class="content-action">
+    <div class="title">{{'Sport.ActiveMatches' | translate}}</div>
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+    <div class="custom-dropdown">
+      <mat-select
+        [(ngModel)]="view"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option value="list">{{'Sport.ListView' | translate}}</mat-option>
+        <mat-option value="tree">{{'Sport.TreeView' | translate}}</mat-option>
+      </mat-select>
+    </div>
+
+    <div class="custom-dropdown">
+      <mat-select
+        (selectionChange)="onProviderChange($event.value)"
+        placeholder="{{'Sport.SelectProvider' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]='null'>{{'Sport.SelectProvider' | translate}}</mat-option>
+        <mat-option *ngFor="let provider of sportProviders" [value]="provider.Id">{{provider.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
+    <button *ngIf="view == 'list'" mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <ng-container [ngSwitch]="view">
+
+    <div *ngSwitchCase="'list'" class="grid-content">
+      <ag-grid-angular
+        id="all-active"
+        #agGrid
+        [class.hide-grid]="loadingUserState"
+        class="ag-theme-balham"
+        [headerHeight]="33"
+        [rowHeight]="42"
+        [rowData]="rowData"
+        [rowModelType]="rowModelType"
+        [suppressRowClickSelection]="true"
+        [components]="frameworkComponents"
+        [columnDefs]="columnDefs"
+        [suppressCopyRowsToClipboard]="true"
+        [defaultColDef]="defaultColDef"
+        [cacheBlockSize]="cacheBlockSize"
+        [sideBar]="sideBar"
+        [animateRows]="true"
+        (paginationChanged)="onPaginationChanged($event)"
+        [enableBrowserTooltips]="enableBrowserTooltips"
+        (gridReady)="onGridReady($event)"
+        [ensureDomOrder]="true"
+        [enableCellTextSelection]="true"
+        [getContextMenuItems]="getContextMenuItems"
+        (columnPinned)="onColumnPinned($event)"
+        (columnMoved)="onColumnMoved($event)"
+        (columnResized)="onColumnResized($event)"
+        (columnVisible)="onColumnVisible($event)"
+        rowSelection="multiple">
+      </ag-grid-angular>
+    </div>
+
+    <div *ngSwitchCase="'tree'" class="tree-container">
+
+      <div class="tree-content-action">
+        <div class="custom-dropdown">
+          <mat-select
+            (selectionChange)="onSportChange($event.value)"
+            [(ngModel)]="sportsId"
+            placeholder="{{'Sport.SelectSport' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option [value]="null">{{'Sport.SelectSport' | translate}}</mat-option>
+            <mat-option *ngFor="let sport of sports" [value]="sport.Id">{{sport.Name}}</mat-option>
+          </mat-select>
+        </div>
+
+        <div class="custom-dropdown">
+          <mat-select
+            [(ngModel)]="statusId"
+            (selectionChange)="onStatusChange($event.value)"
+            placeholder="{{'Clients.SelectType' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option *ngFor="let type of availableStatuses.statuses" [value]="type.status">{{type.name}}</mat-option>
+          </mat-select>
+        </div>
+
+        <div class="input-content">
+          <input type="text"
+                 [placeholder]="'Partners.SearchCompetition' | translate"
+                 [ngModel]="competitionSearchText"
+                 (ngModelChange)="searchCompetition($event)">
+        </div>
+
+        <div class="input-content">
+          <input type="text"
+                 [ngModel]="teamSearchText"
+                 (ngModelChange)="searchTeam($event)"
+                 [placeholder]="'Partners.SearchTeam' | translate">
+        </div>
+
+        <div class="input-content">
+          <input type="number"
+                 [ngModel]="searchMatchId"
+                 (ngModelChange)="searchByMatchId($event)"
+                 [placeholder]="'Partners.SearchByMatchId' | translate">
+        </div>
+
+        <div class="input-content">
+          <input type="text"
+                 [ngModel]="searchExternalId"
+                 (ngModelChange)="searchByExternalId($event)"
+                 [placeholder]="'Partners.SearchByExternalId' | translate">
+        </div>
+
+      </div>
+
+      <ul class="tree-content">
+        <li class="not-found" *ngIf = "!sportTree || sportTree?.length === 0">{{'Sport.MatchesNotFound' | translate}}</li>
+        <li class="tree-li" *ngFor="let sport of sportTree" [ngClass]="{'opened': sport?.Opened}">
+          <label class="sport-view-content">
+            <div *ngIf="!sport?.Opened" class="sport-view" (click)="toggleOpened(sport)">
+              <span>{{sport?.Name}}</span>
+              <mat-icon>keyboard_arrow_down</mat-icon>
+            </div>
+
+            <div *ngIf="sport?.Opened" class="sport-view" (click)="toggleOpened(sport)">
+              <span>{{sport?.Name}}</span>
+              <mat-icon>keyboard_arrow_up</mat-icon>
+            </div>
+            <div class="add-match" (click)="addMatch(sport)">
+              <mat-icon>add_circle</mat-icon>
+              <span class="match-text">{{'Sport.AddMatch' | translate}}</span>
+            </div>
+
+          </label>
+
+          <ul *ngIf="sport?.Opened">
+
+            <li *ngFor="let region of sport.Regions" [ngClass]="{'opened': region.Opened}">
+              <label class="sport-view-content">
+                <div *ngIf="!region.Opened" class="sport-view" (click)="toggleOpened(region)">
+                  <span>{{region.Name}}</span>
+                  <mat-icon>keyboard_arrow_down</mat-icon>
+                </div>
+
+                <div *ngIf="region.Opened" class="sport-view" (click)="toggleOpened(region)">
+                  <span>{{region.Name}}</span>
+                  <mat-icon>keyboard_arrow_up</mat-icon>
+                </div>
+              </label>
+              <ul *ngIf="region.Opened">
+                <li *ngFor="let competition of region.Competitions" [ngClass]="{'opened': competition.Opened}">
+                  <label class="sport-view-content">
+                    <div *ngIf="!competition.Opened" class="sport-view" (click)="toggleOpened(competition)">
+                      <span>{{competition.Name}}</span>
+                      <mat-icon>keyboard_arrow_down</mat-icon>
+                    </div>
+
+                    <div *ngIf="competition.Opened" class="sport-view" (click)="toggleOpened(competition)">
+                      <span>{{competition.Name}}</span>
+                      <mat-icon>keyboard_arrow_up</mat-icon>
+                    </div>
+                    <div class="add-match" (click)="addMatch(sport, region, competition)">
+                      <mat-icon>add_circle</mat-icon>
+                      <span>{{'Sport.AddMatch' | translate}}</span>
+                    </div>
+                  </label>
+                  <ul *ngIf="competition.Opened">
+                    <li *ngFor="let match of competition.Matches" [class.is-live]="match.Status === 1" class="sport-view-content">
+                      <div class="match-name-content">
+                        <div>
+                          <span class="match-number">{{match.MatchNumber}}</span>
+                          <span class="start-time">{{match.StartTime}}</span>
+                          <span class="match-name">{{match.Name}}</span>
+                        </div>
+                        <div  class="eye">
+                          <button mat-stroked-button class="supsend-btn" (click)="onSupsendMatch(match)">{{'Sport.Supsend' | translate}}</button>
+
+                          <button mat-stroked-button class="delete-btn" (click)="resetMatch(match)">{{'Sport.Reset' | translate}}</button>
+
+                          <button mat-stroked-button  (click)="navigateToMatch(match)">
+                            <mat-icon >remove_red_eye</mat-icon>
+                          </button>
+
+
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+    </div>
+
+  </ng-container>
+
+</div>
+
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.MatchId"></router-outlet>

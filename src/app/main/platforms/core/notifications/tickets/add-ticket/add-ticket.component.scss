@@ -1,0 +1,16 @@
+@import "variables";
+@import "mixins";
+
+.modal-wrap {
+  .modal-form {
+    .input-content {
+      @include input-style;
+    }
+
+    .select-content {
+      @include popup-dropdown-style;
+    }
+  }
+
+
+}

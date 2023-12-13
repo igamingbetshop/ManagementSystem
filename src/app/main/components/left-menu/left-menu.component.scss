@@ -1,0 +1,58 @@
+@import "variables";
+@import "mixins";
+
+.sidenav-container {
+  min-width: 46px !important;
+  transition: all 0.4s ease-in;
+
+  &.isExtended {
+    min-width: 220px !important;
+  }
+
+  .content {
+    position: fixed;
+    min-width: inherit;
+    width: 46px;
+
+    .arrow-content {
+      position: absolute;
+      top: 0;
+      right: -16px;
+      width: 16px;
+      height: 30px;
+      border-radius: 0 4px 4px 0;
+      background-color: $white;
+      cursor: pointer;
+
+      &:before {
+        @include arrowLeftRight($blue-5, false, 6px);
+        left: 3px;
+        top: 9px;
+        position: absolute;
+      }
+
+      &.opened {
+        &:before {
+          @include arrowLeftRight($blue-5, true, 6px);
+          left: -4px
+        }
+      }
+    }
+
+    .mat-list-base {
+      padding-top: 5px;
+
+      .mat-list-item {
+        height: 36px;
+        transition: background-color 0.2s ease-in;
+
+        .mat-list-item-content {
+          padding: 0;
+          color: $blue-5;
+          display: block;
+        }
+      }
+    }
+  }
+}
+

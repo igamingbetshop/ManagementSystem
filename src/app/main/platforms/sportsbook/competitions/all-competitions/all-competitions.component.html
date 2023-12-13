@@ -1,0 +1,80 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Sport.Competition' | translate}}</div>
+    <div class = "bulk-editor-dropdown">
+      <button mat-stroked-button class="mat-bulk-btn"
+              [matMenuTriggerFor]="bulkMenu"
+              #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+        {{'Common.Edit' | translate}}
+      </button>
+      <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before">
+        <ng-container #bulkEditorRef></ng-container>
+      </mat-menu>
+    </div>
+    <div class="partner-dropdown">
+      <mat-select
+        [disabled]="isRowSelected()"
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || !partnerId" (click)="addSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="AddCompetition()">{{'Sport.AddCompetition' | translate}}</button>
+    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Sport.BulkEditor' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="compatitions"
+      #agGrid
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressCopyRowsToClipboard]="true"
+      [masterDetail]="masterDetail"
+      [detailCellRendererParams]="detailCellRendererParams"
+      [paginationAutoPageSize]="paginationAutoPageSize"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      (paginationChanged)="onPaginationChanged($event)"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [components]="frameworkComponents"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      (cellValueChanged)="onCellValueChanged($event)"
+      (rowClicked)="onRowClickedAll($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+</div>
