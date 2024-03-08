@@ -10,9 +10,7 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -43,9 +41,7 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'Name'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -61,9 +57,7 @@
         <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
         <div class="second-hand">{{commonSettings?.PartnerName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'PartnerName'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -71,9 +65,7 @@
         <div class="first-hand">{{'Bonuses.BonusWinMinAmount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.MinAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'MinAmount'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -81,9 +73,7 @@
         <div class="first-hand">{{'Bonuses.AccountType' | translate}}</div>
         <div class="second-hand">{{accounttypeName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'AccountTypeId'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -91,9 +81,7 @@
         <div class="first-hand">{{'Bonuses.BonusWinMaxAmount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.MaxAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'MaxAmount'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -101,9 +89,7 @@
         <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Priority}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'Priority'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -119,9 +105,7 @@
         <div class="first-hand">{{'Bonuses.PeriodInHours' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Period}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'Period'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -129,37 +113,25 @@
         <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Percent}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'Percent'">
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
         <div class="second-hand">{{commonSettings?.StartTime | date:'dd/MM/yyyy HH:mm' }}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field class="calendar-picker" appearance="none">
-            <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
-            <mat-datepicker-toggle matSuffix [for]="pickerStart">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-            </mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-          </mat-form-field>
+        <div class="form-field form-calendar calendar-picker">
+            <input matInput type="datetime-local" #dropdownEndContent class="data-time-picker" [formControlName]="'StartTime'"
+              name="meeting-time" >
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
         <div class="second-hand">{{commonSettings?.FinishTime | date:'dd/MM/yyyy HH:mm'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field class="calendar-picker" appearance="none">
-            <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishTime'">
-            <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-            </mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-          </mat-form-field>
+        <div class="form-field form-calendar calendar-picker">
+              <input matInput type="datetime-local" #dropdownContent class="data-time-picker" [formControlName]="'FinishTime'"
+                name="meeting-time" >
         </div>
       </div>
 
@@ -167,9 +139,9 @@
         <div class="first-hand">{{'Bonuses.ValidForAwardingInHours' | translate}}</div>
         <div class="second-hand">{{commonSettings?.ValidForAwarding}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <ng-container> -->
             <input matInput type="number" [formControlName]="'ValidForAwarding'">
-          </mat-form-field>
+          <!-- </ng-container> -->
         </div>
       </div>
 
@@ -177,9 +149,7 @@
         <div class="first-hand">{{'Type' | translate}}</div>
         <div class="second-hand">{{commonSettings?.BonusTypeName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="text" [value]="commonSettings?.BonusTypeName" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -188,9 +158,7 @@
         <div class="first-hand">{{'Bonuses.ValidForSpendingInHours' | translate}}</div>
         <div class="second-hand">{{commonSettings?.ValidForSpending}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'ValidForSpending'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -198,9 +166,7 @@
         <div class="first-hand">{{'Bonuses.Sequence' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Sequence}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'Sequence'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -208,9 +174,7 @@
         <div class="first-hand">{{'Bonuses.ReusingMaxCount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.ReusingMaxCount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'ReusingMaxCount'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -218,9 +182,7 @@
         <div class="first-hand">{{'Bonuses.MaxGranted' | translate}}</div>
         <div class="second-hand">{{commonSettings?.MaxGranted}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'MaxGranted'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -228,9 +190,7 @@
         <div class="first-hand">{{'Bonuses.TurnoverCount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.TurnoverCount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'TurnoverCount'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -238,9 +198,7 @@
         <div class="first-hand">{{'Bonuses.MaxReceiversCount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.MaxReceiversCount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'MaxReceiversCount'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -248,9 +206,7 @@
         <div class="first-hand">{{'Bonuses.TotalGranted' | translate}}</div>
         <div class="second-hand">{{commonSettings?.TotalGranted}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'TotalGranted'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -258,9 +214,7 @@
         <div class="first-hand">{{'Bonuses.TotalReceiversCount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.TotalReceiversCount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'TotalReceiversCount'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -268,9 +222,7 @@
         <div class="first-hand">{{'Bonuses.PercentFromBonusAmount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.Percent}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'Percent'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -278,9 +230,7 @@
         <div class="first-hand">{{'Bonuses.LinkedBonusId' | translate}}</div>
         <div class="second-hand">{{commonSettings?.LinkedBonusId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'LinkedBonusId'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -317,9 +267,23 @@
         <div class="first-hand">{{'Bonuses.ReusingMaxCountInPeriod' | translate}}</div>
         <div class="second-hand">{{commonSettings?.ReusingMaxCountInPeriod}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [formControlName]="'ReusingMaxCountInPeriod'">
-          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="commonSettings?.BonusTypeId == 12">
+        <div class="first-hand">{{'Bonuses.AllowSplit' | translate}}</div>
+        <div class="second-hand">{{commonSettings?.AllowSplit}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'AllowSplit'">{{'Bonuses.AllowSplit' | translate}}</mat-checkbox>
+        </div>
+      </div>
+
+      <div *ngIf="commonSettings?.BonusTypeId == 12">
+        <div class="first-hand">{{'Bonuses.RefundRollbacked' | translate}}</div>
+        <div class="second-hand">{{commonSettings?.RefundRollbacked}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'RefundRollbacked'">{{'Bonuses.RefundRollbacked' | translate}}</mat-checkbox>
         </div>
       </div>
 
@@ -619,9 +583,9 @@
 
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
-          <button mat-raised-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Save' | translate}}</button>
           <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
             translate}}</button>
+          <button mat-raised-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Save' | translate}}</button>
         </div>
       </div>
     </form>

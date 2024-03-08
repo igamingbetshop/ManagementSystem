@@ -37,6 +37,7 @@ export class ByRegionsComponent extends BasePaginatedGridComponent implements On
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
   private totals = {
     totalBetAmount: 0,

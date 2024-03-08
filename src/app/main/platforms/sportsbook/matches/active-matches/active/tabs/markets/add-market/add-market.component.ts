@@ -93,7 +93,6 @@ export class AddMarketComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
       });
-    console.log(obj2);
   }
 
 

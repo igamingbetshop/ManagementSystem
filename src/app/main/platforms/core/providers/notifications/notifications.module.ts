@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import {AgGridModule} from "ag-grid-angular";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {TranslateModule} from "@ngx-translate/core";
 
 import {AgBooleanFilterModule} from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.module";

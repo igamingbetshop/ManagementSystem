@@ -1,17 +1,42 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
+import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {CommonDataService, ConfigService} from "../../../../../../../../core/services";
 import {ActivatedRoute} from "@angular/router";
 import {SportsbookApiService} from "../../../../../services/sportsbook-api.service";
 import {take} from "rxjs/operators";
 import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-add-key',
   templateUrl: './add-key.component.html',
-  styleUrls: ['./add-key.component.scss']
+  styleUrls: ['./add-key.component.scss'],
+  standalone: true,
+  imports: [
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatNativeDateModule,
+    MatDialogModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule
+  ]
 })
 export class AddKeyComponent implements OnInit {
   public formGroup: UntypedFormGroup;

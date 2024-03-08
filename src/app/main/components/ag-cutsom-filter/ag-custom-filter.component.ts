@@ -3,9 +3,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {CommonModule} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatSelectModule} from "@angular/material/select";
+
 import {FormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatInputModule} from "@angular/material/input";
+
 import {FilterService} from "../../../core/services/filter.service";
 
 @Component({

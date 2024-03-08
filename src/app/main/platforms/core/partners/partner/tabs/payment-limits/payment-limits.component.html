@@ -12,9 +12,9 @@
         <div class="first-hand">{{'Partners.WithdrawCountPerDay' | translate}}</div>
         <div class="second-hand">{{payments?.WithdrawMaxCountPerDayPerCustomer | number : '1.2'}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input type="number" matInput [formControlName]="'WithdrawMaxCountPerDayPerCustomer'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -22,18 +22,18 @@
         <div class="first-hand">{{'Partners.CashWithdrawCountPerDay' | translate}}</div>
         <div class="second-hand">{{payments?.CashWithdrawMaxCountPerDayPerCustomer | number : '1.2'}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input type="number" matInput [formControlName]="'CashWithdrawMaxCountPerDayPerCustomer'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
       <div></div>
 
       <div class="form-actions">
         <div class="actions" *ngIf = "isEdit">
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
           <button mat-raised-button class="mat-btn" [disabled]="!formGroup.valid" (click)="savePayment()">{{'Common.Save' | translate}}
           </button>
-          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
         </div>
       </div>
 

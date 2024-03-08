@@ -10,8 +10,11 @@ import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatInputModule} from "@angular/material/input";
+
 import {MatButtonModule} from "@angular/material/button";
+
 import {ConfigService} from "../../../../../../core/services";
 
 @Component({

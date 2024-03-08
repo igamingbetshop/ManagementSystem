@@ -30,6 +30,7 @@ export class AllPoolBettingComponent extends BasePaginatedGridComponent implemen
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   private roundStatuses =  RoundStatuses;
@@ -60,9 +61,9 @@ export class AllPoolBettingComponent extends BasePaginatedGridComponent implemen
         field: 'Id',
       },
       {
-        headerName: 'PoolBetting.TypeId',
+        headerName: 'PoolBetting.MarketTypeId',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'TypeId',
+        field: 'MarketTypeId',
       },
       {
         headerName: 'PoolBetting.Number',

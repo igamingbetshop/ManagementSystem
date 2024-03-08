@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {AgGridModule} from "ag-grid-angular";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {TranslateModule} from "@ngx-translate/core";
 
 const routes: Routes = [

@@ -12,14 +12,14 @@ import {ICellRendererParams} from "ag-grid-community";
     </div>
 
     <div class="container" [class.show] = "params.data.Permissionid === 'ViewPartner' || params.data.Permissionid === 'CreatePartner'">
-      <mat-form-field>
+      <!-- <mat-form-field> -->
         <mat-select
           (selectionChange)="onMultipleSelect($event.value)"
           [(value)]="accessObjectsIds"
           multiple>
-          <mat-option *ngFor="let selection of selections" [value]="selection.Id">{{selection.Name}}</mat-option>
+          <mat-option *ngFor="let selection of selections" [value]="selection.Id">{{selection.Name}} - {{selection.Id}} </mat-option>
         </mat-select>
-      </mat-form-field>
+      <!-- </mat-form-field> -->
     </div>`,
   styles: ['.container {display: none} .show {display: block;} .container input {padding: 5px 10px; outline: none;}']
 })

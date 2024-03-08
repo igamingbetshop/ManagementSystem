@@ -7,7 +7,7 @@
   <form class="modal-form" [formGroup]="formGroup">
 
     <div class="field-content">
-      <mat-form-field class="calendar-picker start" appearance="none">
+      <mat-form-field class="calendar-picker start">
         <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartDate'">
         <mat-datepicker-toggle matSuffix [for]="pickerStart">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
@@ -15,7 +15,7 @@
         <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
       </mat-form-field>
 
-      <mat-form-field class="calendar-picker" appearance="none" style="margin-left: 15px;">
+      <mat-form-field class="calendar-picker" style="margin-left: 15px;">
         <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'EndDate'">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
@@ -24,7 +24,7 @@
       </mat-form-field>
     </div>
 
-    <mat-form-field appearance="none">
+    <mat-form-field>
       <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
       <mat-select #part (selectionChange)="onPartnerChange(part.value)" [formControlName]="'PartnerId'"
         placeholder="{{'Partners.SelectPartner' | translate}}">
@@ -109,7 +109,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="none">
+    <mat-form-field>
       <mat-label>{{'FragmentName' | translate}}</mat-label>
       <mat-select #ban (selectionChange)="onBannerTypeChange(ban.value)" [formControlName]="'FragmentName'"
         placeholder="{{'FragmentName' | translate}}">
@@ -120,7 +120,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="none" *ngIf="bannerTypeId == 4 || bannerTypeId == 5">
+    <mat-form-field *ngIf="bannerTypeId == 4 || bannerTypeId == 5">
       <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
       <mat-select #ban (selectionChange)="onBannerTypeChange(ban.value)" [formControlName]="'SportId'"
         placeholder="{{'Sport.SelectSport' | translate}}">
@@ -128,7 +128,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="none" *ngIf="bannerTypeId == 1">
+    <mat-form-field *ngIf="bannerTypeId == 1">
       <mat-label>{{'Sport.SelectFragment' | translate}}</mat-label>
       <mat-select [formControlName]="'Type'">
         <mat-option *ngFor="let fragment of fragments" [value]="fragment.Id">{{fragment.Name}}</mat-option>
@@ -138,14 +138,14 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="none" *ngIf="bannerTypeId == 2">
+    <mat-form-field *ngIf="bannerTypeId == 2">
       <mat-label>{{'Sport.SelectWidget' | translate}}</mat-label>
       <mat-select [formControlName]="'Type'">
         <mat-option *ngFor="let widget of widgets" [value]="widget.Id">{{widget.Name}}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="none">
+    <mat-form-field>
       <mat-label>{{'Visibility' | translate}}</mat-label>
       <mat-select [formControlName]="'Visibility'" placeholder="{{'Visibility' | translate}}">
         <mat-option *ngFor="let banVisType of bannerVisibilityTypes"

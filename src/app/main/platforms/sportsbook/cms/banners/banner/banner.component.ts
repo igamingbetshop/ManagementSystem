@@ -107,7 +107,7 @@ export class BannerComponent implements OnInit {
       .subscribe(data => {
         if (data.Code === 0) {
           this.banner = data.Banners[0];
-          this.visibilytyName = this.bannerVisibilityTypes.find(x => x.id === this.banner.Visibility)?.name || 'Always';          
+          this.visibilytyName = this.bannerVisibilityTypes.find(x => x.id === this.banner.Visibility)?.name || 'Always';
           this.partnerId = this.banner.PartnerId;
           this.formGroup.patchValue(this.banner);
           if (this.banner.Visibility == null) {
@@ -134,7 +134,7 @@ export class BannerComponent implements OnInit {
         this.getBanner();
         this.isEdit = false;
         SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
-        
+
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }

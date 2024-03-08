@@ -8,7 +8,7 @@ export interface Client {
     Address: string;
     Apartment: string
     BetShopId: number
-    BirthDate: string;
+    BirthDate: any;
     BuildingNumber: number;
     CallToPhone: boolean;
     CategoryId: number;
@@ -75,6 +75,10 @@ export interface Client {
     RegionIsoCode: string | null | number;
     UnderMonitoringTypes: [],
     UnderMonitoringTypesNames: string
+    CharacterName: string;
+    CharacterId: string | number;
+    CharacterLevel: string | number;
+    PinCode: string | number | null;
 }
 
 

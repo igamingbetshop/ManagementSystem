@@ -71,7 +71,7 @@
     </mat-form-field>
 
     <div class="picker-content">
-      <mat-form-field class="calendar-picker start" appearance="none">
+      <mat-form-field class="calendar-picker start">
         <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
         <mat-label>{{'Clients.StartTime' | translate}}</mat-label>
         <mat-datepicker-toggle matSuffix [for]="pickerStart">
@@ -80,7 +80,7 @@
         <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
       </mat-form-field>
 
-      <mat-form-field class="calendar-picker" appearance="none">
+      <mat-form-field class="calendar-picker">
         <mat-label>{{'SkillGames.AnnounceDate' | translate}}</mat-label>
         <input matInput [ngxMatDatetimePicker]="pickerOpenTime" [formControlName]="'OpenTime'">
         <mat-datepicker-toggle matSuffix [for]="pickerOpenTime">

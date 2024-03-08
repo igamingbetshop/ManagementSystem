@@ -229,14 +229,18 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
         cellRenderer: function (params) {
           if (params.data.BirthDate) {
             const dateString = params.data.BirthDate;
-            const [ month, day, year] = dateString.split(/\D/);
-            const formattedDate = new Date(`${day}/${month}/${year}`).toLocaleDateString("en-US", {
+            const [month, day, year] = dateString.split(/\D/);
+
+            const formattedDate = new Date(`${year}-${month}-${day}`).toLocaleDateString("en-US", {
               day: "numeric",
               month: "short",
               year: "numeric"
             });
+
             return formattedDate;
-          } else return "";
+          } else {
+            return "";
+          }
         },
       },
       {
@@ -338,11 +342,11 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
         field: 'AffiliateReferralId',
         resizable: true,
         sortable: false,
-        filter: 'agNumberColumnFilter',
+        filter: 'agTextColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
+          filterOptions: this.filterService.textOptions
         },
       },
       {
@@ -667,7 +671,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
         if (this.partnerId) {
           paging.PartnerId = this.partnerId;
         }
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['CurrencyId', 'City'], ['Currencie', 'Citie']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);

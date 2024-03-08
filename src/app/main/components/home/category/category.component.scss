@@ -280,7 +280,7 @@
 }
 
 .nested-home-dropdown {
-  &.mat-menu-panel {
+  &.mat-mdc-menu-panel {
     padding: 10px 6px 10px 20px;
     border-radius: 12px;
     margin-left: -20px;
@@ -290,7 +290,7 @@
     min-width: 256px;
     overflow: auto;
 
-    .mat-menu-content {
+    .mat-mdc-menu-content {
       padding: 0;
 
       .dropdown-item {

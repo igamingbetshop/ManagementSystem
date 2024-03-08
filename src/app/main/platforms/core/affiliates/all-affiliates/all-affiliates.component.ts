@@ -34,6 +34,7 @@ export class AllAffiliatesComponent extends BasePaginatedGridComponent implement
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
 
@@ -171,7 +172,7 @@ export class AllAffiliatesComponent extends BasePaginatedGridComponent implement
     super.onGridReady(params);
     syncPaginationWithoutBtn();
     syncColumnReset();
-    
+
   }
 
   getPage() {

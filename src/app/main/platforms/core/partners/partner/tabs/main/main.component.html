@@ -1,277 +1,339 @@
-<div class="container" *ngFor="let partner of partners; let i = index">
+<div class="container">
+
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Main' | translate}}</div>
-    <button mat-stroked-button class="edit-btn" (click)="editPartner(i)">{{'Common.Edit' | translate}}</button>
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Main' | translate}}
+    </div>
+
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+
   </div>
 
-<div class="main-history" >
-  <div class="grid-history" *ngIf="!isEdit">
-    <div>
-      <div class="first-hand">{{'Common.Id' | translate}}</div>
-      <div class="third-hand">{{partner?.Id}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Common.State' | translate}}</div>
-      <div class="third-hand">{{partner?.StateName}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Common.Name' | translate}}</div>
-      <div class="third-hand">{{partner?.Name}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Clients.Currency' | translate}}</div>
-      <div class="third-hand">{{partner?.CurrencyId}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.AdminSiteUrl' | translate}}</div>
-      <div class="third-hand" >
-        <mat-select [(value)]="adminSiteUrlSelected">
-          <mat-option *ngFor="let state of adminSiteUrl; let i = index" [value]="i">{{state}}</mat-option>
-        </mat-select>
-      </div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-      <div class="third-hand">{{partner?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.SiteUrl' | translate}}</div>
-      <div class="third-hand" >
-        <mat-select [(value)]="siteUrlSelected">
-          <mat-option *ngFor="let state of siteUrl; let i = index" [value]="i">{{state}}</mat-option>
-        </mat-select>
-      </div>
-    </div>
-    <div>
-      <div class="first-hand">{{'LastUpdateTime' | translate}}</div>
-      <div class="third-hand">{{partner?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.ClientMinAge' | translate}}</div>
-      <div class="third-hand">{{partner?.ClientMinAge}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.UnpaidWinValidPeriod' | translate}}</div>
-      <div class="third-hand">{{partner?.UnpaidWinValidPeriod}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.ClientSessionExpireTime' | translate}}</div>
-      <div class="third-hand">{{partner?.ClientSessionExpireTime}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.UnusedAmountWithdrawPercent' | translate}}</div>
-      <div class="third-hand">{{partner?.UnusedAmountWithdrawPercent}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.AccountingDayStartTime' | translate}}</div>
-      <div class="third-hand">{{partner?.AccountingDayStartTime}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.UserSessionExpireTime' | translate}}</div>
-      <div class="third-hand">{{partner?.UserSessionExpireTime}}</div>
-    </div>
-    <div>
-      <div class="first-hand" style="word-wrap: break-word;inline-size: 37%;overflow: hidden">{{'Partners.AutoApproveBetShopDepositMaxAmount' | translate}}
-      </div>
-      <div class="third-hand">{{partner?.AutoApproveBetShopDepositMaxAmount}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.VerificationKeyActiveMinutes' | translate}}</div>
-      <div class="third-hand">{{partner?.VerificationKeyActiveMinutes}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.AutoConfirmWithdrawMaxAmount' | translate}}</div>
-      <div class="third-hand">{{partner?.AutoConfirmWithdrawMaxAmount}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.AutoApproveWithdrawMaxAmount' | translate}}</div>
-      <div class="third-hand">{{partner?.AutoApproveWithdrawMaxAmount}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.VerificationType' | translate}}</div>
-      <div class="third-hand">{{partner?.VerificationTypeName}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.EmailVerificationCodeLength' | translate}}</div>
-      <div class="third-hand">{{partner?.EmailVerificationCodeLength}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.PasswordRegExp' | translate}}</div>
-      <div class="third-hand" style="width: auto">{{partner?.PasswordRegExp}}</div>
-    </div>
-    <div>
-      <div class="first-hand">{{'Partners.MobileVerificationCodeLength' | translate}}</div>
-      <div class="third-hand">{{partner?.MobileVerificationCodeLength}}</div>
-    </div>
-  </div>
-  <form class="grid-history" [formGroup]="formGroup" *ngIf="isEdit && enableEditIndex == i">
-    <mat-form-field>
-      <mat-label>{{'Common.Id' | translate}}</mat-label>
-      <input matInput [formControlName]="'Id'" readonly>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Common.State' | translate}}</mat-label>
-      <mat-select required [formControlName]="'State'">
-        <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Common.Name' | translate}}</mat-label>
-      <input matInput required [formControlName]="'Name'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Clients.Currency' | translate}}</mat-label>
-      <input matInput [formControlName]="'CurrencyId'" readonly>
-    </mat-form-field>
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
 
-    <mat-form-field>
-      <mat-label>{{'Partners.AdminSiteUrl' | translate}}</mat-label>
-      <input matInput [formControlName]="'AdminSiteUrl'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Clients.CreationTime' | translate}}</mat-label>
-      <input matInput [value]="partner.CreationTime | date:'dd/MM/yyyy HH:MM'" readonly>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.SiteUrl' | translate}}</mat-label>
-      <input matInput [formControlName]="'SiteUrl'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'LastUpdateTime' | translate}}</mat-label>
-      <input matInput [value]="partner.LastUpdateTime | date:'dd/MM/yyyy HH:MM'" readonly>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.ClientMinAge' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'ClientMinAge'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.UnpaidWinValidPeriod' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'UnpaidWinValidPeriod'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.ClientSessionExpireTime' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'ClientSessionExpireTime'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.UnusedAmountWithdrawPercent' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'UnusedAmountWithdrawPercent'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.AccountingDayStartTime' | translate}}</mat-label>
-      <input matInput [formControlName]="'AccountingDayStartTime'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.UserSessionExpireTime' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'UserSessionExpireTime'">
-    </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{'Partners.AutoApproveBetShopDepositMaxAmount' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'AutoApproveBetShopDepositMaxAmount'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.VerificationKeyAciteMinutes' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'VerificationKeyActiveMinutes'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.AutoConfirmWithdrawMaxAmount' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'AutoConfirmWithdrawMaxAmount'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.AutoApproveWithdrawMaxAmount' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'AutoApproveWithdrawMaxAmount'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.VerificationType' | translate}}</mat-label>
-      <mat-select [formControlName]="'VerificationType'">
-        <mat-option *ngFor="let VerificationType of partnersVerificationTypeEnum"
-                    [value]="VerificationType.Id">{{VerificationType.Name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.EmailVerificationCodeLength' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'EmailVerificationCodeLength'">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.MobileVerificationCodeLength' | translate}}</mat-label>
-      <input type="number" matInput [formControlName]="'MobileVerificationCodeLength'">
-    </mat-form-field>
-    <form [formGroup]="regex" class="regex-form">
       <div>
-        <section>
-          <label>{{'Partners.Uppercase' | translate}}:</label>
-          <mat-checkbox [formControlName]="'Uppercase'"></mat-checkbox>
-        </section>
-        <section>
-          <label>{{'Partners.IsUppercaseRequired' | translate}}: </label>
-          <mat-checkbox [formControlName]="'IsUppercaseRequired'"></mat-checkbox>
-        </section>
-        <section>
-          <label>{{'Partners.Lowercase' | translate}}: </label>
-          <mat-checkbox [formControlName]="'Lowercase'"></mat-checkbox>
-        </section>
-        <section>
-          <label>{{'Partners.IsLowercaseRequired' | translate}}: </label>
-          <mat-checkbox [formControlName]="'IsLowercaseRequired'"></mat-checkbox>
-        </section>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="static-hand">{{partner?.Id}}</div>
       </div>
+
       <div>
-        <section>
-          <label>{{'Partners.Numeric' | translate}}: </label>
-          <mat-checkbox [formControlName]="'Numeric'"></mat-checkbox>
-        </section>
-        <section>
-          <label>{{'Partners.IsDigitRequired' | translate}}: </label>
-          <mat-checkbox [formControlName]="'IsDigitRequired'"></mat-checkbox>
-        </section>
-        <section>
-          <label>{{'Partners.Symbol' | translate}}: </label>
-          <mat-checkbox [formControlName]="'Symbol'"></mat-checkbox>
-        </section>
-        <section>
-          <label>{{'Partners.IsSymbolRequired' | translate}}: </label>
-          <mat-checkbox [formControlName]="'IsSymbolRequired'"></mat-checkbox>
-        </section>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="static-hand">{{partner?.CurrencyId}}</div>
+
       </div>
+
       <div>
-        <mat-form-field>
-          <mat-label>{{'Partners.MaxLength' | translate}}</mat-label>
-          <input type="number" matInput [formControlName]="'MaxLength'">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>{{'Partners.MinLength' | translate}}</mat-label>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{partner?.Name}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input matInput [formControlName]="'Name'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{partner?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select required [formControlName]="'State'">
+            <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.AdminSiteUrl' | translate}}</div>
+        <div class="second-hand">{{partner?.AdminSiteUrl}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input matInput [formControlName]="'AdminSiteUrl'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.SiteUrl' | translate}}</div>
+        <div class="second-hand">{{partner?.SiteUrl}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input matInput [formControlName]="'SiteUrl'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+        <div class="static-hand">{{partner?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+      </div>
+      
+      <div>
+        <div class="first-hand">{{'Common.LastUpdateTime' | translate}}</div>
+        <div class="static-hand">{{partner?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.ClientMinAge' | translate}}</div>
+        <div class="second-hand">{{partner?.ClientMinAge}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'ClientMinAge'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.UnpaidWinValidPeriod' | translate}}</div>
+        <div class="second-hand">{{partner?.UnpaidWinValidPeriod}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'UnpaidWinValidPeriod'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.ClientSessionExpireTime' | translate}}</div>
+        <div class="second-hand">{{partner?.ClientSessionExpireTime}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'ClientSessionExpireTime'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.UnusedAmountWithdrawPercent' | translate}}</div>
+        <div class="second-hand">{{partner?.UnusedAmountWithdrawPercent}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'UnusedAmountWithdrawPercent'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.AccountingDayStartTime' | translate}}</div>
+        <div class="second-hand">{{partner?.AccountingDayStartTime}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input matInput [formControlName]="'AccountingDayStartTime'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.UserSessionExpireTime' | translate}}</div>
+        <div class="second-hand">{{partner?.UserSessionExpireTime}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'UserSessionExpireTime'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.AutoApproveBetShopDepositMaxAmount' | translate}}</div>
+        <div class="second-hand">{{partner?.AutoApproveBetShopDepositMaxAmount}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'AutoApproveBetShopDepositMaxAmount'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.VerificationKeyActiveMinutes' | translate}}</div>
+        <div class="second-hand">{{partner?.VerificationKeyActiveMinutes}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'VerificationKeyActiveMinutes'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.AutoConfirmWithdrawMaxAmount' | translate}}</div>
+        <div class="second-hand">{{partner?.AutoConfirmWithdrawMaxAmount}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'AutoConfirmWithdrawMaxAmount'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.AutoApproveWithdrawMaxAmount' | translate}}</div>
+        <div class="second-hand">{{partner?.AutoApproveWithdrawMaxAmount}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input type="number" matInput [formControlName]="'AutoApproveWithdrawMaxAmount'">
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.VerificationType' | translate}}</div>
+        <div class="second-hand">{{partner?.VerificationTypeName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'VerificationType'">
+            <mat-option *ngFor="let VerificationType of partnersVerificationTypeEnum"
+                        [value]="VerificationType?.Id">{{VerificationType?.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.EmailVerificationCodeLength' | translate}}</div>
+        <div class="second-hand">{{partner?.EmailVerificationCodeLength}}</div>
+        <div class="form-field form-input">
+          <input type="number" matInput [formControlName]="'EmailVerificationCodeLength'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.PasswordRegExp' | translate}}</div>
+        <div class="static-hand">{{partner?.PasswordRegExp}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Partners.MobileVerificationCodeLength' | translate}}</div>
+        <div class="second-hand">{{partner?.MobileVerificationCodeLength}}</div>
+        <div class="form-field form-input">
+          <input type="number" matInput [formControlName]="'MobileVerificationCodeLength'">
+        </div>
+      </div>
+
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="saveEditedPartner()">{{'Common.Save' |translate}}</button>
+        </div>
+      </div>
+
+      <div class="content-action">
+        <div class="title"> {{partnerName}} : {{'Partners.SaveRegExp' | translate}}
+        </div>
+    
+      </div>
+
+      <div></div>
+
+
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.Uppercase' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'Uppercase'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'Uppercase'" [disabled]="isUppercaseRequired"></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.IsUppercaseRequired' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'IsUppercaseRequired'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsUppercaseRequired'" (change)="setCheckbox('Uppercase', 'IsUppercaseRequired', 'isUppercaseRequired')" ></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.Lowercase' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'Lowercase'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'Lowercase'" [disabled]="isLowercaseRequired"></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.IsLowercaseRequired' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'IsLowercaseRequired'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsLowercaseRequired'" (change)="setCheckbox('Lowercase', 'IsLowercaseRequired', 'isLowercaseRequired')"></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.Numeric' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'Numeric'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'Numeric'" [disabled]="isDigitRequired"></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.IsDigitRequired' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'IsDigitRequired'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsDigitRequired'" (change)="setCheckbox('Numeric', 'IsDigitRequired', 'isDigitRequired')"></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.Symbol' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'Symbol'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'Symbol'" [disabled]="isSymbolRequired"></mat-checkbox>
+        </div>
+      </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">  
+        <div class="first-hand">{{'Partners.IsSymbolRequired' | translate}}</div>
+        <div class="second-hand">
+          <mat-checkbox [formControlName]="'IsSymbolRequired'" disabled></mat-checkbox>
+          </div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsSymbolRequired'" (change)="setCheckbox('Symbol', 'IsSymbolRequired', 'isSymbolRequired')"></mat-checkbox>
+        </div>
+      </div>
+      
+      <div [formGroupName]="'PasswordRegExProperty'">
+        <div class="first-hand">{{'Partners.MinLength' | translate}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty?.MinLength}}</div>
+        <div class="form-field form-input">
           <input type="number" matInput [formControlName]="'MinLength'">
-        </mat-form-field>
-        <button mat-raised-button color="primary" (click)="saveRegex()">{{'Partners.SaveRegExp' | translate}}</button>
+        </div>
       </div>
+
+      <div [formGroupName]="'PasswordRegExProperty'">
+        <div class="first-hand">{{'Partners.MaxLength' | translate}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty?.MaxLength}}</div>
+        <div class="form-field form-input">
+          <input type="number" matInput [formControlName]="'MaxLength'">
+        </div>
+      </div>
+
+
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="saveRegex()">{{'Partners.SaveRegExp' |translate}}</button>
+        </div>
+      </div>
+
     </form>
-    <div class="buttons" style="background: none">
-      <button mat-raised-button color="primary" [disabled]="!formGroup.valid" (click)="saveEditedPartner()">{{'Common.Save' | translate}}
-      </button>
-      <button mat-raised-button color="warn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
-    </div>
-  </form>
-  <!-- <div class="buttons">
-    <mat-form-field>
-      <mat-select [(value)]="selected.Id">
-        <mat-option [value]="3">environmentId</mat-option>
-        <mat-option *ngFor="let env of partnerEnvironments" [value]="env.Id">{{env.Name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button mat-stroked-button color="primary" [disabled]="selected.Id === 3" (click)="uploadConfig()">Upload Config
-    </button>
-    <button mat-stroked-button color="primary" [disabled]="selected.Id === 3" (click)="uploadMenus()">Upload Menus
-    </button>
-    <button mat-stroked-button color="primary" [disabled]="selected.Id === 3" (click)="uploadStyles()">Upload Styles
-    </button>
-    <button mat-stroked-button color="primary" [disabled]="selected.Id === 3" (click)="uploadTranslations()">Upload
-      Translations
-    </button>
-    <button mat-stroked-button color="primary" [disabled]="selected.Id === 3" (click)="uploadPromotions()">Upload
-      Promotions
-    </button>
-    <button mat-stroked-button color="primary" [disabled]="selected.Id === 3" (click)="uploadNews()">Upload News
-    </button>
-    <button mat-stroked-button color="primary" (click)="PurgeContentCache()">Clear Cloud Cache</button>
-  </div> -->
+  </div>
+
+
+
 </div>
+

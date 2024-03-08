@@ -1,6 +1,6 @@
 import {onSideNavChange, animateText} from '../../../animations/animations';
 import {CommonDataService, SidenavService} from '../../../core/services';
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
   selector: 'app-left-menu',
@@ -9,18 +9,16 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
   encapsulation: ViewEncapsulation.None,
   animations: [onSideNavChange, animateText],
 })
-export class LeftMenuComponent implements OnInit {
+export class LeftMenuComponent {
   public sideNavState = false;
   public linkText = false;
   public homeSections =  JSON.parse(localStorage.getItem('adminMenu'));
 
   constructor(
     private _sidenavService: SidenavService,
-    public commonDataService: CommonDataService
+    public commonDataService: CommonDataService,
   ) {
   }
-
-  ngOnInit() {}
 
   onSinenavToggle() {
     this.sideNavState = !this.sideNavState;
@@ -29,4 +27,5 @@ export class LeftMenuComponent implements OnInit {
       this.linkText = this.sideNavState;
     }, 300);
   }
+
 }

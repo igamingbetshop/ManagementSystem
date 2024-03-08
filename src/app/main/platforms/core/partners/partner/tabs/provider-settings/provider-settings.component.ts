@@ -111,7 +111,7 @@ export class ProviderSettingsComponent extends BasePaginatedGridComponent implem
           onClick: this.saveProviderSettings['bind'](this),
           Label: this.translate.instant("Common.Save"),
           isDisabled: true,
-          bgColor: '#0573BA',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       },

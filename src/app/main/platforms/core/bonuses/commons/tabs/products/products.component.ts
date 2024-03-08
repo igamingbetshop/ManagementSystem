@@ -21,7 +21,6 @@ import { Subject } from 'rxjs';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent extends BaseGridComponent implements OnInit {
-  public gridApi: GridApi;
   private freeSpinBonusType = 14;
   private wagerCasinoBonusType = 10
   private bonusItem: any;
@@ -46,12 +45,7 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
       headerName: 'Common.Name',
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'Name',
-      filter: 'agTextColumnFilter',
-      filterParams: {
-        buttons: ['apply', 'reset'],
-        closeOnApply: true,
-        filterOptions: this.filterService.textOptions
-      },
+      filter: false,
     },
     {
       headerName: 'Bonuses.Percent',
@@ -73,6 +67,7 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
     headerName: 'Common.GroupId',
     headerValueGetter: this.localizeHeader.bind(this),
     field: 'Id',
+    filter: false,
     cellRendererParams: {
       innerRenderer: (params: ICellRendererParams) => {
         return params.data.Id;

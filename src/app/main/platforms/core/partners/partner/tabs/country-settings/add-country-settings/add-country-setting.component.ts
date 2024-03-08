@@ -50,7 +50,7 @@ export class AddCountrySettingComponent implements OnInit {
   ngOnInit(): void {
     this.getCountry();
     this.formValues();
-    
+
   }
 
   getCountry() {

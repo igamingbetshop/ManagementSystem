@@ -119,7 +119,7 @@ export class SportSettingsComponent extends BasePaginatedGridComponent implement
         cellRendererParams: {
           onClick: this.deleteFinishes['bind'](this),
           Label: 'Delete',
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: 'white'
         }
       },
@@ -134,7 +134,7 @@ export class SportSettingsComponent extends BasePaginatedGridComponent implement
         cellRendererParams: {
           onClick: this.saveFinishes['bind'](this),
           Label: 'Save',
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: 'white'
         }
       }

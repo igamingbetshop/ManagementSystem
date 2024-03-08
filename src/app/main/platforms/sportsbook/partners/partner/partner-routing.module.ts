@@ -24,7 +24,10 @@ const routes: Routes = [
         {
           path: 'keys',
           loadChildren:() => import('./tabs/keys/keys.module').then(m => m.KeysModule),
-
+        },
+        {
+          path: 'settings',
+          loadChildren:() => import('./tabs/settings/settingsmodule').then(m => m.SettingsModule),
         },
 
 

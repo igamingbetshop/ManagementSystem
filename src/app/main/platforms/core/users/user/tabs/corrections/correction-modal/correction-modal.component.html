@@ -14,7 +14,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="none" *ngIf = "showCurrency">
+    <mat-form-field *ngIf = "showCurrency">
       <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
       <mat-select placeholder="{{'Clients.SelectCurrency' | translate}}" [formControlName]="'CurrencyId'" required>
         <mat-option *ngFor="let currencie of currencies" [value]="currencie.Id">{{currencie.Id}}</mat-option>

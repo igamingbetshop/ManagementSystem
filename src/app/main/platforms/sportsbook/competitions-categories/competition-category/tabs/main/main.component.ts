@@ -13,12 +13,12 @@ import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper"
 })
 export class MainComponent implements OnInit {
 
-
-  public formGroup: UntypedFormGroup;
-  public categoryId: number;
-  public category: any;
-  public isEdit = false;
-  public multipleBets = [
+  name: string = '';
+  formGroup: UntypedFormGroup;
+  categoryId: number;
+  category: any;
+  isEdit = false;
+  multipleBets = [
     {Id: null, Name: 'NONE'},
     {Id: true, Name: 'YES'},
     {Id: false, Name: 'NO'},
@@ -34,6 +34,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.name = this.activateRoute.snapshot.queryParams.name;
     this.categoryId = +this.activateRoute.snapshot.queryParams.categoryId;
     this.createForm();
     this.getPartner();
@@ -63,7 +64,6 @@ export class MainComponent implements OnInit {
       MaxWinPrematchMultiple: [null, [Validators.required]],
       MaxWinLiveSingle: [null, [Validators.required]],
       MaxWinLiveMultiple: [null, [Validators.required]],
-      AllowMultipleBets: [null],
       IsDefault: [false],
     });
   }

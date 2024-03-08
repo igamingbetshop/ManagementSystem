@@ -12,6 +12,7 @@ import { Controllers, Methods, ModalSizes } from 'src/app/core/enums';
 import { take } from 'rxjs/operators';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 @Component({
   selector: 'app-all-bet-shops',
@@ -20,12 +21,15 @@ import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class AllBetShopsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public rowData = [];
-  public name: string;
-  public betId: string;
-  public partners: any[] = [];
-  public betShopStates: any[] = [];
-  public filteredData;
+  rowData = [];
+  name: string;
+  betId: string;
+  partners: any[] = [];
+  betShopStates: any[] = [];
+  filteredData;
+  frameworkComponents = {
+    agDropdownFilter: AgDropdownFilter,
+  };
 
   constructor(
     protected injector: Injector,
@@ -37,6 +41,32 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
   ) {
     super(injector);
 
+
+  }
+
+  ngOnInit() {
+    this.getBetShopStatesEnum();
+    this.name = this.activateRoute.snapshot.queryParams.Name;
+    this.betId = this.activateRoute.snapshot.queryParams.BetId;
+    this.partners = this.commonDataService.partners;
+    this.getCurrentPage();
+  }
+
+  getBetShopStatesEnum() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_BET_SHOP_STATES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.betShopStates = data.ResponseObject;
+          this.setColumDefs();
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  setColumDefs() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -133,15 +163,14 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
       {
         headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'StateName',
+        field: 'State',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        }
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.betShopStates,
+        },
       },
       {
         headerName: 'BetShops.CurrentLimit',
@@ -279,27 +308,6 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
     ];
   }
 
-  ngOnInit() {
-    this.name = this.activateRoute.snapshot.queryParams.Name;
-    this.betId = this.activateRoute.snapshot.queryParams.BetId;
-    this.partners = this.commonDataService.partners;
-    this.getBetShopStatesEnum();
-    this.getCurrentPage();
-  }
-
-  getBetShopStatesEnum() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_BET_SHOP_STATES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.betShopStates = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
-
   async AddBetshop() {
     const { AddBetShopComponent } = await import('../add-bet-shop/add-bet-shop.component');
     const dialogRef = this.dialog.open(AddBetShopComponent, {
@@ -330,15 +338,14 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
         const paging = new Paging();
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
+
+        this.filteredData = paging;
+        this.setSort(params.request.sortModel, paging);
+        this.setFilter(params.request.filterModel, paging);
         paging.GroupIds = {
           IsAnd: true,
           ApiOperationTypeList: [{ "IntValue": this.betId, "OperationTypeId": 1 }]
         };
-        this.filteredData = paging;
-
-        this.setSort(params.request.sortModel, paging);
-        this.setFilter(params.request.filterModel, paging);
-
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.BET_SHOP, Methods.GET_BET_SHOPS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -355,7 +362,7 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
                   return state.Id == entity.State;
                 })
                 if (stateName) {
-                  entity['StateName'] = stateName.Name;
+                  entity['State'] = stateName.Name;
                 }
               })
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
@@ -380,5 +387,5 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
         }
       });
   }
-  
+
 }

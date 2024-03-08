@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container"  [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.Id }">
 
   <div class="content-action">
     <div class="title">{{'Cms.Banners' | translate}}</div>
@@ -64,3 +64,6 @@
 
   </div>
 </div>
+
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.Id"></router-outlet>
+

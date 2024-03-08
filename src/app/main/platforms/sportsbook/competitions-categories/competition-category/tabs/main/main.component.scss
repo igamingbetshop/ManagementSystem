@@ -73,3 +73,13 @@
     }
   }
 }
+
+.mat-cancel-btn {
+  margin-left: 8px;
+  @include mat-cancel-btn-style;
+}
+
+.mat-btn {
+  margin-left: 8px;
+  @include mat-btn-style;
+}

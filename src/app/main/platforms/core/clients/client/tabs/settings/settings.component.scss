@@ -58,6 +58,17 @@
           -moz-column-gap: 6px;
           column-gap: 6px;
 
+          .static-hand {
+            position: relative;
+            .mat-btn {
+              position: absolute;
+              margin-left: 65%;
+              @include mat-btn-style;
+              width: 150px;
+              height: 30px;
+            }
+          }
+
           .form-checkbox .mat-checkbox {
             height: 30px;
           }
@@ -66,6 +77,7 @@
 
             .readonly-text {
               padding: 0 10px;
+              
             }
 
             input {
@@ -133,7 +145,6 @@
         th {
           background-color: $blue-light-18;
           color: $white;
-
 
           &:first-child {
             border-radius: 4px 0 0 4px;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
@@ -25,7 +25,7 @@ import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
   templateUrl: './bet-bet-shops.component.html',
   styleUrls: ['./bet-bet-shops.component.scss']
 })
-export class BetBetShopsComponent extends BasePaginatedGridComponent implements OnInit, AfterViewInit {
+export class BetBetShopsComponent extends BasePaginatedGridComponent implements OnInit {
 
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public clientData = {};
@@ -557,13 +557,6 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
     this.GetDocumentState();
     this.GetBetTypes();
     this.GetProviders();
-  }
-
-  ngAfterViewInit() {
-    if (this.DetailRowData) {
-      console.log("this.DetailRowDatathis.DetailRowData");
-
-    }
   }
 
   GetProviders() {

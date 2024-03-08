@@ -44,7 +44,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   public rowData = [];
   public games = [];
   public partners = [];
-  public columnDefs;
   public path: string = 'markettypes';
   public path2: string = 'markettypes/selectiontypes';
   public path3: string = 'markettypes/settings';
@@ -225,7 +224,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
               onClick: this.saveSettings['bind'](this),
               Label: 'Save',
               isDisabled: true,
-              bgColor: '#076192',
+              bgColor: '#3E4D66',
               textColor: '#FFFFFF',
             }
           }

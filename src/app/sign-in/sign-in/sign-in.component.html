@@ -1,58 +1,61 @@
-<div class="login-wrapper">
+<div class="sign-in">
 
-  <mat-card>
-    <mat-card-header class="card-header">
-      <img src="{{imagePath}}" alt="logo">
-      <div class="name">Management System</div>
-    </mat-card-header>
+  <div class="card-content">
+    <div class="wrapper"></div>
+    <mat-card>
 
-    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-card-header class="card-header">
+        <img src="{{imagePath}}" alt="logo">
+        <div class="name">Management System</div>
+      </mat-card-header>
 
-      <mat-card-content>
-        <div class="title">{{'Login.LoginAccount' | translate}}</div>
-        <div class="user-input">
-          <input #user class="input" [class.has-error]="hasError('UserName')" matInput placeholder="Username" type="text"
-                 formControlName="UserName">
-          <mat-error *ngIf="hasError('UserName')">
-            {{'Login.UsernameError' | translate}}
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <mat-card-content>
+          <div class="title">{{'Login.LoginAccount' | translate}}</div>
+          <div class="user-input">
+            <input #user class="input" [class.has-error]="hasError('UserName')" matInput placeholder="Username" type="text"
+                   formControlName="UserName">
+            <mat-error *ngIf="hasError('UserName')" class="mat-error">
+              {{'Login.UsernameError' | translate}}
+            </mat-error>
+          </div>
+
+          <div class="password-input">
+            <input #password class="input" [class.has-error]="hasError('Password')" matInput placeholder="Password"
+                   type="password" formControlName="Password">
+            <mat-icon
+              (click)="password.type = password.type === 'password'? 'text': 'password'">{{password.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="hasError('Password')" class="mat-error">
+              {{'Login.PasswordError' | translate}}
+            </mat-error>
+          </div>
+
+          <div class="partner-dropdown">
+            <mat-select
+              formControlName="LanguageId"
+              (selectionChange)="changeLanguage($event.value)"
+              [(value)]="defaultValue"
+              panelClass="overlay-dropdown login"
+              disableOptionCentering>
+              <mat-option *ngFor="let langauge of languages" [value]="langauge.Id">{{langauge.Name}}</mat-option>
+            </mat-select>
+          </div>
+
+        </mat-card-content>
+
+        <div class="btn-content">
+          <button type="submit" mat-stroked-button  class="login-btn" [class.disabled]="disabledButton">{{'Login.Submit' | translate}}</button>
+          <mat-error *ngIf="errorMessage">
+            {{errorMessage}}
           </mat-error>
         </div>
 
+      </form>
 
-        <div class="password-input">
-          <input #password class="input" [class.has-error]="hasError('Password')" matInput placeholder="Password"
-                 type="password" formControlName="Password">
-          <mat-icon
-            (click)="password.type = password.type === 'password'? 'text': 'password'">{{password.type === 'password' ? 'visibility' : 'visibility_off'}}</mat-icon>
-          <mat-error *ngIf="hasError('Password')">
-            {{'Login.PasswordError' | translate}}
-          </mat-error>
-        </div>
+    </mat-card>
+  </div>
 
-
-        <div class="partner-dropdown">
-          <mat-select
-            formControlName="LanguageId"
-            (selectionChange)="changeLanguage($event.value)"
-            [(value)]="defaultValue"
-            panelClass="overlay-dropdown login"
-            disableOptionCentering>
-            <mat-option *ngFor="let langauge of languages" [value]="langauge.Id">{{langauge.Name}}</mat-option>
-          </mat-select>
-        </div>
-
-      </mat-card-content>
-
-      <div class="btn-content">
-        <button type="submit" mat-stroked-button  class="login-btn" [class.disabled]="disabledButton">{{'Login.Submit' | translate}}</button>
-        <mat-error *ngIf="errorMessage">
-          {{errorMessage}}
-        </mat-error>
-      </div>
-
-    </form>
-
-  </mat-card>
 
 
 </div>

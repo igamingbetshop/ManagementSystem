@@ -2,6 +2,7 @@ import {CommonModule} from '@angular/common';
 import {Component, EventEmitter, Input, NgModule, OnInit, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
+
 import {QuillConfigModule, QuillModule} from "ngx-quill";
 import {TranslateModule} from "@ngx-translate/core";
 import * as Quill from "quill";

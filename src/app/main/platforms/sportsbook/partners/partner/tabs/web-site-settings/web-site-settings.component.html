@@ -22,6 +22,12 @@
 
   <div class="website-content-action">
     <div class="title">{{'Partners.WebSiteSettings' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(1)" [class.active]="deviceType === 1">{{'Common.Desktop' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(2)" [class.active]="deviceType === 2">{{'Common.Mobile' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(3)" [class.active]="deviceType === 3">{{'Common.Tablet' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(4)" [class.active]="deviceType === 4">{{'Clients.BetShop' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(5)" [class.active]="deviceType === 5">{{'Common.Terminal' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(6)" [class.active]="deviceType === 6">{{'Common.Application' | translate}}</button>
     <div class="input-container">
       <div class="input-content">
         <input matInput type="text" [placeholder]="'Partners.EnterStylesKey' | translate" [(ngModel)]="searchTitle"

@@ -27,29 +27,28 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class MainComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public client: Client;
-  public formGroup: UntypedFormGroup;
-  public countries: ServerCommonModel[] = [];
-  public allCountries;
-  public underMonitoringTypes = [];
-  public allCities: ServerCommonModel[] = [];
-  public cities: ServerCommonModel[] = [];
-  public clientStates: ServerCommonModel[] = [];
-  public clientCategories: ServerCommonModel[] = [];
-  public jobAreas: ServerCommonModel[] = [];
-  public isSaveActive: boolean;
-  public rowData = [];
-  public columnDefs = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public isEdit = false;
-  public referralTypes = [];
-  public countryId;
-  public districtes;
-  public districtId;
-  public districtName = '';
-
-    displayedColumns: string[] = ['select', 'id', 'balance', 'currency', 'type', 'status'];
+  clientId: number;
+  client: Client;
+  formGroup: UntypedFormGroup;
+  countries: ServerCommonModel[] = [];
+  allCountries;
+  underMonitoringTypes = [];
+  allCities: ServerCommonModel[] = [];
+  cities: ServerCommonModel[] = [];
+  clientStates: ServerCommonModel[] = [];
+  clientCategories: ServerCommonModel[] = [];
+  jobAreas: ServerCommonModel[] = [];
+  isSaveActive: boolean;
+  rowData = [];
+  columnDefs = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  isEdit = false;
+  referralTypes = [];
+  countryId;
+  districtes;
+  districtId;
+  districtName = '';
+  displayedColumns: string[] = ['select', 'id', 'balance', 'currency', 'type', 'status'];
   dataSource ;;
   selection = new SelectionModel<any>(true, []);
 
@@ -133,7 +132,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   ngOnInit() {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.clientStates = this.activateRoute.snapshot.data.clientStates;
-    
     this.clientCategories = this.activateRoute.snapshot.data.clientCategories;
     this.getReferralTypesEnum();
     this.getUnderMonitoringTypes();
@@ -148,11 +146,11 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       Controllers.CLIENT, Methods.GET_CLIENT_BY_ID).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode == 0) {
           this.client = data.ResponseObject.Client;
-          if (this.client.BirthDate == "0001-01-01T00:00:00") {
-            DateTimeHelper.startDate(); 
-            const fromDate = DateTimeHelper.getFromDate(); 
-            fromDate.setFullYear(fromDate.getFullYear() - 21); 
-            this.client.BirthDate = fromDate;
+          if (this.client.BirthDate === "0001-01-01T00:00:00") {
+            DateTimeHelper.startDate();
+            const fromDate = DateTimeHelper.getFromDate();
+            fromDate.setFullYear(fromDate.getFullYear() - 21);
+            this.client.BirthDate = fromDate ;
           }
           this.client.PartnerName = (this.commonDataService.partners as Array<any>).find(p => p.Id === this.client.PartnerId).Name;
           this.client.LanguageName = (this.commonDataService.languages as Array<any>).find(l => l.Id === this.client.LanguageId).Name;
@@ -255,6 +253,9 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       LastDepositDate: [null],
       Age: [null],
       RefId: [null],
+      CharacterName: [null],
+      CharacterId: [null],
+      CharacterLevel: [null],
     });
   }
 
@@ -291,6 +292,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         if (data.ResponseCode === 0) {
           this.countries = data.ResponseObject;
           this.client.CountryName = (this.countries as Array<any>).find(el => el.Id === this.client?.CountryId)?.Name;
+          this.client.CitizenshipName = (this.countries as Array<any>).find(el => el.Id === this.client?.Citizenship)?.Name;
         }
       });
   }
@@ -410,9 +412,21 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       }
     });
   }
-  
+
+  onResetClientPinCode() {
+    this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
+      Controllers.CLIENT, Methods.RESET_CLIENT_PIN_CODE).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.client.PinCode = data.ResponseObject;
+          SnackBarHelper.show(this._snackBar, { Description: 'The pin code has been reset successfully', Type: "success" });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+
+  }
+
   onRowClick(event: any, account: any) {
     this.selection.toggle(account);
-    console.log('Row clicked:', account);
   }
 }

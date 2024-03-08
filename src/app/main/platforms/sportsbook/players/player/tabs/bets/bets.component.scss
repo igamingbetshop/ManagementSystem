@@ -2,7 +2,7 @@
 @import "variables.scss";
 
 .container {
-  height:  94%!important;
+  height:  92%!important;
   @include container-style;
 
   .content-action {
@@ -51,8 +51,8 @@
     .pages-sizes {
       position: absolute;
       left: 265px;
-      bottom: 22px;
-      @include dropdown-style;
+      bottom: 2.4%;
+      @include grid-dropdown-style;
 
       ::ng-deep {
         .mat-select {

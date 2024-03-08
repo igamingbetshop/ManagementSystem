@@ -243,7 +243,6 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
 
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
-
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {

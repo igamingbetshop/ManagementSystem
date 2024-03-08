@@ -27,6 +27,7 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
     floatingFilter: true,
     resizable: true,
     sortable: false,
+    minWidth: 50,
   };
 
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
@@ -141,8 +142,6 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
           })
           this.rowData = _rowData;
 
-          console.log(this.rowData);
-          
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

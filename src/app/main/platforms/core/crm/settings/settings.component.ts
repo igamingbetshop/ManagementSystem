@@ -27,7 +27,6 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
   public rowData = [];
   public partners: any[] = [];
   public settingTypes: any[] = [];
-  columnDefs;
   frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,

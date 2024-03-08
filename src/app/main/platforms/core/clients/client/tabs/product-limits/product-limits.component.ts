@@ -60,7 +60,8 @@ export class ProductLimitsComponent implements OnInit {
     sortable: false,
     resizable: true,
     filter: false,
-    suppressMenu: true
+    suppressMenu: true,
+    minWidth: 50,
   };
   public autoGroupColumnDef: ColDef = {
     headerName: 'Common.GroupId',
@@ -119,11 +120,10 @@ export class ProductLimitsComponent implements OnInit {
   createServerSideDatasource = () => {
     return {
       getRows: (params) => {
-
         const filter: any = {};
         filter.SkipCount = 0;
         filter.TakeCount = -1;
-
+        filter.IsActive = true;
         if (params.parentNode.level == -1) {
           filter.ProductId = 1;
         } else {

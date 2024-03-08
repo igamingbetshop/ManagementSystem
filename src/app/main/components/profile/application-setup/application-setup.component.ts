@@ -67,7 +67,7 @@ export class ApplicationSetupComponent implements OnInit {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.USER, Methods.GENERATE_QR_CODE).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.qrData = data.ResponseObject; 
+          this.qrData = data.ResponseObject;
           this.qrCodeImageSrc = `https://chart.apis.google.com/chart?chs=${this._qrCodeWidth}x${this._qrCodeHeight}&chld=M|0&cht=qr&chl=${this.qrData.Data}`
           this.formGroup.get('QRCode').setValue(this.qrData.Key);
         }
@@ -87,7 +87,7 @@ export class ApplicationSetupComponent implements OnInit {
   close() {
     this.dialogRef.close();
   }
-  
+
   onChangeQR() {
     this.qrCodeImageSrc = null;
     this.qrData = null;

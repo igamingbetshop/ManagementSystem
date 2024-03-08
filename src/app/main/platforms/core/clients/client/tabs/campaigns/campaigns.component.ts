@@ -234,7 +234,7 @@ export class CampaignsComponent extends BasePaginatedGridComponent implements On
           cellRendererParams: {
             onClick: this.saveFinishes['bind'](this),
             Label: 'Save',
-            bgColor: '#076192',
+            bgColor: '#3E4D66',
             textColor: 'white'
           }
         }

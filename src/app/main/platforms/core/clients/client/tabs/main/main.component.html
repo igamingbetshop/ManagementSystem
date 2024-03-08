@@ -11,90 +11,70 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{client?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'Id'" readonly>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
         <div class="second-hand">{{client?.PartnerName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'PartnerName'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'PartnerName'" readonly>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.BuildingNumber' | translate}}</div>
         <div class="second-hand">{{client?.BuildingNumber}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'BuildingNumber'">
-          </mat-form-field>
+          <input matInput [formControlName]="'BuildingNumber'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.UserName' | translate}}</div>
         <div class="second-hand">{{client?.UserName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'UserName'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'UserName'" readonly>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
         <div class="second-hand">{{client?.FirstName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'FirstName'">
-          </mat-form-field>
+          <input matInput [formControlName]="'FirstName'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.MobileNumber' | translate}}</div>
         <div class="second-hand">{{client?.MobileNumber}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'MobileNumber'">
-          </mat-form-field>
+          <input matInput [formControlName]="'MobileNumber'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
         <div class="second-hand">{{client?.LastName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'LastName'">
-          </mat-form-field>
+          <input matInput [formControlName]="'LastName'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.PhoneNumber' | translate}}</div>
         <div class="second-hand">{{client?.PhoneNumber}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'PhoneNumber'">
-          </mat-form-field>
+          <input matInput [formControlName]="'PhoneNumber'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.Email' | translate}}</div>
         <div class="second-hand">{{client?.Email}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Email'">
-          </mat-form-field>
+          <input matInput [formControlName]="'Email'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.SecondName' | translate}}</div>
         <div class="second-hand">{{client?.SecondName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'SecondName'">
-          </mat-form-field>
+          <input matInput [formControlName]="'SecondName'">
         </div>
       </div>
       <div>
@@ -102,8 +82,11 @@
         <div class="second-hand">{{client?.LanguageName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'LanguageId'">
-            <mat-option *ngFor="let language of commonDataService.languages"
-              [value]="language.Id">{{language.Name}}</mat-option>
+            @for (language of commonDataService.languages; track $index) {
+              <mat-option
+                [value]="language.Id">{{language.Name}}
+              </mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -111,18 +94,16 @@
         <div class="first-hand">{{'Clients.SecondSurname' | translate}}</div>
         <div class="second-hand">{{client?.SecondSurname}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'SecondSurname'">
-          </mat-form-field>
+          <input matInput [formControlName]="'SecondSurname'">
         </div>
       </div>
       <!-- <div>
         <div class="first-hand">{{'Clients.PromoCode' | translate}}</div>
         <div class="second-hand">{{client?.PromoCode}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput [formControlName]="'PromoCode'" readonly>
-          </mat-form-field>
+           </mat-form-field> 
         </div>
       </div> -->
       <div>
@@ -130,8 +111,11 @@
         <div class="second-hand">{{client?.GenderName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Gender'">
-            <mat-option *ngFor="let gender of commonDataService.genders"
-              [value]="gender.Id">{{gender.Name}}</mat-option>
+            @for (gender of commonDataService.genders; track $index) {
+              <mat-option
+                [value]="gender.Id">{{gender.Name}}
+              </mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -139,18 +123,14 @@
         <div class="first-hand">{{'Clients.ZipCode' | translate}}</div>
         <div class="second-hand">{{client?.ZipCode}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'ZipCode'">
-          </mat-form-field>
+          <input matInput [formControlName]="'ZipCode'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.Currency' | translate}}</div>
         <div class="second-hand">{{client?.CurrencyId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'CurrencyId'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'CurrencyId'" readonly>
         </div>
       </div>
       <div>
@@ -158,7 +138,9 @@
         <div class="second-hand">{{client?.CountryName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'CountryId'" (selectionChange)="onCountryChange($event)">
-            <mat-option *ngFor="let country of countries" [value]="country.Id" >{{country.Name}}</mat-option>
+            @for (country of countries; track $index) {
+              <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -167,7 +149,9 @@
         <div class="second-hand">{{this.districtName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'DistrictId'" (selectionChange)="onDistrictChange($event)">
-            <mat-option *ngFor="let district of districtes" [value]="district.Id">{{district.Name}}</mat-option>
+            @for (district of districtes; track $index) {
+              <mat-option [value]="district.Id">{{district.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -176,7 +160,9 @@
         <div class="second-hand">{{client?.CityName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'CityId'" (selectionChange)="onCityChange($event)">
-            <mat-option *ngFor="let city of cities" [value]="city.Id">{{city.Name}}</mat-option>
+            @for (city of cities; track $index) {
+              <mat-option [value]="city.Id">{{city.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -184,67 +170,53 @@
         <div class="first-hand">{{'Clients.Address' | translate}}</div>
         <div class="second-hand">{{client?.Address}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Address'">
-          </mat-form-field>
+          <input matInput [formControlName]="'Address'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.Apartment' | translate}}</div>
         <div class="second-hand">{{client?.Apartment}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Apartment'">
-          </mat-form-field>
+          <input matInput [formControlName]="'Apartment'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.CityText' | translate}}</div>
         <div class="second-hand">{{client?.City}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'City'">
-          </mat-form-field>
+          <input matInput [formControlName]="'City'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.IssuedBy' | translate}}</div>
         <div class="second-hand">{{client?.DocumentIssuedBy}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'DocumentIssuedBy'">
-          </mat-form-field>
+          <input matInput [formControlName]="'DocumentIssuedBy'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.BirthDate' | translate}}</div>
         <div class="second-hand">{{client?.BirthDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
-            <input matInput [matDatepicker]="picker" [formControlName]="'BirthDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+        <div class="form-field form-calendar form-calendar-edit">
+          <input matInput [matDatepicker]="picker" [formControlName]="'BirthDate'">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+            <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.DocumentNumber' | translate}}</div>
         <div class="second-hand">{{client?.DocumentNumber}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'DocumentNumber'">
-          </mat-form-field>
+          <input matInput [formControlName]="'DocumentNumber'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
         <div class="second-hand">{{client?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'CreationTime'">
-          </mat-form-field>
+          <input matInput [formControlName]="'CreationTime'">
         </div>
       </div>
       <div>
@@ -267,8 +239,11 @@
         <div class="second-hand">{{client?.DocumentType}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'DocumentType'">
-            <mat-option *ngFor="let docType of commonDataService.documentTypes"
-              [value]="docType.Id">{{docType.Name}}</mat-option>
+            @for (docType of commonDataService.documentTypes; track $index) {
+              <mat-option
+                [value]="docType.Id">{{docType.Name}}
+              </mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -284,7 +259,9 @@
         <div class="second-hand">{{client?.StateName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'State'">
-            <mat-option *ngFor="let state of clientStates" [value]="state.Id">{{state.Name}}</mat-option>
+            @for (state of clientStates; track $index) {
+              <mat-option  [value]="state.Id">{{state.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -299,9 +276,7 @@
         <div class="first-hand">{{'Common.Info' | translate}}</div>
         <div class="second-hand">{{client?.Info}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Info'">
-          </mat-form-field>
+          <input matInput [formControlName]="'Info'">
         </div>
       </div>
       <div>
@@ -315,27 +290,21 @@
         <div class="first-hand">{{'Clients.AffiliatePlatformId' | translate}}</div>
         <div class="second-hand">{{client?.AffiliatePlatformId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'AffiliatePlatformId'">
-          </mat-form-field>
+          <input matInput [formControlName]="'AffiliatePlatformId'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.AffiliateId' | translate}}</div>
         <div class="second-hand">{{client?.AffiliateId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'AffiliateId'">
-          </mat-form-field>
+          <input matInput [formControlName]="'AffiliateId'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.RefId' | translate}}</div>
         <div class="second-hand">{{client?.RefId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'RefId'">
-          </mat-form-field>
+          <input matInput [formControlName]="'RefId'">
         </div>
       </div>
       <div>
@@ -349,9 +318,7 @@
         <div class="first-hand">{{'Clients.BetShopId' | translate}}</div>
         <div class="second-hand">{{client?.BetShopId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'BetShopId'">
-          </mat-form-field>
+          <input matInput [formControlName]="'BetShopId'">
         </div>
       </div>
       <div>
@@ -367,7 +334,9 @@
         <div class="second-hand">{{client?.JobArea}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'JobArea'">
-            <mat-option *ngFor="let jobArea of jobAreas" [value]="jobArea.Id">{{jobArea.NickName}}</mat-option>
+            @for (jobArea of jobAreas; track $index) {
+              <mat-option [value]="jobArea.Id">{{jobArea.NickName}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -376,16 +345,20 @@
         <div class="second-hand">{{client?.CategoryName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'CategoryId'">
-            <mat-option *ngFor="let category of clientCategories" [value]="category.Id">{{category.Name}}</mat-option>
+            @for (category of clientCategories; track $index) {
+              <mat-option [value]="category.Id">{{category.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.Citizenship' | translate}}</div>
-        <div class="second-hand">{{client?.Citizenship}}</div>
+        <div class="second-hand">{{client?.CitizenshipName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Citizenship'">
-            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
+            @for (country of countries; track $index) {
+              <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -393,45 +366,73 @@
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{client?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'NickName'">
-          </mat-form-field>
+          <input matInput [formControlName]="'NickName'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.AgentId' | translate}}</div>
         <div class="second-hand">{{client?.UserId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'UserId'">
-          </mat-form-field>
+          <input matInput [formControlName]="'UserId'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Payments.LastDepositDate' | translate}}</div>
         <div class="second-hand">{{client?.LastDepositDate}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'LastDepositDate'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'LastDepositDate'" readonly>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Common.Age' | translate}}</div>
         <div class="second-hand">{{client?.Age}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Age'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'Age'" readonly>
         </div>
       </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.UnderMonitoringTypes' | translate}}</div>
+        <div class="second-hand">{{client?.UnderMonitoringTypesNames}}</div>
+        <div class="form-field form-input">
+          <input matInput [value]="client?.UnderMonitoringTypesNames" readonly>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CharacterName' | translate}}</div>
+        <div class="second-hand">{{client?.CharacterName}}</div>
+        <div class="form-field form-input">
+          <input matInput formControlName="CharacterName">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CharacterId' | translate}}</div>
+        <div class="second-hand">{{client?.CharacterId}}</div>
+        <div class="form-field form-input">
+          <input matInput formControlName="CharacterId">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CharacterLevel' | translate}}</div>
+        <div class="second-hand">{{client?.CharacterLevel}}</div>
+        <div class="form-field form-input">
+          <input matInput formControlName="CharacterLevel">
+        </div>
+      </div>
+
       <div>
         <div class="first-hand">{{'Clients.ReferralType' | translate}}</div>
         <div class="second-hand">{{client?.ReferralType}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'ReferralType'">
-            <mat-option *ngFor="let referralType of referralTypes"
-              [value]="referralType.Id">{{referralType.Name}}</mat-option>
+            @for (referralType of referralTypes; track $index) {
+              <mat-option 
+                [value]="referralType.Id">{{referralType.Name}}
+              </mat-option>
+            }
           </mat-select>
         </div>
 
@@ -440,24 +441,20 @@
         <div class="first-hand">{{'Clients.USSDPin' | translate}}</div>
         <div class="second-hand" *ngIf="client?.USSDPin; else ''">********</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input [formControlName]="'USSDPin'" matInput [value]="client?.USSDPin ? client.USSDPin : ''">
-          </mat-form-field>
+          <input [formControlName]="'USSDPin'" matInput [value]="client?.USSDPin ? client.USSDPin : ''">
         </div>
       </div>
 
-      <div>
-        <div class="first-hand">{{'Clients.UnderMonitoringTypes' | translate}}</div>
-        <div class="second-hand">{{client?.UnderMonitoringTypesNames}}</div>
-        <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [value]="client?.UnderMonitoringTypesNames" readonly>
-          </mat-form-field>
-        </div>
+      <div class="pin-code-field">
+        <div class="first-hand">{{'Clients.PinCode' | translate}}</div>
+        <div class="static-hand">{{client?.PinCode}}</div>
+
+        <button mat-stroked-button class="mat-btn"  type="button" (click)="onResetClientPinCode()">{{'Clients.ResetPinCode'
+          |translate}}
+        </button>
       </div>
 
-      <div></div>
-      <div></div>
+
       <div></div>
       <div></div>
       <div class="form-actions">
@@ -468,11 +465,13 @@
             translate}}</button>
         </div>
 
-        <div class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
-          <button mat-stroked-button class="mat-btn" [class.disabled]="!isSaveActive" type="submit"
-          (click)="onSubmit()">{{'Common.Save' | translate}}</button>
-        </div>
+        @if(isEdit) {
+          <div class="actions">
+            <button mat-stroked-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
+            <button mat-stroked-button class="mat-btn" [class.disabled]="!isSaveActive" type="submit"
+              (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+          </div>
+        }
       </div>
 
     </form>
@@ -491,9 +490,9 @@
   <div class="grid-content">
     <ag-grid-angular #agGrid class="ag-theme-balham" [headerHeight]="33" [rowHeight]="42" [rowData]="rowData"
       [suppressCopyRowsToClipboard]="true" [rowModelType]="rowModelType" [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef" [cacheBlockSize]="cacheBlockSize"
-      (gridReady)="onGridReady($event)" [ensureDomOrder]="true" [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems" rowSelection="single">
+      [defaultColDef]="defaultColDef" [cacheBlockSize]="cacheBlockSize" (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true" [enableCellTextSelection]="true" [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
     </ag-grid-angular>
   </div>
 

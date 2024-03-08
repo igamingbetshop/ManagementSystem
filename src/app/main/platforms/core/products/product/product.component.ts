@@ -19,29 +19,29 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 })
 export class ProductComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public productStates: any[] = [];
-  public name: string;
-  public productId;
-  public currentProduct;
-  public formGroup: UntypedFormGroup;
-  public rowData = [];
-  public filter: any = {};
-  public isEdit = false;
-  public countries;
-  public countriesEntites = [];
-  public currencesEntites = [];
-  public currencies;
-  public productCategories = [];
-  public gameProviders = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-
+  productStates: any[] = [];
+  name: string;
+  productId;
+  currentProduct;
+  formGroup: UntypedFormGroup;
+  rowData = [];
+  filter: any = {};
+  isEdit = false;
+  countries;
+  countriesEntites = [];
+  currencesEntites = [];
+  currencies;
+  productCategories = [];
+  gameProviders = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
-    private activateRoute: ActivatedRoute,
+    public activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
+
     private fb: UntypedFormBuilder,
     protected injector: Injector,
   ) {
@@ -93,8 +93,8 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
         filter: false,
         valueGetter: params => {
           let data = { path: '', queryParams: null };
-          data.path = '/main/platform/products/view-product';
-          data.queryParams = { commentId: params.data.Id };
+          data.path = '/main/platform/products/all-products/product/view-product';
+          data.queryParams = { CommentId: params.data.Id };
           return data;
         },
         sortable: false
@@ -108,16 +108,16 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
     this.gridStateName = 'core-product-grid-state';
     this.currencies = this.commonDataService.currencies;
     this.name = this.activateRoute.snapshot.queryParams.Name;
-    this.productId = +this.activateRoute.snapshot.queryParams.productId;
+    this.productId = +this.activateRoute.snapshot.queryParams.ProductId;
 
-    
+
     this.getProductStates();
     this.getProductCategories();
     this.getAllCountries();
     this.getGameProviders();
     this.createForm();
     this.setCurrencesEntites();
-    
+
   }
 
 
@@ -189,7 +189,7 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
           this.formGroup.patchValue(this.currentProduct);
           if (this.currentProduct?.CategoryId) {
             this.currentProduct['CategoryName'] = this.productCategories.find(p => p.Id === this.currentProduct?.CategoryId).Name;
-          }          
+          }
           this.countriesEntites.push(this.currentProduct?.Countries.Ids.map(elem => {
             return this.countries?.find((item) => elem === item.Id)?.Name
           }))
@@ -293,6 +293,14 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
   onCancel() {
     this.isEdit = false;
     this.formGroup.patchValue(this.currentProduct);
+  }
+
+  onNaviagetToProducts() {
+    this.router.navigate(['/main/platform/products/all-products'])
+    .then(() => {
+      // Manually reload the page
+      location.reload();
+    });
   }
 
 

@@ -5,13 +5,16 @@ import {UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, 
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatInputModule} from '@angular/material/input';
+
 import {MatFormFieldModule} from '@angular/material/form-field';
+
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {CoreApiService} from '../../platforms/core/services/core-api.service';
 import {ConfigService} from '../../../core/services';
 import {Controllers, Methods} from '../../../core/enums';
 import {take} from 'rxjs/operators';
 import {MatButtonModule} from '@angular/material/button';
+
 import {MatTabsModule} from '@angular/material/tabs';
 
 @Component({

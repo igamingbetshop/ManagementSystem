@@ -8,6 +8,10 @@
   width: 100%;
   height: calc(100vh - 64px);
   background: $content-bg-color;
+  @media only screen and (max-width: 1200px) {
+    background-color: rgb(231, 232, 240);
+    height: auto;
+  }
 
  .content-inner {
     height: 100%;
@@ -34,3 +38,7 @@
 }
 
 
+::-webkit-scrollbar {
+  width: 2px;
+  height: 10px;
+}

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {TranslateModule} from "@ngx-translate/core";
 import {AgGridModule} from "ag-grid-angular";
 

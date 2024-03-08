@@ -27,6 +27,7 @@ export class MappedSportsGridComponent extends BasePaginatedGridComponent implem
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 

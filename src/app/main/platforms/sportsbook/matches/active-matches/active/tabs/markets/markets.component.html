@@ -41,12 +41,14 @@
         <div class="title">
           &nbsp; {{name}}
         </div>
+
+        <div>
+          <button mat-stroked-button [class.disabled]="!this.partnerId"  class="mat-btn" (click)="onReset()">{{'Sport.Reset' | translate}}</button>
+        </div>
+
         <div>
           <button mat-stroked-button  class="mat-btn" (click)="AddMarket()">{{'Sport.AddMarket' | translate}}</button>
         </div>
-        <!-- <div>
-          <button mat-raised-button class="mat-btn" style="margin-right: 10px" (click)="resetMarket()">{{'Sport.ResettleMarket' | translate}}</button>
-        </div> -->
         <div class="partner-dropdown">
           <mat-select
           #part  (selectionChange)="onPartnerChange(part.value)"

@@ -296,7 +296,7 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
       Controllers.ENUMERATION, Methods.GET_CLIENT_ACCOUNT_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
           this.accountTypes = data.ResponseObject;
-          
+
         }
       });
   }

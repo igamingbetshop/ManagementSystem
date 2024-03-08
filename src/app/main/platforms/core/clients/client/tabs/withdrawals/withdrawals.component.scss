@@ -52,8 +52,8 @@
     .pages-sizes {
       position: absolute;
       left: 262px;
-      bottom: 18px;
-      @include dropdown-style;
+      bottom: 1.5%;
+      @include grid-dropdown-style;
 
       ::ng-deep {
         .mat-select {

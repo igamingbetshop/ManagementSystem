@@ -1,23 +1,24 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {SportsbookApiService} from "../../../../../services/sportsbook-api.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ActivatedRoute} from "@angular/router";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { SportsbookApiService } from "../../../../../services/sportsbook-api.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
 import 'ag-grid-enterprise';
-import {BasePaginatedGridComponent} from "../../../../../../../components/classes/base-paginated-grid-component";
-import {AgBooleanFilterComponent} from "../../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../../../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../../../../../components/grid-common/checkbox-renderer.component";
-import {take} from "rxjs/operators";
-import {MatDialog} from "@angular/material/dialog";
-import {Paging} from "../../../../../../../../core/models";
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
-import {OddsTypePipe} from "../../../../../../../../core/pipes/odds-type.pipe";
+import { BasePaginatedGridComponent } from "../../../../../../../components/classes/base-paginated-grid-component";
+import { AgBooleanFilterComponent } from "../../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../../../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../../../../../components/grid-common/checkbox-renderer.component";
+import { take } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { Paging } from "../../../../../../../../core/models";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
+import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe";
 import { LocalStorageService } from "../../../../../../../../core/services";
 import { BetStatuses, ModalSizes, OddsTypes } from 'src/app/core/enums';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-bets',
@@ -53,7 +54,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   private oddsType: number;
   private statusFilterArray = [];
 
-  public betStatuses =  [
+  public betStatuses = [
     { "Name": "Uncalculated", Id: 1 },
     { "Name": "Won", Id: 2 },
     { "Name": "Lost", Id: 3 },
@@ -511,7 +512,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
       },
       getDetailRowData: params => {
         if (params) {
-          this.apiService.apiPost('report/selections', {BetId: params.data.Id})
+          this.apiService.apiPost('report/selections', { BetId: params.data.Id })
             .pipe(take(1))
             .subscribe((data) => {
 
@@ -525,7 +526,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         }
       },
     }
-    this.rowStyle = {background: 'white'};
+    this.rowStyle = { background: 'white' };
   }
 
   ngOnInit() {
@@ -542,7 +543,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
 
   getRowStyle(params) {
     if (params.node.data) {
-      return {'background-color': params.data.CommentTypeName};
+      return { 'background-color': params.data.CommentTypeName };
     }
   }
 
@@ -553,7 +554,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         if (data.Code === 0) {
           this.commentTypes = data.CommentTypes;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -589,9 +590,9 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
                   ProfitAmount: `${this.profit.toFixed(2)} ${this.playerCurrency}`
                 }
               ]);
-              params.success({rowData: mappedRows, rowCount: data.TotalCount});
+              params.success({ rowData: mappedRows, rowCount: data.TotalCount });
             } else {
-              SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
           });
       }
@@ -604,12 +605,12 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
 
   calculateBet() {
     let row = this.gridApi?.getSelectedRows()[0];
-    this.apiService.apiPost('report/calculatebet', {BetId: row.Id})
+    this.apiService.apiPost('report/calculatebet', { BetId: row.Id })
       .pipe(take(1))
       .subscribe((data) => {
         if (data.Code === 0) {
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -618,13 +619,13 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     if (!this.selectedData) {
       this.selected = false;
     } else {
-      this.apiService.apiPost('report/deletebet', {BetId: this.selectedData.data.Id})
+      this.apiService.apiPost('report/deletebet', { BetId: this.selectedData.data.Id })
         .pipe(take(1))
         .subscribe((data) => {
           if (data.Code === 0) {
             this.selected = false;
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         })
 
@@ -651,6 +652,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnSelectPanel();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
@@ -683,10 +685,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   async addNotes(params) {
-    const {AddNoteComponent} = await import('../../../../../../../components/add-note/add-note.component');
+    const { AddNoteComponent } = await import('../../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
       width: ModalSizes.MEDIUM,
-      data: {ObjectId: params.BetDocumentId, ObjectTypeId: 12}
+      data: { ObjectId: params.BetDocumentId, ObjectTypeId: 12 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -707,11 +709,24 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   //   })
   // }
 
+  exportToCsv() {
+    this.apiService.apiPost('report/exportbets', {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+
   async openNotes(params) {
-    const {ViewNoteComponent} = await import('../../../../../../../components/view-note/view-note.component');
+    const { ViewNoteComponent } = await import('../../../../../../../components/view-note/view-note.component');
     const dialogRef = this.dialog.open(ViewNoteComponent, {
       width: ModalSizes.EXTRA_LARGE,
-      data: {ObjectId: params.BetDocumentId, ObjectTypeId: 12, Type: 1}
+      data: { ObjectId: params.BetDocumentId, ObjectTypeId: 12, Type: 1 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {

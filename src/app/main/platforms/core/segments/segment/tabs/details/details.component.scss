@@ -4,7 +4,7 @@
 .container {
   @include container-style;
   height: auto;
-
+  background-color: $content-bg-color;
   .wraper {
     display: grid;
     align-items: center;
@@ -16,7 +16,7 @@
     //   flex: 1;
     // }
 
-    .mat-form-field, .mat-radio-group {
+    .mat-mdc-form-field, .mat-mdc-radio-group {
       flex: 1;
     }
 
@@ -31,7 +31,7 @@
       right: 941px;
     }
 
-    .mat-radio-group {
+    .mat-mdc-radio-group {
       margin-bottom: 10px;
     }
 
@@ -81,7 +81,7 @@
   
       }
   
-      .mat-form-field, .mat-radio-group {
+      .mat-mdc-form-field, .mat-mdc-radio-group {
         flex: 2;
       }
   
@@ -100,7 +100,7 @@
         right: 941px;
       }
   
-      .mat-radio-group {
+      .mat-mdc-radio-group {
         margin-bottom: 10px;
       }
   
@@ -145,14 +145,19 @@
           flex-direction: column;
           height: auto;
         }
+
+        .hand-group {
+          height: auto;
+          min-height: 100%;
+        }
+
+        .group-row {
+          height: auto;
+        }
       }
     }
   }
 }
-
-
-
-
 
 mat-icon {
   cursor: pointer;
@@ -163,6 +168,10 @@ mat-icon {
 
 .mr-15 {
   margin-right: 15px !important;
+}
+
+.picker {
+  width: 250px!important;
 }
 
 .main-main {
@@ -212,7 +221,7 @@ mat-icon {
 
       }
 
-      .mat-form-field, .mat-radio-group {
+      .mat-mdc-form-field, .mat-mdc-radio-group {
         flex: 2;
       }
 
@@ -231,7 +240,7 @@ mat-icon {
         right: 941px;
       }
 
-      .mat-radio-group {
+      .mat-mdc-radio-group {
         margin-bottom: 10px;
       }
 
@@ -289,7 +298,7 @@ mat-icon {
 
       .third-hand {
         width: 40%;
-        .mat-radio-button {
+        .mat-mdc-radio-button {
           margin-left: 5px;
         }
       }
@@ -313,5 +322,11 @@ mat-icon {
     height: 50px!important;
   }
 }
+
+.mat-datepicker-input {
+  background-color: transparent !important;
+}
+
+
 
 

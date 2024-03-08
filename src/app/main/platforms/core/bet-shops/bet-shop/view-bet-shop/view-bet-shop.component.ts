@@ -42,7 +42,7 @@ export class ViewBetShopComponent implements OnInit {
 
   ngOnInit() {
     this.name = this.activateRoute.snapshot.queryParams.Name;
-    
+
     this.betId = this.activateRoute.snapshot.queryParams.BetId;
     this.betSopeId = this.activateRoute.snapshot.queryParams.betShopId;
     this.secondName = this.activateRoute.snapshot.queryParams.secondName;
@@ -74,7 +74,7 @@ export class ViewBetShopComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.cashDesk = data.ResponseObject.Entities[0];
           this.cashDesk.StateName = this.cashdeskStates?.find(p => p.Id == this.cashDesk.State).Name;
-          this.formGroup.patchValue(this.cashDesk);     
+          this.formGroup.patchValue(this.cashDesk);
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
@@ -116,6 +116,18 @@ export class ViewBetShopComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+    });
+  }
+
+  toRedirectToBetshops() {
+    this.router.navigate(['/main/platform/bet-shop-groups/bet-shops/all-bet-shops'], {
+      queryParams: { "BetId": this.betId, "Name": this.name, }
+    });
+  };
+
+  redirectToBetshop() {
+    this.router.navigate(['/main/platform/bet-shop-groups/bet-shops/bet-shop'], {
+      queryParams: { "BetId": this.betId, "Name": this.name, "betShopId": this.betSopeId, "secondName": this.secondName }
     });
   }
 

@@ -67,7 +67,7 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this),
-
+          onCellValueChanged: this.onCheckBoxChange.bind(this)
         }
       },
       {

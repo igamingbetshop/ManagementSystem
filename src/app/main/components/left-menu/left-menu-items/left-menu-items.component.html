@@ -9,7 +9,7 @@
       <ng-container *ngFor="let category of categoryData?.Pages">
         <a mat-menu-item [class.selected]="routerLinkUrl === category.Route" class="item"
           [matMenuTriggerFor]="!!category?.Pages.length && !category.Route ? nestedMenu : null"
-          (mouseleave)="onMouseLeave('root')" [routerLink]="category.Route || null" (click)="onClick(category)">
+          (mouseleave)="onMouseLeave('root')" [routerLink]="category.Route" (click)="onClick(category)">
           <div class="item-content"
             [class.arrow]="!!category?.Pages && category?.isNestedDynamic && !category?.Route || category.Pages?.length > 0 && !category?.Route || category?.ApiRequest && !category?.Route">
             <mat-icon>{{category.Icon}}</mat-icon>
@@ -20,7 +20,7 @@
             <a mat-menu-item class="item" [class.selected]="routerLinkUrl === nestedCategory.Route"
               *ngFor="let nestedCategory of category?.Pages"
               [matMenuTriggerFor]="!!nestedCategory?.ApiRequest || !!nestedCategory?.Pages?.length ? showNestedItem : null"
-              [routerLink]="nestedCategory.Route || null" (mouseenter)="onMouseEnter(nestedCategory)"
+              [routerLink]="nestedCategory.Route" (mouseenter)="onMouseEnter(nestedCategory)"
               (click)="onClick(nestedCategory)">
               <div class="item-content"
                 [class.arrow]="!!nestedCategory?.Pages && nestedCategory?.isNestedDynamic || nestedCategory?.Pages?.length > 0">
@@ -32,10 +32,9 @@
                 <a mat-menu-item class="item" [class.selected]="routerLinkUrl === secondNestedCategory.Route"
                   *ngFor="let secondNestedCategory of nestedCategory?.Pages"
                   [routerLink]="[secondNestedCategory.Route  || null]"
-                  [matMenuTriggerFor]="!!secondNestedCategory?.ApiRequest || !!secondNestedCategory?.Pages ? showNestedItem : null"
                   (click)="onClick(secondNestedCategory)">
                   <div class="item-content">
-                    <mat-icon>{{secondNestedCategory.Icon}}</mat-icon>
+                    <!-- <mat-icon>{{secondNestedCategory.Icon}}</mat-icon> -->
                     <div class="item-name">{{secondNestedCategory?.Name | translate}}</div>
                   </div>
 
@@ -43,7 +42,7 @@
                     overlapTrigger="false">
                     <a mat-menu-item class="item" [class.selected]="routerLinkUrl === thirdNestedCategory.Route"
                       *ngFor="let thirdNestedCategory of secondNestedCategory?.Pages"
-                      
+
                       [matMenuTriggerFor]="!!thirdNestedCategory?.ApiRequest || !!thirdNestedCategory?.Pages ? showNestedItem : null"
                       (click)="onClick(thirdNestedCategory)">
                       <div class="item-content">

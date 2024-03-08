@@ -2,11 +2,16 @@ import {Component, Inject, NgModule, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatInputModule} from "@angular/material/input";
+
 import {MatSelectModule} from "@angular/material/select";
+
 import {ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {MatButtonModule} from "@angular/material/button";
+
 import {TranslateModule} from "@ngx-translate/core";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";

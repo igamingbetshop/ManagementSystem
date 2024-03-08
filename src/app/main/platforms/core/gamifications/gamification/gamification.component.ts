@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { take } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,7 +27,9 @@ export class GamificationComponent implements OnInit {
   environments: any[] = ENVIRONMENTS_STATUSES;
   isEdit = false;
   image: any;
-
+  backgroundImage: any;
+  mobileBackgroundImage: any;
+  isChilde = false;
   constructor(
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
@@ -43,7 +45,10 @@ export class GamificationComponent implements OnInit {
   ngOnInit() {
     this.partners = this.commonDataService.partners;
     this.gamificationId = +this.activateRoute.snapshot.queryParams.gamificationId;
-    this.getGamificationById()
+    if (this.activateRoute.snapshot.queryParams.isChilde) {
+      this.isChilde = true;
+    };
+    this.getGamificationById();
   }
 
   getGamificationById() {
@@ -57,7 +62,11 @@ export class GamificationComponent implements OnInit {
           this.image = "https://"+ this.gamification.SiteUrl + this.gamification.ImageData;
           this.formGroup.patchValue(this.gamification);
           this.formGroup.get('EnvironmentTypeId').setValue(1);
-          
+          if (this.isChilde) {
+            this.backgroundImage = "https://"+ this.gamification.SiteUrl + this.gamification.BackgroundImageData;
+            this.mobileBackgroundImage = "https://"+ this.gamification.SiteUrl + this.gamification.MobileBackgroundImageData;
+          }
+
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -76,50 +85,68 @@ export class GamificationComponent implements OnInit {
       Status: [null, [Validators.required]],
       Order: [null, [Validators.required]],
       ImageExtension: [null],
-      ImageUrl: [null],
+      ImageData: [null],
       CompPoints: [null, [Validators.required]],
+      BackgroundImageData: [null],
+      MobileBackgroundImageData: [null]
     });
   }
 
-  uploadFile(event) {
-    let files = event.target.files.length && event.target.files[0];
-    if (files) {
-      const validDocumentSize = files.size < 5000000;
-      const validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif)$/.test(event.target.value);
-      if (validDocumentFormat && validDocumentSize) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const binaryString = reader.result as string;
-          if (files.size < 700000) {
-            this.formGroup.get('ImageUrl').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
+  handleFileUpload(files: File, imageControlName: string) {
+    const validDocumentSize = files.size < 2500000;
+    const validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif)$/.test(files.name);
+
+    if (validDocumentFormat && validDocumentSize) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const binaryString = reader.result as string;
+        if (files.size < 900000) {
+          this.formGroup.get(imageControlName).setValue(binaryString.substring(binaryString.indexOf(',') + 1));
+          if (imageControlName === 'ImageData') {
             this.formGroup.get('ImageExtension').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
           }
-          else {
-            const img = new Image();
-            img.src = binaryString;
-            img.onload = (data) => {
-              compressImage(img, 0.7).toBlob((blob) => {
-                if (blob) {
-                  const reader = new FileReader();
-                  reader.readAsDataURL(blob);
-                  reader.onloadend = () => {
-                    const base64data = reader.result as string;
-                    this.formGroup.get('ImageUrl').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
-                    this.formGroup.get('ImageExtension').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
-                  }
+        } else {
+          const img = new Image();
+          img.src = binaryString;
+          img.onload = () => {
+            compressImage(img, 0.7).toBlob((blob) => {
+              if (blob) {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => {
+                  const base64data = reader.result as string;
+                  this.formGroup.get(imageControlName).setValue(binaryString.substring(binaryString.indexOf(',') + 1));
                 }
-              },
-                files.type,
-                0.7)
-            }
+              }
+            }, files.type, 0.7)
           }
-        };
-        reader.readAsDataURL(files);
-      } else {
-        this.formGroup.get('ImageExtension').patchValue(null);
-        files = null;
-        SnackBarHelper.show(this._snackBar, { Description: 'Not valid format jpg, png, or Gif and size < 700KB', Type: "error" });
-      }
+        }
+      };
+      reader.readAsDataURL(files);
+    } else {
+      this.formGroup.get(imageControlName).patchValue(null);
+      SnackBarHelper.show(this._snackBar, { Description: 'Not a valid format (jpg, jpeg, png, or gif) or size exceeds 2.5MB', Type: "error" });
+    }
+  }
+
+  uploadFile(event) {
+    const files = event.target.files.length && event.target.files[0];
+    if (files) {
+      this.handleFileUpload(files, 'ImageData');
+    }
+  }
+
+  uploadBackgroundImage(event) {
+    const files = event.target.files.length && event.target.files[0];
+    if (files) {
+      this.handleFileUpload(files, 'BackgroundImageData');
+    }
+  }
+
+  uploadMobileImage(event) {
+    const files = event.target.files.length && event.target.files[0];
+    if (files) {
+      this.handleFileUpload(files, 'MobileBackgroundImageData');
     }
   }
 
@@ -128,9 +155,15 @@ export class GamificationComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    if (obj.ImageUrl === this.image) {
-      obj.ImageUrl = null;
-    }
+    if (obj.ImageData === this.gamification.ImageData) {
+      obj.ImageData = null;
+    };
+    if(obj.BackgroundImageData === this.gamification.BackgroundImageData){
+      obj.BackgroundImageData = null;
+    };
+    if(obj.MobileBackgroundImageData === this.gamification.MobileBackgroundImageData){
+      obj.MobileBackgroundImageData = null;
+    };
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.PARTNER, Methods.SAVE_CHARACHTER)
       .pipe(take(1))
@@ -139,7 +172,7 @@ export class GamificationComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, { Description: "Success", Type: "success" });
           this.isEdit = false;
           this.getGamificationById();
-          
+
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

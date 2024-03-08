@@ -5,9 +5,19 @@
 
   <div class="content-action">
     <div class="title">{{'Providers.Providers' | translate}}</div>
-    <!-- <div>
-      <button mat-stroked-button color="primary"  class="btn-block add-settings" (click)="addProviders()">{{'Providers.AddProvider' | translate}}</button>
-    </div> -->
+
+    <div class = "bulk-editor-dropdown">
+      <button mat-stroked-button class="mat-bulk-btn"
+              [matMenuTriggerFor]="bulkMenu"
+              [class.disabled]="!isRowSelected()"
+              #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+        {{'Common.EditHideSections' | translate}}
+      </button>
+      <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before">
+        <ng-container #bulkEditorRef></ng-container>
+      </mat-menu>
+    </div>
+
     <button mat-stroked-button class="mat-btn" (click)="addProviders()">{{'Providers.AddProvider' |
       translate}}</button>
   </div>
@@ -16,6 +26,7 @@
     <ag-grid-angular
       id="all-providers"
       #agGrid
+      [class.hide-grid]="loadingUserState"
       class="ag-theme-balham"
       [headerHeight]="33"
       [rowHeight]="42"
@@ -27,12 +38,17 @@
       [sideBar]="sideBar"
       [suppressCopyRowsToClipboard]="true"
       [animateRows]="true"
+      [suppressRowClickSelection]="true"
+      [components]="frameworkComponents"
       [cacheBlockSize]="cacheBlockSize"
       (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="multiple">
     </ag-grid-angular>
 
 

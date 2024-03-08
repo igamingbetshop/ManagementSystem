@@ -1,27 +1,26 @@
-import {AfterViewInit, Component, ElementRef, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService} from "../../../../../../../core/services";
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {take} from "rxjs/operators";
-import {MatDialog} from "@angular/material/dialog";
-import {AgBooleanFilterComponent} from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../components/grid-common/button-renderer.component";
-import {TextEditorComponent} from "../../../../../../components/grid-common/text-editor.component";
-import {SelectRendererComponent} from "../../../../../../components/grid-common/select-renderer.component";
-import {NumericEditorComponent} from "../../../../../../components/grid-common/numeric-editor.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {CreateNewDocumentComponent} from "./create-new-document/create-new-document.component";
-import {GridApi, IRowNode, RowNode} from "ag-grid-community";
-import {OpenerComponent} from "../../../../../../components/grid-common/opener/opener.component";
-import {ImageRendererComponent} from "../../../../../../components/grid-common/image-renderer.component";
-import {DatePipe} from "@angular/common";
-import {DatePickerRendererComponent} from "../../../../../../components/grid-common/date-picker-renderer.component";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {StateService} from "../../../../services/state.service";
-import {syncColumnSelectPanel, syncNestedColumnReset} from "../../../../../../../core/helpers/ag-grid.helper";
+import { AfterViewInit, Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService } from "../../../../../../../core/services";
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { take } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { AgBooleanFilterComponent } from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../components/grid-common/button-renderer.component";
+import { TextEditorComponent } from "../../../../../../components/grid-common/text-editor.component";
+import { SelectRendererComponent } from "../../../../../../components/grid-common/select-renderer.component";
+import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { GridApi, IRowNode } from "ag-grid-community";
+import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
+import { ImageRendererComponent } from "../../../../../../components/grid-common/image-renderer.component";
+import { DatePipe } from "@angular/common";
+import { DatePickerRendererComponent } from "../../../../../../components/grid-common/date-picker-renderer.component";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { StateService } from "../../../../services/state.service";
+import { syncColumnSelectPanel, syncNestedColumnReset } from "../../../../../../../core/helpers/ag-grid.helper";
 
 @Component({
   selector: 'app-kyc',
@@ -32,7 +31,6 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
   public clientId: number;
-  public gridApi: GridApi;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public rowModelType2: string = GridRowModelTypes.CLIENT_SIDE;
   public defaultColDef2
@@ -122,10 +120,10 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         filter: false,
         suppressMenu: true,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'object-history').split('?')[0];
-          data.queryParams = {ObjectHistory: params.data.Id};
+          data.queryParams = { ObjectHistory: params.data.Id };
           return data;
         },
         sortable: false
@@ -152,13 +150,13 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     return new Promise<string>((resolve) => {
       this.apiService.apiPost(this.configService.getApiUrl, {}, true,
         Controllers.ENUMERATION, Methods.GET_KYC_DOCUMENT_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.documentTypeName = data.ResponseObject;
-          return resolve('success');
-        } else {
-          return resolve('for continuing');
-        }
-      });
+          if (data.ResponseCode === 0) {
+            this.documentTypeName = data.ResponseObject;
+            return resolve('success');
+          } else {
+            return resolve('for continuing');
+          }
+        });
     });
   }
 
@@ -166,13 +164,13 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     return new Promise<string>((resolve) => {
       this.apiService.apiPost(this.configService.getApiUrl, {}, true,
         Controllers.ENUMERATION, Methods.GET_KYC_DOCUMENT_STATES_ENUM).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.documentStateName = data.ResponseObject;
-          return resolve('success');
-        } else {
-          return resolve('for continuing');
-        }
-      });
+          if (data.ResponseCode === 0) {
+            this.documentStateName = data.ResponseObject;
+            return resolve('success');
+          } else {
+            return resolve('for continuing');
+          }
+        });
     });
   }
 
@@ -188,7 +186,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         suppressMenu: true,
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -211,7 +209,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         },
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -233,7 +231,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         editable: true,
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -255,7 +253,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         editable: true,
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -276,7 +274,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         },
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -297,7 +295,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         editable: true,
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -318,7 +316,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         },
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -338,7 +336,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         },
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -364,7 +362,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         },
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -383,13 +381,13 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         cellRendererParams: {
           onClick: this.saveFinishes['bind'](this),
           Label: 'Save',
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: 'white',
           isDisabled: true,
         },
         cellStyle: function (params) {
           if (params.data.State == 1) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -419,7 +417,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         }
       })
       this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.agGrid.api.redrawRows({rowNodes: [findedNode]});
+      this.agGrid.api.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
@@ -436,30 +434,30 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     };
     this.apiService.apiPost(this.configService.getApiUrl, sData, true,
       Controllers.CLIENT, Methods.UPDATE_CLIENT_IDENTITY_MODEL).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
-        this.stateService.getInfo(true);
-        this.onRowSelected(params);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
+          this.stateService.getInfo(true);
+          this.onRowSelected(params);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getKYCData() {
     this.apiService.apiPost(this.configService.getApiUrl, this.clientId, true,
       Controllers.CLIENT, Methods.GET_CLIENT_IDENTITY_MODEL).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
+        if (data.ResponseCode === 0) {
 
-        this.rowData = data.ResponseObject.map((items) => {
-          items.DocumentTypeName = this.documentTypeName.find((item => item.Id === items.DocumentTypeId))?.Name;
-          // items.DocumentStateName = this.documentStateName.find((item => item.Id === items.State))?.Name;
-          return items;
-        })
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+          this.rowData = data.ResponseObject.map((items) => {
+            items.DocumentTypeName = this.documentTypeName.find((item => item.Id === items.DocumentTypeId))?.Name;
+            // items.DocumentStateName = this.documentStateName.find((item => item.Id === items.State))?.Name;
+            return items;
+          })
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   onSelectChange(params, val, param) {
@@ -475,15 +473,15 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   onRowSelected(params) {
     if (params.node.selected) {
       this.blockedData = params;
-      this.apiService.apiPost(this.configService.getApiUrl, {ObjectId: params.data.Id, ObjectTypeId: 57}, true,
+      this.apiService.apiPost(this.configService.getApiUrl, { ObjectId: params.data.Id, ObjectTypeId: 57 }, true,
         Controllers.REPORT, Methods.GET_OBJECT_CHANGE_HISTORY).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.rowData2 = data.ResponseObject;
-          setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 0);
-        } else {
-          this.rowData2 = [];
-        }
-      });
+          if (data.ResponseCode === 0) {
+            this.rowData2 = data.ResponseObject;
+            setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 0);
+          } else {
+            this.rowData2 = [];
+          }
+        });
     }
   }
 
@@ -500,8 +498,8 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   async create() {
-    const {CreateNewDocumentComponent} = await import('../kyc/create-new-document/create-new-document.component');
-    const dialogRef = this.dialog.open(CreateNewDocumentComponent, {width: ModalSizes.MEDIUM});
+    const { CreateNewDocumentComponent } = await import('../kyc/create-new-document/create-new-document.component');
+    const dialogRef = this.dialog.open(CreateNewDocumentComponent, { width: ModalSizes.MEDIUM });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.rowData.push(data);
@@ -518,24 +516,24 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     } else {
       this.apiService.apiPost(this.configService.getApiUrl, this.blockedData.data.Id, true,
         Controllers.CLIENT, Methods.REMOVE_CLIENT_IDENTITY).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.rowData.splice(this.blockedData.rowIndex, 1);
-          this.gridApi.setRowData(this.rowData);
-          this.selected = false;
-          this.rowData2 = [];
-          this.getKYCData();
-        } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-        }
-      });
+          if (data.ResponseCode === 0) {
+            this.rowData.splice(this.blockedData.rowIndex, 1);
+            this.gridApi.setRowData(this.rowData);
+            this.selected = false;
+            this.rowData2 = [];
+            this.getKYCData();
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          }
+        });
     }
   }
 
   async addNotes(params) {
-    const {AddNoteComponent} = await import('../../../../../../components/add-note/add-note.component');
+    const { AddNoteComponent } = await import('../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
       width: ModalSizes.MEDIUM,
-      data: {ObjectId: params.Id, ObjectTypeId: 57}
+      data: { ObjectId: params.Id, ObjectTypeId: 57 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -545,13 +543,13 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   async openNotes(params) {
-    const {ViewNoteComponent} = await import('../../../../../../components/view-note/view-note.component');
+    const { ViewNoteComponent } = await import('../../../../../../components/view-note/view-note.component');
     const dialogRef = this.dialog.open(ViewNoteComponent, {
       width: ModalSizes.EXTRA_LARGE,
-      data: {ObjectId: params.Id, ObjectTypeId: 57, Type: 1}
+      data: { ObjectId: params.Id, ObjectTypeId: 57, Type: 1 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if (data) {  }
+      if (data) { }
     });
   }
 
@@ -570,10 +568,10 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   async viewPic(params) {
-    const {ViewImageComponent} = await import('../kyc/view-image/view-image.component');
+    const { ViewImageComponent } = await import('../kyc/view-image/view-image.component');
     const dialogRef = this.dialog.open(ViewImageComponent, {
       width: ModalSizes.MEDIUM,
-      data: {value: params.value, clientId: this.clientId}
+      data: { value: params.value, clientId: this.clientId }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -590,15 +588,15 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   exportToCsv() {
     this.apiService.apiPost(this.configService.getApiUrl, this.clientId, true,
       Controllers.CLIENT, Methods.EXPORT_CLIENT_IDENTITY).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          var iframe = document.createElement("iframe");
+          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+          iframe.setAttribute("style", "display: none");
+          document.body.appendChild(iframe);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
 }

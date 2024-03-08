@@ -2,8 +2,9 @@
 @import "mixins";
 
 
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
   .mat-cancel-btn {
+    margin-left: auto;
     @include mat-cancel-btn-style;
   }
 

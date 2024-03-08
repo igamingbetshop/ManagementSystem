@@ -1,7 +1,7 @@
 <div class="container">
   <div class="content-action">
     <div class="title">
-      <a [routerLink]="['../../bet-shop-groups']">{{'BetShops.BetShops' | translate}}</a>
+      <a [routerLink]="['/main/platform/bet-shop-groups']">{{'BetShops.BetShops' | translate}}</a>
       <a (click)="toRedirectToBetshops()">
         / {{name}} / {{betShop?.Name}}
       </a>
@@ -17,12 +17,12 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{betShop?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
             <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
               {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -30,9 +30,9 @@
         <div class="first-hand">{{'Clients.Currency' | translate}}</div>
         <div class="second-hand">{{betShop?.CurrencyId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Clients.Currency' | translate}}" [formControlName]="'CurrencyId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -40,12 +40,12 @@
         <div class="first-hand">{{'Clients.Address' | translate}}</div>
         <div class="second-hand">{{betShop?.Address}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Clients.Address' | translate}}" [formControlName]="'Address'">
             <mat-error *ngIf="errorControl['Address']?.touched && errorControl['Address'].errors?.required">
               {{'Clients.Address' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -53,13 +53,13 @@
         <div class="first-hand">{{'BetShops.DefaultLimit' | translate}}</div>
         <div class="second-hand">{{betShop?.DefaultLimit}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" placeholder="{{'BetShops.DefaultLimit' | translate}}"
               [formControlName]="'DefaultLimit'">
             <mat-error *ngIf="errorControl['DefaultLimit']?.touched && errorControl['DefaultLimit'].errors?.required">
               {{'BetShops.DefaultLimit' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -67,9 +67,9 @@
         <div class="first-hand">{{'Partners.Partner' | translate}}</div>
         <div class="second-hand">{{betShop?.PartnerName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Partners.Partner' | translate}}" [formControlName]="'PartnerName'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -77,9 +77,9 @@
         <div class="first-hand">{{'BetShops.CurrentLimit' | translate}}</div>
         <div class="second-hand">{{betShop?.CurrentLimit}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'BetShops.CurrentLimit' | translate}}" [formControlName]="'CurrentLimit'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -98,10 +98,7 @@
 
       <div>
         <div class="first-hand">{{'BetShops.UpdateTime' | translate}}</div>
-        <div class="second-hand">{{betShop?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
-        <div class="form-field form-input">
-          <input matInput placeholder="{{'BetShops.UpdateTime' | translate}}" [formControlName]="'LastUpdateTime'">
-        </div>
+        <div class="static-hand">{{betShop?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
       </div>
 
       <div>
@@ -119,10 +116,7 @@
 
       <div>
         <div class="first-hand">{{'BetShops.Created' | translate}}</div>
-        <div class="second-hand">{{betShop?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
-        <div class="form-field form-input">
-          <input matInput placeholder="{{'Clients.CreationTime' | translate}}" [formControlName]="'CreationTime'">
-        </div>
+        <div class="static-hand">{{betShop?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
       </div>
 
       <div>

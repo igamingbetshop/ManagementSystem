@@ -200,7 +200,7 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
     syncNestedColumnReset();
     super.onGridReady(params);
     this.getData();
-    
+
     syncColumnSelectPanel();
   }
 

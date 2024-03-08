@@ -150,6 +150,16 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           cellEditor: NumericEditorComponent,
         },
         {
+          headerName: 'Common.DisplayType',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'DisplayType',
+          resizable: true,
+          sortable: true,
+          editable: true,
+          filter: 'agNumberColumnFilter',
+          cellEditor: NumericEditorComponent,
+        },
+        {
           headerName: 'Common.IsForFilter',
           headerValueGetter: this.localizeHeader.bind(this),
           field: 'IsForFilter',
@@ -185,7 +195,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           cellRendererParams: {
             onClick: this.nestedSavePartnerSettings['bind'](this),
             Label: this.translate.instant('Common.Save'),
-            bgColor: '#076192',
+            bgColor: '#3E4D66',
             textColor: '#FFFFFF'
           }
         }
@@ -221,7 +231,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     template: params => {
       const name = params.data.Name;
       return `<div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box;">
-                  <div style="height: 10%; font-weight: 700; font-size: 16px; color: #076192 "> ${name}</div>
+                  <div style="height: 10%; font-weight: 700; font-size: 16px; color: #3E4D66 "> ${name}</div>
                   <div ref="eDetailGrid" style="height: 90%;"></div>
                </div>`
     }
@@ -248,7 +258,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         minWidth: 120,
         tooltipField: 'Id',
         cellRenderer: 'agGroupCellRenderer',
-        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
+        cellStyle: { color: '#3E4D66', 'font-size': '14px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
       },
       {
@@ -316,7 +326,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange1['bind'](this),
-
+          onCellValueChanged: this.onCheckBoxChange1.bind(this)
         }
       },
       {
@@ -407,7 +417,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           onClick: this.saveMarketTypes['bind'](this),
           Label: this.translate.instant('Common.Save'),
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       }
@@ -476,14 +486,8 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           onClick: this.saveSecondGridRow['bind'](this),
           Label: this.translate.instant('Common.Save'),
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
-        },
-        cellStyle: (params) => {
-          if (params.node.rowPinned) {
-            return { display: 'none' };
-          }
-
         },
       }
     ]
@@ -552,15 +556,8 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
         if (data.Code === 0) {
           this.rowData1 = data.Selections;
-          console.log(this.rowData1, 'this.rowData1');
-          
           let count = 0
           this.rowData1.forEach(elem => count++)
-          this.gridApi?.setPinnedBottomRowData([{
-            Id: `Total`,
-            TranslationId: `${count}`,
-          }
-          ]);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -757,9 +754,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-
           this.rowData = data.ResponseObject;
-
           setTimeout(() => {
             this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
           }, 0)

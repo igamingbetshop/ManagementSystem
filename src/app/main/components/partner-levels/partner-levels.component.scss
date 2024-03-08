@@ -1,0 +1,279 @@
+@import "mixins";
+
+.slider-partner-levels {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+
+.your-level {
+
+}
+
+.steps {
+  display: flex;
+  width: 1200px;
+  margin: 0 auto;
+  gap: 106px;
+  position: relative;
+  cursor: context-menu;
+}
+
+.step {
+  flex: 1;
+  text-align: center;
+  padding: 5px;
+  border-radius: 50%;
+  background-color: #B7D6E7;
+  height: 102px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: #fff;
+  font-weight: 500;
+  position: relative;
+  cursor: context-menu;
+}
+
+//.step.active {
+//  background-color: #076192;
+//  box-shadow: 0 0 0 4px #F0F5F8, 0 0 0 8px #076192;
+//}
+
+//.steps::before {
+//  content: '';
+//  position: absolute;
+//  top: 50%;
+//  left: calc(106px / 2 - 2px);
+//  transform: translateY(-50%);
+//  height: 4px;
+//  width: calc(100% - 152px);
+//  background-color: #B7D6E7;
+//}
+
+.step::after {
+  content: '';
+  position: absolute;
+  top: 53%;
+  right: -46%;
+  transform: translateY(-50%) translateX(50%);
+  height: 28px;
+  width: 28px;
+  background-color: #B7D6E7;
+  border-radius: 50%;
+  z-index: 1;
+}
+.step:last-child::after {
+  display: none;
+}
+
+.step.active::after {
+  background-color: #076192;
+}
+.steps .step-active::after {
+  background-color: #076192;
+}
+.steps .step-active {
+  background-color: #076192;
+  box-shadow: 0 0 0 4px #F0F5F8, 0 0 0 8px #076192;
+}
+
+.steps .step-inactive {
+  background-color: #B7D6E7;
+}
+//.step::before {
+//  content: '';
+//  position: absolute;
+//  top: 50%;
+//  transform: translateY(-50%);
+//  height: 4px;
+//  width: 100%;
+//  background-color: #B7D6E7;
+//  left: 124px;
+//}
+.step:last-child::before {
+  display: none;
+}
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #B7D6E7;
+  border-radius: 5px;
+  max-width: 1094px;
+  margin: 0 auto;
+  position: relative;
+  //top: 140px;
+  top: 64px;
+  cursor: context-menu;
+}
+.progress {
+  height: 100%;
+  background-color: #076192;
+  border-radius: 5px;
+  cursor: context-menu;
+}
+
+.container {
+  @include container-style;
+  height: auto;
+  background-color: $content-bg-color;
+  padding: 0 10px 40px;
+
+  .content-action {
+    @include action-style;
+    cursor: context-menu;
+  }
+  .level-benefits {
+    margin: 50px auto 20px;
+    width: 1200px;
+    text-align: center;
+    .level-benefits-title {
+      font-size: 26px;
+      line-height: 30px;
+      color: #076192;
+      font-weight: 600;
+      cursor: default;
+    }
+    .level-benefits-description {
+      font-size: 18px;
+      line-height: 21px;
+      color: #076192;
+      font-weight: 500;
+      cursor: default;
+    }
+  }
+  .six-levels-text {
+    font-size: 20px;
+    line-height: 23px;
+    color: #076192;
+    font-weight: 500;
+    text-align: right;
+    cursor: default;
+  }
+  .vip-part-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    text-align: center;
+    column-gap: 49px;
+    row-gap: 30px;
+    cursor: context-menu;
+    .vip-item {
+      height: 173px;
+      padding: 25px 15px 15px;
+      border: 1px solid rgba(7, 97, 146, 0.3);
+      color: rgba(7, 97, 146, 1);
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      .percentage-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 21%;
+        border-radius: 50%;
+        height: 120px;
+        cursor: context-menu;
+        font-size: 30px;
+        font-weight: 500;
+      }
+      .percentage-circle-active {
+        color: #fff;
+        background: linear-gradient(rgba(76, 136, 179, 1), rgba(7, 97, 146, 1));
+      }
+      .percentage-circle-inactive {
+        color: rgba(7, 97, 146, 1);
+        background: #A0C4D7;
+      }
+      .level-steps-part {
+        width: 70%;
+        line-height: 26px;
+        .title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+          .title-text {
+            font-size: 20px;
+            font-weight: 600;
+          }
+        }
+        .question {
+          font-size: 16px;
+          font-weight: 500;
+          text-align: left;
+        }
+        .text-part {
+          //padding: 0 20px;
+          list-style: none;
+          padding-left: 0;
+          .text-part-item {
+            color: rgba(7, 97, 146, 0.6);
+            font-size: 14px;
+            font-weight: 400;
+            text-align: left;
+            position: relative;
+            padding-left: 20px;
+          }
+          .text-part-item:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(rgba(194, 229, 255, 1), rgba(81, 115, 139, 1));
+            border-radius: 50%;
+          }
+        }
+        .title-about {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          background: rgba(225, 238, 245, 1);
+          padding: 0px 7px;
+          border-radius: 4px;
+          position: relative;
+          cursor: pointer;
+        }
+        .opened-about {
+          position: absolute;
+          right: 0;
+          top: 40px;
+          z-index: 1;
+          padding: 10px;
+          border: 1px solid rgba(160, 196, 215, 1);
+          border-radius: 4px;
+          background: #E1EEF5;
+          width: 100%;
+          .opened-about-us-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 16px;
+            font-weight: 600;
+            .close-icon {
+              cursor: pointer;
+            }
+          }
+          .opened-about-us-text {
+            font-size: 14px;
+            font-weight: 400;
+            text-align: left;
+            line-height: 18px;
+            margin-top: 5px;
+            color: rgba(106, 160, 190, 1);
+          }
+        }
+      }
+    }
+  }
+
+}
+
+

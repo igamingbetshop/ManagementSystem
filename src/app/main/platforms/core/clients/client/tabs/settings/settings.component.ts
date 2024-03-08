@@ -182,6 +182,19 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
       });
   }
 
+  onCheckClientExternalStatus() {
+    this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
+      Controllers.CLIENT, Methods.CHECK_CLIENT_EXTERNAL_STATUS).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          this.getSettings();
+          this.getHistory();
+          SnackBarHelper.show(this._snackBar, { Description: 'Updated', Type: "success" });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
   getHistory() {
     this.apiService.apiPost(this.configService.getApiUrl, { ObjectId: this.clientId, ObjectTypeId: 76 }, true,
       Controllers.REPORT, Methods.GET_OBJECT_CHANGE_HISTORY).pipe(take(1)).subscribe((data) => {

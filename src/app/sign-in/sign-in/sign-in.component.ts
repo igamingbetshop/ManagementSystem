@@ -136,5 +136,8 @@ export class SignInComponent implements AfterViewInit {
       this.authService.logIn(this.loginForm.getRawValue());
     }
   }
+  addBorder(wrap: HTMLElement) {
+    wrap.classList.add('bordered');
+  }
 
 }

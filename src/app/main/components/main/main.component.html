@@ -1,7 +1,7 @@
 <div class="default-section">
-  <app-header></app-header>
-
-  <mat-sidenav-container class="sidenav-container" >
+  <app-header [ngClass]="showSideNav? 'disabled-header' : ''"></app-header>
+  <span class="icon-menu menu" (click)="closeSideNav()"></span>
+  <mat-sidenav-container class="sidenav-container" [ngClass]="showSideNav? '' : 'show-left-menu'">
     <mat-sidenav mode="side" opened="{{onSideNavChange}}">
       <app-left-menu></app-left-menu>
     </mat-sidenav>
@@ -10,7 +10,8 @@
       <div class="main-content" >
         <div class="content-inner">
           <router-outlet></router-outlet>
-          <mat-spinner *ngIf="loading"></mat-spinner>
+          <mat-spinner *ngIf="loading" [diameter]="90"
+          mode="indeterminate"></mat-spinner>
         </div>
       </div>
     </mat-sidenav-content>

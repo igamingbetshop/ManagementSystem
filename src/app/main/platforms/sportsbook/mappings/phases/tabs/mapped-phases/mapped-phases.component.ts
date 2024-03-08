@@ -25,6 +25,7 @@ export class MappedPhasesTabComponent extends BasePaginatedGridComponent impleme
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   constructor(

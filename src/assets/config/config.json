@@ -6,6 +6,6 @@
   "SGApiUrl": "https://skillgamesadminwebapi.iqsoftllc.com/",
   "DefaultLanguage": "en",
   "Domain": "",
-  "HomePageUrl": "platForm",
+  "HomePageUrl": "/main/platform/dashboard",
   "IsCoreSignalR": false
 }

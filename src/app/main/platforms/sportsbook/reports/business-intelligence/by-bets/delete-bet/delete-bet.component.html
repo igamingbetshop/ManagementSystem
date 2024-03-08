@@ -6,7 +6,7 @@
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
 
-    <mat-form-field>
+    <mat-form-field *ngIf="path == 'deletebet'">
       <mat-label>Select Reason</mat-label>
       <mat-select [formControlName]="'Kind'">
         <mat-option *ngFor="let type of allCommentTypes" [value]="type.Id">{{type.Name}}</mat-option>

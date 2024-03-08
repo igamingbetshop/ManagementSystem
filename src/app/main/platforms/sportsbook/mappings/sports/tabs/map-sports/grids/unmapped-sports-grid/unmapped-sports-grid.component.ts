@@ -27,6 +27,7 @@ export class UnmappedSportsGridComponent extends BasePaginatedGridComponent impl
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
   public providers: any[] = [];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;

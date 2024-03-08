@@ -41,8 +41,8 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="textarea">
-      <textarea matInput cdkTextareaAutosize placeholder="{{'Clients.NickName' | translate}}"
+    <mat-form-field class="full-height">
+      <textarea matInput placeholder="{{'Clients.NickName' | translate}}"
         [formControlName]="'NickName'"></textarea>
       <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
         {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}

@@ -78,7 +78,7 @@ export class AddNoteComponent implements OnInit {
       this.formGroup.get('Type').setValue(3);
       this.formGroup.get('Message').setValue('')
     }
-    
+
   }
 
 

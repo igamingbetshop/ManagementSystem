@@ -38,6 +38,8 @@ export class CorePromotionComponent implements OnInit {
   image: any;
   imageMedium: any;
   imageSmall: any;
+  startDates: any;
+  finishDates: any;
 
 
   constructor(
@@ -58,9 +60,7 @@ export class CorePromotionComponent implements OnInit {
     this.id = +this.activateRoute.snapshot.queryParams.Id;
     this.languages = this.commonDataService.languages;
     this.getPromotionById();
-
     this.getDate();
-
   }
 
   getPromotionTypes() {
@@ -93,6 +93,8 @@ export class CorePromotionComponent implements OnInit {
           this.promotion.TypeName = this.promotionTypes.find(x => x.Id === this.promotion.Type)?.Name;
           this.partnerId = this.promotion.PartnerId;
           this.formGroup.patchValue(this.promotion);
+          this.startDates = this.promotion?.StartDate;
+          this.finishDates = this.promotion?.FinishDate;
           this.formGroup.get('EnvironmentTypeId').setValue(1);
           this.getPartnerEnvironments();
           this.getSegments(this.partnerId);

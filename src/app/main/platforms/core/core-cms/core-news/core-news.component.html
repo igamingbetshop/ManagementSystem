@@ -1,0 +1,89 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.Id }">
+
+  <div class="main-content">
+
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Cms.NewsGroups' | translate}}</div>
+
+        <div class="partner-dropdown">
+          <mat-select
+            (selectionChange)="onPartnerChange($event.value)"
+            placeholder="{{'Partners.SelectPartner' | translate}}"
+            panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+            <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+    <div class="grid-content">
+      <ag-grid-angular
+      id="clients"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [paginationPageSize]="cacheBlockSize"
+      [cacheBlockSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      (filterModified)="onFilterModified($event)"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      (rowClicked)="onRowClicked($event)"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="multiple">
+    </ag-grid-angular>
+
+    </div>
+
+    <div class="grid-action">
+      <button mat-stroked-button class="mat-btn" (click)="addNews()">{{'Bonuses.AddGroup' | translate}}</button>
+      <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+      <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="delete()">{{'Common.Delete' | translate}}</button>
+    </div>
+
+
+    </div>
+
+
+    <div class="right-panel">
+      
+      <div class="action-content">
+        <div class="title">{{'Cms.News' | translate}}</div>
+
+        </div>
+
+        <app-news-childs 
+          [tableData]="tableData"
+          (childCharakterData)="onLisenChildCharacter($event)"
+          (getParentData)="getPage(this.newsId, false)"
+          ></app-news-childs>
+
+        <div class="grid-action">
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!this.newsId" (click)="addNews(this.newsId)">{{'Cms.AddNews' | translate}}</button>
+          <button mat-stroked-button class="mat-delete-btn" [class.disabled]="!childId" (click)="delete(childId)">{{'Common.Delete' | translate}}</button>
+        </div>
+
+    </div>
+
+  </div>
+
+</div>
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.Id"></router-outlet>
+

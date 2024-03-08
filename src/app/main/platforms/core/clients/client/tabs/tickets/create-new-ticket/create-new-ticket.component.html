@@ -26,7 +26,8 @@
 
     <mat-form-field>
       <mat-label>{{'Segments.ClientIds' | translate}}</mat-label>
-      <input matInput type="text" placeholder="{{'Common.Ids' | translate}}" [formControlName]="'ClientIds'">
+      <input matInput type="text" placeholder="{{'Common.Ids' | translate}}" [formControl]="formGroup.get('ClientIds')">
+
     </mat-form-field>
 
   </form>

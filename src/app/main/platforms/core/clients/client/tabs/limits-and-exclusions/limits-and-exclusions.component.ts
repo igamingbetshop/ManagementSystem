@@ -21,21 +21,26 @@ import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener
 })
 export class LimitsAndExclusionsComponent extends BaseGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public selfLimitsformGroup: UntypedFormGroup;
-  public systemLimitsformGroup: UntypedFormGroup;
-  public exclusionsFormGroup: UntypedFormGroup;
-  public exclusions;
-  public rowData = [];
-  public columnDefs = [];
-  public selectedExclusionType;
-  public types = [{Id: 1, Name: 'Permanently'}, {Id: 2, Name: 'Temporary'}];
-  public selectedType;
-  public date = new Date();
-  public isEditSelfLimits = false;
-  public isSystemLimitsEdit = false;
-  public selfExcludedUntil;
-  public systemExcludedUntil;
+  clientId: number;
+  selfLimitsformGroup: UntypedFormGroup;
+  systemLimitsformGroup: UntypedFormGroup;
+  exclusionsFormGroup: UntypedFormGroup;
+  exclusions;
+  rowData = [];
+  columnDefs = [];
+  selectedExclusionType;
+  types = [{Id: 1, Name: 'Permanently'}, {Id: 2, Name: 'Temporary'}];
+  selectedType;
+  date = new Date();
+  isEditSelfLimits = false;
+  isSystemLimitsEdit = false;
+  selfExcludedUntil;
+  systemExcludedUntil;
+  commentTemplates = [];
+  comentType;
+  diactivateReasons = [];
+  diactivateReasonType;
+  diactivateSelfReasonType;
 
   constructor(
     private apiService: CoreApiService,
@@ -114,12 +119,49 @@ export class LimitsAndExclusionsComponent extends BaseGridComponent implements O
   }
 
   ngOnInit(): void {
+    this.featchCommentTemplates();
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.selfLimitsFormValues();
     this.exclusionsFormValues();
     this.systemLimitsFormValues();
     this.getClientLimitSettings();
     this.getObjectHistory();
+    this.featchDiactivateTemplates();
+  }
+
+  featchCommentTemplates() {
+    this.apiService.apiPost(this.configService.getApiUrl, 4, true,
+      Controllers.CONTENT, Methods.GET_COMMENT_TEMPLATES).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        this.commentTemplates = data.ResponseObject;
+      } else {
+        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+      }
+    })
+  }
+
+
+  featchDiactivateTemplates() {
+    this.apiService.apiPost(this.configService.getApiUrl, 6, true,
+      Controllers.CONTENT, Methods.GET_COMMENT_TEMPLATES).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        this.diactivateReasons = data.ResponseObject;
+      } else {
+        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+      }
+    })
+  }
+
+  setCommetns(event) {
+    this.comentType = event;
+  }
+
+  setDiactivateCommetns(event) {
+    this.diactivateReasonType = event;
+  }
+
+  setDiactivateSelfCommetns(event) {
+    this.diactivateSelfReasonType = event;
   }
 
   getClientLimitSettings() {
@@ -127,11 +169,11 @@ export class LimitsAndExclusionsComponent extends BaseGridComponent implements O
       Controllers.CLIENT, Methods.GET_CLIENT_LIMIT_SETTINGS).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.exclusions = data.ResponseObject;
-        this.selfExcludedUntil = this.exclusions.SelfExcludedUntil;
-        this.systemExcludedUntil = this.exclusions.SystemExcludedUntil;
+        this.selfExcludedUntil = this.exclusions.SelfExcluded;
+        this.systemExcludedUntil = this.exclusions.SystemExcluded;
         this.selfLimitsformGroup.patchValue(this.exclusions);
         this.systemLimitsformGroup.patchValue(this.exclusions);
-
+        this.comentType = null;
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
@@ -276,6 +318,7 @@ export class LimitsAndExclusionsComponent extends BaseGridComponent implements O
       this.exclusionsFormGroup.get('ToDate').setValue(new Date(a).toISOString())
     }
     const client = this.exclusionsFormGroup.getRawValue();
+    client.Reason = this.comentType;
 
     this.apiService.apiPost(this.configService.getApiUrl, client, true,
       Controllers.CLIENT, Methods.APPLY_SYSTEM_EXCLUSION).pipe(take(1)).subscribe(data => {
@@ -284,6 +327,8 @@ export class LimitsAndExclusionsComponent extends BaseGridComponent implements O
           Description: 'Excluded',
           Type: "success"
         });
+        this.exclusionsFormGroup.reset();
+        this.comentType = null;
         this.getClientLimitSettings();
         this.getObjectHistory();
       } else {
@@ -293,13 +338,21 @@ export class LimitsAndExclusionsComponent extends BaseGridComponent implements O
   }
 
   onDeactivate(method) {
-    this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
+    let reasonId;
+    if (method === 'REMOVE_SYSTEM_EXCLUSION') {
+      reasonId = this.diactivateReasonType;
+    } else {
+      reasonId = this.diactivateSelfReasonType;
+    }
+    this.apiService.apiPost(this.configService.getApiUrl,{Reason: reasonId, ClientId:  +this.clientId}, true,
       Controllers.CLIENT, Methods[method]).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
         SnackBarHelper.show(this._snackBar, {
           Description: 'Deactivated',
           Type: "success",
         });
+        this.diactivateReasonType = null;
+        this.diactivateSelfReasonType = null;
         this.getClientLimitSettings();
         this.getObjectHistory();
       } else {

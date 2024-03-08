@@ -159,7 +159,7 @@ export class UnmappedTeamsGridComponent extends BasePaginatedGridComponent imple
         } else {
           delete paging.SportIds;
         }
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['ProviderName', 'TypeName'], ['ProviderId', 'Type']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
@@ -178,7 +178,7 @@ export class UnmappedTeamsGridComponent extends BasePaginatedGridComponent imple
               sport.TypeName = this.typeNames.find((type) => {
                 return type.Id == sport.Type;
               }).Name;
-            })            
+            })
             params.success({ rowData: mappedRows, rowCount: data.TotalCount });
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });

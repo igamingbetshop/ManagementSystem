@@ -53,6 +53,7 @@ export class ProductLimitsComponent implements OnInit {
     editable: false,
     filter: 'agTextColumnFilter',
     flex: 1,
+    minWidth: 50,
   };
   public autoGroupColumnDef: ColDef = {
     headerName: 'Common.GroupId',

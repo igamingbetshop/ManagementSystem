@@ -70,7 +70,7 @@ export class NotificationsComponent extends BasePaginatedGridComponent implement
 
   getPaymentSystemTypes() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
-      Controllers.PROVIDER, Methods.GET_NOTIFICATION_SERVICES).pipe(take(1)).subscribe((data) => {   
+      Controllers.PROVIDER, Methods.GET_NOTIFICATION_SERVICES).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.rowData = data.ResponseObject;
       }

@@ -25,7 +25,7 @@ export class ViewAnnouncementChangesComponent implements OnInit {
   public segments;
   public ReceiverTypeIds = RECEIVER_TYPES;
   partnerId: any;
-  
+
   constructor(private activateRoute: ActivatedRoute,
               private apiService: CoreApiService,
               public commonDataService: CommonDataService,
@@ -65,7 +65,7 @@ export class ViewAnnouncementChangesComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.oldData = this.parseData(data.ResponseObject[0]);
           this.newData = this.parseData(data.ResponseObject[1]);
-  
+
           this.updateDataProperties(this.oldData);
           this.updateDataProperties(this.newData);
         } else {
@@ -73,11 +73,11 @@ export class ViewAnnouncementChangesComponent implements OnInit {
         }
       });
   }
-  
+
   parseData(data: any): any {
     return data ? JSON.parse(data) : "";
   }
-  
+
   updateDataProperties(target: any): void {
     if (target !== "") {
       target.PartnerName = this.getNameById(target.PartnerId, this.partners);
@@ -86,11 +86,11 @@ export class ViewAnnouncementChangesComponent implements OnInit {
       target.segmentesEntites = [this.mapIdsToNames(target.SegmentIds, this.segments)];
     }
   }
-  
+
   getNameById(id: number, array: any[]): string {
     return array.find(field => field.Id === id)?.Name || "";
   }
-  
+
   mapIdsToNames(ids: number[], array: any[]): string[] {
     return ids.map(elem => array.find(item => elem === item.Id)?.Name || "");
   }
@@ -99,13 +99,13 @@ export class ViewAnnouncementChangesComponent implements OnInit {
     if (array1.length !== array2.length) {
       return false;
     }
-  
+
     for (let i = 0; i < array1.length; i++) {
       if (array1[i] !== array2[i]) {
         return false;
       }
     }
-  
+
     return true;
   }
 

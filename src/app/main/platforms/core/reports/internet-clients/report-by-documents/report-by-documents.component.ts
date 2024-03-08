@@ -18,11 +18,8 @@ import { GridMenuIds } from 'src/app/core/enums';
 })
 export class ReportByDocumentsComponent extends TransactionsComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId?: number;
   public rowData = [];
   public statusNames = [];
-  public partnerId?: number;
   public fromDate = new Date();
   public toDate = new Date();
   public pageFilter = {};

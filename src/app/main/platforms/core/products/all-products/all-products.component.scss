@@ -11,6 +11,43 @@
   .content-action {
     @include action-style;
 
+    .bulk-editor-dropdown {
+      position: relative;
+      .mat-bulk-btn {
+        background-color: $blue-light-7;
+        padding: 0 10px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        ::ng-deep {
+          .mat-button-wrapper {
+            color: $blue-2 !important;
+            position: relative;
+            padding-left: 23px;
+
+            &:before {
+              content: "\e903";
+              font-size: 14px;
+              font-family: 'iq-soft-icon';
+              position: absolute;
+              left: 0;
+              top: -6px;
+            }
+          }
+        }
+
+        &.disabled {
+          opacity: 0.7;
+          pointer-events: none;
+        }
+
+        &:hover {
+          border: 1px solid $blue-5;
+          background-color: $blue-light-22;
+        }
+      }
+
+    }
+
     .mat-btn {
       margin-left: 8px;
       @include mat-btn-style;
@@ -25,7 +62,7 @@
   .grid-content {
     width: 100%;
     height: calc(100% - 92px);
-
+    position: relative;
     ::ng-deep {
       ag-grid-angular {
         width: 100%;
@@ -33,18 +70,72 @@
       }
     }
 
+    .checkbox {
+      position: absolute;
+      top: -3px;
+      z-index: 2;
+      left: 4px;
+      ::ng-deep {
+  
+        .mat-mdc-checkbox-inner-container {
+          width: 16px;
+          height: 16px;
+  
+          .mat-mdc-checkbox-frame {
+            border: 1px solid black;
+            background-color: white;
+            border-radius: 3px;
+          }
+        }
+      }
+  
+      ::ng-deep {
+        .mat-mdc-checkbox-checked {
+          .mat-mdc-checkbox-layout {
+            .mat-mdc-checkbox-inner-container {
+  
+              .mat-mdc-checkbox-frame {
+                border: 1px solid #0091EA;
+              }
+  
+  
+              .mat-mdc-checkbox-checkmark-path {
+                stroke: #0091EA !important;
+              }
+  
+              .mat-mdc-checkbox-background {
+                background-color: unset;
+              }
+            }
+          }
+        }
+      }
+    }
+
     .pages-sizes {
       position: absolute;
       left: 262px;
-      bottom: 20px;
-      @include dropdown-style;
+      bottom: 2.3%;
+      @include grid-dropdown-style;
 
       ::ng-deep {
-        .mat-select {
+        .mat-mdc-select {
           height: 26px !important;
           width: 60px !important;
         }
       }
+    }
+  }
+}
+
+::ng-deep {
+  .bulk-editor-menu {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: unset;
+    background: transparent;
+    .mat-mdc-menu-content {
+      padding: 0 !important;
     }
   }
 }

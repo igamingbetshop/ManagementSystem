@@ -60,7 +60,7 @@
       .pages-sizes {
         padding-left: 10px;
         padding-right: 10px;
-        @include dropdown-style;
+        @include grid-dropdown-style;
 
         ::ng-deep {
           .mat-select {

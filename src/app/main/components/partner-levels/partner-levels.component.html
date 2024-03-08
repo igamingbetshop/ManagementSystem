@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title">{{'PartnerLevels.YourLevel' | translate}}</div>
+  </div>
+  <div class="progress-bar">
+    <!--  <div class="progress" [style.width.%]="9 +((currentStep / totalSteps) * 100)"></div>-->
+    <div class="progress" [style.width.%]="((currentStep / totalSteps) * (100 - 9)) + 9"></div>
+  </div>
+  <div class="steps">
+    <div class="step" *ngFor="let step of steps; let i = index" [class]="getStepClasses(i)">
+      VIP {{ i }}
+    </div>
+  </div>
+  <div class="level-benefits">
+    <p class="level-benefits-title">{{'PartnerLevels.YourLevelBenefits' | translate}}</p>
+    <div class="level-benefits-description">{{'PartnerLevels.YourLevelBenefitsDescription' | translate}}</div>
+  </div>
+  <div class="six-levels-text">
+    {{'PartnerLevels.HereAreLevels' | translate}}
+  </div>
+  <div class="vip-part-grid">
+    <div class="vip-item" *ngFor="let step of steps; let i = index">
+      <div class="percentage-circle" [class]="getPercentageClasses(i)">0%</div>
+      <div class="level-steps-part">
+        <div class="title">
+          <div class="title-text">VIP {{ i }}</div>
+          <div class="title-about" (click)="about(i)">
+            <mat-icon>info</mat-icon>
+            <span class="about-part">{{'PartnerLevels.About' | translate}}</span>
+          </div>
+          <div class="opened-about"  *ngIf="openedAboutSections[i]">
+            <div class="opened-about-us-title">
+              <div>{{'PartnerLevels.About' | translate}} VIP {{ i }}</div>
+              <mat-icon class="close-icon" (click)="close()">close</mat-icon>
+            </div>
+            <p class="opened-about-us-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. At aut explicabo facilis, fugiat fugit, iste officia quas quasi quidem quisquam repellat sapiente ut! Amet, doloribus ipsa ipsam reprehenderit ut voluptatem.</p>
+          </div>
+        </div>
+        <div class="question">
+          {{'PartnerLevels.GrowLevel' | translate}}
+        </div>
+        <ul class="text-part">
+          <li class="text-part-item">{{'PartnerLevels.MustRegistered' | translate}}</li>
+          <li class="text-part-item">{{'PartnerLevels.AddNewSports' | translate}}</li>
+          <li class="text-part-item">{{'PartnerLevels.AddMorePartners' | translate}}</li>
+          <li class="text-part-item">{{'PartnerLevels.BalanceMustBeOver' | translate}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+

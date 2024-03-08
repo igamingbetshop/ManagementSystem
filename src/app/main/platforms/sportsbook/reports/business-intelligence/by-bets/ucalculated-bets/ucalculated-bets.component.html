@@ -9,9 +9,13 @@
   <br>
   <br>
 
-  <ng-container *ngFor="let match of finishedMatches">
-    <span>{{match.MatchId}}</span> - <span>{{match.BetsCount}}</span>
-  </ng-container>
+  <div class="grid-container">
+    <ng-container *ngFor="let match of finishedMatches">
+      <div class="grid-item">
+        <span>{{ match.MatchId }}</span> - <span>{{ match.BetsCount }}</span>
+      </div>
+    </ng-container>
+  </div>
 
   <br>
   <br>

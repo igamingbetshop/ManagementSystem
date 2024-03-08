@@ -14,7 +14,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatSlideToggleModule
   ],
   template: `
-  <div class="label" style="display: flex; justify-content: center; padding-top: 6px; align-items: center;">
+  <div class="label" style="display: flex; justify-content: center; height: 25px; align-items: center;">
 
 
           <mat-slide-toggle color="primary" (ngModelChange)="onChange(params,$event)"  [(ngModel)]="params.value" >
@@ -33,8 +33,7 @@ export class CheckboxRendererComponent implements ICellRendererAngularComp {
   params;
 
   agInit(params): void {
-    this.params = params;
-
+    this.params = params;    
   }
 
   refresh(params?: any): boolean {
@@ -43,12 +42,10 @@ export class CheckboxRendererComponent implements ICellRendererAngularComp {
 
   onChange(par, val,) {
     if (this.params.onchange instanceof Function) {
-
       this.params.onchange(par.data,val,par);
     }
   }
-
-
+  
 }
 
 

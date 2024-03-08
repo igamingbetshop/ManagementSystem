@@ -122,7 +122,7 @@ export class BetShopComponent extends BasePaginatedGridComponent implements OnIn
         filter: false,
         valueGetter: params => {
           let data = { path: '', queryParams: null };
-          data.path = '/main/platform/bet-shops/view-bet-shop';
+          data.path = '/main/platform/bet-shop-groups/bet-shops/view-bet-shop';
           data.queryParams = { viewId: params.data.Id, secondName: this.betShop.Name };
           return data;
         },
@@ -271,8 +271,8 @@ export class BetShopComponent extends BasePaginatedGridComponent implements OnIn
       State: [null, [Validators.required]],
       Type: [null, [Validators.required]],
       RegionId: [null],
-      CreationTime: { value: null, disabled: true },
-      LastUpdateTime: { value: null, disabled: true },
+      CreationTime: [null],
+      LastUpdateTime: [null],
       AgentId: [null],
       PrintLogo: [false],
       AnonymousBet: [null],

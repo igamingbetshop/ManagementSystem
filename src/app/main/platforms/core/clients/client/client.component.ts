@@ -43,7 +43,7 @@ export class ClientComponent implements OnInit {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.getCategoryType();
     this.getStatus();
-    this.getClientInfo();    
+    this.getClientInfo(); 
   }
 
 

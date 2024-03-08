@@ -16,21 +16,22 @@ import { CoreApiService } from "../../../../../core/services/core-api.service";
   styleUrls: ['./web-site-settings.component.scss']
 })
 export class WebSiteSettingsComponent implements OnInit {
-  public partnerId;
-  public partnerName;
-  public menus = [];
-  public websiteMenuItems = [];
-  public subMenuItems = [];
-  public selectedMenu;
-  public selectedMenuItem;
-  public selectedSubMenuItem;
-  public websiteMenuItem;
-  public websiteSubMenuItem;
-  public model: string;
-  public modelChanged: Subject<string> = new Subject<string>();
-  public searchTitle = '';
-  public searchedResultTitle: string;
-  public showSearchedResult: boolean = false;
+  partnerId;
+  partnerName;
+  menus = [];
+  websiteMenuItems = [];
+  subMenuItems = [];
+  selectedMenu;
+  selectedMenuItem;
+  selectedSubMenuItem;
+  websiteMenuItem;
+  websiteSubMenuItem;
+  model: string;
+  modelChanged: Subject<string> = new Subject<string>();
+  searchTitle = '';
+  searchedResultTitle: string;
+  showSearchedResult: boolean = false;
+  deviceType = 1
 
 
   constructor(private activateRoute: ActivatedRoute,
@@ -60,14 +61,24 @@ export class WebSiteSettingsComponent implements OnInit {
     }
   }
 
+  changeDeviceType(number) {
+    this.deviceType = number;
+    this.getWebsiteMenus();
+  }
+
   getWebsiteMenus() {
-    this.apiService.apiPost('cms/getwebsitemenus', { PartnerId: +this.partnerId })
+    this.apiService.apiPost('cms/getwebsitemenus', { PartnerId: +this.partnerId, DeviceType: this.deviceType, })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.menus = data.ResponseObject;
-          this.selectedMenu = data.ResponseObject[0]
-          this.getWebsiteMenuItems(this.selectedMenu.Id)
+          if (!!this.menus.length) {
+            this.selectedMenu = data.ResponseObject[0];
+            this.getWebsiteMenuItems(this.selectedMenu.Id)
+          } else {
+            this.websiteMenuItems = [];
+            this.subMenuItems = [];
+          }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -215,7 +226,7 @@ export class WebSiteSettingsComponent implements OnInit {
   }
 
   searchFindWebSiteMenuItemBySubMenuTitle() {
-    this.apiService.apiPost('cms/findsubmenuitembytitle', 
+    this.apiService.apiPost('cms/findsubmenuitembytitle',
     {
       Title: this.searchTitle.trim(),
       MenuId: this.selectedMenu.Id

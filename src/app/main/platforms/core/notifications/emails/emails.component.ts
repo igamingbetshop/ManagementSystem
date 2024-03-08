@@ -31,20 +31,7 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
   public toDate = new Date();
   public partnerId;
 
-  public states = [
-    {
-      Id: 1,
-      Name:  this.translate.instant('Bonuses.Active')
-    },
-    {
-      Id: 2,
-      Name:  this.translate.instant('Common.Sent')
-    },
-    {
-      Id: 3,
-      Name: this.translate.instant('Common.Failed')
-    }
-  ];
+  public states:any[] = [];
 
   constructor(
     protected injector: Injector,
@@ -171,6 +158,20 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
           return `${dat}`;
         },
       },
+    ];
+    this.states = [
+      {
+        Id: 1,
+        Name:  this.translate.instant('Bonuses.Active')
+      },
+      {
+        Id: 2,
+        Name:  this.translate.instant('Common.Sent')
+      },
+      {
+        Id: 3,
+        Name: this.translate.instant('Common.Failed')
+      }
     ];
   }
 

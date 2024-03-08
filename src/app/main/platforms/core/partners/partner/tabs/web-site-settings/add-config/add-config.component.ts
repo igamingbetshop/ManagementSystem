@@ -63,7 +63,7 @@ export class AddConfigComponent implements OnInit {
   ngOnInit() {
     this.rowId = this.data.rowId;
     this.setFormGroup();
-    this.subscribeToFormChanges(); 
+    this.subscribeToFormChanges();
 
   }
 

@@ -156,13 +156,13 @@
     .footer-ag-grid {
       position: absolute;
       left: 25%;
-      bottom: 17px;
+      bottom: 30px;
       display: flex;
       align-items: center;
       width: 75%;
 
-      @include dropdown-style;
-
+      @include grid-dropdown-style;
+      
       ::ng-deep {
         .mat-select {
           height: 26px !important;

@@ -69,13 +69,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "12kb"
+                  "maximumWarning": "10kb",
+                  "maximumError": "100kb"
                 }
               ]
             }
@@ -85,20 +85,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ManagementSystem:build",
-            "port": 4200
+            "port": 4200,
+            "buildTarget": "ManagementSystem:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ManagementSystem:build:production"
+              "buildTarget": "ManagementSystem:build:production"
             }
           }
         },
         "extract-i18n": {
-
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ManagementSystem:build"
+            "buildTarget": "ManagementSystem:build"
           }
         },
         "test": {

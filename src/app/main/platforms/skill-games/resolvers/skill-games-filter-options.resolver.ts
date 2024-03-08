@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, Resolve} from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import {ConfigService, LocalStorageService} from "../../../../core/services";
 import {FilterService} from "../../../../core/services/filter.service";
 import {map} from "rxjs/operators";
@@ -7,7 +7,7 @@ import {SkillGamesApiService} from "../services/skill-games-api.service";
 
 
 @Injectable()
-export class SkillGamesFilterOptionsResolver implements Resolve<any> {
+export class SkillGamesFilterOptionsResolver  {
   constructor(private apiService: SkillGamesApiService,
               private configService: ConfigService,
               private localStorageService: LocalStorageService,

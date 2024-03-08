@@ -98,7 +98,7 @@ export class MapMarketTypesTabComponent implements OnInit {
       .subscribe(data => {
         if (data.Code === 0) {
           if(type ==='parentRow') {
-            this.unmappedMarketTypesGridComponent.rowData = 
+            this.unmappedMarketTypesGridComponent.rowData =
             this.unmappedMarketTypesGridComponent.rowData.filter(item => item.Id !== data.ResponseObject);
             this.deselectAll()
           } else {
@@ -113,12 +113,12 @@ export class MapMarketTypesTabComponent implements OnInit {
   }
 
   isUnknownRowSelected() {
-    return this.unmappedMarketTypesGridComponent.agGrid.api && 
+    return this.unmappedMarketTypesGridComponent.agGrid.api &&
       this.unmappedMarketTypesGridComponent.agGrid.api.getSelectedRows().length === 0;
   };
 
   isKnownRowSelected() {
-    return this.mappedMarketTypesGridComponent.agGrid.api 
+    return this.mappedMarketTypesGridComponent.agGrid.api
       && this.mappedMarketTypesGridComponent.agGrid.api.getSelectedRows().length === 0;
   };
 
@@ -129,7 +129,7 @@ export class MapMarketTypesTabComponent implements OnInit {
   handleUnmappedDetaliRow(value: boolean) {
     this.isUnmappedDetailSelected = value;
   }
-  
+
   handleMappedRows(value: boolean) {
     this.mappedRowSelected = value;
     if (!this.isUnknownRowSelected() && !this.isUnmappedDetailSelected && !this.isMappedDetailSelected) {
@@ -150,7 +150,7 @@ export class MapMarketTypesTabComponent implements OnInit {
       this.deselectAll();
     }
   }
-  
+
   deselectAll() {
     this.unmappedMarketTypesGridComponent.agGrid.api?.deselectAll();
     this.mappedMarketTypesGridComponent.agGrid.api?.deselectAll();

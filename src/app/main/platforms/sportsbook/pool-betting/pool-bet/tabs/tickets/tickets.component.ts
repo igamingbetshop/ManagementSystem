@@ -29,6 +29,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   constructor(

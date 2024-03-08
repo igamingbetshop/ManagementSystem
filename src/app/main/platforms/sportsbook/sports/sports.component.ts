@@ -127,7 +127,7 @@ export class SportsComponent extends BaseGridComponent implements OnInit {
             onClick: this.nestedSavePartnerSettings['bind'](this),
             Label: this.translate.instant('Common.Save'),
             isDisabled: true,
-            bgColor: '#076192',
+            bgColor: '#3E4D66',
             textColor: '#FFFFFF'
           }
         }
@@ -174,7 +174,6 @@ export class SportsComponent extends BaseGridComponent implements OnInit {
   private updatePath = 'sports/update';
   private settingsPath = 'sports/settings';
   private updateSettingsPath = 'sports/updatesettings';
-  public sideBar;
   public errorDescription: string;
   public showErrorBar: boolean;
 
@@ -236,9 +235,8 @@ export class SportsComponent extends BaseGridComponent implements OnInit {
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this),
-
+          onCellValueChanged: this.onCheckBoxChange.bind(this)
         }
-
       },
       {
         headerName: 'Bonuses.Priority',
@@ -272,7 +270,7 @@ export class SportsComponent extends BaseGridComponent implements OnInit {
           onClick: this.savePartnerSettings['bind'](this),
           Label: this.translate.instant('Common.Save'),
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         },
       }
@@ -284,9 +282,10 @@ export class SportsComponent extends BaseGridComponent implements OnInit {
         {
           id: 'columns',
           labelDefault: 'Sport',
+          labelKey: 'columns',
           iconKey: 'columns',
-          toolPanel: 'agColumnsToolPanel',
-        },
+          toolPanel: 'agColumnsToolPanel'
+        }
       ],
     }
 

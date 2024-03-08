@@ -197,7 +197,7 @@ export class ReportByClientIdentityComponent extends BasePaginatedGridComponent 
         headerName: 'Clients.DocumentType',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'DocumentTypeId',
-        resizable: true, 
+        resizable: true,
         filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,

@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 
 import { DateAdapter } from "@angular/material/core";
 import { take } from "rxjs/operators";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { TranslateModule } from "@ngx-translate/core";
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -55,7 +54,6 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
     NgxMatTimepickerModule,
-    CreateClientComponent,
     FormsModule,
     MatDialogModule
   ],
@@ -116,11 +114,11 @@ export class CreateClientComponent implements OnInit {
     this.items = [];
     this.partnerId = val;
     this.apiService.apiPost(this.configService.getApiUrl, {PartnerId: val, DeviceType: 1},
-      true, Controllers.CONTENT, Methods.GET_WEBSITE_MENU).subscribe(data => {        
+      true, Controllers.CONTENT, Methods.GET_WEBSITE_MENU).subscribe(data => {
         if (data.ResponseCode === 0) {
           let menus = data.ResponseObject;
           let menuId = menus.find(menu => {
-            
+
             return menu['Type'] == 'Config'
           })?.Id;
           this.getWebSiteMenuItems(menuId);

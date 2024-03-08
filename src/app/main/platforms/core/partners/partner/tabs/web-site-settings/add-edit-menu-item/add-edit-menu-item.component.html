@@ -21,7 +21,8 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Partners.Icon' | translate}}</mat-label>
-      <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'" (input)="changeIcon($event)">
+      <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'"
+        (input)="changeIcon($event)">
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Partners.Href' | translate}}</mat-label>
@@ -34,7 +35,22 @@
         {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
-    <input type="file" (change)="uploadFile($event)" *ngIf="showFile">
+
+    <ng-container *ngIf="showFile">
+
+      <div class="img-div">
+        <label for="imageFiles" class="btn">{{'Clients.SelectImage' | translate}}</label>
+        <input id="imageFiles" type="file" (change)="uploadFile($event)">
+        <span class="img-text"> {{selectedImage}} </span>
+      </div>
+    
+      <div class="img-div">
+        <label for="hoverImageFiles" class="btn">{{'Clients.SelectHoverImage' | translate}}</label>
+        <input id="hoverImageFiles" type="file" (change)="uploadHoverImage($event)">
+        <span class="img-text"> {{selectedHoverImage}} </span>
+      </div>
+    
+    </ng-container>
 
     <mat-checkbox [formControlName]="'OpenInRouting'">{{'Partners.OpenInRouting' | translate}}</mat-checkbox>
     <mat-checkbox [formControlName]="'Orientation'">{{'Partners.Orientation' | translate}}</mat-checkbox>
@@ -43,5 +59,6 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' |
+    translate}}</button>
 </div>

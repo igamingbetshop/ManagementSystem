@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Injector, OnInit } from '@angular/core';
 import { CoreApiService } from "../../../../services/core-api.service";
 import { ActivatedRoute } from "@angular/router";
 import { ConfigService } from "../../../../../../../core/services";
@@ -15,26 +15,26 @@ import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helpe
   styleUrls: ['./web-site-settings.component.scss']
 })
 export class WebSiteSettingsComponent implements OnInit {
-  public partnerId;
-  public partnerName;
-  public menus = [];
-  public websiteMenuItems = [];
-  public subMenuItems = [];
-  public selectedMenu;
-  public selectedMenuItem;
-  public selectedSubMenuItem;
-  public websiteMenuItem;
-  public websiteMenuItemName;
-  public websiteSubMenuItem;
-  public model: string;
-  public modelChanged: Subject<string> = new Subject<string>();
-  public searchTitle = '';
-  public icon = 'Icon';
-  public deviceType = 1
-  public partnerEnvironments = [];
-  public selected = { Id: 3, Name: 'environmentId' };
-  public searchedResultTitle: string;
-  public showSearchedResult: boolean = false;
+  partnerId;
+  partnerName;
+  menus = [];
+  websiteMenuItems = [];
+  subMenuItems = [];
+  selectedMenu;
+  selectedMenuItem;
+  selectedSubMenuItem;
+  websiteMenuItem;
+  websiteMenuItemName;
+  websiteSubMenuItem;
+  model: string;
+  modelChanged: Subject<string> = new Subject<string>();
+  searchTitle = '';
+  icon = 'Icon';
+  deviceType = 1
+  partnerEnvironments = [];
+  selected = { Id: 3, Name: 'environmentId' };
+  searchedResultTitle: string;
+  showSearchedResult: boolean = false;
 
   constructor(
     private apiService: CoreApiService,

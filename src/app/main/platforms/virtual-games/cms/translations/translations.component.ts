@@ -99,7 +99,7 @@ export class TranslationsComponent extends BasePaginatedGridComponent implements
               })
             });
             this.setColumnDefs();
-            params.success({ rowData: this.translationEntries, rowCount: this.filter.SearchText ? this.translationEntries.length : data.ResponseObject.Count });           
+            params.success({ rowData: this.translationEntries, rowCount: this.filter.SearchText ? this.translationEntries.length : data.ResponseObject.Count });
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
           }
@@ -159,7 +159,7 @@ export class TranslationsComponent extends BasePaginatedGridComponent implements
         onClick: this.saveTranslations['bind'](this),
         Label: 'Save',
         isDisabled: true,
-        bgColor: '#076192',
+        bgColor: '#3E4D66',
         textColor: '#FFFFFF'
       }
     });

@@ -51,7 +51,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   public status = ACTIVITY_STATUSES;
   public TypeConditions;
 
-
   public addedConditions = {
     selectedGroupType: 1,
     groupTypes: [
@@ -189,15 +188,13 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.commonSettings.PartnerName = this.partners.find((item) => this.commonSettings.PartnerId === item.Id).Name;
     this.accountTypeId = this.commonSettings?.AccountTypeId;
     this.accounttypeName = this.clientType.find(type => type.Id == this.accountTypeId)?.Name;
-    
     this.commonSettings['BonusTypeName'] = this.bonusTypes?.find(x => x.Id == this.commonSettings?.BonusTypeId)?.Name;
     this.bonusTypeId = this.commonSettings?.BonusTypeId;
     this.getPartnerPaymentSegments(this.commonSettings.PartnerId);
     this.formGroup.patchValue(this.commonSettings);
-    
+
     this.TypeConditions = this.commonSettings.Conditions;
     if ((this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) && this.commonSettings?.Conditions ) {
-      
       this.addedConditions = this.bonusesService?.getResponseConditions(this.commonSettings?.Conditions, this.conditionTypes);
     }
 
@@ -384,10 +381,10 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
     if (files) {
-      this.validDocumentSize = files.size < 700000;
+      this.validDocumentSize = files.size < 900000;
       this.validDocumentFormat = files.type === 'image/png' ||
         files.type === 'image/jpg' || files.type === 'image/jpeg' || files.type === 'image/gif';
-      if ((files.size < 700000) &&
+      if ((files.size < 900000) &&
         (files.type === 'image/png' || files.type === 'image/jpg' || files.type === 'image/jpeg' || files.type === 'image/gif')) {
         this.checkDocumentSize = true;
         const reader = new FileReader();
@@ -418,7 +415,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     if (this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) {
       requestBody.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     }
-
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true,
       Controllers.BONUS, Methods.UPDATE_BONUS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
@@ -462,7 +458,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   onAmmountSettingsChange(event) {
     const payload = { ...this.commonSettings, AmountSettings: event };
     delete payload.Products;
-    this.updateBounus(payload);   
+    this.updateBounus(payload);
   }
 
 }

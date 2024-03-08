@@ -8,6 +8,7 @@
   <div class="grid-content">
     <ag-grid-angular
       id="sessions"
+      [class.hide-grid]="loadingUserState"
       #agGrid
       class="ag-theme-balham"
       [headerHeight]="33"

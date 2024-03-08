@@ -77,6 +77,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange3['bind'](this),
+          onCellValueChanged: this.onCheckBoxChange3.bind(this)
         },
       },
       {
@@ -108,7 +109,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         cellRendererParams: {
           onClick: this.getRolePermission['bind'](this),
           Label: 'View',
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF',
         }
       },
@@ -349,7 +350,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   saveUserRoles() {
-    let saved = { 
+    let saved = {
       UserId: +this.userId,
       RoleModels: this.rowData.filter(elem => elem.HasRole != false)
     };

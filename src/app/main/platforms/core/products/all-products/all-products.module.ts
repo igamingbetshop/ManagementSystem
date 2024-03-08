@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AllProductsComponent } from './all-products.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,11 +10,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
 import { TranslateModule } from '@ngx-translate/core';
-import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.module';
 import { AgGridModule } from 'ag-grid-angular';
-import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
+
+import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.module';
 import { FilterOptionsResolver } from '../../resolvers/filter-options.resolver';
+import { DropdownDirective } from 'src/app/core/directives/dropdown.directive';
+import { AllProductsComponent } from './all-products.component';
 
 const routes: Routes = [
   {
@@ -47,7 +50,9 @@ const routes: Routes = [
     MatSnackBarModule,
     TranslateModule,
     AgBooleanFilterModule,
-    AgGridModule
+    AgGridModule,
+    DropdownDirective,
+    MatMenuModule
   ],
   declarations: [AllProductsComponent]
 })

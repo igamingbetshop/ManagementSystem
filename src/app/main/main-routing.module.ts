@@ -41,8 +41,12 @@ const routes: Routes = [
         loadChildren: () => import('./platforms/help-center/help-center.module').then(m => m.HelpCenterModule)
       },
       {
+        path: 'partner-levels',
+        loadChildren: () => import('./components/partner-levels/partner-levels.module').then(m => m.PartnerLevelsModule)
+      },
+      {
         path:'',
-        redirectTo:'home',
+        redirectTo:'platform',
         pathMatch:'full'
       }
     ]

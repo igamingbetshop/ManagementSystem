@@ -42,8 +42,10 @@ export class AuthService {
     const url = this.configService.getApiUrl + '/' + Methods.LOGIN;
     this.apiService.apiPost(url, { Data: encryptData(user) }).pipe(take(1)).subscribe(resp => {
       if (resp.ResponseCode === 0) {
+        const url  = this.configService.homePageUrl;
         localStorage.setItem('adminMenu', JSON.stringify(resp.AdminMenu));
         this.notifyGetUserLoginSucces.next(resp);
+        this.router.navigate([url]);
       } else {
         this.notifyGetUserLoginError.next(resp.Description);
       }

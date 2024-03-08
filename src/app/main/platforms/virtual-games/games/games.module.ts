@@ -6,7 +6,10 @@ import {AgGridModule} from "ag-grid-angular";
 import {GamesRoutingModule} from "./games-routing.module";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {TranslateModule} from "@ngx-translate/core";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 
 const routes: Routes = [
@@ -24,7 +27,9 @@ const routes: Routes = [
     MatGridListModule,
     MatSnackBarModule,
     GamesRoutingModule,
-    TranslateModule
+    TranslateModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   declarations: [GamesComponent]
 })

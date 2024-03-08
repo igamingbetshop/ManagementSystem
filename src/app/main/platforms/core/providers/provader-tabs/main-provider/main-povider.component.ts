@@ -46,7 +46,8 @@ export class MainProviderComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.provider = data.ResponseObject;
           this.currencySetting = this.provider.CurrencySetting[0];
-          this.createForm();
+          this.provider.CurrencySetting = this.currencySetting;
+          this.formGroup.patchValue(this.provider);
           this.setCurrencesEntites();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -56,16 +57,17 @@ export class MainProviderComponent implements OnInit {
 
   public createForm() {
     this.formGroup = this.fb.group({
-      Id: [this.provider?.Id],
-      Name: [this.provider?.Name],
-      Type: [this.provider?.Type],
-      SessionExpireTime: [this.provider?.SessionExpireTime],
-      GameLaunchUrl: [this.provider?.GameLaunchUrl],
+      Id: [null],
+      Name: [null],
+      Type: [null],
+      SessionExpireTime: [null],
+      GameLaunchUrl: [null],
       CurrencySetting: this.fb.group({
-        Ids: [this.provider?.CurrencySetting?.Ids],
-        CurrencyIds: [this.provider?.CurrencySetting?.CurrencyIds],
-        Type: [this.provider?.CurrencySetting?.Type]
-      })
+        Ids: [null],
+        CurrencyIds: [null],
+        Type: [null],
+      }),
+      IsActive: [null],
     });
   }
 
@@ -79,22 +81,23 @@ export class MainProviderComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-  
+
     // Create a copy of the form values
     const obj = { ...this.formGroup.value };
-  
+
     // Set the CurrencySetting field explicitly
     obj.CurrencySetting = {
       Ids: obj.CurrencySetting.Ids,
-      CurrencyIds: obj.CurrencySetting.CurrencyIds,
+      Names: obj.CurrencySetting.CurrencyIds,
       Type: obj.CurrencySetting.Type
     };
-    
+
     this.apiService.apiPost(this.configService.getApiUrl,{ ...obj},
       true, Controllers.PRODUCT, Methods.SAVE_GAME_PROVIDER).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
           this.isEdit = false;
+          this.currencesEntites = [];
           this.getProviderById();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });

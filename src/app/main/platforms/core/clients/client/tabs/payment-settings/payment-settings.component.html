@@ -11,13 +11,13 @@
         <div class="first-hand">{{'Clients.MaxDepositAmount' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxDepositAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxDepositAmount'">
             <mat-error
               *ngIf="errorControls['MaxDepositAmount'].touched && errorControls['MaxDepositAmount'].hasError('required')">
               {{'Clients.MaxDepositAmountIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -25,13 +25,13 @@
         <div class="first-hand">{{'Clients.MaxWithdrawAmount' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxWithdrawAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxWithdrawAmount'">
             <mat-error
               *ngIf="errorControls['MaxWithdrawAmount'].touched && errorControls['MaxWithdrawAmount'].hasError('required')">
               {{'Clients.MaxWithdrawAmountIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
 
         </div>
       </div>
@@ -40,13 +40,13 @@
         <div class="first-hand">{{'Clients.MaxDepositsCountPerDay' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxDepositsCountPerDay}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxDepositsCountPerDay'">
             <mat-error
               *ngIf="errorControls['MaxDepositsCountPerDay'].touched && errorControls['MaxDepositsCountPerDay'].hasError('required')">
               {{'Clients.MaxDepositsCountPerDayIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -54,13 +54,13 @@
         <div class="first-hand">{{'Clients.MaxWithdrawCountPerDay' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxWithdrawCountPerDay}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxWithdrawCountPerDay'">
             <mat-error
               *ngIf="errorControls['MaxWithdrawCountPerDay'].touched && errorControls['MaxWithdrawCountPerDay'].hasError('required')">
               {{'Clients.MaxWithdrawCountPerDayIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -68,13 +68,13 @@
         <div class="first-hand">{{'Clients.MaxTotalWithdrawsAmountPerDay' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxTotalWithdrawsAmountPerDay}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxTotalWithdrawsAmountPerDay'">
             <mat-error
               *ngIf="errorControls['MaxTotalWithdrawsAmountPerDay'].touched && errorControls['MaxTotalWithdrawsAmountPerDay'].hasError('required')">
               {{'Clients.MaxTotalWithdrawsAmountPerDayIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -83,7 +83,7 @@
         <div class="second-hand">{{paymentLimits?.MaxTotalWithdrawsAmountPerWeek}}</div>
         <div class="form-field form-input">
 
-          <mat-form-field appearance="none">
+          <mat-form-field> 
             <input matInput type="number" [formControlName]="'MaxTotalDepositsAmountPerDay'">
             <mat-error
               *ngIf="errorControls['MaxTotalDepositsAmountPerDay'].touched && errorControls['MaxTotalDepositsAmountPerDay'].hasError('required')">
@@ -97,7 +97,7 @@
         <div class="first-hand">{{'Clients.MaxTotalWithdrawsAmountPerWeek' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxTotalDepositsAmountPerDay}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput type="number" [formControlName]="'MaxTotalWithdrawsAmountPerWeek'">
             <mat-error
               *ngIf="errorControls['MaxTotalWithdrawsAmountPerWeek'].touched && errorControls['MaxTotalWithdrawsAmountPerWeek'].hasError('required')">
@@ -111,7 +111,7 @@
         <div class="first-hand">{{'Clients.MaxTotalDepositsAmountPerMonth' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxTotalDepositsAmountPerMonth}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput type="number" [formControlName]="'MaxTotalDepositsAmountPerMonth'">
             <mat-error
               *ngIf="errorControls['MaxTotalDepositsAmountPerMonth'].touched && errorControls['MaxTotalDepositsAmountPerMonth'].hasError('required')">
@@ -124,13 +124,13 @@
         <div class="first-hand">{{'Clients.MaxTotalDepositsAmountPerWeek' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.MaxTotalDepositsAmountPerWeek}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxTotalDepositsAmountPerWeek'">
             <mat-error
               *ngIf="errorControls['MaxTotalDepositsAmountPerWeek'].touched && errorControls['MaxTotalDepositsAmountPerWeek'].hasError('required')">
               {{'Clients.MaxTotalDepositsAmountPerWeekIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -140,13 +140,13 @@
         <div class="second-hand">{{paymentLimits?.MaxTotalWithdrawsAmountPerMonth}}</div>
         <div class="form-field form-input">
 
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'MaxTotalWithdrawsAmountPerMonth'">
             <mat-error
               *ngIf="errorControls['MaxTotalWithdrawsAmountPerMonth'].touched && errorControls['MaxTotalWithdrawsAmountPerMonth'].hasError('required')">
               {{'Clients.MaxTotalWithdrawsAmountPerMonthIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -154,7 +154,7 @@
         <div class="first-hand">{{'Clients.StartTime' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.StartTime | date:'dd/MM/yyyy HH:MM'}}</div>
         <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [matDatepicker]="picker" [formControlName]="'StartTime'">
             <mat-datepicker-toggle matSuffix [for]="picker">
               <div matDatepickerToggleIcon class="icon-calendar"></div>
@@ -163,7 +163,7 @@
             <mat-error *ngIf="errorControls['StartTime'].touched && errorControls['StartTime'].hasError('required')">
               {{'Clients.StartTimeIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -171,7 +171,7 @@
         <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
         <div class="second-hand">{{paymentLimits?.FinishTime | date:'dd/MM/yyyy HH:MM'}}</div>
         <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [matDatepicker]="picker1" [formControlName]="'EndTime'">
             <mat-datepicker-toggle matSuffix [for]="picker1">
               <div matDatepickerToggleIcon class="icon-calendar"></div>
@@ -180,7 +180,7 @@
             <mat-error *ngIf="errorControls['EndTime'].touched && errorControls['EndTime'].hasError('required')">
               {{'Clients.EndTimeIs' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 

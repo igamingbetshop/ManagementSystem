@@ -12,9 +12,7 @@
         <div class="first-hand">{{'Clients.Id' | translate}}</div>
         <div class="second-hand">{{affiliate?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -22,9 +20,7 @@
         <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
         <div class="second-hand">{{affiliate?.FirstName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'FirstName'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -32,9 +28,7 @@
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
         <div class="second-hand">{{affiliate?.LastName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'LastName'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -42,9 +36,7 @@
         <div class="first-hand">{{'Clients.Email' | translate}}</div>
         <div class="second-hand">{{affiliate?.Email}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'Email'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -52,9 +44,7 @@
         <div class="first-hand">{{'Clients.MobileNumber' | translate}}</div>
         <div class="second-hand">{{affiliate?.MobileNumber}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'MobileNumber'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -62,9 +52,7 @@
         <div class="first-hand">{{'Clients.UserName' | translate}}</div>
         <div class="second-hand">{{affiliate?.UserName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'UserName'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -72,9 +60,7 @@
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{affiliate?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'NickName'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -116,9 +102,7 @@
         <div class="first-hand">{{'Clients.Language' | translate}}</div>
         <div class="second-hand">{{affiliate?.LanguageId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'LanguageId'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -136,30 +120,18 @@
         <div class="first-hand">{{'Clients.Currency' | translate}}</div>
         <div class="second-hand">{{affiliate?.CurrencyId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'CurrencyId'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-        <div class="second-hand">{{affiliate?.CreationTime | date: 'short'}}</div>
-        <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'CreationTime'" readonly>
-          </mat-form-field>
-        </div>
+        <div class="static-hand">{{affiliate?.CreationTime | date: 'short'}}</div>
       </div>
 
       <div>
         <div class="first-hand">{{'Partners.LastUpdate' | translate}}</div>
-        <div class="second-hand">{{affiliate?.LastUpdateTime | date: 'short'}}</div>
-        <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'LastUpdateTime'" readonly>
-          </mat-form-field>
-        </div>
+        <div class="static-hand">{{affiliate?.LastUpdateTime | date: 'short'}}</div>
       </div>
 
       <div class="form-actions">

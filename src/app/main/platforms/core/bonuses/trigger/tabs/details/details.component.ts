@@ -26,7 +26,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   public triggerSettings;
   public triggerSetting;
   public rowData;
-  // public trigger;
   public columnDefs = [];
   public paymentEntites = [];
   public paymentSystems;
@@ -56,6 +55,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     selectedConditionType: null,
     selectedConditionValue: null
   };
+
   public conditions = [];
 
   constructor(
@@ -162,7 +162,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.apiService.apiPost(this.configService.getApiUrl, { Id: this.triggerId }, true,
       Controllers.BONUS, Methods.GET_TRIGGER_SETTINGS).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.setTriggerSettings(data.ResponseObject); 
+          this.setTriggerSettings(data.ResponseObject);
         }
       });
   }
@@ -180,17 +180,18 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.triggerSetting = this.triggerSettings[0];
     this.triggerType = this.triggerSetting.Type;
 
-    
     this.formGroup.patchValue(this.triggerSetting)
-    if (this.triggerSetting?.PaymentSystemIds) {
-      this.formGroup.get('PaymentSystemIds').setValue(this.triggerSetting?.PaymentSystemIds);
-    }
-    this.formGroup.get('BonusSettingCodes').setValue(this.triggerSetting?.BonusSettingCodes);
-    if (this.triggerType === 7) {
-      this.formGroup.get('Sequence').setValue(this.triggerSetting?.Sequence);
-    } else if (this.triggerType === 7 || this.triggerType === 8) {
-      this.formGroup.get('UpToAmount').setValue(this.triggerSetting?.UpToAmount);
-    }
+
+    
+    // if (this.triggerSetting?.PaymentSystemIds) {
+    //   this.formGroup.get('PaymentSystemIds').setValue(this.triggerSetting?.PaymentSystemIds);
+    // }
+    // this.formGroup.get('BonusSettingCodes').setValue(this.triggerSetting?.BonusSettingCodes);
+    // if (this.triggerType === 7) {
+    //   this.formGroup.get('Sequence').setValue(this.triggerSetting?.Sequence);
+    // } else if (this.triggerType === 7 || this.triggerType === 8) {
+    //   this.formGroup.get('UpToAmount').setValue(this.triggerSetting?.UpToAmount);
+    // }
     if (this.triggerType === 1 || this.triggerType === 2 || this.triggerType === 3) {
       this.addedConditions = this.bonusesService.getResponseConditions(this.triggerSetting?.Conditions, this.conditionTypes);
     }
@@ -204,6 +205,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       Percent: [null],
       PartnerId: [null],
       Name: [null],
+      Amount: [null],
       Description: [null],
       DayOfWeek: [null],
       Status: [null],

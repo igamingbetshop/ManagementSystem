@@ -1,18 +1,19 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {AgBooleanFilterComponent} from "../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../components/grid-common/checkbox-renderer.component";
-import {TextEditorComponent} from "../../../components/grid-common/text-editor.component";
-import {SelectRendererComponent} from "../../../components/grid-common/select-renderer.component";
-import {GridRowModelTypes} from "../../../../core/enums";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {VirtualGamesApiService} from "../services/virtual-games-api.service";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { AgBooleanFilterComponent } from "../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../components/grid-common/checkbox-renderer.component";
+import { TextEditorComponent } from "../../../components/grid-common/text-editor.component";
+import { SelectRendererComponent } from "../../../components/grid-common/select-renderer.component";
+import { GridRowModelTypes, ModalSizes } from "../../../../core/enums";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { VirtualGamesApiService } from "../services/virtual-games-api.service";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../core/helpers/snackbar.helper";
+import { IRowNode } from "ag-grid-community";
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-games',
@@ -20,7 +21,7 @@ import {IRowNode} from "ag-grid-community";
   styleUrls: ['./games.component.scss']
 })
 export class GamesComponent extends BasePaginatedGridComponent implements OnInit {
-  @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGrid1') agGrid1: AgGridAngular;
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -34,14 +35,17 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
   public rowData1 = [];
   public columnDefs2;
   public rowData = [];
-  public columnDefs;
   public path: string = 'game';
   public path2: string = 'game/gameunits';
   public path3: string = 'game/editgameunitorder';
+  selectedId: any;
 
 
-  constructor(protected injector: Injector, private _snackBar: MatSnackBar,
-              private apiService: VirtualGamesApiService) {
+  constructor(
+    protected injector: Injector, 
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private apiService: VirtualGamesApiService) {
     super(injector);
     this.columnDefs = [
       {
@@ -51,7 +55,7 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
         sortable: true,
         resizable: true,
         minWidth: 100,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
       },
       {
         headerName: 'Common.Name',
@@ -104,7 +108,7 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
         sortable: true,
         resizable: true,
         minWidth: 100,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
       },
       {
         headerName: 'Common.Name',
@@ -181,6 +185,7 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
 
   onRowSelected(params) {
     if (params.node.selected) {
+      this.selectedId = params.data.Id;
       this.getSecondGridData(params);
     } else {
       return;
@@ -188,35 +193,34 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
   }
 
   addResetBTN() {
-       const resetColumn =   {
-        headerName: 'Sport.Reset',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'View',
-        resizable: true,
-        minWidth: 150,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.resetBlackJack['bind'](this),
-          Label: this.translate.instant('Sport.Reset'),
-          bgColor: 'red',
-          textColor: 'white'
-        },
-        cellStyle: function (params) {
-          if (params.data.Status == 1) {
-            return { backgroundColor: '#aefbae' };
-          } else {
-            return null;
-          }
+    const resetColumn = {
+      headerName: 'Sport.Reset',
+      headerValueGetter: this.localizeHeader.bind(this),
+      field: 'View',
+      resizable: true,
+      minWidth: 150,
+      sortable: false,
+      filter: false,
+      cellRenderer: 'buttonRenderer',
+      cellRendererParams: {
+        onClick: this.resetBlackJack['bind'](this),
+        Label: this.translate.instant('Sport.Reset'),
+        bgColor: 'red',
+        textColor: 'white'
+      },
+      cellStyle: function (params) {
+        if (params.data.Status == 1) {
+          return { backgroundColor: '#aefbae' };
+        } else {
+          return null;
         }
       }
-      this.columnDefs2 = [...this.columnDefs2, resetColumn];
+    }
+    this.columnDefs2 = [...this.columnDefs2, resetColumn];
   }
 
   getSecondGridData(params?) {
     const row = params?.data;
-
     let countRows = this.agGrid?.api.getSelectedRows().length;
     if (countRows) {
       let data = {
@@ -227,12 +231,13 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
         .subscribe(data => {
           if (data.ResponseCode === 0) {
             this.rowData1 = data.ResponseObject;
-
-            if(row?.Id == 113){ 
+            if (row?.Id == 113) {
               this.addResetBTN();
+            } else {
+              this.columnDefs2 = this.columnDefs2.filter(item => item.field !== 'View');
             }
           } else {
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         });
     }
@@ -248,7 +253,7 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
             this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
           }, 0)
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -257,17 +262,17 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
     super.onGridReady(params);
   }
 
-  onCellValueChanged(event){
-    if(event.oldValue !== event.value){
+  onCellValueChanged(event) {
+    if (event.oldValue !== event.value) {
       let findedNode: IRowNode;
       let node = event.node.rowIndex;
       this.agGrid1.api.forEachNode(nod => {
-        if(nod.rowIndex == node){
+        if (nod.rowIndex == node) {
           findedNode = nod;
         }
       })
       this.agGrid1.api.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.agGrid1.api.redrawRows({rowNodes: [findedNode]});
+      this.agGrid1.api.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
@@ -284,7 +289,7 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
           this.agGrid1.api.getColumnDef('save').cellRendererParams.isDisabled = true;
           this.getSecondGridData()
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -307,6 +312,16 @@ export class GamesComponent extends BasePaginatedGridComponent implements OnInit
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
+  }
+
+  async createTable() {
+    const { CreateTableComponent } = await import('./create-table/create-table.component');
+    const dialogRef = this.dialog.open(CreateTableComponent, { width: ModalSizes.SMALL, data: { gameId: this.selectedId } });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data)
+        this.rowData.unshift(data);
+      this.gridApi.setRowData(this.rowData);
+    })
   }
 
 }

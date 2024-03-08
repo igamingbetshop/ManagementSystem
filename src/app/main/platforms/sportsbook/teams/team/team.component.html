@@ -13,9 +13,9 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{teamData?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput  type="number" placeholder="{{'Common.Id' | translate}}" [formControlName]="'Id'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -23,9 +23,9 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{teamData?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -33,9 +33,9 @@
         <div class="first-hand">{{'Common.ParentId' | translate}}</div>
         <div class="second-hand">{{teamData?.ParentId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput  type="number" placeholder="{{'Common.ParentId' | translate}}" [formControlName]="'ParentId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -43,9 +43,9 @@
         <div class="first-hand">{{'Common.Rating' | translate}}</div>
         <div class="second-hand">{{teamData?.Rating}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" placeholder="{{'Common.Rating' | translate}}" [formControlName]="'Rating'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -53,9 +53,9 @@
         <div class="first-hand">{{'Common.SportId' | translate}}</div>
         <div class="second-hand">{{teamData?.SportId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput type="number" placeholder="{{'Common.SportId' | translate}}" [formControlName]="'SportId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -63,9 +63,9 @@
         <div class="first-hand">{{'Common.SportName' | translate}}</div>
         <div class="second-hand">{{teamData?.SportName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.SportName' | translate}}" [formControlName]="'SportName'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -73,9 +73,9 @@
         <div class="first-hand">{{'Common.TranslationId' | translate}}</div>
         <div class="second-hand">{{teamData?.TranslationId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.TranslationId' | translate}}" [formControlName]="'TranslationId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -83,9 +83,9 @@
         <div class="first-hand">{{'Common.TypeId' | translate}}</div>
         <div class="second-hand">{{teamData?.TypeId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.TypeId' | translate}}" [formControlName]="'TypeId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -93,8 +93,8 @@
 
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
-          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" type="submit" (click)="onSubmit()">{{'Save'| translate}}</button>
-          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' |translate}}</button>
+          <button mat-stroked-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' |translate}}</button>
+          <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid" type="submit" (click)="onSubmit()">{{'Save'| translate}}</button>
         </div>
       </div>
 

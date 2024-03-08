@@ -317,7 +317,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        
+
       },
       {
         headerName: 'Clients.StartTime',
@@ -425,14 +425,14 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
   onRemoveMatch() {
     let row = this.agGrid1.api.getSelectedRows()[0];
 
-    
+
     this.apiService.apiPost('matches/removefavorite', { MatchId: row.MatchId, PartnerId: row.PartnerId  })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.getPage()
           // let index = this.rowData1.findIndex(links => {
-            
+
           //   return links.Id = row.Id
           // })
           // if (index >= 0) {
@@ -486,9 +486,9 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
               item.Name.push(elem.TeamName)
             })
             item.Name = item.Name.join(' - ');
-          })    
+          })
           this.rowData1 = _data;
-          
+
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -579,7 +579,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
 
   }
 
-  
+
 
 
 }

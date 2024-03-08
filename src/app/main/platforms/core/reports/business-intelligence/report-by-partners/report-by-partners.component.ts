@@ -28,7 +28,7 @@ export class ReportByPartnersComponent extends BasePaginatedGridComponent implem
   public providers = [];
   public playerCurrency;
   public selectedItem = 'today';
-  
+
 
   constructor(private activateRoute: ActivatedRoute,
               private apiService: CoreApiService,

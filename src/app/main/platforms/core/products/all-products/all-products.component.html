@@ -1,8 +1,19 @@
-<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.productId }">
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.ProductId }">
   <div class="content-action">
     <div class="title">
       <a (click)="redirectToAllProducts()">{{'Products.Products' | translate}}</a>
       <ng-container *ngIf="name">/ {{name}}</ng-container>
+    </div>
+
+    <div class = "bulk-editor-dropdown">
+      <button mat-stroked-button class="mat-bulk-btn"
+              [matMenuTriggerFor]="bulkMenu"
+              #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+        {{'Common.Edit' | translate}}
+      </button>
+      <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before">
+        <ng-container #bulkEditorRef></ng-container>
+      </mat-menu>
     </div>
 
     <button mat-stroked-button class="mat-btn"   (click)="AddProduct()">{{'Products.AddProduct' | translate}}</button>
@@ -10,6 +21,12 @@
   </div>
 
   <div class="grid-content">
+    <div class="checkbox">
+      <mat-checkbox
+        [(ngModel)]="checkedRowAll"
+        (change)="changeCheckboxAll()">
+      </mat-checkbox>
+    </div>
     <ag-grid-angular
       id="core-products"
       #agGrid
@@ -23,16 +40,15 @@
       [defaultColDef]="defaultColDef"
       [cacheBlockSize]="cacheBlockSize"
       [paginationPageSize]="cacheBlockSize"
+      [suppressRowClickSelection]="true"
       (paginationChanged)="onPaginationChanged($event)"
       [pagination]="pagination"
       [sideBar]="sideBar"
-      [animateRows]="true"
       (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true"
       [components]="frameworkComponents"
       (filterModified)="onFilterModified($event)"
-      [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
+      [gridOptions]="gridOptions"
       rowSelection="multiple">
     </ag-grid-angular>
 
@@ -49,4 +65,4 @@
   </div>
 </div>
 
-<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.productId"></router-outlet>
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.ProductId"></router-outlet>

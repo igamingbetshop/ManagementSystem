@@ -1,42 +1,59 @@
 .detail-nav-tabs {
     padding: 18px 10px 0;
     border-bottom: unset;
-  
-      .mat-tab-header-pagination {
-        background-color: $blue-2;
+
+      .mat-mdc-tab-header-pagination {
+        background-color: $bg-color;
         border-radius: 4px;
-  
-        .mat-tab-header-pagination-chevron {
+
+        .mat-mdc-tab-header-pagination-chevron {
           border-color: $white;
         }
-  
-        &.mat-tab-header-pagination-disabled {
-          .mat-tab-header-pagination-chevron {
+
+        &.mat-mdc-tab-header-pagination-disabled {
+          .mat-mdc-tab-header-pagination-chevron {
             opacity: 0.7;
           }
         }
       }
-  
-      .mat-tab-link-container {
-        background-color: $blue-2;
+
+      .mat-mdc-tab-link-container {
+        background-color: $bg-color;
         border-radius: 4px;
-  
-        .mat-ink-bar {
+
+        .mat-mdc-ink-bar {
           display: none;
         }
+
+        .mdc-tab__text-label {
+          color: $content-bg-color;
+        }
+
+        .mdc-tab__text-label:hover {
+          color: $border-color;
       }
-  
-    .mat-tab-link {
+
+
+      }
+
+
+
+    .mat-mdc-tab-link {
       height: 44px;
       padding: 0 24px;
       min-width: 120px;
       border-radius: 4px;
       opacity: 1;
       color: $white;
-  
-      &.mat-tab-label-active {
-        background-color: $blue-light-22;
-        color: $blue-2;
+    }
+  }
+
+  .mdc-tab--active {
+    background-color: $grey-blue-3!important;
+    color: $content-bg-color;
+    .mdc-tab__content{
+      span {
+        color: $content-bg-color!important;
       }
     }
   }

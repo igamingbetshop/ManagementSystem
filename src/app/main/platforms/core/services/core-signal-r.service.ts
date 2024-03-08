@@ -13,9 +13,8 @@ export class CoreSignalRService {
   ) {
   }
 
-  init() {
+  init() { 
     const url = this.configService.getApiUrl.slice(0, -4);
-
     this.hubConnection = $.hubConnection(url + '/signalr/signalr', {useDefaultPath: false});
     this.connection = this.hubConnection.createHubProxy('baseHub');
     this.startSocket();

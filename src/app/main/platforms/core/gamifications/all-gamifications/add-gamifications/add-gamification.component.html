@@ -35,8 +35,8 @@
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
-      <mat-select [formControlName]="'PartnerId'" placeholder="{{'Partners.SelectPartner' | translate}}">
+      <mat-label>{{'Partners.Partner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'" placeholder="{{'Partners.Partner' | translate}}">
         <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
       </mat-select>
       <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
@@ -90,6 +90,7 @@
     </mat-form-field>
 
     <div class="space-between">
+      <label for="fileInput" class="file-label">{{'Clients.SelectImage' | translate}}</label>
       <input class="file-input" type="file" (change)="uploadFile($event)">
     </div>
 
@@ -100,6 +101,19 @@
         {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
+
+    <ng-container *ngIf="showCompPoints">
+          <div class="space-between" >
+            <label for="fileInput" class="file-label">{{'Clients.SelectBackgroungImage' | translate}}</label>
+            <input id="fileInput" class="file-input" type="file" (change)="uploadBackgroundImage($event)" >
+          </div>
+      
+          <div>
+            <label>{{'Clients.SelectMobileBackgroundImage' | translate}} </label>
+            <input type="file" (change)="uploadMobileImage($event)">
+          </div>
+    
+    </ng-container>
 
 
   </form>

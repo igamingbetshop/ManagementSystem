@@ -143,9 +143,9 @@ export class WebSiteSettingsComponent implements OnInit {
       const dialogRef = this.dialog.open(AddEditTranslationsComponent, {width: ModalSizes.MEDIUM, data: item});
       dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
         if (data) {
-          
+
           this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
-          
+
         }
       });
     }

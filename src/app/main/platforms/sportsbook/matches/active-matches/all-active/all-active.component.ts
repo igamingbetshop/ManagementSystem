@@ -46,6 +46,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
     cellStyle: function (params) {
       if (params.data.Status == 1) {
         return { backgroundColor: '#aefbae' };
@@ -167,13 +168,23 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
         minWidth: 150,
         sortable: false,
         filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.onSupsendMatch['bind'](this),
-          Label: this.translate.instant('Sport.Supsend'),
-          bgColor: '#FFC107',
-          textColor: 'black'
+        cellRenderer: params => {
+          if (params.node.rowPinned) {
+            return '';
+          }
+          const label = params.data.Enabled ? this.translate.instant('Sport.Supsend') : this.translate.instant('Sport.UnSupsend');
+          const bgColor = params.data.Enabled ? '#FFC107' : '#ff7e54';
+          const textColor = 'black';
+          return `<button mat-stroked-button mat-button class="mat-btn" style="background-color:${bgColor};
+                    cursor: pointer;
+                    border: none;
+                    padding: 6px;
+                    color:${textColor}";
+                    >
+                      ${label}
+                  </button>`;
         },
+        onCellClicked: (event: CellClickedEvent) => this.onSupsendMatch(event),
         cellStyle: function (params) {
           if (params.data.Status == 1) {
             return { backgroundColor: '#aefbae' };
@@ -189,13 +200,25 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
         minWidth: 150,
         sortable: false,
         filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.resetMatch['bind'](this),
-          Label: this.translate.instant('Sport.Reset'),
-          bgColor: 'red',
-          textColor: 'white'
+        cellRenderer: params => {
+          if (params.node.rowPinned) {
+            return '';
+          }
+
+          const label = this.translate.instant('Sport.Reset');
+          const bgColor = 'red';
+          const textColor = 'white';
+
+          return `<button mat-stroked-button mat-button class="mat-btn" style="background-color:${bgColor};
+                    cursor: pointer;
+                    padding: 6px;
+                    border: none;
+                    color:${textColor}";
+                    >
+                      ${label}
+                  </button>`;
         },
+        onCellClicked: (event: CellClickedEvent) => this.resetMatch(event),
         cellStyle: function (params) {
           if (params.data.Status == 1) {
             return { backgroundColor: '#aefbae' };
@@ -204,6 +227,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
           }
         }
       },
+
       {
         headerName: 'Common.View',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -268,8 +292,6 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
       this.searchExternalId = value;
       this.onTeamsFind();
     });
-
-
 
   }
 
@@ -468,24 +490,44 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     const matchData = {
       MatchId: row.MatchId,
       PartnerId: this.partnerId,
-    }
+    };
 
     this.apiService.apiPost('matches/match', matchData)
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           const sData = data.ResponseObject;
-          sData.Enabled = false;
+          sData.Enabled = !sData.Enabled;
           this.apiService.apiPost('matches/update', sData)
             .subscribe(data => {
               if (data.Code === 0) {
-                SnackBarHelper.show(this._snackBar, { Description: "Match suspend is successfully!", Type: "success" });
+                SnackBarHelper.show(this._snackBar, { Description: "Match Updated is successful!", Type: "success" });
 
+                this.sportTree.forEach(sport => {
+                  sport.Regions.forEach(region => {
+                    region.Competitions.forEach(competition => {
+                      competition.Matches.forEach(match => {
+                        if (match.MatchId === sData.MatchId) {
+                          match.Enabled = sData.Enabled;
+                        }
+                      });
+                    });
+                  });
+                });
+
+                const rowIndex = this.gridApi.getRenderedNodes()
+                  .findIndex(node => node.data.MatchId === sData.MatchId);
+
+                if (rowIndex !== -1) {
+                  const rowNode = this.gridApi.getRenderedNodes()[rowIndex];
+                  rowNode.data.Enabled = sData.Enabled;
+
+                  this.gridApi.refreshCells({ rowNodes: [rowNode], force: true });
+                }
               } else {
                 SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
               }
             });
-
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -602,10 +644,10 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
 
   }
 
-  async addMatch(sport, region?, competition?) {
+  async addMatch(sport?, region?, competition?) {
     competition = competition || {};
-    competition.SportId = sport.SportId;
-    competition.SportName = sport.Name;
+    competition.SportId = sport?.SportId || null;
+    competition.SportName = sport?.Name || null;
 
     if (typeof region !== 'undefined') {
 
@@ -616,7 +658,8 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     const dialogRef = this.dialog.open(AddMatchComponent, {
       width: ModalSizes.SMALL, data: {
         competition: competition,
-        sportProviders: this.allProviders
+        sportProviders: this.allProviders,
+        sports: this.sports,
       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {

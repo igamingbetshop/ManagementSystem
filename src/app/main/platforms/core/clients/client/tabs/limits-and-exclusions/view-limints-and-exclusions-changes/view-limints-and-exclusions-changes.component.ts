@@ -45,7 +45,7 @@ export class ViewLimitsAndExclusionsChanges implements OnInit {
       Controllers.REPORT, Methods.GET_OBJECT_HISTORY_ELEMENT_BY_ID).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.oldData = JSON.parse(data.ResponseObject[0]);
-        this.newData = JSON.parse(data.ResponseObject[1]);        
+        this.newData = JSON.parse(data.ResponseObject[1]);
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Resolve, ActivatedRouteSnapshot} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import {ConfigService} from "../../../../core/services/config.service";
 import {Controllers, Methods} from "../../../../core/enums";
 import {map} from "rxjs/operators";
@@ -7,7 +7,7 @@ import {LocalStorageService} from "../../../../core/services/local-storage.servi
 import {CoreApiService} from "../services/core-api.service";
 
 @Injectable()
-export class ClientCategoryResolver implements Resolve<any>
+export class ClientCategoryResolver 
 {
   constructor(private apiService:CoreApiService,
               private configService:ConfigService,

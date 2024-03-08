@@ -1,14 +1,18 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../components/classes/base-paginated-grid-component";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {AgGridAngular} from "ag-grid-angular";
-import {DatePipe} from "@angular/common";
+import { Component, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../components/classes/base-paginated-grid-component";
+import { CoreApiService } from "../../services/core-api.service";
+import { ConfigService } from "../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { AgGridAngular } from "ag-grid-angular";
+import { DatePipe } from "@angular/common";
 import 'ag-grid-enterprise';
-import {Controllers, GridRowModelTypes, Methods} from "../../../../../core/enums";
-import {take} from "rxjs/operators";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
+import { ToggleRendererComponent } from 'src/app/main/components/grid-common/toggle-renderer';
 
 @Component({
   selector: 'app-payment-systems',
@@ -17,15 +21,34 @@ import {take} from "rxjs/operators";
 })
 export class PaymentSystemsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public filteredData;
+  @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
+  @ViewChild('bulkEditorRef', {read: ViewContainerRef}) bulkEditorRef!: ViewContainerRef;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  filteredData;
+  frameworkComponents = {
+    agBooleanColumnFilter: AgBooleanFilterComponent,
+    checkBoxRenderer: ToggleRendererComponent,
+  };
+
+  public defaultColDef = {
+    flex: 1,
+    editable: false,
+    sortable: true,
+    resizable: true,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    minWidth: 50,
+    menuTabs: [   ]
+  };
 
   constructor(private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              protected injector: Injector) {
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    protected injector: Injector) {
     super(injector);
+    this.adminMenuId = GridMenuIds.CORE_PROVIDERS_PAYMENTS;
+
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -33,7 +56,15 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
         field: 'Id',
         sortable: true,
         resizable: true,
-        filter: 'agNumberColumnFilter',
+        headerCheckboxSelection: true,
+        checkboxSelection: true,
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Common.Name',
@@ -41,7 +72,13 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
         field: 'Name',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Clients.CreationTime',
@@ -54,6 +91,13 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
           let dat = datePipe.transform(params.data.CreationTime, 'medium');
           return `${dat}`;
         },
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Partners.LastUpdate',
@@ -66,6 +110,36 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
           let dat = datePipe.transform(params.data.LastUpdateTime, 'medium');
           return `${dat}`;
         },
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
+        headerName: 'Common.IsActive',
+        field: 'IsActive',
+        sortable: true,
+        resizable: true,
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: [true, false],
+          defaultOption: true,
+        },
+        cellRenderer: 'checkBoxRenderer',
+        cellRendererParams: {
+          onChange: this.onCellValueChanged.bind(this),
+          onCellValueChanged: this.onCellValueChanged.bind(this)
+        },
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
     ]
   }
@@ -74,6 +148,32 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
     this.getPaymentSystemTypes();
   }
 
+  onCellValueChanged(params) {
+
+    params.IsActive = !params.IsActive;
+
+    this.apiService.apiPost(this.configService.getApiUrl,{ ...params},
+      true, Controllers.PAYMENT, Methods.SAVE_PAYMENT_SYSTEM).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
+          const updatedRow = this.rowData.find(x => x.Id === params.Id);
+          if (updatedRow) {
+            updatedRow.IsActive = params.IsActive;
+            const rowNode = this.gridApi.getRowNode(updatedRow.Id);
+            this.gridApi.forEachNode((node) => {
+              if (node.data.Id === params.Id) {
+                node.setData(updatedRow);
+                this.gridApi.redrawRows({ rowNodes: [node] });
+                return;
+              }
+            });
+          }
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+}
+
   onGridReady(params) {
     super.onGridReady(params);
   }
@@ -81,11 +181,38 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
   getPaymentSystemTypes() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject;
-      }
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject;
+        }
 
-      setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 300);
+        setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 300);
+      });
+  }
+
+  isRowSelected() {
+    return this.gridApi?.getSelectedRows().length;
+  }
+
+  async onBulkEditorOpen() {
+    if (this.bulkEditorRef) {
+      this.bulkEditorRef.clear();
+    }
+
+    if (!this.isRowSelected()) {
+      return
+    }
+
+    const componentInstance = await import('./bulk-editor/bulk-editor.component').then(c => c.BulkEditorComponent);
+    const componentRef = this.bulkEditorRef.createComponent(componentInstance);
+    componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
+    componentRef.instance.Ids =  this.gridApi.getSelectedRows().map(field => field.Id);
+    ;
+    componentRef.instance.method = Methods.SAVE_PAYMENT_SYSTEM;
+    componentRef.instance.controller = Controllers.PAYMENT;
+    componentRef.instance.afterClosed.subscribe(() => {
+      this.getPaymentSystemTypes();
+      this.bulkEditorRef.clear();
+      this.gridApi.deselectAll();
     });
   }
 

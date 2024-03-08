@@ -1,14 +1,15 @@
 <div class="container">
 
-
   <div class="content-action">
     <div class="title">{{'VirtualGames.Games' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="this.selectedId != 113 && this.selectedId != 115 " (click)="createTable()">
+      {{'VirtualGames.CreateTable' | translate}}
+    </button>
   </div>
 
 <mat-grid-list cols="2" rowHeight="670px">
 
   <mat-grid-tile [colspan]="1">
-
     <ag-grid-angular
       id="finished-markets"
       #agGrid
@@ -31,7 +32,6 @@
       [enableCellTextSelection]="true"
       rowSelection="single">
     </ag-grid-angular>
-
 
   </mat-grid-tile>
 

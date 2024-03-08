@@ -41,6 +41,11 @@ const routes: Routes = [
           resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
         },
         {
+          path: 'agents',
+          loadChildren: () => import('./agents/agents.module').then(m => m.AgentsModule),
+          resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
+        },
+        {
           path: 'roles',
           loadChildren: () => import('./roles/roles.module').then(m => m.RolesModule),
           resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
@@ -162,7 +167,7 @@ const routes: Routes = [
         },
         {
           path: '',
-          redirectTo: 'clients',
+          redirectTo: 'dashboard',
           pathMatch: 'full'
         }
       ]

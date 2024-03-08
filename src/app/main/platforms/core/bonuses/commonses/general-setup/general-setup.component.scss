@@ -5,5 +5,9 @@
     max-height: calc(80vh - 91px);
     min-height: 200px;
     padding-right: 14px;
-  }
+}
+
+.mat-datepicker-input {
+  background-color: transparent!important;
+}
   

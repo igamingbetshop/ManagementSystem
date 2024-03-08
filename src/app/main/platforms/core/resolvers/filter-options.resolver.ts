@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Resolve, ActivatedRouteSnapshot} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import {ConfigService} from "../../../../core/services/config.service";
 import {Controllers, Methods} from "../../../../core/enums";
 import {map} from "rxjs/operators";
@@ -8,7 +8,7 @@ import {FilterService} from "../../../../core/services/filter.service";
 import {CoreApiService} from "../services/core-api.service";
 
 @Injectable()
-export class FilterOptionsResolver implements Resolve<any>
+export class FilterOptionsResolver 
 {
   constructor(private apiService:CoreApiService,
               private configService:ConfigService,

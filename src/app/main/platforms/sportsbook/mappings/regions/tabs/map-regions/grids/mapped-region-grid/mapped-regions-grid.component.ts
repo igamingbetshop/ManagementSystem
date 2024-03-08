@@ -35,6 +35,7 @@ export class MappedRegionsGridComponent extends BasePaginatedGridComponent imple
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 

@@ -28,14 +28,7 @@ export class MainComponent implements OnInit {
   public isEdit = false;
   public isSaveActive = false;
   public isTwoFactorEnabled: boolean;
-  public oddsType = [
-    { Id: 1, Name: this.translate.instant("Common.Decimal") },
-    { Id: 2, Name: this.translate.instant("Common.Fractional") },
-    { Id: 3, Name: this.translate.instant("Common.US") },
-    { Id: 4, Name: this.translate.instant("Common.HK") },
-    { Id: 5, Name: this.translate.instant("Common.Malay") },
-    { Id: 6, Name: this.translate.instant("Common.Indo") }
-  ];
+  public oddsType:any = [];
 
   constructor(
     private configService: ConfigService,
@@ -48,6 +41,14 @@ export class MainComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private dialog: MatDialog
   ) {
+    this.oddsType = [
+      { Id: 1, Name: this.translate.instant("Common.Decimal") },
+      { Id: 2, Name: this.translate.instant("Common.Fractional") },
+      { Id: 3, Name: this.translate.instant("Common.US") },
+      { Id: 4, Name: this.translate.instant("Common.HK") },
+      { Id: 5, Name: this.translate.instant("Common.Malay") },
+      { Id: 6, Name: this.translate.instant("Common.Indo") }
+    ];
   }
 
   ngOnInit() {
@@ -71,7 +72,7 @@ export class MainComponent implements OnInit {
         this.types = data.ResponseObject;
       }
     });
-    this.isTwoFactorEnabled = this.localStorage.get('isTwoFactorEnabled');    
+    this.isTwoFactorEnabled = this.localStorage.get('isTwoFactorEnabled');
     this.getProfileData();
     this.createForm();
   }

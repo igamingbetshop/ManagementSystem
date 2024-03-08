@@ -156,7 +156,7 @@ export class KeysSGComponent extends BasePaginatedGridComponent implements OnIni
           onClick: this.saveCategorySettings['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       },

@@ -1,5 +1,9 @@
 @import "mixins";
 
+.hide {
+  display: none;
+}
+
 .container {
   @include container-style;
   height: auto;

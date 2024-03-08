@@ -89,7 +89,7 @@ export class ProductCategoriesComponent extends BasePaginatedGridComponent imple
           onClick: this.saveProductCategory['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF',
         }
       }

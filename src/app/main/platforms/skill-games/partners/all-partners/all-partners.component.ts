@@ -91,9 +91,9 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
   }
 
   onGridReady(params) {
-    super.onGridReady(params);    
+    super.onGridReady(params);
     syncColumnReset();
-   
+
   }
 
 }

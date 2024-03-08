@@ -596,11 +596,6 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
     });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
 
   onPartnerChange(val: number) {
     this.PartnerId = val;
@@ -625,24 +620,26 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-    this.filteredData.FromDate = DateTimeHelper.getFromDate();
-    this.type = this.urlSegment == 'withdrawals' ? 1 : this.urlSegment == 'deposits' ? 2 : null;
+  startDate() {
+    DateTimeHelper.startDate();
+    this.fromDate = DateTimeHelper.getFromDate();
+    this.toDate = DateTimeHelper.getToDate();
   }
 
-  onEndDateChange(event) {
-    this.toDate = event.value;
-    this.filteredData.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
-    this.type = this.urlSegment == 'withdrawals' ? 1 : this.urlSegment == 'deposits' ? 2 : null;
-  }
-
-  selectTime(time) {
+  selectTime(time: string): void {
     DateTimeHelper.selectTime(time);
     this.fromDate = DateTimeHelper.getFromDate();
     this.toDate = DateTimeHelper.getToDate();
     this.selectedItem = time;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
+    this.getCurrentPage();
+  }
+
+  onStartDateChange(event) {
+    this.fromDate = event.value;
+  }
+
+  onEndDateChange(event) {
+    this.toDate = event.value;
   }
 
   createServerSideDatasource() {

@@ -17,11 +17,9 @@
     }
 
     .date-time-tabs {
-
       .tab-btn {
         margin-right: 8px;
       }
-
       @include tab-button-style;
     }
 
@@ -30,7 +28,6 @@
       &.start {
         margin-right: 8px;
       }
-
       @include calendar-picker-style;
     }
 
@@ -56,17 +53,13 @@
       flex-direction: row-reverse;
       align-items: center;
 
+
       .pages-sizes {
         padding-left: 10px;
         padding-right: 10px;
-        @include dropdown-style;
 
-        ::ng-deep {
-          .mat-select {
-            height: 26px !important;
-            width: 60px !important;
-          }
-        }
+        @include grid-dropdown-style;
+        
       }
 
       .current-paging {

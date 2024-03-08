@@ -10,9 +10,10 @@ import {LoaderService} from "../../../core/services";
   animations:[onMainContentChange]
 })
 export class MainComponent {
-
   public onSideNavChange: boolean = true;
   public loading = false;
+  public showSideNav = false;
+
 
   constructor (
       private sidenavService: SidenavService,
@@ -25,5 +26,9 @@ export class MainComponent {
     this.loader.isLoading.subscribe((v) => {
       this.loading = v;
     });
+  }
+
+  closeSideNav() {
+    this.showSideNav = !this.showSideNav;
   }
 }

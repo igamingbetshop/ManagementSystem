@@ -1,11 +1,11 @@
-import {Component, Injector, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {AuthService, ConfigService, LocalStorageService} from "../../../core/services";
-import {catchError, interval, Subject, Subscription} from "rxjs";
-import {Router} from "@angular/router";
-import {SearchService} from "../../../core/services/search.sevice";
-import {debounceTime} from "rxjs/operators";
-import {TranslateService} from "@ngx-translate/core";
-import {MatSelect} from "@angular/material/select";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AuthService, ConfigService, LocalStorageService } from "../../../core/services";
+import { interval, Subject, Subscription } from "rxjs";
+import { Router } from "@angular/router";
+import { SearchService } from "../../../core/services/search.sevice";
+import { debounceTime } from "rxjs/operators";
+import { TranslateService } from "@ngx-translate/core";
+import { MatSelect } from "@angular/material/select";
 
 @Component({
   selector: 'app-header',
@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   openMatSelect(): void {
     const panel = this.matSelect.panel.nativeElement as HTMLDivElement;
-    panel.scrollTo({top: 0, behavior: 'smooth'});
+    panel.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   searchData(value: string) {
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   navigateMain(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/main/home']);
   }
 
   ngOnDestroy() {

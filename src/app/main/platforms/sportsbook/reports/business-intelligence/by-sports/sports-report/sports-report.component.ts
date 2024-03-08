@@ -40,6 +40,7 @@ export class SportsReportComponent extends BasePaginatedGridComponent implements
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
   @Input() isHide: boolean = false;
 

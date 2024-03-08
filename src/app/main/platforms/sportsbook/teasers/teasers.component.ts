@@ -272,7 +272,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
       //     onClick: this.updateTeaser['bind'](this),
       //     Label: 'Save',
       //     isDisabled: true,
-      //     bgColor: '#076192',
+      //     bgColor: '#3E4D66',
       //     textColor: '#FFFFFF'
       //   }
       // }
@@ -373,7 +373,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
           onClick: this.updateSetting['bind'](this),
           Label: this.translate.instant('Common.Save'),
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       }

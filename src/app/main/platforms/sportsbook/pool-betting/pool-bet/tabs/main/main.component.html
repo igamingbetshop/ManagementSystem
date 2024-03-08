@@ -11,18 +11,18 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{round?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput [formControlName]="'Id'" readonly>
           </mat-form-field>
         </div>
       </div>
 
       <div>
-        <div class="first-hand">{{'PoolBetting.TypeId' | translate}}</div>
-        <div class="second-hand">{{round?.TypeId}}</div>
+        <div class="first-hand">{{'PoolBetting.MarketTypeId' | translate}}</div>
+        <div class="second-hand">{{round?.MarketTypeId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput type="number" [formControlName]="'TypeId'">
+          <mat-form-field>
+            <input matInput type="number" [formControlName]="'MarketTypeId'">
           </mat-form-field>
         </div>
       </div>
@@ -31,7 +31,7 @@
         <div class="first-hand">{{'PoolBetting.Number' | translate}}</div>
         <div class="second-hand">{{round?.Number}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput type="number" [formControlName]="'Number'">
           </mat-form-field>
         </div>
@@ -50,8 +50,8 @@
       <div>
         <div class="first-hand">{{'PoolBetting.OpenTime' | translate}}</div>
         <div class="second-hand">{{round?.OpenTime | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-form-field form-calendar-edit">
+          <mat-form-field>
             <input matInput [ngxMatDatetimePicker]="pickerOpenTime" [formControlName]="'OpenTime'">
             <mat-datepicker-toggle matSuffix [for]="pickerOpenTime"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #pickerOpenTime></ngx-mat-datetime-picker>
@@ -62,8 +62,8 @@
       <div>
         <div class="first-hand">{{'PoolBetting.CloseTime' | translate}}</div>
         <div class="second-hand">{{round?.CloseTime | date: 'dd/MM/yyyy HH:mm:ss'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-form-field form-calendar-edit">
+          <mat-form-field>
             <input matInput [ngxMatDatetimePicker]="pickerCloseTime" [formControlName]="'CloseTime'">
             <mat-datepicker-toggle matSuffix [for]="pickerCloseTime"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #pickerCloseTime></ngx-mat-datetime-picker>
@@ -83,7 +83,7 @@
         <div class="first-hand">{{'PoolBetting.TicketsCount' | translate}}</div>
         <div class="second-hand">{{round?.TicketsCount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput [formControlName]="'TicketsCount'" readonly>
           </mat-form-field>
         </div>
@@ -93,7 +93,7 @@
         <div class="first-hand">{{'PoolBetting.Jackpot' | translate}}</div>
         <div class="second-hand">{{round?.Jackpot}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput [formControlName]="'Jackpot'" readonly>
           </mat-form-field>
         </div>
@@ -103,7 +103,7 @@
         <div class="first-hand">{{'PoolBetting.PoolAmount' | translate}}</div>
         <div class="second-hand">{{round?.PoolAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput [formControlName]="'PoolAmount'" readonly>
           </mat-form-field>
         </div>

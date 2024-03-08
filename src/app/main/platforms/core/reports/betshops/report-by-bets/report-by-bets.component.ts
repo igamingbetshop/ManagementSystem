@@ -92,7 +92,7 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-      },      
+      },
       {
         headerName: 'Clients.BetShopName',
         headerValueGetter: this.localizeHeader.bind(this),

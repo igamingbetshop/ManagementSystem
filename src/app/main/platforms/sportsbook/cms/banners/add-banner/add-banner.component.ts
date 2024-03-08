@@ -169,7 +169,7 @@ export class AddBannerComponent implements OnInit {
         reader.onload = () => {
           const binaryString = reader.result as string;
 
-          if (files.size < 700000) {
+          if (files.size < 900000) {
             this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
             this.formGroup.get('Image').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
           }

@@ -16,9 +16,53 @@
     }
 
     .partner-dropdown {
+      margin-left: 8px;
       @include dropdown-style;
     }
 
+    .bulk-editor-dropdown {
+      position: relative;
+      .mat-bulk-btn {
+        background-color: $blue-light-7;
+        padding: 0 10px;
+        border: 1px solid transparent;
+
+        //&.opened {
+        //
+        //  & ~ .bulk-editor {
+        //    display: block;
+        //  }
+        //}
+
+        ::ng-deep {
+          .mat-button-wrapper {
+            color: $blue-2 !important;
+            position: relative;
+            padding-left: 23px;
+
+            &:before {
+              content: "\e903";
+              font-size: 14px;
+              font-family: 'iq-soft-icon';
+              position: absolute;
+              left: 0;
+              top: -6px;
+            }
+          }
+        }
+
+        &.disabled {
+          opacity: 0.7;
+          pointer-events: none;
+        }
+
+        &:hover {
+          border: 1px solid $blue-5;
+          background-color: $blue-light-22;
+        }
+      }
+
+    }
 
     mat-form-field{
       margin-top: 10px;
@@ -54,5 +98,17 @@ ag-grid-angular {
   padding: 10px;
   button:last-child {
     margin-left: 10px;
+  }
+}
+
+::ng-deep {
+  .bulk-editor-menu {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: unset;
+    background: transparent;
+    .mat-menu-content {
+      padding: 0 !important;
+    }
   }
 }

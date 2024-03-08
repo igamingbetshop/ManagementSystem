@@ -21,8 +21,9 @@ export class BaseGridComponent implements OnInit, OnDestroy {
   public adminMenuId;
   public gridIndex = 0;
   public subscription: Subscription = new Subscription();
+  private previousState: any = null;
 
-  public sideBar = {
+  public sideBar:any = {
     toolPanels: [
       {
         id: "columns",
@@ -42,7 +43,7 @@ export class BaseGridComponent implements OnInit, OnDestroy {
   };
 
   public columnDefs;
-  public defaultColDef;
+  public defaultColDef:any;
   public dateRangeFG: UntypedFormGroup;
   public loadingUserState = true;
 
@@ -80,7 +81,8 @@ export class BaseGridComponent implements OnInit, OnDestroy {
       menuTabs: [
         'filterMenuTab',
         'generalMenuTab',
-      ]
+      ],
+      minWidth: 15,
     };
 
     this.dateRangeFG = new UntypedFormGroup({
@@ -92,7 +94,7 @@ export class BaseGridComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   onGridReady(params) {
-    
+
     if (!!this.adminMenuId) {
       this.saveStateSbj$.pipe(debounceTime(1000)).subscribe(() => {
         if (!isFirstInvocation) {
@@ -132,8 +134,6 @@ export class BaseGridComponent implements OnInit, OnDestroy {
           if (data.ResponseCode === 0) {
             const columnState = JSON.parse(data.ResponseObject);
             if (columnState) {
-              console.log("Column state data found:", columnState);
-              
               try {
                 this.columnApi.applyColumnState({
                   state: columnState,
@@ -174,22 +174,36 @@ export class BaseGridComponent implements OnInit, OnDestroy {
         }
       );
   }
-  
+
 
   saveState() {
-    const savedState = this.columnApi.getColumnState();
-    
+    const currentSavedState = this.columnApi.getColumnState();
+    const currentSavedStateObj = JSON.parse(JSON.stringify(currentSavedState));
+    const previousStateObj = JSON.parse(JSON.stringify(this.previousState));
+
+    if (this.deepEqual(currentSavedStateObj, previousStateObj)) {
+      return;
+    }
+
+    this.previousState = currentSavedState;
+
     this.coreApiService.apiPost(this.configService.getApiUrl, {
       "AdminMenuId": this.adminMenuId,
       "GridIndex": this.gridIndex,
-      "State": JSON.stringify(savedState)
-    }, true,
-      Controllers.USER, Methods.UPDATE_USER_STATE).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-        } else {
-        }
-      });
+      "State": JSON.stringify(currentSavedState)
+    }, true, Controllers.USER, Methods.UPDATE_USER_STATE).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        // Handle successful state update
+      } else {
+        // Handle state update error
+      }
+    });
   }
+
+  deepEqual(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
 
   resetState() {
     this.columnApi.resetColumnState();
@@ -329,7 +343,7 @@ export class BaseGridComponent implements OnInit, OnDestroy {
 
   localizeHeader(parameters: ICellRendererParams): string {
     let headerIdentifier = parameters.colDef.headerName;
-    return this.translate.instant(headerIdentifier);
+    return this.translate.instant(headerIdentifier) || "";
   }
 
   onColumnStateChange() {

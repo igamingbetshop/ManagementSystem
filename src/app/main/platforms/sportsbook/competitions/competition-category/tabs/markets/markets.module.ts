@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AgGridModule } from 'ag-grid-angular';
 import { MatDialogModule } from '@angular/material/dialog';
 import {TranslateModule} from "@ngx-translate/core";
+import { DropdownDirective } from 'src/app/core/directives/dropdown.directive';
+import { MatMenuModule } from '@angular/material/menu';
 
 const routes: Routes = [
   {
@@ -35,7 +37,9 @@ const routes: Routes = [
     MatDialogModule,
     RouterModule.forChild(routes),
     AgGridModule,
-    TranslateModule
+    TranslateModule,
+    DropdownDirective,
+    MatMenuModule
   ],
   declarations: [MarketsComponent]
 })

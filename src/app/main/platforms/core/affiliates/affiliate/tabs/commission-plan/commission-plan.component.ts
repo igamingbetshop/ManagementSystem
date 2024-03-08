@@ -147,7 +147,8 @@ export class CommissionPlanComponent extends BasePaginatedGridComponent implemen
     this.formGroupDeposit = this.fb.group({
       CurrencyId: [null],
       Percent: [null, Validators.pattern(/\-?\d*\.?\d{1,2}/)],
-      UpToAmount: [null, Validators.pattern(/\-?\d*\.?\d{1,2}/)]
+      UpToAmount: [null, Validators.pattern(/\-?\d*\.?\d{1,2}/)],
+      DepositeCount: [null],
     });
   }
 

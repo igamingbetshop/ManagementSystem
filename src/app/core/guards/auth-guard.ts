@@ -1,10 +1,5 @@
 import {Injectable} from '@angular/core';
-import {
-  CanLoad,
-  Route,
-  Router,
-  UrlSegment
-} from '@angular/router';
+import { Route, Router, UrlSegment } from '@angular/router';
 import {AuthService} from '../services/auth.service';
 import {LocalStorageService} from '../services/local-storage.service';
 import {ApiService} from "../services/api.service";
@@ -12,7 +7,7 @@ import {ConfigService} from "../services/config.service";
 import {Methods} from "../enums";
 
 @Injectable({providedIn: 'root'})
-export class AuthGuard implements CanLoad {
+export class AuthGuard  {
 
   isTokenValidated = false;
   constructor(private router: Router,

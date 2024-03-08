@@ -9,6 +9,7 @@ import {take} from 'rxjs/operators';
 import {CellClickedEvent} from 'ag-grid-community';
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 @Component({
   selector: 'app-bonus-settings',
@@ -24,6 +25,10 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   public bonusChannels: any[] = [];
   public partners: any[] = [];
   public partnerId: number;
+  regions: any;
+  frameworkComponents = {
+    agDropdownFilter: AgDropdownFilter,
+  };
 
   constructor(
     private apiService: SportsbookApiService,
@@ -33,6 +38,22 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.SP_BOUNUS_SETTINGS;
+
+
+  }
+
+  ngOnInit() {
+    this.gridStateName = 'bonus-settings-grid-state';
+    this.getBonusesTypes();
+    this.getChannels();
+    this.getPartners();
+    this.getRegions();
+    setTimeout(() => {
+      this.getPage()
+    });
+  }
+
+  setColdefs() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -107,12 +128,36 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         filter: 'agNumberColumnFilter',
       },
       {
+        headerName: 'Bonuses.MaxAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MaxAmount',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+      },
+      {
+        headerName: 'Bonuses.MinAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MinAmount',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+      },
+      {
         headerName: 'Common.Type',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TypeName',
         resizable: true,
         sortable: true,
         filter: 'agTextColumnFilter',
+      },
+      {
+        headerName: 'Bonuses.Country',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'CountryName',
+        resizable: true,
+        sortable: true,
+        filter: false,
       },
       {
         headerName: 'Bonuses.TurnoverCount',
@@ -134,16 +179,16 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
       },
 
     ];
-
   }
 
-  ngOnInit() {
-    this.gridStateName = 'bonus-settings-grid-state';
-    this.getBonusesTypes();
-    this.getChannels();
-    this.getPartners();
-    setTimeout(() => {
-      this.getPage()
+  getRegions() {
+    this.apiService.apiPost('regions', { TypeId: 5 }).subscribe(data => {
+      if (data.Code === 0) {
+        this.regions = data.ResponseObject;
+        this.setColdefs();
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
     });
   }
 
@@ -250,6 +295,12 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
             let partnerName = this.partners.find((partner) => {
               return partner.Id == bonus.PartnerId;
             })
+            let countryName = this.regions.find((region) => {
+              return region.IsoCode == bonus.CountryCode;
+            })
+            if (countryName) {
+              bonus['CountryName'] = countryName.Name;
+            }
             if (partnerName) {
               bonus['PartnerName'] = partnerName.Name;
             }
@@ -260,8 +311,6 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
               bonus['ChanelName'] = chanelName.Name;
             }
           });
-
-console.log(this.rowData, "ROWAS");
 
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});

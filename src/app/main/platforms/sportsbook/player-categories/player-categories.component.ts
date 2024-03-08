@@ -232,7 +232,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
           onClick: this.saveCategorySettings['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF',
         },
         cellStyle: function (params) {

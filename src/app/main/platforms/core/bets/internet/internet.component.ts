@@ -3,8 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 import { take } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { CellClickedEvent, GetRowIdFunc, GetRowIdParams } from 'ag-grid-community';
 import 'ag-grid-enterprise';
@@ -23,6 +21,8 @@ import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes, GridMenuIds }
 import { DateTimeHelper } from "../../../../../core/helpers/datetime.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { formattedNumber } from "../../../../../core/utils";
+import {MatDialog} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-internet',
@@ -153,9 +153,6 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
       if (_Info) {
         info = _Info.replace(/{|}/g, '')
       }
-
-      console.log('luckyNumbers', info);
-
 
       return `
         <div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box; overflow-y: auto">
@@ -778,7 +775,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
             payment['State'] = this.documentStates.find((item) => item.Id == payment.State)?.Name;
             payment['BetTypeId'] = this.betTypes.find((item) => item.Id == payment.BetTypeId)?.Name;
           })
-          
+
           this.totalBetAmount = data.ResponseObject.TotalBetAmount;
           this.TotalWinAmount = data.ResponseObject.TotalWinAmount;
           this.TotalProfit = data.ResponseObject.TotalPossibleWinAmount;

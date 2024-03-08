@@ -6,6 +6,7 @@ import {AgGridModule} from "ag-grid-angular";
 import {OpenerComponent} from "../../../components/grid-common/opener/opener.component";
 import {AgBooleanFilterComponent} from "../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {PlayersRoutingModule} from "./players-routing.module";
 import {PlayersComponent} from "./players.component";
 

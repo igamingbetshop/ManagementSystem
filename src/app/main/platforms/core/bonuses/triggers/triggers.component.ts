@@ -344,10 +344,10 @@ export class TriggersComponent extends BasePaginatedGridComponent implements OnI
             if (partnerName) {
               setting['PartnerId'] = partnerName.Name;
             }
-            if (setting.Type === 5 || setting.Type === 9 || setting.Type === 11 || setting.Type === 12) {
-              setting.Amount = setting.MinAmount
-              setting.MinAmount = null
-            }
+            // if (setting.Type === 5 || setting.Type === 9 || setting.Type === 11 || setting.Type === 12) {
+            //   setting.Amount = setting.MinAmount
+            //   setting.MinAmount = null
+            // }
           });
 
           this.rowData = mappedRows;

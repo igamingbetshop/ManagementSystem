@@ -128,7 +128,8 @@
         border-radius: 4px;
         width: 65%;
         align-items: center;
-        padding: 0 10px;
+        padding: 0;
+        padding-left: 10px;
         box-sizing: border-box;
 
         .mat-btn {
@@ -154,6 +155,13 @@
     width: 64%;
     padding-right: 10px;
 
+    .custom-dropdown {
+      margin-right: 8px;
+      @include dropdown-style;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+
     .grid-edit {
       & > div {
         .first-hand {
@@ -174,6 +182,13 @@
 
   .right {
     width: 36%;
+
+    .custom-dropdown {
+      margin-right: 8px;
+      @include dropdown-style;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
   }
 
   .grid-edit {
@@ -191,7 +206,7 @@
 
     .calendar-picker {
       margin-left: 8px;
-      width: 202px;
+      width: 150px;
       @include calendar-picker-style;
     }
 

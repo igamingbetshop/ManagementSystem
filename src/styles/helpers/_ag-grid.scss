@@ -20,7 +20,6 @@
   background-color: transparent !important;
 
   .ag-root {
-
     ::-webkit-scrollbar-thumb {
       background-color: $blue-light-6 !important;
       border-radius: 5px;
@@ -59,11 +58,11 @@
           .ag-side-button {
 
             .ag-side-button-button {
-              background-color: $blue-light-18;
+              background-color: #3E4D66;
               border: unset;
               border-radius: 0 4px 0 0;
               color: $white;
-              min-height: 34px;
+              min-height: 33px;
               box-shadow: 0 0 4px $black-shadow-3;
 
               .ag-side-button-icon-wrapper {
@@ -825,3 +824,4 @@
     }
   }
 }
+

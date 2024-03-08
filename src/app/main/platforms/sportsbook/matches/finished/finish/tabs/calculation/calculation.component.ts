@@ -37,6 +37,7 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,

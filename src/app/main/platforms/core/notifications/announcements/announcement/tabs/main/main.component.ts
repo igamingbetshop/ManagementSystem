@@ -13,6 +13,7 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { ACTIVITY_STATUSES, RECEIVER_TYPES } from 'src/app/core/constantes/statuses';
 import { DatePipe } from '@angular/common';
 import { CellClickedEvent } from 'ag-grid-community';
+import { AnnouncementsService } from '../../../announcements.service';
 
 @Component({
   selector: 'app-main',
@@ -21,25 +22,28 @@ import { CellClickedEvent } from 'ag-grid-community';
 })
 export class MainComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public announcement: any;
-  public formGroup: UntypedFormGroup;
-  public isEdit = false;
-  public announcementId: number;
-  public partners: any[] = [];
-  public segments;
-  public rowData = [];
-  public columnDefs = [];
-  public segmentesEntites = [];
-  public announcementTypes: any[] = [];
-  public clientStates = ACTIVITY_STATUSES;
-  public ReceiverTypeIds = RECEIVER_TYPES;
+  announcement: any;
+  formGroup: UntypedFormGroup;
+  isEdit = false;
+  announcementId: number;
+  partners: any[] = [];
+  segments;
+  rowData = [];
+  columnDefs = [];
+  segmentesEntites = [];
+  announcementTypes: any[] = [];
+  clientStates = ACTIVITY_STATUSES;
+  ReceiverTypeIds = RECEIVER_TYPES;
   partnerId: any;
+  submitting = false;
+
 
   constructor(
     public configService: ConfigService,
     public commonDataService: CommonDataService,
     private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
+    private announcementsService: AnnouncementsService,
     private _snackBar: MatSnackBar,
     private fb: UntypedFormBuilder,
     protected injector: Injector,
@@ -200,21 +204,23 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   onSubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.submitting) {
       return;
     }
-
+    this.submitting = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_ANNOUNCEMENT).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
-          this.cancel();
+          this.isEdit = false;
+          this.segmentesEntites = [];
           this.getAnnouncementById();
           this.getObjectHistory();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.submitting = false;
       });
   }
 
@@ -246,6 +252,11 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     this.router.navigate(['/main/platform/notifications/announcements/announcement/main/history'], {
       queryParams: { announcementId: this.announcementId, id: row.Id, partnerId: this.partnerId }
     });
+  }
+
+  onNavigateToAnnouncement() {
+    this.announcementsService.updateAnnouncement(this.announcement);
+    this.router.navigate(['/main/platform/notifications/announcements']);
   }
 
 

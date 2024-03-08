@@ -499,7 +499,7 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
           }
         },
       },
-      
+
       {
         headerName: 'Clients.BonusPrize',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -657,7 +657,7 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
         if (this.partnerId) {
           paging.PartnerId = this.partnerId;
         }
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['Status'], ['Statuse'])
         this.setSort(params.request.sortModel, paging);
         this.setFilterDropdown(params, ['PartnerId']);
@@ -671,7 +671,7 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
                 items['Status'] = this.clientBonusStatuses.find((state) => state.Id == items.Status)?.Name;
                 items['PartnerId'] = this.partners.find((state) => state.Id == items.PartnerId)?.Name
                 items['BonusType'] = this.campaignTypes.find((state) => state.Id == items.BonusType)?.Name
-              })                            
+              })
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
               this.gridApi?.setPinnedBottomRowData([{
                 BonusPrize: `${formattedNumber(data.ResponseObject.TotalBonusPrize)} ${this.playerCurrency}`,

@@ -6,6 +6,7 @@ import {TranslateModule} from "@ngx-translate/core";
 import {AgBooleanFilterModule} from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.module";
 import {AgGridModule} from "ag-grid-angular";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {MatSelectModule} from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 

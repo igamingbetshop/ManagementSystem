@@ -11,6 +11,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.module';
 import { AgGridModule } from 'ag-grid-angular';
+import { MatMenuModule } from '@angular/material/menu';
+import { DropdownDirective } from 'src/app/core/directives/dropdown.directive';
 
 @NgModule({
   imports: [
@@ -24,7 +26,9 @@ import { AgGridModule } from 'ag-grid-angular';
     MatSnackBarModule,
     TranslateModule,
     AgBooleanFilterModule,
-    AgGridModule
+    AgGridModule,
+    DropdownDirective,
+    MatMenuModule
   ],
   declarations: [AllProvidersComponent]
 })

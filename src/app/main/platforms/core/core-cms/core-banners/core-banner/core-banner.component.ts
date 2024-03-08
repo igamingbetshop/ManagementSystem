@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
@@ -9,6 +9,7 @@ import { CoreApiService } from '../../../services/core-api.service';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { BannerService } from '../core-banners.service';
 
 @Component({
   selector: 'app-core-banner',
@@ -49,12 +50,16 @@ export class CoreBannerComponent implements OnInit {
     { id: '1024-1200', name: '1024-1200', selected: false },
     { id: '1200-1920', name: '1200-1920', selected: false },
   ];
+  startDates: any;
+  endDates: any;
 
   constructor(
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
+    private bannerService: BannerService,
     public commonDataService: CommonDataService,
     private activateRoute: ActivatedRoute,
+    public router: Router,
     public configService: ConfigService,
     private fb: UntypedFormBuilder,
     public dateAdapter: DateAdapter<Date>
@@ -87,7 +92,7 @@ export class CoreBannerComponent implements OnInit {
   setVisibilityEntytes() {
     this.visibilityEntites.push(this.formGroup.value.Visibility.map(elem => {
       return this.bannerVisibilityTypes.find((item) => elem === item.id).name
-    }))    
+    }))
 
   }
 
@@ -104,13 +109,15 @@ export class CoreBannerComponent implements OnInit {
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.banner = data.ResponseObject;
-          this.setBanner();          
+          this.setBanner();
         }
       })
   }
 
   setBanner() {
     this.partnerId = this.banner?.PartnerId;
+    this.startDates = this.banner?.StartDate;
+    this.endDates = this.banner?.EndDate;
     this.image = "https://" + this.banner?.SiteUrl + '/assets/images/b/' + this.banner?.Image;
     this.formGroup.patchValue(this.banner);
     this.LanguageType = this.banner?.Languages?.Type;
@@ -122,8 +129,9 @@ export class CoreBannerComponent implements OnInit {
     this.getSegments();
     this.formGroup.get('EnvironmentTypeId').setValue(1)
   }
-
-
+  updateStartDate(event: any) {
+    this.startDate = event; // Update the startDate property when the input changes
+  }
 
   getSegments() {
     this.languageEntites = [];
@@ -169,11 +177,9 @@ export class CoreBannerComponent implements OnInit {
     DateTimeHelper.startDate();
     const fromDate = DateTimeHelper.getFromDate();
     const toDate = DateTimeHelper.getToDate();
-
     this.formGroup.get('StartDate').setValue(fromDate);
     this.formGroup.get('EndDate').setValue(toDate);
   }
-
 
   public createForm() {
     this.formGroup = this.fb.group({
@@ -182,7 +188,7 @@ export class CoreBannerComponent implements OnInit {
       EndDate: [null],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
       Body: [null],
-      NickName: [null, [Validators.required, Validators.pattern(/^[a-z][a-z0-9]*$/i)]],
+      NickName: [null, [Validators.required, ]],
       Head: [null],
       Link: [null],
       Image: [null, [Validators.required]],
@@ -214,7 +220,7 @@ export class CoreBannerComponent implements OnInit {
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
     if (files) {
-      const validDocumentSize = files.size < 700000;
+      const validDocumentSize = files.size < 900000;
       const validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif)$/.test(event.target.value);
       if (validDocumentFormat && validDocumentSize) {
         const reader = new FileReader();
@@ -262,6 +268,11 @@ export class CoreBannerComponent implements OnInit {
       const availableSize = this.banner.ImageSizes.find(curSize => curSize === size.id)
       size.selected = !!availableSize;
     });
+  }
+
+  onNavigateToBanners() {
+    this.bannerService.update(this.banner);
+    this.router.navigate(['/main/platform/cms/banners']);
   }
 
 

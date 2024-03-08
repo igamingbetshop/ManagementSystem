@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Controllers, Methods} from "../../../../../../core/enums";
-import {DateAdapter} from "@angular/material/core";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {BonusesService} from "../../bonuses.service";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Controllers, Methods } from "../../../../../../core/enums";
+import { DateAdapter } from "@angular/material/core";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { BonusesService } from "../../bonuses.service";
 
 @Component({
   selector: 'app-create-trigger-setting',
@@ -19,29 +19,29 @@ export class CreateTriggerSettingComponent implements OnInit {
   public partners = [];
   public triggerTypes = [];
   public conditions = [
-    {Id: 1, Name: 'Sport', Type: 1},
-    {Id: 2, Name: 'Region', Type: 1},
-    {Id: 3, Name: 'Competition', Type: 1},
-    {Id: 4, Name: 'Match', Type: 1},
-    {Id: 5, Name: 'Market', Type: 1},
-    {Id: 6, Name: 'Selection', Type: 1},
-    {Id: 7, Name: 'MarketType', Type: 1},
-    {Id: 8, Name: 'SelectionType', Type: 1},
-    {Id: 9, Name: 'MatchStatus', Type: 1},
-    {Id: 10, Name: 'Price', Type: 1},
-    {Id: 11, Name: 'PricePerSelection', Type: 1},
-    {Id: 12, Name: 'BetType', Type: 1},
-    {Id: 13, Name: 'NumberOfSelections', Type: 1},
-    {Id: 14, Name: 'NumberOfWonSelections', Type: 1},
-    {Id: 15, Name: 'NumberOfLostSelections', Type: 1},
-    {Id: 16, Name: 'Stake', Type: 1},
-    {Id: 17, Name: 'BetStatus', Type: 1}
+    { Id: 1, Name: 'Sport', Type: 1 },
+    { Id: 2, Name: 'Region', Type: 1 },
+    { Id: 3, Name: 'Competition', Type: 1 },
+    { Id: 4, Name: 'Match', Type: 1 },
+    { Id: 5, Name: 'Market', Type: 1 },
+    { Id: 6, Name: 'Selection', Type: 1 },
+    { Id: 7, Name: 'MarketType', Type: 1 },
+    { Id: 8, Name: 'SelectionType', Type: 1 },
+    { Id: 9, Name: 'MatchStatus', Type: 1 },
+    { Id: 10, Name: 'Price', Type: 1 },
+    { Id: 11, Name: 'PricePerSelection', Type: 1 },
+    { Id: 12, Name: 'BetType', Type: 1 },
+    { Id: 13, Name: 'NumberOfSelections', Type: 1 },
+    { Id: 14, Name: 'NumberOfWonSelections', Type: 1 },
+    { Id: 15, Name: 'NumberOfLostSelections', Type: 1 },
+    { Id: 16, Name: 'Stake', Type: 1 },
+    { Id: 17, Name: 'BetStatus', Type: 1 }
   ];
   public addedConditions = {
     selectedGroupType: 1,
     groupTypes: [
-      {Id: 1, Name: 'All'},
-      {Id: 2, Name: 'Any'}
+      { Id: 1, Name: 'All' },
+      { Id: 2, Name: 'Any' }
     ],
     groups: [],
     conditions: [],
@@ -50,17 +50,17 @@ export class CreateTriggerSettingComponent implements OnInit {
     selectedConditionValue: null
   };
   public days = [
-    {Id: 1, Name: "Monday"},
-    {Id: 2, Name: "Tuesday"},
-    {Id: 3, Name: "Wednesday"},
-    {Id: 4, Name: "Thursday"},
-    {Id: 5, Name: "Friday"},
-    {Id: 6, Name: "Saturday"},
-    {Id: 0, Name: "Sunday"},
+    { Id: 1, Name: "Monday" },
+    { Id: 2, Name: "Tuesday" },
+    { Id: 3, Name: "Wednesday" },
+    { Id: 4, Name: "Thursday" },
+    { Id: 5, Name: "Friday" },
+    { Id: 6, Name: "Saturday" },
+    { Id: 0, Name: "Sunday" },
   ];
   public sources = [
-    {Id: 1, Name: 'BetAmount'},
-    {Id: 2, Name: 'WinAmount'}
+    { Id: 1, Name: 'BetAmount' },
+    { Id: 2, Name: 'WinAmount' }
   ];
   public formGroup: UntypedFormGroup;
   public fromDate = new Date();
@@ -92,8 +92,8 @@ export class CreateTriggerSettingComponent implements OnInit {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION, Methods.GET_TRIGGER_TYPES_ENUM)
       .subscribe(data => {
         if (data.ResponseCode === 0) {
-          this.triggerTypes =  this.getTriggerValidators(data.ResponseObject);          
-          
+          this.triggerTypes = this.getTriggerValidators(data.ResponseObject);
+
         }
       })
   }
@@ -107,10 +107,10 @@ export class CreateTriggerSettingComponent implements OnInit {
       })
   }
 
-  getTriggerValidators(triggerTypes: {[key : string] : any}[]) {
+  getTriggerValidators(triggerTypes: { [key: string]: any }[]) {
     return triggerTypes.map(field => {
       let validators = ['Name', 'PartnerId', 'Description'];
-      switch(field.Id) {
+      switch (field.Id) {
         case 8:
           validators.push('Percent');
           break;
@@ -136,14 +136,14 @@ export class CreateTriggerSettingComponent implements OnInit {
       }
 
       return {
-        TriggerValidators : validators,
+        TriggerValidators: validators,
         ...field
       }
     });
   }
 
   onBonusChange(BonusTypeId) {
-    this.type = BonusTypeId
+    this.type = BonusTypeId;
     this.handleValidators();
   }
 
@@ -154,9 +154,9 @@ export class CreateTriggerSettingComponent implements OnInit {
     }
 
     this.triggerTypes.forEach(fields => {
-      if(fields.Id === this.type) {
+      if (fields.Id === this.type) {
         for (const key of fields.TriggerValidators) {
-          if(key === 'Name' || key === 'Description' || key === 'BonusSettingCodes') {
+          if (key === 'Name' || key === 'Description' || key === 'BonusSettingCodes') {
             this.formGroup.get(key).setValidators([Validators.required]);
           } else {
             this.formGroup.get(key).setValidators([Validators.required, Validators.min(0)]);
@@ -175,8 +175,8 @@ export class CreateTriggerSettingComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    const triggerSetting = this.formGroup.getRawValue();  
-    
+    const triggerSetting = this.formGroup.getRawValue();
+
     if (triggerSetting.Type == 1 || triggerSetting.Type == 2 || triggerSetting.Type == 3) {
       triggerSetting.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     }
@@ -190,7 +190,7 @@ export class CreateTriggerSettingComponent implements OnInit {
         if (trigger.ResponseCode === 0) {
           this.dialogRef.close('success');
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: trigger.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: trigger.Description, Type: "error" });
         }
       })
   }
@@ -208,8 +208,8 @@ export class CreateTriggerSettingComponent implements OnInit {
       {
         selectedGroupType: 1,
         groupTypes: [
-          {Id: 1, Name: 'All'},
-          {Id: 2, Name: 'Any'}
+          { Id: 1, Name: 'All' },
+          { Id: 2, Name: 'Any' }
         ],
         groups: [],
         conditions: [],
@@ -262,7 +262,7 @@ export class CreateTriggerSettingComponent implements OnInit {
 
   static nonZero(control: any) {
     if (Number(control.value) < 0) {
-      control.setErrors({nonZero: true})
+      control.setErrors({ nonZero: true })
     } else {
       control.setErrors(null)
     }

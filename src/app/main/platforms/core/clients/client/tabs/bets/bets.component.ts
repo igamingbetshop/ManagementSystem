@@ -1,26 +1,27 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService, LocalStorageService} from "../../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService, LocalStorageService } from "../../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import 'ag-grid-enterprise';
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {MatDialog} from "@angular/material/dialog";
-import {take} from "rxjs/operators";
-import {AgBooleanFilterComponent} from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../../../../components/grid-common/checkbox-renderer.component";
-import {Paging} from "../../../../../../../core/models";
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
-import {OddsTypePipe} from "../../../../../../../core/pipes/odds-type.pipe";
-import {GridRowModelTypes, Controllers, Methods, OddsTypes, ModalSizes, GridMenuIds} from 'src/app/core/enums';
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { MatDialog } from "@angular/material/dialog";
+import { take } from "rxjs/operators";
+import { AgBooleanFilterComponent } from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../../../../components/grid-common/checkbox-renderer.component";
+import { Paging } from "../../../../../../../core/models";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
+import { OddsTypePipe } from "../../../../../../../core/pipes/odds-type.pipe";
+import { GridRowModelTypes, Controllers, Methods, OddsTypes, ModalSizes, GridMenuIds } from 'src/app/core/enums';
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { IsRowMaster } from 'ag-grid-enterprise';
 
 @Component({
   selector: 'app-bets',
@@ -47,15 +48,20 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     checkBoxRenderer: CheckboxRendererComponent,
     agDateTimeFilter: AgDateTimeFilter
   };
+
+  public isRowMaster: IsRowMaster = (dataItem: any) => {
+    return this.providers.includes(dataItem.ProductId);
+  };
+
   public detailCellRendererParams: any;
   public totalBetAmount;
   public totalWinAmount;
   public playerCurrency;
   public selectedItem = 'today';
   private oddsType: number;
-  private detailGridParams: any;
   public accounts = [];
   public accountId = null;
+  providers = [];
 
   constructor(
     private apiService: CoreApiService,
@@ -179,7 +185,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         cellRenderer: (params) => {
           const oddsTypePipe = new OddsTypePipe();
           let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-          return `${data}`;
+          return data ? `${data}` : '';
         }
       },
       {
@@ -226,18 +232,17 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         headerName: 'Common.BetDate',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'BetDate',
-        sortable: false,
-        resizable: true,
-        filter: false,
-        suppressMenu: true,
+        sortable: true,
+        filter: 'agDateTimeFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
         cellRenderer: function (params) {
-          let datePipe = new DatePipe("en-US");
+          let datePipe = new DatePipe('en-US');
           let dat = datePipe.transform(params.data.BetDate, 'medium');
-          if (params.node.rowPinned) {
-            return ''
-          } else {
-            return `${dat}`;
-          }
+          return dat ? `${dat}` : '';
         },
       },
       {
@@ -323,6 +328,13 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
             resizable: true,
           },
           {
+            headerName: 'Sport.CompetitionName',
+            headerValueGetter: this.localizeHeader.bind(this),
+            field: 'CompetitionName',
+            sortable: true,
+            resizable: true,
+          },
+          {
             headerName: 'Sport.RegionName',
             headerValueGetter: this.localizeHeader.bind(this),
             field: 'RegionName',
@@ -337,9 +349,9 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
             resizable: true,
           },
           {
-            headerName: 'Sport.MarketTypeId',
+            headerName: 'Sport.MarketId',
             headerValueGetter: this.localizeHeader.bind(this),
-            field: 'MarketTypeId',
+            field: 'MarketId',
             sortable: true,
             resizable: true,
           },
@@ -372,6 +384,20 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
             resizable: true,
           },
           {
+            headerName: 'Common.Status',
+            headerValueGetter: this.localizeHeader.bind(this),
+            field: 'Status',
+            cellRenderer: (params: { value: any; }) => {
+              const stateId = params.value;
+              const stateObject = this.statusNames?.find((state: { Id: any; }) => state.Id === stateId);
+              if (stateObject) {
+                return stateObject.Name;
+              }
+              return '';
+            },
+
+          },
+          {
             headerName: 'Common.Unit',
             headerValueGetter: this.localizeHeader.bind(this),
             field: 'UnitName',
@@ -388,28 +414,28 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         if (params) {
           this.apiService.apiPost(this.configService.getApiUrl, params.data.BetDocumentId, true,
             Controllers.REPORT, Methods.GET_BET_INFO).pipe(take(1)).subscribe(data => {
-            const nestedRowData = data.ResponseObject.BetSelections;
-            this.detailsInline = data.ResponseObject;
-            params.data._Barcode = data.ResponseObject.Barcode;
-            params.data._BetDate = data.ResponseObject.BetDate;
-            params.data._AmountPerBet = data.ResponseObject.AmountPerBet;
-            params.data._Coefficient = data.ResponseObject.Coefficient;
-            params.data.HelpData = this.detailsInline ? data.ResponseObject : null;
-            if (params.data._isUpdated != true) {
-              this.gridApi.redrawRows({ rowNodes: [params.node] });
-            }
-            params.data._isUpdated = true;
-            
-            params.successCallback(nestedRowData);
-          })
+              const nestedRowData = data.ResponseObject.BetSelections;
+              this.detailsInline = data.ResponseObject;
+              params.data._Barcode = data.ResponseObject.Barcode;
+              params.data._BetDate = data.ResponseObject.BetDate;
+              params.data._AmountPerBet = data.ResponseObject.Amount || data.ResponseObject.AmountPerBet;
+              params.data._Coefficient = data.ResponseObject.Coefficient;
+              params.data.HelpData = this.detailsInline ? data.ResponseObject : null;
+              if (params.data._isUpdated != true) {
+                this.gridApi.redrawRows({ rowNodes: [params.node] });
+              }
+              params.data._isUpdated = true;
+
+              params.successCallback(nestedRowData);
+            })
         }
       },
       refreshStrategy: 'everything',
       template: params => {
-        const amount = params?.data?._AmountPerBet;
-        const barcode = params?.data?._Barcode || "";
-        const coefficient = params?.data?._Coefficient;
-        const batDate = params?.data?._BetDate;
+        const amount = params?.data?._AmountPerBet || 0;
+        const barcode = params?.data?._Barcode || 0;
+        const coefficient = params?.data?._Coefficient || "";
+        const batDate = params?.data?._BetDate || "";
         return `
           <div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box; overflow-y: auto">
             <div style="font-weight: 700; font-size: 24px">Information</div>
@@ -417,7 +443,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
             <div style="height: 10%; font-size: 16px; color: #076192">Barcode: ${barcode}</div>
             <div style="height: 10%; font-size: 16px; color: #076192">Bet Date: ${batDate}</div>
             <div style="height: 10%; font-size: 16px; color: #076192">Coefficient: ${coefficient}</div>
-  
+
             <div style="height: 10%; margin-bottom: 15px; display: flex; justify-content: center; font-weight: 700; font-size: 24px";>Selections</div>
             <div ref="eDetailGrid" style="height: 90%;"></div>
           </div>`
@@ -433,6 +459,36 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     this.toDate = new Date(this.toDate.setDate(this.toDate.getDate()));
     this.getDocumenStatesEnum();
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
+    this.getProviders();
+  }
+
+  getProviders() {
+    const paging = {
+      "SkipCount": 0,
+      "TakeCount": 100,
+      "OrderBy": null,
+      "FieldNameToOrderBy": "",
+      "GameProviderIds": {
+        "IsAnd": true,
+        "ApiOperationTypeList": [
+          {
+            "OperationTypeId": 1,
+            "IntValue": 100
+          }
+        ]
+      }
+    }
+    this.apiService.apiPost(this.configService.getApiUrl, paging,
+      true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.providers = data.ResponseObject.Entities.map(provider => provider.Id);
+          if (this.rowData?.length > 0) {
+            this.getCurrentPage();
+          }
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getClientAccounts() {
@@ -449,11 +505,11 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   getDocumenStatesEnum() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.ENUMERATION, Methods.GET_DOCUMENT_STATES_ENUM).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.statusNames = data.ResponseObject;
-        this.mapStatusFilter();
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.statusNames = data.ResponseObject;
+          this.mapStatusFilter();
+        }
+      });
   }
 
   onSelectAccountType(event) {
@@ -501,32 +557,38 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.GET_INTERNET_BETS_REPORT_PAGING).pipe(take(1)).subscribe((data) => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Bets.Entities;
-            mappedRows.forEach((entity) => {
-              let statusNames = this.statusNames.find((status) => {
-                return status.Id == entity.State;
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Bets.Entities;
+              mappedRows.forEach((entity) => {
+                let statusNames = this.statusNames.find((status) => {
+                  return status.Id == entity.State;
+                })
+                if (statusNames) {
+                  entity['State'] = statusNames.Name;
+                }
+                if (entity.ProviderName !== "SoftGaming") {
+                  entity.masterDetail = true;
+                } else {
+                  entity.masterDetail = false;
+                }
               })
-              if (statusNames) {
-                entity['State'] = statusNames.Name;
-              }
-            })
-            this.totalBetAmount = data.ResponseObject.TotalBetAmount;
-            this.totalWinAmount = data.ResponseObject.TotalWinAmount;
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Bets.Count});
-            this.gridApi?.setPinnedBottomRowData([
-              {
-                BetAmount: `${this.totalBetAmount.toFixed(2)} ${this.playerCurrency}`,
-                WinAmount: `${this.totalWinAmount.toFixed(2)} ${this.playerCurrency}`
-              }
-            ]);
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
+              this.totalBetAmount = data.ResponseObject.TotalBetAmount;
+              this.totalWinAmount = data.ResponseObject.TotalWinAmount;
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Bets.Count });
+              this.gridApi?.setPinnedBottomRowData([
+                {
+                  BetAmount: `${this.totalBetAmount.toLocaleString('en-US', { maximumFractionDigits: 2 }).replace(/,/g, ' ')} ${this.playerCurrency}`,
+                  WinAmount: `${this.totalWinAmount.toLocaleString('en-US', { maximumFractionDigits: 2 }).replace(/,/g, ' ')} ${this.playerCurrency}`
+                }
+              ]);
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       }
     }
   }
+
 
   onRowGroupOpened(params) {
     if (params.node.expanded) {
@@ -553,10 +615,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   async addNotes(params) {
-    const {AddNoteComponent} = await import('../../../../../../components/add-note/add-note.component');
+    const { AddNoteComponent } = await import('../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
       width: ModalSizes.MEDIUM,
-      data: {ObjectId: params.BetDocumentId, ObjectTypeId: 12}
+      data: { ObjectId: params.BetDocumentId, ObjectTypeId: 12 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -566,10 +628,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   async openNotes(params) {
-    const {ViewNoteComponent} = await import('../../../../../../components/view-note/view-note.component');
+    const { ViewNoteComponent } = await import('../../../../../../components/view-note/view-note.component');
     const dialogRef = this.dialog.open(ViewNoteComponent, {
       width: ModalSizes.EXTRA_LARGE,
-      data: {ObjectId: params.BetDocumentId, ObjectTypeId: 12, Type: 1}
+      data: { ObjectId: params.BetDocumentId, ObjectTypeId: 12, Type: 1 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {

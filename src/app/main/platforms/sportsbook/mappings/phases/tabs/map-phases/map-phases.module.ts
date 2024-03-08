@@ -33,8 +33,8 @@ const routes: Routes = [
     MatButtonModule
   ],
   declarations: [
-    MapPhasesTabComponent, 
-    UnmapedPhasesComponent, 
+    MapPhasesTabComponent,
+    UnmapedPhasesComponent,
     MappedPhasesComponent],
   providers: [DatePipe],
 })

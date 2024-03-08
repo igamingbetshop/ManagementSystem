@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-agents']">{{'Users.Agents' | translate}}</a> {{userId}} /
+      {{'Users.AgentDownline' | translate}}</div>
+  </div>
+
+  <div class="main-content">
+
+    <div class="right-panel">
+
+      <div class="downline-container">
+        <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabSelectionChange($event)">
+          <mat-tab [label]="agent.Name" *ngFor="let agent of agentsEnums">
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>

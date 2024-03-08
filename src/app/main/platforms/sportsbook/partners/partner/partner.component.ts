@@ -22,6 +22,10 @@ export class PartnerComponent implements OnInit {
       label:'Partners.Keys',
       route:'keys'
     },
+    {
+      label:'Common.Settings',
+      route:'settings'
+    },
   ];
 
   partnerId:number;

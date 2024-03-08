@@ -7,9 +7,12 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
+
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+
 import {MatButtonModule} from '@angular/material/button';
+
 import {MatDialogModule} from "@angular/material/dialog";
 import {AgGridModule} from "ag-grid-angular";
 import {AddKeyComponent} from './add-key/add-key.component';
@@ -46,7 +49,7 @@ const routes: Routes = [
     MatDatepickerModule,
     TranslateModule
   ],
-  declarations: [KeysComponent, AddKeyComponent]
+  declarations: [KeysComponent]
 })
 export class KeysModule {
 }

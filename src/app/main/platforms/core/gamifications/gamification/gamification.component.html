@@ -15,10 +15,8 @@
         <div class="first-hand">{{'Clients.Id' | translate}}</div>
         <div class="second-hand">{{gamification?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" [placeholder]="'Clients.Id' | translate" [formControlName]="'Id'"
               readonly>
-          </mat-form-field>
         </div>
       </div>
 
@@ -26,9 +24,7 @@
         <div class="first-hand">{{'Clients.Title' | translate}}</div>
         <div class="second-hand">{{gamification?.Title}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput readonly="true" [maxLength]="100" [placeholder]="'Clients.Title' | translate" [formControlName]="'Title'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -36,20 +32,16 @@
         <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
         <div class="second-hand">{{gamification?.Description}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" readonly="true" [placeholder]="'Bonuses.Description' | translate"
               [formControlName]="'Description'">
-          </mat-form-field>
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{gamification?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
               [formControlName]="'NickName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -57,21 +49,19 @@
         <div class="first-hand">{{'Common.Order' | translate}}</div>
         <div class="second-hand">{{gamification?.Order}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [maxlength]="2" [placeholder]="'Common.Order' | translate"
               [formControlName]="'Order'">
-          </mat-form-field>
         </div>
       </div>
 
       <div>
-        <div class="first-hand">{{'Partners.SelectPartner' | translate}}</div>
-        <div class="second-hand">{{gamification?.PartnerName}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'PartnerId'" placeholder="{{'Partners.SelectPartner' | translate}}">
+        <div class="first-hand">{{'Partners.Partner' | translate}}</div>
+        <div class="static-hand">{{gamification?.PartnerName}}</div>
+        <!-- <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'PartnerId'" [disabled]="true" placeholder="{{'Partners.Partner' | translate}}">
             <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
           </mat-select>
-        </div>
+        </div> -->
       </div>
 
       <div>
@@ -84,14 +74,12 @@
         </div>
       </div>
       
-      <div *ngIf="gamification?.Order !== 1"  >
+      <div *ngIf="gamification?.Order !== 1 && isChilde"  >
         <div class="first-hand">{{'Segments.ComplimentaryPoint' | translate}}</div>
         <div class="second-hand">{{gamification?.CompPoints}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [maxlength]="2" [placeholder]="'Common.CompPoints' | translate"
               [formControlName]="'CompPoints'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -102,6 +90,27 @@
           <input class="file-input" type="file" (change)="uploadFile($event)">
         </div>
       </div>
+
+      <ng-container *ngIf="isChilde">
+        <div >
+          <div class="first-hand">{{'Products.BackgroundImage' | translate}}</div>
+          <div class="second-hand">{{gamification?.BackgroundImageData}}</div>
+          <div class="form-field form-checkbox">
+            <input class="file-input" type="file" (change)="uploadBackgroundImage($event)">
+          </div>
+        </div>
+  
+        <div>
+          <div class="first-hand">{{'Common.MobileBackgroundImage' | translate}}</div>
+          <div class="second-hand">{{gamification?.MobileBackgroundImageData}}</div>
+          <div class="form-field form-checkbox">
+            <input class="file-input" type="file" (change)="uploadMobileImage($event)">
+          </div>
+        </div>
+
+      </ng-container>
+      
+      
 
       <div *ngIf="isEdit">
         <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
@@ -114,12 +123,12 @@
         </div>
       </div>
 
-
-
-
+      <!-- <div *ngIf="!isChilde"></div> -->
       <div></div>
       <div></div>
-      <div></div>
+
+      <!-- <div *ngIf="gamification?.Order !== 1 && !isChilde"  >
+        </div> -->
 
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
@@ -133,6 +142,34 @@
     </form>
 
   </div>
-  <img class="img" [src]="image" alt="Avatar Image">
+
+
+  <div class="card-content">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image class="img" [src]="image" alt="Image">
+    </mat-card>
+  
+    <ng-container *ngIf="isChilde">
+      <mat-card >
+        <mat-card-header>
+          <mat-card-title>{{"Products.BackgroundImage" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image class="img" [src]="backgroundImage" alt="Background Image">
+      </mat-card>
+
+      <mat-card >
+        <mat-card-header>
+          <mat-card-title>{{"Common.MobileBackgroundImage" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image class="img" [src]="mobileBackgroundImage" alt="Mobile Background Image">
+      </mat-card>
+    </ng-container>
+
+  
+  </div>
+
 
 </div>

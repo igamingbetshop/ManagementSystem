@@ -14,6 +14,7 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { Subject } from 'rxjs';
+import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 
 @Component({
   selector: 'app-report-by-logs',
@@ -22,17 +23,19 @@ import { Subject } from 'rxjs';
 })
 export class ReportByLogsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public filteredData;
-  public partners = [];
-  public partnerId;
-  public selectedItem = 'today';
-  public filter;
+  rowData = [];
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  filteredData;
+  partners = [];
+  partnerId;
+  selectedItem = 'today';
+  filter;
   filterInputChanged: Subject<string> = new Subject<string>();
-
+  frameworkComponents = {
+    agDateTimeFilter: AgDateTimeFilter
+  };
   constructor(private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
     public configService: ConfigService,
@@ -74,12 +77,7 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
         field: 'Caller',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
+        filter: false,
       },
       {
         headerName: 'Clients.Message',
@@ -100,6 +98,12 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
         field: 'CreationTime',
         sortable: true,
         resizable: true,
+        filter: 'agDateTimeFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
         cellRenderer: function (params) {
           let datePipe = new DatePipe("en-US");
           let dat = datePipe.transform(params.data.CreationTime, 'medium');
@@ -156,8 +160,6 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
 
   createServerSideDatasource(data?) {
     if(data) {
-      console.log(data, "DATA");
-      
       return {
         getRows: (params) => {
           params.success({ rowData: data, rowCount: data.length });
@@ -178,7 +180,6 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
         }
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
-
         this.apiService.apiPost(this.configService.getApiUrl, paging, true,
           Controllers.REPORT, Methods.GET_REPORT_BY_LOGS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -199,13 +200,11 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
       this.gridApi.setServerSideDatasource(this.createServerSideDatasource(this.rowData));
     }
   }
-
   applyFilter(event) {
     event = event.toLowerCase();
     const myData = this.rowData.filter(item => item.Caller.toLowerCase().includes(event));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource(myData))
   }
-
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);

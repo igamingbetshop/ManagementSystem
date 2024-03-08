@@ -24,7 +24,7 @@ export class MappedPhasesComponent extends BasePaginatedGridComponent implements
   public rowData = [];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
-  
+
   public sportId: number = 1;
   public defaultColDef = {
     flex: 1,
@@ -33,6 +33,7 @@ export class MappedPhasesComponent extends BasePaginatedGridComponent implements
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
 

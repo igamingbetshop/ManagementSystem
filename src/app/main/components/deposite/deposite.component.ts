@@ -8,6 +8,7 @@ import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../core/helpers/snackbar.helper";
 import { MatDialog } from "@angular/material/dialog";
 import { StateService } from '../../platforms/core/services/state.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-deposite',
@@ -52,7 +53,6 @@ export class DepositeComponent implements OnInit {
   splitedItems: any[] = [];
   mySplitedItem: string;
 
-
   constructor(
     private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
@@ -62,8 +62,8 @@ export class DepositeComponent implements OnInit {
     public commonDataService: CommonDataService,
     private stateService: StateService,
     private router: Router,
+    private translate: TranslateService,
     public dialog: MatDialog) {
-
   }
 
   ngOnInit(): void {
@@ -89,21 +89,40 @@ export class DepositeComponent implements OnInit {
         }
       });
     this.getLanguages();
+  }
 
+  onMessageTransaction()  {
+    SnackBarHelper.show(this._snackBar, { Description: this.translate.instant('Common.TransactionDosentExist'), Type: "error" });
   }
 
   getPaymentRequestById() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.paymentId, true,
       Controllers.PAYMENT, Methods.GET_PAYMENT_REQUEST_BY_ID).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
+          // if((data.ResponseObject.PaymentRequest.Type == 2 && this.type != 2 || data.ResponseObject.PaymentRequest.Type == 3 && this.type == 2)
+          // ) {
+          //   this.onMessageTransaction();
+          //   return;
+          // }
+          if ((data.ResponseObject.PaymentRequest.Type == 3 || data.ResponseObject.PaymentRequest.Type == 2 )
+           &&
+            (this.selectedPage == 'Withdrawals' )
+            ) {
+              this.onMessageTransaction();
+              return;
+          }
+          if ((data.ResponseObject.PaymentRequest.Type == 1 ) &&
+            this.type != 1
+            ) {
+              this.onMessageTransaction();
+              return;
+          }
           this.paymentVerified = data.ResponseObject;
           this.payment = data.ResponseObject.PaymentRequest;
           this.paymentInfo = JSON.parse(this.payment.Info);
           this.paymentStatus = this.statusName.find((item => item.Id === data.ResponseObject.PaymentRequest.State))?.Name;
           this.partnerName = this.partners.find((item => item.Id === data.ResponseObject.PaymentRequest.PartnerId))?.Name;
 
-          console.log(data.ResponseObject.PaymentRequest.State, "stat");
-          
           if (this.payment.Parameters) {
             this.payment['ParsedParameters'] = JSON.parse(this.payment.Parameters);
           }
@@ -196,16 +215,16 @@ export class DepositeComponent implements OnInit {
   }
 
 
- 
+
   onSplitPayoutRequest() {
     if (this.calculateSumOfItems() < this.totalAmount) {
       this.splitedItems.push((this.totalSplitedAmount));
-    } 
+    }
 
     const data = {
       PaymentRequestId: this.paymentId,
       Installments: this.splitedItems,
-    }   
+    }
 
     this.apiService.apiPost(this.configService.getApiUrl, data, true, Controllers.PAYMENT,
       Methods.SPLIT_PAYOUT_REQUEST).pipe(take(1)).subscribe((data) => {
@@ -253,22 +272,20 @@ export class DepositeComponent implements OnInit {
     if (!this.mySplitedItem) {
       return false;
     }
-  
+
     const newItemValue = parseFloat(this.mySplitedItem);
-  
+
     if (isNaN(newItemValue) || newItemValue < 0 || newItemValue % 1 !== 0) {
       return false;
     }
-  
+
     const sumOfItems = this.splitedItems.reduce((acc, item) => acc + parseFloat(item), 0) + newItemValue;
-  
+
     if (Math.abs(sumOfItems) >= Math.abs(this.totalAmount)) {
       return false;
     }
-  
+
     return true;
   }
-  
-
 
 }

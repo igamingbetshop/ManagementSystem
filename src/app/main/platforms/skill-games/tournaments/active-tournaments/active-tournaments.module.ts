@@ -4,13 +4,18 @@ import {TranslateModule} from "@ngx-translate/core";
 import {AgBooleanFilterModule} from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.module";
 import {AgGridModule} from "ag-grid-angular";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
+
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatInputModule} from "@angular/material/input";
+
 import {MatIconModule} from "@angular/material/icon";
 import {MatSelectModule} from "@angular/material/select";
+
 import {ActiveTournamentsRoutingModule} from "./active-tournaments-routing.module";
 import {ActiveTournamentsComponent} from "./active-tournaments.component";
 import {ActiveTournamentComponent} from "./active-tournament/active-tournament.component";

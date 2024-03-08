@@ -4,12 +4,15 @@ import {NgModule} from "@angular/core";
 import {CommonModule, DatePipe} from "@angular/common";
 import {AgGridModule} from "ag-grid-angular";
 import {MatButtonModule} from "@angular/material/button";
+
 import {MatSelectModule} from "@angular/material/select";
+
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from "@angular/material/dialog";
 import {CreateNewDocumentComponent} from './create-new-document/create-new-document.component';
 import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
+
 import {ViewImageComponent} from './view-image/view-image.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";

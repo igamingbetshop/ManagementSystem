@@ -99,7 +99,7 @@ export class NikiNamePopup implements OnInit {
     });
 
     let changedItems = [];
-    
+
     for (let i = 0; i < this.translationData.Translations.length; i++) {
       if (this.translationData.Translations[i].Text != this.unModifiedData.Translations[i].Text) {
         changedItems.push(this.translationData.Translations[i]);

@@ -7,6 +7,8 @@ import { TranslateModule } from "@ngx-translate/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+
+
 import { MatButtonModule } from "@angular/material/button";
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -47,7 +49,7 @@ export class AddComponent implements OnInit {
   public productStates: any[] = [];
   public parentProductName;
   public parentId;
-  
+
   message: string = '';
 
   constructor(
@@ -86,7 +88,7 @@ export class AddComponent implements OnInit {
         }
       });
   }
-  
+
   findId() {
     const name = this.parentProductName?.split(" ").join('');
     this.gameProviderId = this.gameProviders.find((partner) => partner.Name == name)?.Id;

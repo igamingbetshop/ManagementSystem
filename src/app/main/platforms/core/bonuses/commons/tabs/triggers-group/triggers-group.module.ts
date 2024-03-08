@@ -7,9 +7,12 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { AddTriggerToGroupComponent } from './add-trigger-to-group/add-trigger-to-group.component';
 import { CreateTriggerGroupComponent } from './create-trigger-group/create-trigger-group.component';
 import {MatButtonModule} from "@angular/material/button";
+
 import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
+
 import {MatInputModule} from "@angular/material/input";
+
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
 

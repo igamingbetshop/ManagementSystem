@@ -33,7 +33,6 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
     colorEditor: ColorEditorComponent
   };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public columnDefs;
   public rowData = [];
   public path: string = 'clientcategory';
   public path2: string = 'clientcategory/save';

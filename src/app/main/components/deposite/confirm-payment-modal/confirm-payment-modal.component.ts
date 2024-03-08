@@ -32,9 +32,9 @@ export class ConfirmPaymentModalComponent{
       RequestType: this.data.RequestType,
       SendEmail: this.data.SendEmail,
       Parameters: '{}',
-      Comment: this.data.Comment 
+      Comment: this.data.Comment
     }
-    
+
     if (value.RequestType === 3) {
       this.apiService.apiPost(this.configService.getApiUrl, value, true, Controllers.PAYMENT,
         Methods.SET_TO_IN_PROCESS_PAYMENT_REQUEST).pipe(take(1)).subscribe((data) => {

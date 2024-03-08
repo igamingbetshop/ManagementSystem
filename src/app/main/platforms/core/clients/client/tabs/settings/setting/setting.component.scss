@@ -7,17 +7,20 @@
   .content-action {
     @include action-style;
     height: 68px;
+
   }
 }
 
-.object-history {
-  padding: 15px;
+.main-history {
+  padding: 0 10px 10px 10px;
+  background: $content-bg-color;
 
   .grid-history {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     padding-top: 15px;
+    padding-bottom: 15px;
 
     .changed {
       border: 1px solid red;
@@ -28,21 +31,56 @@
       background: white;
 
       .first-hand {
-        width: 30%;
+        width: 25%;
         padding: 10px 10px;
+        background-color: $blue-light-22;
+        align-items: center;
         border-right: 1px solid rgb(216, 216, 216);
       }
 
-      .second-hand {
-        width: 30%;
+      .static-hand {
+        align-items: center;
         padding: 10px 10px;
+        width: 80%!important;
+      }
+      
+      .second-hand {
+        width: 50%;
+        padding: 10px 10px;
+        align-items: center;
         border-right: 1px solid #d8d8d8;
       }
 
       .third-hand {
-        width: 30%;
+        width: 50%;
+        align-items: center;
         padding: 10px 10px;
       }
+    }
+
+    .group-row {
+      height: auto;
+    }
+
+    .first-hand-group {
+      height: auto;
+      width: 25%;
+      align-items: center;
+      justify-content: left;
+    }
+
+    .static-hand-group {
+      display: grid;
+      height: 100%;
+      border-radius: 4px;
+      background: $white;
+      align-items: center;
+      // padding: 0 10px;
+      margin: 0;
+      box-sizing: border-box;
+      font-size: 13px;
+      font-weight: 400;
+      text-align: left;
     }
   }
 }

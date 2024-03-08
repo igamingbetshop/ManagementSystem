@@ -8,7 +8,7 @@
 
          <div class="wraper">
            <div>{{'Partners.Partners' | translate}}</div>
-           <mat-form-field appearance="none">
+           <mat-form-field>
             <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
             <mat-select [formControlName]="'PartnerId'" >
               <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
@@ -21,8 +21,8 @@
 
          <div class="wraper" style="margin-bottom: 4px;">
             <div>{{'Common.Name' | translate}}</div>
-            <mat-form-field appearance="none" >
-              <input matInput   [formControlName]="'Name'" placeholder="{{'Common.Name' | translate}}">
+            <mat-form-field >
+              <input matInput   [formControlName]="'Name'" placeholder="{{'Common.Name' | translate}}" required>
               <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
                 {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
               </mat-error>
@@ -65,42 +65,42 @@
 
          <div class="wraper">
           <div>{{'Segments.AffiliateIds' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'AffiliateId'" placeholder="{{'Segments.AffiliateIds' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.Bonuses' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'Bonus'" placeholder="{{'Segments.Bonuses' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.ClientIds' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'ClientId'" placeholder="{{'Segments.ClientIds' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.DepositPaymentSystems' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'SuccessDepositPaymentSystem'" placeholder="{{'Segments.DepositPaymentSystems' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Clients.Emails' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'Email'"  placeholder="{{'Clients.Emails' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.FirstNames' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'FirstName'" placeholder="{{'Segments.FirstNames' | translate}}">
           </mat-form-field>
          </div>
@@ -108,35 +108,35 @@
 
          <div class="wraper">
           <div>{{'Segments.LastNames' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'LastName'" placeholder="{{'Segments.LastNames' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.MobileCodes' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'MobileCode'" placeholder="{{'Segments.MobileCodes' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.RegionIds' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'Region'" placeholder="{{'Segments.RegionIds' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.SegmentIds' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'SegmentId'" placeholder="{{'Segments.SegmentIds' | translate}}">
           </mat-form-field>
          </div>
 
          <div class="wraper">
           <div>{{'Segments.WithdrawPaymentSystems' | translate}}</div>
-          <mat-form-field appearance="none">
+          <mat-form-field>
             <input matInput   [formControlName]="'SuccessWithdrawalPaymentSystem'" placeholder="{{'Segments.WithdrawPaymentSystems' | translate}}" >
           </mat-form-field>
          </div>
@@ -147,7 +147,7 @@
             <div>
               <span *ngFor="let condition of addedConditions.SessionPeriod.conditions; let $index = index">
                   <span>
-                      {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
+                      {{condition.ConditionType.Name}} {{condition.ConditionValue }}
                       <mat-icon  style="cursor: pointer" (click)="removeCondition(addedConditions.SessionPeriod, $index)">close</mat-icon>
                   </span>
                   <span ng-if="$index">&</span>
@@ -161,17 +161,15 @@
             </div>
           </div>
           <div *ngIf="addedConditions.SessionPeriod.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.SessionPeriod.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
-                <input matInput [matDatepicker]="picker" [(ngModel)]="addedConditions.SessionPeriod.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+              <mat-form-field class="mr-15">
+                <input matInput type="number" [placeholder]="'Common.InsertMinutes' | translate" [(ngModel)]="addedConditions.SessionPeriod.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addDateCondition(addedConditions.SessionPeriod)">{{'Common.Add' | translate}}</button>
           </div>
@@ -197,14 +195,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.SignUpPeriod.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput [matDatepicker]="picker1" [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
                 <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
                 <mat-datepicker #picker1></mat-datepicker>
@@ -232,14 +230,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.TotalBetsCount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.TotalBetsCount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="value" [(ngModel)]="addedConditions.TotalBetsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.TotalBetsCount)">{{'Common.Add' | translate}}</button>
@@ -265,14 +263,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.SportBetsCount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.SportBetsCount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="value" [(ngModel)]="addedConditions.SportBetsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.SportBetsCount)">{{'Common.Add' | translate}}</button>
@@ -299,14 +297,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.CasinoBetsCount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.CasinoBetsCount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.CasinoBetsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.CasinoBetsCount)">{{'Common.Add' | translate}}</button>
@@ -333,14 +331,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.TotalBetsAmount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.TotalBetsAmount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.TotalBetsAmount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.TotalBetsAmount)">{{'Common.Add' | translate}}</button>
@@ -366,14 +364,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.TotalDepositsCount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.TotalDepositsCount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.TotalDepositsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.TotalDepositsCount)">{{'Common.Add' | translate}}</button>
@@ -399,14 +397,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.TotalDepositsAmount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.TotalDepositsAmount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.TotalDepositsAmount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.TotalDepositsAmount)">{{'Common.Add' | translate}}</button>
@@ -433,14 +431,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.TotalWithdrawalsCount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.TotalWithdrawalsCount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.TotalWithdrawalsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.TotalWithdrawalsCount)">{{'Common.Add' | translate}}</button>
@@ -466,14 +464,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.TotalWithdrawalsAmount.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.TotalWithdrawalsAmount.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.TotalWithdrawalsAmount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.TotalWithdrawalsAmount)">{{'Common.Add' | translate}}</button>
@@ -499,14 +497,14 @@
             </div>
           </div>
           <div *ngIf="addedConditions.ComplimentaryPoint.showNew == true">
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
                 <mat-select [(ngModel)]="addedConditions.ComplimentaryPoint.selectedConditionType" [ngModelOptions]="{'standalone': true}">
                   <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
                   <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field appearance="none" class="mr-15">
+              <mat-form-field class="mr-15">
                 <input matInput  placeholder="{{'Bonuses.Value' | translate}}" [(ngModel)]="addedConditions.ComplimentaryPoint.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
               </mat-form-field>
               <button mat-raised-button color="primary"  (click)="addCondition(addedConditions.ComplimentaryPoint)">{{'Common.Add' | translate}}</button>

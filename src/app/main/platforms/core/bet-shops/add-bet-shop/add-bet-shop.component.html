@@ -5,15 +5,17 @@
 
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
-    <mat-form-field>
-      <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
+    <mat-form-field >
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'" required>
       <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
         {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="{{'Clients.Address' | translate}}" [formControlName]="'Address'">
+      <mat-label>{{'Clients.Address' | translate}}</mat-label>
+      <input matInput placeholder="{{'Clients.Address' | translate}}" [formControlName]="'Address'" required>
       <mat-error *ngIf="errorControl['Address']?.touched && errorControl['Address'].errors?.required">
         {{'Clients.Address' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
@@ -40,27 +42,31 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'BetShops.CurrentLimit' | translate}}" [formControlName]="'CurrentLimit'">
+      <mat-label>{{'BetShops.CurrentLimit' | translate}}</mat-label>
+      <input matInput type="number" placeholder="{{'BetShops.CurrentLimit' | translate}}" [formControlName]="'CurrentLimit'" required>
       <mat-error *ngIf="errorControl['CurrentLimit']?.touched && errorControl['CurrentLimit'].errors?.required">
         {{'BetShops.CurrentLimit' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'BetShops.DefaultLimit' | translate}}" [formControlName]="'DefaultLimit'">
+      <mat-label>{{'BetShops.DefaultLimit' | translate}}</mat-label>
+      <input matInput type="number" placeholder="{{'BetShops.DefaultLimit' | translate}}" [formControlName]="'DefaultLimit'" required>
       <mat-error *ngIf="errorControl['DefaultLimit']?.touched && errorControl['DefaultLimit'].errors?.required">
         {{'BetShops.DefaultLimit' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="number" placeholder="{{'BetShops.BonusPercent' | translate}}" [formControlName]="'BonusPercent'">
+      <mat-label>{{'BetShops.BonusPercent' | translate}}</mat-label>
+      <input matInput type="number" placeholder="{{'BetShops.BonusPercent' | translate}}" [formControlName]="'BonusPercent'" required>
       <mat-error *ngIf="errorControl['BonusPercent']?.touched && errorControl['BonusPercent'].errors?.required">
         {{'BetShops.BonusPercent' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'BetShops.MaxCopyCount' | translate}}</mat-label>
       <input matInput type="number" placeholder="{{'BetShops.MaxCopyCount' | translate}}" [formControlName]="'MaxCopyCount'">
       <mat-error *ngIf="errorControl['MaxCopyCount']?.touched && errorControl['MaxCopyCount'].errors?.required">
         {{'BetShops.MaxCopyCount' | translate}} {{'Errors.Required' | translate}}
@@ -68,6 +74,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'BetShops.MaxWinAmount' | translate}}</mat-label>
       <input matInput type="number" placeholder="{{'BetShops.MaxWinAmount' | translate}}" [formControlName]="'MaxWinAmount'">
       <mat-error *ngIf="errorControl['MaxWinAmount']?.touched && errorControl['MaxWinAmount'].errors?.required">
         {{'BetShops.MaxWinAmount' | translate}} {{'Errors.Required' | translate}}
@@ -75,6 +82,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'BetShops.MinBetAmount' | translate}}</mat-label>
       <input matInput type="number" placeholder="{{'BetShops.MinBetAmount' | translate}}" [formControlName]="'MinBetAmount'">
       <mat-error *ngIf="errorControl['MinBetAmount']?.touched && errorControl['MinBetAmount'].errors?.required">
         {{'BetShops.MinBetAmount' | translate}} {{'Errors.Required' | translate}}
@@ -82,6 +90,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'BetShops.MaxEventCountPerTicket' | translate}}</mat-label>
       <input matInput type="number" placeholder="{{'BetShops.MaxEventCountPerTicket' | translate}}" [formControlName]="'MaxEventCountPerTicket'">
       <mat-error *ngIf="errorControl['MaxEventCountPerTicket']?.touched && errorControl['MaxEventCountPerTicket'].errors?.required">
         {{'BetShops.MaxEventCountPerTicket' | translate}} {{'Errors.Required' | translate}}
@@ -89,6 +98,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'BetShops.CommissionType' | translate}}</mat-label>
       <input matInput type="number" placeholder="{{'BetShops.CommissionType' | translate}}" [formControlName]="'CommissionType'">
       <mat-error *ngIf="errorControl['CommissionType']?.touched && errorControl['CommissionType'].errors?.required">
         {{'BetShops.CommissionType' | translate}} {{'Errors.Required' | translate}}
@@ -96,6 +106,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'BetShops.CommisionRate' | translate}}</mat-label>
       <input matInput type="number" placeholder="{{'BetShops.CommisionRate' | translate}}" [formControlName]="'CommisionRate'">
       <mat-error *ngIf="errorControl['CommisionRate']?.touched && errorControl['CommisionRate'].errors?.required">
         {{'BetShops.CommisionRate' | translate}} {{'Errors.Required' | translate}}

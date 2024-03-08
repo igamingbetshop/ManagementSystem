@@ -107,7 +107,7 @@ export class CommentTypeComponent extends BasePaginatedGridComponent implements 
           onClick: this.saveCommentSettings['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         },
         cellStyle: (param) => this.getCellStyle(param),

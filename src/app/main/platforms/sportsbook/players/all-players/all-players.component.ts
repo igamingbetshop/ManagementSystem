@@ -17,9 +17,9 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class AllPlayersComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public rowData = [];
-  public path = 'players';
-  public partners: any[] = [];
+  rowData = [];
+  path = 'players';
+  partners: any[] = [];
 
   constructor(
     protected injector: Injector,
@@ -196,7 +196,6 @@ export class AllPlayersComponent extends BasePaginatedGridComponent implements O
   }
 
   ngOnInit() {
-    this.gridStateName = 'all-players-grid-state';
     this.apiService.apiPost('partners').subscribe(data => {
       if (data.Code === 0) {
         this.partners = data.ResponseObject;

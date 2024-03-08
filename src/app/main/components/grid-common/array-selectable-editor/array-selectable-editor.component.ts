@@ -29,13 +29,13 @@ const KEY_ENTER = 'Enter';
 export class ArraySelectableEditorComponent implements ICellEditorAngularComp {
 
   private params: ICellEditorParams;
-  public items: any[] = []; 
+  public items: any[] = [];
   public options: any[];
   public displayValue: string;
 
   agInit(params: ICellEditorParams): void {
     this.params = params;
-    this.items = params.value || []; 
+    this.items = params.value || [];
     this.options = this.params['options'];
   }
 

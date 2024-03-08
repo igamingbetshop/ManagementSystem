@@ -5,7 +5,6 @@ import {CommonDataService, ConfigService} from "../../../../../../../../core/ser
 import {ActivatedRoute} from "@angular/router";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {SportsbookApiService} from "../../../../../services/sportsbook-api.service";
-import {Controllers, Methods} from "../../../../../../../../core/enums";
 import {take} from "rxjs/operators";
 import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
 
@@ -25,14 +24,16 @@ export class AddEditMenuComponent implements OnInit {
   public iconChanging;
   public showFile = false;
 
-  constructor(public dialogRef: MatDialogRef<AddEditMenuComponent>,
-              private apiService: SportsbookApiService,
-              private _snackBar: MatSnackBar,
-              public configService: ConfigService,
-              private activateRoute: ActivatedRoute,
-              private fb: UntypedFormBuilder,
-              public commonDataService: CommonDataService,
-              @Inject(MAT_DIALOG_DATA) private data) {
+  constructor(
+    public dialogRef: MatDialogRef<AddEditMenuComponent>,
+    private apiService: SportsbookApiService,
+    private _snackBar: MatSnackBar,
+    public configService: ConfigService,
+    private activateRoute: ActivatedRoute,
+    private fb: UntypedFormBuilder,
+    public commonDataService: CommonDataService,
+    @Inject(MAT_DIALOG_DATA) private data
+  ) {
   }
 
   ngOnInit(): void {
@@ -50,6 +51,7 @@ export class AddEditMenuComponent implements OnInit {
       this.formGroup = this.fb.group({
         Title: [null],
         Type: [''],
+        StyleType: [''],
         Icon: [''],
         Href: [null],
         Order: [null],
@@ -63,6 +65,7 @@ export class AddEditMenuComponent implements OnInit {
         Id: [this.menuItem.Id],
         Title: [this.menuItem.Title],
         Type: [this.menuItem.Type],
+        StyleType: [this.menuItem.StyleType],
         Icon: [this.menuItem.Icon],
         Href: [this.menuItem.Href],
         Order: [this.menuItem.Order],
@@ -76,11 +79,7 @@ export class AddEditMenuComponent implements OnInit {
 
   changeIcon(event) {
     this.iconChanging = event.target.value;
-    if (this.iconChanging) {
-      this.showFile = true
-    } else {
-      this.showFile = false;
-    }
+    this.showFile = !!this.iconChanging;
   }
 
   submit() {
@@ -91,7 +90,7 @@ export class AddEditMenuComponent implements OnInit {
         if (data.Code === 0) {
           this.dialogRef.close(data.ResponseObject);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
       });
   }
@@ -100,10 +99,10 @@ export class AddEditMenuComponent implements OnInit {
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
     if (files) {
-      this.validDocumentSize = files.size < 700000;
+      this.validDocumentSize = files.size < 900000;
       this.validDocumentFormat = files.type === 'image/png' ||
         files.type === 'image/jpg' || files.type === 'image/jpeg' || files.type === 'image/gif';
-      if ((files.size < 700000) &&
+      if ((files.size < 900000) &&
         (files.type === 'image/png' || files.type === 'image/jpg' || files.type === 'image/jpeg' || files.type === 'image/gif')) {
         this.checkDocumentSize = true;
         const reader = new FileReader();
@@ -116,7 +115,7 @@ export class AddEditMenuComponent implements OnInit {
       } else {
         this.checkDocumentSize = false;
         files = null;
-        SnackBarHelper.show(this._snackBar, {Description : 'failed', Type : "error"});
+        SnackBarHelper.show(this._snackBar, {Description: 'failed', Type: "error"});
       }
     }
   }

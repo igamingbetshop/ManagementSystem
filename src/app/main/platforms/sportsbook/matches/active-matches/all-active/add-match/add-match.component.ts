@@ -47,20 +47,21 @@ import { SportsbookApiService } from '../../../../services/sportsbook-api.servic
   ],
 })
 export class AddMatchComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public providers: any[] = [];
-  public competition: any;
+  formGroup: UntypedFormGroup;
+  providers: any[] = [];
+  competition: any;
   private index = 1;
 
-  public TeamIds: TeamInput[] = [{ Id: 1, Value: '' }];
+  TeamIds: TeamInput[] = [{ Id: 1, Value: '' }];
 
-  public matchTypes = [
+  matchTypes = [
     { id: '1', type: 1, name: 'Usual' },
     { id: '2', type: 2, name: 'Special' }
   ];
+  sports: any[] = [];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { sportProviders: any[], competition: any },
+    @Inject(MAT_DIALOG_DATA) public data: { sportProviders: any[], competition: any, sports: any[] },
     public dialogRef: MatDialogRef<AddMatchComponent>,
     private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
@@ -74,6 +75,7 @@ export class AddMatchComponent implements OnInit {
     this.providers = this.data.sportProviders;
     this.competition = this.data.competition;
     this.createForm();
+    this.sports = this.data.sports
   }
 
   public createForm() {
@@ -89,9 +91,19 @@ export class AddMatchComponent implements OnInit {
       Type: ['1']
     });
 
-    this.formGroup.controls['SportName'].disable();
+    if(this.competition.SportId) {
+      this.formGroup.controls['SportId'].disable();
+    }
     this.formGroup.controls['RegionName'].disable();
     this.formGroup.controls['CompetitionName'].disable();
+  }
+
+  onSelectionChange(event: number) {
+    this.sports.forEach((sport) => {
+      if (sport.Id === event) {
+        this.formGroup.controls['SportName'].setValue(sport.Name);
+      }
+    });
   }
 
   onAddTeam() {
@@ -104,9 +116,7 @@ export class AddMatchComponent implements OnInit {
   }
 
   changeTeam(value: string, i: number) {
-
     this.TeamIds[i].Value = value;
-
   }
 
   get errorControl() {
@@ -133,9 +143,6 @@ export class AddMatchComponent implements OnInit {
     this.dialogRef.close(obj);
   }
 }
-
-export class AddMatchModule { }
-
 export interface TeamInput {
   Id: number;
   Value: string;

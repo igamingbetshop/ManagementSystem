@@ -7,7 +7,9 @@ import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+
 import {MatInputModule} from '@angular/material/input';
+
 import {DropdownDirective} from '../../../../core/directives/dropdown.directive';
 
 @Component({
@@ -122,7 +124,7 @@ export class AgDropdownFilter implements AgFilterComponent {
   updateFilter() {
     if(this.isFilterActive()) {
       this.params.filterChangedCallback();
-      
+
     }
     this.params.api.hidePopupMenu();
   }

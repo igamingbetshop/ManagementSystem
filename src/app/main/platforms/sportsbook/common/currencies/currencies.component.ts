@@ -64,7 +64,7 @@ export class CurrenciesComponent extends BasePaginatedGridComponent implements O
           onClick: this.saveCurrencies['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       },

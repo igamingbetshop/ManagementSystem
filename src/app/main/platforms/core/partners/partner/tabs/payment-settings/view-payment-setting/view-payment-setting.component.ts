@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CoreApiService} from "../../../../../services/core-api.service";
 import {CommonDataService, ConfigService} from "../../../../../../../../core/services";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Controllers, Methods, ModalSizes} from "../../../../../../../../core/enums";
 import {take} from "rxjs/operators";
-import {UntypedFormArray, UntypedFormBuilder, FormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
 
@@ -15,29 +15,32 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./view-payment-setting.component.scss']
 })
 export class ViewPaymentSettingComponent implements OnInit {
-  public id;
-  public paymentSystem;
-  public paymentCurrencies = [];
-  public statusName = [
+  id;
+  paymentSystem;
+  partnerName;
+  parentId;
+  paymentCurrencies = [];
+  statusName = [
     {Id: 1, Name: 'Active'},
     {Id: 3, Name: 'Hidden'},
     {Id: 2, Name: 'Inactive'},
   ];
-  public typeNames = [
+  typeNames = [
     {Id: 2, NickName: null, Name: "Deposit", Info: null},
     {Id: 1, NickName: null, Name: "Withdraw", Info: null}
   ];
-  public countries = [];
-  public editedPayment;
-  public isEdit = false;
-  public isEditCurrency = false;
-  public formGroup: UntypedFormGroup;
-  public enableEditIndex;
+  countries = [];
+  editedPayment;
+  isEdit = false;
+  isEditCurrency = false;
+  formGroup: UntypedFormGroup;
+  enableEditIndex;
 
   constructor(private activateRoute: ActivatedRoute,
               private apiService: CoreApiService,
               public configService: ConfigService,
               private _snackBar: MatSnackBar,
+              private router: Router,
               private fb: UntypedFormBuilder,
               public dialog: MatDialog,
               public commonDataService: CommonDataService) {
@@ -45,6 +48,8 @@ export class ViewPaymentSettingComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
+    this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
+    this.parentId = this.activateRoute.snapshot.queryParams.partnerId;
     this.getAllCountries();
     this.getPartnerPaymentSystemId();
     this.getPartnerPaymentCurrency();
@@ -73,7 +78,6 @@ export class ViewPaymentSettingComponent implements OnInit {
 
   editPaymentSystem() {
     this.isEdit = true;
-
   }
 
   submit() {
@@ -105,28 +109,8 @@ export class ViewPaymentSettingComponent implements OnInit {
         this.paymentSystem.PartnerName = this.commonDataService.partners.find((item => item.Id === this.paymentSystem.PartnerId))?.Name;
         this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
         this.paymentSystem.TypeName = this.typeNames.find((item => item.Id === this.paymentSystem.Type))?.Name;
-        this.formGroup.get('Id').setValue(this.paymentSystem?.Id);
-        this.formGroup.get('State').setValue(this.paymentSystem?.State);
-        this.formGroup.get('Commission').setValue(this.paymentSystem?.Commission);
-        this.formGroup.get('FixedFee').setValue(this.paymentSystem?.FixedFee);
-        this.formGroup.get('PartnerId').setValue(this.paymentSystem?.PartnerId);
-        this.formGroup.get('PartnerName').setValue(this.paymentSystem?.PartnerName);
-        this.formGroup.get('TypeName').setValue(this.paymentSystem?.TypeName);
-        this.formGroup.get('Type').setValue(this.paymentSystem?.Type);
-        this.formGroup.get('MinAmount').setValue(this.paymentSystem?.MinAmount);
-        this.formGroup.get('MaxAmount').setValue(this.paymentSystem?.MaxAmount);
-        this.formGroup.get('UserName').setValue(this.paymentSystem?.UserName);
-        this.formGroup.get('Password').setValue(this.paymentSystem?.Password);
-        this.formGroup.get('PaymentSystemName').setValue(this.paymentSystem?.PaymentSystemName);
-        this.formGroup.get('PaymentSystemId').setValue(this.paymentSystem?.PaymentSystemId);
-        this.formGroup.get('AllowMultipleClientsPerPaymentInfo').setValue(this.paymentSystem?.AllowMultipleClientsPerPaymentInfo);
-        this.formGroup.get('AllowMultiplePaymentInfoes').setValue(this.paymentSystem?.AllowMultiplePaymentInfoes);
-        this.formGroup.get('CurrencyId').setValue(this.paymentSystem?.CurrencyId);
-        this.formGroup.get('LastUpdateTime').setValue(this.paymentSystem?.LastUpdateTime);
-        this.formGroup.get('Priority').setValue(this.paymentSystem?.Priority);
-        this.formGroup.get('Info').setValue(this.paymentSystem?.Info);
-        this.formGroup.get('Countries').setValue(this.paymentSystem?.Countries);
-        this.formGroup.get('OpenMode').setValue(this.paymentSystem?.OpenMode);
+        this.formGroup.patchValue(this.paymentSystem);
+
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
@@ -156,7 +140,8 @@ export class ViewPaymentSettingComponent implements OnInit {
       TypeName: [null],
       Type: [null],
       PaymentSystemId: [null],
-      OpenMode: [null]
+      OpenMode: [null],
+      ApplyPercentAmount: [null],
     });
   }
 
@@ -179,7 +164,7 @@ export class ViewPaymentSettingComponent implements OnInit {
       PaymentSettingId: currencyItem.PaymentSettingId,
       CurrencyId: currencyItem.CurrencyId
     }
-    
+
     this.apiService.apiPost(this.configService.getApiUrl, edited, true,
       Controllers.PAYMENT, Methods.SAVE_PARTNER_PAYMENT_CURRENCY_RATE).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -208,5 +193,10 @@ export class ViewPaymentSettingComponent implements OnInit {
       }
     });
   }
+
+  onRedirectToPaymentSettings() {
+    this.router.navigate(['/main/platform/partners/partner/payment-settings'], {
+      queryParams: { "partnerId": this.parentId, "partnerName": this.partnerName }
+    });  }
 
 }

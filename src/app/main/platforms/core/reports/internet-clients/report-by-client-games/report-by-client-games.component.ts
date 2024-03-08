@@ -171,7 +171,7 @@ export class ReportByClientGamesComponent extends BasePaginatedGridComponent imp
           filterOptions: this.filterService.numberOptions
         },
       },
-     
+
     ]
   }
 
@@ -233,8 +233,6 @@ export class ReportByClientGamesComponent extends BasePaginatedGridComponent imp
           Controllers.REPORT, Methods.GET_REPORT_BY_CLIENT_GAMES).pipe(take(1)).subscribe(data => {
           if (data.ResponseCode === 0) {
             const mappedRows = data.ResponseObject;
-            console.log(mappedRows, 'mappedRows');
-            
             // .Clients.Entities.map((items) => {
             //   items.PartnerName = this.partners.find((item => item.Id === items.PartnerId))?.Name;
             //   items.StateName = this.status.find((item => item.Id === items.Status))?.Name;

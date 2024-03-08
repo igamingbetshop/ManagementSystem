@@ -63,7 +63,7 @@ export class MainComponent implements OnInit {
     var sData = {
       MatchId: this.finishId,
       ServiceType: value
-    };    
+    };
     this.apiService.apiPost('matches/reset', sData)
       .pipe(take(1))
       .subscribe(data => {

@@ -13,26 +13,24 @@
       <div>
         <div class="first-hand">{{'Common.StartDate' | translate}}</div>
         <div class="second-hand">{{promotion?.StartDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
             <mat-datepicker-toggle matSuffix [for]="picker">
               <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
             </mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
         <div class="second-hand">{{promotion?.FinishDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+            </mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
         </div>
       </div>
 
@@ -40,9 +38,7 @@
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{promotion?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Clients.NickName' | translate" [formControlName]="'NickName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -50,9 +46,7 @@
         <div class="first-hand">{{'Cms.Image' | translate}}</div>
         <div class="second-hand">{{promotion?.ImageName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'ImageName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -80,9 +74,7 @@
         <div class="first-hand">{{'Common.Order' | translate}}</div>
         <div class="second-hand">{{promotion?.Order}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Common.Order' | translate" [formControlName]="'Order'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -218,25 +210,25 @@
   </div>
 
    <div class="card-content">
-     <mat-card class="card">
+     <mat-card>
        <mat-card-header>
          <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
        </mat-card-header>
-       <img mat-card-image [src]="image" alt="Image">
+         <img class="img" mat-card-image [src]="image" alt="Image">
      </mat-card>
    
-     <mat-card class="card">
+     <mat-card>
        <mat-card-header>
          <mat-card-title>{{"Cms.ImageMedum" | translate}}</mat-card-title>
        </mat-card-header>
-       <img mat-card-image [src]="imageMedium" alt="Image">
+         <img class="img" mat-card-image [src]="imageMedium" alt="Image">
      </mat-card>
    
-     <mat-card class="card">
+     <mat-card>
        <mat-card-header>
          <mat-card-title>{{"Cms.ImageSmall" | translate}}</mat-card-title>
        </mat-card-header>
-       <img mat-card-image [src]="imageSmall" alt="Image">
+         <img class="img" mat-card-image [src]="imageSmall" alt="Image">
      </mat-card>
    </div>
 

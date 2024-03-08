@@ -7,7 +7,7 @@ import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { CoreApiService } from '../../../../services/core-api.service';
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { Form, FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-details',
@@ -31,78 +31,8 @@ export class DetailsComponent implements OnInit {
   public KYCStates = [{ Id: null, Name: 'All' }, { Id: true, Name: 'Yes' }, { Id: false, Name: 'No' }];
   public arrayTypeProps = ['AffiliateId', 'Bonus', 'ClientId', 'Email', 'FirstName', 'LastName', 'UserName', 'MobileCode', 'Region', 'SegmentId', 'SuccessDepositPaymentSystem', 'SuccessWithdrawalPaymentSystem'];
   public rules = [{ Id: 1, Name: "TD" }, { Id: 2, Name: "DC" }, { Id: 3, Name: "SBC" }, { Id: 4, Name: "CBC" }];
-  // public form: FormGroup;
   public formGroup: UntypedFormGroup;
-  public addedConditions = {
-    SessionPeriodObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: new Date(),
-      opened: false,
-      showNew: false
-    },
-    SignUpPeriodObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: new Date(),
-      opened: false,
-      showNew: false
-    },
-    CasinoBetsCountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    ComplimentaryPointObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    SportBetsCountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    TotalBetsCountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    TotalBetsAmountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    TotalDepositsCountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    TotalDepositsAmountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    TotalWithdrawalsCountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    },
-    TotalWithdrawalsAmountObject: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: null,
-      showNew: false
-    }
-  };
+  public addedConditions: any = {};
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -263,11 +193,23 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setAdditionals();
+    this.clientStates = this.activateRoute.snapshot.data.clientStates.map(item => {
+      item.checked = false;
+      return item;
+    });
+    this.segmentId = this.activateRoute.snapshot.queryParams.segmentId;
+    this.partners = this.commonDataService.partners;
+    this.getFilterOperation();
+    this.getPaymentSegmentById();
+  }
+
+  setAdditionals() {
     this.addedConditions = {
       SessionPeriodObject: {
         conditions: [],
         selectedConditionType: null,
-        selectedConditionValue: new Date(),
+        selectedConditionValue: null,
         opened: false,
         showNew: false
       },
@@ -333,20 +275,13 @@ export class DetailsComponent implements OnInit {
         showNew: false
       }
     }
-    this.clientStates = this.activateRoute.snapshot.data.clientStates.map(item => {
-      item.checked = false;
-      return item;
-    });
-    this.segmentId = this.activateRoute.snapshot.queryParams.segmentId;
-    this.partners = this.commonDataService.partners;
-    this.getFilterOperation();
-    this.getPaymentSegmentById();
   }
 
 
   onCancle() {
     this.isEdit = false;
-    this.ngOnInit();
+    this.setAdditionals();
+    this.getPaymentSegmentById();
   }
 
   getFilterOperation() {
@@ -358,9 +293,6 @@ export class DetailsComponent implements OnInit {
           this.operations = data.ResponseObject.filter(el => {
             return el.NickName != "Contains" && el.NickName != "StartsWith" && el.NickName != "DoesNotContain" && el.NickName != "EndsWith";
           });
-
-          console.log(this.operations, 'operations');
-          
 
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -389,17 +321,16 @@ export class DetailsComponent implements OnInit {
       item.selectedConditionValue = null;
       item.showNew = false;
     }
-  }; 
+  };
 
   getPaymentSegmentById() {
     this.apiService.apiPost(this.configService.getApiUrl, { Id: this.segmentId }, true,
       Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.formGroup.patchValue(data.ResponseObject[0]);
-
-          console.log(this.formGroup.value, 'form');
-          
           this.PaymentSegment = data.ResponseObject.map((obj) => {
+            obj.GenderName = this.genders.find(item => item.Id === obj.Gender)?.Name;
+            obj.ModeName = this.modes.find(item => item.Id === obj.Mode)?.Name;
+            obj.IsKYCVerifiedName = this.KYCStates.find(item => item.Id === obj.IsKYCVerified)?.Name;
             obj.PartnerName = this.partners.find((item => item.Id === obj.PartnerId))?.Name;
             return obj;
           })[0];
@@ -416,8 +347,10 @@ export class DetailsComponent implements OnInit {
                 });
               }) : [];
           })
-
           this.SegmentSetting = this.PaymentSegment.SegementSetting;
+          this.formGroup.patchValue(this.PaymentSegment);
+
+          
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -425,9 +358,9 @@ export class DetailsComponent implements OnInit {
   }
 
   onSubmit() {
-    let requestObj = Object.assign({}, this.PaymentSegment);
-    let oldData = Object.assign({}, this.PaymentSegment);
-    
+    let requestObj = this.formGroup.getRawValue();
+    let oldData = this.formGroup.getRawValue();
+
     this.arrayTypeProps.filter(prop => !!requestObj[prop]).forEach(key => {
       requestObj[key] = {
         ConditionItems: requestObj[key].split(',').map(item => {
@@ -441,7 +374,7 @@ export class DetailsComponent implements OnInit {
 
     Object.keys(this.addedConditions).forEach(key => {
       if (this.addedConditions[key].conditions) requestObj[key.replace('Object', '')] = {
-        ConditionItems: this.addedConditions[key].conditions.map(item => {          
+        ConditionItems: this.addedConditions[key].conditions.map(item => {
           return {
             OperationTypeId: item.ConditionType?.Id,
             StringValue: item?.ConditionValue
@@ -458,22 +391,21 @@ export class DetailsComponent implements OnInit {
         }
       })
     };
-        
+
     this.saveSegment(requestObj, oldData);
 
   }
 
   saveSegment(data, oldData) {
-
     this.apiService.apiPost(this.configService.getApiUrl, data, true,
       Controllers.CONTENT, Methods.SAVE_SEGMENT).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-
           Object.values(this.addedConditions).forEach(val => {
             val['showNew'] = false;
           });
           this.isEdit = false;
-          this.ngOnInit();
+          this.setAdditionals();
+          this.getPaymentSegmentById();
         } else {
           this.PaymentSegment = Object.assign({}, oldData);
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -481,7 +413,6 @@ export class DetailsComponent implements OnInit {
       });
   }
 
-  
-
 
 }
+

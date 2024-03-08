@@ -53,7 +53,7 @@
       </div>
       <div class="field-content">
         <div class="input-content">
-          <input (keyup.enter)="searchQuickLink('withdrawId')" [(ngModel)] = "quickLinksFilter.WithdrawId" class="input" type="number" placeholder="{{'Payments.DepositId' | translate}}">
+          <input (keyup.enter)="searchQuickLink('withdrawId')" [(ngModel)] = "quickLinksFilter.WithdrawId" class="input" type="number" placeholder="{{'Payments.WithdrawId' | translate}}">
         </div>
         <button class="filter-btn" [class.disabled]="!quickLinksFilter.WithdrawId" (click)="searchQuickLink('withdrawId')">{{'Common.Go' | translate}}</button>
       </div>

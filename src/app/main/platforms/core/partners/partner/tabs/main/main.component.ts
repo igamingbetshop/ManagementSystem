@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {CoreApiService} from "../../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../../core/services";
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
-import {Controllers, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+
+import { take } from "rxjs/operators";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ConfigService } from "../../../../../../../core/services";
+import { ActivatedRoute } from "@angular/router";
+import { Controllers, Methods } from "../../../../../../../core/enums";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -15,26 +16,15 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  public regExModel = {
-    Uppercase: false,
-    IsUppercaseRequired: false,
-    Lowercase: false,
-    IsLowercaseRequired: false,
-    Numeric: false,
-    IsDigitRequired: false,
-    Symbol: false,
-    IsSymbolRequired: false,
-    MaxLength: 0,
-    MinLength: 0
-  };
+
   public partnerId;
   public partnerName;
   public states = [];
   public partnerEnvironments = [];
   public partners = [];
+  public partner;
   public partnersVerificationTypeEnum = [];
   public formGroup: UntypedFormGroup;
-  // public selected = {Id: 3, Name: 'environmentId'};
   public isEdit = false;
   public enableEditIndex;
   public adminSiteUrl = []
@@ -42,14 +32,17 @@ export class MainComponent implements OnInit {
   public siteUrl = [];
   public siteUrlSelected;
 
+  isUppercaseRequired = false;
+  isLowercaseRequired = false;
+  isDigitRequired = false;
+  isSymbolRequired = false;
   constructor(private apiService: CoreApiService,
-              private commonDataService: CommonDataService,
-              private fb: UntypedFormBuilder,
-              private activateRoute: ActivatedRoute,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public dialog: MatDialog
-              ) {
+    private fb: UntypedFormBuilder,
+    private activateRoute: ActivatedRoute,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog
+  ) {
   }
 
   ngOnInit(): void {
@@ -57,101 +50,59 @@ export class MainComponent implements OnInit {
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.getStates();
     this.getPartnersVerificationTypeEnum();
-    // this.getPartnerEnvironments();
-
-    this.getForm();
+    this.createForm();
   }
 
   getStates() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.ENUMERATION, Methods.GET_USER_STATES_ENUM).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.states = data.ResponseObject;
-        this.getPartners();
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.states = data.ResponseObject;
+          this.getPartners();
+        }
+      });
   }
 
-  // getPartnerEnvironments() {
-  //   this.apiService.apiPost(this.configService.getApiUrl, +this.partnerId, true,
-  //     Controllers.PARTNER, Methods.GET_PARTNER_ENVIRONMENTS).pipe(take(1)).subscribe((data) => {
-  //     if (data.ResponseCode === 0) {
-  //       this.partnerEnvironments = data.ResponseObject;
-  //     }
-  //   });
-  // }
-
   getPartners() {
-    this.apiService.apiPost(this.configService.getApiUrl, {Id: String(this.partnerId)}, true,
+    this.apiService.apiPost(this.configService.getApiUrl, { Id: String(this.partnerId) }, true,
       Controllers.PARTNER, Methods.GET_PARTNERS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.partners = data.ResponseObject.Entities.map((obj) => {
-          obj.StateName = this.states.find((item) => {
-            return item.Id === obj.State;
+        if (data.ResponseCode === 0) {
+          this.partner = data.ResponseObject.Entities[0];
+
+          this.partner.StateName = this.states.find((item) => {
+            return item.Id === this.partner.State;
           })?.Name;
-          obj.VerificationTypeName = this.partnersVerificationTypeEnum.find((item) => {
-            return item.Id === obj?.VerificationType;
+          this.partner.VerificationTypeName = this.partnersVerificationTypeEnum.find((item) => {
+            return item.Id === this.partner?.VerificationType;
           })?.Name;
-          obj.AdminSiteUrl = obj.AdminSiteUrl.split(',');
-          this.adminSiteUrl = obj.AdminSiteUrl;
+          this.partner.AdminSiteUrl = this.partner.AdminSiteUrl.split(',');
+          this.adminSiteUrl = this.partner.AdminSiteUrl;
           this.adminSiteUrlSelected = [...this.adminSiteUrl.keys()][0];
-          obj.SiteUrl = obj.SiteUrl.split(',');
-          this.siteUrl = obj.SiteUrl;
+          this.partner.SiteUrl = this.partner.SiteUrl.split(',');
+          this.siteUrl = this.partner.SiteUrl;
           this.siteUrlSelected = [...this.siteUrl.keys()][0];
-          return obj;
-        });
-        this.formGroup.get('Id').setValue(this.partners[0].Id);
-        this.formGroup.get('CurrencyId').setValue(this.partners[0].CurrencyId);
-        this.formGroup.get('Name').setValue(this.partners[0].Name);
-        this.formGroup.get('State').setValue(this.partners[0].State);
-        this.formGroup.get('StateName').setValue(this.partners[0].StateName);
-        this.formGroup.get('LastUpdateTime').setValue(this.partners[0].LastUpdateTime);
-        this.formGroup.get('CreationTime').setValue(this.partners[0].CreationTime);
-        this.formGroup.get('AdminSiteUrl').setValue(this.partners[0].AdminSiteUrl);
-        this.formGroup.get('SiteUrl').setValue(this.partners[0].SiteUrl);
-        this.formGroup.get('ClientMinAge').setValue(this.partners[0].ClientMinAge);
-        this.formGroup.get('UnpaidWinValidPeriod').setValue(this.partners[0].UnpaidWinValidPeriod);
-        this.formGroup.get('ClientSessionExpireTime').setValue(this.partners[0].ClientSessionExpireTime);
-        this.formGroup.get('UnusedAmountWithdrawPercent').setValue(this.partners[0].UnusedAmountWithdrawPercent);
-        this.formGroup.get('AccountingDayStartTime').setValue(this.partners[0].AccountingDayStartTime);
-        this.formGroup.get('UserSessionExpireTime').setValue(this.partners[0].UserSessionExpireTime);
-        this.formGroup.get('AutoApproveBetShopDepositMaxAmount').setValue(this.partners[0].AutoApproveBetShopDepositMaxAmount);
-        this.formGroup.get('VerificationKeyActiveMinutes').setValue(this.partners[0].VerificationKeyActiveMinutes);
-        this.formGroup.get('AutoApproveWithdrawMaxAmount').setValue(this.partners[0].AutoApproveWithdrawMaxAmount);
-        this.formGroup.get('AutoConfirmWithdrawMaxAmount').setValue(this.partners[0].AutoConfirmWithdrawMaxAmount);
-        this.formGroup.get('EmailVerificationCodeLength').setValue(this.partners[0].EmailVerificationCodeLength);
-        this.formGroup.get('MobileVerificationCodeLength').setValue(this.partners[0].MobileVerificationCodeLength);
-        this.formGroup.get('VerificationType').setValue(this.partners[0].VerificationType);
-        this.regex.get('Uppercase').setValue(this.partners[0].PasswordRegExProperty.Uppercase);
-        this.regex.get('IsUppercaseRequired').setValue(this.partners[0].PasswordRegExProperty.IsUppercaseRequired);
-        this.regex.get('Lowercase').setValue(this.partners[0].PasswordRegExProperty.Lowercase);
-        this.regex.get('IsLowercaseRequired').setValue(this.partners[0].PasswordRegExProperty.IsLowercaseRequired);
-        this.regex.get('Numeric').setValue(this.partners[0].PasswordRegExProperty.Numeric);
-        this.regex.get('IsDigitRequired').setValue(this.partners[0].PasswordRegExProperty.IsDigitRequired);
-        this.regex.get('Symbol').setValue(this.partners[0].PasswordRegExProperty.Symbol);
-        this.regex.get('IsSymbolRequired').setValue(this.partners[0].PasswordRegExProperty.IsSymbolRequired);
-        this.regex.get('MaxLength').setValue(this.partners[0].PasswordRegExProperty.MaxLength);
-        this.regex.get('MinLength').setValue(this.partners[0].PasswordRegExProperty.MinLength);
-      }
-    });
+
+          this.formGroup.patchValue(this.partner);
+        }
+      });
   }
 
   getPartnersVerificationTypeEnum() {
     this.apiService.apiPost(this.configService.getApiUrl, this.partnerId, true,
       Controllers.ENUMERATION, Methods.PARTNERS_CLIENT_VERIFICATION_TYPE_ENUM).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.partnersVerificationTypeEnum = data.ResponseObject;
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.partnersVerificationTypeEnum = data.ResponseObject;
+        }
+      });
   }
 
-  getForm() {
+  createForm() {
     this.formGroup = this.fb.group({
-      Id: [{value: null, disabled: true}],
+      Id: [{ value: null, disabled: true }],
       State: [null, [Validators.required]],
       StateName: [null],
       Name: [null, [Validators.required]],
-      CurrencyId: [{value: null, disabled: true}],
+      CurrencyId: [{ value: null, disabled: true }],
       AdminSiteUrl: [null, [Validators.required]],
       CreationTime: [null],
       SiteUrl: [null, [Validators.required]],
@@ -185,17 +136,21 @@ export class MainComponent implements OnInit {
     });
   }
 
-  saveRegex() {
-    this.formGroup.get('PasswordRegExProperty').setValue(this.regex.value);
-    this.apiService.apiPost(this.configService.getApiUrl, this.regex.value, true,
-      Controllers.PARTNER, Methods.SAVE_PASSWORD_REG_EX).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        // this.isEdit = false;
 
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+
+  saveRegex() {
+    const data = this.regex.value;
+    data.PartnerId = +this.partnerId;
+    this.formGroup.get('PasswordRegExProperty').setValue(data);
+    this.apiService.apiPost(this.configService.getApiUrl, data, true,
+      Controllers.PARTNER, Methods.SAVE_PASSWORD_REG_EX).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          this.isEdit = false;
+
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   saveEditedPartner() {
@@ -208,21 +163,21 @@ export class MainComponent implements OnInit {
       if (partner.AdminSiteUrl !== partner.SiteUrl) {
         this.apiService.apiPost(this.configService.getApiUrl, partner, true,
           Controllers.PARTNER, Methods.SAVE_PARTNER).pipe(take(1)).subscribe((data) => {
-          if (data.ResponseCode === 0) {
-            partner.StateName = this.states.find((item) => {
-              return item.Id === data.ResponseObject.State;
-            }).Name;
-            partner.VerificationTypeName = this.partnersVerificationTypeEnum.find((item) => {
-              return item.Id === data.ResponseObject.VerificationType;
-            }).Name;
-            partner.AdminSiteUrl = partner.AdminSiteUrl.split(',');
-            partner.SiteUrl = partner.SiteUrl.split(',');
-            this.isEdit = false;
-            this.getPartners();
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              partner.StateName = this.states.find((item) => {
+                return item.Id === data.ResponseObject.State;
+              }).Name;
+              partner.VerificationTypeName = this.partnersVerificationTypeEnum.find((item) => {
+                return item.Id === data.ResponseObject.VerificationType;
+              }).Name;
+              partner.AdminSiteUrl = partner.AdminSiteUrl.split(',');
+              partner.SiteUrl = partner.SiteUrl.split(',');
+              this.isEdit = false;
+              this.getPartners();
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       }
     }
   }
@@ -230,6 +185,19 @@ export class MainComponent implements OnInit {
   get regex() {
     return this.formGroup.get('PasswordRegExProperty') as UntypedFormGroup;
   }
+
+  setCheckbox(formControlName: string, changedFormControlName: string, validator: string) {
+    const passwordRegExProperty = this.formGroup.get('PasswordRegExProperty');
+
+    if (passwordRegExProperty.get(changedFormControlName).value === true) {
+      const updatedValue = { ...passwordRegExProperty.value, [formControlName]: true };
+      passwordRegExProperty.setValue(updatedValue);
+      this[validator] = true;
+    }  else {
+      this[validator] = false;
+    }
+  }
+
 
   // uploadConfig() {
   //   this.apiService.apiPost(this.configService.getApiUrl, {
@@ -307,6 +275,11 @@ export class MainComponent implements OnInit {
 
   get errorControls() {
     return this.formGroup.controls;
+  }
+
+  onCancel() {
+    this.isEdit = false;
+    this.getPartners();
   }
 
 }

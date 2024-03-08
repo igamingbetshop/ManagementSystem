@@ -1,15 +1,29 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-competitions-categories']">{{'Sport.CompetitionCategories' | translate}}</a> / :{{'Sport.Profit' | translate}}</div>
+    <div class="title"><a [routerLink]="['../../all-competitions-categories']">{{'Sport.CompetitionCategories' | translate}}</a> / : {{'Sport.Profit' | translate}} / {{name}}</div>
 
-    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <div class = "bulk-editor-dropdown">
+      <button mat-stroked-button class="mat-bulk-btn"
+              [matMenuTriggerFor]="bulkMenu"
+              #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+        {{'Common.Edit' | translate}}
+      </button>
+      <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before">
+        <ng-container #bulkEditorRef></ng-container>
+      </mat-menu>
+    </div>
+
+    <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
     <button mat-stroked-button class="mat-btn" (click)="addSettings()">{{'Sport.AddSettings' | translate}}
     </button>
     <button mat-stroked-button class="mat-delete-btn" [disabled]="isRowSelected()"
             (click)="delete()">{{'Sport.DeleteSettings' | translate}}
     </button>
+
+    <button mat-stroked-button class="mat-export-btns" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+
   </div>
 
   <div class="grid-content">
@@ -38,7 +52,7 @@
     (columnMoved)="onColumnMoved($event)"
     (columnResized)="onColumnResized($event)"
     (columnVisible)="onColumnVisible($event)"
-    rowSelection="single">
+    rowSelection="multiple">
     >
   </ag-grid-angular>
   </div>

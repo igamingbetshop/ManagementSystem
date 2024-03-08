@@ -87,7 +87,7 @@ export class CreateNewDocumentComponent implements OnInit {
     let files = event.target.files.length && event.target.files[0];
     if (files)
     {
-      this.validDocumentSize = files.size < 700000;
+      this.validDocumentSize = files.size < 900000;
       this.validDocumentFormat = /^(image\/png|image\/jpg|image\/jpeg|image\/gif|application\/pdf)$/.test(files.type);
       if (this.validDocumentFormat && this.validDocumentSize)
       {

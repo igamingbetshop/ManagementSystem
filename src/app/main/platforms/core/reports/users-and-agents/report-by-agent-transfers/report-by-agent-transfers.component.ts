@@ -168,7 +168,7 @@ export class ReportByAgentTransfersComponent extends BasePaginatedGridComponent 
   onEndDateChange(event) {
     this.toDate = event.value;
   }
-  
+
   getByPartnerData(event) {
     this.partnerId = event;
     this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());

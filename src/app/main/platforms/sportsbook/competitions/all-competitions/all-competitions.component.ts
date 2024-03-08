@@ -1,24 +1,24 @@
-import {Component, OnInit, Injector, ViewChild, ViewContainerRef} from '@angular/core';
-import {SportsbookApiService} from '../../services/sportsbook-api.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {take} from 'rxjs/operators';
-import {AgBooleanFilterComponent} from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
-import {ButtonRendererComponent} from 'src/app/main/components/grid-common/button-renderer.component';
-import {NumericEditorComponent} from 'src/app/main/components/grid-common/numeric-editor.component';
-import {CheckboxRendererComponent} from 'src/app/main/components/grid-common/checkbox-renderer.component';
-import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener.component';
-import {MatDialog} from "@angular/material/dialog";
+import { Component, OnInit, Injector, ViewChild, ViewContainerRef } from '@angular/core';
+import { SportsbookApiService } from '../../services/sportsbook-api.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { take } from 'rxjs/operators';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
+import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
+import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
+import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
+import { MatDialog } from "@angular/material/dialog";
 import 'ag-grid-enterprise';
-import {CommonDataService} from 'src/app/core/services';
-import {Paging} from 'src/app/core/models';
-import {GridMenuIds, ModalSizes} from 'src/app/core/enums';
-import {SelectRendererComponent} from "../../../../components/grid-common/select-renderer.component";
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
-import {AgGridAngular} from "ag-grid-angular";
+import { CommonDataService } from 'src/app/core/services';
+import { Paging } from 'src/app/core/models';
+import { GridMenuIds, ModalSizes } from 'src/app/core/enums';
+import { SelectRendererComponent } from "../../../../components/grid-common/select-renderer.component";
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { IRowNode } from "ag-grid-community";
+import { AgGridAngular } from "ag-grid-angular";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import {MatMenuTrigger} from "@angular/material/menu";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
   selector: 'app-all-competitions',
@@ -28,7 +28,7 @@ import {MatMenuTrigger} from "@angular/material/menu";
 export class AllCompetitionsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
-  @ViewChild('bulkEditorRef', {read: ViewContainerRef}) bulkEditorRef!: ViewContainerRef;
+  @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
   public partners: any[] = [];
   public providers: any[] = [];
   public partnerId: number;
@@ -53,9 +53,9 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
   };
 
   private multipleBetsStates = [
-    {Id: 1, Name: this.translate.instant('Sport.None'), State: null},
-    {Id: 2, Name: this.translate.instant('Common.Yes'), State: true},
-    {Id: 3, Name: this.translate.instant('Common.No'), State: false},
+    { Id: 1, Name: this.translate.instant('Sport.None'), State: null },
+    { Id: 2, Name: this.translate.instant('Common.Yes'), State: true },
+    { Id: 3, Name: this.translate.instant('Common.No'), State: false },
   ];
 
   public detailCellRendererParams: any = {
@@ -73,7 +73,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           headerName: 'Sport.SettingId',
           headerValueGetter: this.localizeHeader.bind(this),
           field: 'SettingId',
-          cellStyle: {color: '#076192'}
+          cellStyle: { color: '#076192' }
         },
         {
           headerName: 'Partners.PartnerName',
@@ -155,32 +155,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           cellEditor: 'numericEditor',
         },
         {
-          headerName: 'Sport.AllowMultipleBets',
-          headerValueGetter: this.localizeHeader.bind(this),
-          field: 'AllowMultipleBets',
-          resizable: true,
-          sortable: true,
-          editable: true,
-          cellRenderer: 'selectRenderer',
-          cellRendererParams: {
-            onchange: this.onSelectMultipleBets['bind'](this),
-            Selections: this.multipleBetsStates,
-          },
-        },
-        {
-          headerName: 'Sport.AllowCashout',
-          headerValueGetter: this.localizeHeader.bind(this),
-          field: 'AllowCashout',
-          resizable: true,
-          sortable: true,
-          editable: true,
-          cellRenderer: 'selectRenderer',
-          cellRendererParams: {
-            onchange: this.onSelectCashOut['bind'](this),
-            Selections: this.multipleBetsStates,
-          },
-        },
-        {
           headerName: 'Products.CategoryId',
           headerValueGetter: this.localizeHeader.bind(this),
           field: 'CategoryId',
@@ -200,7 +174,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           cellRendererParams: {
             onClick: this.nestedSavePartnerSettings['bind'](this),
             Label: 'Save',
-            bgColor: '#076192',
+            bgColor: '#3E4D66',
             textColor: '#FFFFFF'
           }
         },
@@ -209,7 +183,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           headerValueGetter: this.localizeHeader.bind(this),
           cellRenderer: OpenerComponent,
           valueGetter: params => {
-            let data = {path: '', queryParams: null};
+            let data = { path: '', queryParams: null };
             let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
             data.path = this.router.url.replace(replacedPart, 'competition');
             data.queryParams = {
@@ -223,14 +197,12 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         },
       ],
       onGridReady: params => {
-        // params.api.setDomLayout('autoHeight');
       },
     },
-    // get the rows for each Detail Grid
     getDetailRowData: params => {
 
       if (params) {
-        this.apiService.apiPost(this.nestedPath, {"CompetitionId": params.data.Id}).subscribe(data => {
+        this.apiService.apiPost(this.nestedPath, { "CompetitionId": params.data.Id }).subscribe(data => {
           if (data.Code === 0) {
             this.rowDataNested = data.ResponseObject;
             this.rowDataNested.forEach(row => {
@@ -244,7 +216,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
             this.setIdByBoolean(this.rowDataNested);
             params.successCallback(this.rowDataNested);
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         })
       }
@@ -287,7 +259,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         minWidth: 140,
         tooltipField: 'Id',
         cellRenderer: 'agGroupCellRenderer',
-        cellStyle: {color: '#076192', 'font-size': '12px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '12px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -453,32 +425,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         cellEditor: 'numericEditor',
       },
       {
-        headerName: 'Sport.AllowMultipleBets',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AllowMultipleBets',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        cellRenderer: 'selectRenderer',
-        cellRendererParams: {
-          onchange: this.onSelectMultipleBets['bind'](this),
-          Selections: this.multipleBetsStates,
-        },
-      },
-      {
-        headerName: 'Sport.AllowCashout',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AllowCashout',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        cellRenderer: 'selectRenderer',
-        cellRendererParams: {
-          onchange: this.onSelectCashOut['bind'](this),
-          Selections: this.multipleBetsStates,
-        },
-      },
-      {
         headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Enabled',
@@ -562,7 +508,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           onClick: this.saveCategorySettings['bind'](this),
           Label: this.translate.instant('Common.Save'),
           // isDisabled: this.isDisabled
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       },
@@ -573,13 +519,14 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         field: 'View',
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'competition');
           data.queryParams = {
             competitionId: params.data.Id,
             sportId: params.data.SportId,
-            partnerId: params.data.PartnerId
+            partnerId: params.data.PartnerId,
+            name: params.data.Name
           };
           return data;
         },
@@ -595,10 +542,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
     this.getProviders();
   }
 
-  onSelectMultipleBets(params, value: number, event) {
-    params.AllowMultipleBets = this.multipleBetsStates.find(el => el.Id === value).State;
-  }
-
   onSelectCashOut(params, value: number, event) {
     params.AllowCashout = this.multipleBetsStates.find(el => el.Id === value).State;
   }
@@ -608,7 +551,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
     this.apiService.apiPost(this.updateNestedPath, row).subscribe(data => {
       if (data.Code === 0) {
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -643,9 +586,9 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          SnackBarHelper.show(this._snackBar, {Description: 'added successfully', Type: "success"});
+          SnackBarHelper.show(this._snackBar, { Description: 'added successfully', Type: "success" });
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -655,8 +598,8 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
   }
 
   async AddCompetition() {
-    const {CreateCompetitionComponent} = await import('../../competitions/create-competition/create-competition.component');
-    const dialogRef = this.dialog.open(CreateCompetitionComponent, {width: ModalSizes.MIDDLE});
+    const { CreateCompetitionComponent } = await import('../../competitions/create-competition/create-competition.component');
+    const dialogRef = this.dialog.open(CreateCompetitionComponent, { width: ModalSizes.MIDDLE });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.go();
@@ -675,14 +618,14 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         }
       })
       this.isDisabled = false;
-      this.gridApi.redrawRows({rowNodes: [findedNode]});
+      this.gridApi.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
   saveCategorySettings(params) {
     let requestBody = params.data;
 
-    if(requestBody['AllowMultipleBets'] == null) {
+    if (requestBody['AllowMultipleBets'] == null) {
       requestBody.AllowMultipleBetsMapped = 'NULL';
     } else if (requestBody['AllowMultipleBets'] == true) {
       requestBody.AllowMultipleBetsMapped = "YES";
@@ -690,7 +633,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       requestBody.AllowMultipleBetsMapped = "NO";
     }
 
-    if(requestBody['AllowCashout'] == null) {
+    if (requestBody['AllowCashout'] == null) {
       requestBody.AllowCashoutMapped = 'NULL';
     } else if (requestBody.AllowCashout == true) {
       requestBody.AllowCashoutMapped = "YES";
@@ -702,7 +645,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       if (data.Code === 0) {
         this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -728,7 +671,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
 
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
-        this.filterData = {...paging};
+        this.filterData = { ...paging };
         this.apiService.apiPost(this.path, paging)
           .pipe(take(1))
           .subscribe(data => {
@@ -743,9 +686,9 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
                 //   bet['ProviderId'] = providerName.Name;
                 // }
               })
-              params.success({rowData: data.Objects, rowCount: data.TotalCount});
+              params.success({ rowData: data.Objects, rowCount: data.TotalCount });
             } else {
-              SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
           });
       },
@@ -797,7 +740,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       this.agGrid.api.forEachNode((node) => {
         const skipCount = Math.floor(node.rowIndex / this.cacheBlockSize);
         node['selected'] = !node['selected'];
-
       });
       this.selectedRowIdsAll = this.agGrid.api.getSelectedRows().map(field => field.Id);
     } else {
@@ -811,7 +753,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       if (data.Code === 0) {
         this.providers = data.Objects;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -828,7 +770,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
   }
 
   exportToCsv() {
-
     this.apiService.apiPost('/competitions/exportcompetitions').pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         let iframe = document.createElement("iframe");
@@ -836,7 +777,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         iframe.setAttribute("style", "display: none");
         document.body.appendChild(iframe);
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }

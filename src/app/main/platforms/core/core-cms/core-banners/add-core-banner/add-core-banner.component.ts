@@ -3,9 +3,12 @@ import {Component, NgModule, OnInit} from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators, FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
+
 import {MatFormFieldModule} from '@angular/material/form-field';
+
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
+
 import {MatSelectModule} from '@angular/material/select';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
@@ -39,7 +42,7 @@ export const pagingSource = {
   selector: 'app-add-core-banner',
   templateUrl: './add-core-banner.component.html',
   styleUrls: ['./add-core-banner.component.scss'],
-  standalone: true, 
+  standalone: true,
   imports: [
     CommonModule,
     MatIconModule,
@@ -70,13 +73,7 @@ export class AddCoreBannerComponent implements OnInit {
   public bannerTypes: any = {};
   public bannerTypeId: number = 1;
 
-  public bannerVisibilityTypes = [
-    {id: 1, name: this.translate.instant('Clients.LoggedOut')},
-    {id: 2, name: this.translate.instant('Clients.LoggedIn')},
-    {id: 3, name: this.translate.instant('Clients.NoDeposit')},
-    {id: 4, name: this.translate.instant('Clients.OneDepositOnly')},
-    {id: 5, name: this.translate.instant('Clients.TwoOrMoreDeposits')},
-  ];
+  public bannerVisibilityTypes:any[] = [];
 
   public categorySource = {
     types: [],
@@ -101,6 +98,13 @@ export class AddCoreBannerComponent implements OnInit {
     public dateAdapter: DateAdapter<Date>
   ) {
     this.dateAdapter.setLocale('en-GB');
+    this.bannerVisibilityTypes = [
+      {id: 1, name: this.translate.instant('Clients.LoggedOut')},
+      {id: 2, name: this.translate.instant('Clients.LoggedIn')},
+      {id: 3, name: this.translate.instant('Clients.NoDeposit')},
+      {id: 4, name: this.translate.instant('Clients.OneDepositOnly')},
+      {id: 5, name: this.translate.instant('Clients.TwoOrMoreDeposits')},
+    ];
   }
 
   ngOnInit() {
@@ -197,7 +201,7 @@ export class AddCoreBannerComponent implements OnInit {
         reader.onload = () => {
           const binaryString = reader.result as string;
 
-          if(files.size < 700000)
+          if(files.size < 900000)
           {
             this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
             this.formGroup.get('Image').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
@@ -263,9 +267,6 @@ export class AddCoreBannerComponent implements OnInit {
   get errorControl() {
     return this.formGroup.controls;
 
-    if(this.formGroup.controls) {
-      console.log('errors',this.formGroup.controls['Order'].errors);
-    }
   }
 
   close() {

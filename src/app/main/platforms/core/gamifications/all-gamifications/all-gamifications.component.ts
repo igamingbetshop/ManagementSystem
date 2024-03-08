@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, OnDestroy } from '@angular/core';
 
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -16,25 +16,26 @@ import { CommonDataService } from 'src/app/core/services';
 import { CellDoubleClickedEvent } from 'ag-grid-community';
 import { CharacterChildsComponent } from './character-childs/character-childs.component';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-all-gamifications',
   templateUrl: './all-gamifications.component.html',
   styleUrls: ['./all-gamifications.component.scss']
 })
-export class AllGamificationsComponent extends BasePaginatedGridComponent implements OnInit {
+export class AllGamificationsComponent extends BasePaginatedGridComponent implements OnInit, OnDestroy  {
 
   @ViewChild(CharacterChildsComponent) characterChildsComponent: CharacterChildsComponent;
 
-  public partnerId;
-  public rowData = [];
-  public frameworkComponents;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public partners: any[] = [];
-  public statuses: any[] = ACTIVITY_STATUSES;
-  public environments: any[] = ENVIRONMENTS_STATUSES
-  public characterChilds: any[] = [];
-  public defaultColDef = {
+  partnerId;
+  rowData = [];
+  frameworkComponents;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  partners: any[] = [];
+  statuses: any[] = ACTIVITY_STATUSES;
+  environments: any[] = ENVIRONMENTS_STATUSES
+  characterChilds: any[] = [];
+  defaultColDef = {
     flex: 1,
     editable: false,
     sortable: true,
@@ -42,14 +43,16 @@ export class AllGamificationsComponent extends BasePaginatedGridComponent implem
     filter: 'agTextColumnFilter',
     floatingFilter: true,
   };
-  public childId: number;
+  childId: number;
   canCreateChild = false;
   charakterId: any;
-  public allData = [];
+  allData = [];
   charakterPartner: any;
   rowClassRules = {
     'active-row': params => params.node.isSelected()
   };
+  private routerSubscription: Subscription;
+
 
   constructor(
     protected injector: Injector,
@@ -110,7 +113,6 @@ export class AllGamificationsComponent extends BasePaginatedGridComponent implem
         filter: false,
         valueGetter: params => {
           let data = { path: 'gamification', queryParams: { gamificationId: params.data.Id } };
-          // data.queryParams = { gamificationId: params.data.Id };
           return data;
         },
         sortable: false
@@ -123,9 +125,8 @@ export class AllGamificationsComponent extends BasePaginatedGridComponent implem
 
   ngOnInit() {
     this.partners = this.commonDataService.partners;
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        // Call your method here
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd && this.rowData.length) {
         this.getRows();
       }
     });
@@ -198,9 +199,9 @@ export class AllGamificationsComponent extends BasePaginatedGridComponent implem
 
   onRowClicked(event: any) {
     const id = event.data.Id;
-    
+
     this.childId = this.rowData.findIndex(x => x.Id === id);
-  
+
     this.characterChilds = this.allData.find(item => item.Parent.Id === id)?.Children;
     this.charakterId = id;
     this.charakterPartner = event.data.PartnerId;
@@ -216,6 +217,12 @@ export class AllGamificationsComponent extends BasePaginatedGridComponent implem
   createChildCharacter(event) {
     this.charakterId = event.ParentId;
     this.canCreateChild = true;
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 
 }

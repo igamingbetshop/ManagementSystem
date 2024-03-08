@@ -3,11 +3,11 @@
 
 .container {
   @include container-style;
-  height: 93%;
+  height: 92%;
 
   .content-action {
     @include action-style;
-    height: 68px;
+    height: 60px;
 
     .mat-copy-btn {
       margin-left: 8px;

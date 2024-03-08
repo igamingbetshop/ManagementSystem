@@ -1,6 +1,6 @@
 <div class="container">
   <div class="content-action">
-    <div class="title"><a [routerLink]="['/main/platform/notifications/announcements']">{{'Notifications.Announcement' | translate}}</a> / {{announcementId}}
+    <div class="title"><a (click)="onNavigateToAnnouncement()">{{'Notifications.Announcement' | translate}}</a> / {{announcementId}}
       : {{'Sport.MainInfo' | translate}}</div>
     <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
   </div>
@@ -12,9 +12,9 @@
         <div class="first-hand">{{'Clients.Id' | translate}}</div>
         <div class="second-hand">{{announcement?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -22,9 +22,9 @@
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{announcement?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'NickName'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -32,9 +32,9 @@
         <div class="first-hand">{{'Clients.UserId' | translate}}</div>
         <div class="second-hand">{{announcement?.UserId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'UserId'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -90,7 +90,7 @@
         <div class="first-hand">{{ 'Common.UserIds' | translate }}</div>
         <div class="second-hand">{{ announcement?.UserIds.join(', ') }}</div>
         <div class="form-field text-area">
-          <textarea matInput [placeholder]="'Common.UserIds' | translate"[formControl]="formGroup.get('UserIds')" (blur)="convertToArray('UserIds')"></textarea>
+          <textarea class="text-area-fild" matInput [placeholder]="'Common.UserIds' | translate"[formControl]="formGroup.get('UserIds')" (blur)="convertToArray('UserIds')"></textarea>
       </div>
       </div>
       
@@ -99,7 +99,7 @@
         <div class="second-hand">{{ announcement?.ClientIds.join(', ') }}</div>
 
         <div class="form-field text-area">
-          <textarea matInput [placeholder]="'Segments.ClientIds' | translate"  [formControl]="formGroup.get('ClientIds')" (blur)="convertToArray('ClientIds')">
+          <textarea class="text-area-fild" matInput [placeholder]="'Segments.ClientIds' | translate"  [formControl]="formGroup.get('ClientIds')" (blur)="convertToArray('ClientIds')">
           </textarea>
       </div>
       </div>
@@ -111,7 +111,7 @@
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
           <button mat-stroked-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
-          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()" [class.disabled]="!formGroup.valid || submitting">{{'Common.Save' |translate}}</button>
         </div>
       </div>
     </form>

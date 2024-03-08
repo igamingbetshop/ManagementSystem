@@ -2,15 +2,14 @@
 @import "variables.scss";
 
 .container {
-
   width: 100%;
-  height: calc(100% - 62px);
+  height: 92%;
   padding: 0 10px;
   box-sizing: border-box;
 
   .content-action {
     @include action-style;
-    height: 68px;
+    height: 60px;
 
     .mat-btn {
       @include mat-btn-style;
@@ -21,7 +20,6 @@
       margin-left: 8px;
       @include mat-copy-btn-style;
     }
-    
   }
 
   .grid-content {

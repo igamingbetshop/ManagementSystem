@@ -21,21 +21,21 @@
       <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
     </div>
 
-    <mat-form-field class="calendar-picker start" appearance="none">
+    <div class="calendar-picker start">
       <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
       <mat-datepicker-toggle matSuffix [for]="pickerStart">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </mat-form-field>
+    </div>
 
-    <mat-form-field class="calendar-picker" appearance="none">
+    <div class="calendar-picker">
       <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
       <mat-datepicker-toggle matSuffix [for]="pickerEnd">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </mat-form-field>
+    </div>
 
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 

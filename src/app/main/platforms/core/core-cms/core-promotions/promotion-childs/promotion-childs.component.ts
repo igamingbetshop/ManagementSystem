@@ -123,6 +123,7 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   public rowData: any[];
@@ -139,7 +140,7 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
   }
 
   ngOnChanges(): void {
-    this.rowData = this.tableData;    
+    this.rowData = this.tableData;
   }
 
   onGridReady(params) {
@@ -170,5 +171,5 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
   onRowClicked(event: any) {
     this.childCharakterData.emit(event.data);
   }
-  
+
 }

@@ -11,10 +11,9 @@ import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/c
 import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
-import { CellClickedEvent, CellValueChangedEvent, ColDef } from 'ag-grid-community';
+import { CellClickedEvent, CellValueChangedEvent, ColDef, ValueFormatterParams } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
-import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -43,7 +42,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
     selectRenderer: SelectRendererComponent,
     buttonRenderer: ButtonRendererComponent,
   }
-  public defaultColDef: {
+  override defaultColDef =  {
     flex: 1,
     unSortIcon: false,
     copyHeadersToClipboard: true,
@@ -58,7 +57,8 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
     menuTabs: [
       'filterMenuTab',
       'generalMenuTab',
-    ]
+    ],
+    minWidth: 50,
   };
 
   public autoGroupColumnDef: ColDef = {
@@ -113,8 +113,16 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'PartnerId',
         editable: true,
-        filter: 'agTextColumnFilter',
         floatingFilter: true,
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: this.partners.map(item => item.Id),
+          debounceMs: 200,
+          suppressFilterButton: true,
+          valueFormatter: (
+            params: ValueFormatterParams
+          ) => params.value = this.partners.find(item => item.Id == params.value)?.Name,
+        },
         cellRenderer: 'selectRenderer',
         cellRendererParams: {
           onchange: this.onSelectChange['bind'](this, "PartnerId"),
@@ -253,7 +261,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
     if(this.agGrid?.api.getSelectedRows()[0]) {
       paretnId = this.agGrid?.api.getSelectedRows()[0];
     }
-    
+
     const { AddComponent } = await import('./add/add.component');
     const dialogRef = this.dialog.open(AddComponent, {
       width: ModalSizes.SMALL,
@@ -306,7 +314,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
 
   onSelectChange(key, params, val,) {
     params[key] = val;
-    
+
     this.onCellValueChanged(params);
   }
 
@@ -328,8 +336,6 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
       .pipe(take(1))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
-          console.log(data.ResponseObject, "data.ResponseObject");
-          
           let mappedData = [];
           data.ResponseObject.forEach(field => {
             // field.PartnerName = this.partners.find((partner) => partner.Id === field.PartnerId)?.Name;
@@ -339,7 +345,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
               this.handleDataRecursively(data.ResponseObject, field, mappedData);
             }
           })
-          this.rowData = mappedData;          
+          this.rowData = mappedData;
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

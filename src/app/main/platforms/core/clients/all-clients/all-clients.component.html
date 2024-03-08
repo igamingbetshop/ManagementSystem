@@ -9,7 +9,9 @@
         panelClass="overlay-dropdown"
         disableOptionCentering>
         <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+        @for ( partner of partners; track $index) {
+          <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
+        }
       </mat-select>
     </div>
     <div class="date-time-tabs">
@@ -20,21 +22,29 @@
       <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
     </div>
 
-    <mat-form-field class="calendar-picker start" appearance="none">
+    <div class="calendar-picker start">
       <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
       <mat-datepicker-toggle matSuffix [for]="pickerStart">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </mat-form-field>
+    </div>
 
-    <mat-form-field class="calendar-picker" appearance="none">
+    <!-- <mat-form-field class="calendar-picker start">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </mat-form-field> -->
+
+    <div class="calendar-picker">
       <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
       <mat-datepicker-toggle matSuffix [for]="pickerEnd">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </mat-form-field>
+    </div>
 
     <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
@@ -84,7 +94,9 @@
           [(value)]="defaultPageSize"
           panelClass="overlay-dropdown small"
           disableOptionCentering>
-          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+          @for (sizes of pageSizes; track $index) {
+            <mat-option [value]="sizes">{{sizes}}</mat-option>
+          }
         </mat-select>
       </div>
 
@@ -101,4 +113,6 @@
 
   </div>
 </div>
-<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.clientId"></router-outlet>
+@if(this.activateRoute.snapshot.queryParams.clientId) {
+  <router-outlet ></router-outlet>
+}

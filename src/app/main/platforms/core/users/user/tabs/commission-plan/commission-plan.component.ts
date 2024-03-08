@@ -50,6 +50,7 @@ export class CommissionPlanComponent implements OnInit {
     editable: false,
     filter: 'agTextColumnFilter',
     flex: 1,
+    minWidth: 50,
   };
   public autoGroupColumnDef: ColDef = {
     headerName: 'Group Id',

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, Input, OnInit, SecurityContext, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { take } from 'rxjs';
 import { ConfigService } from "src/app/core/services";
@@ -49,7 +49,6 @@ export class ViewImageComponent implements OnInit {
   ngOnInit(): void {
     this.value = this.data.value;
     this.clientId = this.data.clientId;
-    this.getCountry();
     this.imgValue = this.configService.defaultOptions.WebApiUrl;
     const url = this.imgValue + '/' + this.value;
     this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -65,8 +64,7 @@ export class ViewImageComponent implements OnInit {
           this.cityId = data.ResponseObject.Client.CityId;
           this.countryId = data.ResponseObject.Client.CountryId;
           this.districtId = data.ResponseObject.Client.DistrictId;
-
-
+          this.getCountry();
           if (this.districtId) {
             this.getDistrict(this.countryId)
           } else {

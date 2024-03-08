@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../cms/banners']">{{'Cms.Banners' | translate}}</a> / <span>{{id}}</span>
+    <div class="title"><a (click)="onNavigateToBanners()">{{'Cms.Banners' | translate}}</a> / <span>{{id}}</span>
     </div>
 
     <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
@@ -13,57 +13,49 @@
       <div>
         <div class="first-hand">{{'Common.StartDate' | translate}}</div>
         <div class="second-hand">{{banner?.StartDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
             <mat-datepicker-toggle matSuffix [for]="picker">
               <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
             </mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
         <div class="second-hand">{{banner?.EndDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [matDatepicker]="picker1" [formControlName]="'EndDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix [for]="picker1">
+              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+            </mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Cms.Body' | translate}}</div>
-        <div class="static-hand">{{banner?.Body}}</div>
-        <!-- <div class="form-field form-input">
-          <mat-form-field appearance="none">
+        <div class="second-hand">{{banner?.Body}}</div>
+         <div class="form-field form-input">
             <input matInput [maxLength]="150" [placeholder]="'Cms.Body'" [formControlName]="'Body'">
-          </mat-form-field>
-        </div> -->
+        </div> 
       </div>
 
       <div>
         <div class="first-hand">{{'Cms.Head' | translate}}</div>
-        <div class="static-hand">{{banner?.Head}}</div>
-        <!-- <div class="form-field form-input">
-          <mat-form-field appearance="none">
+        <div class="second-hand">{{banner?.Head}}</div>
+         <div class="form-field form-input"> 
             <input matInput [maxLength]="100" [placeholder]="'Cms.Head' | translate" [formControlName]="'Head'">
-          </mat-form-field>
-        </div> -->
+        </div> 
       </div>
 
       <div>
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{banner?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
               [formControlName]="'NickName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -71,10 +63,8 @@
         <div class="first-hand">{{'Common.Order' | translate}}</div>
         <div class="second-hand">{{banner?.Order}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="text" [maxlength]="2" [placeholder]="'Common.Order' | translate"
               [formControlName]="'Order'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -82,9 +72,7 @@
         <div class="first-hand">{{'Cms.Link' | translate}}</div>
         <div class="second-hand">{{banner?.Link}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" [placeholder]="'Cms.Link' | translate" [formControlName]="'Link'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -92,9 +80,7 @@
         <div class="first-hand">{{'Common.Type' | translate}}</div>
         <div class="second-hand">{{banner?.Type}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -116,9 +102,7 @@
         <div class="first-hand">{{'Cms.Image' | translate}}</div>
         <div class="second-hand">{{banner?.Image}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'Image'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -252,11 +236,19 @@
           <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
         </div>
       </div>
-
     </form>
   </div>
 
-  <img class="img" [src]="image" alt="Image">
+  <div class="card-content">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
+      </mat-card-header>
+      
+      <img class="img" [src]="image" alt="Image">
+    </mat-card>
+    </div>
+
 
 
 </div>

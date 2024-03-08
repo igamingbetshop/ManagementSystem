@@ -12,11 +12,11 @@ import { ICellRendererParams } from "ag-grid-community";
 @Component({
   selector: 'app-select-renderer',
   template: `<div>
-     <mat-form-field>
+     <!-- <mat-form-field> -->
         <mat-select   #sel  (ngModelChange)="onChange(sel.value, $event)" [(ngModel)]="params.value">
           <mat-option *ngFor="let selection of selections" [value]="selection.Id">{{selection.Name}}</mat-option>
         </mat-select>
-     </mat-form-field>
+     <!-- </mat-form-field> -->
 </div>`,
   standalone: true,
   imports: [

@@ -5,8 +5,6 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { AnnouncementRoutingModule } from './announcement-routing.module';
 import { ViewAnnouncementChangesComponent } from './tabs/view-announcement-changes/view-announcement-changes.component';
 import { TranslateModule } from '@ngx-translate/core';
-
-
 @NgModule({
   imports: [
     CommonModule,

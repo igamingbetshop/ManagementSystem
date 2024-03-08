@@ -15,7 +15,7 @@
       </mat-select>
     </div>
     
-    <button mat-raised-button class="mat-btn" (click)="onResetMatch()">{{'Sport.ResetMatch' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="onResetMatch()">{{'Sport.ResetMatch' | translate}}</button>
     <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
     
   </div>
@@ -27,9 +27,7 @@
         <div class="first-hand">{{'Clients.Id' | translate}}</div>
         <div class="second-hand">{{activeMatch.MatchId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Common.Id' | translate" readonly [formControlName]="'MatchId'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -37,9 +35,7 @@
         <div class="first-hand">{{'Sport.SportName' | translate}}</div>
         <div class="second-hand">{{activeMatch.SportName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Sport.SportName' | translate" readonly [formControlName]="'SportName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -47,9 +43,7 @@
         <div class="first-hand">{{'Sport.Number' | translate}}</div>
         <div class="second-hand">{{activeMatch.Number}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Sport.Number' | translate" readonly [formControlName]="'Number'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -57,9 +51,7 @@
         <div class="first-hand">{{'Sport.RegionName' | translate}}</div>
         <div class="second-hand">{{activeMatch.RegionName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Sport.RegionName' | translate" readonly [formControlName]="'RegionName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -67,9 +59,7 @@
         <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
         <div class="second-hand">{{activeMatch.ExternalId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Products.ExternalId' | translate" readonly [formControlName]="'ExternalId'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -77,23 +67,21 @@
         <div class="first-hand">{{'Sport.CompetitionName' | translate}}</div>
         <div class="second-hand">{{activeMatch.CompetitionName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Sport.RegionName' | translate" readonly [formControlName]="'CompetitionName'">
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Clients.StartTime' | translate}}</div>
         <div class="second-hand">{{activeMatch.StartTime}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field class="calendar-picker start" appearance="none">
+        <div class="form-field form-calendar-edit">
+          <div class="calendar-picker start">
             <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
             <mat-datepicker-toggle matSuffix [for]="pickerStart">
               <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
             </mat-datepicker-toggle>
             <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-          </mat-form-field>
+          </div>
         </div>
       </div>
 
@@ -101,12 +89,10 @@
         <div class="first-hand">{{'Sport.Competition' | translate}}</div>
         <div class="second-hand">{{activeMatch.CompetitionId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'Sport.Competition' | translate" [formControlName]="'CompetitionId'">
             <mat-error *ngIf="errorControl['CompetitionId']?.touched && errorControl['CompetitionId'].errors?.required">
               {{'Sport.Competition' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -114,13 +100,11 @@
         <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
         <div class="second-hand">{{activeMatch.AbsoluteLimit}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'Sport.AbsoluteLimit' | translate"
             [formControlName]="'AbsoluteLimit'">
             <mat-error *ngIf="errorControl['AbsoluteLimit']?.touched && errorControl['AbsoluteLimit'].errors?.required">
               {{'Sport.AbsoluteLimit' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -128,12 +112,10 @@
         <div class="first-hand">{{'Sport.Delay' | translate}}</div>
         <div class="second-hand">{{activeMatch.Delay}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'Sport.Delay' | translate" [formControlName]="'Delay'">
             <mat-error *ngIf="errorControl['Delay']?.touched && errorControl['Delay'].errors?.required">
               {{'Sport.Delay' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -141,14 +123,12 @@
         <div class="first-hand">{{'Sport.MaxWinPrematchSingle' | translate}}</div>
         <div class="second-hand">{{activeMatch.MaxWinPrematchSingle}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchSingle' | translate"
                    [formControlName]="'MaxWinPrematchSingle'">
             <mat-error
               *ngIf="errorControl['MaxWinPrematchSingle']?.touched && errorControl['MaxWinPrematchSingle'].errors?.required">
               {{'Sport.MaxWinPrematchSingle' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -157,14 +137,12 @@
         <div class="first-hand">{{'Sport.MaxWinPrematchMultiple' | translate}}</div>
         <div class="second-hand">{{activeMatch.MaxWinPrematchMultiple}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchMultiple' | translate"
                    [formControlName]="'MaxWinPrematchMultiple'">
             <mat-error
               *ngIf="errorControl['MaxWinPrematchMultiple']?.touched && errorControl['MaxWinPrematchMultiple'].errors?.required">
               {{'Sport.MaxWinPrematchMultiple' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -172,13 +150,11 @@
         <div class="first-hand">{{'Sport.MaxWinLiveSingle' | translate}}</div>
         <div class="second-hand">{{activeMatch.MaxWinLiveSingle}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput type="number" [placeholder]="'Sport.MaxWinLiveSingle' | translate"
                    [formControlName]="'MaxWinLiveSingle'">
             <mat-error *ngIf="errorControl['MaxWinLiveSingle']?.touched && errorControl['MaxWinLiveSingle'].errors?.required">
               {{'Sport.MaxWinLiveSingle' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -186,14 +162,12 @@
         <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
         <div class="second-hand">{{activeMatch.MaxWinLiveMultiple}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput type="number" [placeholder]="'Sport.MaxWinLiveMultiple' | translate"
                    [formControlName]="'MaxWinLiveMultiple'">
             <mat-error
               *ngIf="errorControl['MaxWinLiveMultiple']?.touched && errorControl['MaxWinLiveMultiple'].errors?.required">
               {{'Sport.MaxWinLiveMultiple' | translate}} {{'Errors.Required' | translate}}
             </mat-error>
-          </mat-form-field>
         </div>
       </div>
 
@@ -201,10 +175,8 @@
         <div class="first-hand">{{'Sport.ResultInfo' | translate}}</div>
         <div class="second-hand">{{activeMatch.ResultInfo}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput type="number" [placeholder]="'Sport.ResultInfo' | translate" readonly
                    [formControlName]="'ResultInfo'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -212,9 +184,7 @@
         <div class="first-hand">{{'Common.Type' | translate}}</div>
         <div class="second-hand">{{activeMatch.Type}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput type="number" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -242,9 +212,7 @@
         <div class="first-hand">{{'Sport.CurrentPhase' | translate}}</div>
         <div class="second-hand">{{activeMatch.currentPhase}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput [placeholder]="'Sport.CurrentPhase' | translate" readonly [formControlName]="'currentPhase'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -252,9 +220,7 @@
         <div class="first-hand">{{'Sport.LinkedMatches' | translate}}</div>
         <div class="second-hand">{{activeMatch.LinkedMatches}}</div>
         <div class="form-field form-input">
-          <mat-form-field>
             <input matInput [placeholder]="'Sport.LinkedMatches' | translate" readonly [formControlName]="'LinkedMatches'">
-          </mat-form-field>
         </div>
       </div>
 

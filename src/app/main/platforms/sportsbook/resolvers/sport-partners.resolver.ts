@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Resolve, ActivatedRouteSnapshot} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import {ConfigService} from "../../../../core/services/config.service";
 import {map} from "rxjs/operators";
 import {LocalStorageService} from "../../../../core/services/local-storage.service";
@@ -7,7 +7,7 @@ import {CommonDataService} from "../../../../core/services/common-data.service";
 import { SportsbookApiService } from '../services/sportsbook-api.service';
 
 @Injectable()
-export class SportPartnersResolver implements Resolve<any>
+export class SportPartnersResolver 
 {
   constructor(private apiService:SportsbookApiService,
               private configService:ConfigService,

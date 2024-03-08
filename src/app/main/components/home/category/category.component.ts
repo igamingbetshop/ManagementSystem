@@ -16,7 +16,7 @@ export class CategoryComponent implements OnInit {
   @Input() categoryData: CategoryData;
   public categoryName: string;
   public title: string;
-  private url = this.configService.getApiUrl + '/ApiRequest';
+  private url;
   private dynamicMode = null;
 
   constructor(
@@ -27,6 +27,7 @@ export class CategoryComponent implements OnInit {
   ) {
     this.searchService.showSearchContainer(true);
     this.sidenavService.sideNavState$.next(false);
+    this.url = this.configService.getApiUrl + '/ApiRequest';
   }
 
   ngOnInit() {

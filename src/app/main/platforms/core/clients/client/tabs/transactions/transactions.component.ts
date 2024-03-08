@@ -293,8 +293,9 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
             this.operationTypesArray.push(String(element.NickName));
           });
           this.operationTypesEnum = this.setEnum(data.ResponseObject);
-          this.getDocumenStatesEnum();
         }
+        this.getDocumenStatesEnum();
+
       });
   }
 
@@ -373,8 +374,8 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Entities;
               mappedRows.forEach((items) => {
-                items.State = this.statusNames.find((item => item.Id === items.State))?.Name;
-                items.OperationTypeId = this.operationTypesEnum[items.OperationTypeId];
+                items.State = this.statusNames?.find((item => item.Id === items.State))?.Name;
+                items.OperationTypeId = this.operationTypesEnum?.[items.OperationTypeId];
               });
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
             } else {

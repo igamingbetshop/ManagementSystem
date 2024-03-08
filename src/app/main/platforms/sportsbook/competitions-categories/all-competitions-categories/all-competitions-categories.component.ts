@@ -15,6 +15,7 @@ import 'ag-grid-enterprise';
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import {IRowNode} from "ag-grid-community";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
 
 @Component({
   selector: 'app-all-competitions-categories',
@@ -32,8 +33,21 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
   public clonePath: string = 'competitions/clonecategory';
   public deletePath: string = 'competitions/deletecategory';
 
-  public frameworkComponents;
+  public frameworkComponents  = {
+    agBooleanColumnFilter: AgBooleanFilterComponent,
+    buttonRenderer: ButtonRendererComponent,
+    numericEditor: NumericEditorComponent,
+    checkBoxRenderer: CheckboxRendererComponent,
+    colorEditor: ColorEditorComponent,
+    selectStateRenderer: SelectStateRendererComponent,
+  };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+
+  private multipleBetsStates = [
+    {Id: null,  Name: this.translate.instant('Sport.None')},
+    {Id: true, Name: this.translate.instant('Common.Yes')},
+    {Id: false, Name: this.translate.instant('Common.No')},
+  ]
 
   constructor(
     private apiService: SportsbookApiService,
@@ -234,26 +248,26 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
           }
         }
       },
-      {
-        headerName: 'Sport.AllowMultipleBets',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AllowMultipleBets',
-        resizable: true,
-        sortable: true,
-        filter: 'agBooleanColumnFilter',
-        cellRenderer: 'checkBoxRenderer',
-        cellRendererParams: {
-          onchange: this.onCheckBoxChange1['bind'](this),
-
-        },
-        cellStyle: function (params) {
-          if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
-          } else {
-            return null;
-          }
-        }
-      },
+      // {
+      //   headerName: 'Sport.AllowCashout',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'AllowCashout',
+      //   resizable: true,
+      //   sortable: true,
+      //   editable: true,
+      //   cellRenderer: 'selectStateRenderer',
+      //   cellRendererParams: {
+      //     onchange: this.onSelectCashOut['bind'](this),
+      //     Selections: this.multipleBetsStates,
+      //   },
+      //   cellStyle: function (params) {
+      //     if (params.data.Color !== '#FFFFFF') {
+      //       return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+      //     } else {
+      //       return null;
+      //     }
+      //   }
+      // },
       {
         headerName: 'Segments.IsDefault',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -286,7 +300,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
           onClick: this.saveCategorySettings['bind'](this),
           Label: this.translate.instant('Common.Save') ,
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         },
         cellStyle: function (params) {
@@ -306,7 +320,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
           let data = {path: '', queryParams: null};
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'competition-category');
-          data.queryParams = {categoryId: params.data.Id, sportId: params.data.SportId};
+          data.queryParams = {categoryId: params.data.Id, sportId: params.data.SportId, name: params.data.Name};
           return data;
         },
         sortable: false,
@@ -319,13 +333,6 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         }
       },
     ];
-    this.frameworkComponents = {
-      agBooleanColumnFilter: AgBooleanFilterComponent,
-      buttonRenderer: ButtonRendererComponent,
-      numericEditor: NumericEditorComponent,
-      checkBoxRenderer: CheckboxRendererComponent,
-      colorEditor: ColorEditorComponent,
-    }
   }
 
   ngOnInit() {
@@ -433,6 +440,10 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
     })
+  }
+
+  onSelectCashOut(params, value: number, event) {
+    params.AllowCashout = value;
   }
 
   getPage() {

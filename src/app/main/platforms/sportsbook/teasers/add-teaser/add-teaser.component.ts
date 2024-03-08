@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+
+
 import { SportsbookApiService } from "../../services/sportsbook-api.service";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import {
@@ -173,7 +175,7 @@ export class AddTeaserComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    obj.PointCoefficients = this.selectedPoints.map((item) => item.Value);    
+    obj.PointCoefficients = this.selectedPoints.map((item) => item.Value);
     this.dialogRef.close(obj);
   }
 

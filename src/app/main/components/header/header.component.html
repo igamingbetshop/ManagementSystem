@@ -4,9 +4,13 @@
     <img src="{{imagePath}}" (click)="navigateMain()" alt="logo"/>
   </div>
 
-  <div *ngIf="showSearchBox" class="search-categories">
+  <!--<div *ngIf="showSearchBox" class="search-categories">
     <input placeholder="Search..." type="text" class="input" [ngModel]="searchedValue"
            (ngModelChange)="searchData($event)">
+  </div>-->
+  <div class="partner-levels-header" [routerLink]="['/main/partner-levels']">
+    <mat-icon>query_builder</mat-icon>
+    <div>VIP 0</div>
   </div>
   <div class="clock-cont">{{ currentDateTime  | date:'HH:mm:ss a MMMM d, y z'}}</div>
   <div class="user-content" routerLink='/main/profile'>{{userName }}</div>

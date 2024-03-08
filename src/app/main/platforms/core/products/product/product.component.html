@@ -1,9 +1,17 @@
-<div class="container">
-  <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-products']">{{'Products.Product' | translate}}</a> / {{name}} / {{productId}}
-      </div>
 
-    <button mat-stroked-button class="edit-btn" [class.disable]=""  (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.CommentId }">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-products']" [queryParams]="{Name: name }">{{'Products.Product' | translate}}
+        <ng-container *ngIf="name">
+          / {{name}}
+        </ng-container>
+      </a>
+      / {{productId}}
+    </div>
+
+    <button mat-stroked-button class="edit-btn" [class.disable]="" (click)="isEdit = true">{{'Common.Edit' |
+      translate}}</button>
   </div>
 
   <div class="content-edit">
@@ -12,9 +20,9 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -22,9 +30,9 @@
         <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.ExternalId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'ExternalId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -32,9 +40,9 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Name'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -52,9 +60,9 @@
         <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Description}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Description'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -73,9 +81,9 @@
         <div class="first-hand">{{'Products.ParentId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.ParentId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'ParentId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -83,9 +91,9 @@
         <div class="first-hand">{{'Products.MobileImageUrl' | translate}}</div>
         <div class="second-hand">{{currentProduct?.MobileImageUrl}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'MobileImageUrl'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -93,9 +101,9 @@
         <div class="first-hand">{{'Products.BackgroundImageUrl' | translate}}</div>
         <div class="second-hand">{{currentProduct?.BackgroundImageUrl}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'BackgroundImageUrl'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -103,9 +111,9 @@
         <div class="first-hand">{{'Products.SubproviderId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.SubproviderId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'SubproviderId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -113,9 +121,9 @@
         <div class="first-hand">{{'Products.CategoryId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.CategoryId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <<mat-form-field>
             <input matInput [formControlName]="'CategoryId'">
-          </mat-form-field>
+          </mat-form-field> 
         </div>
       </div> -->
 
@@ -134,9 +142,9 @@
         <div class="first-hand">{{'Products.WebImageUrl' | translate}}</div>
         <div class="second-hand">{{currentProduct?.WebImageUrl}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'WebImageUrl'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -152,11 +160,11 @@
         <div class="first-hand">{{'Products.Jackpot' | translate}}</div>
         <div class="second-hand">{{currentProduct?.HasJackpot}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'HasJackpot'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
-      </div>      
+      </div>
 
       <div>
         <div class="first-hand">{{'Products.FreeSpinSupport' | translate}}</div>
@@ -186,7 +194,7 @@
         <div class="first-hand">{{'Products.MobileImage' | translate}}</div>
         <div class="second-hand">{{currentProduct?.MobileImage}}</div>
         <div class="form-field form-checkbox">
-          <input  type="file"  (change)="uploadMobileImage($event)"  [formControlName]="'MobileImage'">
+          <input type="file" (change)="uploadMobileImage($event)" [formControlName]="'MobileImage'">
         </div>
       </div>
 
@@ -194,7 +202,7 @@
         <div class="first-hand">{{'Products.BackgroundImage' | translate}}</div>
         <div class="second-hand">{{currentProduct?.BackgroundImage}}</div>
         <div class="form-field form-checkbox">
-          <input  type="file"  (change)="uploadBackgroundImage($event)" [formControlName]="'BackgroundImage'">
+          <input type="file" (change)="uploadBackgroundImage($event)" [formControlName]="'BackgroundImage'">
         </div>
       </div>
 
@@ -202,7 +210,7 @@
         <div class="first-hand">{{'Products.WebImage' | translate}}</div>
         <div class="second-hand">{{currentProduct?.WebImage}}</div>
         <div class="form-field form-checkbox">
-          <input  type="file"  (change)="uploadWebImage($event)" [formControlName]="'WebImage'">
+          <input type="file" (change)="uploadWebImage($event)" [formControlName]="'WebImage'">
         </div>
       </div>
 
@@ -216,8 +224,8 @@
         </div>
 
         <div class="form-field form-checkbox" [formGroupName]="'Countries'">
-          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
-          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          <input [value]="2" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="1" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
           translate}}
         </div>
       </div>
@@ -237,9 +245,9 @@
         <div class="first-hand">{{'Bonuses.BetValues' | translate}}</div>
         <div class="second-hand">{{currentProduct?.BetValues}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'BetValues'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -247,13 +255,13 @@
         <div class="first-hand">{{'Bonuses.Lines' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Lines}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Lines'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
-<!-- 
+      <!-- 
       <div>
         <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
         <div class="second-hand" *ngIf="currentProduct?.Currencies?.Type==1">
@@ -279,16 +287,17 @@
           </mat-select>
         </div>
       </div> -->
-      
+
       <div></div>
       <div></div>
       <div></div>
       <div class="form-actions">
 
         <div class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' |
+            translate}}</button>
           <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" type="submit"
-          (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+            (click)="onSubmit()">{{'Common.Save' | translate}}</button>
         </div>
 
       </div>
@@ -298,25 +307,26 @@
 
   <div class="grid-content">
     <ag-grid-angular
-    id="core-product"
-    #agGrid
-    class="ag-theme-balham"
-    [suppressCopyRowsToClipboard]="true"
-    [headerHeight]="33"
-    [rowHeight]="42"
-    [rowData]="rowData"
-    [rowModelType]="rowModelType"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    [suppressRowClickSelection]="true"
-    [cacheBlockSize]="cacheBlockSize"
-    (gridReady)="onGridReady($event)"
-    [ensureDomOrder]="true"
-    [enableCellTextSelection]="true"
-    [getContextMenuItems]="getContextMenuItems"
-    rowSelection="single">
-  </ag-grid-angular>
+      id="core-product"
+      #agGrid
+      class="ag-theme-balham"
+      [suppressCopyRowsToClipboard]="true"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressRowClickSelection]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
   </div>
 
 </div>
 
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.CommentId"></router-outlet>

@@ -2,7 +2,9 @@
 
   <div class="content-action">
 
-    <div class="title"> {{'Products.Product' | translate}} {{id}}</div>
+    <div class="title"> 
+      <a [routerLink]="['/main/platform/products/all-products/product']" [queryParams]="{BetId: betId, Name: name, ProductId: productId }">{{'Products.Product' | translate}}
+      / {{name}} / {{productId}}  /</a> {{id}} </div>
 
   </div>
   <div class="content-edit">

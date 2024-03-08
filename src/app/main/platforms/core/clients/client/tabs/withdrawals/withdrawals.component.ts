@@ -20,8 +20,9 @@ import {Paging} from "../../../../../../../core/models";
 import {DatePipe} from "@angular/common";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
 import {DateAdapter} from "@angular/material/core";
-import {syncColumnNestedSelectPanel, syncColumnSelectPanel, syncNestedColumnReset, syncPaginationWithoutBtn} from "../../../../../../../core/helpers/ag-grid.helper";
+import {syncColumnSelectPanel, syncNestedColumnReset, syncPaginationWithoutBtn} from "../../../../../../../core/helpers/ag-grid.helper";
 import {DateTimeHelper} from "../../../../../../../core/helpers/datetime.helper";
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 @Component({
   selector: 'app-withdrawals',
@@ -41,30 +42,13 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
   public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   public autoGroupColumnDef: ColDef;
   public filteredData;
-  public frameworkComponents;
+  public frameworkComponents = {
+    buttonRenderer: ButtonRendererComponent,
+    agDropdownFilter: AgDropdownFilter,
+  }
   public accounts = [];
   public accountId = null;
-  public nestedFrameworkComponents = {
-    agBooleanColumnFilter: AgBooleanFilterComponent,
-    buttonRenderer: ButtonRendererComponent,
-    numericEditor: NumericEditorComponent,
-    checkBoxRenderer: CheckboxRendererComponent,
-  };
   public rowClassRules;
-  public detailCellRendererParams: any = {
-    detailGridOptions: {
-      rowHeight: 47,
-      defaultColDef: {
-        sortable: true,
-        filter: true,
-        flex: 1,
-      },
-      components: this.nestedFrameworkComponents,
-
-      onGridReady: params => {
-      },
-    },
-  }
   public AmountSummary;
   public playerCurrency;
   public urlSegment;
@@ -84,6 +68,79 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
     super(injector);
     this.adminMenuId = GridMenuIds.CLIENTS_WITHDRAWALS;
     this.dateAdapter.setLocale('en-GB');
+
+    this.rowClassRules = {
+      'payment-status-1': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 1;
+      },
+      'payment-status-2': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 2;
+      },
+      'payment-status-3': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 3;
+      },
+      'payment-status-4': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 4;
+      },
+      'payment-status-5': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 5;
+      },
+      'payment-status-6': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 6;
+      },
+      'payment-status-7': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 7;
+      },
+      'payment-status-8': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 8;
+      },
+      'payment-status-9': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 9;
+      },
+      'payment-status-10': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 10;
+      },
+      'payment-status-11': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 11;
+      },
+      'payment-status-12': function (params) {
+        let numSickDays = params.data?.Status;
+        return numSickDays === 12;
+      },
+    };
+  }
+
+  ngOnInit(): void {
+    this.featchPaymentSystems();
+    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
+    this.startDate();
+    this.getClientAccounts();
+    this.getPaymentStates();
+    this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
+  }
+
+  getPaymentStates() {
+    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.ENUMERATION, Methods.GET_PAYMENT_REQUEST_STATES_ENUM).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        this.statusName = data.ResponseObject;
+        this.setColdefs();
+      }
+    });
+  }
+
+  setColdefs() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -178,10 +235,14 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
         field: 'State',
         sortable: true,
         resizable: true,
-        filter: false,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.statusName,
+        },
         cellStyle: function (params) {
           if (params.data.Status == 8) {
-            return {color: 'white'};
+            return { color: 'white' };
           } else {
             return null;
           }
@@ -393,78 +454,6 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
         sortable: false
       }
     ];
-    this.rowClassRules = {
-      'payment-status-1': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 1;
-      },
-      'payment-status-2': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 2;
-      },
-      'payment-status-3': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 3;
-      },
-      'payment-status-4': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 4;
-      },
-      'payment-status-5': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 5;
-      },
-      'payment-status-6': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 6;
-      },
-      'payment-status-7': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 7;
-      },
-      'payment-status-8': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 8;
-      },
-      'payment-status-9': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 9;
-      },
-      'payment-status-10': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 10;
-      },
-      'payment-status-11': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 11;
-      },
-      'payment-status-12': function (params) {
-        let numSickDays = params.data?.Status;
-        return numSickDays === 12;
-      },
-    };
-    // this.masterDetail = true;
-    this.frameworkComponents = {
-      agBooleanColumnFilter: AgBooleanFilterComponent,
-      buttonRenderer: ButtonRendererComponent,
-      numericEditor: NumericEditorComponent,
-      checkBoxRenderer: CheckboxRendererComponent,
-      textEditor: TextEditorComponent,
-    }
-  }
-
-  ngOnInit(): void {
-    this.featchPaymentSystems();
-    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
-    this.startDate();
-    this.getClientAccounts();
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
-      Controllers.ENUMERATION, Methods.GET_PAYMENT_REQUEST_STATES_ENUM).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.statusName = data.ResponseObject;
-      }
-    });
-    this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
   }
 
   featchPaymentSystems() {
@@ -517,8 +506,6 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
   onGridReady(params) {
     super.onGridReady(params);
     syncNestedColumnReset();
-    syncPaginationWithoutBtn();
-    syncColumnSelectPanel();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
@@ -539,11 +526,10 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
             IntValue: this.clientId
           }]
         }
-        console.log(paging, 'paging');
-        
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
+
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.PAYMENT, Methods.GET_PAYMENT_REQUESTS_PAGING).pipe(take(1)).subscribe((data) => {
           if (data.ResponseCode === 0) {
@@ -563,7 +549,7 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
               }
               entity.PaymentSystemName = this.paymentSystems.find((system) => system.Id == entity.PaymentSystemId)?.Name;
             })
-            
+
             this.AmountSummary = data.ResponseObject.PaymentRequests.TotalAmount;
             params.success({rowData: mappedRows, rowCount: data.ResponseObject.PaymentRequests.Count});
             this.gridApi?.setPinnedBottomRowData([

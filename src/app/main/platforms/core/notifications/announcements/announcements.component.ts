@@ -1,24 +1,26 @@
-import {Component, OnInit, Injector} from '@angular/core';
-import {CommonDataService} from 'src/app/core/services';
-import {CoreApiService} from '../../services/core-api.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {Controllers, GridMenuIds, Methods, ModalSizes, ObjectTypes} from 'src/app/core/enums';
-import {Paging} from 'src/app/core/models';
-import {take} from 'rxjs/operators';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { CommonDataService } from 'src/app/core/services';
+import { CoreApiService } from '../../services/core-api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { Controllers, GridMenuIds, Methods, ModalSizes, ObjectTypes } from 'src/app/core/enums';
+import { Paging } from 'src/app/core/models';
+import { take } from 'rxjs/operators';
 import 'ag-grid-enterprise';
-import {MatDialog} from '@angular/material/dialog';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
+import { MatDialog } from '@angular/material/dialog';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { CellClickedEvent, CellDoubleClickedEvent } from 'ag-grid-community';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { ActivatedRoute } from '@angular/router';
 import { RECEIVER_TYPES } from 'src/app/core/constantes/statuses';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { AnnouncementsService } from './announcements.service';
 
 const states = [
-  {"Name": 'Active', "Id": 1},
-  {"Name": 'Inactive', "Id": 2}
+  { "Name": 'Active', "Id": 1 },
+  { "Name": 'Inactive', "Id": 2 }
 ];
 
 @Component({
@@ -26,7 +28,7 @@ const states = [
   templateUrl: './announcements.component.html',
   styleUrls: ['./announcements.component.scss']
 })
-export class AnnouncementsComponent extends BasePaginatedGridComponent implements OnInit {
+export class AnnouncementsComponent extends BasePaginatedGridComponent implements OnInit, OnDestroy {
   public rowData = [];
   public partners: any[] = [];
   public announcementTypes: any[] = [];
@@ -34,8 +36,10 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
   public selectedItem = 'today';
   public fromDate = new Date();
   public toDate = new Date();
-  public receiverTypeIds = RECEIVER_TYPES
-
+  public receiverTypeIds = RECEIVER_TYPES;
+  frameworkComponents = {
+    agDropdownFilter: AgDropdownFilter,
+  };
   constructor(
     protected injector: Injector,
     protected commonDataService: CommonDataService,
@@ -43,18 +47,48 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
     public _snackBar: MatSnackBar,
     public activateRoute: ActivatedRoute,
     public dialog: MatDialog,
+    private announcementsService: AnnouncementsService,
     public dateAdapter: DateAdapter<Date>
   ) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
     this.adminMenuId = GridMenuIds.CORE_ANNOUNCMENTS;
+
+  }
+
+  ngOnInit() {
+    this.fetchAnnucementTypesEnum()
+    this.partners = this.commonDataService.partners;
+    this.gridStateName = 'announcements-grid-state';
+    this.startDate();
+    this.announcementsService.currentAnnouncement.subscribe((announcement) => {
+      if (announcement) {
+        const rowIdToUpdate = announcement?.Id;
+        const displayedRows = this.gridApi.getDisplayedRowCount();
+        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+          const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+
+          if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+            rowNode.data.StateName = announcement.StateName;
+            rowNode.data.TypeName = announcement.TypeName;
+            rowNode.data.SegmentIds = announcement.SegmentIds;
+            rowNode.data.ClientIds = announcement.ClientIds;
+            this.gridApi.redrawRows({ rowNodes: [rowNode] });
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  setColDef() {
     this.columnDefs = [
       {
         field: 'Id',
         sortable: true,
         resizable: true,
         tooltipField: 'Id',
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -117,11 +151,10 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
         field: 'TypeName',
         resizable: true,
         sortable: true,
-        filter: 'agTextColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.announcementTypes,
         },
       },
       {
@@ -140,14 +173,13 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
       {
         headerName: 'Common.Status',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'StatusName',
+        field: 'StateName',
         resizable: true,
         sortable: true,
-        filter: 'agTextColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
+          filterOptions: this.filterService.stateOptions,
+          filterData: states,
         },
       },
       {
@@ -167,13 +199,6 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
     ];
   }
 
-  ngOnInit() {
-    this.fetchAnnucementTypesEnum()
-    this.partners = this.commonDataService.partners;
-    this.gridStateName = 'announcements-grid-state';
-    this.startDate();
-  }
-
   isRowSelected() {
     return this.gridApi && this.gridApi.getSelectedRows().length === 0;
   };
@@ -184,9 +209,10 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
       .pipe(take(1))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
-          this.announcementTypes = data.ResponseObject;          
+          this.announcementTypes = data.ResponseObject;
+          this.setColDef();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -219,9 +245,9 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
   }
 
   async addAnnouncement() {
-    const {AddAnnouncementsComponent} = await import('./add-announcements/add-announcements.component');
+    const { AddAnnouncementsComponent } = await import('./add-announcements/add-announcements.component');
     const dialogRef = this.dialog.open(AddAnnouncementsComponent, {
-      width: ModalSizes.SMALL, 
+      width: ModalSizes.SMALL,
       data: {
         partners: this.partners,
         partnerId: this.partnerId, announcementTypes: this.announcementTypes, announcement: {}
@@ -236,7 +262,7 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
 
   async editAnnouncement() {
     const row = this.gridApi.getSelectedRows()[0];
-    const {AddAnnouncementsComponent} = await import('./add-announcements/add-announcements.component');
+    const { AddAnnouncementsComponent } = await import('./add-announcements/add-announcements.component');
     const dialogRef = this.dialog.open(AddAnnouncementsComponent, {
       width: ModalSizes.SMALL, data: {
         partners: this.partners,
@@ -267,6 +293,8 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
         paging.PartnerId = this.partnerId;
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
+        this.changeFilerName(params.request.filterModel,
+          ['StateName', 'TypeName'], ['State', 'Type']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
 
@@ -287,7 +315,7 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
                   return st.Id == entity.State;
                 })
                 if (statusName) {
-                  entity['StatusName'] = statusName.Name;
+                  entity['StateName'] = statusName.Name;
                 }
                 let typeName = this.announcementTypes.find((st) => {
                   return st.Id == entity.Type;
@@ -303,11 +331,11 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
                   entity['ReceiverTypeName'] = receiverTypeName.Name;
                 }
               })
-              params.success({rowData: mappedRows});
+              params.success({ rowData: mappedRows });
             } else {
-              SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
-            setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 200);
+            setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 200);
           });
       },
     };
@@ -315,22 +343,23 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
 
   async cellDoubleClicked(event: CellDoubleClickedEvent) {
     const id = event.data.Id;
-    const {NikiNamePopup} = await import('./nike-name-popup/nike-name-popup.component');
+    const { NikiNamePopup } = await import('./nike-name-popup/nike-name-popup.component');
     const dialogRef = this.dialog.open(NikiNamePopup, {
       width: ModalSizes.MEDIUM, data: {
         ObjectId: id,
-        ObjectTypeId:  ObjectTypes.Announcement
+        ObjectTypeId: ObjectTypes.Announcement
       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.gridApi.setServerSideDatasource(this.createServerSideDatasource())      }
+        this.gridApi.setServerSideDatasource(this.createServerSideDatasource())
+      }
     })
   }
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-    setTimeout(() => {this.gridApi.setServerSideDatasource(this.createServerSideDatasource());}, 0);
+    setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
   redirectToAnnouncements(ev) {
@@ -338,6 +367,10 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
     this.router.navigate(['/main/platform/notifications/announcements/announcement/main'], {
       queryParams: { "announcementId": row.Id }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.announcementsService.updateAnnouncement(null);
   }
 
 }

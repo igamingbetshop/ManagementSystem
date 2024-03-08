@@ -11,9 +11,7 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'Id'" readonly>
         </div>
       </div>
 
@@ -21,9 +19,7 @@
         <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.PartnerName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [value]="triggerSetting?.PartnerName" readonly>
-          </mat-form-field>
+          <input matInput [value]="triggerSetting?.PartnerName" readonly>
         </div>
       </div>
 
@@ -31,32 +27,29 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input matInput [formControlName]="'Name'" readonly>
-          </mat-form-field>
+          <input matInput [formControlName]="'Name'" readonly>
         </div>
       </div>
 
+      @if (triggerSetting?.Type != 15) {
       <div>
         <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Percent}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'Percent'" required>
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'Percent'" required>
         </div>
       </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Description}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="text" matInput [formControlName]="'Description'" required>
-          </mat-form-field>
+          <input type="text" matInput [formControlName]="'Description'" required>
         </div>
       </div>
 
+      @if (triggerSetting?.Type != 15) {}
       <div>
         <div class="first-hand">{{'Bonuses.DayOfWeek' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Day}}</div>
@@ -71,79 +64,66 @@
         <div class="first-hand">{{'Bonuses.TranslationId' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.TranslationId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'TranslationId'" readonly>
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'TranslationId'" readonly>
         </div>
       </div>
 
-      <div
-        *ngIf="triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type == 10">
+      @if ( triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type
+      == 10 ) {
+      <div>
         <div class="first-hand">{{'Bonuses.TotalWagerAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MinAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'MinAmount'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'MinAmount'">
         </div>
       </div>
+      }
 
       <div>
         <div class="first-hand">{{'Common.Type' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.TypeName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="text" matInput [value]="triggerSetting?.TypeName" readonly>
-          </mat-form-field>
+          <input type="text" matInput [value]="triggerSetting?.TypeName" readonly>
         </div>
       </div>
 
-      <div
-        *ngIf="triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type == 10">
+      @if (triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type
+      == 10) {
+      <div>
         <div class="first-hand">{{'Bonuses.UpToAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MaxAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'MaxAmount'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'MaxAmount'">
         </div>
       </div>
 
-      <div *ngIf="triggerSetting?.Type == 7">
+      }
+
+      @if (triggerSetting?.Type == 7) {
+      <div>
         <div class="first-hand">{{'Bonuses.Sequence' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Sequence}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'Sequence'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'Sequence'">
         </div>
       </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.StartTime | date:'dd/MM/yyyy HH:mm' }}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field class="calendar-picker" appearance="none">
-            <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
-            <mat-datepicker-toggle matSuffix [for]="pickerStart">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-            </mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-          </mat-form-field>
-        </div>
+          <div class="form-field form-calendar calendar-picker">
+            <input matInput type="datetime-local" #dropdownEndContent class="data-time-picker"
+              [formControlName]="'StartTime'" name="meeting-time">
+          </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.FinishTime | date:'dd/MM/yyyy HH:mm'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field class="calendar-picker" appearance="none">
-            <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishTime'">
-            <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-          </mat-form-field>
+        <div class="form-field form-calendar calendar-picker">
+          <input matInput type="datetime-local" #dropdownContent class="data-time-picker"
+            [formControlName]="'FinishTime'" name="meeting-time">
         </div>
       </div>
 
@@ -151,85 +131,108 @@
         <div class="first-hand">{{'Bonuses.SegmentId' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.SegmentId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'SegmentId'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'SegmentId'">
         </div>
       </div>
 
-      <div
-        *ngIf="triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type == 10">
+      @if (triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type
+      == 10) {
+      <div>
         <div class="first-hand">{{'Bonuses.MinBetCount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MinBetCount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'MinBetCount'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'MinBetCount'">
         </div>
       </div>
 
-      <div
-        *ngIf="triggerSetting?.Type == 5 || triggerSetting?.Type == 9 || triggerSetting?.Type == 11 || triggerSetting?.Type == 12">
+      }
+
+      @if (triggerSetting?.Type == 15) {
+      <div>
+        <div class="first-hand">{{'Bonuses.DaysCount' | translate}}</div>
+        <div class="second-hand">{{triggerSetting?.MinBetCount}}</div>
+        <div class="form-field form-input">
+          <input type="number" matInput [formControlName]="'MinBetCount'">
+        </div>
+      </div>
+
+      }
+
+      <!-- @if (triggerSetting?.Type == 5 || triggerSetting?.Type == 9 || triggerSetting?.Type == 11 || triggerSetting?.Type
+      == 12) {
+      <div>
         <div class="first-hand">{{'Payments.Amount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MinAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'MinAmount'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'MinAmount'">
         </div>
       </div>
+      } -->
 
-      <div
-        *ngIf="triggerSetting?.Type == 4 || triggerSetting?.Type == 6 || triggerSetting?.Type == 7 || triggerSetting?.Type == 8">
+      @if (triggerSetting?.Type == 4 || triggerSetting?.Type == 6 || triggerSetting?.Type == 7 || triggerSetting?.Type
+      == 8 || triggerSetting?.Type == 15) {
+      <div>
         <div class="first-hand">{{'Bonuses.MinAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MinAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'MinAmount'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'MinAmount'">
         </div>
       </div>
 
-      <div
-        *ngIf="triggerSetting?.Type == 4 || triggerSetting?.Type == 6 || triggerSetting?.Type == 7 || triggerSetting?.Type == 8">
+      }
+
+      @if (triggerSetting?.Type == 4 || triggerSetting?.Type == 6 || triggerSetting?.Type == 7 || triggerSetting?.Type
+      == 8) {
+      <div>
         <div class="first-hand">{{'Bonuses.MaxAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MaxAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="number" matInput [formControlName]="'MaxAmount'">
-          </mat-form-field>
+          <input type="number" matInput [formControlName]="'MaxAmount'">
         </div>
       </div>
 
-      <div *ngIf="triggerSetting?.Type == 7 || triggerSetting?.Type == 8">
+      }
+
+      @if(triggerSetting?.Type == 7 || triggerSetting?.Type == 8) {
+      <div>
         <div class="first-hand">{{'Bonuses.UpToAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.UpToAmount}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="text" matInput [formControlName]="'UpToAmount'">
-          </mat-form-field>
+          <input type="text" matInput [formControlName]="'UpToAmount'">
         </div>
       </div>
+      }
 
-      <div *ngIf="triggerSetting?.Type == 2 || triggerSetting?.Type == 3">
+      @if (!!this.formGroup.get('Amount')) {
+      <div>
+        <div class="first-hand">{{'Clients.Amount' | translate}}</div>
+        <div class="second-hand">{{triggerSetting?.Amount}}</div>
+        <div class="form-field form-input">
+          <input type="text" matInput [formControlName]="'Amount'">
+        </div>
+      </div>
+      }
+
+      @if(triggerSetting?.Type == 2 || triggerSetting?.Type == 3) {
+      <div>
         <div class="first-hand">{{'Bonuses.Source' | translate}}</div>
         <div class="second-hand">{{getSourceName(+triggerSetting?.BonusSettingCodes)}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="text" matInput [formControlName]="'BonusSettingCodes'">
-          </mat-form-field>
+          <input type="text" matInput [formControlName]="'BonusSettingCodes'">
         </div>
       </div>
+      }
 
-      <div *ngIf="triggerSetting?.Type == 4 || triggerSetting?.Type == 11 || triggerSetting?.Type == 12">
+      @if(triggerSetting?.Type == 4 || triggerSetting?.Type == 11 || triggerSetting?.Type == 12) {
+      <div>
         <div class="first-hand">{{'Bonuses.BonusSettingCodes' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.BonusSettingCodes}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
-            <input type="text" matInput [formControlName]="'BonusSettingCodes'">
-          </mat-form-field>
+          <input type="text" matInput [formControlName]="'BonusSettingCodes'">
         </div>
       </div>
+
+      }
 
       <!-- <div *ngIf="triggerSetting?.Type == 7 || triggerSetting?.Type == 8">
         <div class="first-hand">{{'Payments.PaymentSystems' | translate}}</div>
@@ -241,17 +244,21 @@
         </div>
       </div> -->
 
-      <div *ngIf="triggerSetting?.Type == 7 || triggerSetting?.Type == 8">
+      @if(triggerSetting?.Type == 7 || triggerSetting?.Type == 8 || triggerSetting?.Type == 15) {
+      <div>
         <div class="first-hand">{{'Payments.PaymentSystems' | translate}}</div>
-        <div class="second-hand" *ngIf="triggerSetting?.PaymentSystemIds?.Type!=1 &&
-          triggerSetting?.PaymentSystemIds?.Type!=2 
-        "></div>
-        <div class="second-hand" *ngIf="triggerSetting?.PaymentSystemIds?.Type==1">
+        @if(triggerSetting?.PaymentSystemIds?.Type!=1 &&
+        triggerSetting?.PaymentSystemIds?.Type!=2) {
+        <div class="second-hand"></div>
+        } @else if (triggerSetting?.PaymentSystemIds?.Type==1) {
+        <div class="second-hand">
           {{'Bonuses.InSet' | translate}}
         </div>
-        <div class="second-hand" *ngIf="triggerSetting?.PaymentSystemIds?.Type==2">
+        } @else if (triggerSetting?.PaymentSystemIds?.Type==2) {
+        <div class="second-hand">
           {{'Bonuses.OutOfSet' | translate}}
         </div>
+        }
 
         <div class="form-field form-checkbox" [formGroupName]="'PaymentSystemIds'">
           <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
@@ -260,17 +267,21 @@
         </div>
       </div>
 
-      <div *ngIf="triggerSetting?.Type == 7 || triggerSetting?.Type == 8" style="height: auto;">
+      }
+
+      @if (triggerSetting?.Type == 7 || triggerSetting?.Type == 8 || triggerSetting?.Type == 15) {
+      <div style="height: auto;">
         <div class="first-hand">{{'Payments.PaymentSystems' | translate}}</div>
         <div class="second-hand" style="width: 600px; word-break: break-all">
           <span *ngFor="let payment of paymentEntites">{{payment}}</span>
         </div>
         <div class="form-field form-dropdown" [formGroupName]="'PaymentSystemIds'">
-          <mat-select [formControlName]="'Ids'" multiple style="width: 600px;">
+          <mat-select [formControlName]="'Ids'" multiple >
             <mat-option *ngFor="let payment of paymentSystems" [value]="payment.Id">{{payment.Name}}</mat-option>
           </mat-select>
         </div>
       </div>
+      }
 
       <div>
         <div class="first-hand">{{'Common.Status' | translate}}</div>
@@ -281,19 +292,196 @@
           </mat-select>
         </div>
       </div>
+      @if (triggerSetting?.Type != 1 && triggerSetting?.Type != 2 && triggerSetting?.Type == 3) {
+      <div></div>
+      }
+      @if (triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3) {
+      <div class="types">
+        <div class="additionally">
+          <mat-form-field>
+            <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+            <mat-select [(value)]="addedConditions.selectedGroupType"
+              (selectionChange)="addedConditions.selectedGroupType = $event.value">
+              <mat-option *ngFor="let name of addedConditions.groupTypes" [value]="name.Id">{{name.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="condition-list" *ngFor="let condition of addedConditions.conditions; let index = index">
+            <div>{{condition?.Condition?.Name}}</div>
+            <div>{{condition?.ConditionType?.NickName}}</div>
+            <div>{{condition?.ConditionValue}}</div>
+            <mat-icon (click)="removeCondition(addedConditions, index)">close</mat-icon>
+          </div>
+          <div class="condition-action">
+            <div class="selection-action">
+              <mat-form-field>
+                <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+                <mat-select [ngModel]="addedConditions.selectedCondition"
+                  (selectionChange)="addedConditions.selectedCondition = $event.value"
+                  [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let name of conditions" [value]="name">{{name.Name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                <mat-select #selectedOperation [ngModel]="addedConditions.selectedConditionType"
+                  (selectionChange)="addedConditions.selectedConditionType = selectedOperation.value"
+                  [ngModelOptions]="{standalone: true}">
+                  <mat-option *ngFor="let name of conditionTypes" [value]="name">{{name.NickName}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>{{'Bonuses.Value' | translate}}</mat-label>
+                <input matInput type="text" [placeholder]="'Bonuses.Value' | translate"
+                  [ngModel]="addedConditions.selectedConditionValue"
+                  (ngModelChange)="this.addedConditions.selectedConditionValue = $event"
+                  [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+
+            <div class="btn-action">
+              <button mat-stroked-button class="mat-btn" (click)="addCondition(addedConditions)"
+                [class.disabled]="!addedConditions.selectedCondition || !addedConditions.selectedConditionType || !this.addedConditions.selectedConditionValue">
+                {{'Common.Add' | translate}}
+              </button>
+              <button mat-stroked-button class="mat-btn" (click)="addGroup(addedConditions)">{{'Bonuses.AddGroup' |
+                translate}}
+              </button>
+            </div>
+
+          </div>
+
+          <div *ngFor="let group of addedConditions.groups; let i = index" class="group-container">
+            <mat-form-field>
+              <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+              <mat-select [ngModel]="group.selectedGroupType" (selectionChange)="group.selectedGroupType = $event.value"
+                [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let groupType of group.groupTypes"
+                  [value]="groupType.Id">{{groupType.Name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="condition-list" *ngFor="let condition of group.conditions">
+              <div>{{condition.Condition.Name}}</div>
+              <div>{{condition.ConditionType.NickName}}</div>
+              <div>{{condition.ConditionValue}}</div>
+              <mat-icon (click)="removeCondition(group, i)">close</mat-icon>
+            </div>
+
+            <div class="condition-action">
+
+              <div class="selection-action">
+                <mat-form-field>
+                  <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+                  <mat-select [ngModel]="group.selectedCondition"
+                    (selectionChange)="group.selectedCondition = $event.value" [ngModelOptions]="{standalone: true}">
+                    <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
+                    <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition.Name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                  <mat-select [ngModel]="group.selectedConditionType"
+                    (selectionChange)="group.selectedConditionType = $event.value"
+                    [ngModelOptions]="{standalone: true}">
+                    <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                    <mat-option *ngFor="let conditionType of conditionTypes"
+                      [value]="conditionType">{{conditionType.NickName}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <input matInput [placeholder]="'Value'" [ngModel]="group.selectedConditionValue"
+                    (ngModelChange)="group.selectedConditionValue = $event" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
+
+              </div>
+
+              <div class="btn-action">
+                <button mat-stroked-button class="mat-btn" (click)="addCondition(group)"
+                  [class.disabled]="!group.selectedCondition || !group.selectedConditionType || !group.selectedConditionValue">{{'Common.Add'
+                  | translate}}
+                </button>
+                <button mat-stroked-button class="mat-btn" (click)="addGroup(group)">{{'Bonuses.AddGroup' |
+                  translate}}</button>
+                <button mat-stroked-button class="mat-btn"
+                  (click)="removeGroup(addedConditions, i)">{{'Bonuses.RemoveGroup' | translate}}</button>
+              </div>
+
+            </div>
+            <div *ngFor="let subgroup of group.groups" class="sub-group-container">
+              <!-- <mat-form-field> -->
+              <mat-label>Select</mat-label>
+              <mat-select [ngModel]="subgroup.selectedGroupType"
+                (selectionChange)="subgroup.selectedGroupType = $event.value" [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let groupType of subgroup.groupTypes"
+                  [value]="groupType.Id">{{groupType.Name}}</mat-option>
+              </mat-select>
+              <!-- </mat-form-field> -->
+
+              <div class="condition-list" *ngFor="let condition of subgroup.conditions; let i = index">
+                <div>{{condition.Condition.Name}}</div>
+                <div>{{condition.ConditionType.NickName}}</div>
+                <div>{{condition.ConditionValue}}</div>
+                <mat-icon style="cursor: pointer" (click)="removeCondition(subgroup, i)">close</mat-icon>
+              </div>
+
+              <div class="condition-action">
+                <div class="selection-action sub-group">
+                  <!-- <mat-form-field> -->
+                  <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+                  <mat-select [ngModel]="subgroup.selectedCondition"
+                    (selectionChange)="subgroup.selectedCondition = $event.value" [ngModelOptions]="{standalone: true}">
+                    <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
+                    <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition.Name}}</mat-option>
+                  </mat-select>
+                  <!-- </mat-form-field> -->
+                  <!-- <mat-form-field> -->
+                  <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                  <mat-select [ngModel]="subgroup.selectedConditionType"
+                    (selectionChange)="subgroup.selectedConditionType = $event.value"
+                    [ngModelOptions]="{standalone: true}">
+                    <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                    <mat-option *ngFor="let conditionType of conditionTypes"
+                      [value]="conditionType">{{conditionType.NickName}}</mat-option>
+                  </mat-select>
+                  <!-- </mat-form-field> -->
+                  <!-- <mat-form-field> -->
+                  <input matInput [placeholder]="'Value'" [ngModel]="subgroup.selectedConditionValue"
+                    (ngModelChange)="subgroup.selectedConditionValue = $event" [ngModelOptions]="{standalone: true}">
+                  <!-- </mat-form-field> -->
+                </div>
+                <div class="btn-action">
+                  <button mat-stroked-button class="mat-btn" (click)="addCondition(subgroup)"
+                    [class.disabled]="!subgroup.selectedCondition || !subgroup.selectedConditionType || !subgroup.selectedConditionValue">{{'Common.Add'
+                    | translate}}
+                  </button>
+                  <button mat-stroked-button class="mat-btn" (click)="removeGroup(group, i)">{{'Bonuses.RemoveGroup' |
+                    translate}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      }
 
       <div></div>
 
+
+
       <div class="form-actions">
 
-        <div class="actions" *ngIf="isEdit">
+        @if (isEdit) {
+        <div class="actions">
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' |
+            translate}}</button>
           <button mat-raised-button class="mat-btn" [disabled]="!formGroup.valid" (click)="submit()">{{'Common.Save' |
             translate}}
           </button>
-          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' |
-            translate}}</button>
         </div>
-        <div class="actions" *ngIf="triggerSetting?.Type == 6" [ngSwitch]="triggerSetting?.Status">
+        }
+        @if (triggerSetting?.Type == 6) {
+        <div class="actions" [ngSwitch]="triggerSetting?.Status">
           <div *ngSwitchCase="0">
             <button mat-raised-button class="mat-btn">{{'Bonuses.Accepted' | translate}}</button>
             <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Bonuses.Rejected' |
@@ -306,6 +494,7 @@
             <button mat-raised-button class="mat-cancel-btn" disabled>{{'Bonuses.Rejected' | translate}}</button>
           </div>
         </div>
+        }
 
       </div>
 
@@ -331,23 +520,24 @@
   <br>
   <div class="grid-content">
     <ag-grid-angular
-      #agGrid
-      class="ag-theme-balham"
-      [headerHeight]="33"
-      [rowHeight]="42"
-      [suppressCopyRowsToClipboard]="true"
-      [rowData]="rowData"
-      [rowModelType]="rowModelType"
-      [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef"
-      [sideBar]="sideBar"
-      [cacheBlockSize]="cacheBlockSize"
-      (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [suppressCopyRowsToClipboard]="true"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [sideBar]="sideBar"
+    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+
   </div>
 
 </div>

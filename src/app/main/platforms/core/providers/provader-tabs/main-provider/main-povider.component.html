@@ -12,9 +12,9 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{provider?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Id'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -22,9 +22,9 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{provider?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Name'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -32,9 +32,9 @@
         <div class="first-hand">{{'Common.Type' | translate}}</div>
         <div class="second-hand">{{provider?.Type}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Type'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -42,9 +42,9 @@
         <div class="first-hand">{{'Providers.SessionExpireTime' | translate}}</div>
         <div class="second-hand">{{provider?.SessionExpireTime}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'SessionExpireTime'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -52,42 +52,20 @@
         <div class="first-hand">{{'Providers.GameLaunchUrl' | translate}}</div>
         <div class="second-hand">{{provider?.GameLaunchUrl}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'GameLaunchUrl'">
-          </mat-form-field>
-        </div>
-      </div>
-      <div></div>
-
-      <!-- <div>
-        <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
-        <div class="second-hand" *ngIf="currencySetting?.Type==2">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="currencySetting?.Type==1">
-          {{'Bonuses.OutOfSet' | translate}}
-        </div>
-
-        <div class="form-field form-checkbox" >
-          <input [value]="2" [ngModel]="currencySetting?.Type" type="radio">{{'Bonuses.InSet' | translate}}
-          <input [value]="1" style="margin-left: 5px;" [ngModel]="currencySetting?.Type" type="radio">{{'Bonuses.OutOfSet' |
-          translate}}
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
       <div>
-        <div class="first-hand">{{'Clients.SelectCurrency' | translate}}</div>
-        <div class="second-hand">
-          <ng-container *ngFor="let currency of currencesEntites">
-            {{currency}}
-          </ng-container>
+        <div class="first-hand">{{'Common.IsActive' | translate}}</div>
+        <div class="second-hand">{{provider?.IsActive}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsActive'">{{'Common.IsActive' |
+            translate}}</mat-checkbox>
         </div>
-        <div class="form-field form-dropdown" >
-          <mat-select [ngModel]="currencySetting?.CurrencyIds"  multiple [ngModelOptions]="{standalone: true}">
-            <mat-option *ngFor="let Currency of currencies" [value]="Currency.Id">{{Currency.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>  -->
+      </div>
       
       <div>
         <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>

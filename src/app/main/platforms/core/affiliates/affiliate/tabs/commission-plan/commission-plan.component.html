@@ -16,9 +16,9 @@
           <div class="first-hand">{{'Clients.Amount' | translate}}</div>
           <div class="second-hand">{{affiliate?.FixedFeeCommission?.Amount}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput  type="number" [formControlName]="'Amount'">
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -36,9 +36,9 @@
           <div class="first-hand">{{'Clients.TotalDepositAmount' | translate}}</div>
           <div class="second-hand">{{affiliate?.FixedFeeCommission?.TotalDepositAmount}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput  type="number" [formControlName]="'TotalDepositAmount'">
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -67,9 +67,9 @@
           <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
           <div class="second-hand">{{affiliate?.DepositCommission?.Percent}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput  type="number" [formControlName]="'Percent'">
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -87,17 +87,29 @@
           <div class="first-hand">{{'Bonuses.UpToAmount' | translate}}</div>
           <div class="second-hand">{{affiliate?.DepositCommission?.UpToAmount}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput  type="number" [formControlName]="'UpToAmount'">
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
+
+        <div>
+          <div class="first-hand">{{'Bonuses.DepositeCount' | translate}}</div>
+          <div class="second-hand">{{affiliate?.DepositCommission?.DepositeCount}}</div>
+          <div class="form-field form-input">
+            <!-- <mat-form-field appearance="none"> -->
+              <input matInput  type="number" [formControlName]="'DepositeCount'">
+            <!-- </mat-form-field> -->
+          </div>
+        </div>
+
+        <div></div>
 
         <div class="form-actions">
 
           <div class="actions" *ngIf = "isEdit">
-            <button mat-stroked-button class="mat-btn" [class.disabled]="formGroupFixedFee.invalid || formGroupDeposit.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
             <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
+            <button mat-stroked-button class="mat-btn" [class.disabled]="formGroupFixedFee.invalid || formGroupDeposit.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
           </div>
         </div>
       </div>

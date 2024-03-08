@@ -3,7 +3,8 @@
   <div class="content-action">
 
     <div class="title"><a [routerLink]="['../../active-tournaments']">{{'SkillGames.ActiveTournaments' | translate}}</a>
-      / {{id}}</div>
+      / {{id}}
+    </div>
 
   </div>
 
@@ -13,22 +14,18 @@
       <div>
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand"></div>
-        <div class="form-field">
-          <mat-form-field appearance="none">
+        <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Common.Id' | translate" [formControlName]="'Id'" readonly>
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'StartTime' | translate}}</div>
         <div class="second-hand"></div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [ngxMatDatetimePicker]="picker" [formControlName]="'StartTime'">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
-          </mat-form-field>
         </div>
       </div>
 
@@ -36,9 +33,7 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [formControlName]="'Name'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -46,11 +41,9 @@
         <div class="first-hand">{{'SkillGames.AnnounceDate' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
             <input matInput [ngxMatDatetimePicker]="picker1" [formControlName]="'OpenTime'">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #picker1></ngx-mat-datetime-picker>
-          </mat-form-field>
         </div>
       </div>
 
@@ -58,10 +51,8 @@
         <div class="first-hand">{{'SkillGames.RoundsCount' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.RoundsCount' | translate"
               [formControlName]="'NumberOfRounds'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -69,10 +60,8 @@
         <div class="first-hand">{{'SkillGames.JoinFee' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.JoinFee' | translate"
               [formControlName]="'JoinFee'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -80,10 +69,8 @@
         <div class="first-hand">{{'SkillGames.BuyInRound' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.BuyInRound' | translate"
               [formControlName]="'BuyInRound'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -91,10 +78,8 @@
         <div class="first-hand">{{'SkillGames.MinimumPlayersCount' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.MinimumPlayersCount' | translate"
               [formControlName]="'MinimumPlayersCount'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -102,10 +87,8 @@
         <div class="first-hand">{{'SkillGames.MaximumPlayersCount' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.MaximumPlayersCount' | translate"
               [formControlName]="'MaximumPlayersCount'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -113,10 +96,8 @@
         <div class="first-hand">{{'SkillGames.PrizePool' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.PrizePool' | translate"
               [formControlName]="'PrizePool'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -124,10 +105,8 @@
         <div class="first-hand">{{'SkillGames.Distribution' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'SkillGames.Distribution' | translate"
               [formControlName]="'PoolDistribution'">
-          </mat-form-field>
         </div>
       </div>
 

@@ -20,6 +20,9 @@ export class ViewProductComponent implements OnInit {
   public partners: any [] = [];
   public productStates: any[] = [];
   public gameProviders: any[] = [];
+  betId: any;
+  name: any;
+  productId: any;
 
   constructor(private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
@@ -29,7 +32,10 @@ export class ViewProductComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.id = this.activateRoute.snapshot.queryParams.commentId;
+    this.betId = this.activateRoute.snapshot.queryParams.BetId;
+    this.name = this.activateRoute.snapshot.queryParams.Name;
+    this.productId = this.activateRoute.snapshot.queryParams.ProductId;
+    this.id = this.activateRoute.snapshot.queryParams.CommentId;
     this.partners = this.commonDataService.partners;
     this.getProductStates();
     this.getGameProviders();

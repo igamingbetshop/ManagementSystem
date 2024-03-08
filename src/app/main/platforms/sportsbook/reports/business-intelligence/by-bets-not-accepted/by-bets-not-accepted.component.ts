@@ -128,7 +128,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
       },
 
       {
-        headerName: 'Partners.PlatformId',
+        headerName: 'Common.ErrorMessages',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ExternalBetId',
         resizable: true,
@@ -491,7 +491,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
 
   goToMatch(ev) {
     const row = ev.data;
-    const url = this.router.serializeUrl(this.router.createUrlTree(['main/sportsbook/matches/active-matches/active/main'],
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/main/sportsbook/matches/active-matches/all-active/active/main'],
       {queryParams: {"partnerId": row.PartnerId, "MatchId": row.MatchId, 'name': row.Competitors,}}));
     window.open(url, '_blank');
   }

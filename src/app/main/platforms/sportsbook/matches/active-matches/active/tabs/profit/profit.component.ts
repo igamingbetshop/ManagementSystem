@@ -1,20 +1,22 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {SportsbookApiService} from "../../../../../services/sportsbook-api.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute} from "@angular/router";
-import {BasePaginatedGridComponent} from "../../../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {AgBooleanFilterComponent} from "../../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../../../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../../../../../components/grid-common/checkbox-renderer.component";
-import {GridRowModelTypes, ModalSizes} from "../../../../../../../../core/enums";
-import {take} from "rxjs/operators";
+import { Component, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { SportsbookApiService } from "../../../../../services/sportsbook-api.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
+import { BasePaginatedGridComponent } from "../../../../../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { AgBooleanFilterComponent } from "../../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../../../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../../../../../components/grid-common/checkbox-renderer.component";
+import { GridRowModelTypes, ModalSizes } from "../../../../../../../../core/enums";
+import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
-import {ViewProfitInfoComponent} from "./view-profit-info/view-profit-info.component";
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
+import { ViewProfitInfoComponent } from "./view-profit-info/view-profit-info.component";
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
+import { IRowNode } from "ag-grid-community";
+import { MatMenuTrigger } from '@angular/material/menu';
+import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
 
 @Component({
   selector: 'app-profit',
@@ -22,6 +24,8 @@ import {IRowNode} from "ag-grid-community";
   styleUrls: ['./profit.component.scss']
 })
 export class ProfitComponent extends BasePaginatedGridComponent implements OnInit {
+  @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
+  @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public path: string = 'matches/markettypeprofits';
   public name: string = '';
@@ -36,17 +40,23 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
+    selectStateRenderer: SelectStateRendererComponent,
   };
   public selectedData;
   public selected = false;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public partners: any[] = [];
+  private multipleBetsStates = [
+    { Id: null, Name: this.translate.instant('Sport.None') },
+    { Id: true, Name: this.translate.instant('Common.Yes') },
+    { Id: false, Name: this.translate.instant('Common.No') },
+  ];
 
   constructor(protected injector: Injector,
-              private apiService: SportsbookApiService,
-              private _snackBar: MatSnackBar,
-              public dialog: MatDialog,
-              private activateRoute: ActivatedRoute) {
+    private apiService: SportsbookApiService,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private activateRoute: ActivatedRoute) {
     super(injector);
     this.columnDefs = [
       {
@@ -56,6 +66,7 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
         sortable: true,
         resizable: true,
         minWidth: 120,
+        checkboxSelection: true,
         cellRenderer: 'agGroupCellRenderer',
         floatingFilter: true,
         suppressMenu: true,
@@ -180,16 +191,31 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
         },
       },
       {
-        headerName: 'Sport.AllowMultipleBets',
+        headerName: 'Sport.AllowCashout',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AllowMultipleBets',
-        sortable: true,
+        field: 'AllowCashout',
         resizable: true,
+        sortable: false,
+        filter: false,
         editable: true,
-        floatingFilter: true,
-        suppressMenu: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
+        cellRenderer: 'selectStateRenderer',
+        cellRendererParams: {
+          onchange: this.onSelectCashOut['bind'](this),
+          Selections: this.multipleBetsStates,
+        },
+      },
+      {
+        headerName: "Sport.AllowMultipleBets",
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: "AllowMultipleBets",
+        resizable: true,
+        sortable: true,
+        filter: false,
+        floatingFilter: false,
+        cellRenderer: 'selectStateRenderer',
+        cellRendererParams: {
+          onchange: this.onAllowMultipleBetsChange["bind"](this),
+          Selections: this.multipleBetsStates,
         },
       },
       {
@@ -233,21 +259,21 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
         filter: false,
         onCellClicked: this.viewProfit['bind'](this)
       },
-      {
-        headerName: 'Common.Save',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'save',
-        resizable: true,
-        minWidth: 150,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.saveFinishes['bind'](this),
-          Label: 'Save',
-          isDisabled: true
-        }
-      }
+      // {
+      //   headerName: 'Common.Save',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'save',
+      //   resizable: true,
+      //   minWidth: 150,
+      //   sortable: false,
+      //   filter: false,
+      //   cellRenderer: 'buttonRenderer',
+      //   cellRendererParams: {
+      //     onClick: this.saveFinishes['bind'](this),
+      //     Label: 'Save',
+      //     isDisabled: true
+      //   }
+      // }
     ]
   }
 
@@ -279,22 +305,24 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
           this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
           this.getProfits();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
-  onCellValueChanged(event){
-    if(event.oldValue !== event.value){
+  onCellValueChanged(event) {
+    if (event.oldValue !== event.value) {
       let findedNode: IRowNode;
       let node = event.node.rowIndex;
       this.gridApi.forEachNode(nod => {
-        if(nod.rowIndex == node){
+        if (nod.rowIndex == node) {
           findedNode = nod;
         }
       })
-      this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.gridApi.redrawRows({rowNodes: [findedNode]});
+      // this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
+      // this.gridApi.redrawRows({ rowNodes: [findedNode] });
+      this.saveFinishes(event);
+
     }
   }
 
@@ -313,8 +341,8 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   isRowSelected() {
-    return this.gridApi && this.gridApi?.getSelectedRows().length === 0;
-  };
+    return this.gridApi?.getSelectedRows().length;
+  }
 
   deleteSetting() {
     let row = this.gridApi?.getSelectedRows()[0];
@@ -324,16 +352,16 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
         if (data.Code === 0) {
           this.getProfits();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
   async addSetting() {
-    const {AddSettingComponent} = await import('../profit/add-setting/add-setting.component');
+    const { AddSettingComponent } = await import('../profit/add-setting/add-setting.component');
     const dialogRef = this.dialog.open(AddSettingComponent, {
       width: ModalSizes.MEDIUM,
-      data: {PartnerId: this.pageConfig.PartnerId, MatchId: this.pageConfig.MatchId}
+      data: { PartnerId: this.pageConfig.PartnerId, MatchId: this.pageConfig.MatchId }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -349,7 +377,7 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
         if (data.Code === 0) {
           this.rowData = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -361,13 +389,46 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
     this.getProfits();
   }
 
+  onAllowMultipleBetsChange(params, val, event) {
+    params.AllowMultipleBets = val;
+    this.onCellValueChanged(event);
+  }
+
+  onSelectCashOut(params, value: number, event) {
+    params.AllowCashout = value;
+    this.onCellValueChanged(event);
+  }
+
   getPartners() {
     this.apiService.apiPost('partners').subscribe(data => {
       if (data.Code === 0) {
         this.partners = data.ResponseObject;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+    });
+  }
+
+  async onBulkEditorOpen() {
+    if (this.bulkEditorRef) {
+      this.bulkEditorRef.clear();
+    }
+
+    if (!this.isRowSelected()) {
+      return
+    }
+
+    const componentInstance = await import('../../../../../competitions-categories/competition-category/tabs/markets/competition-bulk-editor/competition-bulk-editor.component').then(c => c.CompetitionBulkEditorComponent);
+    const componentRef = this.bulkEditorRef.createComponent(componentInstance);
+    componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
+    componentRef.instance.ids = this.gridApi.getSelectedRows();
+    componentRef.instance.matchId = this.matchId;
+    componentRef.instance.partnerId = this.partnerId || null;
+    componentRef.instance.path = 'matches/bulkupdatemarkettypeprofit';
+    componentRef.instance.afterClosed.subscribe(() => {
+      this.getProfits();
+      this.bulkEditorRef.clear();
+      this.gridApi.deselectAll();
     });
   }
 

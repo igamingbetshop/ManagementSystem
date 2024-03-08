@@ -32,7 +32,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="type != 7 && type != 11 ">
+    <mat-form-field *ngIf="type != 7 && type != 11 && type != 15 ">
       <mat-label>{{'Payments.Amount' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Payments.Amount' | translate" [formControlName]="'Amount'">
       <mat-error *ngIf="errorControl['Amount']?.touched && errorControl['Amount'].errors?.required">
@@ -62,7 +62,7 @@
         {{'Bonuses.SegmentId' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="type != 5 && type != 9 && type != 12">
+    <mat-form-field *ngIf="type != 5 && type != 9 && type != 12 && type != 15">
       <mat-label>{{'Bonuses.Percent' | translate}}</mat-label>
       <input matInput type="number" min="0" [placeholder]="'Bonuses.Percent' | translate" [formControlName]="'Percent'" required>
       <mat-error *ngIf="errorControl['Percent']?.touched && errorControl['Percent'].errors?.required">
@@ -74,7 +74,7 @@
     </mat-form-field>
 
     <div class="field-content">
-      <mat-form-field class="calendar-picker start" appearance="none">
+      <mat-form-field class="calendar-picker start">
         <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'" (dateChange)="onStartDateChange($event)">
         <mat-datepicker-toggle matSuffix [for]="pickerStart">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
@@ -82,7 +82,7 @@
         <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
       </mat-form-field>
 
-      <mat-form-field class="calendar-picker" appearance="none" style="margin-left: 15px;">
+      <mat-form-field class="calendar-picker" style="margin-left: 15px;">
         <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishTime'" (dateChange)="onFinishDateChange($event)">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
@@ -101,7 +101,7 @@
         {{'Bonuses.TotalWagerAmount' | translate}} {{'Errors.PositiveNumbers' | translate}}
       </mat-error>
     </mat-form-field>
-    <mat-form-field *ngIf="type == 4 || type == 6 || type == 7 || type == 8 || type == 5 || type == 9 ||  type == 12">
+    <mat-form-field *ngIf="type == 4 || type == 6 || type == 7 || type == 8 || type == 5 || type == 9 ||  type == 12 || type == 15">
       <mat-label>{{'Bonuses.MinAmount' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.MinAmount' | translate" [formControlName]="'MinAmount'">
     </mat-form-field>
@@ -115,10 +115,23 @@
         {{'Bonuses.MinBetCount' | translate}} {{'Errors.PositiveNumbers' | translate}}
       </mat-error>
     </mat-form-field>
+    @if(type == 15) {
+      <mat-form-field>
+        <mat-label>{{'Bonuses.DaysCount' | translate}}</mat-label>
+        <input matInput type="number" min="0" [placeholder]="'Bonuses.DaysCount' | translate" [formControlName]="'MinBetCount'" required>
+        <mat-error *ngIf="errorControl['MinBetCount']?.touched && errorControl['MinBetCount'].errors?.required">
+          {{'Bonuses.MinBetCount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+        <mat-error *ngIf="errorControl['MinBetCount']?.touched && errorControl['MinBetCount'].errors?.min">
+          {{'Bonuses.MinBetCount' | translate}} {{'Errors.PositiveNumbers' | translate}}
+        </mat-error>
+      </mat-form-field>
+    }
     <mat-form-field *ngIf="type == 1 || type == 2 || type == 3 || type == 10">
       <mat-label>{{'Bonuses.UpToAmount' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.UpToAmount' | translate" [formControlName]="'MaxAmount'">
     </mat-form-field>
+
     <mat-form-field *ngIf="type == 4 || type == 6 || type == 7 || type == 8">
       <mat-label>{{'Bonuses.MaxAmount' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.MaxAmount' | translate" [formControlName]="'MaxAmount'">
@@ -127,6 +140,12 @@
       <mat-label>{{'Bonuses.UpToAmount' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.UpToAmount' | translate" [formControlName]="'UpToAmount'">
     </mat-form-field>
+    @if (type == 15) {
+      <mat-form-field >
+        <mat-label>{{'Clients.Amount' | translate}}</mat-label>
+        <input matInput type="text" [placeholder]="'Bonuses.Amount' | translate" [formControlName]="'UpToAmount'">
+      </mat-form-field>
+    }
     <mat-form-field *ngIf="type == 4 || type == 11 || type == 12">
       <mat-label>{{'Bonuses.BonusSettingCodes' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.BonusSettingCodes' | translate" [formControlName]="'BonusSettingCodes'" request>
@@ -154,13 +173,15 @@
       </mat-error>
 
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Bonuses.SelectDayOfWeek' | translate}}</mat-label>
-      <mat-select [formControlName]="'DayOfWeek'">
-        <mat-option [value]="null">{{'Bonuses.SelectDayOfWeek' | translate}}</mat-option>
-        <mat-option *ngFor="let day of days" [value]="day.Id">{{day.Name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    @if (type != 15) {
+      <mat-form-field >
+        <mat-label>{{'Bonuses.SelectDayOfWeek' | translate}}</mat-label>
+        <mat-select [formControlName]="'DayOfWeek'">
+          <mat-option [value]="null">{{'Bonuses.SelectDayOfWeek' | translate}}</mat-option>
+          <mat-option *ngFor="let day of days" [value]="day.Id">{{day.Name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    }
   </form>
 
   <div class="additionally" *ngIf="type === 1 ||  type === 2 || type === 3">

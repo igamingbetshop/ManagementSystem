@@ -259,13 +259,13 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
     return {
       getRows: (params) => {
         const paging = new Paging();
-        
+
           paging.PartnerId = this.partnerId;
           paging.SkipCount = this.paginationPage - 1;
           paging.TakeCount = this.cacheBlockSize;
           paging.FromDate = this.fromDate;
           paging.ToDate = this.toDate;
-          // paging.UserId = this.userId; 
+          // paging.UserId = this.userId;
         this.changeFilerName(params.request.filterModel, ['StateName'], ['state']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);

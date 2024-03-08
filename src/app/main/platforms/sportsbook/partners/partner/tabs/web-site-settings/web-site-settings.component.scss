@@ -8,7 +8,7 @@
 
   .content-action {
     @include action-style;
-    height: 68px;
+    height: 45px;
 
     .partner-dropdown {
       margin-right: 8px;
@@ -30,11 +30,24 @@
   .website-content-action {
 
     @include action-style;
-    height: 30px;
+    height: 40px;
 
     .title {
       font-size: 18px;
     }
+    .mat-btn {
+      margin: 4px;
+      border: 1px solid $gray-light-14;
+      border-radius: 8px;
+      color: $gray-light-15;
+      background-color: $gray-light;
+      box-shadow: none;
+      transition: 0.3s ease-in;
+      &.active {
+        background-color: $bg-color;
+        color: white !important;
+      }
+    }    
 
     .input-container {
       position: relative;

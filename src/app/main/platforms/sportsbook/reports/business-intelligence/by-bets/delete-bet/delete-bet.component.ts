@@ -9,6 +9,8 @@ import { TranslateModule } from "@ngx-translate/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+
+
 import { MatButtonModule } from "@angular/material/button";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatSelectModule } from '@angular/material/select';
@@ -69,7 +71,7 @@ export class DeleteBetComponent implements OnInit {
 
   formValues() {
     this.formGroup = this.fb.group({
-      Kind: [null, [Validators.required]],
+      Kind: [],
       Comment: [''],
     });
   }
@@ -84,10 +86,15 @@ export class DeleteBetComponent implements OnInit {
     }
     const obj = this.formGroup.getRawValue();
 
+    let type = null;
+    if (this.path == "deletebet") {
+      type = obj.Kind;
+    }
+
     this.apiService.apiPost(`report/${this.path}`,
       {
         BetIds: [this.betId],
-        TypeId: obj.Kind,
+        TypeId: type,
         Comment: obj.Comment
       })
       .pipe(take(1))

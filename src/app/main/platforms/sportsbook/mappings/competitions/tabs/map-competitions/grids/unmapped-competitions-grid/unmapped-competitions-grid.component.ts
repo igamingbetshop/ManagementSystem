@@ -165,7 +165,7 @@ export class UnMappedCompetitionsGridComponent extends BasePaginatedGridComponen
         } else {
           delete paging.SportIds;
         }
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['ProviderName'], ['ProviderId']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);

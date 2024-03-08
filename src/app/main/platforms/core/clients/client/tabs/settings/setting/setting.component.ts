@@ -17,50 +17,8 @@ export class SettingComponent implements OnInit {
   public clientId: number;
   public history;
   public ObjectHistory;
-  public oldData =
-    {
-      AMLProhibited: {},
-      AMLVerified: {},
-      JCJProhibited: {},
-      CautionSuspension: {},
-      SelfExcluded: {},
-      SystemExcluded: {},
-      TermsConditionsAcceptanceVersion: {},
-      UnusedAmountWithdrawPercent: {},
-      CasinoLayout: {},
-      BlockedForInactivity: {},
-      DocumentExpired: {},
-      DocumentVerified: {},
-      Excluded: {},
-      IsAffiliateManager: {},
-      MaxCredit: {},
-      PasswordChangedDate: {},
-      SessionLimit: {},
-      Younger: {},
-      PayoutLimit: {},
-    };
-  public newData =
-    {
-      AMLProhibited: {},
-      AMLVerified: {},
-      JCJProhibited: {},
-      CautionSuspension: {},
-      SelfExcluded: {},
-      SystemExcluded: {},
-      TermsConditionsAcceptanceVersion: {},
-      UnusedAmountWithdrawPercent: {},
-      CasinoLayout: {},
-      BlockedForInactivity: {},
-      DocumentExpired: {},
-      DocumentVerified: {},
-      Excluded: {},
-      IsAffiliateManager: {},
-      MaxCredit: {},
-      PasswordChangedDate: {},
-      SessionLimit: {},
-      Younger: {},
-      PayoutLimit: {},
-    };
+  public oldData;
+  public newData;
 
   constructor(private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
@@ -73,49 +31,40 @@ export class SettingComponent implements OnInit {
   ngOnInit(): void {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.ObjectHistory = this.activateRoute.snapshot.queryParams.setting;
+    this.featchHistory();
+  }
+
+  featchHistory() {
     this.apiService.apiPost(this.configService.getApiUrl, this.ObjectHistory, true,
       Controllers.REPORT, Methods.GET_OBJECT_HISTORY_ELEMENT_BY_ID).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.mapData(data.ResponseObject);
+          this.oldData = JSON.parse(data.ResponseObject[0]);
+          this.newData = JSON.parse(data.ResponseObject[1]);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
-  mapData(res) {
-    let oldData = JSON.parse(res[0]);
-    let newData = JSON.parse(res[1]);
+  checkVerifications() {
+    const oldVerificationServices = this.oldData?.VerificationServices || [];
+    const newVerificationServices = this.newData?.VerificationServices || [];
 
-    for (let i = 0; i < oldData.length; i++) {
-      if (oldData[i].Name == "SelfExcluded" && oldData[i].StringValue)
-        oldData[i].StringValue = parseInt(oldData[i].StringValue);
-      if (oldData[i].Name == "SystemExcluded" && oldData[i].StringValue)
-        oldData[i].StringValue = parseInt(oldData[i].StringValue);
-
-      this.oldData[oldData[i].Name] = oldData[i];
-
-      if (oldData[i].StringValue == "" && newData.findIndex(x => x.Name == oldData[i].Name) == -1)
-        this.newData[oldData[i].Name] = oldData[i];
+    if (oldVerificationServices.length !== newVerificationServices.length) {
+      return false;
     }
 
-    for (let i = 0; i < newData.length; i++) {
-      if (newData[i].Name == "SelfExcluded" && newData[i].StringValue)
-        newData[i].StringValue = parseInt(newData[i].StringValue);
-      if (newData[i].Name == "SystemExcluded" && newData[i].StringValue)
-        newData[i].StringValue = parseInt(newData[i].StringValue);
-
-      this.newData[newData[i].Name] = newData[i];
-
-      if (newData[i].StringValue == "" && oldData.findIndex(x => x.Name == newData[i].Name) == -1)
-        this.oldData[newData[i].Name] = newData[i];
+    for (let i = 0; i < oldVerificationServices.length; i++) {
+      if (oldVerificationServices[i] !== newVerificationServices[i]) {
+        return false;
+      }
     }
+      return true;
   }
 
   onNavigateTo() {
-
     this.router.navigate(['main/platform/clients/all-clients/client/settings/'],
-      {queryParams: {"clientId": this.clientId}});
+      { queryParams: { "clientId": this.clientId } });
   }
 
 

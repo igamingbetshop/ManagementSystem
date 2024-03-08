@@ -5,9 +5,12 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/
 import {take} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatInputModule} from "@angular/material/input";
+
 import {TranslateModule} from "@ngx-translate/core";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatButtonModule} from "@angular/material/button";
+
 import {MatIconModule} from "@angular/material/icon";
 import {PoolBettingApiService} from "../../../../../services/pool-betting-api.service";
 import {PBControllers, PBMethods} from "../../../../../../../../core/enums";

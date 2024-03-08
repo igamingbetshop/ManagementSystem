@@ -13,9 +13,13 @@ import {MatIconModule} from "@angular/material/icon";
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatSelectModule} from "@angular/material/select";
+
 import {MatInputModule} from "@angular/material/input";
+
 import {MatButtonModule} from "@angular/material/button";
+
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {AddCorePromotionsComponent} from "../../core-promotions/add-core-promotions/add-core-promotions.component";

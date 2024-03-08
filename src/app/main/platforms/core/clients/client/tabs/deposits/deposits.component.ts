@@ -494,7 +494,7 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
           let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           this.urlSegment = replacedPart;
-          this.type = this.urlSegment == 'withdrawals' ? 2 : null;          
+          this.type = this.urlSegment == 'withdrawals' ? 2 : null;
           data.path = this.router.url.replace(replacedPart, 'paymentrequests').split('?')[0];
           data.queryParams = { paymentId: params.data.Id, paymentSystemName: params.data.PaymentSystemName, type:  params.data.Type };
           return data;

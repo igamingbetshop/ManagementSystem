@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { CoreApiService } from '../../services/core-api.service';
@@ -17,10 +17,13 @@ import { Paging } from 'src/app/core/models';
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
-import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { AgSelectableFilter } from 'src/app/main/components/grid-common/ag-selectable-filter/ag-selectable-filter.component';
+import { ActivatedRoute } from '@angular/router';
+import { BannerService } from './core-banners.service';
 
 
-enum bannerVisibilityTypes {
+export enum BannerVisibilityTypes {
+  'Empety' = -1,
   'Logged Out' = 1,
   'Logged In' = 2,
   'No Deposit' = 3,
@@ -28,31 +31,40 @@ enum bannerVisibilityTypes {
   'Two Or More Deposits' = 5,
 }
 
+export function getVisibilityTypeOptions(): { Id: number; Name: string }[] {
+  const enumValues = Object.values(BannerVisibilityTypes).filter(value => typeof value === 'number');
+
+  return enumValues.map(value => ({ Id: value as number, Name: BannerVisibilityTypes[value as number] }));
+}
+
+
 @Component({
   selector: 'app-core-banners',
   templateUrl: './core-banners.component.html',
   styleUrls: ['./core-banners.component.scss']
 })
-export class CoreBannersComponent extends BasePaginatedGridComponent implements OnInit {
+export class CoreBannersComponent extends BasePaginatedGridComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public partners: any[] = [];
   public partnerId = 1;
   public fromDate = new Date();
   public toDate = new Date();
   public rowData = [];
-  // public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public filter: any = {};
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
-    agDropdownFilter: AgDropdownFilter,
+    agSelectableFilter: AgSelectableFilter,
     agDateTimeFilter: AgDateTimeFilter
   };
-  // public fragmentSource: any = [];
+
+  banersTypes = getVisibilityTypeOptions();
 
   constructor(
     protected injector: Injector,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
+    public activateRoute: ActivatedRoute,
+    private bannerService: BannerService,
     public commonDataService: CommonDataService,
     public dialog: MatDialog,
   ) {
@@ -64,14 +76,15 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Id',
         resizable: true,
+        sortable: true,
         cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
+        filter: 'agNumberColumnFilter',
         minWidth: 90,
-        filter: 'agTextColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
-          filterOptions: this.filterService.textOptions,
-        }
+          filterOptions: this.filterService.numberOptions
+        },
       },
       {
         headerName: 'Bonuses.Body',
@@ -151,17 +164,13 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ShowDescription',
         resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions,
-        }
+        filter: 'agBooleanColumnFilter',
       },
       {
         headerName: 'Common.StartDate',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'StartDate',
+        sortable: true,
         filter: 'agDateTimeFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -178,6 +187,7 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerName: 'Common.EndDate',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'EndDate',
+        sortable: true,
         filter: 'agDateTimeFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -195,6 +205,7 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Order',
         resizable: true,
+        sortable: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -207,12 +218,8 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'IsEnabled',
         resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions,
-        }
+        sortable: true,
+        filter: 'agBooleanColumnFilter',
       },
       {
         headerName: 'Common.Type',
@@ -231,17 +238,26 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Visibility',
         resizable: true,
-        filter: false,
+        filter: 'agSelectableFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: Object.keys(BannerVisibilityTypes)
+          .filter(key => !isNaN(Number(BannerVisibilityTypes[key])))
+          .map(key => ({
+            Id: BannerVisibilityTypes[key],
+            Name: key,
+          }))
+          ,
+        },
       },
       {
         headerName: 'Common.View',
         headerValueGetter: this.localizeHeader.bind(this),
         cellRenderer: OpenerComponent,
+        minWidth: 50,
         filter: false,
         valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'banner');
+          let data = { path: 'banner', queryParams: null };
           data.queryParams = {
             Id: params.data.Id,
           };
@@ -249,15 +265,39 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         },
         sortable: false
       },
-
-
     ];
   }
 
   ngOnInit() {
     this.gridStateName = 'core-banners-grid-state';
     this.partners = this.commonDataService.partners;
-    // this.getBannerFragments();
+    this.subscribeToCurrentUpdate();
+  }
+
+  subscribeToCurrentUpdate() {
+    this.bannerService.currentUpdate.subscribe((banner) => {
+      if (banner && this.gridApi.getDisplayedRowCount() > 0) {
+        const rowIdToUpdate = banner?.Id;
+        const displayedRows = this.gridApi.getDisplayedRowCount();
+        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+          const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+          if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+            rowNode.data.StartDate = banner.StartDate;
+            rowNode.data.EndDate = banner.EndDate;
+            rowNode.data.Type = banner.Type;
+            rowNode.data.Order = banner.Order;
+            rowNode.data.ShowDescription = banner.ShowDescription;
+            rowNode.data.ShowLogin = banner.ShowLogin;
+            rowNode.data.ShowRegistration = banner.ShowRegistration;
+            rowNode.data.Image = banner.Image;
+            rowNode.data.IsEnabled = banner.IsEnabled;
+            rowNode.data.Visibility = banner.Visibility;
+            this.gridApi.redrawRows({ rowNodes: [rowNode] });
+            break;
+          }
+        }
+      }
+    });
   }
 
   startDate() {
@@ -319,13 +359,27 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         let paging = new Paging();
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
-        paging.CreatedFrom = this.fromDate;
-        paging.CreatedBefore = this.toDate;
+        // paging.CreatedFrom = this.fromDate;
+        // paging.CreatedBefore = this.toDate;
         if (this.partnerId) {
           paging.PartnerId = this.partnerId;
         }
+        this.changeFilerName(params.request.filterModel,
+          ['Body'], ['Bodie']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
+        if (paging.IsEnableds) {
+          paging.IsEnabled = paging.IsEnableds.ApiOperationTypeList[0].BooleanValue;
+          delete paging.IsEnableds;
+        }
+        if (paging.Visibilitys) {
+          paging.Visibility = paging.Visibilitys.ApiOperationTypeList[0].IntValue;
+          delete paging.Visibilitys;
+        }
+        if (paging.ShowDescriptions) {
+          paging.ShowDescription = paging.ShowDescriptions.ApiOperationTypeList[0].BooleanValue;
+          delete paging.ShowDescriptions;
+        }
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.CONTENT, Methods.CET_WEB_SITE_BANNERS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -333,7 +387,7 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
               mappedRows.Entities.forEach((payment) => {
                 payment['PartnerName'] = this.partners.find((partner) => partner.Id == payment.PartnerId).Name;
                 payment.Visibility = payment.Visibility.map(element => {
-                  return bannerVisibilityTypes[element]
+                  return BannerVisibilityTypes[element]
                 });
                 // payment['Type'] = this.getType(payment.Type);
               });
@@ -352,7 +406,6 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
-
   async cellDoubleClicked(event: CellDoubleClickedEvent, typeId) {
     const id = event.data.Id;
     const { AddEditTranslationComponent } = await import('../../../../components/add-edit-translation/add-edit-translation.component');
@@ -367,21 +420,11 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         this.getCurrentPage();
       }
     })
+
   }
 
-  // getType(type) {
-  //   let typeName ='';
-  //   if(type > 0 && type < 10) {
-  //     typeName =  pagingSource.types.find(field =>  field.Id == type)?.Name;
-  //   } else if(type >= 99 && type <= 199) {
-  //     const id = type % 100;
-  //     typeName = `Category ${id} Web `;
-  //   } else if(type >= 200 && type <= 299) {
-  //     const id = type % 100;
-  //     typeName = `Category ${id} Mobile `;
-  //   } else {
-  //     typeName = this.fragmentSource.find(field => field =>  field.Id == type)?.Name;
-  //   }
-  //   return typeName;
-  // }
+  ngOnDestroy(): void {
+    this.bannerService.update(null);
+  }
+
 }

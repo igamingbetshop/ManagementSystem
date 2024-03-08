@@ -1,13 +1,13 @@
 export class DateTimeHelper {
 
-  private static fromDate;
-  private static toDate;
+  private static fromDate: Date;
+  private static toDate: Date;
 
   static startDate() {
     let toDate = this.getDateNow();
     toDate.setDate(toDate.getDate() + 1);
 
-    this.fromDate =  this.getDateNow();
+    this.fromDate = this.getDateNow();
     this.toDate = toDate;
   }
 
@@ -16,7 +16,7 @@ export class DateTimeHelper {
     let toDate = this.getDateNow();
     toDate.setDate(toDate.getDate() + 1);
 
-    switch(time) {
+    switch (time) {
       case 'today':
         this.fromDate = fromDate;
         this.toDate = toDate;
@@ -37,7 +37,7 @@ export class DateTimeHelper {
         this.toDate = toDate;
         break;
       case 'All Times':
-        fromDate.setFullYear(1989, 12, 31);
+        fromDate.setFullYear(2015, 3, 1);
         this.fromDate = fromDate;
         this.toDate = toDate;
         break;
@@ -45,11 +45,8 @@ export class DateTimeHelper {
   }
 
   static getDateNow() {
-    const date =  new Date();
-    date.setHours(0);
-    date.setMinutes(0);
-    date.setSeconds(0);
-    date.setMilliseconds(0);
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
 
     return date;
   }

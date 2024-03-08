@@ -39,6 +39,7 @@
     <div class="input-content">
       <input matInput [placeholder]="'Cms.SearchInEnglish' | translate" [disabled] = "!objectTypeId" [(ngModel)]="filter.SearchText" (ngModelChange)="inputChanged($event)">
     </div>
+    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 
   </div>
 

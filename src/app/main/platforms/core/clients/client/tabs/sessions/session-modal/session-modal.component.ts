@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, } from "@angular/material/dialog";
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Controllers, Methods } from 'src/app/core/enums';
@@ -45,7 +45,7 @@ export class SessionModalComponent implements OnInit {
       )
       .subscribe((data) => {
         if (data.ResponseCode === 0) {
-          
+
           if(data.ResponseObject.length === 0 ) {
             SnackBarHelper.show(this._snackBar, { Description: "No Data", Type: "info" });
             this.dialogRef.close();

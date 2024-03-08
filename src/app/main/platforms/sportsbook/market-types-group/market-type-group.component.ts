@@ -61,7 +61,7 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
         sortable: true,
         resizable: true,
         tooltipField: 'Id',
-        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
+        cellStyle: { color: '#3E4D66', 'font-size': '14px', 'font-weight': '500' },
         floatingFilter: true,
         suppressMenu: true,
         floatingFilterComponentParams: {
@@ -164,7 +164,7 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
           onClick: this.saveMarketTypeGroup['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       }
@@ -231,7 +231,7 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
   }
 
   saveMarketTypeGroup(params) {
-    const row = params.data;    
+    const row = params.data;
     this.apiService.apiPost(this.updatePath, row).subscribe(data => {
       if (data.Code === 0) {
         this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;

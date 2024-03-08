@@ -5,6 +5,8 @@
     </div>
 
     <div class="header2" fxHeight="50px">
+      <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+
       <button mat-raised-button class="mat-btn" (click)="getBets()">{{'Common.Go' | translate}}</button>
     </div>
   </div>

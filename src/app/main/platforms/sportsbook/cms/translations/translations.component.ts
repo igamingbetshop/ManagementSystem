@@ -12,7 +12,7 @@ import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
-import { syncPaginationWithoutBtn } from 'src/app/core/helpers/ag-grid.helper';
+import { syncColumnSelectPanel, syncPaginationWithoutBtn } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-translations',
@@ -82,6 +82,7 @@ export class TranslationsComponent extends BasePaginatedGridComponent implements
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnSelectPanel();
     syncPaginationWithoutBtn();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
@@ -175,7 +176,7 @@ export class TranslationsComponent extends BasePaginatedGridComponent implements
         onClick: this.saveTranslations['bind'](this),
         Label: 'Save',
         isDisabled: true,
-        bgColor: '#076192',
+        bgColor: '#3E4D66',
         textColor: '#FFFFFF'
       }
     });
@@ -266,6 +267,19 @@ export class TranslationsComponent extends BasePaginatedGridComponent implements
   localizeHeader(parameters: ICellRendererParams): string {
     let headerIdentifier = parameters.colDef.headerName;
     return this.translate.instant(headerIdentifier);
+  }
+
+  exportToCsv() {
+    this.apiService.apiPost('common/exporttranslationentries', this.filter).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
   }
 
 }

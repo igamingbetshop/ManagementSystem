@@ -4,6 +4,7 @@ import {PartnersRoutingModule} from "./partners-routing.module";
 import {PartnersComponent} from "./partners.component";
 import {DocumentTypesResolver} from "../resolvers/document-types.resolver";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+
 import {FilterOptionsResolver} from "../resolvers/filter-options.resolver";
 
 

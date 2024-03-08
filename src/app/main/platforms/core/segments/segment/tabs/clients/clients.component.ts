@@ -347,8 +347,7 @@ export class ClientsComponent extends BasePaginatedGridComponent implements OnIn
           if (r.TypeId === 5)
             this.regions.push(r);
         });
-        console.log(this.regions, 'regions');
-        
+
         this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
       }
     });

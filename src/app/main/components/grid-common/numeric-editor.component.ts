@@ -15,7 +15,6 @@ const KEY_TAB = 'Tab';
   imports: [
     CommonModule,
     FormsModule,
-    
   ],
   template: `
     <input
@@ -79,13 +78,23 @@ export class NumericEditorComponent implements AfterViewInit {
       return;
     }
 
-    if (event.key === KEY_ENTER || event.key === KEY_TAB) {
+    if (event.key === KEY_ENTER) {
       // Handle Enter key press
       this.params.api.stopEditing();
       this.params.api.dispatchEvent({
         type: 'cellEditingStopped',
       });
     }
+
+    if (event.key === KEY_TAB) {
+      if (event.shiftKey) {
+        this.params.api.tabToPreviousCell();
+      } else {
+        this.params.api.tabToNextCell();
+      }
+      event.preventDefault();
+    }
+    
 
     if (!this.isKeyPressedNumeric(event)) {
       event.preventDefault();
@@ -104,18 +113,12 @@ export class NumericEditorComponent implements AfterViewInit {
     setTimeout(() => {
       this.input.nativeElement.focus();
       if (this.highlightAllOnFocus) {
+        // Use select method to highlight the content
         this.input.nativeElement.select();
         this.highlightAllOnFocus = false;
-      } else {
-        const length = this.input.nativeElement.value
-          ? this.input.nativeElement.value.length
-          : 0;
-        if (length > 0) {
-          this.input.nativeElement.setSelectionRange(length, length);
-        }
       }
     });
-  }
+  }  
 
   private isCharNumeric(charStr: string): boolean {
     return !!/\d/.test(charStr);

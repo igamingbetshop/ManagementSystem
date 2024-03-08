@@ -5,7 +5,7 @@
   position: relative;
   padding: 5px 0;
 
-  .mat-dialog-title {
+  .mat-mdc-dialog-title {
     margin: 0;
   }
 
@@ -38,10 +38,10 @@
 
       .mat-btn {
         @include mat-btn-style;
+        margin-left: 8px;
       }
 
       .mat-cancel-btn {
-        margin-left: 8px;
         @include mat-cancel-btn-style;
       }
     }
@@ -66,7 +66,8 @@
     }
 
     th {
-      background-color: $header-background-color;
+      background-color: $bg-color;
+      color: $content-bg-color;
       &:first-child {
         border-radius: 4px 0 0 4px;
       }
@@ -77,16 +78,16 @@
     }
 
     td {
-      border-bottom: 1px solid $blue-light-4;
-      border-top: 1px solid $blue-light-4;
+      border-bottom: 1px solid $title-color;
+      border-top: 1px solid $title-color;
 
       &:first-child {
-        border-left: 1px solid $blue-light-4;
+        border-left: 1px solid $title-color;
         border-radius: 4px;
       }
 
       &:last-child {
-        border-right: 1px solid $blue-light-4;
+        border-right: 1px solid $title-color;
         border-radius: 4px;
       }
 
@@ -98,7 +99,7 @@
 
       textarea {
         padding: 8px 14px;
-        border: 1px solid $blue-2;
+        border: 1px solid $text-color;
         border-radius: 4px;
         box-sizing: border-box;
         width: 100% !important;
@@ -106,7 +107,7 @@
         min-height: 36px;
         font-size: 16px;
         outline: none;
-        color: $blue-2;
+        color: $text-color;
         background-color: $white;
         font-family: "Roboto", sans-serif;
         resize: vertical;
@@ -147,7 +148,7 @@
   }
 }
 
-.mat-dialog-actions {
+.mat-mdc-dialog-actions {
   justify-content: flex-end;
   margin-bottom: 0;
   padding: 18px 0 0 0;
@@ -160,5 +161,14 @@
   .mat-btn {
     margin-left: 8px;
     @include mat-btn-style;
+  }
+}
+
+.mdc-tab {
+  background-color: $grey-blue-3!important;
+  color: $white!important;
+  &.mdc-tab--active {
+    background-color: $bg-color!important;
+    color: $white!important;
   }
 }

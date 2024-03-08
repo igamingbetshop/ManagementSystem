@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } 
 import { ActivatedRoute } from "@angular/router";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 
-import { mergeMap, take } from "rxjs/operators";
+import { take } from "rxjs/operators";
 import { IRowNode } from "ag-grid-community";
 import 'ag-grid-enterprise';
 import { MatDialog } from "@angular/material/dialog";
@@ -57,12 +57,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
   public filteredData;
   public selectedChangeCheckbox = false;
   public subProvidersTypesEnum;
-  public active = this.translate.instant("Common.Active");
-  public inactive = this.translate.instant("Common.Inactive");
-  public statuses = [
-    { Name: `${this.active}`, Id: 1 },
-    { Name: `${this.inactive}`, Id: 2 }
-  ];
+  public statuses = [];
   public formGroup: UntypedFormGroup;
   public productCategories = [];
   public gameProviders = [];
@@ -84,28 +79,40 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
   }
 
   ngOnInit(): void {
+    this.getAllProductStates();
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.formValues();
     this.mergeProductApi();
   }
 
+  getAllProductStates() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_PRODUCT_STATES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.statuses = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+      });
+  }
+
   mergeProductApi() {
     const getProductCategories$ = this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.PRODUCT, Methods.GET_PRODUCT_CATEGORIES);
     const getGameProviders$ = this.apiService.apiPost(this.configService.getApiUrl, { SettingPartnerId: this.partnerId }, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS);
-  
+
     forkJoin([getProductCategories$, getGameProviders$])
       .pipe(take(1)) // Take the first emitted value and complete the observable
       .subscribe(([productCategoriesData, gameProvidersData]) => {
         if (productCategoriesData.ResponseCode === 0) {
           this.productCategories = productCategoriesData.ResponseObject;
         }
-  
+
         if (gameProvidersData.ResponseCode === 0) {
           this.gameProviders = gameProvidersData.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
         }
-        console.log(this.gameProviders);
-        
         this.subProvidersTypesEnum = this.setEnum(this.gameProviders);
         this.setColumnDefs();
       });
@@ -219,7 +226,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         sortable: true,
         resizable: true,
         editable: true,
-        hide: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -295,6 +301,15 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         },
       },
       {
+        headerName: 'Products.HasImage',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'HasImage',
+        sortable: false,
+        resizable: true,
+        cellRenderer: this.imageCheckRenderer.bind(this),
+        filter: 'agBooleanColumnFilter',
+      },
+      {
         headerName: 'Partners.OpenMode',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'OpenMode',
@@ -320,6 +335,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this, "HasDemo"),
+          onCellValueChanged: this.onCheckBoxChange.bind(this)['bind'](this, "HasDemo")
         }
       },
       {
@@ -332,6 +348,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this, "IsForDesktop"),
+          onCellValueChanged: this.onCheckBoxChange.bind(this)['bind'](this, "IsForDesktop"),
         }
       },
       {
@@ -344,6 +361,8 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this, "IsForMobile"),
+          onCellValueChanged: this.onCheckBoxChange.bind(this)['bind'](this, "IsForMobile"),
+
         }
       },
       {
@@ -382,7 +401,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
           onClick: this.saveProductSettings['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#0573BA',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       }
@@ -395,6 +414,11 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     const matExportBtn = document.querySelector('.mat-export-btn-partner');
     agColumnSelect.prepend(matExportBtn);
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  imageCheckRenderer(params: any): string {
+    const hasImage = params.data.MobileImageUrl || params.data.DesktopImageUrl;
+    return hasImage ? this.translate.instant('Products.HasImage') : this.translate.instant('Products.NoImage');
   }
 
   createServerSideDatasource() {
@@ -412,6 +436,9 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         if (paging.CategoryIds) {
           paging.CategoryIds = paging.CategoryIds.ApiOperationTypeList[0].IntValue;
         }
+        if (paging.HasImages) {
+          paging.HasImages = paging.HasImages.ApiOperationTypeList[0].BooleanValue;
+        }
         this.filteredData = { ...paging };
 
         if(this.filteredData.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {
@@ -421,7 +448,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         if(this.filteredData.SubproviderIds) {
           this.filteredData.SubproviderIds.ApiOperationTypeList[0].ArrayValue = this.transformArrayToNumbers(this.filteredData.SubproviderIds.ApiOperationTypeList[0].ArrayValue, this.subProvidersTypesEnum);
         }
-        
+
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.PRODUCT, Methods.GET_PARTNER_PRODUCT_SETTINGS).pipe(take(1)).subscribe((data) => {
             if (data.ResponseCode === 0) {

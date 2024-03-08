@@ -1,12 +1,12 @@
 import {Injectable} from "@angular/core";
-import {ActivatedRouteSnapshot, Resolve} from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import {CommonDataService, ConfigService, LocalStorageService} from "../../../../core/services";
 import {map} from "rxjs/operators";
 import {SkillGamesApiService} from "../services/skill-games-api.service";
 
 
 @Injectable()
-export class SkillGamesPartnersResolver implements Resolve<any> {
+export class SkillGamesPartnersResolver  {
   constructor(private apiService: SkillGamesApiService,
               private configService: ConfigService,
               private localStorageService: LocalStorageService,

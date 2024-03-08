@@ -7,8 +7,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Controllers, Methods, ModalSizes} from "../../../../../../../core/enums";
 import {take} from "rxjs/operators";
 import {MatDialog} from "@angular/material/dialog";
-import {CreateTriggerGroupComponent} from "./create-trigger-group/create-trigger-group.component";
-import {AddTriggerToGroupComponent} from "./add-trigger-to-group/add-trigger-to-group.component";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
 
 @Component({
@@ -53,7 +51,7 @@ export class TriggersGroupComponent implements OnInit {
           item.TypeName = this.types.find((chr) => {
             return chr.Id === item.Type;
           }).Name;
-          
+
           return item;
         });
       }
@@ -103,7 +101,7 @@ export class TriggersGroupComponent implements OnInit {
   }
 
   onRemoveTriggerGroup(event) {
-    
+
     this.apiService.apiPost(this.configService.getApiUrl, { TriggerGroupId: event.Id}, true,
       Controllers.BONUS, Methods.REMOVE_TRIGGER_GROUP).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -112,12 +110,12 @@ export class TriggersGroupComponent implements OnInit {
         SnackBarHelper.show(this._snackBar, {Description : 'failed', Type : "error"});
       }
     });
-    
+
   }
 
   onPriorityChange(ev) {
     // console.log(ev);
-    
+
   }
 
 }

@@ -4,7 +4,6 @@
 .home-container {
   padding: 50px 36px 0 36px;
   box-sizing: border-box;
-
   @include desktop {
     padding-top: fluidSizeOnly(50, 42, $media-desktop-size, $media-laptop-size);
   }
@@ -30,11 +29,10 @@
 
 @media screen and (max-width: $media-laptop) {
   .home-container {
-
     .categories {
       row-gap: 30px;
       column-gap: 34px;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
     }
   }
 }

@@ -33,6 +33,7 @@ export class UnmapedPhasesComponent extends BasePaginatedGridComponent implement
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   constructor(
@@ -103,8 +104,6 @@ export class UnmapedPhasesComponent extends BasePaginatedGridComponent implement
           }
         })
         this.rowData = mappedRows;
-
-        console.log("ROWDATA", this.rowData);
 
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });

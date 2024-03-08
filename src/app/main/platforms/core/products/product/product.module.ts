@@ -18,7 +18,14 @@ import {TranslateModule} from "@ngx-translate/core";
 const routes: Routes = [
   {
     path: '',
-    component: ProductComponent
+    component: ProductComponent,
+    children: [
+      {
+        path: 'view-product',
+        loadChildren: () => import('./view-product/view-product.module').then(m => m.ViewProductModule)
+
+      },
+    ]
   },
 
 ];

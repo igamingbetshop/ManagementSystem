@@ -37,6 +37,7 @@ export class MatchGridComponent extends BasePaginatedGridComponent {
     resizable: true,
     sortable: false,
     filter: false,
+    minWidth: 50,
   };
 
   constructor(

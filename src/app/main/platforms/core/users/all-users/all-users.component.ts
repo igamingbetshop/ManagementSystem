@@ -290,7 +290,7 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
         paging.partnerId = this.partnerId;
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['Type'], ['UserType']);
         this.setSort(params.request.sortModel, paging);
         this.setFilterDropdown(params);

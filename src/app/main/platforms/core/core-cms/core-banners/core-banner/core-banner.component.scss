@@ -39,13 +39,15 @@
       @include  mat-cancel-btn-style
     }
   }
-
-}
-.img {
-  width: 600px!important;
-  height: 400px!important;
 }
 
+.card-content {
+  display: flex;
+  .img {
+    max-width: 400px;
+    max-height: 400px;
+  }
+}
 
 
 

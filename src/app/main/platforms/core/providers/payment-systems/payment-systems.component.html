@@ -2,26 +2,46 @@
 
   <div class="content-action">
     <div class="title">{{'Payments.PaymentSystems' | translate}}</div>
+
+    <div class = "bulk-editor-dropdown">
+      <button mat-stroked-button class="mat-bulk-btn"
+              [matMenuTriggerFor]="bulkMenu"
+              #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+        {{'Common.EditHideSections' | translate}}
+      </button>
+      <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before">
+        <ng-container #bulkEditorRef></ng-container>
+      </mat-menu>
+    </div>
+
   </div>
 
   <div class="grid-content">
     <ag-grid-angular
       id="report-bets"
       #agGrid
+      [class.hide-grid]="loadingUserState"
       class="ag-theme-balham"
       [headerHeight]="33"
       [rowHeight]="42"
       [rowData]="rowData"
-      [suppressCopyRowsToClipboard]="true"
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [suppressCopyRowsToClipboard]="true"
+      [animateRows]="true"
+      [suppressRowClickSelection]="true"
+      [components]="frameworkComponents"
       [cacheBlockSize]="cacheBlockSize"
       (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="multiple">
     </ag-grid-angular>
   </div>
 </div>

@@ -182,7 +182,7 @@ export class TemplatesComponent extends BasePaginatedGridComponent implements On
           onClick: this.saveTemplateSettings['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#076192',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       }

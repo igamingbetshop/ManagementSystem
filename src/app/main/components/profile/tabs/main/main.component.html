@@ -10,9 +10,9 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{user?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Id'" readonly>
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -30,9 +30,9 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{user?.UserName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'UserName'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -50,9 +50,9 @@
         <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
         <div class="second-hand">{{user?.FirstName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'FirstName'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -70,9 +70,9 @@
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
         <div class="second-hand">{{user?.LastName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'LastName'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -110,9 +110,9 @@
         <div class="first-hand">{{'Clients.Password' | translate}}</div>
         <div class="second-hand">********</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input type="password" matInput [formControlName]="'Password'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -149,9 +149,9 @@
   </div>
 
   <div class="api-key-content">
-    <mat-form-field>
+    <!-- <mat-form-field> -->
       <input matInput [placeholder]="'Api Key'" [(ngModel)]="apiKeyString">
-    </mat-form-field>
+    <!-- </mat-form-field> -->
 
     <div>
       <div class="first-hand"></div>

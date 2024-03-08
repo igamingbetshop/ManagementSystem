@@ -14,6 +14,7 @@ import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/c
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MATCH_STATUSES } from 'src/app/core/constantes/statuses';
+import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
   selector: 'app-main',
@@ -39,7 +40,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     };
 
   public Statuses = MATCH_STATUSES;
-  localizeHeader: any;
   matchName: string;
 
   constructor(
@@ -49,9 +49,9 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     protected injector: Injector,
     private fb: UntypedFormBuilder,
     public dialog: MatDialog,
-  ) { 
+  ) {
     super(injector);
-    
+
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -95,6 +95,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onUpdateCompetitor['bind'](this),
+          onCellValueChanged: this.onUpdateCompetitor.bind(this)
         }
       },
       {
@@ -274,7 +275,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     });
   }
 
-  async onAddCompetitor() {    
+  async onAddCompetitor() {
     const {AddCompetitor} = await import('./add-competitor/add-competitor.component');
     const dialogRef = this.dialog.open(AddCompetitor, {width:ModalSizes.SMALL, data: this.MatchId});
       dialogRef.afterClosed().pipe(take(1)).subscribe(() => {
@@ -306,6 +307,11 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
 
   get errorControl() {
     return this.formGroup.controls;
+  }
+
+  localizeHeader(parameters: ICellRendererParams): string {
+    let headerIdentifier = parameters.colDef.headerName;
+    return this.translate.instant(headerIdentifier) || "";
   }
 
 }

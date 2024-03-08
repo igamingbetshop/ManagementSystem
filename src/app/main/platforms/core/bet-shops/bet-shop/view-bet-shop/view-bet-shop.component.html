@@ -1,10 +1,18 @@
 <div class="container">
   <div class="content-action">
-    <div class="title" *ngIf="cashDesk" >
-      <a [routerLink]="['../../bet-shop-groups']">
-        {{'BetShops.BetShops' | translate}} / {{name}} / {{secondName}} / {{cashDesk.Name}}  
-      </a>
-      </div>
+    @if (cashDesk) {
+      <div class="title">
+        <a [routerLink]="['/main/platform/bet-shop-groups']">
+          {{'BetShops.BetShops' | translate}}    
+        </a>
+        <a (click)="toRedirectToBetshops()">
+          / {{name}} 
+        </a>
+        <a (click)="redirectToBetshop()">
+          / {{secondName}} / {{cashDesk.Name}}
+        </a>
+        </div>
+    }
     <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
   </div>
 
@@ -15,9 +23,9 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{cashDesk?.Id}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.Id' | translate}}" [formControlName]="'Id'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -25,9 +33,9 @@
         <div class="first-hand">{{'BetShops.BetShopId' | translate}}</div>
         <div class="second-hand">{{cashDesk?.BetShopId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'BetShops.BetShopId' | translate}}" [formControlName]="'BetShopId'">
-          </mat-form-field>
+          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -35,11 +43,12 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{cashDesk?.Name}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <!-- <mat-form-field> -->
             <input matInput placeholder="{{'Common.Name' | translate}}" [formControlName]="'Name'">
-            <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
+            <!-- <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
               {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>          </mat-form-field>
+            </mat-error>        -->
+             <!-- </mat-form-field> -->
           </div>
         </div>
         
@@ -50,9 +59,9 @@
               <mat-select [formControlName]="'State'">
                 <mat-option *ngFor="let state of cashdeskStates" [value]="state.Id">{{state.Name}}</mat-option>
               </mat-select>
-              <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
+              <!-- <mat-error *ngIf="errorControl['State']?.touched && errorControl['State'].errors?.required">
                 {{'Common.State' | translate}} {{'Errors.Required' | translate}}
-              </mat-error>       
+              </mat-error>        -->
           </div>
         </div>
 
@@ -63,9 +72,9 @@
             <mat-select [formControlName]="'Type'">
               <mat-option *ngFor="let type of cashdesktypes" [value]="type.Id">{{type.Name}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+            <!-- <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
               {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>     
+            </mat-error>      -->
           </div>
         </div>
 
@@ -73,12 +82,12 @@
           <div class="first-hand">{{'BetShops.MacAddress' | translate}}</div>
           <div class="second-hand">{{cashDesk?.MacAddress}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput placeholder="{{'BetShops.MacAddress' | translate}}" [formControlName]="'MacAddress'">
-              <mat-error *ngIf="errorControl['MacAddress']?.touched && errorControl['MacAddress'].errors?.required">
+              <!-- <mat-error *ngIf="errorControl['MacAddress']?.touched && errorControl['MacAddress'].errors?.required">
                 {{'BetShops.MacAddress' | translate}} {{'Errors.Required' | translate}}
-              </mat-error>     
-            </mat-form-field>
+              </mat-error>      -->
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -86,9 +95,9 @@
           <div class="first-hand">{{'BetShops.EncryptionKey' | translate}}</div>
           <div class="second-hand">{{cashDesk?.EncryptionKey}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput placeholder=" {{'BetShops.EncryptionKey' | translate}} {{'Errors.ShouldBe16Characters' | translate}}" [formControlName]="'EncryptionKey'">
-              <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.required">
+              <!-- <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.required">
                 {{'BetShops.EncryptionKey' | translate}} {{'Errors.Required' | translate}}
               </mat-error>
               <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.minlength">
@@ -96,8 +105,8 @@
               </mat-error>
               <mat-error *ngIf="errorControl['EncryptionKey']?.touched && errorControl['EncryptionKey'].errors?.maxlength">
                 {{'BetShops.EncryptionKey' | translate}} {{'Errors.ShouldBe16Characters' | translate}}
-              </mat-error>    
-            </mat-form-field>
+              </mat-error>     -->
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -108,23 +117,23 @@
             <mat-select [formControlName]="'Restrictions'">
               <mat-option *ngFor="let restriction of restrictions" [value]="restriction?.Id">{{restriction?.Name}}</mat-option>
             </mat-select>
-            <mat-error *ngIf="errorControl['Restrictions']?.touched && errorControl['Restrictions'].errors?.required">
+            <!-- <mat-error *ngIf="errorControl['Restrictions']?.touched && errorControl['Restrictions'].errors?.required">
               {{'Common.Restriction' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
+            </mat-error> -->
           </div>
         </div>
 
         <div></div>
-        <div></div>
-        <div></div>
 
 
-      <div class="form-actions" *ngIf="isEdit">
-        <div class="actions" >
-          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
-          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
-        </div>
-      </div>
+        @if (isEdit) {
+          <div class="form-actions">
+            <div class="actions" >
+              <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+              <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+            </div>
+          </div>
+        }
     </form>
   </div>
 </div>

@@ -86,7 +86,9 @@ export class RegionsComponent extends BasePaginatedGridComponent implements OnIn
           filter: 'agBooleanColumnFilter',
           cellRenderer: 'checkBoxRenderer',
           cellRendererParams: {
-            onchange: this.onCheckBoxChangeNested['bind'](this),
+
+            onchange: this.onCheckBoxChangeNested.bind(this),
+            onCellValueChanged: this.onCheckBoxChange.bind(this)
           }
         },
         {
@@ -272,6 +274,8 @@ export class RegionsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   onCheckBoxChange(params, val, param) {
+    console.log(params, val, param);
+    
     params.Enabled = val;
     this.onCellValueChanged(param)
   }

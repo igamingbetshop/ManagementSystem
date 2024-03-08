@@ -773,8 +773,6 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
 
   ngOnInit(): void {
     this.gameId = this.route.snapshot.queryParamMap.get('gameId');
-    console.log("ROUTE", this.route.snapshot);
-    
     this.startDate();
     this.partners = this.commonDataService.partners;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
@@ -782,7 +780,7 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
     this.getCategoryEnum();
     this.getProviders();
     this.getDeviceTypes();
-    this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;    
+    this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
   }
 
   startDate() {
@@ -812,12 +810,12 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
     syncColumnSelectPanel();
     syncColumnReset();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  
+
     const gameId = this.route.snapshot.queryParams['gameId'];
     if (gameId) {
       const filterModel = {
-        type: 'equals', 
-        filter: gameId.toString(), 
+        type: 'equals',
+        filter: gameId.toString(),
       };
 
       const productIdColumn = this.columnDefs.find((colDef) => colDef.field === 'ProductId');
@@ -836,7 +834,7 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
         paging.BetDateFrom = this.fromDate;
-        paging.BetDateBefore = this.toDate;        
+        paging.BetDateBefore = this.toDate;
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;

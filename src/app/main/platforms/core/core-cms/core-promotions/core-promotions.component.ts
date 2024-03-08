@@ -35,6 +35,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   states = ACTIVITY_STATUSES;
@@ -247,7 +248,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
 
 
   onRowClicked(event: any) {
-    this.promotionId = event.data.Id;    
+    this.promotionId = event.data.Id;
     this.getPage(this.promotionId, false);
   }
 }

@@ -1,0 +1,12 @@
+<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+  <form class="bulk-editor-content" >
+    <mat-slide-toggle class="bulk-switch"  [(ngModel)]="value" > {{'Common.Hide' | translate}} </mat-slide-toggle>
+
+
+  </form>
+
+  <div class="bulk-editor-actions">
+    <button class="bulk-cancel-btn" (click)="onCancelBtn()">{{'Common.Cancel' | translate}}</button>
+    <button class="bulk-primary-btn" (click)="openConfirmDialog()">{{'Common.Save' |translate}}</button>
+  </div>
+</div>

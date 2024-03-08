@@ -2,7 +2,6 @@
 @import "mixins.scss";
 
 .left-menu-items {
-
   .section-content {
     padding: 8px 14px;
     display: flex;
@@ -11,7 +10,7 @@
     height: 100%;
 
     &:hover {
-      background-color: $blue-light-3;
+      background-color: $grey-blue-1;
     }
 
     .material-icons {
@@ -24,21 +23,17 @@
       display: none;
       font-size: 14px;
       white-space: nowrap;
-      ;
       text-overflow: ellipsis;
       overflow: hidden;
       padding-left: 10px;
       font-family: "Roboto", sans-serif;
-
       &.show {
         display: inline-block;
       }
     }
 
     &.selected {
-      background-color: $blue-2;
-
-
+      background-color: $bg-color;
       .material-icons {
         color: $white;
       }
@@ -51,30 +46,25 @@
 }
 
 .item-dropdown {
-
-  &.mat-menu-panel {
+  &.mat-mdc-menu-panel {
     border-radius: 0;
     min-height: auto;
     max-height: calc(100vh - 64px);
     min-width: 220px;
     overflow: auto;
     height: 100% !important;
-
     &.nested {
       left: 1px !important;
     }
-
-    .mat-menu-content {
+    .mat-mdc-menu-content {
       padding: 0;
-
       .item {
         height: 100%;
         cursor: pointer;
         position: relative;
         transition: background-color 0.2s ease;
-
         &:hover {
-          background-color: $blue-light-3;
+          background-color: $grey-blue-1;
         }
 
         .mat-menu-submenu-icon {
@@ -85,14 +75,13 @@
           display: flex;
           align-items: center;
 
-
           &.arrow {
             &::after {
               content: "";
               display: inline-block;
               width: 0;
               height: 0;
-              border-left: 4px solid $gray-light-3;
+              border-left: 4px solid $bg-color;
               border-top: 4.5px solid transparent;
               border-bottom: 4.5px solid transparent;
               position: absolute;
@@ -105,11 +94,11 @@
             height: 18px;
             font-size: 18px;
             margin-right: 10px !important;
-            color: $gray-light-3;
+            color: $bg-color;
           }
 
           .item-name {
-            color: $gray-light-3;
+            color: $bg-color;
             padding-right: 5px;
           }
 
@@ -120,7 +109,7 @@
         }
 
         &.selected {
-          background-color: $blue-2;
+          background-color: $bg-color;
           pointer-events: none;
           color: $white;
 
@@ -136,10 +125,21 @@
         }
       }
 
-      .mat-menu-item {
+      .mat-mdc-menu-item {
         height: 34px;
-        line-height: 34px;
+        min-height: 34px!important;
+        margin: 0!important;
       }
+
     }
   }
+}
+
+.mat-mdc-menu-item-text {
+  height: 20px;
+  line-height: 20px;
+}
+
+.mat-mdc-menu-submenu-icon {
+  color: $bg-color!important;
 }

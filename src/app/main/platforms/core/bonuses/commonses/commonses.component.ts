@@ -132,7 +132,7 @@ export class CommonsesComponent extends BaseGridComponent implements OnInit {
           });
       }
     },
-    
+
   } as IDetailCellRendererParams<any, any>;
 
   public bonusTypes = [];

@@ -1,0 +1,25 @@
+.img-div {
+  display: flex;
+
+  label {
+    margin: 3px 0;
+    padding: 10px;
+    background-color: #378FC8;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color:#076192;
+    }
+  }
+
+  input {
+    visibility: hidden;
+    width: 10px;
+  }
+
+  .img-text {
+    margin-left: auto;
+  }
+}

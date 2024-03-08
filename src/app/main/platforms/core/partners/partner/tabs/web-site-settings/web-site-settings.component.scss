@@ -6,7 +6,7 @@
   height: auto;
   .content-action {
     @include action-style;
-    height: 68px;
+    height: 60px;
     .partner-dropdown {
       margin-right: 8px;
       @include dropdown-style;
@@ -24,14 +24,17 @@
     }
     .mat-btn {
       margin: 4px;
-      color: $blue-5 !important;
-      background-color: $blue-light-7;
-      padding: 0 10px;
+      border: 1px solid $gray-light-14;
+      border-radius: 8px;
+      color: $gray-light-15;
+      background-color: $gray-light;
+      box-shadow: none;
+      transition: 0.3s ease-in;
       &.active {
-        background-color: $blue-2;
+        background-color: $bg-color;
         color: white !important;
       }
-    }    
+    }  
     .input-container {
       margin-left: 4px;
       position: relative;

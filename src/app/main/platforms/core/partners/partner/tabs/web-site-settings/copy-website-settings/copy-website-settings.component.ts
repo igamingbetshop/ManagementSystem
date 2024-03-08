@@ -27,7 +27,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     private apiService: CoreApiService,
     private _snackBar: MatSnackBar,
     public configService: ConfigService,
-    
+
     private activateRoute: ActivatedRoute,
     private fb: UntypedFormBuilder,
     public commonDataService: CommonDataService,
@@ -38,7 +38,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     this.diviceType = this.data.diviceType;
     this.formValues();
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
-    this.partners = this.commonDataService.partners;    
+    this.partners = this.commonDataService.partners;
   }
 
   close() {
@@ -46,7 +46,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
   }
 
   onChange(event) {
-    
+
     if (event) {
       this.selectedPartner = event;
       this.formGroup.get('MenuItemId').enable();
@@ -74,7 +74,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     });
   }
 
-  
+
 
   onSubmit() {
     const requestBody = this.formGroup.getRawValue();

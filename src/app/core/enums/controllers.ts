@@ -18,7 +18,8 @@ export enum Controllers {
     UTIL = 'Util',
     LANGUAGE = 'Language',
     PROVIDER = 'Provider',
-    AFFILIATES = 'Affiliate'
+    AFFILIATES = 'Affiliate',
+    AGENT = 'Agent',
 }
 
 export enum PBControllers {

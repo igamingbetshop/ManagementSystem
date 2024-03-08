@@ -241,11 +241,11 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
         onCellClicked: (event: CellClickedEvent) => this.redirectToFinished(event),
       },
     ];
-  }  
+  }
 
   redirectToFinished(ev) {
     const row = ev.data;
-  
+
     const queryParams = {
       finishId: row.MatchId,
       partnerId: row.PartnerId,
@@ -254,18 +254,18 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
       isMainPartner: row.isMainPartner,
       sportId: row.SportId,
     };
-  
+
     const queryString = Object.keys(queryParams)
       .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
       .join('&');
-  
+
     const newWindow = window.open(`/main/sportsbook/matches/finished/finish/main?${queryString}`, '_blank');
-  
+
     if (newWindow) {
       newWindow.focus();
     }
   }
-  
+
 
   getSports() {
     this.apiService.apiPost('sports').subscribe(data => {
@@ -349,9 +349,9 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
         } else if (paging.hasOwnProperty("SportIds")) {
           delete paging.SportIds;
         }
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['SportName', 'Status'], ['SportId', 'Statuse']);
-       
+
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
 

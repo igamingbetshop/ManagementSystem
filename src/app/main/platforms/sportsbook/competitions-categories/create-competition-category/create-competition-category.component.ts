@@ -54,7 +54,6 @@ export class CreateCompetitionCategoryComponent implements OnInit {
       MaxWinPrematchMultiple:[null],
       MaxWinLiveSingle:[null],
       MaxWinLiveMultiple:[null],
-      AllowMultipleBets:[false],
       IsDefault:[false],
     });
   }

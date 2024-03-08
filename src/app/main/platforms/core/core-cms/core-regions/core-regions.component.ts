@@ -5,7 +5,7 @@ import { CoreApiService } from '../../services/core-api.service';
 import { CommonDataService } from 'src/app/core/services';
 import { MatDialog } from '@angular/material/dialog';
 import 'ag-grid-enterprise';
-import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
 import { CellValueChangedEvent, ColDef } from 'ag-grid-community';
 import { take } from 'rxjs/operators';
@@ -238,7 +238,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     params.TypeId = value;
     this.onCellValueChanged(params);
   }
-  
+
 
   async addRegions() {
     const parentId = this.agGrid.api.getSelectedRows()[0]?.Id;

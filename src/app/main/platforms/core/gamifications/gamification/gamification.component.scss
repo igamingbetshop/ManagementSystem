@@ -17,8 +17,17 @@
   }
 
   .img {
-    width: 300px;
-    height: 300px;
+    width: 270px;
+    height: 270px;
   }
+}
 
+.card-content {
+  display: flex;
+  gap: 10px;
+  .card {
+    max-width: 300px;
+    max-height: 300px;
+    margin-right: 20px;
+  }
 }

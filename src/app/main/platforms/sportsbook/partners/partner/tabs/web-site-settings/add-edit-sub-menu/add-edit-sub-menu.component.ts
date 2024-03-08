@@ -93,7 +93,7 @@ export class AddEditSubMenuComponent implements OnInit {
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
     if (files) {
-      this.validDocumentSize = files.size < 700000;
+      this.validDocumentSize = files.size < 900000;
       this.validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif|\.svg|\.ttf|\.otf|\.woff|\.woff2)$/.test(event.target.value);
       if (this.validDocumentFormat && this.validDocumentSize)
       {

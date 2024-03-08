@@ -1,5 +1,5 @@
-import { Component, Injector, OnInit } from '@angular/core';
-import { Controllers, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
+import { Component, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import 'ag-grid-enterprise';
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -7,8 +7,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { CoreApiService } from "../../services/core-api.service";
 import { take } from 'rxjs/operators';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
-import { CellClickedEvent } from 'ag-grid-community';
+import { CellClickedEvent, ICellRendererParams } from 'ag-grid-community';
 import { ActivatedRoute } from '@angular/router';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ToggleRendererComponent } from 'src/app/main/components/grid-common/toggle-renderer';
 
 @Component({
   selector: 'app-all-providers',
@@ -16,9 +19,25 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./all-providers.component.scss']
 })
 export class AllProvidersComponent extends BasePaginatedGridComponent implements OnInit {
+  @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
+  @ViewChild('bulkEditorRef', {read: ViewContainerRef}) bulkEditorRef!: ViewContainerRef;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  frameworkComponents = {
+    agBooleanColumnFilter: AgBooleanFilterComponent,
+    checkBoxRenderer: ToggleRendererComponent,
+  };
 
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  public defaultColDef = {
+    flex: 1,
+    editable: false,
+    sortable: true,
+    resizable: true,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    minWidth: 50,
+    menuTabs: [   ]
+  };
 
   constructor(
     protected injector: Injector,
@@ -28,14 +47,22 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
     public dialog: MatDialog,
   ) {
     super(injector);
+    this.adminMenuId = GridMenuIds.CORE_PROVIDERS_PRODUCTS;
     this.columnDefs = [
       {
         field: 'Id',
         sortable: true,
         resizable: true,
         tooltipField: 'Id',
-        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
-        filter: 'agNumberColumnFilter',
+        headerCheckboxSelection: true,
+        checkboxSelection: true,
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Common.Name',
@@ -43,7 +70,13 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
         field: 'Name',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Providers.SessionExpireTime',
@@ -51,7 +84,13 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
         field: 'SessionExpireTime',
         resizable: true,
         sortable: true,
-        filter: 'agNumberColumnFilter',
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Providers.GameLaunchUrl',
@@ -59,7 +98,38 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
         field: 'GameLaunchUrl',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
+        headerName: 'Common.IsActive',
+        field: 'IsActive',
+        sortable: true,
+        resizable: true,
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: [true, false],
+          defaultOption: true,
+        },
+        cellRenderer: 'checkBoxRenderer',
+        cellRendererParams: {
+          frameworkComponent: ToggleRendererComponent,
+          onCellValueChanged: (params: ICellRendererParams) => {
+            this.onCellValueChanged(params);
+          }
+        },
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        }
       },
       {
         headerName: 'Common.View',
@@ -73,6 +143,13 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
             visibility
           </i>`;
         },
+        cellStyle: function (params) {
+          if (params.data.IsActive !== true) {
+            return { color: 'white', backgroundColor: '#d3d3d3' };
+          } else {
+            return null;
+          }
+        },
         onCellClicked: (event: CellClickedEvent) => this.redirectToProvider(event),
       },
     ]
@@ -82,7 +159,7 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
   ngOnInit() {
     this.gridStateName = 'all-providers-grid-state';
     this.getPage();
-    super.ngOnInit();    
+    super.ngOnInit();
   }
 
   redirectToProvider(params) {
@@ -120,6 +197,58 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
 
   onGridReady(params) {
     super.onGridReady(params);
+  }
+
+  onCellValueChanged(params) {
+    params.IsActive = !params.IsActive;
+      this.apiService.apiPost(this.configService.getApiUrl, params,
+        true, Controllers.PRODUCT, Methods.SAVE_GAME_PROVIDER).pipe(take(1)).subscribe(data => {
+          if (data.ResponseCode === 0) {
+            SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
+            const updatedRow = this.rowData.find(x => x.Id === params.Id);
+            if (updatedRow) {
+              updatedRow.IsActive = params.IsActive;
+              const rowNode = this.gridApi.getRowNode(updatedRow.Id);
+              this.gridApi.forEachNode((node) => {
+                if (node.data.Id === params.Id) {
+                  node.setData(updatedRow);
+                  this.gridApi.redrawRows({ rowNodes: [node] });
+                  return;
+                }
+              });
+            }
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          }
+        });
+  }
+
+  isRowSelected() {
+    return this.gridApi?.getSelectedRows().length;
+  }
+
+  async onBulkEditorOpen() {
+    if (this.bulkEditorRef) {
+      this.bulkEditorRef.clear();
+    }
+
+    if (!this.isRowSelected()) {
+      return
+    }
+
+    const componentInstance = await import('../payment-systems/bulk-editor/bulk-editor.component').then(c => c.BulkEditorComponent);
+    const componentRef = this.bulkEditorRef.createComponent(componentInstance);
+    componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
+    componentRef.instance.Ids =  this.gridApi.getSelectedRows().map(field => field.Id);
+    ;
+    componentRef.instance.method = Methods.SAVE_GAME_PROVIDER;
+    componentRef.instance.controller = Controllers.PRODUCT;
+
+    componentRef.instance.afterClosed.subscribe(() => {
+      this.getPage();
+      this.bulkEditorRef.clear();
+      this.gridApi.deselectAll();
+    });
   }
 
 }

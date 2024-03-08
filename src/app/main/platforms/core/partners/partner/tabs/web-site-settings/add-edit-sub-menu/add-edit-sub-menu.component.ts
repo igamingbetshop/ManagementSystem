@@ -1,13 +1,13 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {CoreApiService} from '../../../../../services/core-api.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {CommonDataService, ConfigService} from '../../../../../../../../core/services';
-import {ActivatedRoute} from '@angular/router';
-import {Controllers, Methods} from '../../../../../../../../core/enums';
-import {take} from 'rxjs/operators';
-import {SnackBarHelper} from '../../../../../../../../core/helpers/snackbar.helper';
+import { Component, Inject, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CoreApiService } from '../../../../../services/core-api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonDataService, ConfigService } from '../../../../../../../../core/services';
+import { ActivatedRoute } from '@angular/router';
+import { Controllers, Methods } from '../../../../../../../../core/enums';
+import { take } from 'rxjs/operators';
+import { SnackBarHelper } from '../../../../../../../../core/helpers/snackbar.helper';
 
 @Component({
   selector: 'app-add-edit-sub-menu',
@@ -83,16 +83,15 @@ export class AddEditSubMenuComponent implements OnInit {
 
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true, Controllers.CONTENT,
       Methods.SAVE_WEBSITE_SUB_MENU_ITEM).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.dialogRef.close(data.ResponseObject);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: 'error'});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(data.ResponseObject);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+      });
   }
 
   uploadFile(event) {
-
     let files = event.target.files.length && event.target.files[0];
     if (files) {
       if (this.isValidFormat(files)) {
@@ -107,7 +106,7 @@ export class AddEditSubMenuComponent implements OnInit {
       } else {
         this.checkDocumentSize = false;
         files = null;
-        SnackBarHelper.show(this._snackBar, {Description: 'file format not valid', Type: 'error'});
+        SnackBarHelper.show(this._snackBar, { Description: 'file format not valid', Type: 'error' });
       }
     }
   }
@@ -130,15 +129,16 @@ export class AddEditSubMenuComponent implements OnInit {
   }
 
   isValidFormat(files: any): boolean {
-    return (files.size < 700000) && (files.type === 'image/png' ||
-      files.type === 'image/jpg' ||
-      files.type === 'image/x-icon' ||
-      files.type === 'image/svg+xml' ||
-      files.type === 'image/jpeg' ||
-      files.type === 'image/gif' ||
-      files.name.includes('.ttf'));
+    return (files.size < 900000) && (files.type === 'image/png' ||
+    files.type === 'image/jpg' ||
+    files.type === 'image/x-icon' ||
+    files.type === 'image/svg+xml' ||
+    files.type === 'image/jpeg' ||
+    files.type === 'image/gif' ||
+    files.type === 'application/pdf' ||
+    files.type === 'image/vnd.microsoft.icon' ||    
+    files.name.includes('.ttf'));
   }
-
 
   public onChangeColor(color: string): void {
     this.color = color;

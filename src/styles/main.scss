@@ -1,8 +1,6 @@
-@use "~ag-grid-community/styles" as ag;
-@include ag.grid-styles((
-  theme: balham,
-  --ag-header-background-color:#0573BA
-));
+@use "ag-grid-community/styles" as ag;
+@include ag.grid-styles((theme: balham,
+    --ag-header-background-color:#3E4D66));
 @import "helpers/mixins";
 @import "general/general_dir";
 @import "helpers/fonts";
@@ -14,23 +12,22 @@
 @import "helpers/detail-nav-tabs";
 @import "helpers/modal-form";
 
-.mat-menu-content {
-  a.active
-  {
+.mat-mdc-menu-content {
+  a.active {
     background-color: #1375aa;
     color: rgb(165, 162, 162);
   }
 }
 
-.mat-form-field-flex > .mat-form-field-infix {
+.mat-mdc-form-field-flex>.mat-form-field-infix {
   padding: 0.4em 0 !important;
 }
 
-.mat-form-field-label-wrapper {
+.mat-mdc-form-field-label-wrapper {
   top: -1.5em;
 }
 
-.mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+.mat-mdc-form-field-appearance-outline.mat-mdc-form-field-can-float.mat-mdc-form-field-should-float .mat-mdc-form-field-label {
   transform: translateY(-1.1em) scale(.75);
   width: 133.33333%;
 }
@@ -40,14 +37,51 @@
   border-bottom: 1px solid $border-color;
   @include flex-between;
   @include flex-vertical-center;
-  mat-icon{cursor: pointer}
+  mat-icon {
+    cursor: pointer
+  }
 }
 
 .modal-form {
   display: grid;
   grid-gap: 10px;
 }
+.mat-drawer-content{
+  @media only screen and (max-width: 1200px) {
+    margin-left: 0!important;
+  }
+}
+.menu{
+  display: none;
+  position: relative;
+  z-index: 4;
+  top: -50px;
+  left: 0;
+  height: 0;
+  font-size: 30px;
+  margin-left: 2px;
+  @media only screen and (max-width: 1200px) {
+  display: block;
+  }
+}
 
+.disabled-header
+{
+  position: relative;
+  @media only screen and (max-width: 1200px) {
+    &:after
+    {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 47px;
+      bottom: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 2;
+    }
+  }
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -59,7 +93,7 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-.mat-snack-bar-container {
+.mat-mdc-snack-bar-container {
   margin: 0 !important;
   padding: 0 !important;
   background-color: transparent !important;
@@ -73,6 +107,10 @@ input[type=number] {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
+}
+
+::-webkit-scrollbar-track-piece:vertical:start:corner-present {
+  margin-bottom: 50px;
 }
 
 ::-webkit-scrollbar-track {

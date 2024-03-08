@@ -14,8 +14,6 @@ import { FormsModule } from "@angular/forms";
 import { TranslateModule } from "@ngx-translate/core";
 import { HelpCenterRoutingModule } from './help-center-routing.module';
 import { HelpCenterComponent } from './help-center.component';
-import { CoreSectionComponent } from './platforms/core-section/core-section.component';
-
 
 @NgModule({
   declarations: [

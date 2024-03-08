@@ -52,7 +52,7 @@ export class MainComponent implements OnInit {
   createNonNullableForm() {
     this.formGroup = this.fb.nonNullable.group({
       Id: [{ value: this.round?.Id, disabled: true }],
-      TypeId: [this.round?.TypeId],
+      MarketTypeId: [this.round?.MarketTypeId],
       Number: [this.round?.Number],
       Status: [this.round?.Status],
       OpenTime: [this.round?.OpenTime],
@@ -96,7 +96,7 @@ export class MainComponent implements OnInit {
 
 export interface IRound {
   Id: number;
-  TypeId: number;
+  MarketTypeId: number;
   Number: number;
   Status: number;
   StatusName: string;

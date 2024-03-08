@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -151,7 +153,7 @@ export class AddCorePromotionsComponent implements OnInit {
         reader.onload = () => {
           const binaryString = reader.result as string;
 
-          if(files.size < 700000)
+          if(files.size < 900000)
           {
             this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
             this.formGroup.get('ImageName').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
@@ -249,11 +251,11 @@ export class AddCorePromotionsComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    
+
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_PROMOTION)
       .pipe(take(1))
-      .subscribe(data => { 
+      .subscribe(data => {
         if (data.ResponseCode === 0) {
         this.dialogRef.close(obj);
         } else {

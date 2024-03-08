@@ -1,0 +1,15 @@
+<div class="grid-content">
+  <ag-grid-angular
+    id="compatitions"
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [components]="frameworkComponents"
+    (rowClicked)="onRowClicked($event)"
+    (gridReady)="onGridReady($event)"
+    rowSelection="single">
+  </ag-grid-angular>
+</div>

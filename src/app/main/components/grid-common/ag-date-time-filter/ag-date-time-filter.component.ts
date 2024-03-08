@@ -65,11 +65,11 @@ export class AgDateTimeFilter implements AgFilterComponent {
     const filterOptions = params.filterOptions;
 
     const displayKeysToKeep = [Operations.isGreater, Operations.isLess, Operations.isEuqal];
-    
+
     const filteredOptions = filterOptions.filter(elem => displayKeysToKeep.includes(elem.displayKey));
-    
-    this.filterOptions =  filteredOptions.sort(customSort);    
-    
+
+    this.filterOptions =  filteredOptions.sort(customSort);
+
     this.filterData = params.filterData;
     this.filterType = params.filterType ? params.filterType : 'date';
     this.suppressAndOrCondition = params.suppressAndOrCondition ? params.suppressAndOrCondition : false;
@@ -157,13 +157,13 @@ export class AgDateTimeFilter implements AgFilterComponent {
   onStartDateChange(event, conditionIndex: number) {
     const dateString = event;
     const date = new Date(dateString);
-  
+
     // Get the current time zone offset in minutes
     const timeZoneOffsetMinutes = date.getTimezoneOffset();
-  
+
     // Calculate the date and time in the current time zone
     const dateInCurrentTimeZone = new Date(date.getTime() + timeZoneOffsetMinutes * 60 * 1000);
-  
+
     const year = dateInCurrentTimeZone.getFullYear();
     const month = String(dateInCurrentTimeZone.getMonth() + 1).padStart(2, "0");
     const day = String(dateInCurrentTimeZone.getDate()).padStart(2, "0");
@@ -172,14 +172,14 @@ export class AgDateTimeFilter implements AgFilterComponent {
     const seconds = "00";
     const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     this.onDataChange(formattedDate, conditionIndex);
-  
+
     if (conditionIndex) {
       this.filter.filterModels[1].dateFrom = formattedDate;
     } else {
       this.filter.filterModels[0].dateFrom = formattedDate;
     }
   }
-  
+
 
 }
 

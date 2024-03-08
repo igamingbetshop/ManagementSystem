@@ -10,6 +10,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { CoreApiService } from '../../../services/core-api.service';
+import { syncColumnNestedSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 const statusModel = [
   { "Name": "active", "Id": 1 },
@@ -23,8 +25,11 @@ const statusModel = [
 })
 export class ProviderComponent extends BasePaginatedGridComponent implements OnInit {
   providerId: number;
-  public rowData = [];
-  public frameworkComponents;
+  rowData = [];
+  frameworkComponents;
+  filteredData;
+  gameProviders: any[] = [];
+
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -33,6 +38,19 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
     private apiService: CoreApiService,
   ) {
     super(injector);
+
+    this.frameworkComponents = {
+      agBooleanColumnFilter: AgBooleanFilterComponent,
+      agDropdownFilter: AgDropdownFilter,
+    }
+  }
+
+  ngOnInit() {
+    this.fetchProviders();
+    this.providerId = +this.activateRoute.snapshot.queryParams.providerId;
+  }
+
+  setColdefs() {
     this.columnDefs = [
       {
         field: 'Id',
@@ -79,12 +97,19 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'GameProviderName',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        filter: false,
+      },
+      {
+        headerName: 'Providers.SubProviderName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SubproviderName',
+        sortable: true,
+        resizable: true,
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        }
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.gameProviders
+        },
       },
       {
         headerName: 'Products.HasDemo',
@@ -92,7 +117,8 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'HasDemo',
         resizable: true,
         sortable: true,
-        filter: 'agBooleanColumnFilter',
+        filter: false,
+        // filter: 'agBooleanColumnFilter',
       },
       {
         headerName: 'Products.IsForDesktop',
@@ -100,7 +126,8 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'IsForDesktop',
         resizable: true,
         sortable: true,
-        filter: 'agBooleanColumnFilter',
+        filter: false,
+        // filter: 'agBooleanColumnFilter',
       },
       {
         headerName: 'Products.IsForMobile',
@@ -108,7 +135,8 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'IsForMobile',
         resizable: true,
         sortable: true,
-        filter: 'agBooleanColumnFilter',
+        filter: false,
+        // filter: 'agBooleanColumnFilter',
       },
       {
         headerName: 'Common.IsLeaf',
@@ -116,12 +144,7 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'IsLeaf',
         resizable: true,
         sortable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
+        filter: false,
       },
       {
         headerName: 'Bonuses.Description',
@@ -142,12 +165,7 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'Level',
         resizable: true,
         sortable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
+        filter: false,
       },
       {
         headerName: 'Products.MobileImageUrl',
@@ -181,11 +199,11 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         field: 'State',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
-          filterOptions: this.filterService.textOptions
+          filterOptions: this.filterService.numberOptions
         },
         cellRenderer: function (params) {
           let status = params.data.State == 1 ? 'active' : params.data.State == 2 ? 'inactive' : '';
@@ -194,14 +212,21 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
       },
 
     ];
-    this.frameworkComponents = {
-      agBooleanColumnFilter: AgBooleanFilterComponent,
-    }
   }
 
-  ngOnInit() {
-    this.gridStateName = 'provider-grid-state';
-    this.providerId = +this.activateRoute.snapshot.queryParams.providerId;
+
+  fetchProviders() {
+    this.apiService.apiPost(this.configService.getApiUrl, { ParentId: this.providerId }, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.gameProviders = data.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
+
+          this.setColdefs();
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+      });
   }
 
   sync() {
@@ -223,6 +248,7 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnNestedSelectPanel();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
@@ -240,10 +266,14 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
             IntValue: this.providerId,
           }]
         };
-
+        this.changeFilerName(params.request.filterModel,
+          ['SubproviderName'], ['SubproviderId']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
+        this.filteredData = paging;
 
+        console.log(paging, 'paging');
+        
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -260,5 +290,19 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  exportToCsv() {
+    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
+      Controllers.PRODUCT, Methods.EXPORT_PRODUCTS).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          var iframe = document.createElement('iframe');
+          iframe.setAttribute('src', this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+          iframe.setAttribute('style', 'display: none');
+          document.body.appendChild(iframe);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+      });
   }
 }

@@ -59,7 +59,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     this.apiService.apiPost('cms/websitemenus', {PartnerId: this.selectedPartner})
       .pipe(take(1))
       .subscribe(data => {
-        
+
         if (data.ResponseCode === 0) {
           this.menus = data.ResponseObject;
         } else {

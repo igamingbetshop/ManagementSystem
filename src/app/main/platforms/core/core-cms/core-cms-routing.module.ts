@@ -26,6 +26,11 @@ const routes: Routes = [
         resolve: {filterData: FilterOptionsResolver, commonData: CommonDataResolver},
       },
       {
+        path: 'news',
+        loadChildren: () => import('./core-news/core-news.module').then(m => m.CoreNewsModule),
+        resolve: {filterData: FilterOptionsResolver, commonData: CommonDataResolver},
+      },
+      {
         path: 'comment-types',
         loadChildren: () => import('./core-comment-types/core-comment-types.module').then(m => m.CoreCommentTypesModule),
         resolve: {filterData: FilterOptionsResolver},
@@ -55,6 +60,11 @@ const routes: Routes = [
         path: 'security-questions',
         loadChildren: () => import('./security-questions/security-questions.module').then(m => m.SecurityQuestionsModule),
         resolve: {commonData: CommonDataResolver, filterData: FilterOptionsResolver},
+      },
+      {
+        path: 'popups',
+        loadChildren: () => import('./popups/popups.module').then(m => m.PopupsModule),
+        resolve: {filterData: FilterOptionsResolver, commonData: CommonDataResolver},
       },
       {
         path: '',

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 
@@ -38,8 +38,8 @@ import { syncColumnSelectPanel } from "../../../../../../../../../core/helpers/a
 export class AllProductsComponent extends BasePaginatedGridComponent implements OnInit {
 
   @Output("onUpdate") onUpdate: EventEmitter<any> = new EventEmitter<any>();
-  public partnerId;
-  public partnerName;
+  public partnerId:any;
+  public partnerName:any;
   public frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -53,13 +53,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   public columnDefs = [];
   public rowData = [];
   public filteredDataAll;
-
-  public active = this.translate.instant("Common.Active");
-  public inactive = this.translate.instant("Common.Inactive");
-  public statuses = [
-    { Name: `${this.active}`, Id: 1 },
-    { Name: `${this.inactive}`, Id: 2 }
-  ];
+  public statuses = [];
   public selectedRowIds: number[] = [];
   public formGroup: UntypedFormGroup;
   public productCategories = [];
@@ -102,7 +96,21 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.formValues();
+    this.getAllProductStates();
     this.mergeProductApi();
+  }
+
+  getAllProductStates() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_PRODUCT_STATES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.statuses = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+      });
   }
 
   mergeProductApi() {
@@ -224,6 +232,15 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         },
       },
       {
+        headerName: 'Products.HasImage',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'HasImage',
+        sortable: false,
+        resizable: true,
+        cellRenderer: this.imageCheckRenderer.bind(this),
+        filter: 'agBooleanColumnFilter',
+      },
+      {
         headerName: 'Products.IsForDesktop',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'IsForDesktop',
@@ -233,6 +250,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this),
+          onCellValueChanged: this.onCheckBoxChange.bind(this)
         }
       },
       {
@@ -245,6 +263,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this),
+          onCellValueChanged: this.onCheckBoxChange.bind(this)
         }
       },
     ]
@@ -254,6 +273,11 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     super.onGridReady(params);
     syncColumnSelectPanel();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  imageCheckRenderer(params: any): string {
+    const hasImage = params.data.MobileImageUrl || params.data.DesktopImageUrl;
+    return hasImage ? this.translate.instant('Products.HasImage') : this.translate.instant('Products.NoImage');
   }
 
   onPageSizeChanged() {
@@ -271,8 +295,11 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         this.selectedRowIds = [];
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
-        this.filteredDataAll = {...paging};
+        if (paging.HasImages) {
+          paging.HasImages = paging.HasImages.ApiOperationTypeList[0].BooleanValue;
+        }
 
+        this.filteredDataAll = {...paging};
         if(this.filteredDataAll.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {
           params.success({ rowData: [], rowCount: 0 });
           return;
@@ -316,7 +343,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   onRowSelected(params) {
     const isSelectedRow = params.api.getSelectedRows().length !== 0;
     if (isSelectedRow) {
-      this.selectedRowIds = params.api.getSelectedRows().map(field => field.Id);      
+      this.selectedRowIds = params.api.getSelectedRows().map(field => field.Id);
       this.formGroup.enable();
     } else {
       this.formGroup.disable();

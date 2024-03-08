@@ -4,6 +4,7 @@ export class Request {
   RequestObject: any;
   ClientId: number;
   Token: string;
+  Loading: boolean;
 }
 
 export interface Category {

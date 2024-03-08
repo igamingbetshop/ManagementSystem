@@ -18,9 +18,9 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
     {{label}}
   </button>
 </ng-container>
-<ng-container *ngIf="this.icon">
 
-  <button  mat-icon-button style="background-color: {{bgColor}}; color: {{textColor}}" [class.disabled]="isDisabled" mat-stroked-button (click)="onClick($event)" >
+<ng-container *ngIf="this.icon">
+  <button  mat-mini-fab style="background-color: {{bgColor}}; color: {{textColor}}" [class.disabled]="isDisabled" (click)="onClick($event)" >
     <mat-icon>{{icon}}</mat-icon>
   </button>
 </ng-container>

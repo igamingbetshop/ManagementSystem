@@ -359,6 +359,17 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         },
       },
       {
+        headerName: 'Common.Ip',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Ip',
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.textOptions
+        },
+      },
+      {
         headerName: 'Clients.Notes',
         headerValueGetter: this.localizeHeader.bind(this),
         resizable: true,

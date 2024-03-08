@@ -1,0 +1,54 @@
+<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+  <form class="bulk-editor-content" [formGroup]="formGroup">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <div class="bulk-input-row">
+        <label for="AbsoluteProfitRange1" class="bulk-label">{{ 'Sport.Till48HoursAP' | translate }}:</label>
+        <input class="bulk-input" id="AbsoluteProfitRange1" formControlName="AbsoluteProfitRange1" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="AbsoluteProfitRange2" class="bulk-label">{{ 'Sport.48_24HoursAP' | translate }}:</label>
+        <input class="bulk-input" id="AbsoluteProfitRange2" formControlName="AbsoluteProfitRange2" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="AbsoluteProfitRange3" class="bulk-label">{{ 'Sport.Last24HoursAP' | translate }}:</label>
+        <input class="bulk-input" id="AbsoluteProfitRange3" formControlName="AbsoluteProfitRange3" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="AbsoluteProfitLive" class="bulk-label">{{ 'Sport.LiveAP' | translate }}:</label>
+        <input class="bulk-input" id="AbsoluteProfitLive" formControlName="AbsoluteProfitLive" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="RelativeLimitRange1" class="bulk-label">{{ 'Sport.Till48HoursRL' | translate }}:</label>
+        <input class="bulk-input" id="RelativeLimitRange1" formControlName="RelativeLimitRange1" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="RelativeLimitRange2" class="bulk-label">{{ 'Sport.48_24HoursRL' | translate }}:</label>
+        <input class="bulk-input" id="RelativeLimitRange2" formControlName="RelativeLimitRange2" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="RelativeLimitRange3" class="bulk-label">{{ 'Sport.Last24HoursRL' | translate }}:</label>
+        <input class="bulk-input" id="RelativeLimitRange3" formControlName="RelativeLimitRange3" type="number">
+      </div>
+    
+      <div class="bulk-input-row">
+        <label for="RelativeLimitLive" class="bulk-label">{{ 'Sport.LiveRL' | translate }}:</label>
+        <input class="bulk-input" id="RelativeLimitLive" formControlName="RelativeLimitLive" type="number">
+      </div>
+    
+      <!-- Add your submit button and other form elements if needed -->
+    
+    </form>
+    
+  </form>
+
+  <div class="bulk-editor-actions">
+    <button class="bulk-cancel-btn" (click)="onCancelBtn()">{{'Common.Cancel' | translate}}</button>
+    <button class="bulk-primary-btn" (click)="openConfirmDialog()">{{'Common.Save' |translate}}</button>
+  </div>
+</div>

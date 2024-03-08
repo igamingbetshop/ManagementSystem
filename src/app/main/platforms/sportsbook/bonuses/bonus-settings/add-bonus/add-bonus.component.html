@@ -23,6 +23,13 @@
       </mat-select>
     </mat-form-field>
 
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCountry' | translate}}</mat-label>
+      <mat-select [formControlName]="'CountryCode'">
+        <mat-option *ngFor="let region of regions" [value]="region.IsoCode">{{region.Name}} - {{region.IsoCode}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
 
     <mat-form-field>
       <mat-label>{{'Sport.SelectBonusChannel' | translate}}</mat-label>
@@ -33,6 +40,7 @@
 
 
     <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
       <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
       <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
         {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
@@ -40,6 +48,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'Sport.MinCount' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Sport.MinCount' | translate" [formControlName]="'SelectionsMinCount'">
       <mat-error
         *ngIf="errorControl['SelectionsMinCount']?.touched && errorControl['SelectionsMinCount'].errors?.required">
@@ -47,16 +56,29 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="selectedType == 1">
+    <mat-form-field  *ngIf="this.formGroup.value.TypeId == 1 || this.bonus.TypeId == 1">
+      <mat-label>{{'Sport.SelectionsMaxCount' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Sport.SelectionsMaxCount' | translate" [formControlName]="'SelectionsMaxCount'">
     </mat-form-field>
 
-    <mat-form-field *ngIf="selectedType == 1">
+    <mat-form-field>
+      <mat-label>{{'BetShops.BonusPercent' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'BetShops.BonusPercent' | translate" [formControlName]="'BonusPercent'">
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'Sport.MinCoeff' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Sport.MinCoeff' | translate" [formControlName]="'MinCoeff'">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="this.formGroup.value.TypeId == 1 || this.bonus.TypeId == 1">
+      <mat-label>{{'Bonuses.MaxAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MaxAmount' | translate" [formControlName]="'MaxAmount'">
+    </mat-form-field>
+
+    <mat-form-field *ngIf="this.formGroup.value.TypeId == 1 || this.bonus.TypeId == 1">
+      <mat-label>{{'Bonuses.MinAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MinAmount' | translate" [formControlName]="'MinAmount'">
     </mat-form-field>
 
   </form>

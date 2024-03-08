@@ -353,9 +353,6 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
               items.StateName = this.status.find((item => item.Id === items.Status))?.Name;
               return items;
             });
-
-            console.log(mappedRows, 'mappedRows');
-            
             params.success({rowData: mappedRows, rowCount: data.ResponseObject.Clients.Count});
           } else {
             SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});

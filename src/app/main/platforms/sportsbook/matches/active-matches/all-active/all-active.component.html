@@ -2,6 +2,9 @@
 
   <div class="content-action">
     <div class="title">{{'Sport.ActiveMatches' | translate}}</div>
+    
+    <button mat-stroked-button class="mat-btn"(click)="addMatch()">{{'Sport.AddMatch' | translate}}</button>
+
     <div class="custom-dropdown">
       <mat-select
         (selectionChange)="onPartnerChange($event.value)"
@@ -188,8 +191,13 @@
                           <span class="match-name">{{match.Name}}</span>
                         </div>
                         <div  class="eye">
-                          <button mat-stroked-button class="supsend-btn" (click)="onSupsendMatch(match)">{{'Sport.Supsend' | translate}}</button>
-
+                          <button mat-stroked-button class="supsend-btn"
+                            [style.background-color]="match.Enabled ? '#FFC107' : '#ff7e54'"
+                            [style.color]="match.Enabled ? 'black' : 'black'"
+                            (click)="onSupsendMatch(match)">
+                            {{ match.Enabled ? ('Sport.Supsend'| translate) : ('Sport.UnSupsend' | translate) }}
+                          </button>
+                  
                           <button mat-stroked-button class="delete-btn" (click)="resetMatch(match)">{{'Sport.Reset' | translate}}</button>
 
                           <button mat-stroked-button  (click)="navigateToMatch(match)">

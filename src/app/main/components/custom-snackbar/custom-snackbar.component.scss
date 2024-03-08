@@ -23,40 +23,40 @@
 
   .close-btn {
     position: absolute;
-    right: 8px;
-    top: 8px;
+    right: 15px;
+    top: 15px;
     cursor: pointer;
 
-    .mat-icon-no-color {
+    .mat-mdc-icon-no-color {
       font-size: 25px !important;
     }
   }
 
   .content {
     display: flex;
-
+    width: 400px;
     .icon {
 
       &.success {
-        .mat-icon-no-color {
+        .mat-mdc-icon-no-color {
           background-color: $snackbar-green;
           color: $snackbar-green-light;
         }
       }
 
       &.info {
-        .mat-icon-no-color {
+        .mat-mdc-icon-no-color {
           background-color: $blue-6;
           color: $blue-light-2;
         }
       }
 
-      .mat-icon {
+      .mat-mdc-icon {
         width: 27px;
         height: 27px;
       }
 
-      .mat-icon-no-color {
+      .mat-mdc-icon-no-color {
         font-size: 18px !important;
         background-color: $snackbar-red;
         border-radius: 15px;
@@ -81,6 +81,8 @@
 
       .description {
         padding-top: 10px;
+        width: 330px;
+        word-break: break-all;
         font-family: 'PT Sans', sans-serif;
       }
     }

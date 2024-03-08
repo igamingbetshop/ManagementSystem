@@ -6,12 +6,15 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {take} from "rxjs/operators";
 import {MatButtonModule} from '@angular/material/button';
+
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
+
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import {MatInputModule} from "@angular/material/input";
+
 
 
 import { CoreApiService } from '../../../../services/core-api.service';
@@ -28,7 +31,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './copy-settings.component.html',
   styleUrls: ['./copy-settings.component.scss'],
   imports: [
-    CommonModule,   
+    CommonModule,
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -61,10 +64,10 @@ export class CopySettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.formValues();
-      this.partners = this.commonDataService.partners;     
+      this.partners = this.commonDataService.partners;
 
       this.myLable = this.data.lable;
-      this.method = this.data.method;  
+      this.method = this.data.method;
       this.formGroup.get('ToPartnerId').setValue(this.data.partnerId);
 
   }

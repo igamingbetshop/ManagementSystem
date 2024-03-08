@@ -49,9 +49,9 @@
 
   .checkbox {
     position: absolute;
-    top: 6px;
+    top: -3px;
     z-index: 2;
-    left: 4px;
+    left: -8px;
     ::ng-deep {
 
       .mat-checkbox-inner-container {
@@ -92,8 +92,8 @@
   .pages-sizes {
     position: absolute;
     left: 262px;
-    bottom: 20px;
-    @include dropdown-style;
+    bottom: 3%;
+    @include grid-dropdown-style;
 
     ::ng-deep {
       .mat-select {

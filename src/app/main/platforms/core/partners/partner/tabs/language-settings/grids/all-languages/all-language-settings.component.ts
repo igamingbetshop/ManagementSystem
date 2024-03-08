@@ -56,7 +56,6 @@ export class AllLanguageSettingsComponent extends BasePaginatedGridComponent imp
   }
 
   onRowSelected() {
-    console.log("agGrid.api.getSelectedNodes()", this.agGrid.api.getSelectedNodes());
     this.selectedNodes.emit(this.agGrid.api.getSelectedNodes());
     this.valueEmitted.emit(false);
   }

@@ -69,6 +69,19 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
         },
       },
       {
+        headerName: 'Products.ExternalId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'ObjectExternalId',
+        resizable: true,
+        sortable: true,
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.textOptions
+        },
+      },
+      {
         headerName: 'Sport.ExternalName',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ObjectExternalName',
@@ -112,17 +125,17 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
   combineMethods() {
     const getSports$ = this.apiService.apiPost('sports');
     const getProviders$ = this.apiService.apiPost('providers');
-  
+
     forkJoin([getSports$, getProviders$]).subscribe((results) => {
       const sportsData = results[0];
       const providersData = results[1];
-  
+
       if (sportsData.Code === 0) {
         this.sports = sportsData.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
       } else {
         SnackBarHelper.show(this._snackBar, { Description: sportsData.Description, Type: "error" });
       }
-  
+
       if (providersData.Code === 0) {
         this.providers = providersData.Objects;
         this.setColumnDefs(); // Call setColumnDefs() after both methods succeed.
@@ -173,7 +186,7 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
         paging.PageSize = this.cacheBlockSize;
         paging.PageSize = Number(this.cacheBlockSize);
         paging.ObjectTypeId = 6;
-        this.changeFilerName(params.request.filterModel, 
+        this.changeFilerName(params.request.filterModel,
           ['SportName', 'ProviderName'], ['SportId', 'ProviderId']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);

@@ -77,6 +77,8 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
   public compatitionName;
   private oddsType: number;
+  selectedSelections: any;
+  rowSuccessOutcomeCount: any;
 
   constructor(
     protected injector: Injector,
@@ -177,6 +179,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         cellRenderer: 'checkBoxRenderer',
         cellRendererParams: {
           onchange: this.onCheckBoxChange['bind'](this),
+          onCellValueChanged: this.onCheckBoxChange.bind(this)
         },
       },
       {
@@ -345,7 +348,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-
+          this.showMe(this.selectedSelections, this.rowSuccessOutcomeCount);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -366,6 +369,9 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   showMe(item, successOutComeCount) {
+
+    console.log(item,  "item", successOutComeCount);
+    
     this.rowData1 = item;
     this.itemsCount = item.length;
     let itemCoef = 0;
@@ -829,6 +835,8 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
               }
             });
 
+            this.selectedSelections = data.Selections;
+            this.rowSuccessOutcomeCount = row.SuccessOutcomeCount;
             this.showMe(data.Selections, row.SuccessOutcomeCount);
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -874,6 +882,23 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = false;
       this.agGrid.api.redrawRows({ rowNodes: [findedNode] });
     }
+  }
+
+  onReset() {
+    const data = {
+      MarketId: this.selectedMarketId,
+      PartnerId: this.partnerId,
+    };
+    this.apiService.apiPost('markets/resetselections', data)
+    .pipe(take(1))
+    .subscribe(data => {
+      if (data.Code === 0) {
+        SnackBarHelper.show(this._snackBar, { Description: "Reseted", Type: "success" });
+        this.getPage();
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
   }
 
 }

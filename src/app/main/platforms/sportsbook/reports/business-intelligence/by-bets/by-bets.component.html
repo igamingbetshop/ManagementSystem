@@ -5,7 +5,6 @@
     <div class="title">{{'Reports.ReportByBets' | translate}}</div>
     <button mat-stroked-button class="stream-btn"
             [ngClass] = "{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected}"
-
             (click)="toggleLiveUpdate()">
       {{isLiveUpdateOn ? ('Reports.LiveUpdatesOff' | translate)  : ('Reports.LiveUpdatesOn' | translate) }}
     </button>
@@ -41,23 +40,24 @@
       <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
     </div>
 
-    <mat-form-field class="calendar-picker start" appearance="none">
+    <div class="calendar-picker start">
       <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="go()">
       <mat-datepicker-toggle matSuffix [for]="pickerStart">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </mat-form-field>
+    </div>
 
-    <mat-form-field class="calendar-picker" appearance="none">
+    <div class="calendar-picker">
       <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="go()">
       <mat-datepicker-toggle matSuffix [for]="pickerEnd">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </mat-form-field>
+    </div>
 
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 
     <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
 
@@ -72,6 +72,7 @@
       [headerHeight]="33"
       [rowHeight]="42"
       [rowData]="rowData"
+      [getRowId]="getRowId"
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
@@ -162,9 +163,9 @@
     rowSelection="single">
   </ag-grid-angular> -->
 
-  <app-match-grid 
-    [oddsType]="oddsType" 
-    [rowData]="rowData1" 
+  <app-match-grid
+    [oddsType]="oddsType"
+    [rowData]="rowData1"
     (selectStatus)="this.onSelectStatus($event)"
     (blockMatch)="this.onBlockMatch($event)"
     (finishedMatchesMarket)="this.goToFinishedMatchesMarket($event)"

@@ -54,6 +54,10 @@ export class ConfigService {
     return this._defaultOptions.SGApiUrl
   }
 
+  get homePageUrl(): string {
+    return this._defaultOptions.HomePageUrl;
+  }
+
   get langList(): any {
     return this._langList;
   }

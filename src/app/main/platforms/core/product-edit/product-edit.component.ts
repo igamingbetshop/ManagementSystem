@@ -11,6 +11,7 @@ import { SnackBarHelper } from "../../../../core/helpers/snackbar.helper";
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
 import { AgGridAngular } from 'ag-grid-angular';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
 
 @Component({
   selector: 'app-product-edit',
@@ -20,12 +21,10 @@ import { AgGridAngular } from 'ag-grid-angular';
 
 export class ProductEditComponent extends BaseGridComponent {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
-
-  public gridApi: GridApi;
   public searchName = '';
-
   public frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
+    agBooleanColumnFilter: AgBooleanFilterComponent,
   };
 
   constructor(
@@ -62,12 +61,7 @@ export class ProductEditComponent extends BaseGridComponent {
       field: 'Description',
       editable: true,
       onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-      filter: 'agTextColumnFilter',
-      filterParams: {
-        buttons: ['apply', 'reset'],
-        closeOnApply: true,
-        filterOptions: this.filterService.textOptions
-      },
+      filter: false,
     },
     {
       headerName: 'Common.State',
@@ -76,6 +70,7 @@ export class ProductEditComponent extends BaseGridComponent {
       cellRenderer: (params) => {
         return params.data.State === 0 ? 'Inactive' : params.data.State === 1 ? 'Active' : '';
       },
+      filter: 'agBooleanColumnFilter',
     },
     {
       headerName: 'Common.View',
@@ -117,35 +112,32 @@ export class ProductEditComponent extends BaseGridComponent {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-
   }
-    redirectToProducts(ev) {
+  redirectToProducts(ev) {
     const row = ev.data;
     if (!row.GameProviderId) {
       this.router.navigate(['/main/platform/products/all-products'], {
-        queryParams: { "BetId": row.Id, "Name": row.Name}
-      });    
+        queryParams: { "BetId": row.Id, "Name": row.Name }
+      });
     } else {
       this.router.navigate(['/main/platform/products/all-products/product'], {
-        queryParams: { "BetId": row.ParentId, "Name": row.Name, "productId": row.Id}
+        queryParams: { "BetId": row.ParentId, "Name": row.Name, "ProductId": row.Id }
       });
     }
-
-
   }
 
   onCellValueChanged(params) {
-      let group = params.data;
+    let group = params.data;
     group.NewId = group.Id;
-      this.apiService.apiPost(this.configService.getApiUrl, group,
-        true, Controllers.PRODUCT, Methods.EDIT_PRODUCTS)
-        .subscribe(data => {
-          if (data.ResponseCode === 0) {
-            group.isEditMode = false;
-          } else {
-            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-          }
-        });
+    this.apiService.apiPost(this.configService.getApiUrl, group,
+      true, Controllers.PRODUCT, Methods.EDIT_PRODUCTS)
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          group.isEditMode = false;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   createServerSideDatasource = () => {
@@ -160,6 +152,16 @@ export class ProductEditComponent extends BaseGridComponent {
           filter.ParentId = params.parentNode.data.Id;
         }
         this.setFilter(params.request.filterModel, filter);
+
+        if (filter.Names) {
+          filter.Pattern = filter.Names.ApiOperationTypeList[0].StringValue;
+          delete filter.Names;
+        }
+        if (filter.States) {
+          filter.State = filter.States.ApiOperationTypeList[0].BooleanValue;
+          delete filter.States;
+        }
+
         this.apiService.apiPost(this.configService.getApiUrl, filter,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -174,8 +176,7 @@ export class ProductEditComponent extends BaseGridComponent {
     };
   }
 
-    async addGroup() {
-
+  async addGroup() {
     const groupC = this.agGrid?.api.getSelectedRows()[0];
     const { AddComponent } = await import('./add/add.component');
     const dialogRef = this.dialog.open(AddComponent, {

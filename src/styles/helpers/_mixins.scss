@@ -12,6 +12,7 @@
   }
 }
 
+
 @function fluidSizeOnly($max, $min, $maxVP, $minVP) {
   @return calc(#{$min}px + (#{$max} - #{$min}) * ((100vw - #{$minVP}px) / (#{$maxVP} - #{$minVP})));
 }
@@ -33,6 +34,7 @@
   height: 100%;
   padding: 0 10px;
   box-sizing: border-box;
+  background-color: $gray-light-16;
 }
 
 @mixin action-style {
@@ -44,12 +46,12 @@
   .title {
     font-size: 20px;
     letter-spacing: 0.04em;
-    color: $blue-5;
+    color: $title-color;
     flex: 1;
 
     a {
       text-decoration: none;
-      color: $blue-5;
+      color: $title-color;
       cursor: pointer;
     }
 
@@ -59,50 +61,107 @@
   }
 }
 
+@mixin grid-dropdown-style {
+  ::ng-deep {
+    .mat-mdc-select {
+      height: 28px;
+      border-radius: 6px;
+      display: flex !important;
+      align-items: center;
+      width: 85px !important;
+      padding: 0 8px 0 10px;
+      background-color: #D1D1D2;
+      color: $bg-color !important;
+
+      &[aria-expanded="true"] {
+        .mat-mdc-select-arrow {
+          background-color: #D1D1D2!important;
+          border-bottom: 5px solid #D1D1D2;
+          border-top: 5px solid transparent;
+          margin: 0 4px 4px 4px;
+          svg {
+            top: -200%;
+            left: 0;
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+      .mat-mdc-select-trigger {
+
+        .mat-mdc-select-value {
+          color: $bg-color;
+
+          .mat--mdc-select-placeholder {
+            color: $bg-color;
+            opacity: 0.9;
+          }
+        }
+
+        .mat-mdc-select-arrow-wrapper {
+          .mat-mdc-select-arrow {
+            color: $bg-color;
+          }
+        }
+      }
+
+      &.mat-mdc-select-disabled {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
 @mixin dropdown-style {
   ::ng-deep {
     font-size: 14px;
-    .mat-select {
+
+    .mat-mdc-select {
       height: 36px;
-      border-radius: 4px;
+      border-radius: 6px;
       display: flex !important;
       align-items: center;
       width: 169px !important;
       padding: 0 8px 0 10px;
-      background-color: $blue-2;
+      background-color: #D1D1D2;
+      // color: $content-bg-color;
 
       &[aria-expanded="true"] {
-
-        .mat-select-trigger {
-          .mat-select-arrow-wrapper {
-            .mat-select-arrow {
-              border-bottom: 5px solid $white;
+        .mat-mdc-select-trigger {
+          .mat-mdc-select-arrow-wrapper {
+            .mat-mdc-select-arrow {
+              background-color: #D1D1D2!important;
+              border-bottom: 5px solid #D1D1D2;
               border-top: 5px solid transparent;
               margin: 0 4px 4px 4px;
+              svg {
+                top: -200%;
+                left: 0;
+                transform: rotate(180deg);
+              }
             }
           }
         }
       }
 
-      .mat-select-trigger {
-
-        .mat-select-value {
-          color: $white;
-
-          .mat-select-placeholder {
-            color: $white;
+      .mat-mdc-select-trigger {
+        .mat-mdc-select-value {
+          color: $title-color;
+          .mat--mdc-select-placeholder {
+            color: $title-color;
             opacity: 0.9;
           }
         }
 
-        .mat-select-arrow-wrapper {
-          .mat-select-arrow {
+        .mat-mdc-select-arrow-wrapper {
+          .mat-mdc-select-arrow {
             color: $white;
           }
         }
       }
 
-      &.mat-select-disabled {
+      &.mat-mdc-select-disabled {
         opacity: 0.7;
         pointer-events: none;
       }
@@ -113,28 +172,54 @@
 
 @mixin tab-button-style {
 
-  ::ng-deep {
-    .mat-stroked-button {
-      border: 1px solid $gray-light;
-      color: $gray-light-2;
-      background-color: $white;
-      box-shadow: none;
-      transition: 0.3s ease-in;
+  .mat--mdc-stroked-button {
+    border: 1px solid $gray-light-14;
+    border-radius: 8px;
+    color: $gray-light-15;
+    background-color: $white;
+    box-shadow: none;
+    transition: 0.3s ease-in;
 
-      .mat-button-focus-overlay {
-        background-color: $white !important;
-      }
+    .mat--mdc-button-focus-overlay {
+      background-color: $bg-color !important;
+    }
 
-      &:hover {
-        border: 1px solid $blue-5 !important;
+    &:hover {
+      border: 1px solid $gray-light-13 !important;
 
-        .mat-button-wrapper {
-          color: $blue-5;
-        }
+      .mat-mdc-button-wrapper {
+        color: $text-color;
       }
     }
   }
+
+
 }
+
+// @mixin tab-button-style {
+
+//   ::ng-deep {
+//     .mat-stroked-button {
+//       border: 1px solid $gray-light-14;
+//       color: $gray-light-15;
+//       background-color: $white;
+//       box-shadow: none;
+//       transition: 0.3s ease-in;
+//       border-radius: 8px;
+//       .mat-button-focus-overlay {
+//         background-color: $bg-color !important;
+//       }
+
+//       &:hover {
+//         border: 1px solid $gray-light-13 !important;
+
+//         .mat-button-wrapper {
+//           color: $text-color;
+//         }
+//       }
+//     }
+//   }
+// }
 
 @mixin arrowLeftRight($color, $arrow-left, $size) {
   content: "";
@@ -144,7 +229,9 @@
   @if $arrow-left {
     border-left: $size solid transparent;
     border-right: $size solid $color;
-  } @else {
+  }
+
+  @else {
     border-left: $size solid $color;
     border-right: $size solid transparent;
   }
@@ -158,46 +245,86 @@
   @if $opened {
     border-top: $size solid transparent;
     border-bottom: $size solid $color;
-  } @else {
+  }
+
+  @else {
     border-top: $size solid $color;
     border-bottom: $size solid transparent;
   }
 }
 
 @mixin mat-btn-style {
-  background-color: $blue-2;
-  padding: 0 10px;
+  background-color: $bg-color;
+  // padding: 0 10px;
+  color: $white;
+  border-radius: 8px;
 
   ::ng-deep {
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $white !important;
     }
   }
 
   &.disabled {
-    color: $blue-5 !important;
-    background-color: $blue-light-7;
+    color: $gray-light-15 !important;
+    background-color: $gray-light-13;
     pointer-events: none;
+
     ::ng-deep {
-      .mat-button-wrapper {
-        color: $blue-5 !important;
+      .mat-mdc-button-wrapper {
+        color: $gray-light-15 !important;
       }
     }
   }
 
   &:hover {
-    cursor: pointer;
     border: 1px solid $blue-5;
-    background: linear-gradient($blue-5, $blue-light-13 50%, $blue-2);
+    background-color: $bg-color !important;
+
+    ::ng-deep {
+      .mat-mdc-button-wrapper {
+        color: $bg-color !important;
+      }
+    }
   }
 }
+
+// @mixin mat-btn-style {
+//   background-color: $bg-color;
+//   padding: 0 10px;
+//   border-radius: 8px;
+
+//   ::ng-deep {
+//     .mat-button-wrapper {
+//       color: $white !important;
+//     }
+//   }
+
+//   &.disabled {
+//     color: $gray-light-15 !important;
+//     background-color: $gray-light-13;
+//     pointer-events: none;
+//     ::ng-deep {
+//       .mat-button-wrapper {
+//         color: $gray-light-15 !important;
+//       }
+//     }
+//   }
+
+//   &:hover {
+//     cursor: pointer;
+//     border-radius: 8px;
+//     background-color: $bg-color;  
+//   }
+// }
 
 @mixin mat-supsend-style {
   background-color: $orange-yellow;
   padding: 0 10px;
   color: $black;
+  border-radius: 8px;
 
-  .mat-button-wrapper {
+  .mat--mdc-button-wrapper {
     color: $white !important;
   }
 
@@ -206,7 +333,7 @@
     background-color: $lime;
     pointer-events: none;
 
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $black !important;
     }
   }
@@ -222,9 +349,10 @@
 @mixin mat-cancel-btn-style {
   background-color: $white;
   padding: 0 10px;
+  border-radius: 8px;
 
   ::ng-deep {
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $gray-light-2 !important;
     }
   }
@@ -239,7 +367,7 @@
     background: $white;
 
     ::ng-deep {
-      .mat-button-wrapper {
+      .mat-mdc-button-wrapper {
         color: $blue-5 !important;
       }
     }
@@ -254,9 +382,10 @@
   line-height: 33px;
   background-color: transparent !important;
   margin-right: 4px;
+  border-radius: 8px;
 
   ::ng-deep {
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $blue-2 !important;
       position: relative;
       padding: 0 10px;
@@ -304,6 +433,7 @@
 @mixin mat-delete-style {
   background-color: $red-2;
   color: $white;
+  border-radius: 8px;
 
   &.disabled {
     opacity: 0.7;
@@ -314,6 +444,7 @@
 @mixin mat-enable-style {
   background-color: $green-2;
   color: $white;
+  border-radius: 8px;
 
   &.disabled {
     opacity: 0.7;
@@ -325,9 +456,10 @@
   background-color: $blue-light-22;
   padding: 0 10px;
   border: 1px solid $blue-light-4;
+  border-radius: 8px;
 
   ::ng-deep {
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $blue-2 !important;
       position: relative;
 
@@ -355,9 +487,10 @@
   background-color: $blue-light-22;
   padding: 0 10px;
   border: 1px solid $blue-light-4;
+  border-radius: 8px;
 
   ::ng-deep {
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $blue-2 !important;
       position: relative;
     }
@@ -378,9 +511,10 @@
   background-color: red;
   padding: 0 10px;
   border: 1px solid $red-3;
+  border-radius: 8px;
 
   ::ng-deep {
-    .mat-button-wrapper {
+    .mat-mdc-button-wrapper {
       color: $white !important;
       position: relative;
     }
@@ -398,12 +532,17 @@
 }
 
 @mixin calendar-picker-style {
+  display: flex !important;
   border: 1px solid $gray-light;
-  border-radius: 4px;
-  background-color: $white;
+  border-radius: 8px;
+  background-color: $gray-light-13;
+  border-radius: 8px;
+  color: $gray-light-15;
+  height: 35px;
+  position: relative;
 
   ::ng-deep {
-    .mat-form-field-wrapper {
+    .mat-mdc-form-field-wrapper {
       padding-bottom: 0 !important;
 
       input {
@@ -411,12 +550,12 @@
         caret-color: transparent;
       }
 
-      .mat-form-field-flex {
+      .mat-mdc-form-field-flex {
         display: flex;
         align-items: center;
         height: 36px;
 
-        .mat-form-field-infix {
+        .mat-mdc-form-field-infix {
           border: unset;
           line-height: 17px;
           padding-left: 10px !important;
@@ -432,11 +571,17 @@
   }
 
   &.mat-focused {
-    border: 1px solid $blue-2;
+    border: 1px solid $bg-color;
   }
 
   .icon-calendar {
     font-size: 18px;
+  }
+
+  &.selected-time {
+    background-color: $blue-light-3 !important;
+    border: 1px solid $blue-light-4 !important;
+    color: $blue-5 !important;
   }
 }
 
@@ -469,7 +614,7 @@
     }
   }
 
-  .mat-error {
+  .mat-mdc-error {
     color: $red;
     font-size: 12px;
   }
@@ -517,7 +662,7 @@
   }
 
   ::ng-deep {
-    .mat-select {
+    .mat-mdc-select {
       padding: 8px 7px 8px 14px;
       border: 1px solid $blue-2;
       border-radius: 4px;
@@ -529,14 +674,14 @@
       background-color: $white;
 
 
-      .mat-select-trigger {
+      .mat-mdc-select-trigger {
 
-        .mat-select-value {
+        .mat-mdc-select-value {
           color: $blue-2;
         }
 
-        .mat-select-arrow-wrapper {
-          .mat-select-arrow {
+        .mat-mdc-select-arrow-wrapper {
+          .mat-mdc-select-arrow {
             color: $blue-2;
           }
         }
@@ -544,7 +689,7 @@
     }
   }
 
-  .mat-error {
+  .mat-mdc-error {
     color: $red;
     font-size: 12px;
   }
@@ -553,7 +698,7 @@
 //TODO willl be improved (resign not ready)
 @mixin mat-checkbox-style {
   ::ng-deep {
-    .mat-checkbox-ripple {
+    .mat-mdc-checkbox-ripple {
       left: 0 !important;
       top: 0 !important;
       height: 16px !important;
@@ -562,138 +707,134 @@
   }
 }
 
-  // .modal-form {
-  //   .field-content {
-  //     display: flex;
-  //     padding-left: 0;
-  //     padding-right: 0;
+// .modal-form {
+//   .field-content {
+//     display: flex;
+//     padding-left: 0;
+//     padding-right: 0;
 
-  //     .calendar-picker {
-  //       // width: 270px;
-  //       padding-top: 8px;
-  //       padding-left: 0;
-  //       padding-right: 0;
-  //       padding-bottom: 0px;
-  //       background-color: $blue-light-22 !important;
-  //       border: 1px solid #5BA3D3!important;
-  //       border-radius: 6px;
+//     .calendar-picker {
+//       // width: 270px;
+//       padding-top: 8px;
+//       padding-left: 0;
+//       padding-right: 0;
+//       padding-bottom: 0px;
+//       background-color: $blue-light-22 !important;
+//       border: 1px solid #5BA3D3!important;
+//       border-radius: 6px;
 
-  //       .mat-form-field-outline {
-  //         border: 1px solid #5BA3D3;
-  //       }
+//       .mat-form-field-outline {
+//         border: 1px solid #5BA3D3;
+//       }
 
-  //       ::ng-deep mat-datepicker-toggle {
-  //         color: $blue-8 !important;
-  //       }
+//       ::ng-deep mat-datepicker-toggle {
+//         color: $blue-8 !important;
+//       }
 
-  //       @include calendar-picker-style;
-  //     }
-  //   }
+//       @include calendar-picker-style;
+//     }
+//   }
 
-  //   .input-content {
-  //     @include input-style;
-  //   }
+//   .input-content {
+//     @include input-style;
+//   }
 
-  //   .select-content {
-  //     @include popup-dropdown-style;
-  //   }
+//   .select-content {
+//     @include popup-dropdown-style;
+//   }
 
-  //   .mat-form-field {
-  //     margin: 2px;
-  //     padding-left: 12px;
-  //     width: 98%;
-  //     height: 48px;
-  //     background-color: $blue-light-22;
-  //     border: 1px solid #5BA3D3;
-  //     border-radius: 6px;
-  //     color: $blue-2 !important;
+//   .mat-form-field {
+//     margin: 2px;
+//     padding-left: 12px;
+//     width: 98%;
+//     height: 48px;
+//     background-color: $blue-light-22;
+//     border: 1px solid #5BA3D3;
+//     border-radius: 6px;
+//     color: $blue-2 !important;
 
-  //     &.ng-invalid{
-  //       &.ng-touched   {
-  //       border: 1px solid $red-6;
-  //     }
+//     &.ng-invalid{
+//       &.ng-touched   {
+//       border: 1px solid $red-6;
+//     }
 
-  //   }
+//   }
 
-  //     mat-select {
-  //       color: $blue-8 !important;
-  //     }
+//     mat-select {
+//       color: $blue-8 !important;
+//     }
 
-  //     ::ng-deep {
-  //       &::placeholder {
-  //         color: $blue-8 !important;
-  //         &.ng-invalid{
-  //           &.ng-touched   {
-  //             color: $red-6!important;
-  //         }
-  //       }
-  //       }
+//     ::ng-deep {
+//       &::placeholder {
+//         color: $blue-8 !important;
+//         &.ng-invalid{
+//           &.ng-touched   {
+//             color: $red-6!important;
+//         }
+//       }
+//       }
 
-  //       color: $blue-8 !important;
+//       color: $blue-8 !important;
 
-  //       .mat-select-placeholder {
-  //         color: $blue-8 !important;
-  //         &.ng-invalid{
-  //           &.ng-touched   {
-  //             color: $red-6!important;
-  //         }
-  //       }
-  //       }
+//       .mat-select-placeholder {
+//         color: $blue-8 !important;
+//         &.ng-invalid{
+//           &.ng-touched   {
+//             color: $red-6!important;
+//         }
+//       }
+//       }
 
-  //       .mat-select-value-text{
-  //       color: $blue-8 !important;
-  //       &.ng-invalid{
-  //         &.ng-touched   {
-  //           color: $red-6!important;
-  //       }
-  //     }
-  //       }
+//       .mat-select-value-text{
+//       color: $blue-8 !important;
+//       &.ng-invalid{
+//         &.ng-touched   {
+//           color: $red-6!important;
+//       }
+//     }
+//       }
 
-  //       .mat-form-field-label {
-  //         color: $blue-8 !important;
-  //         &.ng-invalid{
-  //           &.ng-touched   {
-  //             color: $red-6!important;
-  //         }
-  //       }
-  //       }
+//       .mat-form-field-label {
+//         color: $blue-8 !important;
+//         &.ng-invalid{
+//           &.ng-touched   {
+//             color: $red-6!important;
+//         }
+//       }
+//       }
 
-  //       .mat-select-arrow {
-  //         color: $blue-8 !important;
-  //       }
+//       .mat-select-arrow {
+//         color: $blue-8 !important;
+//       }
 
-  //       mat-error {
-  //         font-size: 12px!important;
-  //         color: $red-6 !important;
-  //       }
-  //     }
+//       mat-error {
+//         font-size: 12px!important;
+//         color: $red-6 !important;
+//       }
+//     }
 
-  //   }
+//   }
 
-  //   mat-select {
-  //     color: $blue-8 !important;
-  //     &::placeholder {
-  //       color: $blue-8 !important;
-  //     }
-  //   }
+//   mat-select {
+//     color: $blue-8 !important;
+//     &::placeholder {
+//       color: $blue-8 !important;
+//     }
+//   }
 
-  //   mat-checkbox {
-  //     color: $blue-8;
-  //   }
+//   mat-checkbox {
+//     color: $blue-8;
+//   }
 
-  //   ::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
-  //     background-color: $blue-8 !important;
-  //   }
+//   ::ng-deep .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+//     background-color: $blue-8 !important;
+//   }
 
-  //   ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-  //     background-color: $blue-8 !important;
-  //   }
+//   ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background {
+//     background-color: $blue-8 !important;
+//   }
 
-  //   ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
-  //     background-color: $blue-8 !important;
-  //   }
-  // }
-
-
-
-
+//   ::ng-deep .mat-checkbox-ripple .mat-ripple-element {
+//     background-color: $blue-8 !important;
+//   }
+// }

@@ -336,6 +336,8 @@ export enum Methods {
     GET_USER_SETTINGS = "GetUserSettings",
     UPDATE_USER_SETTINGS = "UpdateUserSettings",
     GET_AGENT_LEVELS_ENUM = 'GetAgentLevelsEnum',
+    GET_EXISTING_LEVELS = 'GetExistingLevels',
+    GET_AGENTS = 'GetAgents',
     CREATE_MANUAL_DEPOSIT = 'CreateManualDeposit',
     UPDATE_USER_STATE = "UpdateUserState",
     GET_USER_STATE = "GetUserState",
@@ -368,7 +370,21 @@ export enum Methods {
     GET_CHARACTER_HIERARCHY = "GetCharacterHierarchy",
     CANCEL_FREE_SPIN = "CancelFreeSpin",
     SPLIT_PAYOUT_REQUEST = "SplitPayoutRequest",
-    GET_ANNOUNCEMENT_BY_ID = "GetAnnouncementById"
+    GET_ANNOUNCEMENT_BY_ID = "GetAnnouncementById",
+    GET_NEWS = "GetNews",
+    REMOVE_NEWS = 'RemoveNews',
+    SAVE_NEWS = 'SaveNews',
+    GET_NEWS_BY_ID = 'GetNewsById',
+    SAVE_PAYMENT_SYSTEM = 'SavePaymentSystem',
+    SAVE_PRODUCTS_COUNTRY_SETTING = 'SaveProductsCountrySetting',
+    GET_POPUP_TYPES_ENUM = 'GetPopupTypesEnum',
+    SAVE_POPUP = 'SavePopup',
+    GET_POPUPS = 'GetPopups',
+    BROADCAST_POPUP = 'BroadcastPopup',
+    GET_POPUP_BY_ID = 'GetPopupById',
+    REMOVE_POPUP = 'RemovePopup',
+    CHECK_CLIENT_EXTERNAL_STATUS = 'CheckClientExternalStatus',
+    RESET_CLIENT_PIN_CODE = 'ResetClientPinCode',
   }
 
 
@@ -382,5 +398,5 @@ export enum PBMethods {
   GET_ROUND_MATCHES = 'GetRoundMatches',
   ADD_MATCH_TO_ROUND = 'AddMatchToRound',
   DELETE_MATCH_FROM_ROUND = 'DeleteMatchFromRound',
-  GET_TICKETS = 'getTickets'
+  GET_TICKETS = 'getTickets',
 }

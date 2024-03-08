@@ -13,7 +13,7 @@ import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-mater
     CommonModule,
     AffiliateRoutingModule,
     MatTabsModule,
-    NgxMatDatetimePickerModule, 
+    NgxMatDatetimePickerModule,
     NgxMatNativeDateModule
   ],
   declarations: [AffiliateComponent]

@@ -8,12 +8,15 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {PoolBettingApiService} from "../../services/pool-betting-api.service";
 import {PBControllers, PBMethods} from "../../../../../core/enums";
 import {MatInputModule} from "@angular/material/input";
+
 import {TranslateModule} from "@ngx-translate/core";
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {MatFormFieldModule} from "@angular/material/form-field";
+
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {MatButtonModule} from "@angular/material/button";
+
 import {MatIconModule} from "@angular/material/icon";
 import {DateTimeHelper} from "../../../../../core/helpers/datetime.helper";
 
@@ -65,9 +68,10 @@ export class AddRoundComponent implements OnInit {
 
   formValues() {
     this.formGroup = this.fb.group({
-      TypeId: [null, [Validators.required]],
+      MarketTypeId: [null, [Validators.required]],
       OpenTime: [null],
-      CloseTime: [null]
+      CloseTime: [null],
+      NickName: [null]
     });
   }
 

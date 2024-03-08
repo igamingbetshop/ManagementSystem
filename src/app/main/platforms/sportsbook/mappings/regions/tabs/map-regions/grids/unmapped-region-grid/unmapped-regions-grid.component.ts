@@ -38,6 +38,7 @@ export class UnmappedRegionsGridComponent extends BasePaginatedGridComponent imp
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   constructor(

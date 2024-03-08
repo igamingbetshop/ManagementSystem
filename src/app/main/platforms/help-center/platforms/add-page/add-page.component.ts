@@ -12,8 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./add-page.component.scss'],
   standalone: true,
   imports: [
-    CommModule, 
-    FormsModule, 
+    CommModule,
+    FormsModule,
     QuillModule,
     MatButtonModule
   ],
@@ -86,7 +86,7 @@ export { VideoBlot };
 // export class AddPageComponent implements AfterViewInit {
 //   editorContent: string = '';
 //   quill: Quill;
-  
+
 
 //   @ViewChild('fileInput') fileInput: ElementRef;
 

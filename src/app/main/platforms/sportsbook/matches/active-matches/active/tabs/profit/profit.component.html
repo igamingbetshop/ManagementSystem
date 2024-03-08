@@ -3,6 +3,18 @@
     <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> / : {{'Sport.Profit' | translate}}
       <span>{{matchId}}</span> &nbsp; {{name}}
     </div>
+
+    <div class = "bulk-editor-dropdown">
+      <button mat-stroked-button class="mat-bulk-btn"
+              [matMenuTriggerFor]="bulkMenu"
+              #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+        {{'Common.Edit' | translate}}
+      </button>
+      <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before">
+        <ng-container #bulkEditorRef></ng-container>
+      </mat-menu>
+    </div>
+
     <div class="partner-dropdown">
       <mat-select
       #part  (selectionChange)="onPartnerChange(part.value)"

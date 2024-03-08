@@ -43,9 +43,9 @@
           <div class="first-hand">{{'Clients.DocumentExpired' | translate}}</div>
           <div class="second-hand">{{settings?.DocumentExpired}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'DocumentExpired'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -53,9 +53,9 @@
           <div class="first-hand">{{'Clients.SelfExcluded' | translate}}</div>
           <div class="second-hand">{{settings?.SelfExcluded}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'SelfExcluded'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -63,9 +63,9 @@
           <div class="first-hand">{{'Clients.Younger' | translate}}</div>
           <div class="second-hand">{{settings?.Younger}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'Younger'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -73,9 +73,9 @@
           <div class="first-hand">{{'Clients.Restricted' | translate}}</div>
           <div class="second-hand">{{settings?.Restricted}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'Restricted'" readonly="">
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -83,9 +83,9 @@
           <div class="first-hand">{{'Clients.SystemExcluded' | translate}}</div>
           <div class="second-hand">{{settings?.SystemExcluded}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'SystemExcluded'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -102,9 +102,9 @@
           <div class="first-hand">{{'Clients.DocumentVerified' | translate}}</div>
           <div class="second-hand">{{settings?.DocumentVerified}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'DocumentVerified'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -122,9 +122,9 @@
           <div class="first-hand">{{'Clients.JCJStatus' | translate}}</div>
           <div class="second-hand">{{settings?.JCJProhibited}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'JCJProhibited'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -142,9 +142,9 @@
           <div class="first-hand">{{'Clients.PasswordChangedDate' | translate}}</div>
           <div class="second-hand">{{settings?.PasswordChangedDate}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'PasswordChangedDate'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -152,9 +152,9 @@
           <div class="first-hand">{{'Clients.SessionLimit' | translate}}</div>
           <div class="second-hand">{{settings?.SessionLimit}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput [formControlName]="'SessionLimit'" readonly>
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -162,9 +162,9 @@
           <div class="first-hand">{{'Clients.UnusedAmountWithdrawPercent' | translate}}</div>
           <div class="second-hand">{{settings?.UnusedAmountWithdrawPercent}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput type="number" [formControlName]="'UnusedAmountWithdrawPercent'">
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
@@ -188,25 +188,15 @@
           <div class="first-hand">{{'Clients.AMLPercent' | translate}}</div>
           <div class="second-hand">{{settings?.AMLPercent}}</div>
           <div class="form-field form-input">
-            <mat-form-field appearance="none">
+            <!-- <mat-form-field> -->
               <input matInput type="number" [formControlName]="'AMLPercent'">
-            </mat-form-field>
-          </div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Clients.ExternalStatus' | translate}}</div>
-          <div class="second-hand">{{settings?.ExternalStatus?.Status}} - {{settings?.ExternalStatus?.CheckedAt |
-            date:'dd/MM/yyyy HH:mm'}}</div>
-          <div class="form-field form-input">
-            <div class="readonly-text">{{settings?.ExternalStatus?.Status }} - {{settings?.ExternalStatus?.CheckedAt |
-              date:'dd/MM/yyyy HH:mm'}}</div>
+            <!-- </mat-form-field> -->
           </div>
         </div>
 
         <div>
           <div class="first-hand">{{'Clients.PEPSanctioned' | translate}}</div>
-          <div class="second-hand">{{settings?.PEPSanctioned }}</div>
+          <div class="second-hand">{{settings?.PEPSanctioned?.Status}} - {{settings?.PEPSanctioned?.CheckedAt | date:'dd/MM/yyyy HH:mm'}}</div>
           <div class="form-field form-checkbox">
             <mat-checkbox [formControlName]="'PEPSanctioned'">{{'Clients.PEPSanctioned' |translate}}</mat-checkbox>
           </div>
@@ -214,7 +204,7 @@
 
         <div>
           <div class="first-hand">{{'Clients.UnderHighRiskCountry' | translate}}</div>
-          <div class="second-hand">{{settings?.UnderHighRiskCountry }}</div>
+          <div class="second-hand">{{settings?.UnderHighRiskCountry?.Status }} - {{settings?.UnderHighRiskCountry?.CheckedAt | date:'dd/MM/yyyy HH:mm' }}</div>
           <div class="form-field form-checkbox">
             <mat-checkbox [formControlName]="'UnderHighRiskCountry'">{{'Clients.UnderHighRiskCountry'
               |translate}}</mat-checkbox>
@@ -235,6 +225,21 @@
             </ng-container>
           </div>
 
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.ExternalStatus' | translate}}</div>
+          <div class="static-hand">{{settings?.ExternalStatus?.Status}} - {{settings?.ExternalStatus?.CheckedAt |
+            date:'dd/MM/yyyy HH:mm'}}
+            <button class="mat-btn" (click)="onCheckClientExternalStatus()">{{'Clients.CheckStatus' | translate}}</button>  
+
+          </div>
+          <!-- <div class="form-field form-input">
+            <div class="readonly-text">{{settings?.ExternalStatus?.Status}} - {{settings?.ExternalStatus?.CheckedAt |
+              date:'dd/MM/yyyy HH:mm'}}
+            <button class="mat-btn" ></button>  
+            </div>
+          </div> -->
         </div>
 
       </form>
@@ -455,10 +460,10 @@
         <tr class="spacer"></tr>
       </table>
       <div class="actions" *ngIf="!isReadOnly">
-        <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |
-          translate}}</button>
         <button mat-stroked-button class="mat-cancel-btn" (click)="isReadOnly = true">{{'Common.Cancel' |
           translate}}</button>
+        <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |
+            translate}}</button>
       </div>
     </div>
   </div>

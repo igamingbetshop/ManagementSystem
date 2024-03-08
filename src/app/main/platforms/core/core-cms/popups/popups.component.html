@@ -1,0 +1,69 @@
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.id }">
+
+  <div class="content-action">
+    <div class="title">{{'Cms.Popups' | translate}}</div>
+    <div class="partner-dropdown">
+      <mat-select
+        (selectionChange)="onPartnerChange($event.value)"
+        placeholder="{{'Partners.SelectPartner' | translate}}"
+        panelClass="overlay-dropdown"
+        disableOptionCentering>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </div>
+
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="onBroadCast()">{{'Cms.Broadcast' | translate}}</button>
+
+    <button mat-stroked-button class="mat-btn" (click)="onAddPopup()">{{'Cms.AddPopup' | translate}}</button>
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="onDeletePopup()">
+      {{'Common.Delete' | translate}}
+    </button>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="core-cms-banners"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [suppressCopyRowsToClipboard]="true"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [sideBar]="sideBar"
+      [animateRows]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [pagination]="pagination"
+      [enableCellTextSelection]="true"
+      [components]="frameworkComponents"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+
+  </div>
+</div>
+<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.id"></router-outlet>
+

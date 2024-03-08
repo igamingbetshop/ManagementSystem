@@ -168,8 +168,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
       Token: this.localStorage.get('token'),
       UnreadsOnly: false,
       ClientIds: {IsAnd: true, ApiOperationTypeList: [{IntValue: this.clientId, DecimalValue: this.clientId, OperationTypeId: 1}]}
-    }
-
+    };
     this._signalR.connection.invoke(Methods.GET_TICKETS, request).then(data => {
       if (data.ResponseCode === 0) {
         this.rowData = data.ResponseObject.Tickets.map((question) => {
@@ -179,7 +178,6 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
-      setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 300);
     });
   }
 

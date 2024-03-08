@@ -1,4 +1,4 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
 import {CoreApiService} from '../../services/core-api.service';
@@ -96,7 +96,7 @@ export class SecurityQuestionsComponent extends BasePaginatedGridComponent imple
           onClick: this.saveSecurityQuestion['bind'](this),
           Label: 'Save',
           isDisabled: true,
-          bgColor: '#0573BA',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       },

@@ -91,7 +91,7 @@ export class CharacterChildsComponent extends BaseGridComponent implements OnCha
       filter: false,
       valueGetter: params => {
         let data = { path: 'gamification', queryParams: null };
-        data.queryParams = { gamificationId: params.data.Id };
+        data.queryParams = { gamificationId: params.data.Id, isChilde: true };
         return data;
       },
       sortable: false
@@ -105,6 +105,7 @@ export class CharacterChildsComponent extends BaseGridComponent implements OnCha
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   private clickedRowId: number | null = null;
@@ -121,7 +122,7 @@ export class CharacterChildsComponent extends BaseGridComponent implements OnCha
   }
 
   ngOnChanges(): void {
-    this.rowData = this.tableData;    
+    this.rowData = this.tableData;
     this.rowData?.forEach((item) => {
       item.Status = item.Status === 1 ? 'Active' : 'Inactive';
     });
@@ -156,5 +157,5 @@ export class CharacterChildsComponent extends BaseGridComponent implements OnCha
   onRowClicked(event: any) {
     this.childCharakterData.emit(event.data);
   }
-  
+
 }

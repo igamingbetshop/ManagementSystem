@@ -24,9 +24,8 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
   @ViewChild('agGrid1', {static: false}) agGrid1: AgGridAngular;
   public rowData = [];
-  public columnDefs;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public userId;
+  public userId:any;
   public path = 'user/markettypes';
   public path2 = 'markettypes/categoryprofitvalues';
   public path3 = 'markettypes/saveprofitvalue';

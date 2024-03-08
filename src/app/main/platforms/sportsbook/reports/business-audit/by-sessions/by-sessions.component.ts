@@ -228,7 +228,7 @@ export class BySessionsComponent extends BasePaginatedGridComponent implements O
     this.selectedItem = time;
     this.getCurrentPage();
   }
-  
+
   onStartDateChange(event) {
     this.fromDate = event.value;
   }

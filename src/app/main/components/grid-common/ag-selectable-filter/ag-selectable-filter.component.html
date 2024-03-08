@@ -1,0 +1,39 @@
+<div class="ag-boolean-filter">
+
+  <div class="ag-tabs-body ag-filter ag-filter-wrapper">
+    <div class="ag-filter">
+      <div class="ag-filter-wrapper">
+
+        <div *ngFor="let filterModel of filter.filterModels; let i = index" class="ag-filter-body-wrapper">
+
+
+          <div class="custom-dropdown" Dropdown>
+            <div class="header">{{filterModel.selectedType}}</div>
+            <i class="icon-arrow"></i>
+            <ul class="content">
+              <li class="option"
+                (click)="filterModel.type = type.displayKey; filterModel.selectedType = type.displayName"
+                *ngFor="let type of filterOptions" [value]="type.displayKey">{{type.displayName}}</li>
+            </ul>
+          </div>
+
+          <div class="custom-dropdown" Dropdown (openedDropdown)="onDropdownOpen($event, dropdownContent, i)">
+            <div class="header">{{filterModel.selectedFilter}}</div>
+            <i class="icon-arrow"></i>
+            <ul class="content" #dropdownContent>
+              <li class="option"
+                (click)="onDataChange(data.Id, filterModel, i);  filterModel.selectedFilter = data.Name"
+                *ngFor="let data of filterData" [value]="data.Id">{{data.Name}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="ag-filter-apply-panel">
+          <button type="button" class="ag-standard-button ag-filter-apply-panel-button"
+            (click)="updateFilter()">{{'Sport.Apply' | translate}}</button>
+          <button type="button" class="ag-standard-button ag-filter-apply-panel-button"
+            (click)="destroyFilter()">{{'Sport.Reset' | translate}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

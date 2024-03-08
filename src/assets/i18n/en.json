@@ -195,6 +195,7 @@
     "ProductId": "Product Id",
     "LogoutDescription": "LogoutDescription",
     "Settings": "Settings",
+    "State": "State",
     "AMLStatus": "AML Status",
     "AMLVerified": "AML Verified",
     "BlockedForInactivity": "Blocked For Inactivity",
@@ -307,7 +308,13 @@
     "CreateChildharacter": "Create Child Character",
     "Childers": "Childers",
     "ReceiverType": "Receiver Type",
-    "PayoutLimit": "Payout Limit"
+    "PayoutLimit": "Payout Limit",
+    "SelectBackgroungImage": "Select Backgroung Image",
+    "SelectImage": "Select Image",
+    "VerificationServices": "Verification Services",
+    "UnderHighRiskCountry": "Under High Risk Country",
+    "PEPSanctioned": "PEP Sanctioned",
+    "CheckStatus": "Check Status"
   },
   "Partners": {
     "AddPartner": "Add Partner",
@@ -426,12 +433,22 @@
     "SearchByName": "Search by name...",
     "CampaignId": "Campaign Id",
     "PlatformId": "Platform Id",
-    "CountrySettings": "Country Settings"
+    "CountrySettings": "Country Settings",
+    "ApplyPercentAmount": "Apply Percent Amount",
+    "Countries": "Countries"
   },
   "Currencies": {
     "Currencies": "Currencies",
     "AddCurrency": "Add Currency",
     "CurrencyName": "Currency Name"
+  },
+  "Currency": {
+    "FirstName": "First Name",
+    "LastName": "Last Name",
+    "Email": "Email",
+    "UserName": "User Name",
+    "Language": "Language",
+    "Currency": "Currency"
   },
   "Crm": {
     "Crm": "CRM",
@@ -442,10 +459,15 @@
   },
   "Users": {
     "AddUser": "Add User",
+    "AddAgent": "Add Agent",
     "Users": "Users",
+    "Agents": "Agents",
     "Users&Agents": "Users & Agents",
     "CreateUser": "Create User",
+    "CreateAgent": "Create Agent",
+    "AgentDownline": "Agent Downline",
     "UsernameMainInfo": "Username Main info",
+    "AgentNameMainInfo": "Agent Name Main Info",
     "UserPassword": "User Password",
     "EditUserRoles": "Edit User Roles",
     "SaveRoleChange": "Save Role Change",
@@ -553,7 +575,9 @@
     "InternetBetsAmount": "Internet Bets Amount",
     "TotalBetsFromMobile": "Total Bets From Mobile",
     "TotalBetsFromWebsite": "Total Bets From Website",
-    "TotalBetsFromWap": "Total Bets From Wap"
+    "TotalBetsFromWap": "Total Bets From Wap",
+    "SelectChartType": "Select Chart Type",
+    "Tablet": "Tablet"
   },
   "Payments": {
     "Document": "Document",
@@ -742,7 +766,8 @@
     "WinAccountType": "Win Account Type",
     "BetValueLevel": "BetValueLevel",
     "Regularity": "Regularity",
-    "ReusingMaxCountInPeriod": "Reusing MaxCount In Period"
+    "ReusingMaxCountInPeriod": "Reusing MaxCount In Period",
+    "DaysCount": "Days Count"
   },
   "Segments": {
     "Segments": "Segments",
@@ -881,7 +906,9 @@
     "BackgroundImage": "Background Image",
     "WebImage": "Web Image",
     "ProductsGroup": "Products Group",
-    "IsLastProductGroup": "Is Last Product Group"
+    "IsLastProductGroup": "Is Last Product Group",
+    "HasImage": "Has Image",
+    "NoImage": "No Image"
   },
   "Accounting": {
     "Accounting": "Accounting",
@@ -975,7 +1002,13 @@
     "ImageType" : "Image Type",
     "IsoCode3": "Iso Code 3",
     "EnumType": "EnumType",
-    "PromotionGroups": "Promotion Groups"
+    "PromotionGroups": "Promotion Groups",
+    "Popups": "Popups",
+    "AddPopup": "Add Popup",
+    "Popup": "Popup",
+    "NewsGroups": "News Groups",
+    "News": "News",
+    "AddNews": "Add News"
   },
   "Reports": {
     "Reports": "Reports",
@@ -1044,6 +1077,8 @@
     "AddSettings": "Add Settings",
     "Sports": "Sports",
     "Sport": "Sport",
+    "BonusDate": "Bonus Date",
+    "BetId": "Bet Id",
     "Teams": "Teams",
     "AddTeam": "AddTeam",
     "AddCoin": "Add Coin",
@@ -1094,6 +1129,7 @@
     "Clone": "Clone",
     "LiveDelay": "Live Delay",
     "MainInfo": "Main Info",
+    "Downline": "Downline",
     "DelayBetweenBetsLive": "Delay Between Bets Live",
     "DelayBetweenBetsPrematch": "Delay Between Bets Prematch",
     "DelayPercentLive": "Delay Percent Live",
@@ -1299,7 +1335,8 @@
     "Stake": "Stake",
     "PleaseSettleThemAsSoonAsPossible": "Please settle them as soon as possible",
     "TheFollowingMatchesAreFinished": "The following matches are finished with non-seattled bets",
-    "Supsend": "Supsend"
+    "Supsend": "Supsend",
+    "UnSupsend": "Unsupsend"
   },
   "PoolBetting": {
     "PoolBetting": "Pool Betting",
@@ -1321,7 +1358,8 @@
     "BalancePercent": "Balance Percent",
     "BooleanValue": "BooleanValue",
     "IntValue": "Int Value",
-    "DecimalValue": "Decimal Value"
+    "DecimalValue": "Decimal Value",
+    "CreateTable": "Create Table"
   },
   "SkillGames": {
     "CashTables": "Cash Tables",
@@ -1578,7 +1616,12 @@
     "SplitedAmount": "Splited Amount",
     "Submit": "Submit",
     "HeaderTranslationId": "Header Translation Id",
-    "UserIds": "User Ids"
+    "UserIds": "User Ids",
+    "TransactionDosentExist": "Transaction Dosent Exist",
+    "ErrorMessages": "Error Message",
+    "EditHideSections": "Edit Hide Sections",
+    "SelectAll": "Select All",
+    "Settings": "Settings"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",
@@ -1602,6 +1645,18 @@
     "DisableTwoFactorAuthentication": "Disable Two Factor Authentication",
     "Disable": "Disable",
     "EnterThe6digitsCodeIntoTheTextboxBelowAndThenContinueToDisable": "Enter the 6-digits code into the textbox below and then continue to disable."
-   }
+   },
+  "PartnerLevels": {
+    "YourLevel": "Your Level",
+    "YourLevelBenefits": "Your Level Benefits / Your Level Description",
+    "YourLevelBenefitsDescription": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. It is also used to temporarily replace text in a process called greeking, which allows designers to consider the form of a webpage or publication, without the meaning of the text influencing the design.\nLorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.",
+    "HereAreLevels": "Here are 6 levels for you",
+    "About": "About",
+    "GrowLevel": "Do you want to grow your level?",
+    "MustRegistered": "You must be registered for at least 2 months",
+    "AddNewSports": "Add new 5 sports by the end of the month",
+    "AddMorePartners": "Add 100 + more partners",
+    "BalanceMustBeOver": "Your balance must be over $250"
+  }
 
 }

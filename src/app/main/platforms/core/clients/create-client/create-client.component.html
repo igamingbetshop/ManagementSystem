@@ -17,7 +17,7 @@
 
       <ng-container *ngFor=" let item of items" [ngSwitch]="item.Type">
 
-        <mat-form-field *ngSwitchCase="'Currency'" appearance="none">
+        <mat-form-field *ngSwitchCase="'Currency'">
           <mat-label>{{'selectCurrency' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title">
             <mat-option *ngFor="let currency of partnerCurrencies" [value]="currency.CurrencyId">{{currency.CurrencyId}}</mat-option>
@@ -27,7 +27,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'Title'" appearance="none">
+        <mat-form-field *ngSwitchCase="'Title'">
           <mat-label>{{'Title' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title">
             <mat-option *ngFor="let title of titles" [value]="title.Id">{{title.Name}}</mat-option>
@@ -37,7 +37,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'text'" appearance="none">
+        <mat-form-field *ngSwitchCase="'text'">
           <mat-label>{{item.Title}}</mat-label>
           <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
           <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
@@ -47,7 +47,7 @@
 
         <mat-checkbox color="primary" *ngSwitchCase="'checkbox'" [formControlName]="item.Title">{{item.Title}}</mat-checkbox>
 
-        <mat-form-field *ngSwitchCase="'MobileData'" appearance="none">
+        <mat-form-field *ngSwitchCase="'MobileData'">
           <mat-label>{{item.Title}}</mat-label>
           <input matInput type="number" [placeholder]="item.Title" [formControlName]="item.Title">
           <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
@@ -55,7 +55,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'mobileNumber'" appearance="none">
+        <mat-form-field *ngSwitchCase="'mobileNumber'">
           <mat-label>{{item.Title}}</mat-label>
           <input matInput type="text" [placeholder]="item.Title" [formControlName]="item.Title">
           <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
@@ -63,7 +63,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'Gender'" appearance="none">
+        <mat-form-field *ngSwitchCase="'Gender'">
           <mat-label>{{'Clients.SelectGender' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title">
             <mat-option [value]="0">{{'Clients.SelectGender' | translate}}</mat-option>
@@ -74,7 +74,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'BirthDate'" appearance="none">
+        <mat-form-field *ngSwitchCase="'BirthDate'">
           <mat-label>{{'Clients.ChooseDate' | translate}}</mat-label>
           <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="item.Title">
           <mat-datepicker-toggle matSuffix [for]="pickerStart">
@@ -82,7 +82,7 @@
           <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'password'" appearance="none">
+        <mat-form-field *ngSwitchCase="'password'">
           <mat-label>{{item.Title}}</mat-label>
           <input matInput type="password" [placeholder]="item.Title" [formControlName]="item.Title">
           <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
@@ -93,7 +93,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'confirm'" appearance="none">
+        <mat-form-field *ngSwitchCase="'confirm'">
           <mat-label>{{item.Title}}</mat-label>
           <input matInput type="password" [placeholder]="item.Title" [formControlName]="item.Title">
           <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
@@ -107,7 +107,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'Region'" appearance="none">
+        <mat-form-field *ngSwitchCase="'Region'">
           <mat-label>{{'Clients.SelectCountry' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title" #region (selectionChange)="onCountryChange(region.value)">
             <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
@@ -117,7 +117,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'Region2'" appearance="none">
+        <mat-form-field *ngSwitchCase="'Region2'">
           <mat-label>{{'Clients.SelectCountry' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title" #region1 (selectionChange)="onCountryChange(region1.value)">
             <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
@@ -127,7 +127,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'Region1'" appearance="none">
+        <mat-form-field *ngSwitchCase="'Region1'">
           <mat-label>{{'Clients.Citizenship' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title" #region1 (selectionChange)="onCountryChange(region1.value)">
             <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
@@ -137,7 +137,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'city'" appearance="none">
+        <mat-form-field *ngSwitchCase="'city'">
           <mat-label>{{'Clients.SelectCity' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title">
             <mat-option *ngFor="let selectedCiti of selectedCities" [value]="selectedCiti.Id">{{selectedCiti.Name}}
@@ -148,7 +148,7 @@
           </mat-error>
         </mat-form-field>
 
-        <ng-container *ngIf="item.Title === 'JobArea'" appearance="none">
+        <ng-container *ngIf="item.Title === 'JobArea'">
           <mat-form-field *ngSwitchCase="'select'">
             <mat-label>{{'Clients.SelectJobArea' | translate}}</mat-label>
             <mat-select [formControlName]="item.Title">
@@ -160,7 +160,7 @@
           </mat-form-field>
         </ng-container>
 
-        <ng-container *ngIf="item.Title === 'DocumentType'" appearance="none">
+        <ng-container *ngIf="item.Title === 'DocumentType'">
           <mat-form-field *ngSwitchCase="'select'">
             <mat-label>{{'Clients.SelectDocumentType' | translate}}</mat-label>
             <mat-select [formControlName]="item.Title">
@@ -174,6 +174,10 @@
         </ng-container>
       </ng-container>
     </ng-container>
+
+    @if (formGroup.get('VerifyEmail')) {
+      <mat-checkbox color="primary" [formControlName]="'VerifyEmail'" required>{{'Clients.VerifyEmail' | translate}}</mat-checkbox>
+    }
 
     <mat-checkbox color="primary" [formControlName]="'SendMail'">{{'Clients.SendEmail' | translate}}</mat-checkbox>
     <mat-checkbox color="primary" [formControlName]="'SendSms'">{{'Clients.SendSms' | translate}}</mat-checkbox>

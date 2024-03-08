@@ -12,26 +12,22 @@
       <div>
         <div class="first-hand">{{'Common.StartDate' | translate}}</div>
         <div class="second-hand">{{banner?.StartDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
             <mat-datepicker-toggle matSuffix [for]="picker">
               <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
             </mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
         <div class="second-hand">{{banner?.EndDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-          <mat-form-field appearance="none">
+        <div class="form-field form-calendar-edit">
             <input matInput [matDatepicker]="picker1" [formControlName]="'EndDate'">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
-          </mat-form-field>
         </div>
       </div>
 
@@ -39,9 +35,9 @@
         <div class="first-hand">{{'Cms.Body' | translate}}</div>
         <div class="static-hand">{{banner?.Body}}</div>
         <!-- <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <<mat-form-field> 
             <input matInput [maxLength]="150" [placeholder]="'Cms.Body'" [formControlName]="'Body'">
-          </mat-form-field>
+           </mat-form-field> 
         </div> -->
       </div>
 
@@ -49,9 +45,9 @@
         <div class="first-hand">{{'Cms.Head' | translate}}</div>
         <div class="static-hand">{{banner?.Head}}</div>
         <!-- <div class="form-field form-input">
-          <mat-form-field appearance="none">
+          <mat-form-field> 
             <input matInput [maxLength]="100" [placeholder]="'Cms.Head' | translate" [formControlName]="'Head'">
-          </mat-form-field>
+          </mat-form-field> 
         </div> -->
       </div>
 
@@ -59,10 +55,8 @@
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{banner?.NickName}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
               [formControlName]="'NickName'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -70,10 +64,8 @@
         <div class="first-hand">{{'Common.Order' | translate}}</div>
         <div class="second-hand">{{banner?.Order}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="text" [maxlength]="2" [placeholder]="'Common.Order' | translate"
               [formControlName]="'Order'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -81,9 +73,7 @@
         <div class="first-hand">{{'Cms.Link' | translate}}</div>
         <div class="second-hand">{{banner?.Link}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [maxLength]="100" [placeholder]="'Cms.Link' | translate" [formControlName]="'Link'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -91,9 +81,7 @@
         <div class="first-hand">{{'Common.Type' | translate}}</div>
         <div class="second-hand">{{banner?.Type}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -101,9 +89,7 @@
         <div class="first-hand">{{'Sport.MatchId' | translate}}</div>
         <div class="second-hand">{{banner?.MatchId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Sport.MatchId' | translate" [formControlName]="'MatchId'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -111,9 +97,7 @@
         <div class="first-hand">{{'Sport.SportId' | translate}}</div>
         <div class="second-hand">{{banner?.SportId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Sport.SportId' | translate" [formControlName]="'SportId'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -132,10 +116,8 @@
         <div class="first-hand">{{'Sport.MarketTypeId' | translate}}</div>
         <div class="second-hand">{{banner?.MarketTypeId}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput type="number" [placeholder]="'Sport.MarketTypeId' | translate"
               [formControlName]="'MarketTypeId'">
-          </mat-form-field>
         </div>
       </div>
 
@@ -167,9 +149,7 @@
         <div class="first-hand">{{'Cms.Image' | translate}}</div>
         <div class="second-hand">{{banner?.Image}}</div>
         <div class="form-field form-input">
-          <mat-form-field appearance="none">
             <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'Image'">
-          </mat-form-field>
         </div>
       </div>
 

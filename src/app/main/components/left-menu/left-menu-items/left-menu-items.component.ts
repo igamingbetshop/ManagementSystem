@@ -3,9 +3,7 @@ import { Location } from '@angular/common';
 import { Category } from '../../../../core/models';
 import { NavigationEnd, Router } from '@angular/router';
 import { ApiService, ConfigService } from '../../../../core/services';
-import { debounceTime, take } from 'rxjs/operators';
-import { Controllers, Methods } from '../../../../core/enums';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
@@ -20,7 +18,7 @@ export class LeftMenuItemsComponent implements OnInit, OnDestroy {
   @Input() rootCategoryName: string;
   @Input() linkText: string;
   public title: string;
-  private url = this.configService.getApiUrl + '/ApiRequest';
+  private url;
   public disableApiCall = false;
   private routerSubscription: Subscription;
   public routerLinkUrl = '';
@@ -42,7 +40,9 @@ export class LeftMenuItemsComponent implements OnInit, OnDestroy {
     private configService: ConfigService,
     private apiService: ApiService,
     private location: Location,
+    private route: Router
   ) {
+    this.url = this.configService.getApiUrl + '/ApiRequest';
   }
 
   ngOnInit() {
@@ -71,14 +71,11 @@ export class LeftMenuItemsComponent implements OnInit, OnDestroy {
   }
 
   onClick(category): void {
+    this.route.navigate([category.Route]);
     if (!category.Route) {
       return;
     }
     this.menuContacts.closeMenu();
-  }
-
-  private reloadPage(url: string): void {
-    window.location.href = url;
   }
 
   getQueryParams(category: Category): { [key: string]: number | string } {

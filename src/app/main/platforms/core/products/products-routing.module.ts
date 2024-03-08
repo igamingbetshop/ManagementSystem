@@ -10,16 +10,6 @@ const routes: Routes = [
     path:'',
     component:ProductsComponent,
     children:[
-      // {
-      //   path: 'product',
-      //   loadChildren: () => import('./product/product.module').then(m => m.ProductModule),
-      //   resolve:{filterData:FilterOptionsResolver},
-      // },
-      {
-        path: 'view-product',
-        loadChildren: () => import('./product/view-product/view-product.module').then(m => m.ViewProductModule)
-
-      },
       {
         path: 'all-products',
         loadChildren: () => import('./all-products/all-products.module').then(m => m.AllProductsModule),

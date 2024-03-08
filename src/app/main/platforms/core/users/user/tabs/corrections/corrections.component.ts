@@ -1,25 +1,25 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {AgBooleanFilterComponent} from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../components/grid-common/button-renderer.component";
-import {TextEditorComponent} from "../../../../../../components/grid-common/text-editor.component";
-import {SelectRendererComponent} from "../../../../../../components/grid-common/select-renderer.component";
-import {NumericEditorComponent} from "../../../../../../components/grid-common/numeric-editor.component";
-import {ImageRendererComponent} from "../../../../../../components/grid-common/image-renderer.component";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService} from "../../../../../../../core/services";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {take} from "rxjs/operators";
-import {Paging} from "../../../../../../../core/models";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { AgBooleanFilterComponent } from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../components/grid-common/button-renderer.component";
+import { TextEditorComponent } from "../../../../../../components/grid-common/text-editor.component";
+import { SelectRendererComponent } from "../../../../../../components/grid-common/select-renderer.component";
+import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
+import { ImageRendererComponent } from "../../../../../../components/grid-common/image-renderer.component";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService } from "../../../../../../../core/services";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
+import { Paging } from "../../../../../../../core/models";
 import 'ag-grid-enterprise';
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
-import {DateTimeHelper} from "../../../../../../../core/helpers/datetime.helper";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
+import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 
 @Component({
   selector: 'app-corrections',
@@ -95,7 +95,7 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
         cellRendererParams: {
           onClick: this.debitToAccount['bind'](this),
           Label: 'Debit To Account',
-          bgColor: '#0573BA',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       },
@@ -109,7 +109,7 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
         cellRendererParams: {
           onClick: this.creditFromAccount['bind'](this),
           Label: 'Credit From Account',
-          bgColor: '#0573BA',
+          bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
       }
@@ -242,13 +242,13 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   getUserAccounts() {
     this.apiService.apiPost(this.configService.getApiUrl, this.userId, true,
       Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject.Accounts;
-        this.clientUnusedId = this.rowData.find((item) => item.TypeId === 1);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject.Accounts;
+          this.clientUnusedId = this.rowData.find((item) => item.TypeId === 1);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   onGridReady(params) {
@@ -270,13 +270,13 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.USER, Methods.GET_CORRECTIONS).pipe(take(1)).subscribe((data) => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities;
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Entities;
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       }
     }
   }
@@ -317,10 +317,10 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
 
   async debitToAccount(params: any, showCurrency: boolean = false) {
     this.headerName = 'Debit';
-    const {CorrectionModalComponent} = await import('../corrections/correction-modal/correction-modal.component');
+    const { CorrectionModalComponent } = await import('../corrections/correction-modal/correction-modal.component');
     const dialogRef = this.dialog.open(CorrectionModalComponent, {
       width: ModalSizes.MEDIUM,
-      data: {account: params?.data, headerName: this.headerName, showCurrency: showCurrency}
+      data: { account: params?.data, headerName: this.headerName, showCurrency: showCurrency }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -332,10 +332,10 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
 
   async creditFromAccount(params: any, showCurrency: boolean = false) {
     this.headerName = 'Credit';
-    const {CorrectionModalComponent} = await import('../corrections/correction-modal/correction-modal.component');
+    const { CorrectionModalComponent } = await import('../corrections/correction-modal/correction-modal.component');
     const dialogRef = this.dialog.open(CorrectionModalComponent, {
       width: ModalSizes.MEDIUM,
-      data: {account: params?.data, headerName: this.headerName, showCurrency: showCurrency}
+      data: { account: params?.data, headerName: this.headerName, showCurrency: showCurrency }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -360,10 +360,10 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   }
 
   async addNotes(params) {
-    const {AddNoteComponent} = await import('../../../../../../components/add-note/add-note.component');
+    const { AddNoteComponent } = await import('../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
       width: ModalSizes.MEDIUM,
-      data: {ObjectId: params.Id, ObjectTypeId: 15}
+      data: { ObjectId: params.Id, ObjectTypeId: 15 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -373,10 +373,10 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   }
 
   async openNotes(params) {
-    const {ViewNoteComponent} = await import('../../../../../../components/view-note/view-note.component');
+    const { ViewNoteComponent } = await import('../../../../../../components/view-note/view-note.component');
     const dialogRef = this.dialog.open(ViewNoteComponent, {
       width: ModalSizes.EXTRA_LARGE,
-      data: {ObjectId: params.Id, ObjectTypeId: 15, Type: 1}
+      data: { ObjectId: params.Id, ObjectTypeId: 15, Type: 1 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) { }

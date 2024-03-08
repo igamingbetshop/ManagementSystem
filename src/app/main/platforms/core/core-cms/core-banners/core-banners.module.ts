@@ -19,6 +19,12 @@ const routes: Routes = [
   {
     path: '',
     component: CoreBannersComponent,
+    children: [
+      {
+        path: 'banner',
+        loadChildren: () => import('../core-banners/core-banner/core-banner.module').then(m => m.CoreBannerModule),
+      },
+    ]
 
   }
 ];

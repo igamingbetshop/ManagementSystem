@@ -1,5 +1,4 @@
 @import "variables.scss";
-//this scss file use for changing global material styles
 
 .overlay-dropdown {
   top: 30px !important;
@@ -8,7 +7,7 @@
   border-radius: 12px !important;
   padding: 10px 8px !important;
   position: absolute;
-
+  // min-height: 200px !important;
   &.small {
     min-width: 60px !important;
     bottom: 5px;
@@ -33,31 +32,30 @@
   }
 
   &.login {
-    right: -24px;
-    min-width: calc(100% + 26px) !important;
+    position: absolute !important;
+    top: 10px!important;
+    left: -40px;
   }
 
-  .mat-option {
+  .mat-mcd-option {
     padding: 8px 0 8px 4;
     transition: all 0.3s ease;
 
     &:hover {
-
-      .mat-option-text {
-        color: $blue-2 !important;
+      .mat-mcd-option-text {
+        color:$black-4 !important;
         text-decoration: underline;
-        text-decoration-color: $blue-2;
+        text-decoration-color:$black-4;
       }
     }
 
     &:active {
-      background-color: $blue-light-3 !important;
-      .mat-option-text {
-        color: $blue-5 !important;
+      .mat-mcd-option-text {
+        color: $black-4 !important;
       }
     }
 
-    .mat-option-text {
+    .mat-mcd-option-text {
       font-size: 14px;
       color: $gray-light-6;
     }
@@ -74,28 +72,57 @@
 }
 
 .cdk-overlay-pane {
-
+  min-width: 200px;
   ::-webkit-scrollbar {
     width: 9px;
   }
 
   ::-webkit-scrollbar-track {
     margin: 12px 0;
-    border-right: 6px solid $white;
+    border-right: 6px solid $grey-blue-1;
     background-color: $gray-light-5;
   }
 
   ::-webkit-scrollbar-thumb {
     margin: 40px 0;
-    border-right: 6px solid $white;
+    border-right: 6px solid $grey-blue-1;
     background-color: $gray-light-4;
   }
 }
 
 .mat-stroked-button {
   &.selected-time {
-    background-color: $blue-light-3 !important;
-    border: 1px solid $blue-light-4 !important;
-    color: $blue-5 !important;
+    background-color: $gray-light-13 !important;
+    border: 1px solid $gray-light !important;
+    color: $gray-light-12 !important;
   }
+}
+
+.selected-time {
+  background-color: $gray-light-2 !important;
+  border: 1px solid $gray-light-14 !important;
+  color: $gray-light-15 !important;
+}
+
+.mat-datepicker-input {
+  height: 32px !important;
+  border: none !important;
+  padding-left: 6px;
+  background-color: $gray-light-13 !important;
+  outline: none;
+}
+
+.mat-datepicker-toggle {
+  position: absolute;
+  top: -6px;
+  right: 0;
+}
+
+
+.mat-datepicker-popup {
+  background-color: $gray-light-5 !important;
+}
+
+.mat-calendar-body-selected {
+  background-color: $gray-light-14 !important;
 }

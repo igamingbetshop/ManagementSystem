@@ -4,6 +4,7 @@
     <div class="title"><a [routerLink]="['/main/platform/providers/all-providers']">{{'Partners.Provider' | translate}}</a> / {{providerId}}</div>
 
     <button mat-stroked-button class="mat-btn" (click)="sync()">{{'Providers.Sync' | translate}}</button>
+    <button mat-stroked-button class="mat-export-btns" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 
   </div>
 

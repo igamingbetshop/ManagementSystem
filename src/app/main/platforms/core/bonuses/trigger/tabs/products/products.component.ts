@@ -14,8 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent extends BaseGridComponent implements OnInit {
-  public gridApi: GridApi;
-  public triggerId;
+  public triggerId:any;
   private triggerItem: any;
 
   constructor(

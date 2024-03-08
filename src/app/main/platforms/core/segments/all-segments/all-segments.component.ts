@@ -1,14 +1,15 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute} from '@angular/router';
-import {take} from 'rxjs/operators';
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from 'src/app/core/enums';
-import {CommonDataService} from 'src/app/core/services/common-data.service';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener.component';
-import {CoreApiService} from '../../services/core-api.service';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
+import { Component, Injector, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
+import { CommonDataService } from 'src/app/core/services/common-data.service';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
+import { CoreApiService } from '../../services/core-api.service';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-all-segments',
@@ -33,6 +34,7 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    minWidth: 50,
   };
 
   constructor(
@@ -50,7 +52,7 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         headerName: 'Common.Id',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Id',
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
       },
       {
         headerName: 'Partners.PartnerName',
@@ -199,10 +201,10 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: 'segment', queryParams: null};
+          let data = { path: 'segment', queryParams: null };
           // let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           // data.path = this.router.url.replace(replacedPart, 'segment');
-          data.queryParams = {segmentId: params.data.Id};
+          data.queryParams = { segmentId: params.data.Id };
           return data;
         },
         sortable: false
@@ -226,7 +228,7 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         if (data.ResponseCode === 0) {
           this.filterOperating = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -243,14 +245,14 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
 
   onGridReady(params) {
     super.onGridReady(params);
-
+    syncColumnReset();
   }
 
   async addSegment() {
-    const {AddSegmentComponent} = await import('../add-segment/add-segment.component');
+    const { AddSegmentComponent } = await import('../add-segment/add-segment.component');
     const dialogRef = this.dialog.open(AddSegmentComponent, {
       width: ModalSizes.MEDIUM,
-      data: {ClientStates: this.clientStates, FilterOperating: this.filterOperating}
+      data: { ClientStates: this.clientStates, FilterOperating: this.filterOperating }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -261,8 +263,8 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
 
   async deleteSegment() {
     const row = this.gridApi.getSelectedRows()[0];
-    const {ConfirmComponent} = await import('../../../../components/confirm/confirm.component');
-    const dialogRef = this.dialog.open(ConfirmComponent, {width: ModalSizes.SMALL});
+    const { ConfirmComponent } = await import('../../../../components/confirm/confirm.component');
+    const dialogRef = this.dialog.open(ConfirmComponent, { width: ModalSizes.SMALL });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.apiService.apiPost(this.configService.getApiUrl, row,
@@ -272,7 +274,7 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
             if (data.ResponseCode === 0) {
               this.getPage();
             } else {
-              SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
           });
       }
@@ -299,7 +301,7 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
           });
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
 
       });
