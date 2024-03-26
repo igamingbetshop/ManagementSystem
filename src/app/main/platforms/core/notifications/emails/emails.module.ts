@@ -16,6 +16,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 
 const routes: Routes = [
@@ -26,27 +27,28 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    MatCheckboxModule,
-    TranslateModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    AgGridModule,
-    RouterModule.forChild(routes),
-    MatIconModule
-  ],
-  declarations: [EmailsComponent],
-  providers: [DatePipe],
+    declarations: [EmailsComponent],
+    providers: [DatePipe],
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatCheckboxModule,
+        TranslateModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        AgGridModule,
+        RouterModule.forChild(routes),
+        MatIconModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class EmailsModule { }

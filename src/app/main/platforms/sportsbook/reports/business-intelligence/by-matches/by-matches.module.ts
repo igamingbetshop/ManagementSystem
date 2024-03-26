@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AgGridModule } from 'ag-grid-angular';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ByMatchesComponent } from './by-matches.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -21,22 +21,19 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    AgGridModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    TranslateModule,
-    MatButtonModule,
-    MatInputModule
-  ],
-  declarations: [ByMatchesComponent],
-  providers: [DatePipe],
+    declarations: [ByMatchesComponent],
+    providers: [DatePipe],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        AgGridModule,
+        TranslateModule,
+        MatButtonModule,
+        MatInputModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class ByMatchesModule { }

@@ -1,21 +1,22 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {DecimalPipe} from "@angular/common";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from "@angular/router";
+import { DecimalPipe } from "@angular/common";
 
-import {AgGridAngular} from "ag-grid-angular";
+import { AgGridAngular } from "ag-grid-angular";
 import 'ag-grid-enterprise';
-import {take} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { CellClickedEvent } from 'ag-grid-community';
 
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {Paging} from "../../../../../../core/models";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { Paging } from "../../../../../../core/models";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-games',
@@ -42,6 +43,7 @@ export class ReportByGamesComponent extends BasePaginatedGridComponent implement
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
+    private exportService:ExportService,
     protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_GAMES;
@@ -297,32 +299,25 @@ export class ReportByGamesComponent extends BasePaginatedGridComponent implement
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.partners = this.commonDataService.partners;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.getProviders();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   getByPartnerData(event) {
@@ -333,12 +328,12 @@ export class ReportByGamesComponent extends BasePaginatedGridComponent implement
   getProviders() {
     this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
       Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        this.providers = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.providers = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   onGridReady(params) {
@@ -370,22 +365,22 @@ export class ReportByGamesComponent extends BasePaginatedGridComponent implement
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.GET_REPORT_BY_INTERNET_GAMES).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities.map((items) => {
-              items.ProviderName = this.providers.find((item => item.Id === items.ProviderId))?.Name;
-              return items;
-            });
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Entities.length});
-            this.gridApi?.setPinnedBottomRowData([
-              {
-                BetAmount: `${data.ResponseObject.TotalBetAmount?.toFixed(2)}`,
-                WinAmount: `${data.ResponseObject.TotalWinAmount?.toFixed(2)}`,
-              }
-            ]);
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Entities.map((items) => {
+                items.ProviderName = this.providers.find((item => item.Id === items.ProviderId))?.Name;
+                return items;
+              });
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Entities.length });
+              this.gridApi?.setPinnedBottomRowData([
+                {
+                  BetAmount: `${data.ResponseObject.TotalBetAmount?.toFixed(2)}`,
+                  WinAmount: `${data.ResponseObject.TotalWinAmount?.toFixed(2)}`,
+                }
+              ]);
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }
@@ -405,17 +400,7 @@ export class ReportByGamesComponent extends BasePaginatedGridComponent implement
   exportToCsv() {
     delete this.filteredData.StartDate;
     delete this.filteredData.EndDate;
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_REPORT_BY_INTERNET_GAMES).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_REPORT_BY_INTERNET_GAMES, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

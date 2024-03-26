@@ -30,6 +30,7 @@ import { formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { Subscription } from "rxjs";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 declare var window: any;
 @Component({
@@ -682,7 +683,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
     this.betCurrency = this.localStorageService.get('user')?.CurrencyId;
     this.getCommentTypes();
-    this.startDate();
+    this.setTime();
     this._signalR.init();
     this.mapPartnersFilters();
     this.adminMenuId = GridMenuIds.REPORT_BY_BETS;
@@ -694,6 +695,28 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
       }
     })
   }
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
+
+  onSelectBetCategory(event) {
+    this.availableBetCategoriesStatus = event;
+    this.getCurrentPage();
+  }
+
+  onSelectBetStatus(event) {
+    this.availableStatusesStatus = event;
+    this.getCurrentPage();
+  }
+  
 
   getPartners() {
     this.partners = this.commonDataService.partners.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
@@ -1059,30 +1082,23 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     });
   }
 
-  toggleLiveUpdate() {
+  toggleLiveUpdate(event) {
+    this.isLiveUpdateOn = !event;
 
+    console.log(this.isLiveUpdateOn, "isLiveUpdateOn");
+    
     if (!this.isLiveUpdateOn) {
+      
       this.subscribeToUpdates();
+      console.log("subscribing to bets");
     } else {
+      
       this.unSubscribeFromUpdates();
+      console.log("unsubscribing from bets");
     }
   }
 
   go() {
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 

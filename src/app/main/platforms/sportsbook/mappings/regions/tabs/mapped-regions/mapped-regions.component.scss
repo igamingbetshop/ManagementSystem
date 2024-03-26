@@ -3,7 +3,7 @@
 
 .container {
   @include container-style;
-  height: 82%;
+  height: 85%;
 
   .content-action {
     @include action-style;
@@ -33,8 +33,8 @@
     .pages-sizes {
       position: absolute;
       left: 262px;
-      bottom: 22px;
-      @include dropdown-style;
+      bottom: 2.4%;
+      @include grid-dropdown-style;
 
       ::ng-deep {
         .mat-select {

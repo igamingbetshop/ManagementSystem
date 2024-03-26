@@ -160,7 +160,7 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
   }
 
   getKeys() {
-    this.apiService.apiPost('partners/getpartnerkeys', {PartnerId: +this.partnerId})
+    this.apiService.apiPost('partners/getpartnersettings', {PartnerId: +this.partnerId})
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {

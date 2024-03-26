@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, OnInit, ViewChild } from '@angular/core';
+import {AfterViewInit, Component, inject, Injector, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 
 import { AgGridAngular } from "ag-grid-angular";
@@ -7,14 +7,15 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { DateAdapter } from "@angular/material/core";
 
 import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
-import { Controllers, GridMenuIds, Methods } from "../../../../../../../core/enums";
+import { Controllers, Methods } from "../../../../../../../core/enums";
 import { CoreApiService } from "../../../../services/core-api.service";
 import { CommonDataService, ConfigService } from "../../../../../../../core/services";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 import { Paging } from 'src/app/core/models';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../../services/export.service";
 
 @Component({
   selector: 'app-transactions',
@@ -24,24 +25,25 @@ import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 export class TransactionsComponent extends BasePaginatedGridComponent implements OnInit, AfterViewInit {
 
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId?: number;
-  public rowData = [];
-  public statusNames = [];
-  public operationTypesArray = [];
-  public partnerId?: number;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public pageFilter = {};
-  public selectedItem = 'today';
-  public partners = [];
-  public operationTypesEnum;
+  clientId?: number;
+  rowData = [];
+  statusNames = [];
+  operationTypesArray = [];
+  partnerId?: number;
+  fromDate = new Date();
+  toDate = new Date();
+  pageFilter = {};
+  selectedItem = 'today';
+  partners = [];
+  operationTypesEnum;
   savedFilterModel;
-  public accounts = [];
-  public accountId = null;
-  public frameworkComponents = {
+  accounts = [];
+  accountId = null;
+  frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
   };
-
+  pageIdName =  ''
+  private exportService = inject(ExportService);
   constructor(
     protected apiService: CoreApiService,
     protected activateRoute: ActivatedRoute,
@@ -62,11 +64,27 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
   }
 
   ngOnInit(): void {
+    this.setTime();
     this.getOperationTypesEnum();
-    this.startDate();
     this.partners = this.commonDataService.partners || null;
     this.clientId = +this.activateRoute.snapshot.queryParams.clientId || null;
     this.getClientAccounts();
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Transactions')}`;
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
+    this.getCurrentPage();
   }
 
   setColumnDefs() {
@@ -309,32 +327,7 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
       });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
 
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
 
   onGridReady(params) {
     syncNestedColumnReset();
@@ -404,17 +397,8 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.pageFilter, true,
-      Controllers.CLIENT, Methods.EXPORT_CLIENT_DOCUMENTS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_CLIENT_DOCUMENTS, this.pageFilter);
   }
 
   transformArrayToNumbers(array, obj) {
@@ -432,6 +416,10 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
       }
     }
     return result;
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 
 }

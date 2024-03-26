@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { syncColumnNestedSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import {ExportService} from "../../../../services/export.service";
 
 @Component({
   selector: 'app-clients',
@@ -34,6 +35,7 @@ export class ClientsComponent extends BasePaginatedGridComponent implements OnIn
     private _snackBar: MatSnackBar,
     private apiService:CoreApiService,
     public commonDataService:CommonDataService,
+    private exportService:ExportService,
     private activateRoute: ActivatedRoute,
   ) {
     super(injector);
@@ -403,17 +405,7 @@ export class ClientsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
-      Controllers.CLIENT, Methods.EXPORT_SEGMENT_CLIENTS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_SEGMENT_CLIENTS, this.filteredData);
   }
 
 }

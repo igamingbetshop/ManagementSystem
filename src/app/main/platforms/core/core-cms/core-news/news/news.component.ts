@@ -35,6 +35,13 @@ export class NewsComponent implements OnInit {
     {Id: 1, Name: 'Active'},
     {Id: 2, Name: 'Inactive '},
   ];
+  types = [
+    {Id: 0, Name: 'Sport'},
+    {Id: 1, Name: 'Casino'},
+    {Id: 2, Name: 'Live Casino'},
+    {Id: 3, Name: 'Virtual Games'},
+    {Id: 4, Name: 'Skill Games'},
+  ]
   image: any;
   imageMedium: any;
   imageSmall: any;

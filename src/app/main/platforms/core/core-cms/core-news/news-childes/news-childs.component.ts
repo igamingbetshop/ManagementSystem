@@ -10,7 +10,7 @@ import { CellDoubleClickedEvent } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { NewsService } from '../news.service';
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import {ACTIVITY_STATUSES, NEWS_TYPES} from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-news-childs',
@@ -71,6 +71,10 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
       headerName: 'Common.State',
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'State',
+      filter: 'agTextColumnFilter',
+      filterParams:{
+        filterOptions:['startsWith']
+      }
     },
     {
       headerName: 'Common.StartDate',
@@ -133,6 +137,7 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
 
   rowData: any[];
   states = ACTIVITY_STATUSES;
+  types = NEWS_TYPES;
 
   constructor(
     protected injector: Injector,
@@ -151,9 +156,9 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
   ngOnChanges(): void {
     this.rowData = this.tableData;
     if (this.tableData.length > 0) {
-      
+
     }
-    
+
   }
 
   onGridReady(params) {
@@ -174,7 +179,7 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
             rowNode.data.FinishDate = news.FinishDate;
             rowNode.data.NickName = news.NickName;
             rowNode.data.Order = news.Order;
-            rowNode.data.Type = news.Type;
+            rowNode.data.Type = news['Type'] = this.types.find((type) => type.Id == news.Type)?.Name;
             rowNode.data.State = news['State'] = this.states.find((state) => state.Id == news.State)?.Name;
             this.gridApi.redrawRows({ rowNodes: [rowNode] });
             break;

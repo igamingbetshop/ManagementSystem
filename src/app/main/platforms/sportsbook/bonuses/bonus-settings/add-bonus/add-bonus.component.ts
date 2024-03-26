@@ -65,7 +65,7 @@ export class AddBonusComponent implements OnInit {
   }
 
   getRegions() {
-    this.apiService.apiPost(this.path, { TypeId: 5 }).subscribe(data => {
+    this.apiService.apiPost(this.path, { Type: 5 }).subscribe(data => {
       if (data.Code === 0) {
         this.regions = data.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
       } else {
@@ -84,6 +84,7 @@ export class AddBonusComponent implements OnInit {
       SelectionsMinCount: [this.bonus.SelectionsMinCount, [Validators.required]],
       SelectionsMaxCount: [this.bonus.SelectionsMaxCount],
       BonusPercent: [this.bonus.BonusPercent],
+      MinTotalCoef: [this.bonus.MinTotalCoef],
       MinCoeff: [this.bonus.MinCoeff],
       MaxAmount: [this.bonus.MaxAmount],
       MinAmount: [this.bonus.MinAmount],
@@ -97,6 +98,7 @@ export class AddBonusComponent implements OnInit {
       this.formGroup.controls['SelectionsMaxCount'].disable();
       this.formGroup.controls['BonusPercent'].disable();
       this.formGroup.controls['MinCoeff'].disable();
+      this.formGroup.controls['MinTotalCoef'].disable();
     }
 
   }
@@ -131,6 +133,7 @@ export class AddBonusComponent implements OnInit {
     this.bonus.SelectionsMaxCount = this.formGroup.get('SelectionsMaxCount').value;
     this.bonus.BonusPercent = this.formGroup.get('BonusPercent').value;
     this.bonus.MinCoeff = this.formGroup.get('MinCoeff').value;
+    this.bonus.MinTotalCoef = this.formGroup.get('MinTotalCoef').value;
     this.bonus.State = this.formGroup.get('State').value;
     this.bonus.MaxAmount = this.formGroup.get('MaxAmount').value;
     this.bonus.MinAmount = this.formGroup.get('MinAmount').value;

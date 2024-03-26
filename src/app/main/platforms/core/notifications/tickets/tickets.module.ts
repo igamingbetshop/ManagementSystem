@@ -17,29 +17,31 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TicketsRoutingModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatCheckboxModule,
-    TranslateModule,
-    AgBooleanFilterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    AgGridModule
-  ],
-  declarations: [TicketsComponent],
-  providers: [DatePipe, CoreSignalRService],
+    declarations: [TicketsComponent],
+    providers: [DatePipe, CoreSignalRService],
+    imports: [
+        CommonModule,
+        TicketsRoutingModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatSnackBarModule,
+        MatCheckboxModule,
+        TranslateModule,
+        AgBooleanFilterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        AgGridModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class TicketsModule { }

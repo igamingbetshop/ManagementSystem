@@ -1,37 +1,9 @@
 <div class="container">
 
-  <div class="content-action">
-    <div class="title">{{'Reports.Results' | translate}}</div>
-
-    <div class="date-time-tabs">
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='month'" mat-stroked-button (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
-    </div>
-
-    <div class="calendar-picker start">
-      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </div>
-
-    <div class="calendar-picker">
-      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </div>
-
-    <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
-    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
-
-
-  </div>
+  <app-partner-date-filter 
+  [title]="'Reports.Results'" 
+  (toDateChange)="onDateChange($event)"
+  />
 
   <div class="grid-content">
     <ag-grid-angular
@@ -73,6 +45,9 @@
     <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
   </mat-select>
 </div>
+
+<button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
 
   </div>
 </div>

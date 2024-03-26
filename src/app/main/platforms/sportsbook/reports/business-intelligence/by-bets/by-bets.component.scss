@@ -4,59 +4,6 @@
 .container {
   @include container-style;
 
-  .content-action {
-    @include action-style;
-
-    .stream-btn {
-      color: #fff;
-      border: none;
-      height: 35px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-right: 8px;
-
-      &.live-btn-on {
-        background: $green;
-      }
-
-      &.live-btn-off {
-        background: linear-gradient(180deg, #791711 0%, #B91616 49.48%, #E42A1E 100%)
-      }
-
-      &.live-btn-pending {
-        background: $orange-3;
-      }
-    }
-
-    .custom-dropdown {
-      margin-right: 8px;
-      @include dropdown-style;
-    }
-
-    .date-time-tabs {
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      width: 202px;
-
-      &.start {
-        margin-right: 8px;
-      }
-
-      @include calendar-picker-style;
-    }
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-  }
-
   .grid-content {
     width: 100%;
     // height: calc(100% - 360px);
@@ -64,7 +11,7 @@
     position: relative;
 
     &.all-size {
-      height: calc(100% - 11%);
+      height: calc(100% - 9%);
     }
 
     ::ng-deep {

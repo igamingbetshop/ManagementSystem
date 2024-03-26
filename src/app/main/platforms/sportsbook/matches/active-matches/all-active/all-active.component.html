@@ -132,7 +132,7 @@
       </div>
 
       <ul class="tree-content">
-        <li class="not-found" *ngIf = "!sportTree || sportTree?.length === 0">{{'Sport.MatchesNotFound' | translate}}</li>
+        <li class="not-found" *ngIf = "!sportTree || sportTree?.length === 0">{{'Sport.Loading' | translate}}</li>
         <li class="tree-li" *ngFor="let sport of sportTree" [ngClass]="{'opened': sport?.Opened}">
           <label class="sport-view-content">
             <div *ngIf="!sport?.Opened" class="sport-view" (click)="toggleOpened(sport)">

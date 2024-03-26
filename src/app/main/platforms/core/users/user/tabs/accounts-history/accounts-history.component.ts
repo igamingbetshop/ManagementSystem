@@ -12,6 +12,7 @@ import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper"
 import {DateAdapter} from "@angular/material/core";
 import { ICellRendererParams } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-accounts-history',
@@ -20,13 +21,14 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AccountsHistoryComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public userId: number;
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public selectedItem = 'today';
+  userId: number;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  selectedItem = 'today';
+  pageIdName: string;
   constructor(private activateRoute: ActivatedRoute,
               private apiService: CoreApiService,
               public configService: ConfigService,
@@ -137,85 +139,29 @@ export class AccountsHistoryComponent extends BasePaginatedGridComponent impleme
   ngOnInit() {
     this.userId = this.activateRoute.snapshot.queryParams.userId;
     this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
-    this.selectTime('today');
-  }
-
-  selectTime(time) {
-    let todayTime = new Date();
-    let tomorrowTime = new Date();
-    tomorrowTime.setHours(0);
-    tomorrowTime.setMinutes(0);
-    tomorrowTime.setSeconds(0);
-    tomorrowTime.setMilliseconds(0);
-    tomorrowTime.setDate(tomorrowTime.getDate() + 1);
-    let fromDay = new Date();
-    fromDay.setHours(0);
-    fromDay.setMinutes(0);
-    fromDay.setSeconds(0);
-    fromDay.setMilliseconds(0);
-
-    if (time === 'today') {
-      todayTime.setHours(0);
-      todayTime.setMinutes(0);
-      todayTime.setSeconds(0);
-      todayTime.setMilliseconds(0);
-      this.fromDate = todayTime;
-      this.toDate = tomorrowTime;
-    } else if (time === 'yesterday') {
-      todayTime.setHours(0);
-      todayTime.setMinutes(0);
-      todayTime.setSeconds(0);
-      todayTime.setMilliseconds(0);
-      todayTime.setDate(todayTime.getDate() - 1);
-      this.fromDate = todayTime;
-      this.toDate = fromDay;
-    } else if (time === 'week') {
-      todayTime.setHours(0);
-      todayTime.setMinutes(0);
-      todayTime.setSeconds(0);
-      todayTime.setMilliseconds(0);
-      todayTime.setDate(todayTime.getDate() - 7);
-      this.fromDate = todayTime;
-      this.toDate = tomorrowTime;
-    } else if (time === 'month') {
-      todayTime.setHours(0);
-      todayTime.setMinutes(0);
-      todayTime.setSeconds(0);
-      todayTime.setMilliseconds(0);
-      todayTime.setMonth(todayTime.getMonth() - 1);
-      this.fromDate = todayTime;
-      this.toDate = tomorrowTime;
-    }
-    this.clientData = {
-      UserId: this.userId,
-      FromDate: this.fromDate,
-      ToDate: this.toDate
-    }
-    this.selectedItem = time;
+    this.setTime();
+    this.pageIdName = `/ ${this.userId} : ${this.translate.instant('Users.AccountsHistory')}`;
     this.getData();
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-    this.clientData = {
-      UserId: this.userId,
-      FromDate: new Date(this.fromDate.setDate(this.fromDate.getDate() + 1)),
-      ToDate: this.toDate
-    };
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getData();
   }
 
-  onEndDateChange(event) {
-    this.toDate = event.value;
-    this.clientData = {
-      UserId: this.userId,
-      FromDate: this.fromDate,
-      ToDate: new Date(this.toDate.setDate(this.toDate.getDate() + 1))
-    };
-    this.getData();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   getData() {
+    this.clientData = {
+      UserId: this.userId,
+      FromDate: this.fromDate,
+      ToDate: this.toDate
+    };
     this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
       Controllers.USER, Methods.GET_USER_ACCOUNTS_BALANCE_HISTORY_PAGING).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
@@ -224,6 +170,10 @@ export class AccountsHistoryComponent extends BasePaginatedGridComponent impleme
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
     });
+  }
+
+  onNavigateToUsers() {
+    this.router.navigate(["/main/platform/users/all-users"])
   }
 
 }

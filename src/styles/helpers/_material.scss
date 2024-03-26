@@ -126,3 +126,57 @@
 .mat-calendar-body-selected {
   background-color: $gray-light-14 !important;
 }
+
+.partner-dropdown {
+  margin-left: auto;
+  margin-right: 8px;
+  .mat-mdc-select {
+    height: 36px;
+    border-radius: 6px;
+    display: flex !important;
+    align-items: center;
+    width: 169px !important;
+    padding: 0 8px 0 10px;
+    background-color: #D1D1D2;
+    // color: $content-bg-color;
+
+    &[aria-expanded="true"] {
+      .mat-mdc-select-trigger {
+        .mat-mdc-select-arrow-wrapper {
+          .mat-mdc-select-arrow {
+            background-color: #D1D1D2!important;
+            border-bottom: 5px solid #D1D1D2;
+            border-top: 5px solid transparent;
+            margin: 0 4px 4px 4px;
+            svg {
+              top: -200%;
+              left: 0;
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
+    }
+
+    .mat-mdc-select-trigger {
+      .mat-mdc-select-value {
+        color: $title-color;
+        .mat--mdc-select-placeholder {
+          color: $title-color;
+          opacity: 0.9;
+        }
+      }
+
+      .mat-mdc-select-arrow-wrapper {
+        .mat-mdc-select-arrow {
+          color: $white;
+        }
+      }
+    }
+
+    &.mat-mdc-select-disabled {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  }
+}

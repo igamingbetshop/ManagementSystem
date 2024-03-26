@@ -26,7 +26,7 @@ export class WithdrawalsComponent extends BasePaymentComponent implements OnInit
 
   onGridReady(params: any): void {
     super.onGridReady(params);
-    syncPaginationWithBtn();
+    // syncPaginationWithBtn();
   }
 
 }

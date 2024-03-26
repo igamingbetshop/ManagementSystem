@@ -1,19 +1,19 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {DatePipe} from "@angular/common";
-import {AgGridAngular} from "ag-grid-angular";
-import {Paging} from "../../../../../../core/models";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {take} from "rxjs/operators";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { DatePipe } from "@angular/common";
+import { AgGridAngular } from "ag-grid-angular";
+import { Paging } from "../../../../../../core/models";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {formattedNumber} from "../../../../../../core/utils";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-bets',
@@ -32,12 +32,13 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
   public playerCurrency;
   public selectedItem = 'today';
 
-  constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+  constructor(
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_BETSHOPS_BETS;
     this.columnDefs = [
@@ -211,36 +212,15 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.partners = this.commonDataService.partners;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   onGridReady(params) {
@@ -249,6 +229,16 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
     syncColumnSelectPanel();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
+    this.getCurrentPage();
+  }
+
 
   createServerSideDatasource() {
     return {
@@ -270,42 +260,32 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.REPORT_BET_SHOP_BETS_REPORT_PAGING).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities;
-            this.gridApi?.setPinnedBottomRowData([{
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Entities;
+              this.gridApi?.setPinnedBottomRowData([{
                 BetAmount: `${formattedNumber(data.ResponseObject.TotalBetAmount)} ${this.playerCurrency}`,
                 WinAmount: `${formattedNumber(data.ResponseObject.TotalWinAmount)} ${this.playerCurrency}`,
                 Profit: `${formattedNumber(data.ResponseObject.TotalProfit)} ${this.playerCurrency}`
               }
-            ]);
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-          }
-        });
+              ]);
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-    setTimeout(() => {this.gridApi.setServerSideDatasource(this.createServerSideDatasource());}, 0);
+    setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
   exportToCsv() {
     delete this.filteredData.StartDate;
     delete this.filteredData.EndDate;
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId }, true,
-      Controllers.REPORT, Methods.EXPORT_BET_SHOP_BETS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      }else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_BET_SHOP_BETS, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

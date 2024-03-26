@@ -116,7 +116,7 @@ export class CreateAgentComponent implements OnInit {
   public createForm() {
     this.formGroup = this.fb.group({
       PartnerId: [null, [Validators.required]],
-      Type: [null, [Validators.required]],
+      Type: [4],
       State: [null, [Validators.required]],
       UserName: [null, [Validators.required]],
       FirstName: [null, [Validators.required]],

@@ -25,7 +25,7 @@
     </div>
 
     
-    <div class="calendar-picker start">
+    <!-- <div class="calendar-picker start">
       <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="go()">
       <mat-datepicker-toggle matSuffix [for]="pickerStart">
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
@@ -39,7 +39,18 @@
         <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
       </mat-datepicker-toggle>
       <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </div> -->
+
+    <div class="calendar-picker" Dropdown >
+      <input matInput type="datetime-local" #dropdownContent (ngModelChange)="onStartDateChange($event)"
+        name="meeting-time" [ngModel]="formatDateTime(fromDate)">
     </div>
+  
+    <div class="calendar-picker" DropdownEnd >
+      <input matInput type="datetime-local" #dropdownEndContent (ngModelChange)="onEndDateChange($event)"
+        name="meeting-time" [ngModel]="formatDateTime(toDate)">
+    </div>
+
 
     <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
   </div>

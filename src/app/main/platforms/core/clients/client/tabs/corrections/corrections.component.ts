@@ -13,7 +13,9 @@ import { MatDialog } from "@angular/material/dialog";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
+import { CellClickedEvent } from 'ag-grid-community';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'client-main',
@@ -218,6 +220,11 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
         sortable: true,
         resizable: true,
         suppressMenu: true,
+        cellRenderer: function (params) {
+          let datePipe = new DatePipe('en-US');
+          let dat = datePipe.transform(params.data.CreationTime, 'medium');
+          return `${dat}`;
+        },
       },
       {
         headerName: 'Partners.LastUpdate',
@@ -226,6 +233,11 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
         sortable: true,
         resizable: true,
         suppressMenu: true,
+        cellRenderer: function (params) {
+          let datePipe = new DatePipe('en-US');
+          let dat = datePipe.transform(params.data.LastUpdateTime, 'medium');
+          return `${dat}`;
+        },
       },
       {
         headerName: 'Clients.Notes',
@@ -245,6 +257,7 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
             return newButton2;
           }
         },
+        onCellClicked: (event: CellClickedEvent) => this.onRowClicked(event),
         suppressMenu: true,
       },
     ]
@@ -254,7 +267,19 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.getClientAccountTypes();
     this.getClientAccounts();
-    this.startDate();
+    this.setTime();
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getClientCorrections();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   getClientAccounts() {
@@ -306,27 +331,6 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     this.getClientCorrections();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getClientCorrections();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
 
   async DebitToAccount(params) {
     this.headerName = 'DebitToAccount';
@@ -423,11 +427,24 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     const { AddNoteComponent } = await import('../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
       width: ModalSizes.MEDIUM,
-      data: { ObjectId: params.Id, ObjectTypeId: 15 }
+      data: { ObjectId: params.Id, ObjectTypeId: 56 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.getClientCorrections();
+        if (this.gridApi) {
+          const rowIdToUpdate = params.Id;
+          const displayedRows = this.gridApi.getDisplayedRowCount();
+
+          for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+            const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+
+            if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+              rowNode.data.HasNote = true;
+              this.gridApi.redrawRows({ rowNodes: [rowNode] });
+              break;
+            }
+          }
+        }
       }
     });
   }
@@ -436,11 +453,15 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     const { ViewNoteComponent } = await import('../../../../../../components/view-note/view-note.component');
     const dialogRef = this.dialog.open(ViewNoteComponent, {
       width: ModalSizes.EXTRA_LARGE,
-      data: { ObjectId: params.Id, ObjectTypeId: 15, Type: 1 }
+      data: { ObjectId: params.Id, ObjectTypeId: 56, Type: 1 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
       }
     });
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 }

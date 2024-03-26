@@ -21,7 +21,7 @@
 
          <div class="wraper" style="margin-bottom: 4px;">
             <div>{{'Common.Name' | translate}}</div>
-            <mat-form-field >
+            <mat-form-field>
               <input matInput   [formControlName]="'Name'" placeholder="{{'Common.Name' | translate}}" required>
               <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
                 {{'Common.Name' | translate}} {{'Errors.Required' | translate}}

@@ -140,21 +140,23 @@
           <div class="first-hand">{{ item?.Name}}</div>
           <div class="second-hand">{{ item?.Count}}</div>
           <div class="form-field form-input">
-            <mat-form-field >
+            <!-- <mat-form-field > -->
               <input matInput type="number" placeholder={{item?.Count}} [formControlName]="(i)" ngModel="{{levelTypes[i]?.Count}}" >
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
         </div>
       </ng-container>
 
       <div></div>
+      <div></div>
+      <div></div>
 
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
           <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid || formGroup.pristine" type="submit"
             (click)="onSubmit()">{{'Common.Save' | translate}}
           </button>
-          <button mat-stroked-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
         </div>
       </div>
 

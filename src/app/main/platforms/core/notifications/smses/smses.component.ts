@@ -13,6 +13,7 @@ import { CellDoubleClickedEvent } from "ag-grid-community";
 import { MatDialog } from "@angular/material/dialog";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 
 
@@ -159,35 +160,24 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
   }
 
   ngOnInit() {
+    this.setTime();    
     this.partners = this.commonDataService.partners;
     this.gridStateName = 'smses-grid-state';
-    this.startDate();
-  }
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onPartnerChange(val: number) {
-    this.partnerId = val;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   onGridReady(params) {

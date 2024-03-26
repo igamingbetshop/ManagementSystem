@@ -4,40 +4,9 @@
 .container {
   @include container-style;
 
-  .content-action {
-    @include action-style;
-
-    .partner-dropdown {
-      margin-right: 8px;
-      @include dropdown-style;
-    }
-
-    .calendar-picker {
-      margin-left: 8px;
-      @include calendar-picker-style;
-    }
-
-    .date-time-tabs {
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-
-    .tiket-btn {
-      margin-right: 8px;
-    }
-  }
-
   .grid-content {
     width: 100%;
-    height: calc(100% - 92px);
+    height: calc(100% - 62px);
 
     ::ng-deep {
       ag-grid-angular {
@@ -46,16 +15,33 @@
       }
     }
 
-    .pages-sizes {
+    .footer-ag-grid {
       position: absolute;
-      left: 262px;
-      bottom: 2%;
+      left: 14%;
+      bottom: 1.4%;
+      display: flex;
+      align-items: center;
+      width: 80%;
+
       @include grid-dropdown-style;
 
       ::ng-deep {
         .mat-select {
           height: 26px !important;
           width: 60px !important;
+          position: absolute;
+          top: 3px;
+        }
+      }
+
+      .btn-action {
+        margin-left: auto;
+        margin-right: 10px;
+        order: 2;
+
+        .mat-btn {
+          margin-left: 8px;
+          @include mat-btn-style;
         }
       }
     }

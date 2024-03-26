@@ -13,6 +13,7 @@ import {OpenerComponent} from "../../../../../../components/grid-common/opener/o
 import {DatePipe} from "@angular/common";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
 import {CoreSignalRService} from "../../../../services/core-signal-r.service";
+import {ExportService} from "../../../../services/export.service";
 
 
 @Component({
@@ -38,6 +39,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
     public dialog: MatDialog,
     private commonDataService: CommonDataService,
     private _signalR: CoreSignalRService,
+    private exportService:ExportService,
     private localStorage: LocalStorageService) {
     super(injector);
     this.adminMenuId = GridMenuIds.CLIENTS_TICKETS;
@@ -196,18 +198,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl,
-      {TakeCount:100,SkipCount:0, ClientIds:this.filteredClientId}, true,
-      Controllers.CLIENT, Methods.EXPORT_CLIENT_MESSAGES).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENT_MESSAGES, {TakeCount:100,SkipCount:0, ClientIds:this.filteredClientId});
   }
 
 }

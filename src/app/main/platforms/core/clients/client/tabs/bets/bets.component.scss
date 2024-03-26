@@ -5,42 +5,11 @@
   @include container-style;
   height: auto;
 
-  .content-action {
-    @include action-style;
-    height: 68px;
 
-    .custom-dropdown {
-      @include dropdown-style;
-      margin-right: 8px;
-    }
-
-    .date-time-tabs {
-
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      width: 202px;
-      &.start {
-        margin-right: 8px;
-      }
-
-      @include calendar-picker-style;
-    }
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-  }
 
   .grid-content {
     width: 100%;
-    height: calc(100vh - 342px);
+    height: calc(100vh - 336px);
 
     ::ng-deep {
       ag-grid-angular {

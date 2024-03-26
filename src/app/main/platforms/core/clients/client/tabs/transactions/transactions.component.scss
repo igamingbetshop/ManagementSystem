@@ -1,51 +1,15 @@
 @import "mixins.scss";
 @import "variables.scss";
 
+
+
 .container {
   @include container-style;
   height: auto;
 
-  .content-action {
-    @include action-style;
-    height: 68px;
-
-    .custom-dropdown {
-      @include dropdown-style;
-      margin-right: 8px;
-    }
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-
-    .mat-export-btn {
-      margin-left: 8px;
-      @include mat-export-btn-style;
-    }
-
-    .date-time-tabs {
-
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      width: 202px;
-      &.start {
-        margin-right: 8px;
-      }
-
-      @include calendar-picker-style;
-    }
-  }
-
   .grid-content {
     width: 100%;
-    height: calc(100vh - 360px);
+    height: calc(100vh - 354px);
 
     ::ng-deep {
       ag-grid-angular {
@@ -87,3 +51,5 @@
 
   }
 }
+
+

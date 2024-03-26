@@ -4,7 +4,9 @@
     <div class="title">{{'Payments.PaymentSystems' | translate}}</div>
 
     <div class = "bulk-editor-dropdown">
-      <button mat-stroked-button class="mat-bulk-btn"
+      <button mat-stroked-button 
+              class="mat-bulk-btn"
+              [class.disabled]="!this.isRowSelected()"
               [matMenuTriggerFor]="bulkMenu"
               #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
         {{'Common.EditHideSections' | translate}}
@@ -44,4 +46,7 @@
       rowSelection="multiple">
     </ag-grid-angular>
   </div>
+
+  <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
 </div>

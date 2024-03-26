@@ -1,20 +1,20 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {DatePipe} from "@angular/common";
-import {Paging} from "../../../../../../core/models";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {take} from "rxjs/operators";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { ActivatedRoute } from "@angular/router";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { DatePipe } from "@angular/common";
+import { Paging } from "../../../../../../core/models";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { take } from "rxjs/operators";
 
 import 'ag-grid-enterprise';
-import {OpenerComponent} from "../../../../../components/grid-common/opener/opener.component";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { OpenerComponent } from "../../../../../components/grid-common/opener/opener.component";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-report-by-client-changes',
@@ -33,11 +33,11 @@ export class ReportByClientChangesComponent extends BasePaginatedGridComponent i
   public partners = [];
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    protected injector: Injector) {
     super(injector);
     this.gridStateName = 'clients-grid-state';
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_CLIENT_CHANGES;
@@ -120,7 +120,7 @@ export class ReportByClientChangesComponent extends BasePaginatedGridComponent i
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           data.path = this.router.url.split('?')[0] + '/' + params.data.Id;
           return data;
         },
@@ -130,36 +130,26 @@ export class ReportByClientChangesComponent extends BasePaginatedGridComponent i
   }
 
   ngOnInit(): void {
+    this.setTime();    
     this.partners = this.commonDataService.partners;
-    this.startDate();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
-  }
 
   onGridReady(params) {
     super.onGridReady(params);
@@ -191,12 +181,12 @@ export class ReportByClientChangesComponent extends BasePaginatedGridComponent i
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.GET_REPORT_BY_OBJECT_CHANGE_HISTORY).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            params.success({rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              params.success({ rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }

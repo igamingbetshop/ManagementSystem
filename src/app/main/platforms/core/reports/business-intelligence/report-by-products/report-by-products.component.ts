@@ -9,8 +9,9 @@ import { BasePaginatedGridComponent } from "../../../../../components/classes/ba
 import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DecimalPipe } from "@angular/common";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-products',
@@ -34,6 +35,7 @@ export class ReportByProductsComponent extends BasePaginatedGridComponent implem
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
+    private exportService:ExportService,
     protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_BUISNEES_INTELIGANCE_PRODUCTS;
@@ -236,36 +238,24 @@ export class ReportByProductsComponent extends BasePaginatedGridComponent implem
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.partners = this.commonDataService.partners;
     this.getData();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getData();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getData();
   }
 
@@ -296,17 +286,8 @@ export class ReportByProductsComponent extends BasePaginatedGridComponent implem
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.clientData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_PRODUCTS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_PRODUCTS, {...this.clientData, adminMenuId: this.adminMenuId});
   }
 
 }

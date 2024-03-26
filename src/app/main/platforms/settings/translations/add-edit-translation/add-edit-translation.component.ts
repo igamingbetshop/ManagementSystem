@@ -44,6 +44,7 @@ export class AddEditTranslationComponent implements OnInit {
       Id:[this.dialogData.Id || null],
       Title: [this.dialogData.Title || null, Validators.required],
       Order: [this.dialogData.Order || null, Validators.required],
+      InterfaceType: [this.dialogData.interfaceType || null],
     })
   }
 

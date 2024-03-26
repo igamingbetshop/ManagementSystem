@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Injector, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { take } from 'rxjs/operators';
 
@@ -9,6 +9,8 @@ import { CommonDataService } from 'src/app/core/services';
 import { CellDoubleClickedEvent } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
+import { PromotionsService } from '../core-promotions.service';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-promotion-childs',
@@ -19,12 +21,12 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
   @Input() tableData: any[] = [];
   @Output() childCharakterData: EventEmitter<any> = new EventEmitter<any>()
   @Output() getParentData: EventEmitter<any> = new EventEmitter<any>()
-  public partnerId;
-  public frameworkComponents = {
+  partnerId;
+  frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
   };
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public colDefs = [
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  colDefs = [
     {
       headerName: 'Common.Id',
       headerValueGetter: this.localizeHeader.bind(this),
@@ -108,15 +110,13 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
       filter: false,
       valueGetter: params => {
         let data = { path: 'promotion', queryParams: null };
-        data.queryParams = { Id: params.data.Id };
+        data.queryParams = { Id: params.data.Id, Childe: true };
         return data;
       },
       sortable: false
     },
-
-
   ];
-  public defaultColDef = {
+  defaultColDef = {
     flex: 1,
     editable: false,
     sortable: true,
@@ -125,22 +125,46 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
     floatingFilter: true,
     minWidth: 50,
   };
-
-  public rowData: any[];
+  states = ACTIVITY_STATUSES;
+  rowData: any[];
 
   constructor(
     protected injector: Injector,
     public dialog: MatDialog,
+    private promotionsService: PromotionsService,
     public commonDataService: CommonDataService,
   ) {
     super(injector);
-    // this.adminMenuId = GridMenuIds.CORE_PROMOTIONS;
-    // this.gridIndex = 1;
     this.columnDefs = this.colDefs;
+    this.subscribeToCurrentUpdate();
   }
 
   ngOnChanges(): void {
     this.rowData = this.tableData;
+  }
+
+  subscribeToCurrentUpdate() {
+    this.promotionsService.currentUpdate.subscribe((promotion) => {
+      const rowIdToUpdate = promotion?.Id;
+      if (promotion && this.rowData.length > 0) {
+        const displayedRows = this.rowData.length; 
+        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+          const rowNode = this.rowData[rowIndex];
+          if (rowNode.Id == rowIdToUpdate) {
+            rowNode.Title = promotion.Title;
+            rowNode.Image = promotion.Image;
+            rowNode.State = this.states.find((state) => state.Id == promotion.State)?.Name;
+            rowNode.StyleType = promotion.StyleType;
+            rowNode.Order = promotion.Order;
+            rowNode.StartDate = promotion.StartDate;
+            rowNode.FinishDate = promotion.FinishDate;
+            this.rowData[rowIndex] = rowNode
+            break;
+          }
+        }  
+        this.rowData = [...this.rowData];
+      }
+    });
   }
 
   onGridReady(params) {

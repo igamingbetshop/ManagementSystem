@@ -6,11 +6,12 @@
 
   .content-action {
     @include action-style;
+    height: 62px;
   }
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 92px);
+    height: calc(100% - 62px);
 
     ::ng-deep {
       ag-grid-angular {

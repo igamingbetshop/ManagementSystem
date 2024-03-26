@@ -1,67 +1,18 @@
 
 <div class="container">
-  <div class="content-action">
 
-    <div class="title">{{'Reports.ReportByBets' | translate}}</div>
-    <button mat-stroked-button class="stream-btn"
-            [ngClass] = "{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected}"
-            (click)="toggleLiveUpdate()">
-      {{isLiveUpdateOn ? ('Reports.LiveUpdatesOff' | translate)  : ('Reports.LiveUpdatesOn' | translate) }}
-    </button>
-
-    <div class="custom-dropdown">
-      <mat-select
-      [(ngModel)]="availableBetCategoriesStatus"
-        (selectionChange)="go()"
-        panelClass="overlay-dropdown"
-        [ngModelOptions]="{standalone: true}"
-        disableOptionCentering>
-        <mat-option *ngFor="let betcategory of availableBetCategories"  [value]="betcategory.status">{{betcategory.Name | translate}}</mat-option>
-      </mat-select>
-    </div>
-
-    <div class="custom-dropdown">
-      <mat-select
-        (selectionChange)="go()"
-        [(ngModel)]="availableStatusesStatus"
-        [ngModelOptions]="{standalone: true}"
-        [placeholder]="'Clients.SelectStatus' | translate"
-        panelClass="overlay-dropdown"
-        disableOptionCentering>
-        <mat-option *ngFor="let _status of availableStatuses"  [value]="_status.Status">{{_status.Name | translate}}</mat-option>
-      </mat-select>
-    </div>
-
-    <div class="date-time-tabs">
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
-      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'month'" (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
-      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'week'" (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
-      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'yesterday'" (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
-      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
-    </div>
-
-    <div class="calendar-picker start">
-      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="go()">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </div>
-
-    <div class="calendar-picker">
-      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="go()">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </div>
-
-    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
-    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
-
-    <button mat-stroked-button class="mat-btn" (click)="go()">{{'Common.Go' | translate}}</button>
-
-  </div>
+  <app-partner-date-filter 
+  [title]="'Reports.ReportByBets'" 
+  [betCategory]="true"
+  [betStatuses]="true"
+  [allTimesFilter]="false"
+  [liveUpdateBTN]="true"
+  [isReconnected]="isReconnected"
+  (toDateChange)="onDateChange($event)"
+  (betCategoryChange)="onSelectBetCategory($event)"
+  (betStatusesChange)="onSelectBetStatus($event)"
+  (onLiveUpdateBTN)="toggleLiveUpdate($event)"
+  />
 
   <div class="grid-content" [class.all-size] = "!show">
     <ag-grid-angular
@@ -138,6 +89,10 @@
     </div>
 
 </div>
+
+<button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+<button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+
 <div *ngIf="show" class="match-grid">
 
   <!-- <ag-grid-angular

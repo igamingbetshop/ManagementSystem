@@ -109,8 +109,6 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
     this.currencies = this.commonDataService.currencies;
     this.name = this.activateRoute.snapshot.queryParams.Name;
     this.productId = +this.activateRoute.snapshot.queryParams.ProductId;
-
-
     this.getProductStates();
     this.getProductCategories();
     this.getAllCountries();
@@ -229,6 +227,7 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
         Type: [null],
         Ids: [null],
       }),
+      RTP: [null],
       Currencies: this.fb.group({
         Ids: [null],
         Names: [null],

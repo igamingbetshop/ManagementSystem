@@ -2,11 +2,15 @@
   <div class="content-action">
     <div class="title">
       <a (click)="redirectToAllProducts()">{{'Products.Products' | translate}}</a>
-      <ng-container *ngIf="name">/ {{name}}</ng-container>
+      @if (name) {
+        / {{name}}
+      }
     </div>
 
     <div class = "bulk-editor-dropdown">
-      <button mat-stroked-button class="mat-bulk-btn"
+      <button mat-stroked-button 
+              class="mat-bulk-btn"
+              [class.disabled]="!this.isRowSelected()"
               [matMenuTriggerFor]="bulkMenu"
               #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
         {{'Common.Edit' | translate}}
@@ -59,10 +63,14 @@
         [(value)]="defaultPageSize"
         panelClass="overlay-dropdown small"
         disableOptionCentering>
-        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        @for (sizes of pageSizes; track $index) {
+          <mat-option [value]="sizes" >{{sizes}}</mat-option>
+        }
       </mat-select>
     </div>
   </div>
 </div>
 
-<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.ProductId"></router-outlet>
+@if (this.activateRoute.snapshot.queryParams.ProductId) {
+  <router-outlet></router-outlet>
+}

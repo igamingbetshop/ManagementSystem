@@ -5,6 +5,7 @@ import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-mater
 import {TranslateModule} from "@ngx-translate/core";
 import {AgentComponent} from "./agent.component";
 import {AgentRoutingModule} from "./agent-routing.module";
+import {RouterModule} from "@angular/router";
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {AgentRoutingModule} from "./agent-routing.module";
     MatTabsModule,
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
-    TranslateModule
+    TranslateModule,
+    RouterModule
   ],
   declarations: [AgentComponent]
 })

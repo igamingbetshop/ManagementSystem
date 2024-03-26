@@ -1,20 +1,22 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {DatePipe} from "@angular/common";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from "@angular/common";
 
-import {AgGridAngular} from "ag-grid-angular";
+import { AgGridAngular } from "ag-grid-angular";
 import 'ag-grid-enterprise';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {take} from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
 
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods} from "../../../../../../core/enums";
-import {Paging} from "../../../../../../core/models";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from "../../../../../../core/enums";
+import { Paging } from "../../../../../../core/models";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnSelectPanel, syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-sessions',
@@ -38,25 +40,26 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
     agDropdownFilter: AgDropdownFilter,
   };
   public deviceTypes = [
-    {Id: 1, Name: 'Desktop'},
-    {Id: 2, Name: 'Mobile'},
-    {Id: 3, Name: 'Wap'}
+    { Id: 1, Name: 'Desktop' },
+    { Id: 2, Name: 'Mobile' },
+    { Id: 3, Name: 'Wap' }
   ];
   blockedData;
   public reasons = [];
   public partnerId;
   public show = true;
   public states = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Inactive'}
+    { Id: 1, Name: 'Active' },
+    { Id: 2, Name: 'Inactive' }
   ];
 
   constructor(
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_SESSIONS;
     this.columnDefs = [
@@ -365,9 +368,24 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.getReason();
     this.partners = this.commonDataService.partners;
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
+    this.getCurrentPage();
   }
 
   isRowSelected() {
@@ -377,37 +395,10 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   getReason() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.ENUMERATION, Methods.GET_LOGOUT_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.reasons = data.ResponseObject;
-      }
-    });
-  }
-
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
+        if (data.ResponseCode === 0) {
+          this.reasons = data.ResponseObject;
+        }
+      });
   }
 
   onGridReady(params) {
@@ -439,18 +430,18 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.GET_REPORT_BY_CLIENT_SESSIONS).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities.map((items) => {
-              items.StateName = this.states.find((item => item.Id === items.State))?.Name;
-              items.DeviceName = this.deviceTypes.find((item => item.Id === items.DeviceType))?.Name;
-              items.LogoutType = this.reasons.find((item => item.Id === items.LogoutType))?.Name;
-              return items;
-            });
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Entities.map((items) => {
+                items.StateName = this.states.find((item => item.Id === items.State))?.Name;
+                items.DeviceName = this.deviceTypes.find((item => item.Id === items.DeviceType))?.Name;
+                items.LogoutType = this.reasons.find((item => item.Id === items.LogoutType))?.Name;
+                return items;
+              });
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }
@@ -460,12 +451,12 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
       this.blockedData = params;
       this.apiService.apiPost(this.configService.getApiUrl, params.data.Id, true,
         Controllers.REPORT, Methods.GET_CLIENT_SESSION_INFO).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.rowData2 = data.ResponseObject;
-        } else {
-          this.rowData2 = [];
-        }
-      });
+          if (data.ResponseCode === 0) {
+            this.rowData2 = data.ResponseObject;
+          } else {
+            this.rowData2 = [];
+          }
+        });
     }
   }
 
@@ -474,17 +465,7 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_CLIENT_SESSIONS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      }else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_CLIENT_SESSIONS, {...this.filteredData, adminMenuId: this.adminMenuId});
   }
 
 }

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { take } from 'rxjs';
-import { ConfigService } from "src/app/core/services";
+import {AuthService, ConfigService} from "src/app/core/services";
 import { CoreApiService } from 'src/app/main/platforms/core/services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { Client } from 'src/app/core/interfaces';
@@ -42,6 +42,7 @@ export class ViewImageComponent implements OnInit {
     public dialogRef: MatDialogRef<ViewImageComponent>,
     private configService: ConfigService,
     private sanitizer: DomSanitizer,
+    private authService:AuthService,
     @Inject(MAT_DIALOG_DATA) public data: { value: any, clientId: number | string },
     private _el: ElementRef) {
   }
@@ -50,7 +51,7 @@ export class ViewImageComponent implements OnInit {
     this.value = this.data.value;
     this.clientId = this.data.clientId;
     this.imgValue = this.configService.defaultOptions.WebApiUrl;
-    const url = this.imgValue + '/' + this.value;
+    const url = `${this.imgValue}/Statement/${this.value}/?token=${this.authService.token}`;
     this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.isImage = ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png'].includes(url.split('.').pop());
     this.getClient();

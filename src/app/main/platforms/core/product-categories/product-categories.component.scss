@@ -6,7 +6,7 @@
 
   .content-action {
     @include action-style;
-
+    height: 62px;
     .mat-btn {
       margin-left: 8px;
       @include mat-btn-style;
@@ -15,7 +15,7 @@
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 92px);
+    height: calc(100% - 62px);
 
     ::ng-deep {
       ag-grid-angular {

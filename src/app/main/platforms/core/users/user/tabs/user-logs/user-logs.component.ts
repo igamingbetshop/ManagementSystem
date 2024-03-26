@@ -1,10 +1,9 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import 'ag-grid-enterprise';
-import {AgGridAngular} from "ag-grid-angular";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {DatePipe} from "@angular/common";
-import {take} from "rxjs/operators";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { AgGridAngular } from "ag-grid-angular";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { DatePipe } from "@angular/common";
+import { take } from "rxjs/operators";
 import { syncColumnSelectPanel, syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { Controllers, Methods } from 'src/app/core/enums';
@@ -13,6 +12,8 @@ import { Paging } from 'src/app/core/models';
 import { ConfigService, CommonDataService } from 'src/app/core/services';
 import { CoreApiService } from '../../../../services/core-api.service';
 import { ActivatedRoute } from '@angular/router';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../../services/export.service";
 
 @Component({
   selector: 'app-user-logs',
@@ -29,14 +30,16 @@ export class UserLogsComponent extends BasePaginatedGridComponent implements OnI
   partnerId;
   selectedItem = 'today';
   userId;
+  pageIdName: string;
 
   constructor(
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              private activateRoute: ActivatedRoute,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private activateRoute: ActivatedRoute,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.columnDefs = [
       {
@@ -255,31 +258,22 @@ export class UserLogsComponent extends BasePaginatedGridComponent implements OnI
   }
 
   ngOnInit(): void {
-    this.startDate();
     this.userId = +this.activateRoute.snapshot.queryParams.userId;
+    this.setTime();
+    this.pageIdName = `/ ${this.userId} : ${this.translate.instant('Users.UserLogs')}`;
     this.partnerId = +this.activateRoute.snapshot.queryParams.partnerId;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   onGridReady(params) {
@@ -292,58 +286,49 @@ export class UserLogsComponent extends BasePaginatedGridComponent implements OnI
   createServerSideDatasource() {
     return {
       getRows: (params) => {
-
         const paging = new Paging();
-
-          paging.PartnerId = this.partnerId;
-          paging.SkipCount = this.paginationPage - 1;
-          paging.TakeCount = Number(this.cacheBlockSize);
-          paging.FromDate = this.fromDate;
-          paging.ToDate = this.toDate;
-
-        this.changeFilerName(params.request.filterModel,['Country'], ['Countrie'])
+        paging.PartnerId = this.partnerId;
+        paging.SkipCount = this.paginationPage - 1;
+        paging.TakeCount = Number(this.cacheBlockSize);
+        paging.FromDate = this.fromDate;
+        paging.ToDate = this.toDate;
+        this.changeFilerName(params.request.filterModel, ['Country'], ['Countrie'])
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
-        paging.UserIds ={
+        paging.UserIds = {
           "ApiOperationTypeList": [
-              {
-                  "OperationTypeId": 1,
-                  "DecimalValue": this.userId,
-                  "IntValue": this.userId
-              }
+            {
+              "OperationTypeId": 1,
+              "DecimalValue": this.userId,
+              "IntValue": this.userId
+            }
           ],
           "IsAnd": true
-      }
+        }
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.GET_REPORT_BY_USER_LOGS_PAGING).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            params.success({rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              params.success({ rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-    setTimeout(() => {this.gridApi.setServerSideDatasource(this.createServerSideDatasource());}, 0);
+    setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_BY_USER_LOGS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      }else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_BY_USER_LOGS, { ...this.filteredData, adminMenuId: this.adminMenuId });
+  }
+
+  onNavigateToUsers() {
+    this.router.navigate(["/main/platform/users/all-users"])
   }
 
 }

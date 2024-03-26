@@ -1,17 +1,18 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {Paging} from "../../../../../../core/models";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {take} from "rxjs/operators";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { Paging } from "../../../../../../core/models";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DecimalPipe} from "@angular/common";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DecimalPipe } from "@angular/common";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-agent-transfers',
@@ -30,11 +31,12 @@ export class ReportByAgentTransfersComponent extends BasePaginatedGridComponent 
   public partners = [];
 
   constructor(
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_AGENTS_TRANSACTIONS;
     this.columnDefs = [
@@ -143,35 +145,23 @@ export class ReportByAgentTransfersComponent extends BasePaginatedGridComponent 
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.partners = this.commonDataService.partners;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {
@@ -198,33 +188,24 @@ export class ReportByAgentTransfersComponent extends BasePaginatedGridComponent 
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.REPORT, Methods.GET_REPORT_BY_AGENT_TRANSFERS).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            params.success({rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              params.success({ rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-    setTimeout(() => {this.gridApi.setServerSideDatasource(this.createServerSideDatasource());}, 0);
+    setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId }, true,
-      Controllers.REPORT, Methods.EXPORT_REPORT_BY_AGENT_TRANSFERS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      }else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_REPORT_BY_AGENT_TRANSFERS, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

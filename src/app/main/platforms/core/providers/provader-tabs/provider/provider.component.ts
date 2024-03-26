@@ -12,6 +12,7 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { CoreApiService } from '../../../services/core-api.service';
 import { syncColumnNestedSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import {ExportService} from "../../../services/export.service";
 
 const statusModel = [
   { "Name": "active", "Id": 1 },
@@ -36,6 +37,7 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
     protected injector: Injector,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
+    private exportService:ExportService
   ) {
     super(injector);
 
@@ -273,7 +275,7 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         this.filteredData = paging;
 
         console.log(paging, 'paging');
-        
+
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -293,16 +295,6 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
-      Controllers.PRODUCT, Methods.EXPORT_PRODUCTS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement('iframe');
-          iframe.setAttribute('src', this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute('style', 'display: none');
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.PRODUCT, Methods.EXPORT_PRODUCTS, this.filteredData);
   }
 }

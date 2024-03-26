@@ -17,6 +17,7 @@
   },
   "Clients": {
     "AddClient": "Add Client",
+    "Id": "Id",
     "Clients": "Clients",
     "Client": "Client",
     "ClientName": "Client Name",
@@ -114,6 +115,7 @@
     "Address": "Address",
     "BuildingNumber": "Building Number",
     "UserName": "User Name",
+    "Username": "Username",
     "Apartment": "Apartment",
     "FirstName": "First Name",
     "LastName": "Last Name",
@@ -314,7 +316,10 @@
     "VerificationServices": "Verification Services",
     "UnderHighRiskCountry": "Under High Risk Country",
     "PEPSanctioned": "PEP Sanctioned",
-    "CheckStatus": "Check Status"
+    "CheckStatus": "Check Status",
+    "BonusWinAmount": "Bonus Win Amount",
+    "OriginalBonusWinAmount": "Original Bonus Win Amount"
+
   },
   "Partners": {
     "AddPartner": "Add Partner",
@@ -457,17 +462,27 @@
     "Templates": "Templates",
     "AddTemplate": "Add Template"
   },
+  "Agents": {
+    "Agents": "Agents",
+    "Agent": "Agent",
+    "MainInfo": "Main Info",
+    "Downline": "Downline",
+    "CommissionPlan": "Commission Plan",
+    "Settings": "Settings",
+    "AddAgent": "Add Agent",
+    "CreateAgent": "Create Agent",
+    "Employees": "Employees",
+    "Corrections": "Corrections",
+    "Username": "Username",
+    "Id": "Id"
+  },
   "Users": {
     "AddUser": "Add User",
-    "AddAgent": "Add Agent",
     "Users": "Users",
     "Agents": "Agents",
     "Users&Agents": "Users & Agents",
     "CreateUser": "Create User",
-    "CreateAgent": "Create Agent",
-    "AgentDownline": "Agent Downline",
     "UsernameMainInfo": "Username Main info",
-    "AgentNameMainInfo": "Agent Name Main Info",
     "UserPassword": "User Password",
     "EditUserRoles": "Edit User Roles",
     "SaveRoleChange": "Save Role Change",
@@ -1336,7 +1351,8 @@
     "PleaseSettleThemAsSoonAsPossible": "Please settle them as soon as possible",
     "TheFollowingMatchesAreFinished": "The following matches are finished with non-seattled bets",
     "Supsend": "Supsend",
-    "UnSupsend": "Unsupsend"
+    "UnSupsend": "Unsupsend",
+    "Loading": "Loading..."
   },
   "PoolBetting": {
     "PoolBetting": "Pool Betting",
@@ -1414,7 +1430,9 @@
     "SubTitle" : "Sub Title",
     "SubOrder" : "Sub Order",
     "OrderBy" : "Order By",
-    "AddSetting" : "Add Setting"
+    "AddSetting" : "Add Setting",
+    "AdminTranslations": "Admin Translations",
+    "AgentTranslations": "Agent Translations"
   },
   "ChangePassword": {
     "HeaderText": "Password Expiration Notice",
@@ -1621,7 +1639,9 @@
     "ErrorMessages": "Error Message",
     "EditHideSections": "Edit Hide Sections",
     "SelectAll": "Select All",
-    "Settings": "Settings"
+    "Settings": "Settings",
+    "SelectDeviceType": "Select Device Type",
+    "DeviceType": "Device Type"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",

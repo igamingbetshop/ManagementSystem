@@ -15,12 +15,13 @@ import { AgBooleanFilterComponent } from '../../../../components/grid-common/ag-
 import { CoreApiService } from '../../services/core-api.service';
 import { SnackBarHelper } from '../../../../../core/helpers/snackbar.helper';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DateTimeHelper } from "../../../../../core/helpers/datetime.helper";
 import { syncColumnReset, syncColumnSelectPanel, syncPaginationWithBtn, } from "../../../../../core/helpers/ag-grid.helper";
 import { AgDropdownFilter } from "../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { ServerCommonModel } from 'src/app/core/models/server-common-model';
 import { GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-enterprise';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../services/export.service";
 
 @Component({
   selector: 'all-clients',
@@ -54,6 +55,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     private apiService: CoreApiService,
     private _snackBar: MatSnackBar,
     public activateRoute: ActivatedRoute,
+    private exportService:ExportService,
     private commonDataService: CommonDataService) {
     super(injector);
     this.getCountry();
@@ -66,6 +68,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
   }
 
   ngOnInit() {
+    this.setTime();
     this.gridStateName = 'clients-grid-state';
     this.currencies = this.commonDataService.currencyNames.map(data => { return { Id: data, Name: data }; });
     this.partners = this.commonDataService.partners;
@@ -74,7 +77,12 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     this.getUnderMonitoringTypes();
     this.getClientStates();
     this.getCategories();
-    this.startDate();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   getCountry() {
@@ -609,30 +617,12 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     ];
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
   }
 
@@ -686,7 +676,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Entities;
               mappedRows.forEach((items) => {
-                if(this.countriesEnum[items.CountryId]){
+                if(this.countriesEnum?.[items.CountryId]){
                   items.CountryId = this.countriesEnum[items.CountryId];
                 }
               });
@@ -788,19 +778,9 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     ];
   }
 
-  exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.clientData, adminMenuId: this.adminMenuId}, true,
-      Controllers.CLIENT, Methods.EXPORT_CLIENTS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          let iframe = document.createElement('iframe');
-          iframe.setAttribute('src', this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute('style', 'display: none');
-          document.body.appendChild(iframe);
-          this.gridApi.closeToolPanel();
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
-        }
-      });
+  exportToCsv()
+  {
+    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENTS, {...this.clientData, adminMenuId: this.adminMenuId});
   }
 
   async sendMailToPlayer() {

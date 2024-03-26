@@ -1,13 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {take} from 'rxjs/operators';
 import {Controllers, Methods} from 'src/app/core/enums';
 import {CommonDataService, ConfigService} from 'src/app/core/services';
 import {CoreApiService} from '../../../services/core-api.service';
 import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 import {DateAdapter} from "@angular/material/core";
+import { PromotionsService } from '../core-promotions.service';
 
 @Component({
   selector: 'app-core-promotion',
@@ -40,14 +41,17 @@ export class CorePromotionComponent implements OnInit {
   imageSmall: any;
   startDates: any;
   finishDates: any;
-
+  deviceTypes = [];
+  childe: any;
 
   constructor(
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
     private activateRoute: ActivatedRoute,
     public configService: ConfigService,
+    private promotionsService: PromotionsService,
     private fb: UntypedFormBuilder,
+    private router: Router,
     public dateAdapter: DateAdapter<Date>,
     private commonDataService: CommonDataService,
   ) {
@@ -55,9 +59,11 @@ export class CorePromotionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getDeviceTypes();
     this.createForm();
     this.getPromotionTypes();
     this.id = +this.activateRoute.snapshot.queryParams.Id;
+    this.childe = this.activateRoute.snapshot.queryParams.Childe;
     this.languages = this.commonDataService.languages;
     this.getPromotionById();
     this.getDate();
@@ -76,6 +82,19 @@ export class CorePromotionComponent implements OnInit {
       });
   }
 
+  getDeviceTypes() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.deviceTypes = data.ResponseObject;          
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
   getPromotionById() {
     this.apiService.apiPost(this.configService.getApiUrl, {Id: this.id}, true, Controllers.CONTENT, Methods.Get_Promotion_By_Id)
       .pipe(take(1))
@@ -90,6 +109,7 @@ export class CorePromotionComponent implements OnInit {
           this.imageSmall = "https://" + this.promotion?.SiteUrl + '/assets/images/promotions/small/' + this.promotion?.ImageName;
 
           this.promotion.StatusName = this.promotion.State === 1 ? 'Active' : this.promotion.State === 2 ? 'Inactive' : '';
+          this.promotion.DeviceName = this.deviceTypes.find(x => x.Id === this.promotion.DeviceType)?.Name;
           this.promotion.TypeName = this.promotionTypes.find(x => x.Id === this.promotion.Type)?.Name;
           this.partnerId = this.promotion.PartnerId;
           this.formGroup.patchValue(this.promotion);
@@ -176,12 +196,13 @@ export class CorePromotionComponent implements OnInit {
       StartDate: [null],
       FinishDate: [null],
       NickName: [null, [Validators.required]],
-      ImageName: [null, [Validators.required]],
+      ImageName: [null],
       Type: [null, [Validators.required]],
       State: [null, [Validators.required]],
       ImageData: [null],
       ImageDataSmall: [""],
       StyleType: [null],
+      DeviceType: [null],
       ImageDataMedium: [null],
       Order: [null, [Validators.required]],
       Segments: this.fb.group({
@@ -265,6 +286,11 @@ export class CorePromotionComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
       })
+  }
+
+  onNavigateToTromotions() {
+    this.promotionsService.update(this.promotion);
+    this.router.navigate(['/main/platform/cms/promotions'])
   }
 
 }

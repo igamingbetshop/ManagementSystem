@@ -44,6 +44,7 @@ export class AddEditTranslationItemComponent implements OnInit {
       MenuItemId: [this.dialogData.translationId],
       Title: [this.dialogData.Title || null],
       Order: [this.dialogData.Order || null],
+      InterfaceType: [this.dialogData.interfaceType || null],
     })
   }
 

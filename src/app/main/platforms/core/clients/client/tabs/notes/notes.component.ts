@@ -21,6 +21,7 @@ import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { CLIENT_BOUNUS_STATUSES } from 'src/app/core/constantes/statuses';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-notes',
@@ -29,19 +30,20 @@ import { CLIENT_BOUNUS_STATUSES } from 'src/app/core/constantes/statuses';
 })
 export class NotesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public columnDefs = [];
-  public fromDate = new Date();
+  clientId: number;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  columnDefs = [];
+  fromDate = new Date();
 
-  public toDate = new Date();
-  public clientData = {};
-  public statusName = [];
-  public clientBonusStatuses = CLIENT_BOUNUS_STATUSES;
-  public comments;
-  public selectedItem = 'today';
-  public frameworkComponents = {
+  toDate = new Date();
+  clientData = {};
+  statusName = [];
+  clientBonusStatuses = CLIENT_BOUNUS_STATUSES;
+  comments;
+  selectedItem = 'today';
+  pageIdName: string;
+  frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     textEditor: TextEditorComponent,
@@ -169,8 +171,10 @@ export class NotesComponent extends BasePaginatedGridComponent implements OnInit
   ngOnInit(): void {
     this.getCommentTemplates();
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
-    this.startDate();
+    this.setTime();     
     this.getData();
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Notes')}`;
+
   }
 
   getData() {
@@ -198,27 +202,19 @@ export class NotesComponent extends BasePaginatedGridComponent implements OnInit
       });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getData();
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
 
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
 
   onGridReady(params) {
     syncNestedColumnReset();
@@ -258,6 +254,10 @@ export class NotesComponent extends BasePaginatedGridComponent implements OnInit
         this.getData();
       }
     });
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 
 }

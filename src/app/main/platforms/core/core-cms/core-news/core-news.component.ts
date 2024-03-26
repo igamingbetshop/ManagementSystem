@@ -88,6 +88,10 @@ export class CoreNewsComponent extends BasePaginatedGridComponent implements OnI
         headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'State',
+        filter: 'agTextColumnFilter',
+        filterParams:{
+          filterOptions:['startsWith']
+        }
       },
       {
         headerName: 'Partners.StyleType',

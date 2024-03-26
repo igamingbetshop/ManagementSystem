@@ -1,15 +1,18 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods} from "../../../../../../core/enums";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from "../../../../../../core/enums";
+import { ActivatedRoute } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
+
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { CoreApiService } from "../../../services/core-api.service";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-partners',
@@ -31,11 +34,12 @@ export class ReportByPartnersComponent extends BasePaginatedGridComponent implem
 
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_BUISNEES_INTELIGANCE_PARTNERS;
     this.columnDefs = [
@@ -120,36 +124,24 @@ export class ReportByPartnersComponent extends BasePaginatedGridComponent implem
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.partners = this.commonDataService.partners;
     this.getData();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getData();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getData();
   }
 
@@ -166,26 +158,17 @@ export class ReportByPartnersComponent extends BasePaginatedGridComponent implem
     }
     this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
       Controllers.REPORT, Methods.GET_REPORT_BY_PARTNERS).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.clientData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_REPORT_BY_PARTNERS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      }else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_REPORT_BY_PARTNERS, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 
 }

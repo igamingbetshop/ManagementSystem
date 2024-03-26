@@ -1,0 +1,30 @@
+<div class="container">
+
+<!--  <div class="content-action">-->
+<!--    <div class="title"><a [routerLink]="['../../all-agents']">{{'Agents.Agents' | translate}}</a> {{userId}} ({{agentLevelName}})  / {{'Agents.CommissionPlan' | translate}}</div>-->
+<!--  </div>-->
+
+  <div class="grid-content">
+    <ag-grid-angular
+      class="ag-theme-balham"
+      style="width: 100%; height: 100%;"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [enableGroupEdit] = "true"
+      [autoGroupColumnDef]="autoGroupColumnDef"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [treeData]="true"
+      [animateRows]="true"
+      [isServerSideGroup]="isServerSideGroup"
+      [getServerSideGroupKey]="getServerSideGroupKey"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+    >
+    </ag-grid-angular>
+  </div>
+
+</div>

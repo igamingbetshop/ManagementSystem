@@ -29,6 +29,7 @@ import { Controllers, Methods } from "../../../../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { Paging } from "../../../../../../../../../core/models";
 import { syncColumnSelectPanel } from "../../../../../../../../../core/helpers/ag-grid.helper";
+import {ExportService} from "../../../../../../services/export.service";
 
 @Component({
   selector: 'all-products-settings',
@@ -72,6 +73,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     protected injector: Injector,
     public dialog: MatDialog,
     private ref: ChangeDetectorRef,
+    private exportService:ExportService,
     private _snackBar: MatSnackBar) {
     super(injector);
     this.autoGroupColumnDef = {
@@ -419,17 +421,8 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredDataAll, true,
-      Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCTS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          let iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+
+    this.exportService.exportToCsv( Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCTS, this.filteredDataAll);
   }
 
   update() {

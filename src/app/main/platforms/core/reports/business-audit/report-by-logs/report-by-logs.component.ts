@@ -11,10 +11,10 @@ import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums"
 import { debounceTime, take } from "rxjs/operators";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { Subject } from 'rxjs';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-report-by-logs',
@@ -118,38 +118,26 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.partners = this.commonDataService.partners;
     this.filterInputChanged.pipe(debounceTime(1000)).subscribe(event => {
       this.applyFilter(event);
     });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {
@@ -159,7 +147,7 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   }
 
   createServerSideDatasource(data?) {
-    if(data) {
+    if (data) {
       return {
         getRows: (params) => {
           params.success({ rowData: data, rowCount: data.length });

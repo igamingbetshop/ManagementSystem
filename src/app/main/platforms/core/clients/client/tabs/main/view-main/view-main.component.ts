@@ -50,9 +50,9 @@ export class ViewMainComponent implements OnInit {
     data.PartnerName = this.commonDataService.partners.find((item) => {
       return item.Id === data.PartnerId;
     }).Name;
-    data.GenderName = this.commonDataService.genders.find((item) => {
+    data.GenderName = this.commonDataService?.genders?.find((item) => {
       return item.Id === data.Gender;
-    }).Name;
+    })?.Name;
     data.LanguageName = this.commonDataService.languages.find((item) => {
       return item.Id === data.LanguageId;
     }).Name;

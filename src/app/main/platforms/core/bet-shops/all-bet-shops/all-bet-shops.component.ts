@@ -13,6 +13,7 @@ import { take } from 'rxjs/operators';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import {ExportService} from "../../services/export.service";
 
 @Component({
   selector: 'app-all-bet-shops',
@@ -38,6 +39,7 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
     public commonDataService: CommonDataService,
     public dialog: MatDialog,
     private activateRoute: ActivatedRoute,
+    private exportService:ExportService
   ) {
     super(injector);
 
@@ -374,18 +376,9 @@ export class AllBetShopsComponent extends BasePaginatedGridComponent implements 
     };
   }
 
-  exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
-      Controllers.BET_SHOP, Methods.EXPORT_BET_SHOPS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+  exportToCsv()
+  {
+    this.exportService.exportToCsv( Controllers.BET_SHOP, Methods.EXPORT_BET_SHOPS, this.filteredData);
   }
 
 }

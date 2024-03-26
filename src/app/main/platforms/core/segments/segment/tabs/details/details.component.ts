@@ -7,7 +7,7 @@ import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { CoreApiService } from '../../../../services/core-api.service';
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-details',
@@ -77,7 +77,7 @@ export class DetailsComponent implements OnInit {
       SegmentIdSet: [null],
       ClientId: [null],
       ClientIdSet: [null],
-      Email: [null],
+      Email: [null, [ Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]],
       EmailSet: [null],
       FirstName: [null],
       FirstNameSet: [null],

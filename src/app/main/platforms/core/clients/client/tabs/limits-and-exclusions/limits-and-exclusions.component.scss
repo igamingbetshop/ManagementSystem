@@ -204,10 +204,13 @@
       @include dropdown-style;
     }
 
-    .calendar-picker {
-      margin-left: 8px;
-      width: 150px;
+    .calendar-picker-div {
       @include calendar-picker-style;
+
+      .calendar-picker {
+        @include calendar-picker-style;
+        max-width: 8.5rem;
+      }
     }
 
     .space {
@@ -216,6 +219,8 @@
 
     .mat-btn {
       @include mat-btn-style;
+      display: flex;
+      margin-left: auto;
     }
   }
 }

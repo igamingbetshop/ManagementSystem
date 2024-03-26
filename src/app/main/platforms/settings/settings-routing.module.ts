@@ -10,6 +10,12 @@ const routes: Routes = [
       {
         path: 'translations',
         loadChildren: () => import('./translations/translations.module').then(m => m.TranslationsModule),
+        data: { InterfaceType: 1 }
+      },
+      {
+        path: 'agent-translations',
+        loadChildren: () => import('./translations/translations.module').then(m => m.TranslationsModule),
+        data: { InterfaceType: 2 }
       },
       {
         path: '',

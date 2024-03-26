@@ -54,7 +54,6 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_POPUPS;
-
   }
 
   ngOnInit() {
@@ -73,11 +72,11 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
         resizable: true,
         cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         minWidth: 90,
-        filter: 'agTextColumnFilter',
+        filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
-          filterOptions: this.filterService.textOptions,
+          filterOptions: this.filterService.numberOptions,
         }
       },
       {
@@ -346,7 +345,8 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
     const dialogRef = this.dialog.open(AddEditTranslationComponent, {
       width: ModalSizes.MEDIUM, data: {
         ObjectId: id,
-        ObjectTypeId: typeId
+        ObjectTypeId: typeId,
+        DeviceType: true
       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {

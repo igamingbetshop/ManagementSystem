@@ -3,8 +3,6 @@ import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { ByBetsComponent } from './by-bets.component';
 import { RouterModule, Routes } from '@angular/router';
 import { AgGridModule } from 'ag-grid-angular';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,7 +11,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { OddsTypePipe } from "../../../../../../core/pipes/odds-type.pipe";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { MatInputModule } from "@angular/material/input";
 import { ConfigService } from "../../../../../../core/services";
 import { SportsbookSignalRNewService } from "../../../services/signal-r/sportsbook-signal-r-new.service";
@@ -21,6 +18,7 @@ import { SportsBookSignalROldService } from "../../../services/signal-r/sportsbo
 import { SportsbookSignalRService } from "../../../services/signal-r/sportsbook-signal-r.service";
 import { MatIconModule } from '@angular/material/icon';
 import { MatchGridComponent } from './match-grid/match-grid.component';
+import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
 
 
 const routes: Routes = [
@@ -31,35 +29,33 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatButtonModule,
-    MatSnackBarModule,
-    TranslateModule,
-    FormsModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    ReactiveFormsModule,
-    AgGridModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    MatInputModule,
-    MatIconModule
-  ],
-  declarations: [ByBetsComponent, MatchGridComponent],
-  providers: [
-    DatePipe,
-    SportsBookSignalROldService,
-    DecimalPipe,
-    OddsTypePipe, {
-      provide: SportsbookSignalRService,
-      useFactory: SignalRFactory,
-      deps: [ConfigService]
-    }],
+    declarations: [ByBetsComponent, MatchGridComponent],
+    providers: [
+        DatePipe,
+        SportsBookSignalROldService,
+        DecimalPipe,
+        OddsTypePipe, {
+            provide: SportsbookSignalRService,
+            useFactory: SignalRFactory,
+            deps: [ConfigService]
+        }
+    ],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatButtonModule,
+        MatSnackBarModule,
+        TranslateModule,
+        FormsModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        AgGridModule,
+        MatInputModule,
+        MatIconModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class ByBetsModule { }
 

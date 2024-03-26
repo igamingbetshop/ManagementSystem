@@ -34,6 +34,7 @@ export class PopupComponent implements OnInit {
   segmentesEntites = [];
   image: any;
   types: any;
+  mobileImage: string;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -92,7 +93,8 @@ export class PopupComponent implements OnInit {
     this.partnerId = this.popup?.PartnerId;
     this.popup.PartnerName = this.partners.find((item) => this.partnerId === item.Id).Name;
     this.popup.TypeName = this.types.find((item) => this.popup.Type === item.Id).Name;
-    this.image = "https://" + this.popup?.SiteUrl + '/assets/images/popup/' + this.popup?.ImageName;
+    this.image = "https://" + this.popup?.SiteUrl + '/assets/images/popup/web/' + this.popup?.ImageName;
+    this.mobileImage = "https://" + this.popup?.SiteUrl + '/assets/images/popup/mobile/' + this.popup?.ImageName;
     this.formGroup.patchValue(this.popup);
     this.getPartnerEnvironments();
     this.getPartnerPaymentSegments(this.partnerId);
@@ -137,6 +139,7 @@ export class PopupComponent implements OnInit {
       Id: [null],
       ImageData: [null],
       ImageName: [null],
+      MobileImageData: [null],
       LastUpdateTime: [null, [Validators.required]],
       NickName: [null, [Validators.required, Validators.pattern(/^[a-z][a-z0-9]*$/i)]],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
@@ -194,6 +197,25 @@ export class PopupComponent implements OnInit {
         SnackBarHelper.show(this._snackBar, { Description: 'Not valid format jpg, png, or Gif and size < 700KB', Type: "error" });
       }
     }
+  }
+
+  uploadFile1(evt) {
+    let files = evt.target.files;
+    if (!files || files.length === 0) {
+      SnackBarHelper.show(this._snackBar,
+        { Description: "Please choose a file", Type: "error" }
+      );
+      return;
+    }
+  
+    let file = files[0];
+  
+    let reader = new FileReader();
+    reader.onload = () => {
+      const binaryString = reader.result as string;
+      this.formGroup.get('MobileImageData').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
+    };
+    reader.readAsDataURL(file);
   }
 
   convertToArray(controlName: string): void {

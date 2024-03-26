@@ -152,11 +152,11 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
             fromDate.setFullYear(fromDate.getFullYear() - 21);
             this.client.BirthDate = fromDate ;
           }
-          this.client.PartnerName = (this.commonDataService.partners as Array<any>).find(p => p.Id === this.client.PartnerId).Name;
-          this.client.LanguageName = (this.commonDataService.languages as Array<any>).find(l => l.Id === this.client.LanguageId).Name;
-          this.client.GenderName = (this.commonDataService.genders as Array<any>).find(g => g.Id === this.client.Gender).Name;
+          this.client.PartnerName = (this.commonDataService?.partners as Array<any>).find(p => p.Id === this.client.PartnerId).Name;
+          this.client.LanguageName = (this.commonDataService?.languages as Array<any>).find(l => l.Id === this.client.LanguageId).Name;
+          this.client.GenderName = (this.commonDataService?.genders as Array<any>).find(g => g.Id === this.client.Gender)?.Name;
           this.client.CategoryName = (this.clientCategories as Array<any>).find(l => l.Id === this.client.CategoryId).Name;
-          this.client.StateName = this.clientStates.find(field => field.Id === this.client.State)?.Name;
+          this.client.StateName = this.clientStates?.find(field => field.Id === this.client.State)?.Name;
           if (!!this.client.UnderMonitoringTypes) {
             this.client.UnderMonitoringTypesNames = '';
             this.client.UnderMonitoringTypes.forEach(element => {

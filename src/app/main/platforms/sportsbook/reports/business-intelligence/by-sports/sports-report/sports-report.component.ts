@@ -8,10 +8,10 @@ import { take } from 'rxjs/operators';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { GridMenuIds, GridRowModelTypes } from 'src/app/core/enums';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { Paging } from 'src/app/core/models';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { SportsbookApiService } from '../../../../services/sportsbook-api.service';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-sports-report',
@@ -121,22 +121,23 @@ export class SportsReportComponent extends BasePaginatedGridComponent implements
   }
 
   ngOnInit() {
-    this.startDate();
+    this.setTime();
     this.getPartners();
     this.getRows();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId !== undefined) {
+      this.partnerId = event.partnerId;
+    }
     this.getRows();
   }
 
@@ -153,10 +154,6 @@ export class SportsReportComponent extends BasePaginatedGridComponent implements
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
-  }
-
-  go() {
-    this.getRows();
   }
 
   toRedirectToRegions(ev) {

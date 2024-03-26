@@ -6,14 +6,14 @@
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
 
-    <mat-form-field>
+    <mat-form-field *ngIf="isParent">
       <mat-label>{{'Common.StartDate' | translate}}</mat-label>
       <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <mat-form-field>
+    <mat-form-field *ngIf="isParent">
       <mat-label>{{'Common.EndDate' | translate}}</mat-label>
       <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
       <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
@@ -59,6 +59,17 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field *ngIf="isParent">
+      <mat-label>{{'Common.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+
     <mat-form-field>
       <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'">
       <mat-error *ngIf="errorControl['Order']?.touched && errorControl['Order'].errors?.required">
@@ -79,14 +90,14 @@
         <label>{{'Cms.ImageDataMedium' | translate}}</label>
         <input type="file" (change)="uploadFile2($event)">
       </div>
-  
+
       <mat-form-field>
         <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'ImageName'">
         <mat-error *ngIf="errorControl['ImageName']?.touched && errorControl['ImageName'].errors?.required">
           {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
         </mat-error>
       </mat-form-field>
-  
+
     </ng-container>
   </form>
 

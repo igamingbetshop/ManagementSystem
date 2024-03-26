@@ -2,14 +2,12 @@
   <form class="bulk-editor-content" [formGroup]="formGroup">
 
     <div class="b-input-content" [formGroupName]="'Countries'">
-      <input [value]="1" class="bulk-input" [formControlName]="'Type'" type="radio">
-      <span class="bulk-label"> {{'Bonuses.InSet' | translate}}</span>
-    </div>
-
-    <div class="b-input-content" [formGroupName]="'Countries'" >
       <input [value]="2" class="bulk-input" [formControlName]="'Type'" type="radio">
+      <span class="bulk-label"> {{'Bonuses.InSet' | translate}}</span>
+      <input [value]="1" class="bulk-input" [formControlName]="'Type'" type="radio">
       <span class="bulk-label"> {{'Bonuses.OutOfSet' | translate}}</span>
     </div>
+
 
     <div class="custom-dropdown" [formGroupName]="'Countries'">
       <mat-select formControlName="Ids" multiple [placeholder]="'Clients.SelectCountry' | translate">

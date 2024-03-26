@@ -54,6 +54,7 @@
           #part  (selectionChange)="onPartnerChange(part.value)"
             placeholder="{{'Partners.SelectPartner' | translate}}"
             panelClass="overlay-dropdown"
+            [(ngModel)]="this.partnerId"
             disableOptionCentering>
             <mat-option [value]='null'>{{'Partners.SelectPartner' | translate}}</mat-option>
             <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>

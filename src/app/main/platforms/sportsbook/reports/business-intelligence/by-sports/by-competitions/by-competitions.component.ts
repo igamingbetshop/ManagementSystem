@@ -12,6 +12,7 @@ import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { Paging } from 'src/app/core/models';
 import { SportsbookApiService } from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-by-competitions',
@@ -172,22 +173,63 @@ export class ByCompetitionsComponent extends BasePaginatedGridComponent implemen
     this.regionName = this.route.snapshot.queryParams.regionName;
     this.regionId = this.route.snapshot.queryParams.regionId;
     this.partnerId = this.route.snapshot.queryParams.partnerId || 1;
-    this.startDate();
     this.getPartners();
+    this.startDate();
   }
 
   startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  selectTime(time: string): void {
+    const [fromDate, toDate] = DateHelper.selectTime(time);
+    this.fromDate = fromDate;
+    this.toDate = toDate;
     this.selectedItem = time;
     this.getCurrentPage();
+  }
+
+  onStartDateChange(event: any) {
+    if (event instanceof Date) {
+      this.fromDate = event;
+    } else {
+      const formattedDateTime = event;
+      this.fromDate = this.parseDateTimeString(formattedDateTime);
+    }
+  }
+
+  formatDateTime(date: any): string {
+    if (date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    return '';
+  }
+
+  private parseDateTimeString(dateTimeString: string): Date {
+    const dateTimeParts = dateTimeString.split('T');
+    if (dateTimeParts.length === 2) {
+      const [datePart, timePart] = dateTimeParts;
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hours, minutes] = timePart.split(':').map(Number);
+      return new Date(year, month - 1, day, hours, minutes);
+    }
+    return new Date();
+  }
+
+  onEndDateChange(event: any) {
+    if (event instanceof Date) {
+      this.toDate = event;
+    } else {
+      const formattedDateTime = event;
+      this.toDate = this.parseDateTimeString(formattedDateTime);
+    }
   }
 
   getPartners() {

@@ -24,7 +24,11 @@ export class AuthGuard  {
       if(this.isTokenValidated)
         return true;
 
+      /*if(this.authService.getUser.IsTwoFactorEnabled)
+        return true;*/
+
       return new Promise((resolve) => {
+
         this.apiService.apiGet(this.config.getApiUrl, null, Methods.VALIDATE_TOKEN).toPromise()
           .then((responseData) => {
             if (responseData['ResponseCode'] === 0)

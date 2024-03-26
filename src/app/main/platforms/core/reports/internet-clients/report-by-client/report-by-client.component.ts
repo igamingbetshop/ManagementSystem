@@ -1,17 +1,19 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { ActivatedRoute } from "@angular/router";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
 import 'ag-grid-enterprise';
-import {Paging} from "../../../../../../core/models";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DecimalPipe} from "@angular/common";
+import { Paging } from "../../../../../../core/models";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DecimalPipe } from "@angular/common";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 
 @Component({
@@ -32,11 +34,12 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
   public selectedItem = 'today';
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_CLIENT;
     this.columnDefs = [
@@ -269,7 +272,12 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
         field: 'TotalDepositAmount',
         sortable: true,
         resizable: true,
-        filter:false
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
       },
       {
         headerName: 'Clients.TotalWithdrawalAmount',
@@ -277,7 +285,12 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
         field: 'TotalWithdrawalAmount',
         sortable: true,
         resizable: true,
-        filter:false
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
       },
     ]
   }
@@ -287,33 +300,20 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
     this.partners = this.commonDataService.partners;
   }
 
+
   startDate() {
     DateTimeHelper.startDate();
     this.fromDate = DateTimeHelper.getFromDate();
     this.toDate = DateTimeHelper.getToDate();
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {
@@ -326,38 +326,30 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
   createServerSideDatasource() {
     return {
       getRows: (params) => {
-
         const paging = new Paging();
+        paging.SkipCount = this.paginationPage - 1;
+        paging.TakeCount = Number(this.cacheBlockSize);
+        paging.FromDate = this.fromDate;
+        paging.ToDate = this.toDate;
         if (this.partnerId) {
           paging.PartnerId = this.partnerId;
-          paging.SkipCount = this.paginationPage - 1;
-          // paging.TakeCount = this.cacheBlockSize;
-          paging.TakeCount = Number(this.cacheBlockSize);
-          paging.FromDate = this.fromDate;
-          paging.ToDate = this.toDate;
-        } else {
-          paging.SkipCount = this.paginationPage - 1;
-          // paging.TakeCount = this.cacheBlockSize;
-          paging.TakeCount = Number(this.cacheBlockSize);
-          paging.FromDate = this.fromDate;
-          paging.ToDate = this.toDate;
-        }
+        } 
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.DASHBOARD, Methods.GET_CLIENTS_INFO_LIST).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Clients.Entities.map((items) => {
-              items.PartnerName = this.partners.find((item => item.Id === items.PartnerId))?.Name;
-              items.StateName = this.status.find((item => item.Id === items.Status))?.Name;
-              return items;
-            });
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Clients.Count});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-          }
-        });
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Clients.Entities.map((items) => {
+                items.PartnerName = this.partners.find((item => item.Id === items.PartnerId))?.Name;
+                items.StateName = this.status.find((item => item.Id === items.Status))?.Name;
+                return items;
+              });
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Clients.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }
@@ -368,17 +360,8 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.DASHBOARD, Methods.EXPORT_CLIENTS_INFO_LIST).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      }else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+
+    this.exportService.exportToCsv( Controllers.DASHBOARD, Methods.EXPORT_CLIENTS_INFO_LIST, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

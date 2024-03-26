@@ -6,15 +6,14 @@ import 'ag-grid-enterprise';
 import { Paging } from 'src/app/core/models';
 import { take } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
-import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { DateTimeHelper } from "../../../../../../core/helpers/datetime.helper";
 import { GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { MATCH_STATUSES } from 'src/app/core/constantes/statuses';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { CellClickedEvent } from 'ag-grid-community';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 
 @Component({
@@ -55,10 +54,20 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
   ngOnInit() {
     this.getSports();
     this.gridStateName = 'all-finished-matches-grid-state';
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+    this.setTime();
     this.getProviders();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
   }
 
   setColunmDef() {
@@ -293,29 +302,17 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
   }
 
   onSportChange(value) {
+    console.log(value, "onSportChange");
+    
     this.sportId = value;
     this.go();
   }
 
   onProviderChange(val) {
+    console.log(val, "onProviderChange");
+    
     this.providerId = val;
     this.go();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {

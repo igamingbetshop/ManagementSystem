@@ -6,8 +6,6 @@
 
   .content-action {
     @include action-style;
-    height: 60px;
-
     .edit-btn {
       @include mat-edit-btn-style;
     }

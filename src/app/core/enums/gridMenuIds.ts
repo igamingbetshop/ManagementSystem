@@ -4,6 +4,7 @@ export enum GridMenuIds {
   ALL_CLIENTS = 4,
   AFFILIATES = 5,
   USERS = 6,
+  AGENTS = 206,
   DEPOSITS = 8,
   WITHDRAWALS = 9,
   PAYMENT_FORMS = 10,

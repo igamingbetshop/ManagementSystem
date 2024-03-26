@@ -597,7 +597,6 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
             } else {
               SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
             }
-            setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 300);
           });
       }
     }

@@ -149,7 +149,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   getPaymentSystems() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
+    this.apiService.apiPost(this.configService.getApiUrl, {IsActive: true},
       true, Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS)
       .subscribe(data => {
         if (data.ResponseCode === 0) {

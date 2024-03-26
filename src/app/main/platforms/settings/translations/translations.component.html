@@ -1,7 +1,13 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title">{{'Settings.Translations' | translate}}</div>
+    <div class="title">
+      @if (interfaceType === 1 ) {
+        {{'Settings.AdminTranslations' | translate}}
+      } @else {
+        {{'Settings.AgentTranslations' | translate}}
+      }
+    </div>
     <button mat-stroked-button class="mat-btn" (click)="uploadTranslations()">Upload translations</button>
   </div>
 

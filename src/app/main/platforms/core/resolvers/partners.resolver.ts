@@ -8,7 +8,7 @@ import {CommonDataService} from "../../../../core/services/common-data.service";
 import {CoreApiService} from "../services/core-api.service";
 
 @Injectable()
-export class PartnersResolver 
+export class PartnersResolver
 {
   constructor(private apiService:CoreApiService,
               private configService:ConfigService,
@@ -29,7 +29,7 @@ export class PartnersResolver
     else
     {
       return this.apiService.apiPost(this.configService.getApiUrl,
-        {}, true, Controllers.PARTNER, Methods.GET_PARTNERS).pipe(map(data => {
+        {TakeCount:500}, true, Controllers.PARTNER, Methods.GET_PARTNERS).pipe(map(data => {
           let partners = [];
           if( data.ResponseCode === 0) {
             partners = data.ResponseObject.Entities;

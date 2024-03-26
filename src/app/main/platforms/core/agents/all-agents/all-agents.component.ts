@@ -38,7 +38,7 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
     public dialog: MatDialog,
   ) {
     super(injector);
-    this.adminMenuId = GridMenuIds.USERS;
+    this.adminMenuId = GridMenuIds.AGENTS;
     this.initialTypes();
 
 
@@ -205,19 +205,6 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         sortable: true
       },
       {
-        headerName: 'Users.UserRoles',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'UserRoles',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        }
-      },
-      {
         headerName: 'View',
         cellRenderer: OpenerComponent,
         filter: false,
@@ -225,7 +212,8 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
           let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'agent');
-          data.queryParams = { userId: params.data.Id, partnerId: params.data.PartnerId };
+          // data.queryParams = { userId: params.data.Id, partnerId: params.data.PartnerId, levelId: params.data.Level };
+          data.queryParams = { agentIds: params.data.Id };
           return data;
         },
         sortable: false
@@ -252,7 +240,9 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         const paging = new Paging();
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
-        paging.UserTypes = {ApiOperationTypeList:[{OperationTypeId:1,DecimalValue:4,IntValue:4}],IsAnd:true}
+        paging.Type = 4;
+        paging.WithClients = false;
+        paging.WithDownlines = false;
         paging.partnerId = this.partnerId;
         this.changeFilerName(params.request.filterModel,
           ['Type'], ['UserType']);
@@ -262,7 +252,7 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         this.filteredData = paging;
 
         this.apiService.apiPost(this.configService.getApiUrl, paging,
-          true, Controllers.USER, Methods.GET_USERS).pipe(take(1)).subscribe(data => {
+          true, Controllers.USER, Methods.GET_AGENTS).pipe(take(1)).subscribe(data => {
           if (data.ResponseCode === 0) {
             const mappedRows = data.ResponseObject.Entities;
             mappedRows.forEach((entity) => {

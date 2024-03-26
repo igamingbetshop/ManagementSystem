@@ -1,20 +1,20 @@
-import {DatePipe} from '@angular/common';
-import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {take} from 'rxjs/operators';
-import {Controllers, GridMenuIds, Methods, ModalSizes, StatusNames} from 'src/app/core/enums';
+import { DatePipe } from '@angular/common';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { take } from 'rxjs/operators';
+import { Controllers, GridMenuIds, Methods, ModalSizes, StatusNames } from 'src/app/core/enums';
 import 'ag-grid-enterprise';
-import {CommonDataService, LocalStorageService} from 'src/app/core/services';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {AgBooleanFilterComponent} from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
-import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener.component';
-import {CoreApiService} from '../../services/core-api.service';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {CoreSignalRService} from "../../services/core-signal-r.service";
-import {MatDialog} from "@angular/material/dialog";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { CommonDataService, LocalStorageService } from 'src/app/core/services';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
+import { CoreApiService } from '../../services/core-api.service';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { CoreSignalRService } from "../../services/core-signal-r.service";
+import { MatDialog } from "@angular/material/dialog";
 import { Paging } from 'src/app/core/models';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-tickets',
@@ -201,10 +201,10 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'ticket');
-          data.queryParams = {ticketId: params.data.Id, status: params.data.Status};
+          data.queryParams = { ticketId: params.data.Id, status: params.data.Status };
           return data;
         },
         cellStyle: (params) => this.getCellStyle(params.data.UnreadMessagesCount),
@@ -218,42 +218,31 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
   ngOnInit() {
     this.partners = this.commonDataService.partners;
     this.getTicketTypes();
-
-    this.startDate();
-
+    this.setTime();
     this.gridStateName = 'tickets-grid-state';
 
     this._signalR.init();
     this.signalRSubscription = this._signalR.connectionEmitter
-    .subscribe(connected => {
+      .subscribe(connected => {
         if (connected === true) {
           this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
         }
       });
 
-      this.setPartnersPlaysholder()
+    this.setPartnersPlaysholder()
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.partnerId = event.partnerId;
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   getTicketTypes() {
@@ -264,41 +253,36 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
         if (data.ResponseCode === 0) {
           this.ticketsTypesEnum = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
   setPartnersPlaysholder() {
-    this.partnersPlaceholder = this.partners.length > 1 ? this.translate.instant('Partners.SelectPartner')  : this.partners[0].Name;
+    this.partnersPlaceholder = this.partners.length > 1 ? this.translate.instant('Partners.SelectPartner') : this.partners[0].Name;
   }
 
   getCellStyle(unreadMessagesCount: number) {
     if (unreadMessagesCount === 0) {
-      return {backgroundColor: '#BCE1BA'};
+      return { backgroundColor: '#BCE1BA' };
     }
-    return {backgroundColor: '#DBB3B9'};
-  }
-
-  onPartnerChange(value) {
-    this.partnerId = value;
-    this.gridApi.refreshServerSideStore({purge: true});
+    return { backgroundColor: '#DBB3B9' };
   }
 
   unreadChange(isRead: boolean) {
     this.unreadsOnly = isRead;
-    this.gridApi.refreshServerSideStore({purge: true});
+    this.gridApi.refreshServerSideStore({ purge: true });
   }
 
   async creteNewTicket() {
-    const {AddTicketComponent} = await import('../tickets/add-ticket/add-ticket.component');
+    const { AddTicketComponent } = await import('../tickets/add-ticket/add-ticket.component');
     const dialogRef = this.dialog.open(AddTicketComponent, {
       width: ModalSizes.MEDIUM,
-      data: {partnerId: this.partnerId}
+      data: { partnerId: this.partnerId }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.gridApi.refreshServerSideStore({purge: true});
+        this.gridApi.refreshServerSideStore({ purge: true });
       }
     })
   }
@@ -331,9 +315,9 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
                 return question;
               });
 
-            params.success({rowData: this.rowData, rowCount: data.ResponseObject.Count});
+            params.success({ rowData: this.rowData, rowCount: data.ResponseObject.Count });
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         });
 
@@ -348,7 +332,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-    setTimeout(() => {this.gridApi.setServerSideDatasource(this.createServerSideDatasource());}, 0);
+    setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
 }

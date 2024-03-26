@@ -23,6 +23,7 @@ import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-deposits',
@@ -31,30 +32,30 @@ import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class DepositsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public filteredClientId;
-  public statusName = [];
-  public masterDetail;
-  public partners;
-  public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
-  public autoGroupColumnDef: ColDef;
-  public filteredData;
-  public selectedItem = 'today';
-  public frameworkComponents;
-  public accounts = [];
+  clientId: number;
+  rowData = [];
+  fromDate = new Date();
+  toDate = new Date();
+  filteredClientId;
+  statusName = [];
+  masterDetail;
+  partners;
+  rowModelType: string = GridRowModelTypes.SERVER_SIDE;
+  autoGroupColumnDef: ColDef;
+  filteredData;
+  selectedItem = 'today';
+  frameworkComponents;
+  accounts = [];
   private paymentSystems = [];
-  public accountId = null;
-  public nestedFrameworkComponents = {
+  accountId = null;
+  nestedFrameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
   };
-  public rowClassRules;
-  public detailCellRendererParams: any = {
+  rowClassRules;
+  detailCellRendererParams: any = {
     detailGridOptions: {
       rowHeight: 47,
       defaultColDef: {
@@ -68,12 +69,13 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
       },
     },
   }
-  public AmountSummary;
-  public playerCurrency;
-  public urlSegment;
-  public type = 0;
-  public client;
-  public currencyId;
+  AmountSummary;
+  playerCurrency;
+  urlSegment;
+  type = 0;
+  client;
+  currencyId;
+  pageIdName =  ''
 
   constructor(
     private apiService: CoreApiService,
@@ -155,9 +157,23 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
     this.featchStatesEnum();
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.getClientAccounts();
-    this.startDate();
+    this.setTime();
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Deposits')}`;
     this.getClient();
+
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   featchPaymentSystems() {
@@ -514,19 +530,12 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
     ];
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
   getClient() {
     this.apiService.apiPost(this.configService.getApiUrl, this.clientId, true,
       Controllers.CLIENT, Methods.GET_CLIENT_BY_ID).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.client = data.ResponseObject.Client;
-          this.currencyId = data.ResponseObject.Client.CurrencyId
-
+          this.currencyId = data.ResponseObject.Client.CurrencyId;
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -612,22 +621,6 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
     setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
   async addNotes(params) {
     const { AddNoteComponent } = await import('../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
@@ -693,6 +686,10 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
           }
         });
     })
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 
 }

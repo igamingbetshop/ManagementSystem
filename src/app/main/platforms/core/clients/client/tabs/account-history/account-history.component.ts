@@ -12,6 +12,8 @@ import { DateAdapter } from "@angular/material/core";
 import { syncColumnNestedSelectPanel, syncColumnSelectPanel, syncNestedColumnReset } from "../../../../../../../core/helpers/ag-grid.helper";
 import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../../services/export.service";
 
 @Component({
   selector: 'app-account-history',
@@ -20,15 +22,16 @@ import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-com
 })
 export class AccountHistoryComponent extends BaseGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public selectedItem = 'today';
-  public accounts = [];
-  public accountId = null;
+  clientId: number;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowData = [];
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  selectedItem = 'today';
+  accounts = [];
+  accountId = null;
+  pageIdName: string;
 
   constructor(
     private apiService: CoreApiService,
@@ -36,6 +39,7 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
     protected injector: Injector,
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
+    private exportService:ExportService,
     public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
@@ -148,35 +152,21 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
   ngOnInit(): void {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.getClientAccounts();
-    this.startDate();
+    this.setTime();
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.AccountHistory')}`;
     this.adminMenuId = GridMenuIds.CLIENTS_ACCOUNT_HISTORY;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.clientData = {
-      ClientId: this.clientId,
-      FromDate: this.fromDate,
-      ToDate: this.toDate
-    }
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getData();
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   getClientAccounts() {
@@ -223,18 +213,11 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
-      Controllers.CLIENT, Methods.EXPORT_CLIENT_ACCOUNTS_BALANCE_HISTORY).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENT_ACCOUNTS_BALANCE_HISTORY, this.clientData);
   }
 
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
+  }
 
 }

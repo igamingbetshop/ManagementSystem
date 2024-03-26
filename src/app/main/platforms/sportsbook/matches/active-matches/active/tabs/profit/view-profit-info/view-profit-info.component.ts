@@ -39,17 +39,19 @@ export class ViewProfitInfoComponent implements OnInit {
             let row = [];
             row.push(key);
             if (resp[key] == null)
-              row = [...row, ...['-', '-', '-', '-', '-', '-', '-', '-']];
+              row = [...row, ...['-', '-', '-', '-', '-', '-', '-', '-', '-', '-',]];
             else {
               row.push(!resp[key]['AbsoluteProfitRange1'] && resp[key]['AbsoluteProfitRange1'] !== 0 ? '-' : resp[key]['AbsoluteProfitRange1']);
               row.push(!resp[key]['AbsoluteProfitRange2'] && resp[key]['AbsoluteProfitRange2'] !== 0 ? '-' : resp[key]['AbsoluteProfitRange2']);
               row.push(!resp[key]['AbsoluteProfitRange3'] && resp[key]['AbsoluteProfitRange3'] !== 0 ? '-' : resp[key]['AbsoluteProfitRange3']);
               row.push(!resp[key]['AbsoluteProfitLive'] && resp[key]['AbsoluteProfitLive'] !== 0 ? '-' : resp[key]['AbsoluteProfitLive']);
-
               row.push(!resp[key]['RelativeLimitRange1'] && resp[key]['RelativeLimitRange1'] !== 0 ? '-' : resp[key]['RelativeLimitRange1']);
               row.push(!resp[key]['RelativeLimitRange2'] && resp[key]['RelativeLimitRange2'] !== 0 ? '-' : resp[key]['RelativeLimitRange2']);
               row.push(!resp[key]['RelativeLimitRange3'] && resp[key]['RelativeLimitRange3'] !== 0 ? '-' : resp[key]['RelativeLimitRange3']);
               row.push(!resp[key]['RelativeLimitLive'] && resp[key]['RelativeLimitLive'] !== 0 ? '-' : resp[key]['RelativeLimitLive']);
+              row.push((resp[key]['AllowCashout'] == true) ? 'YES' : ((resp[key]['AllowCashout'] == false) ? 'NO' : "NONE"));
+              row.push((resp[key]['AllowMultipleBets'] == true) ? 'YES'
+              : row.push((resp[key]['AllowMultipleBets'] == false) ? 'NO' : "NONE"));
             }
             this.profitInfo.push(row);
           });

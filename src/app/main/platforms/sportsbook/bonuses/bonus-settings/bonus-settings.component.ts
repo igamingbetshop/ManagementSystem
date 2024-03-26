@@ -1,13 +1,13 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {GridMenuIds, GridRowModelTypes, ModalSizes} from 'src/app/core/enums';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {SportsbookApiService} from '../../services/sportsbook-api.service';
+import { Component, Injector, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { GridMenuIds, GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import 'ag-grid-enterprise';
-import {take} from 'rxjs/operators';
-import {CellClickedEvent} from 'ag-grid-community';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
+import { take } from 'rxjs/operators';
+import { CellClickedEvent } from 'ag-grid-community';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
@@ -47,10 +47,9 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
     this.getBonusesTypes();
     this.getChannels();
     this.getPartners();
-    this.getRegions();
-    setTimeout(() => {
-      this.getPage()
-    });
+    this.setColdefs();
+    this.getPage();
+
   }
 
   setColdefs() {
@@ -63,7 +62,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         resizable: true,
         minWidth: 100,
         tooltipField: 'Id',
-        cellStyle: {color: '#076192', 'font-size': '12px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '12px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
       },
       {
@@ -120,6 +119,14 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         },
       },
       {
+        headerName: 'Sport.MinTotalCoef',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MinTotalCoef',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+      },
+      {
         headerName: 'Sport.MinCoeff',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MinCoeff',
@@ -154,7 +161,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
       {
         headerName: 'Bonuses.Country',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CountryName',
+        field: 'CountryCode',
         resizable: true,
         sortable: true,
         filter: false,
@@ -181,16 +188,6 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
     ];
   }
 
-  getRegions() {
-    this.apiService.apiPost('regions', { TypeId: 5 }).subscribe(data => {
-      if (data.Code === 0) {
-        this.regions = data.ResponseObject;
-        this.setColdefs();
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
-  }
 
   getBonusesTypes() {
     this.apiService.apiPost('utils/bonustypes', {})
@@ -199,7 +196,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         if (data.Code === 0) {
           this.bonusTypes = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
 
       });
@@ -212,7 +209,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         if (data.Code === 0) {
           this.bonusChannels = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -222,14 +219,14 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
       if (data.Code === 0) {
         this.partners = data.ResponseObject;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }
 
   async editBonus(params) {
     const row = params.data;
-    const {AddBonusComponent} = await import('./add-bonus/add-bonus.component');
+    const { AddBonusComponent } = await import('./add-bonus/add-bonus.component');
     const dialogRef = this.dialog.open(AddBonusComponent, {
       width: ModalSizes.SMALL, data: {
         partners: this.partners,
@@ -246,7 +243,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
 
   async addBonus() {
 
-    const {AddBonusComponent} = await import('./add-bonus/add-bonus.component');
+    const { AddBonusComponent } = await import('./add-bonus/add-bonus.component');
     const dialogRef = this.dialog.open(AddBonusComponent, {
       width: ModalSizes.SMALL, data: {
         partners: this.partners,
@@ -295,12 +292,6 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
             let partnerName = this.partners.find((partner) => {
               return partner.Id == bonus.PartnerId;
             })
-            let countryName = this.regions.find((region) => {
-              return region.IsoCode == bonus.CountryCode;
-            })
-            if (countryName) {
-              bonus['CountryName'] = countryName.Name;
-            }
             if (partnerName) {
               bonus['PartnerName'] = partnerName.Name;
             }
@@ -313,7 +304,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
           });
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }

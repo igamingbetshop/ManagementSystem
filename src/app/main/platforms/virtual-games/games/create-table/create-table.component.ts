@@ -69,7 +69,7 @@ export class CreateTableComponent implements OnInit {
     }
 
     const obj = this.formGroup.getRawValue();
-    this.apiService.apiPost('createtable', obj).pipe(take(1)).subscribe(data => {
+    this.apiService.apiPost('game/createtable', obj).pipe(take(1)).subscribe(data => {
       if(data.ResponseCode === 0)
       {
         this.dialogRef.close(data.ResponseObject);

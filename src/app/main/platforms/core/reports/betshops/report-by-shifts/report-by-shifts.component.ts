@@ -1,19 +1,20 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {Paging} from "../../../../../../core/models";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {take} from "rxjs/operators";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { ActivatedRoute } from "@angular/router";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { Paging } from "../../../../../../core/models";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {formattedNumber} from "../../../../../../core/utils";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-shifts',
@@ -33,11 +34,12 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
   public selectedItem = 'today';
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_BETSHOPS_SHIFTS;
     this.columnDefs = [
@@ -345,38 +347,24 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.partners = this.commonDataService.partners;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
-    this.selectTime('today');
   }
 
-
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {
@@ -394,13 +382,11 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
         if (this.partnerId) {
           paging.PartnerId = this.partnerId;
           paging.SkipCount = this.paginationPage - 1;
-          // paging.TakeCount = this.cacheBlockSize;
           paging.TakeCount = Number(this.cacheBlockSize);
           paging.FromDate = this.fromDate;
           paging.ToDate = this.toDate;
         } else {
           paging.SkipCount = this.paginationPage - 1;
-          // paging.TakeCount = this.cacheBlockSize;
           paging.TakeCount = Number(this.cacheBlockSize);
           paging.FromDate = this.fromDate;
           paging.ToDate = this.toDate;
@@ -410,9 +396,9 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.BET_SHOP, Methods.GET_FN_ADMIN_SHIFT_REPORT_PAGING).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            params.success({rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count});
-            this.gridApi?.setPinnedBottomRowData([{
+            if (data.ResponseCode === 0) {
+              params.success({ rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count });
+              this.gridApi?.setPinnedBottomRowData([{
                 BetAmount: `${formattedNumber(data.ResponseObject.TotalBetAmount)} ${this.playerCurrency}`,
                 WinAmount: `${formattedNumber(data.ResponseObject.PayedWinAmount)} ${this.playerCurrency}`,
                 DepositAmount: `${formattedNumber(data.ResponseObject.TotalDepositAmount)} ${this.playerCurrency}`,
@@ -422,12 +408,12 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
                 TotalAmount: `${formattedNumber(data.ResponseObject.EndAmount)} ${this.playerCurrency}`,
                 TotalBonusAmount: `${formattedNumber(data.ResponseObject.BonusAmount)} ${this.playerCurrency}`,
               }
-            ]);
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-          setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 200);
-        });
+              ]);
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+            setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 200);
+          });
 
       },
     };
@@ -435,21 +421,11 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-    setTimeout(() => {this.gridApi.setServerSideDatasource(this.createServerSideDatasource());}, 0);
+    setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.clientData, adminMenuId: this.adminMenuId}, true,
-      Controllers.BET_SHOP, Methods.EXPORT_SHIFTS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.BET_SHOP, Methods.EXPORT_SHIFTS, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 
 }

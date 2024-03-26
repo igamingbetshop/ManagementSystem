@@ -28,12 +28,11 @@ export class APIInterceptor implements HttpInterceptor {
   
     const token = JSON.parse(localStorage.getItem('token'));
     const urlToken = token ? `&token=${token}` : '';
-  
-    if (req.body && req.body.RequestObject && req.body.RequestObject.Loading !== false) {
+    if (req.body && req.body?.RequestObject && req.body.RequestObject.Loading !== false) {
       this.loaderService.isLoading.next(true);
       delete req.body.RequestObject.Loading;
       delete req.body.Loading;
-    }
+    } 
   
     let clonedRequest: HttpRequest<any> = req.clone({
       url: `${req.url}?TimeZone=${timeZone}&LanguageId=${lang}${urlToken}`,
@@ -45,9 +44,10 @@ export class APIInterceptor implements HttpInterceptor {
       });
     }
   
-    if (clonedRequest.body && clonedRequest.body.RequestObject) {
+    if (clonedRequest.body && req.url && req.body?.Loading !== false) {
+      this.loaderService.isLoading.next(true);
       this.requests.push(clonedRequest);
-    }
+    } 
   
     return next.handle(clonedRequest).pipe(
       tap(event => {
@@ -65,11 +65,9 @@ export class APIInterceptor implements HttpInterceptor {
       }),
       finalize(() => {
         if(clonedRequest.body && clonedRequest.body.RequestObject && clonedRequest.body.RequestObject.Loading == false) {
-          
           this.loaderService.isLoading.next(false);
           this.requests = [];
         } else {
-
           this.removeRequest(clonedRequest);
         }
       })

@@ -19,9 +19,10 @@ import { DateAdapter } from "@angular/material/core";
 import { OddsTypePipe } from "../../../../../../../core/pipes/odds-type.pipe";
 import { LocalStorageService } from "../../../../../../../core/services";
 import { OddsTypes, ModalSizes } from 'src/app/core/enums';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { BETAVAILABLESTATUSES, BETSTATUSES } from 'src/app/core/constantes/statuses';
 import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 @Component({
   selector: 'app-bets',
@@ -30,44 +31,48 @@ import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class BetsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public playerId: number;
-  public availableBetCategoriesStatus: number = -1;
-  public availableStatusesStatus: number = -1;
-  public availableBetCategories = [
+  rowData = [];
+  playerId: number;
+  availableBetCategoriesStatus: number = -1;
+  availableStatusesStatus: number = -1;
+  availableBetCategories = [
     { Id: 1, status: -1, Name: 'All Bets' },
     { id: 2, status: 0, Name: 'Real Bets' },
     { id: 3, status: 1, Name: 'Bonus Bets' }
   ];
 
-  public betTypesModel = [
+  betTypesModel = [
     { Name: "Single", Id: 1 },
     { Name: "Multiple", Id: 2 },
     { Name: "System", Id: 3 },
     { Name: "Chain", Id: 4 },
     { Name: "Teaser", Id: 5 },
   ];
-  public availableStatuses = BETAVAILABLESTATUSES;
-  public betStatuses = BETSTATUSES;
-  public commentTypes = [];
-  public totalBetAmount;
-  public totalWinAmount;
-  public totalProfit;
-  public playerCurrency;
-  public detailsInline;
-  public masterDetail;
-  public selectedItem = 'today';
-  public detailCellRendererParams: any;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public nestedFrameworkComponents = {
+  availableStatuses = BETAVAILABLESTATUSES;
+  betStatuses = BETSTATUSES;
+  commentTypes = [];
+  totalBetAmount;
+  totalWinAmount;
+  totalProfit;
+  playerCurrency;
+  detailsInline;
+  masterDetail;
+  selectedItem = 'today';
+  detailCellRendererParams: any;
+  fromDate = new Date();
+  toDate = new Date();
+  nestedFrameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
   };
+  frameworkComponents = {
+    agDropdownFilter: AgDropdownFilter,
+  }
   private oddsType: number;
   filteredData: Paging;
+  pageIdName: string;
 
   constructor(private activateRoute: ActivatedRoute,
     private apiService: SportsbookApiService,
@@ -137,7 +142,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         cellRenderer: (params) => {
           const oddsTypePipe = new OddsTypePipe();
           let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-          return `${data}`;
+          return data ? ` ${data}` : '';
         }
       },
       {
@@ -285,11 +290,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         field: 'StatusName',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.betStatuses,
         },
       },
       {
@@ -341,7 +345,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         },
         cellRenderer: function (params) {
           let names = `<span data-action-type="view-name">${params.data.MatchId}</span>`;
-          return `${names}`;
+          return names ? `${names}` : '';
         },
         cellStyle: { cursor: 'pointer', 'text-decoration': 'underline' },
         onCellClicked: (event: CellClickedEvent) => this.goToFinished(event),
@@ -679,11 +683,30 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     this.playerId = this.activateRoute.snapshot.queryParams.playerId;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
     this.getCommentTypes();
-    this.startDate();
+    this.setTime();
+    this.pageIdName = `/ ${this.playerId} : ${this.translate.instant('Clients.Bets')}`;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
   }
 
-  go() {
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
+
+  onSelectBetCategory(event) {
+    this.availableBetCategoriesStatus = event;
+    this.getCurrentPage();
+  }
+
+  onSelectBetStatus(event) {
+    this.availableStatusesStatus = event;
     this.getCurrentPage();
   }
 
@@ -702,20 +725,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
       }
 
     })
-  }
-
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {
@@ -738,6 +747,8 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
           IsAnd: true,
           ApiOperationTypeList: [{ OperationTypeId: 1, IntValue: this.playerId, DecimalValue: this.playerId }]
         }
+        this.changeFilerName(params.request.filterModel,
+          ['StatusName'], ['State']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         delete paging.StartDate;
@@ -748,18 +759,14 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
           if (data.Code === 0) {
             const mappedRows = data.Objects;
             mappedRows.forEach((bet) => {
-              let statusName = this.betStatuses.find((status) => {
-                return status.Id == bet.Status;
-              })
-              bet['CommentTypeColor'] = this.commentTypes.find((comment) => comment.Id == bet.CommentTypeId)?.Color;
-
-              if (statusName) {
-                bet['StatusName'] = statusName.Name;
-              }
+              bet.StatusName = this.betStatuses.find((status) => status.Id == bet.State)?.Name;
             })
             this.totalBetAmount = data.TotalBetAmount;
             this.totalWinAmount = data.TotalWinAmount;
             this.totalProfit = data.TotalProfit;
+
+            console.log('mappedRows', mappedRows);
+            
             params.success({ rowData: mappedRows, rowCount: data.TotalCount });
             this.gridApi?.setPinnedBottomRowData([
               {
@@ -779,14 +786,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   async addNotes(params) {
@@ -861,6 +860,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/sportsbook/players/all-players"])
   }
 
 }

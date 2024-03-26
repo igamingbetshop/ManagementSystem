@@ -18,6 +18,7 @@ import { MatInputModule } from "@angular/material/input";
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 
 import { DepositsComponent } from './deposits.component';
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 
 const routes: Routes = [
@@ -34,27 +35,28 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatSelectModule,
-    MatNativeDateModule,
-    MatSnackBarModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    TranslateModule,
-    AgBooleanFilterModule,
-    MatDialogModule,
-    AgGridModule,
-    MatInputModule,
-    FormsModule,
-    RouterModule.forChild(routes),
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
-  ],
-  declarations: [DepositsComponent]
+    declarations: [DepositsComponent],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatSelectModule,
+        MatNativeDateModule,
+        MatSnackBarModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        TranslateModule,
+        AgBooleanFilterModule,
+        MatDialogModule,
+        AgGridModule,
+        MatInputModule,
+        FormsModule,
+        RouterModule.forChild(routes),
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class DepositsModule {
 }

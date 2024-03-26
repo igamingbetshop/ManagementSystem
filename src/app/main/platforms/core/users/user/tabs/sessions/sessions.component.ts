@@ -9,7 +9,7 @@ import {take} from "rxjs/operators";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnSelectPanel, syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
-import { GridRowModelTypes, GridMenuIds, Controllers, Methods } from 'src/app/core/enums';
+import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { Paging } from 'src/app/core/models';
 import { ConfigService, CommonDataService } from 'src/app/core/services';
@@ -17,6 +17,7 @@ import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base
 import { CoreApiService } from '../../../../services/core-api.service';
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 import { ActivatedRoute } from '@angular/router';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-sessions',
@@ -44,6 +45,7 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
   show = true;
   states = ACTIVITY_STATUSES;
   userId;
+  pageIdName: string;
   constructor(
               private apiService: CoreApiService,
               public configService: ConfigService,
@@ -207,9 +209,10 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
   }
 
   ngOnInit(): void {
-    this.startDate();
-    this.getReason();
     this.userId = +this.activateRoute.snapshot.queryParams.userId;
+    this.setTime();
+    this.pageIdName = `/ ${this.userId} : ${this.translate.instant('Clients.Sessions')}`;
+    this.getReason();
     this.partnerId = +this.activateRoute.snapshot.queryParams.partnerId;
   }
 
@@ -226,31 +229,21 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
     });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
   }
 
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   onGridReady(params) {
     super.onGridReady(params);
-    syncColumnSelectPanel();
+    // syncColumnSelectPanel();
     syncColumnReset();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
@@ -310,6 +303,10 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
   //     }
   //   });
   // }
+
+  onNavigateToUsers() {
+    this.router.navigate(["/main/platform/users/all-users"])
+  }
 
 }
 

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CoreApiService } from '../../../../../services/core-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,15 +15,16 @@ import { SnackBarHelper } from '../../../../../../../../core/helpers/snackbar.he
   styleUrls: ['./add-edit-sub-menu.component.scss']
 })
 export class AddEditSubMenuComponent implements OnInit {
-  public action;
-  public partnerId;
-  public menuItem;
-  public formGroup: UntypedFormGroup;
-  public checkDocumentSize;
-  public iconChanging;
-  public showFile = false;
-  public color = '';
-  public styleMenuId = 43;
+  action;
+  partnerId;
+  menuItem;
+  formGroup: UntypedFormGroup;
+  checkDocumentSize;
+  iconChanging;
+  showFile = false;
+  color = '';
+  styleMenuId = 43;
+  selectedImage;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditSubMenuComponent>,
@@ -51,8 +52,8 @@ export class AddEditSubMenuComponent implements OnInit {
       this.formGroup = this.fb.group({
         Title: [null],
         Type: [''],
-        StyleType: [''],
-        Icon: [''],
+        StyleType: ['', [Validators.maxLength(255)]],
+        Icon: ['', [Validators.maxLength(100)]],
         Href: [null],
         Order: [null],
         OpenInRouting: [false],
@@ -101,6 +102,7 @@ export class AddEditSubMenuComponent implements OnInit {
           const binaryString = reader.result as string;
           this.formGroup.get('Image').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
           this.formGroup.get('Icon').setValue(files.name);
+          this.selectedImage = files.name;
         };
         reader.readAsDataURL(files);
       } else {
@@ -129,12 +131,14 @@ export class AddEditSubMenuComponent implements OnInit {
   }
 
   isValidFormat(files: any): boolean {
-    return (files.size < 900000) && (files.type === 'image/png' ||
+    return (files.size < 900000) && (
+    files.type === 'image/png' ||
     files.type === 'image/jpg' ||
     files.type === 'image/x-icon' ||
     files.type === 'image/svg+xml' ||
     files.type === 'image/jpeg' ||
     files.type === 'image/gif' ||
+    files.type === 'image/webp' ||
     files.type === 'application/pdf' ||
     files.type === 'image/vnd.microsoft.icon' ||    
     files.name.includes('.ttf'));

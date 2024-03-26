@@ -3,9 +3,9 @@
 <div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.CommentId }">
   <div class="content-action">
     <div class="title"><a [routerLink]="['../../all-products']" [queryParams]="{Name: name }">{{'Products.Product' | translate}}
-        <ng-container *ngIf="name">
+        @if (name) {
           / {{name}}
-        </ng-container>
+        }
       </a>
       / {{productId}}
     </div>
@@ -20,9 +20,7 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Id}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Id'" readonly>
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -30,9 +28,7 @@
         <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.ExternalId}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'ExternalId'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -40,9 +36,7 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Name}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Name'" readonly>
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -51,7 +45,9 @@
         <div class="second-hand">{{currentProduct?.StateName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'State'">
-            <mat-option *ngFor="let state of productStates" [value]="state.Id">{{state.Name}}</mat-option>
+            @for (state of productStates; track $index) {
+              <mat-option [value]="state.Id">{{state.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -60,9 +56,7 @@
         <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Description}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Description'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -72,7 +66,9 @@
 
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'GameProviderId'">
-            <mat-option *ngFor="let provider of gameProviders" [value]="provider.Id">{{provider.Name}}</mat-option>
+            @for (provider of gameProviders; track $index) {
+              <mat-option [value]="provider.Id">{{provider.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -81,9 +77,7 @@
         <div class="first-hand">{{'Products.ParentId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.ParentId}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'ParentId'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -91,9 +85,7 @@
         <div class="first-hand">{{'Products.MobileImageUrl' | translate}}</div>
         <div class="second-hand">{{currentProduct?.MobileImageUrl}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'MobileImageUrl'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -101,9 +93,7 @@
         <div class="first-hand">{{'Products.BackgroundImageUrl' | translate}}</div>
         <div class="second-hand">{{currentProduct?.BackgroundImageUrl}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'BackgroundImageUrl'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -111,9 +101,7 @@
         <div class="first-hand">{{'Products.SubproviderId' | translate}}</div>
         <div class="second-hand">{{currentProduct?.SubproviderId}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'SubproviderId'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -132,7 +120,9 @@
         <div class="second-hand">{{currentProduct?.CategoryName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'CategoryId'">
-            <mat-option *ngFor="let category of productCategories" [value]="category.Id">{{category.Name}}</mat-option>
+            @for (category of productCategories; track $index) {
+              <mat-option [value]="category.Id">{{category.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -142,9 +132,7 @@
         <div class="first-hand">{{'Products.WebImageUrl' | translate}}</div>
         <div class="second-hand">{{currentProduct?.WebImageUrl}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'WebImageUrl'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -160,9 +148,7 @@
         <div class="first-hand">{{'Products.Jackpot' | translate}}</div>
         <div class="second-hand">{{currentProduct?.HasJackpot}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'HasJackpot'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -216,12 +202,16 @@
 
       <div [class.group-left-item]="isEdit">
         <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
-        <div class="second-hand" *ngIf="currentProduct?.Countries?.Type==1">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="currentProduct?.Countries?.Type==2">
-          {{'Bonuses.OutOfSet' | translate}}
-        </div>
+        @if (currentProduct?.Countries?.Type==2) {
+          <div class="second-hand">
+            {{'Bonuses.InSet' | translate}}
+          </div>
+        }
+        @if (currentProduct?.Countries?.Type==1) {
+          <div class="second-hand">
+            {{'Bonuses.OutOfSet' | translate}}
+          </div>
+        }
 
         <div class="form-field form-checkbox" [formGroupName]="'Countries'">
           <input [value]="2" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
@@ -232,10 +222,14 @@
 
       <div [class.group-right-item]="isEdit">
         <div class="first-hand">{{'Clients.SelectCountry' | translate}}</div>
-        <div class="second-hand" *ngFor="let country of countriesEntites">{{country}}</div>
+        @for (country of countriesEntites; track $index) {
+          <div class="second-hand">{{country}}</div>
+        }
         <div class="form-field form-dropdown" [formGroupName]="'Countries'">
           <mat-select [formControlName]="'Ids'" multiple>
-            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
+            @for (country of countries; track $index) {
+              <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -245,9 +239,7 @@
         <div class="first-hand">{{'Bonuses.BetValues' | translate}}</div>
         <div class="second-hand">{{currentProduct?.BetValues}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'BetValues'" readonly>
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -255,9 +247,16 @@
         <div class="first-hand">{{'Bonuses.Lines' | translate}}</div>
         <div class="second-hand">{{currentProduct?.Lines}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Lines'" readonly>
-          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+
+      <div>
+        <div class="first-hand">{{'Products.RTP' | translate}}</div>
+        <div class="second-hand">{{currentProduct?.RTP}}</div>
+        <div class="form-field form-input">
+            <input matInput [formControlName]="'RTP'" readonly>
         </div>
       </div>
 
@@ -290,15 +289,16 @@
 
       <div></div>
       <div></div>
-      <div></div>
       <div class="form-actions">
 
-        <div class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' |
-            translate}}</button>
-          <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" type="submit"
-            (click)="onSubmit()">{{'Common.Save' | translate}}</button>
-        </div>
+        @if (isEdit) {
+          <div class="actions">
+            <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' |
+              translate}}</button>
+            <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" type="submit"
+              (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+          </div>
+        }
 
       </div>
 
@@ -329,4 +329,7 @@
 
 </div>
 
-<router-outlet *ngIf="this.activateRoute.snapshot.queryParams.CommentId"></router-outlet>
+@if (this.activateRoute.snapshot.queryParams.CommentId) {
+  <router-outlet></router-outlet>
+
+}

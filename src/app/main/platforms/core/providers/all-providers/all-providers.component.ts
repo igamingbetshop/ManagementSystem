@@ -219,6 +219,12 @@ export class AllProvidersComponent extends BasePaginatedGridComponent implements
             }
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            params.IsActive = !params.IsActive;
+            const rowIndex = this.rowData.findIndex(row => row.Id === params.Id);
+            if (rowIndex !== -1) {
+              this.rowData[rowIndex].IsActive = params.IsActive;
+              this.rowData = [...this.rowData];
+            }
           }
         });
   }

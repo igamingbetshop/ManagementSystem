@@ -17,6 +17,7 @@ import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper"
 export class MainComponent extends BasePaginatedGridComponent implements OnInit  {
   public userId: number;
   public user: any;
+  agentIds;
   public formGroup: UntypedFormGroup;
   public types: any[] = [];
   public states: any[] = [];
@@ -26,6 +27,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   public partners: any[] = [];
   public isEdit = false;
   public passRegEx;
+  // agentLevelId;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -41,6 +43,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
 
   ngOnInit() {
     this.userId = this.activateRoute.snapshot.queryParams.userId;
+    this.agentIds = this.activateRoute.snapshot.queryParams.agentIds;
+    // this.agentLevelId = +this.activateRoute.snapshot.queryParams.levelId;
     this.genders = this.commonDataService.genders;
     this.currencies = this.commonDataService.currencies;
     this.partners = this.commonDataService.partners;
@@ -76,7 +80,15 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   getUser() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.userId,
+    let requestObject;
+    if (this.agentIds) {
+      let agentIdArray = this.agentIds.split(',');
+      let lastAgentId = agentIdArray[agentIdArray.length - 1];
+      requestObject = lastAgentId;
+    } else {
+      requestObject = this.userId;
+    }
+    this.apiService.apiPost(this.configService.getApiUrl, requestObject,
       true, Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
         this.user = data.ResponseObject;

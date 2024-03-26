@@ -41,6 +41,8 @@ export class QuickFindComponent {
     InternetBetId: "",
     BetShopBetId: "",
     MobileNumber: "",
+    AgentId: "",
+    AgentUserName: ""
   };
 
   constructor(
@@ -103,7 +105,90 @@ export class QuickFindComponent {
           value: this.quickLinksFilter.BetShopBetId,
         };
         break;
+      case "agentId":
+        this.getUserById(String(this.quickLinksFilter.AgentId));
+        break;
+      case "agentUserName":
+        this.redirectAgentUserName(this.quickLinksFilter.AgentUserName);
+        break;
     }
+  }
+
+  getUserById(value) {
+    this.apiService
+      .apiPost(
+        this.configService.getApiUrl,
+        value,
+        true,
+        Controllers.USER,
+        Methods.GET_USER_BY_ID
+      )
+      .pipe(take(1))
+      .subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          this.quickFindData = data.ResponseObject;
+          if (data.ResponseObject.Path) {
+            let formattedPath = data.ResponseObject.Path.replace(/^\/|\/$/g, '');
+            formattedPath = formattedPath.replace(/\//g, ',');
+            this.redirectAgentDetail(formattedPath);
+            return formattedPath;
+          } else if (!data.ResponseObject) {
+            SnackBarHelper.show(this._snackBar, {
+              Description: "Agent not found",
+              Type: "error",
+            });
+          }
+        } else {
+          SnackBarHelper.show(this._snackBar, {
+            Description: data.Description,
+            Type: "error",
+          });
+        }
+      });
+  }
+
+  redirectAgentDetail(id) {
+    const agentDetailUrl = this.baseUrl + "/agents/agent/main?agentIds=" + id;
+    window.open(agentDetailUrl, "_blank");
+  }
+
+  redirectAgentUserName(value) {
+    let paging = new Paging();
+    paging.SkipCount = 0;
+    paging.TakeCount = 100;
+    paging.ParentId = null;
+    paging.WithDownlines = true;
+    paging.UserNames = this.getOperationType(value);
+    this.apiService
+      .apiPost(
+        this.configService.getApiUrl,
+        paging,
+        true,
+        Controllers.USER,
+        Methods.GET_AGENTS
+      )
+      .pipe(take(1))
+      .subscribe((data) => {
+        this.quickFindData = data.ResponseObject.Entities;
+        if (data.ResponseObject.Count === 0) {
+          SnackBarHelper.show(this._snackBar, {
+            Description: "Agent not found",
+            Type: "error",
+          });
+        } else if (data.ResponseObject.Count > 0) {
+          if (data.ResponseObject.Entities[0].Path) {
+            let formattedPath = data.ResponseObject.Entities[0].Path.replace(/^\/|\/$/g, '');
+            formattedPath = formattedPath.replace(/\//g, ',');
+            this.redirectAgentDetail(formattedPath);
+            return formattedPath;
+          } else {
+            SnackBarHelper.show(this._snackBar, {
+              Description: "Path not found",
+              Type: "error",
+            });
+          }
+        }
+      });
   }
 
   handleClientRedirect(type: string, value: string) {

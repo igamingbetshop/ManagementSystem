@@ -90,6 +90,7 @@
 
     <div class="field-content">
       <div class="space-between">
+        <label for="imageFiles" class="btn">{{'Cms.Image' | translate}}</label>
         <input class="file-input" type="file" (change)="uploadFile($event)">
       </div>
       <mat-form-field style="margin-top: 10px;">
@@ -99,7 +100,11 @@
           {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
         </mat-error>
       </mat-form-field>
+    </div>
 
+    <div class="space-between">
+      <label for="imageFiles" class="btn">{{'Products.MobileImage' | translate}}</label>
+      <input class="file-input" type="file" (change)="uploadFile1($event)">
     </div>
 
     <mat-form-field>

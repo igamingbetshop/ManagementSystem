@@ -19,6 +19,7 @@ import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes, GridMenuIds }
 import { formattedNumber } from "../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import {ExportService} from "../../services/export.service";
 
 @Component({
   selector: 'app-bet-bet-shops',
@@ -228,6 +229,7 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
     public dateAdapter: DateAdapter<Date>,
     private localStorageService: LocalStorageService,
     private changeDetector: ChangeDetectorRef,
+    private exportService:ExportService
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.BET_SHOPS;
@@ -831,16 +833,6 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, { ...this.clientData, adminMenuId: this.adminMenuId }, true,
-      Controllers.REPORT, Methods.EXPORT_BET_SHOP_BETS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement('iframe');
-          iframe.setAttribute('src', this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute('style', 'display: none');
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_BET_SHOP_BETS, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 }

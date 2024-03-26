@@ -9,10 +9,10 @@ import 'ag-grid-enterprise';
 import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../core/enums";
 import { take } from "rxjs/operators";
 import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
-import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { ToggleRendererComponent } from 'src/app/main/components/grid-common/toggle-renderer';
+import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-payment-systems',
@@ -170,12 +170,19 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
           }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          params.IsActive = !params.IsActive;
+          const rowIndex = this.rowData.findIndex(row => row.Id === params.Id);
+          if (rowIndex !== -1) {
+            this.rowData[rowIndex].IsActive = params.IsActive;
+            this.rowData = [...this.rowData];
+          }
         }
       });
 }
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnReset();
   }
 
   getPaymentSystemTypes() {

@@ -3,7 +3,7 @@
 
 .container {
   @include container-style;
-  height: 92%;
+  height: 91%;
 
   .content-action {
     @include action-style;
@@ -35,6 +35,16 @@
         height: 100%;
       }
     }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px;
+      button:last-child {
+        margin-left: 10px;
+      }
+    }
   }
 }
 
@@ -46,12 +56,4 @@ ag-grid-angular {
   margin-left: 10px;
 }
 
-.buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 10px;
-  button:last-child {
-    margin-left: 10px;
-  }
-}
+

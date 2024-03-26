@@ -81,6 +81,14 @@ export const RECEIVER_TYPES = [
   { Id: 90, Name: "Affiliate" },
 ];
 
+export const NEWS_TYPES = [
+  {Id: 0, Name: 'Sport'},
+  {Id: 1, Name: 'Casino'},
+  {Id: 2, Name: 'Live Casino'},
+  {Id: 3, Name: 'Virtual Games'},
+  {Id: 4, Name: 'Skill Games'},
+]
+
 export const CLIENT_BOUNUS_STATUSES = [
   { Id: 1, Name: 'Active' },
   { Id: 2, Name: 'Inactive' },

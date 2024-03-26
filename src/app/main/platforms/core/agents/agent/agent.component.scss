@@ -1,0 +1,55 @@
+.detail-nav-tabs {
+  padding-top: 0;
+  padding-bottom: 18px;
+}
+.container {
+  width: 100%;
+  height: auto;
+  padding: 0 10px;
+  background-color: #F0F5F8;
+
+  .content-action {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 68px;
+
+    .title {
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      letter-spacing: 0.04em;
+      color: #3F4E67;
+      flex: 1;
+      .title-container{
+        display: flex;
+      }
+
+      .title-link {
+        margin-right: 5px;
+        text-decoration: none;
+        color: #3F4E67;
+        cursor: pointer;
+      }
+
+      .title-link-item {
+        cursor: pointer;
+      }
+
+      .agentIds {
+        display: flex;
+        align-items: center;
+
+        .agentIdsItems {
+          cursor: pointer;
+        }
+
+        .agentIdsItems:last-child {
+          text-decoration: underline;
+          pointer-events: none;
+          cursor: default;
+        }
+      }
+    }
+  }
+}

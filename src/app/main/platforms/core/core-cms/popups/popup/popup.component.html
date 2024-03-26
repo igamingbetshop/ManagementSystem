@@ -36,11 +36,13 @@
       <div>
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
         <div class="second-hand">{{popup?.FinishDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar">
-            <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-        </div>
+        <div class="form-field form-calendar-edit">
+          <input matInput [matDatepicker]="picker" [formControlName]="'FinishDate'">
+          <mat-datepicker-toggle matSuffix [for]="picker">
+            <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+      </div>
       </div>
 
       <div>
@@ -106,23 +108,33 @@
       </div>
       </div>
 
-      <div>
-        <div class="first-hand">{{'Cms.Image' | translate}}</div>
-        <div class="second-hand">{{popup?.ImageName}}</div>
-        <div class="form-field form-input">
-            <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'ImageName'">
+      @if (isEdit) {
+        <div>
+          <div class="first-hand">{{'Cms.Image' | translate}}</div>
+          <div class="second-hand">{{popup?.ImageName}}</div>
+          <div class="form-field form-input">
+              <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'ImageName'">
+          </div>
         </div>
-      </div>
-
-      <div *ngIf="isEdit">
-        <div class="first-hand">{{'Common.UploadFile' | translate}}</div>
-        <div class="second-hand"></div>
-        <div class="form-field form-checkbox">
-          <input type="file" (change)="uploadFile($event)">
+  
+        <div>
+          <div class="first-hand">{{'Common.UploadImage' | translate}}</div>
+          <div class="second-hand"></div>
+          <div class="form-field form-checkbox">
+            <input type="file" (change)="uploadFile($event)">
+          </div>
         </div>
-      </div>
+  
+        <div>
+          <div class="first-hand">{{'Common.UploadMobileImage' | translate}}</div>
+          <div class="second-hand"></div>
+          <div class="form-field form-checkbox">
+            <input type="file" (change)="uploadFile1($event)">
+          </div>
+        </div>
+      }
 
-      <div  *ngIf="isEdit">
+      <div >
         <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-dropdown">
@@ -133,6 +145,7 @@
         </div>
       </div>
 
+      <div></div>
       <div></div>
 
       <div class="form-actions">
@@ -147,14 +160,19 @@
 
 
   <div class="card-content">
-    <mat-card class="card">
+    <mat-card>
       <mat-card-header>
         <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
       </mat-card-header>
       <img mat-card-image class="img" [src]="image" alt="Image">
     </mat-card>
 
-  
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{"Products.MobileImage" | translate}}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image class="img" [src]="mobileImage" alt="Image">
+    </mat-card>
   </div>
 
 </div>

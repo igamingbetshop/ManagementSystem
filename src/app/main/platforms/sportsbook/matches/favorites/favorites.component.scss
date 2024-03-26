@@ -7,13 +7,12 @@
 
   .content-action {
     @include action-style;
-    height: 68px;
 
   }
 
   .main-content {
     width: 100%;
-    height: calc(100% - 7%);
+    height: calc(100% - 62px);
     display: flex;
     column-gap: 10px;
     .left-panel,

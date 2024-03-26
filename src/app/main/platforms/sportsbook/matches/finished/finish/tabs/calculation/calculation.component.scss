@@ -4,12 +4,10 @@
 
 .container {
   @include container-style;
-  height: 92%;
+  height: 91%;
 
   .content-action {
     @include action-style;
-    height: 62px;
-
     .custom-dropdown {
       margin-right: 8px;
       @include dropdown-style;
@@ -20,7 +18,7 @@
   
   .main-content {
     width: 100%;
-    height: calc(100% - 7%);
+    height: calc(100% - 62px);
     display: flex;
     column-gap: 10px;
   

@@ -11,7 +11,7 @@ import { CoreApiService } from "../../../services/core-api.service";
 import { CommonDataService, ConfigService } from "../../../../../../core/services";
 import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from "../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-report-by-payment-system',
@@ -34,7 +34,7 @@ export class ReportByPaymentSystemComponent extends BasePaginatedGridComponent i
     { Id: 1, Name: 'Withdraw' },
     { Id: 2, Name: 'Deposit' }
   ];
-  public paymentId = this.payments[1].Id;
+  public paymentId = 2;
   public detailCellRendererParams: any;
   public masterDetail;
   public detailsInline;
@@ -161,18 +161,26 @@ export class ReportByPaymentSystemComponent extends BasePaginatedGridComponent i
   }
 
   ngOnInit(): void {
+    this.setTime();  
     this.partners = this.commonDataService.partners;
     this.getPaymentSystemTypes();
-    this.startDate();
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getReportByPaymentSystems();
   }
+
 
   getPaymentSystemTypes() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
@@ -185,27 +193,9 @@ export class ReportByPaymentSystemComponent extends BasePaginatedGridComponent i
       });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-  }
-
   getByPaymentData(event) {
     this.paymentId = event;
-  }
-
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
+    this.getReportByPaymentSystems();
   }
 
   getReportByPaymentSystems() {
@@ -213,7 +203,7 @@ export class ReportByPaymentSystemComponent extends BasePaginatedGridComponent i
       FromDate: this.fromDate,
       ToDate: this.toDate,
       PartnerId: this.partnerId,
-      Type: 2
+      Type: this.paymentId
     }
     this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
       Controllers.REPORT, Methods.GET_REPORT_BY_PAYMENT_SYSTEM).pipe(take(1)).subscribe(data => {

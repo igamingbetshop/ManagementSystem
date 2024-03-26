@@ -203,12 +203,12 @@
       </div>
       }
 
-      @if (!!this.formGroup.get('Amount')) {
+      @if (triggerSetting?.type != 7 && triggerSetting?.type != 11 && triggerSetting?.type != 15) {
       <div>
         <div class="first-hand">{{'Clients.Amount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Amount}}</div>
         <div class="form-field form-input">
-          <input type="text" matInput [formControlName]="'Amount'">
+          <input type="number" matInput [formControlName]="'Amount'">
         </div>
       </div>
       }

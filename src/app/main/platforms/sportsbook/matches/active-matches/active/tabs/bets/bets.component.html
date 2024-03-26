@@ -42,13 +42,12 @@
     [getRowStyle]="getRowStyle"
     rowSelection="single">
   </ag-grid-angular>
-  </div>
-
   <div class="buttons">
     <button mat-raised-button color="warn" [disabled]="isBetCalculated()" (click)="calculateBet()">{{'Sport.CalculateBet' | translate}}</button>
     <button mat-raised-button color="warn" [disabled]="isRowSelected()" (click)="deleteBet()">{{'Sport.DeleteBet' | translate}}</button>
-
   </div>
+  </div>
+
 
 </div>
 

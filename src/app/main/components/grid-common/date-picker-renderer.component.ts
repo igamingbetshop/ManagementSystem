@@ -12,7 +12,7 @@ import {MatInputModule} from "@angular/material/input";
 @Component({
   selector: 'app-date-picker-renderer',
   template: `
-    <mat-form-field style="width: 70%">
+    <div style="width: 70%">
       <input
         matInput
         [matDatepicker]="picker"
@@ -20,7 +20,7 @@ import {MatInputModule} from "@angular/material/input";
         (dateChange)="onDateChanged($event, $event)"/>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    </div>
   `
 })
 export class DatePickerRendererComponent implements ICellRendererAngularComp {

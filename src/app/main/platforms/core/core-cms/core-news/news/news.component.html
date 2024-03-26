@@ -13,7 +13,7 @@
 
   <div class="content-edit">
     <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
-      <div>
+      <div *ngIf="isChilde">
         <div class="first-hand">{{'Common.StartDate' | translate}}</div>
         <div class="second-hand">{{news?.StartDate | date:'dd/MM/yyyy'}}</div>
         <div class="form-field form-calendar form-calendar-edit">
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div>
+      <div *ngIf="isChilde">
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
         <div class="second-hand">{{news?.FinishDate | date:'dd/MM/yyyy'}}</div>
         <div class="form-field form-calendar  form-calendar-edit">
@@ -91,14 +91,17 @@
         </div>
       </div>
 
-      <div>
+      <div *ngIf="isChilde">
         <div class="first-hand">{{'Partners.Type' | translate}}</div>
         <div class="second-hand">{{news?.Type}}</div>
-        <div class="form-field form-input">
-          <input matInput [placeholder]="'Partners.Type' | translate" [formControlName]="'Type'">
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Type'">
+            <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+          </mat-select>
         </div>
       </div>
-      
+
+
       <div [class.group-left-item]="isEdit">
         <div class="first-hand">{{'Bonuses.ChooseSegment' | translate}}</div>
         <div class="second-hand" *ngIf="news?.Segments?.Type==1">

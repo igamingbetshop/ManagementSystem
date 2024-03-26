@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {OddsTypePipe} from "../../../../../core/pipes/odds-type.pipe";
 import {SettleBetModalComponent} from "./settle-bet-modal/settle-bet-modal.component";
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -27,28 +28,29 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatSnackBarModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatSlideToggleModule,
-    MatIconModule,
-    MatButtonModule,
-    TranslateModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    AgGridModule,
-    RouterModule.forChild(routes),
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    SettleBetModalComponent
-  ],
-  declarations: [InternetComponent],
-  providers: [DatePipe, OddsTypePipe],
+    declarations: [InternetComponent],
+    providers: [DatePipe, OddsTypePipe],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatSnackBarModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatSlideToggleModule,
+        MatIconModule,
+        MatButtonModule,
+        TranslateModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        AgGridModule,
+        RouterModule.forChild(routes),
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        SettleBetModalComponent,
+        PartnerDateFilterComponent
+    ]
 })
 export class InternetModule { }

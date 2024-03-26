@@ -11,6 +11,7 @@ import { CoreApiService } from '../../services/core-api.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import {ExportService} from "../../services/export.service";
 
 @Component({
   selector: 'app-betshop-calculation',
@@ -37,6 +38,7 @@ export class BetshopCalculationComponent extends BasePaginatedGridComponent impl
     public commonDataService: CommonDataService,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
+    private exportService:ExportService
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.BETSHOP_CALCULATION;
@@ -260,17 +262,6 @@ export class BetshopCalculationComponent extends BasePaginatedGridComponent impl
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_BET_SHOP_RECONINGS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_BET_SHOP_RECONINGS, {...this.filteredData, adminMenuId: this.adminMenuId});
   }
-
 }

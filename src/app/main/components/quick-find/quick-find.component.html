@@ -9,13 +9,13 @@
       <div class="title">{{'Clients.Client' | translate}}</div>
       <div class="field-content">
         <div class="input-content">
-          <input (keyup.enter)="searchQuickLink('clientId')" [(ngModel)] = "quickLinksFilter.ClientId"  class="input" type="number" placeholder="{{'Clients.ClientId' | translate}}">
+          <input (keyup.enter)="searchQuickLink('clientId')" [(ngModel)] = "quickLinksFilter.ClientId"  class="input" type="number" placeholder="{{'Clients.Id' | translate}}">
         </div>
         <button class="filter-btn" [class.disabled]="!quickLinksFilter.ClientId" (click)="searchQuickLink('clientId')">{{'Common.Go' | translate}}</button>
       </div>
       <div class="field-content">
         <div class="input-content">
-          <input (keyup.enter)="searchQuickLink('clientUserName')" [(ngModel)] = "quickLinksFilter.ClientUserName" class="input" type="text" placeholder="{{'Clients.UserName' | translate}}">
+          <input (keyup.enter)="searchQuickLink('clientUserName')" [(ngModel)] = "quickLinksFilter.ClientUserName" class="input" type="text" placeholder="{{'Clients.Username' | translate}}">
         </div>
         <button class="filter-btn" [class.disabled]="!quickLinksFilter.ClientUserName.trim()" (click)="searchQuickLink('clientUserName')">{{'Common.Go' | translate}}</button>
       </div>
@@ -41,6 +41,21 @@
         <button class="filter-btn" [class.disabled]="!quickLinksFilter.MobileNumber.trim()" (click)="searchQuickLink('MobileNumber')">{{'Common.Go' | translate}}</button>
       </div>
 
+    </div>
+    <div class="client-filter">
+      <div class="title agents">{{'Agents.Agent' | translate}}</div>
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('agentId')" [(ngModel)] = "quickLinksFilter.AgentId" class="input" type="number" placeholder="{{'Agents.Id' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.AgentId" (click)="searchQuickLink('agentId')">{{'Common.Go' | translate}}</button>
+      </div>
+      <div class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink('agentUserName')" [(ngModel)] = "quickLinksFilter.AgentUserName" class="input" type="text" placeholder="{{'Agents.Username' | translate}}">
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter.AgentUserName.trim()" (click)="searchQuickLink('agentUserName')">{{'Common.Go' | translate}}</button>
+      </div>
     </div>
 
     <div class="client-filter">

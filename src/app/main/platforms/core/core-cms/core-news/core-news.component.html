@@ -63,13 +63,13 @@
 
 
     <div class="right-panel">
-      
+
       <div class="action-content">
         <div class="title">{{'Cms.News' | translate}}</div>
 
         </div>
 
-        <app-news-childs 
+        <app-news-childs
           [tableData]="tableData"
           (childCharakterData)="onLisenChildCharacter($event)"
           (getParentData)="getPage(this.newsId, false)"

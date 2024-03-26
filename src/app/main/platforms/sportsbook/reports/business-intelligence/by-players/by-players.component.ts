@@ -1,19 +1,20 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {SportsbookApiService} from '../../../services/sportsbook-api.service';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import 'ag-grid-enterprise';
-import {AgGridAngular} from 'ag-grid-angular';
-import {Paging} from 'src/app/core/models';
-import {take} from 'rxjs/operators';
-import {MatDialog} from '@angular/material/dialog';
-import {CellClickedEvent} from 'ag-grid-community';
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DecimalPipe} from "@angular/common";
-import {DateAdapter} from "@angular/material/core";
+import { AgGridAngular } from 'ag-grid-angular';
+import { Paging } from 'src/app/core/models';
+import { take } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { CellClickedEvent } from 'ag-grid-community';
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DecimalPipe } from "@angular/common";
+import { DateAdapter } from "@angular/material/core";
 import { GridMenuIds } from 'src/app/core/enums';
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 
 @Component({
@@ -23,7 +24,7 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class ByPlayersComponent extends BasePaginatedGridComponent implements OnInit {
 
-  @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
 
   public commentTypes: any[] = [];
   TotalWinAmount;
@@ -69,7 +70,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
               backgroundColor: params.data.CategoryColor
             };
           } else {
-            return {color: '#076192', 'font-size': '14px', 'font-weight': '500', 'padding-left': '10px'};
+            return { color: '#076192', 'font-size': '14px', 'font-weight': '500', 'padding-left': '10px' };
           }
         }
       },
@@ -86,7 +87,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -105,7 +106,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -124,7 +125,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -143,7 +144,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -167,7 +168,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -191,7 +192,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -216,7 +217,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -236,7 +237,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         },
         cellStyle: function (params) {
           if (params.data.CategoryColor !== '#FFFFFF') {
-            return {color: 'white', backgroundColor: params.data.CategoryColor};
+            return { color: 'white', backgroundColor: params.data.CategoryColor };
           } else {
             return null
           }
@@ -248,9 +249,8 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
   }
 
   ngOnInit() {
-    this.gridStateName = 'report-by-player-grid-state';
     this.Currency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
-    this.startDate();
+    this.setTime();
   }
 
   goToReportByBets(ev) {
@@ -258,30 +258,16 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
     window.open(url, '_blank');
   }
 
-  go() {
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
-  }
-
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   onGridReady(params) {
@@ -315,7 +301,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
             this.TotalBetAmount = data.TotalBetAmount;
             this.TotalProfit = data.TotalProfit;
 
-            params.success({rowData: data.Objects, rowCount: data.TotalCount});
+            params.success({ rowData: data.Objects, rowCount: data.TotalCount });
 
             this.gridApi?.setPinnedBottomRowData([
               {
@@ -326,7 +312,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
             ]);
 
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         });
       },

@@ -12,6 +12,7 @@ import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { Paging } from 'src/app/core/models';
 import { SportsbookApiService } from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-by-regions',
@@ -20,17 +21,18 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 })
 export class ByRegionsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public partners: any[] = [];
-  public sportId: number;
-  public sportName: string;
-  public path = "report/regions";
-  public partnerId: number;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public selectedItem = 'today';
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public defaultColDef = {
+  partners: any[] = [];
+  sportId: number;
+  sportName: string;
+  path = "report/regions";
+  partnerId: number;
+  rowData = [];
+  pageIdName =  '';
+  fromDate = new Date();
+  toDate = new Date();
+  selectedItem = 'today';
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  defaultColDef = {
     flex: 1,
     editable: false,
     sortable: true,
@@ -124,24 +126,28 @@ export class ByRegionsComponent extends BasePaginatedGridComponent implements On
     this.sportId = +this.route.snapshot.queryParams.sportId;
     this.sportName = this.route.snapshot.queryParams.sportName;
     this.partnerId = +this.route.snapshot.queryParams.partnerId;
-    this.startDate();
+    this.setTime();
     this.getPartners();
     this.getRows();
+    this.pageIdName = `/ ${this.sportName} : ${this.translate.instant('Sport.Regions')}`;
+
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId !== undefined) {
+      this.partnerId = event.partnerId;
+    }
     this.getRows();
   }
+  
 
   getPartners() {
     this.apiService.apiPost('partners').subscribe(data => {
@@ -151,10 +157,6 @@ export class ByRegionsComponent extends BasePaginatedGridComponent implements On
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
-  }
-
-  go() {
-    this.getRows();
   }
 
   toRedirectToCompetitions(ev) {
@@ -193,6 +195,10 @@ export class ByRegionsComponent extends BasePaginatedGridComponent implements On
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
+  }
+
+  onNavigateToSport() {
+    this.router.navigate(["/main/sportsbook/business-intelligence/report-by-sports"])
   }
 
 }

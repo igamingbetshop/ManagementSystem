@@ -1,23 +1,20 @@
-import {RouterModule, Routes} from "@angular/router";
-import {NgModule} from "@angular/core";
-import {CommonModule, DatePipe} from "@angular/common";
-import {ReportByWithdrawalComponent} from "./report-by-withdrawal.component";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from "@angular/core";
+import { CommonModule, DatePipe } from "@angular/common";
+import { ReportByWithdrawalComponent } from "./report-by-withdrawal.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import {FormsModule} from "@angular/forms";
-import {AgGridModule} from "ag-grid-angular";
-import {MatButtonModule} from "@angular/material/button";
-
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {MatFormFieldModule} from "@angular/material/form-field";
-
-import {MatInputModule} from "@angular/material/input";
-
-import {MatSelectModule} from "@angular/material/select";
-
-import {TranslateModule} from "@ngx-translate/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
+import { FormsModule } from "@angular/forms";
+import { AgGridModule } from "ag-grid-angular";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { TranslateModule } from "@ngx-translate/core";
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
+import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -28,6 +25,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  declarations: [ReportByWithdrawalComponent],
+  providers: [DatePipe],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -42,10 +41,9 @@ const routes: Routes = [
     MatSelectModule,
     TranslateModule,
     NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
-  ],
-  declarations: [ReportByWithdrawalComponent],
-  providers: [DatePipe],
+    NgxMatNativeDateModule,
+    PartnerDateFilterComponent
+  ]
 })
 
 

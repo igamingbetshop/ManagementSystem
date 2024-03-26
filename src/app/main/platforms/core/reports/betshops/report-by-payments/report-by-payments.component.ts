@@ -1,15 +1,16 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods} from "../../../../../../core/enums";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from "../../../../../../core/enums";
+import { ActivatedRoute } from "@angular/router";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-payments',
@@ -28,13 +29,14 @@ export class ReportByPaymentsComponent extends BasePaginatedGridComponent implem
   public selectedItem = 'today';
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private exportService:ExportService,
+    protected injector: Injector) {
     super(injector);
-    this.adminMenuId = GridMenuIds.CORE_REPORT_BY_BETSHOPS_PAYMENTS ;
+    this.adminMenuId = GridMenuIds.CORE_REPORT_BY_BETSHOPS_PAYMENTS;
     this.columnDefs = [
       {
         headerName: 'BetShops.BetShopId',
@@ -248,41 +250,29 @@ export class ReportByPaymentsComponent extends BasePaginatedGridComponent implem
   }
 
   ngOnInit(): void {
-    this.startDate();
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
+    this.setTime();
     this.partners = this.commonDataService.partners;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getData();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-    this.getData();
-
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-    this.getData();
-
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   onGridReady(params) {
     super.onGridReady(params);
     syncColumnSelectPanel();
     syncColumnReset();
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
+    this.getData();
   }
 
   getData() {
@@ -300,12 +290,12 @@ export class ReportByPaymentsComponent extends BasePaginatedGridComponent implem
     }
     this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
       Controllers.REPORT, Methods.GET_REPORT_BY_BET_SHOP_PAYMENTS).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getByPartnerData(event) {
@@ -314,17 +304,7 @@ export class ReportByPaymentsComponent extends BasePaginatedGridComponent implem
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.clientData, adminMenuId: this.adminMenuId}, true,
-      Controllers.REPORT, Methods.EXPORT_BY_BET_SHOP_PAYMENTS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-        iframe.setAttribute("style", "display: none");
-        document.body.appendChild(iframe);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_BY_BET_SHOP_PAYMENTS, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 
 }

@@ -1,15 +1,15 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridRowModelTypes, Methods} from "../../../../../../core/enums";
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {ActivatedRoute} from "@angular/router";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridRowModelTypes, Methods } from "../../../../../../core/enums";
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { ActivatedRoute } from "@angular/router";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-report-by-withdrawal',
@@ -33,12 +33,12 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
   public columnDefs2 = [];
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              public commonDataService: CommonDataService,
-              protected injector: Injector,
-              public dateAdapter: DateAdapter<Date>) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    protected injector: Injector,
+    public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
     this.columnDefs = [
@@ -104,10 +104,24 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
   }
 
   ngOnInit(): void {
-    this.startDate();
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
+    this.setTime();
     this.partners = this.commonDataService.partners;
     this.getPaymentSystems();
+    this.getData();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getData();
   }
 
@@ -115,33 +129,13 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
   getPaymentSystems() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.paymentSystems = data.ResponseObject;
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.paymentSystems = data.ResponseObject;
+        }
+      });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getData();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
 
   getData() {
     if (!this.partnerId) {
@@ -157,52 +151,52 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
     }
     this.apiService.apiPost(this.configService.getApiUrl, this.clientData, true,
       Controllers.REPORT, Methods.GET_PARTNER_PAYMENTS_SUMMARY_REPORT).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        if (data.ResponseObject.PaymentRequests.PaymentMethods.length !== 0) {
-          this.paymentSystems2 = data.ResponseObject.PaymentRequests.PaymentMethods.map((items) => {
-            this.rowData = [];
-            let a = {
-              ClientId: this.columnDefs.find(o => o.field === 'ClientId'),
-              Name_Surname: this.columnDefs.find(o => o.field === 'Name_Surname'),
-              PaymentSystemId: items.PaymentSystemId,
-              CurrencyId: items.CurrencyId,
-              Name: this.paymentSystems.find((item) => {
-                return item.Id === items.PaymentSystemId;
-              }).Name,
-              field: this.paymentSystems.find((item) => {
-                return item.Id === items.PaymentSystemId;
-              }).Name + " (" + items.CurrencyId + ")",
-              headerName: this.paymentSystems.find((item) => {
-                return item.Id === items.PaymentSystemId;
-              }).Name + " (" + items.CurrencyId + ")",
-            }
-            this.columnDefs.push(a);
-          })
-          this.gridApi?.setColumnDefs(this.columnDefs);
-          this.gridApi?.sizeColumnsToFit();
-          this.nestedHeaders = data.ResponseObject.PaymentRequests.PaymentsInfo.forEach((i) => {
-            i.totalAmount = 0;
-            i.Payments.forEach((j) => {
-              j.Name = this.paymentSystems.find((chr) => {
-                return chr.Id === j.PaymentSystemId;
-              }).Name
-              i[j.Name + " (" + i.CurrencyId + ")"] = j.Amount;
-              i.totalAmount += j.Amount;
+        if (data.ResponseCode === 0) {
+          if (data.ResponseObject.PaymentRequests.PaymentMethods.length !== 0) {
+            this.paymentSystems2 = data.ResponseObject.PaymentRequests.PaymentMethods.map((items) => {
+              this.rowData = [];
+              let a = {
+                ClientId: this.columnDefs.find(o => o.field === 'ClientId'),
+                Name_Surname: this.columnDefs.find(o => o.field === 'Name_Surname'),
+                PaymentSystemId: items.PaymentSystemId,
+                CurrencyId: items.CurrencyId,
+                Name: this.paymentSystems.find((item) => {
+                  return item.Id === items.PaymentSystemId;
+                }).Name,
+                field: this.paymentSystems.find((item) => {
+                  return item.Id === items.PaymentSystemId;
+                }).Name + " (" + items.CurrencyId + ")",
+                headerName: this.paymentSystems.find((item) => {
+                  return item.Id === items.PaymentSystemId;
+                }).Name + " (" + items.CurrencyId + ")",
+              }
+              this.columnDefs.push(a);
             })
-            this.rowData.push(i)
-            this.gridApi?.setRowData(this.rowData);
-          })
+            this.gridApi?.setColumnDefs(this.columnDefs);
+            this.gridApi?.sizeColumnsToFit();
+            this.nestedHeaders = data.ResponseObject.PaymentRequests.PaymentsInfo.forEach((i) => {
+              i.totalAmount = 0;
+              i.Payments.forEach((j) => {
+                j.Name = this.paymentSystems.find((chr) => {
+                  return chr.Id === j.PaymentSystemId;
+                }).Name
+                i[j.Name + " (" + i.CurrencyId + ")"] = j.Amount;
+                i.totalAmount += j.Amount;
+              })
+              this.rowData.push(i)
+              this.gridApi?.setRowData(this.rowData);
+            })
+          } else {
+            this.columnDefs = [];
+            this.rowData = [];
+            this.columnDefs = this.columnDefs2;
+            this.gridApi?.setColumnDefs(this.columnDefs);
+          }
         } else {
-          this.columnDefs = [];
-          this.rowData = [];
-          this.columnDefs = this.columnDefs2;
-          this.gridApi?.setColumnDefs(this.columnDefs);
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-      setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 300);
-    });
+        setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 300);
+      });
   }
 
   getByPartnerData(event) {

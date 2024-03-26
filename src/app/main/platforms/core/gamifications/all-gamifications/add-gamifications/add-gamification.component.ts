@@ -59,7 +59,6 @@ export class AddGamificationComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-
     this.partners = this.commonDataService.partners;
     if (!!this.data.paretnId) {
       this.formGroup.get('PartnerId').setValue(this.data.partnerId);

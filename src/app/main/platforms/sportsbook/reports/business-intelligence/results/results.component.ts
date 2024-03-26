@@ -10,9 +10,9 @@ import {DatePipe} from '@angular/common';
 import {MatDialog} from '@angular/material/dialog';
 import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 import {DateAdapter} from "@angular/material/core";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-results',
@@ -149,33 +149,23 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
 
   ngOnInit() {
     this.gridStateName = 'results-grid-state';
-    this.startDate();
+    this.setTime();
   }
 
   go() {
     this.getCurrentPage();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   onGridReady(params) {

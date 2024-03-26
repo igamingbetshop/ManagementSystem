@@ -15,6 +15,7 @@ import { CoreApiService } from "../../services/core-api.service";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import {ExportService} from "../../services/export.service";
 
 
 @Component({
@@ -39,6 +40,7 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
     public commonDataService: CommonDataService,
+    private exportService:ExportService,
     public dialog: MatDialog,
   ) {
     super(injector);
@@ -355,17 +357,7 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.USER, Methods.EXPORT_USERS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.USER, Methods.EXPORT_USERS, {...this.filteredData, adminMenuId: this.adminMenuId});
   }
 
 }

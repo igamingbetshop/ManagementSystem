@@ -8,7 +8,8 @@
   .content-action {
     @include action-style;
     height: 68px;
-
+    justify-content: flex-end;
+    margin-top: -17px;
     .edit-btn {
       @include mat-edit-btn-style;
     }

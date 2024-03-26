@@ -4,13 +4,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CellClickedEvent } from 'ag-grid-community';
 import 'ag-grid-enterprise';
 import { take } from 'rxjs/operators';
-import { GridMenuIds, GridRowModelTypes } from 'src/app/core/enums';
+import { GridMenuIds } from 'src/app/core/enums';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { Paging } from 'src/app/core/models';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-by-matches',
@@ -28,6 +28,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
   public fromDate = new Date();
   public toDate = new Date();
   public selectedItem = 'today';
+  filteredData: Paging;
   // public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
@@ -151,21 +152,22 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
 
   ngOnInit() {
     this.competitionId = this.route.snapshot.queryParams.competitionId || null;
-    this.startDate();
+    this.setTime();
     this.getPartners();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId !== undefined) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
   }
 
@@ -179,9 +181,6 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
     });
   }
 
-  go() {
-    this.getCurrentPage();
-  }
 
   goToMatchesMarket(ev) {
     const row = ev.data;
@@ -192,6 +191,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnSelectPanel();
     syncColumnReset();
     this.gridApi = params.api;
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
@@ -206,8 +206,11 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
         paging.CompetitionId = this.competitionId;
+        paging.PartnerId = this.partnerId;
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
+        this.filteredData = paging;
+
         this.apiService.apiPost(this.path, paging)
           .pipe(take(1))
           .subscribe(data => {
@@ -220,6 +223,19 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
           });
       }
     }
+  }
+  
+  exportToCsv() {
+    this.apiService.apiPost('report/exportmatches',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
   }
 
   onPageSizeChanged() {

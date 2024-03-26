@@ -23,6 +23,7 @@ import {DateAdapter} from "@angular/material/core";
 import {syncColumnSelectPanel, syncNestedColumnReset, syncPaginationWithoutBtn} from "../../../../../../../core/helpers/ag-grid.helper";
 import {DateTimeHelper} from "../../../../../../../core/helpers/datetime.helper";
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-withdrawals',
@@ -31,30 +32,31 @@ import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdow
 })
 export class WithdrawalsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public filteredClientId;
-  public statusName = [];
-  public masterDetail;
-  public partners;
-  public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
-  public autoGroupColumnDef: ColDef;
-  public filteredData;
-  public frameworkComponents = {
+  clientId: number;
+  rowData = [];
+  fromDate = new Date();
+  toDate = new Date();
+  filteredClientId;
+  statusName = [];
+  masterDetail;
+  partners;
+  rowModelType: string = GridRowModelTypes.SERVER_SIDE;
+  autoGroupColumnDef: ColDef;
+  filteredData;
+  frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
     agDropdownFilter: AgDropdownFilter,
   }
-  public accounts = [];
-  public accountId = null;
-  public rowClassRules;
-  public AmountSummary;
-  public playerCurrency;
-  public urlSegment;
-  public selectedItem = 'today';
-  public type = 0;
+  accounts = [];
+  accountId = null;
+  rowClassRules;
+  AmountSummary;
+  playerCurrency;
+  urlSegment;
+  selectedItem = 'today';
+  type = 0;
   private paymentSystems = [];
+  pageIdName: string;
 
   constructor(
     private apiService: CoreApiService,
@@ -124,10 +126,23 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
   ngOnInit(): void {
     this.featchPaymentSystems();
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
-    this.startDate();
+    this.setTime();
     this.getClientAccounts();
     this.getPaymentStates();
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Withdrawals')}`;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   getPaymentStates() {
@@ -467,11 +482,6 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
       });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate =  DateTimeHelper.getFromDate();
-    this.toDate =  DateTimeHelper.getToDate();
-  }
 
   getClientAccounts() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
@@ -570,22 +580,6 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
     }, 0);
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
   async addNotes(params) {
     const {AddNoteComponent} = await import('../../../../../../components/add-note/add-note.component');
     const dialogRef = this.dialog.open(AddNoteComponent, {
@@ -623,6 +617,10 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
           return this.openNotes(data);
       }
     }
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 
 }

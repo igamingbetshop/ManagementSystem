@@ -126,8 +126,8 @@
 
         </div>
         <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'Gender'">
-            @for (gender of commonDataService.genders; track $index) {
+          <mat-select [formControlName]="'Gender'" [placeholder]="'All'">
+            @for (gender of genders; track $index) {
               <mat-option
                 [value]="gender.Id">{{gender.Name}}
               </mat-option>
@@ -182,7 +182,7 @@
         <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.MobileCode}}</div>
         <div class="form-field form-input" >
-            <input matInput placeholder="{{'Segments.MobileCode' | translate}}" formControlName="MobileCode">
+            <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}" formControlName="MobileCode">
         </div>
       </div>
 

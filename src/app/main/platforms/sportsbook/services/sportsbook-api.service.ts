@@ -22,7 +22,8 @@ export class SportsbookApiService
       CurrencyId:user.CurrencyId,
       LanguageId: user.LanguageId,
       TimeZone: getTimeZone(),
-      UserId: user.UserId
+      UserId: user.UserId,
+      Loading: true
     };
     requestUrl = `${this.configService.getSBApiUrl}/` + path;
     if(data)

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AgGridAngular } from "ag-grid-angular";
 import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { CoreApiService } from "../../../../services/core-api.service";
@@ -13,7 +13,7 @@ import { TextEditorComponent } from "../../../../../../components/grid-common/te
 import { SelectRendererComponent } from "../../../../../../components/grid-common/select-renderer.component";
 import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { GridApi, IRowNode } from "ag-grid-community";
+import { IRowNode } from "ag-grid-community";
 import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
 import { ImageRendererComponent } from "../../../../../../components/grid-common/image-renderer.component";
 import { DatePipe } from "@angular/common";
@@ -21,6 +21,7 @@ import { DatePickerRendererComponent } from "../../../../../../components/grid-c
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { StateService } from "../../../../services/state.service";
 import { syncColumnSelectPanel, syncNestedColumnReset } from "../../../../../../../core/helpers/ag-grid.helper";
+import {ExportService} from "../../../../services/export.service";
 
 @Component({
   selector: 'app-kyc',
@@ -62,6 +63,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     public configService: ConfigService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
+    private exportService:ExportService,
     private stateService: StateService) {
     super(injector);
     this.columnDefs2 = [
@@ -586,17 +588,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.clientId, true,
-      Controllers.CLIENT, Methods.EXPORT_CLIENT_IDENTITY).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_CLIENT_IDENTITY, this.clientId);
   }
 
 }

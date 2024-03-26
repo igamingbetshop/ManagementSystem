@@ -30,7 +30,7 @@ export class AuthService {
     return !!token;
   }
 
-  getToken() {
+  get token() {
     return this.localStorageService.get('token');
   }
 
@@ -45,7 +45,8 @@ export class AuthService {
         const url  = this.configService.homePageUrl;
         localStorage.setItem('adminMenu', JSON.stringify(resp.AdminMenu));
         this.notifyGetUserLoginSucces.next(resp);
-        this.router.navigate([url]);
+        if(!resp.IsTwoFactorEnabled)
+          this.router.navigate([url]);
       } else {
         this.notifyGetUserLoginError.next(resp.Description);
       }

@@ -4,7 +4,7 @@
         <span class="title-span">{{matchId}}</span> &nbsp; {{name}}
       </div>
 
-    <div class="custom-dropdown">
+    <!-- <div class="custom-dropdown">
       <mat-select
       #part  (selectionChange)="onPartnerChange(part.value)"
         placeholder="{{'Partners.SelectPartner' | translate}}"
@@ -13,7 +13,9 @@
         <mat-option [value]='null'>{{'Partners.SelectPartner' | translate}}</mat-option>
         <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
       </mat-select>
-    </div>
+    </div> -->
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
+
 
   </div>
 
@@ -39,11 +41,20 @@
       (cellValueChanged)="onCellValueChanged($event)"
       rowSelection="single">
     </ag-grid-angular>
+
+    <button 
+      mat-raised-button 
+      color="warn" 
+      (click)="autoCalculate()"
+      class="auto-calc-btn"
+      >{{'Sport.AutomaticCalculation' | translate}}</button>
     </div>
+
+
 
     <div class="right-panel">
         <div class="finished-calculation" *ngIf="sportId == 1">
-          <div class="title">{{'Sport.Score' | translate}}</div>
+          <div class="title">{{'Sport.Goles' | translate}}</div>
           <table class="aut-calc-template">
             <thead>
             <tr>
@@ -68,7 +79,7 @@
             </tr>
             </tbody>
           </table>
-          <button mat-raised-button color="warn" (click)="autoCalculate()">{{'Sport.AutomaticCalculation' | translate}}</button>
+          <!-- <button mat-raised-button color="warn" (click)="autoCalculate()">{{'Sport.AutomaticCalculation' | translate}}</button> -->
         </div>
         <div class="finished-calculation" *ngIf="sportId == 2">
           <div class="title">{{'Sport.Basketball' | translate}}</div>
@@ -98,8 +109,293 @@
             </tr>
             </tbody>
           </table>
-          <button mat-raised-button color="warn" (click)="autoCalculate()">{{'Sport.AutomaticCalculation' | translate}}</button>
         </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.Corners' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.YellowCards' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.RedCards' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.ShotsOnTarget' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.Fouls' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.Ofsides' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.Substitutions' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.Substitutions' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.Penalties' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="finished-calculation">
+          <div class="title">{{'Sport.ScoredPenaltes' | translate}}</div>
+          <table class="aut-calc-template">
+            <thead>
+            <tr>
+              <th></th>
+              <th>FT</th>
+              <th>H1</th>
+              <th>H2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="table-left">{{'Sport.Home' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-left">{{'Sport.Away' | translate}}</td>
+              <td *ngFor="let result of calculateOutcomesScore?.Results;let last = last;">
+                <input>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button 
+        mat-raised-button
+        (click)="onSave()"
+        class="mat-btn"
+        >{{'Common.Save' | translate}}</button>
 
     </div>
 

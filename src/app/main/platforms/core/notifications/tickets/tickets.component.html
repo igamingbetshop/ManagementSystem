@@ -1,51 +1,15 @@
 <div class="container">
 
-  <div class="content-action">
-    <div class="title">{{'Notifications.Tickets' | translate}}</div>
-
-    <div class="partner-dropdown">
-      <mat-select
-        (selectionChange)="onPartnerChange($event.value)"
-        [placeholder] = "partnersPlaceholder"
-        panelClass="overlay-dropdown"
-        disableOptionCentering>
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
-      </mat-select>
-    </div>
-
-    <mat-checkbox labelPosition="before" color="primary" #hasNote (change)="unreadChange(hasNote.checked)">{{'Notifications.UnreadsOnly' | translate}}</mat-checkbox>
-    <button mat-stroked-button class="mat-btn tiket-btn" (click)="creteNewTicket()">{{'Notifications.CreateNewTicket' | translate}}</button>
+  <app-partner-date-filter 
+  [title]="'Notifications.Tickets'" 
+  [partners]="'CorePlatform'" 
+  [checkBoxText]="'Notifications.UnreadsOnly'" 
+  (checkBoxClick)="unreadChange($event)"
+  (toDateChange)="onDateChange($event)"
+/>
 
 
-    <div class="date-time-tabs">
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
-      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'month'" (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
-      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'week'" (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
-      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
-      <button mat-stroked-button class="tab-btn" [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
-    </div>
 
-    <div class="calendar-picker start">
-      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </div>
-
-    <div class="calendar-picker">
-      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </div>
-
-    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
-
-    <button mat-stroked-button  class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
-
-  </div>
 
   <div class="grid-content">
     <ag-grid-angular
@@ -82,7 +46,7 @@
       rowSelection="single">
     </ag-grid-angular>
 
-    <div class="pages-sizes">
+    <div class="footer-ag-grid">
       <mat-select
         (selectionChange)="onPageSizeChanged()"
         [(ngModel)]="cacheBlockSize"
@@ -91,7 +55,12 @@
         disableOptionCentering>
         <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
       </mat-select>
+    <div class="btn-action">
+      <button mat-stroked-button class="mat-btn tiket-btn" (click)="creteNewTicket()">{{'Notifications.CreateNewTicket' | translate}}</button>
     </div>
+  </div>
+
+
 
   </div>
 </div>

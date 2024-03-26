@@ -20,7 +20,7 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import {ACTIVITY_STATUSES, NEWS_TYPES} from 'src/app/core/constantes/statuses';
 import { compressImage } from 'src/app/core/utils';
 
 @Component({
@@ -49,6 +49,7 @@ export class AddCoreNewsComponent implements OnInit {
   partnerId = null;
   formGroup: UntypedFormGroup;
   states = ACTIVITY_STATUSES;
+  types = NEWS_TYPES;
   environments: any[] = [];
   isParent: boolean;
 
@@ -102,7 +103,7 @@ export class AddCoreNewsComponent implements OnInit {
     if(!this.isParent)  {
       this.partnerId = +val;
     }
-    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId,
+    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
       true, Controllers.PARTNER, Methods.GET_PARTNER_ENVIRONMENTS)
       .pipe(take(1))
       .subscribe(data => {
@@ -201,6 +202,7 @@ export class AddCoreNewsComponent implements OnInit {
       ImageName: [null],
       State: [null, [Validators.required]],
       ImageData: [null],
+      Type: [null,  [Validators.required]],
       ImageDataSmall: [""],
       ImageDataMedium: [null],
       Order: [null, [Validators.required]],

@@ -1,4 +1,4 @@
-import { Directive, Injector, OnInit, ViewChild } from "@angular/core";
+import {Directive, inject, Injector, OnInit, ViewChild} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DatePipe } from "@angular/common";
 
@@ -15,13 +15,14 @@ import { CoreApiService } from "../../platforms/core/services/core-api.service";
 import { AgGridAngular } from "ag-grid-angular";
 import { SnackBarHelper } from "../../../core/helpers/snackbar.helper";
 import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes } from "src/app/core/enums";
-import { DateTimeHelper } from "../../../core/helpers/datetime.helper";
 import { formattedNumber } from "../../../core/utils";
-import { syncColumnReset, syncColumnSelectPanel } from "src/app/core/helpers/ag-grid.helper";
+import { syncColumnReset, syncColumnSelectPanel, syncPaginationWithBtn } from "src/app/core/helpers/ag-grid.helper";
 import { AgDropdownFilter } from "../grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
 import { AgDateTimeFilter } from "../grid-common/ag-date-time-filter/ag-date-time-filter.component";
 import { GetContextMenuItemsParams, MenuItemDef } from "ag-grid-enterprise";
 import { CellClickedEvent } from "ag-grid-community";
+import { DateHelper } from "../partner-date-filter/data-helper.class";
+import {ExportService} from "../../platforms/core/services/export.service";
 
 @Directive()
 export class BasePaymentComponent extends BasePaginatedGridComponent implements OnInit {
@@ -137,6 +138,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
     </div>`
     }
   };
+  private exportService = inject(ExportService);
 
   constructor(
     protected injector: Injector,
@@ -173,14 +175,20 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   ngOnInit() {
     this.getpaymentRequestStates();
     this.getPaymentSystems();
+    this.setTime();
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.urlSegment = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
     this.type = this.urlSegment == 'withdrawals' ? 1 : this.urlSegment == 'deposits' ? 2 : null;
     this.gridStateName = `${this.urlSegment}-grid-state`;
     this.partners = this.commonDataService.partners;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
-    this.startDate();
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   getpaymentRequestStates() {
@@ -260,7 +268,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
         cellRenderer: (params) => {
           const note = `<mat-icon data-action-type="view-note" class="mat-icon material-icons" style="font-size: 18px; width: 18px; height: 20px; vertical-align: middle"> ${params.data.ClientHasNote ? 'folder' : 'folder_open'}</mat-icon>`;
           const names = `<span data-action-type="view-name">${params.data.FirstName} ${params.data.LastName}</span>`;
-          return `${note} ${names}`;
+          return (params.data.FirstName && params.data.LastName) ? `${note} ${names}` : '';
         },
         filter: false,
       },
@@ -331,6 +339,19 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
         },
       },
       {
+        headerName: 'Clients.FinalAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'FinalAmount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
         headerName: 'Clients.CommissionPercent',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CommissionPercent',
@@ -359,7 +380,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
         resizable: true,
         filter: false,
         cellRenderer: (params) => {
-          return `${params.data.Amount - params.data.CommissionAmount}`;
+          return (params.data.Amount && params.data.CommissionAmount) ? `${params.data.Amount - params.data.CommissionAmount}` : " ";
         },
       },
       {
@@ -521,7 +542,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
         cellRenderer: function (params) {
           let datePipe = new DatePipe("en-US");
           let dat = datePipe.transform(params.data.CreationTime, 'medium');
-          return `${dat}`;
+          return dat ? `${dat}` : '';
         }
       },
       {
@@ -549,7 +570,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
         cellRenderer: function (params) {
           let datePipe = new DatePipe("en-US");
           let dat = datePipe.transform(params.data.LastUpdateTime, 'medium');
-          return `${dat}`;
+          return dat ? `${dat}` : '';
         },
       },
       {
@@ -596,11 +617,12 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
     });
   }
 
-
-  onPartnerChange(val: number) {
-    this.PartnerId = val;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.PartnerId = event.partnerId;
     this.type = this.urlSegment == 'withdrawals' ? 1 : this.urlSegment == 'deposits' ? 2 : null;
-    this.go();
+    this.getCurrentPage();
   }
 
   go() {
@@ -618,28 +640,6 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
     syncColumnSelectPanel();
     syncColumnReset();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   createServerSideDatasource() {
@@ -675,6 +675,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
               this.oldData = mappedRows;
               this.gridApi?.setPinnedBottomRowData([{
                 Amount: `${formattedNumber(data.ResponseObject.PaymentRequests.TotalAmount)} ${this.playerCurrency}`,
+                FinalAmount: data.ResponseObject.PaymentRequests.TotalFinalAmount ?  `${formattedNumber(data.ResponseObject.PaymentRequests.TotalFinalAmount)} ${this.playerCurrency}` : "",
                 UserName: `${data.ResponseObject.PaymentRequests.TotalUniquePlayers?.toFixed(0)}`,
               }
               ]);
@@ -753,22 +754,10 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl,
-      {
-        ...this.filteredData,
-        adminMenuId: this.adminMenuId
-      }, true,
-      Controllers.PAYMENT, Methods.EXPORT_DEPOSIT_PAYMENT_REQUESTS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      }
-      );
+    this.exportService.exportToCsv( Controllers.PAYMENT, Methods.EXPORT_DEPOSIT_PAYMENT_REQUESTS, {
+      ...this.filteredData,
+      adminMenuId: this.adminMenuId
+    });
   }
 
   onRowGroupOpened(params) {

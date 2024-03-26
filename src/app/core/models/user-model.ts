@@ -8,4 +8,5 @@ export class UserModel
   UserId:number;
   UserLogin:string;
   UserName:string;
+  IsTwoFactorEnabled:boolean;
 }

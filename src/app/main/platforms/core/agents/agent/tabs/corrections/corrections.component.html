@@ -1,0 +1,86 @@
+<div class="container">
+  <div class="content-action">
+    <button class="mat-btn" mat-stroked-button (click)="onDebitToAccount()">{{'Payments.DebitToAccount' | translate}}</button>
+    <button class="mat-btn" mat-stroked-button (click)="onCreditFromAccount()">{{'Payments.CreditFromAccount' | translate}}</button>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="corrections"
+      #agGrid
+      class="ag-theme-balham first-ag-grid"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [suppressCopyRowsToClipboard]="true"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+  <div class="content-action">
+    <div class="title"></div>
+    <div class="date-time-tabs">
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'month'" (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'week'" (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'yesterday'" (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
+      <button class="tab-btn" mat-stroked-button [class.selected-time]="selectedItem === 'today'" (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
+    </div>
+
+    <div class="calendar-picker">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate"
+             (dateChange)="onStartDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </div>
+
+    <div class="calendar-picker">
+      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="all-finished"
+      #agGrid2
+      class="ag-theme-balham second-ag-grid"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData2"
+      [rowModelType]="rowModelType2"
+      [sideBar]="sideBar"
+      [suppressRowClickSelection]="true"
+      [columnDefs]="columnDefs2"
+      [cacheBlockSize]="cacheBlockSize"
+      [suppressCopyRowsToClipboard]="true"
+      [paginationAutoPageSize]="paginationAutoPageSize"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      [groupIncludeFooter]="true"
+      [groupIncludeTotalFooter]="true"
+      [defaultColDef]="defaultColDef"
+      (gridReady)="onGridReady($event)"
+      (rowClicked)="onRowClicked($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="multiple">
+    </ag-grid-angular>
+  </div>

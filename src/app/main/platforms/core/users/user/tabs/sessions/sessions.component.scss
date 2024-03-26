@@ -4,41 +4,7 @@
 .container {
   @include container-style;
   height: 90%;
-
-  .content-action {
-    @include action-style;
-    height: 60px;
-
-    .date-time-tabs {
-
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      width: 202px;
-      &.start {
-        margin-right: 8px;
-      }
-
-      @include calendar-picker-style;
-    }
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-
-    .mat-export-btn {
-      margin-left: 8px;
-      @include mat-export-btn-style;
-    }
-  }
-
-
+  
   .toggle-content {
     display: flex;
     justify-content: center;

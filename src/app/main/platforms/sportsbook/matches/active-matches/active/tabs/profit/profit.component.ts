@@ -328,7 +328,7 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
 
   viewProfit(data) {
     const dialogRef = this.dialog.open(ViewProfitInfoComponent, {
-      width: ModalSizes.EXTRA_LARGE, data: {
+      width: ModalSizes.XXL, data: {
         MatchId: data.value.MatchId, PartnerId: this.partnerId, MarketTypeId: data.value.MarketTypeId
       }
     });

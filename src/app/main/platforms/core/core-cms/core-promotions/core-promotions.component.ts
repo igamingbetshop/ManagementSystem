@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { CoreApiService } from '../../services/core-api.service';
@@ -13,6 +13,7 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 import { ActivatedRoute } from '@angular/router';
+import { PromotionsService } from './core-promotions.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './core-promotions.component.html',
   styleUrls: ['./core-promotions.component.scss']
 })
-export class CorePromotionsComponent extends BasePaginatedGridComponent implements OnInit {
+export class CorePromotionsComponent extends BasePaginatedGridComponent implements OnInit, OnDestroy {
 
   partners: any[] = [];
   partnerId = null;
@@ -42,6 +43,8 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
   tableData = [];
   promotionId: any;
   childId: any;
+  deviceTypes: any;
+  promotionType: any;
 
   constructor(
     protected injector: Injector,
@@ -49,6 +52,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
     private apiService: CoreApiService,
     public commonDataService: CommonDataService,
     public activateRoute: ActivatedRoute,
+    private promotionsService: PromotionsService,
     private localStorageService: LocalStorageService,
     public dialog: MatDialog,
   ) {
@@ -91,6 +95,11 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
         field: 'State',
       },
       {
+        headerName: 'Common.DeviceType',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'DeviceType',
+      },
+      {
         headerName: 'Partners.StyleType',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'StyleType',
@@ -108,7 +117,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
         filter: false,
         valueGetter: params => {
           let data = { path: 'promotion', queryParams: null };
-          data.queryParams = { Id: params.data.Id };
+          data.queryParams = { Id: params.data.Id, };
           return data;
         },
         sortable: false
@@ -119,10 +128,47 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
   }
 
   ngOnInit() {
+    this.getDeviceTypes();
     this.gridStateName = 'core-promotions-grid-state';
     this.partners = this.localStorageService.get('core_partners');
     this.getPromotionTypesEnum();
-    this.getPage();
+    this.subscribeToCurrentUpdate();
+  }
+
+  getDeviceTypes() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.deviceTypes = data.ResponseObject;
+          this.getPage();
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  subscribeToCurrentUpdate() {
+    this.promotionsService.currentUpdate.subscribe((promotion) => {
+      const rowIdToUpdate = promotion?.Id;
+      if (promotion && this.gridApi.getDisplayedRowCount() > 0) {
+        const displayedRows = this.gridApi.getDisplayedRowCount();
+        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+          const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+          if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+            rowNode.data.Title = promotion.Title;
+            rowNode.data.Image = promotion.Image;
+            rowNode.data.State =   this.states.find((state) => state.Id == promotion.State)?.Name;
+            rowNode.data.DeviceType = this.deviceTypes.find((elem) => elem.Id == promotion?.DeviceType)?.Name;;
+            rowNode.data.StyleType = promotion.StyleType;
+            rowNode.data.Order = promotion.Order;
+            this.gridApi.redrawRows({ rowNodes: [rowNode] });
+            break;
+          }
+        }
+      }
+    });
   }
 
   onGridReady(params) {
@@ -173,7 +219,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
 
   async addPromotion(parentId?) {
     const { AddCorePromotionsComponent } = await import('./add-core-promotions/add-core-promotions.component');
-    const dialogRef = this.dialog.open(AddCorePromotionsComponent, { width: ModalSizes.LARGE, data: { PartnerId: this.partnerId, ParentId: parentId } });
+    const dialogRef = this.dialog.open(AddCorePromotionsComponent, { width: ModalSizes.LARGE, data: { PartnerId: this.partnerId, ParentId: parentId, Type: this.promotionType } });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.getPage();
@@ -223,7 +269,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
           if (!!parentId) {
             const _data = data.ResponseObject;
             _data.forEach((element) => {
-              element['Type'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
+              element['TypeName'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
             });
             this.tableData = _data;
@@ -231,8 +277,9 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
             this.rowData = data.ResponseObject;
             this.rowData.forEach((element) => {
               element['PartnerName'] = this.partners.find((partner) => partner.Id == element.PartnerId)?.Name;
-              element['Type'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
+              element['TypeName'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
+              element['DeviceType'] = this.deviceTypes.find((elem) => elem.Id == element?.DeviceType)?.Name;
             });
             this.tableData = [];
             if (this.promotionId) {
@@ -246,9 +293,13 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
       });
   }
 
-
   onRowClicked(event: any) {
     this.promotionId = event.data.Id;
+    this.promotionType = event.data.Type;
     this.getPage(this.promotionId, false);
+  }
+
+  ngOnDestroy(): void {
+    this.promotionsService.update(null);
   }
 }

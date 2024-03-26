@@ -1,38 +1,11 @@
 
 <div class="container">
 
-  <div class="content-action">
-    <div class="title">{{'Reports.ReportByPlayers' | translate}}</div>
+  <app-partner-date-filter 
+  [title]="'Reports.ReportByPlayers'" 
+  (toDateChange)="onDateChange($event)"
+  />
 
-    <div class="date-time-tabs">
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button (click)="selectTime('All Times')">{{'Common.AllTimes' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='month'" mat-stroked-button (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
-      <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
-    </div>
-
-    <div class="calendar-picker start">
-      <input matInput [ngxMatDatetimePicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" ></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </div>
-
-    <div class="calendar-picker">
-      <input matInput [ngxMatDatetimePicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </div>
-
-    <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
-    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
-
-
-  </div>
 
   <div class="grid-content">
     <ag-grid-angular
@@ -78,57 +51,4 @@
   </div>
 </div>
 
-
-
-<!-- 
-<div class="header" >
-  <div class="subheader">
-      <div>
-      <h4>{{'Reports.ReportByPlayers' | translate}}</h4>
-      </div>
-      <div>
-
-          <button mat-stroked-button color="primary" class="btn-block" [class.selected-time]="selectedItem === 'month'" (click)="today('month')">{{'Common.Month' | translate}}</button>
-          <button mat-stroked-button color="primary" class="btn-block" [class.selected-time]="selectedItem === 'week'" (click)="today('week')">{{'Common.Week' | translate}}</button>
-          <button mat-stroked-button color="primary" class="btn-block" [class.selected-time]="selectedItem === 'yesterday'" (click)="today('yesterday')">{{'Common.Yesterday' | translate}}</button>
-          <button mat-stroked-button color="primary" class="btn-block" [class.selected-time]="selectedItem === 'today'" (click)="today('today')">{{'Common.Today' | translate}}</button>
-
-          <mat-form-field style="height: 57px">
-            <mat-date-range-input [formGroup]="dateRangeFG" [rangePicker]="picker">
-              <input matStartDate placeholder="{{'Common.StartDate' | translate}}" [formControlName]="'start'">
-              <input matEndDate placeholder="{{'Common.EndDate' | translate}}" [formControlName]="'end'">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-          </mat-form-field>
-
-
-          <button mat-stroked-button color="primary" class="btn-block" (click)="go()">{{'Common.Go' | translate}}</button>
-        </div>
-    </div>
-</div>
-
-     <ag-grid-angular
-        id="report-by-players"
-        #agGrid
-        class="ag-theme-balham"
-        [headerHeight]="33"
-        [rowHeight]="42"
-        [rowData]="rowData"
-        [rowModelType]="rowModelType"
-        [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef"
-        [cacheBlockSize]="cacheBlockSize"
-        [paginationPageSize]="cacheBlockSize"
-        (paginationChanged)="onPaginationChanged($event)"
-        [pagination]="pagination"
-        [suppressCopyRowsToClipboard]="true"
-        [sideBar]="sideBar"
-        [animateRows]="true"
-        [enableBrowserTooltips]="enableBrowserTooltips"
-        (gridReady)="onGridReady($event)"
-        [ensureDomOrder]="true"
-        [enableCellTextSelection]="true"
-        rowSelection="single">
-     </ag-grid-angular>
- -->
+<button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>

@@ -14,29 +14,31 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {MatInputModule} from "@angular/material/input";
+import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    AllFinishedRoutingModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatSnackBarModule,
-    TranslateModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    AgGridModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
-  ],
-  declarations: [AllFinishedComponent],
-  providers: [DatePipe],
+    declarations: [AllFinishedComponent],
+    providers: [DatePipe],
+    imports: [
+        CommonModule,
+        AllFinishedRoutingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        MatSnackBarModule,
+        TranslateModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        AgGridModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class AllFinishedModule { }

@@ -1,7 +1,5 @@
 <div class="container">
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-agents']">{{'Users.Agents' | translate}}</a> {{userId}} /
-      {{'Users.AgentNameMainInfo' | translate}}</div>
     <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
   </div>
 
@@ -94,7 +92,8 @@
 
       <div>
         <div class="first-hand">{{'Common.Type' | translate}}</div>
-        <div class="static-hand">{{user?.TypeName}}</div>
+<!--        <div class="static-hand">{{user?.TypeName}}</div>-->
+        <div class="static-hand">{{user?.Type}}</div>
       </div>
 
       <div>

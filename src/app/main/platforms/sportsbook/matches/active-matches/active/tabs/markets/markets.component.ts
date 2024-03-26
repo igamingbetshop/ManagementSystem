@@ -20,7 +20,6 @@ import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe"
 import { LocalStorageService } from "../../../../../../../../core/services";
 import { GridRowModelTypes, OddsTypes, ModalSizes } from 'src/app/core/enums';
 
-
 @Component({
   selector: 'app-markets',
   templateUrl: './markets.component.html',
@@ -79,6 +78,9 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   private oddsType: number;
   selectedSelections: any;
   rowSuccessOutcomeCount: any;
+  selectedRowData: { MarketId: any; PartnerId: number; MatchId: any; LineNumber: any; };
+  selectedRowSuccessOutcomeCount: any;
+  selectedSuccessOutcomeCount: any;
 
   constructor(
     protected injector: Injector,
@@ -348,20 +350,16 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.showMe(this.selectedSelections, this.rowSuccessOutcomeCount);
+          this.getSelectedRowData();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-
   }
 
   onRowSelected(params) {
-
     if (params.node.selected) {
       this.selectedMarketId = params.data.Id;
-
-
       this.getSecondGridData(params);
     } else {
       return;
@@ -369,9 +367,6 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   showMe(item, successOutComeCount) {
-
-    console.log(item,  "item", successOutComeCount);
-    
     this.rowData1 = item;
     this.itemsCount = item.length;
     let itemCoef = 0;
@@ -408,443 +403,258 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         MatchId: row.MatchId,
         LineNumber: row.LineNumber,
       };
-      if (this.partnerId) {
-        this.columnDefs2 = [
-          {
-            headerName: 'Common.Id',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'SelectionId',
-            sortable: true,
-            resizable: true,
-            minWidth: 100,
-            tooltipField: 'Id',
-            cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Products.ExternalId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'ExternalId',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
+      this.selectedRowData = data;
+      this.selectedRowSuccessOutcomeCount = row.SuccessOutcomeCount;
+      this.selectedSuccessOutcomeCount = row.SuccessOutcomeCount;
 
+      this.columnDefs2 = [
+        {
+          headerName: 'Common.Id',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'SelectionId',
+          sortable: true,
+          resizable: true,
+          minWidth: 100,
+          tooltipField: 'Id',
+          cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
           },
-          {
-            headerName: 'Common.Name',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'Name',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
+        },
+        {
+          headerName: 'Products.ExternalId',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'ExternalId',
+          sortable: true,
+          resizable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
           },
-          {
-            headerName: 'Sport.BaseCoefficient',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'BaseCoefficient',
-            resizable: true,
-            sortable: true,
-            // editable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-            cellEditor: 'numericEditor',
+        },
+        {
+          headerName: 'Common.Name',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'Name',
+          sortable: true,
+          resizable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
           },
-          {
-            headerName: 'Sport.Coefficient',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'Coefficient',
-            resizable: true,
-            sortable: true,
-            editable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellStyle: { backgroundColor: '#cccccc' },
-            onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-            cellRenderer: (params) => {
-              const oddsTypePipe = new OddsTypePipe();
-              let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-              return `${data}`;
-            }
+        },
+        {
+          headerName: 'Sport.BaseCoefficient',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'BaseCoefficient',
+          resizable: true,
+          sortable: true,
+          editable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
           },
-          {
-            headerName: 'Sport.CoefficientDiff',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'CoefficientDiff',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellRenderer: function (params) {
-              let color = params.data.CoefficientDiff < 0 ? 'red' : 'green';
-              let value = params.data.CoefficientDiff;
-              let sign = params.data.CoefficientDiff >= 0 ? '+' : '';
-              return `<div class="${color}">${sign}${value}%</div>`;
-            },
-
+          cellStyle: { backgroundColor: '#cccccc' },
+          onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
+          cellEditor: 'numericEditor',
+        },
+        {
+          headerName: 'Sport.Coefficient',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'Coefficient',
+          resizable: true,
+          sortable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
           },
-          {
-            headerName: 'Sport.LimitLeft',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'LimitLeft',
-            resizable: true,
-            sortable: true,
-            editable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellStyle: { backgroundColor: '#cccccc' },
-            onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-            cellEditor: 'numericEditor',
-          },
-          {
-            headerName: 'Common.StatusName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'StatusName',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-
-
-          },
-          {
-            headerName: 'Sport.ResettleStatus',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'ResettleStatus',
-            resizable: true,
-            sortable: true,
-            cellRenderer: 'selectRenderer',
-            cellRendererParams: {
-              onchange: this.onSelectChange1['bind'](this),
-              Selections: this.statusModel,
-            },
-          },
-          {
-            headerName: 'Common.TotalBetAmount',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'TotalBetAmount',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Common.PossibleProfit',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'PossibleProfit',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellRenderer: function (params) {
-              let color = params.data.PossibleProfit < 0 ? 'red' : 'green';
-              let value = params.data.PossibleProfit;
-              let sign = params.data.PossibleProfit > 0 ? '+' : '';
-              return `<div class="${color}">${sign}${value}</div>`;
-            },
-          },
-          {
-            headerName: 'Payments.CurrencyId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'CurrencyId',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Sport.TeamId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'TeamId',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Common.View',
-            headerValueGetter: this.localizeHeader.bind(this),
-            cellRenderer: OpenerComponent,
-            filter: false,
-            valueGetter: params => {
-              let data = { path: '', queryParams: null };
-              let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-              data.path = this.router.url.replace(replacedPart, 'market').split('?')[0];
-              data.queryParams = { SelectionId: params.data.SelectionId };
-              return data;
-            },
-            sortable: false
-          },
-        ];
-      } else {
-        this.columnDefs2 = [
-          {
-            headerName: 'Common.Id',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'SelectionId',
-            sortable: true,
-            resizable: true,
-            minWidth: 100,
-            tooltipField: 'Id',
-            cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Products.ExternalId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'ExternalId',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-
-          },
-          {
-            headerName: 'Common.Name',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'Name',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Sport.BaseCoefficient',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'BaseCoefficient',
-            resizable: true,
-            sortable: true,
-            editable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellStyle: { backgroundColor: '#cccccc' },
-            onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-            cellEditor: 'numericEditor',
-          },
-          {
-            headerName: 'Sport.Coefficient',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'Coefficient',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellRenderer: (params) => {
-              const oddsTypePipe = new OddsTypePipe();
-              let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-              return `${data}`;
-            }
-          },
-          {
-            headerName: 'Sport.CoefficientDiff',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'CoefficientDiff',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellRenderer: function (params) {
-              let color = params.data.CoefficientDiff < 0 ? 'red' : 'green';
-              let value = params.data.CoefficientDiff;
-              let sign = params.data.CoefficientDiff >= 0 ? '+' : '';
-              return `<div class="${color}">${sign}${value}%</div>`;
-            },
-          },
-          {
-            headerName: 'Sport.LimitLeft',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'LimitLeft',
-            resizable: true,
-            sortable: true,
-            editable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellStyle: { backgroundColor: '#cccccc' },
-            onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-            cellEditor: 'numericEditor',
-          },
-          {
-            headerName: 'Common.StatusName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'StatusName',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-
-          },
-          {
-            headerName: 'Sport.ResettleStatus',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'ResettleStatus',
-            resizable: true,
-            sortable: true,
-            cellRenderer: 'selectRenderer',
-            cellRendererParams: {
-              onchange: this.onSelectChange1['bind'](this),
-              Selections: this.statusModel,
-            },
-
-          },
-          {
-            headerName: 'Sport.TotalBetAmount',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'TotalBetAmount',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Sport.PossibleProfit',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'PossibleProfit',
-            resizable: true,
-            sortable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-            cellRenderer: function (params) {
-              let color = params.data.PossibleProfit < 0 ? 'red' : 'green';
-              let value = params.data.PossibleProfit;
-              let sign = params.data.PossibleProfit > 0 ? '+' : '';
-              return `<div class="${color}">${sign}${value}</div>`;
-            },
-          },
-          {
-            headerName: 'Payments.CurrencyId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'CurrencyId',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Sport.TeamId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'TeamId',
-            sortable: true,
-            resizable: true,
-            floatingFilter: true,
-            suppressMenu: true,
-            floatingFilterComponentParams: {
-              suppressFilterButton: true,
-            },
-          },
-          {
-            headerName: 'Common.View',
-            headerValueGetter: this.localizeHeader.bind(this),
-            cellRenderer: OpenerComponent,
-            filter: false,
-            valueGetter: params => {
-              let data = { path: '', queryParams: null };
-              let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-              data.path = this.router.url.replace(replacedPart, 'market').split('?')[0];
-              data.queryParams = { SelectionId: params.data.SelectionId };
-              return data;
-            },
-            sortable: false
-          },
-        ];
-      }
-      this.apiService.apiPost(this.selectPath, data)
-        .pipe(take(1))
-        .subscribe(data => {
-          if (data.Code === 0) {
-
-            data.Selections.forEach(sel => {
-              sel.ResettleStatus = sel.Status;
-              let selName = this.statusModel.find(model => {
-                return model.Id == sel.Status;
-              })
-              if (selName) {
-                sel.StatusName = selName.Name;
-              }
-            });
-
-            this.selectedSelections = data.Selections;
-            this.rowSuccessOutcomeCount = row.SuccessOutcomeCount;
-            this.showMe(data.Selections, row.SuccessOutcomeCount);
-          } else {
-            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          cellRenderer: (params) => {
+            const oddsTypePipe = new OddsTypePipe();
+            let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
+            return `${data}`;
           }
-        });
+        },
+        {
+          headerName: 'Sport.CoefficientDiff',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'CoefficientDiff',
+          resizable: true,
+          sortable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+          cellRenderer: function (params) {
+            let color = params.data.CoefficientDiff < 0 ? 'red' : 'green';
+            let value = params.data.CoefficientDiff;
+            let sign = params.data.CoefficientDiff >= 0 ? '+' : '';
+            return `<div class="${color}">${sign}${value}%</div>`;
+          },
+        },
+        {
+          headerName: 'Sport.LimitLeft',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'LimitLeft',
+          resizable: true,
+          sortable: true,
+          editable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+          cellStyle: { backgroundColor: '#cccccc' },
+          onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
+          cellEditor: 'numericEditor',
+        },
+        {
+          headerName: 'Common.StatusName',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'StatusName',
+          resizable: true,
+          sortable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+
+        },
+        {
+          headerName: 'Sport.ResettleStatus',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'ResettleStatus',
+          resizable: true,
+          sortable: true,
+          cellRenderer: 'selectRenderer',
+          cellRendererParams: {
+            onchange: this.onSelectChange1['bind'](this),
+            Selections: this.statusModel,
+          },
+
+        },
+        {
+          headerName: 'Sport.TotalBetAmount',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'TotalBetAmount',
+          resizable: true,
+          sortable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+        },
+        {
+          headerName: 'Sport.PossibleProfit',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'PossibleProfit',
+          resizable: true,
+          sortable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+          cellRenderer: function (params) {
+            let color = params.data.PossibleProfit < 0 ? 'red' : 'green';
+            let value = params.data.PossibleProfit;
+            let sign = params.data.PossibleProfit > 0 ? '+' : '';
+            return `<div class="${color}">${sign}${value}</div>`;
+          },
+        },
+        {
+          headerName: 'Payments.CurrencyId',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'CurrencyId',
+          sortable: true,
+          resizable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+        },
+        {
+          headerName: 'Sport.TeamId',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'TeamId',
+          sortable: true,
+          resizable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+        },
+        {
+          headerName: 'Common.View',
+          headerValueGetter: this.localizeHeader.bind(this),
+          cellRenderer: OpenerComponent,
+          filter: false,
+          valueGetter: params => {
+            let data = { path: '', queryParams: null };
+            let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
+            data.path = this.router.url.replace(replacedPart, 'market').split('?')[0];
+            data.queryParams = { SelectionId: params.data.SelectionId };
+            return data;
+          },
+          sortable: false
+        },
+      ];
+
+      if (this.partnerId) {
+        for (const definition of this.columnDefs2) {
+          if (definition.headerName === 'Sport.BaseCoefficient') {
+            definition.editable = false,
+            definition.cellStyle = { backgroundColor: 'transparent' };
+          }
+          if (definition.headerName == 'Sport.Coefficient') {
+            definition.editable = true;
+            definition.cellStyle = { backgroundColor: '#cccccc' };
+          }
+        }
+      };
+      this.getSelectedRowData();
     }
   }
 
+  getSelectedRowData() {
+    this.apiService.apiPost(this.selectPath, this.selectedRowData)
+    .pipe(take(1))
+    .subscribe(data => {
+      if (data.Code === 0) {
+
+        data.Selections.forEach(sel => {
+          sel.ResettleStatus = sel.Status;
+          let selName = this.statusModel.find(model => {
+            return model.Id == sel.Status;
+          })
+          if (selName) {
+            sel.StatusName = selName.Name;
+          }
+        });
+
+        this.selectedSelections = data.Selections;
+        this.rowSuccessOutcomeCount = this.selectedRowSuccessOutcomeCount;
+        this.showMe(data.Selections, this.selectedSuccessOutcomeCount);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+
+
+  getSelections() {
+    
+  }
 
   onGridReady(params) {
     super.onGridReady(params);

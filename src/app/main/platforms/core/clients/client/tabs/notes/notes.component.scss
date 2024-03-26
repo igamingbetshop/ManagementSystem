@@ -5,37 +5,10 @@
   @include container-style;
   height: auto;
 
-  .content-action {
-    @include action-style;
-    height: 68px;
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-
-    .date-time-tabs {
-
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      width: 202px;
-      &.start {
-        margin-right: 8px;
-      }
-
-      @include calendar-picker-style;
-    }
-  }
 
   .grid-content {
     width: 100%;
-    height: calc(100vh - 340px);
+    height: calc(100vh - 388px);
 
     ::ng-deep {
       ag-grid-angular {
@@ -43,5 +16,12 @@
         height: 100%;
       }
     }
+  }
+
+  .mat-btn {
+    display: flex;
+    margin: 8px;
+    @include mat-btn-style;
+    margin-left: auto;
   }
 }

@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['/main/platform/cms/promotions']">{{'Cms.Promotions' | translate}}</a> /
+    <div class="title"><a (click)="onNavigateToTromotions()">{{'Cms.Promotions' | translate}}</a> /
       <span>{{id}}</span>
     </div>
     <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
@@ -42,13 +42,15 @@
         </div>
       </div>
 
+      @if (childe) {
       <div>
         <div class="first-hand">{{'Cms.Image' | translate}}</div>
         <div class="second-hand">{{promotion?.ImageName}}</div>
         <div class="form-field form-input">
-            <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'ImageName'">
+            <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'ImageName'" readonly>
         </div>
       </div>
+    }
 
       <div>
         <div class="first-hand">{{'Clients.SelectType' | translate}}</div>
@@ -88,6 +90,20 @@
 
         </div>
       </div>
+
+      @if (!childe) {
+        <div>
+          <div class="first-hand">{{'Common.DeviceType' | translate}}</div>
+          <div class="second-hand">{{promotion?.DeviceName}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'DeviceType'">
+              <mat-option *ngFor="let type of deviceTypes" [value]="type.Id">{{type.Name}}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+
+      }
+
 
       <div [class.group-left-item]="isEdit">
         <div class="first-hand">{{'Bonuses.ChooseSegment' | translate}}</div>
@@ -156,7 +172,7 @@
         </div>
       </div>
 
-      <ng-container *ngIf="isEdit">
+      @if (isEdit) {
         <div>
           <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
           <div class="second-hand"></div>
@@ -168,33 +184,33 @@
           </div>
         </div>
 
-        <div>
-          <div class="first-hand">{{'Common.ImageData' | translate}}</div>
-          <div class="second-hand">{{ promotion?.ImageData}}</div>
-          <div class="form-field form-checkbox">
-            <input type="file" (change)="uploadFile($event)" [formControlName]="'ImageData'">
+        @if (childe) {
+          <div>
+            <div class="first-hand">{{'Common.ImageData' | translate}}</div>
+            <div class="second-hand">{{ promotion?.ImageData}}</div>
+            <div class="form-field form-checkbox">
+              <input type="file" (change)="uploadFile($event)" [formControlName]="'ImageData'">
+            </div>
           </div>
-        </div>
-        
-        <div>
-          <div class="first-hand">{{'Common.ImageDataMedium' | translate}}</div>
-          <div class="second-hand">{{ promotion?.ImageDataMedium}}</div>
-          <div class="form-field form-checkbox">
-            <input type="file" (change)="uploadFile2($event)" [formControlName]="'ImageDataMedium'">
+          
+          <div>
+            <div class="first-hand">{{'Common.ImageDataMedium' | translate}}</div>
+            <div class="second-hand">{{ promotion?.ImageDataMedium}}</div>
+            <div class="form-field form-checkbox">
+              <input type="file" (change)="uploadFile2($event)" [formControlName]="'ImageDataMedium'">
+            </div>
           </div>
-        </div>
-        
-        <div>
-          <div class="first-hand">{{'Cms.ImageDataSmall' | translate}}</div>
-          <div class="second-hand">{{ promotion?.ImageDataMedium}}</div>
-          <div class="form-field form-checkbox">
-            <input type="file" (change)="uploadFile1($event)" [formControlName]="'ImageDataSmall'">
+          
+          <div>
+            <div class="first-hand">{{'Cms.ImageDataSmall' | translate}}</div>
+            <div class="second-hand">{{ promotion?.ImageDataMedium}}</div>
+            <div class="form-field form-checkbox">
+              <input type="file" (change)="uploadFile1($event)" [formControlName]="'ImageDataSmall'">
+            </div>
           </div>
-        </div>
+        }
 
-
-
-      </ng-container>
+      }
 
       <div></div>
 
@@ -209,6 +225,7 @@
     </form>
   </div>
 
+  @if (childe) {
    <div class="card-content">
      <mat-card>
        <mat-card-header>
@@ -231,5 +248,6 @@
          <img class="img" mat-card-image [src]="imageSmall" alt="Image">
      </mat-card>
    </div>
+  }
 
 </div>

@@ -17,6 +17,7 @@ import {NoteComponent} from './note/note.component';
 import {MatIconModule} from "@angular/material/icon";
 import {TranslateModule} from "@ngx-translate/core";
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
+import { PartnerDateFilterComponent } from "../../../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -26,24 +27,25 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [NotesComponent, NoteComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatInputModule,
-    FormsModule,
-    MatIconModule,
-    TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
-  ]
+    declarations: [NotesComponent, NoteComponent],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatFormFieldModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatInputModule,
+        FormsModule,
+        MatIconModule,
+        TranslateModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class NotesModule {
 

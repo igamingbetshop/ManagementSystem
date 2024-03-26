@@ -6,7 +6,7 @@ import { GridMenuIds, GridRowModelTypes } from 'src/app/core/enums';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-by-limits',
@@ -127,6 +127,7 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnSelectPanel();
     syncColumnReset();
   }
 
@@ -146,6 +147,19 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
+  }
+
+  exportToCsv() {
+    this.apiService.apiPost('report/exportlimits',  {...this.filter, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
   }
 
 }

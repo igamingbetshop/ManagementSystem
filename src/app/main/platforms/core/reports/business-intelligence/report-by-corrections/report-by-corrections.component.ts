@@ -16,7 +16,8 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { OPERATIONS } from 'src/app/core/constantes/statuses';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-corrections',
@@ -41,6 +42,7 @@ export class ReportByCorrectionsComponent extends BasePaginatedGridComponent imp
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
+    private exportService:ExportService,
     protected injector: Injector) {
     super(injector);
     this.frameworkComponents = {
@@ -245,47 +247,23 @@ export class ReportByCorrectionsComponent extends BasePaginatedGridComponent imp
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.partners = this.commonDataService.partners;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-
-    this.clientData = {
-      FromDate: this.fromDate,
-      ToDate: new Date(this.toDate.setDate(this.toDate.getDate() + 1))
-    };
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  getByPartnerData(event) {
-    this.partnerId = event;
-    this.gridApi?.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-
-    this.clientData = {
-      FromDate: this.fromDate,
-      ToDate: this.toDate
-    };
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onGridReady(params) {
@@ -335,17 +313,7 @@ export class ReportByCorrectionsComponent extends BasePaginatedGridComponent imp
 
   exportToCsv() {
 
-    this.apiService.apiPost(this.configService.getApiUrl, {...this.filteredData, adminMenuId: this.adminMenuId}, true,
-      Controllers.CLIENT, Methods.EXPORT_CLIENT_CORRECTIONS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          let iframe = document.createElement('iframe');
-          iframe.setAttribute('src', this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute('style', 'display: none');
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENT_CORRECTIONS, {...this.filteredData, adminMenuId: this.adminMenuId});
   }
 
 }

@@ -30,6 +30,7 @@ import { Controllers, Methods, ModalSizes } from "../../../../../../../../../cor
 import { Paging } from "../../../../../../../../../core/models";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { forkJoin } from 'rxjs';
+import {ExportService} from "../../../../../../services/export.service";
 
 
 @Component({
@@ -74,6 +75,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     protected injector: Injector,
     public dialog: MatDialog,
     private ref: ChangeDetectorRef,
+    private exportService:ExportService,
     private _snackBar: MatSnackBar) {
     super(injector);
   }
@@ -639,17 +641,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
-      Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCT_SETTINGS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          let iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCT_SETTINGS, this.filteredData);
   }
 
   getSelectedProductIds(): number[] {

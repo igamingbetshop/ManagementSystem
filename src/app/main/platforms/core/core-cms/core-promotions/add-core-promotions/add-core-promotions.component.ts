@@ -47,18 +47,19 @@ import { compressImage } from 'src/app/core/utils';
 export class AddCorePromotionsComponent implements OnInit {
 
 
-  public partners: any[] = [];
-  public partnerId = null;
-  public formGroup: UntypedFormGroup;
-  public promotionTypes: any = [];
-
-  public states = ACTIVITY_STATUSES;
-
-  public environments: any[] = [];
+  partners: any[] = [];
+  partnerId = null;
+  formGroup: UntypedFormGroup;
+  promotionTypes: any = [];
+  states = ACTIVITY_STATUSES;
+  environments: any[] = [];
+  deviceTypes = [];
+  isParent: boolean;
+  submitting = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddCorePromotionsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { ParentId: number },
+    @Inject(MAT_DIALOG_DATA) public data: { ParentId: number, Type: number},
 
     private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
@@ -72,14 +73,32 @@ export class AddCorePromotionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isParent = !!this.data?.ParentId;
     this.partners = this.localStorageService.get('core_partners');
-    this.getPromotionTypes();
+    this.getPromotionTypes(this.data?.ParentId);
     this.createForm();
     this.getDate();
+    this.getDeviceTypes();
   }
 
-  getPromotionTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId,
+  getDeviceTypes() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.deviceTypes = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  getPromotionTypes(val) {
+    if(!this.isParent)  {
+      this.partnerId = +val;
+    }
+    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
       true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
       .pipe(take(1))
       .subscribe(data => {
@@ -112,7 +131,6 @@ export class AddCorePromotionsComponent implements OnInit {
 
 
   GetPartnerEnvironments(val) {
-
     this.partnerId = +val
     this.apiService.apiPost(this.configService.getApiUrl, this.partnerId,
       true, Controllers.PARTNER, Methods.GET_PARTNER_ENVIRONMENTS)
@@ -125,22 +143,7 @@ export class AddCorePromotionsComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-
-
   }
-
-  // uploadFile(evt) {
-  //   let files = evt.target.files;
-  //   let file = files[0];
-  //   if (files && file) {
-  //     let reader = new FileReader();
-  //     reader.onload = () => {
-  //       const binaryString = reader.result as string;
-  //       this.formGroup.get('ImageData').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
 
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
@@ -227,17 +230,21 @@ export class AddCorePromotionsComponent implements OnInit {
       FinishDate: [null],
       NickName: [null, [Validators.required]],
       ImageName: [null],
-      Type: [null, [Validators.required]],
+      Type: [null, this.isParent ? null : Validators.required],
       State: [null, [Validators.required]],
       ImageData: [null],
       ImageDataSmall: [""],
       ImageDataMedium: [null],
+      DeviceType: [null],
       Order: [null, [Validators.required]],
     });
+    if (this.isParent && this.data && this.data.Type) {
+      this.formGroup.get('Type').setValue(this.data.Type);
+    }
   }
 
   get errorControl() {
-    return this.formGroup.controls;
+    return this.formGroup?.controls;
   }
 
   close() {
@@ -245,23 +252,26 @@ export class AddCorePromotionsComponent implements OnInit {
   }
 
   onSubmit() {
-
-    if (this.formGroup.invalid) {
+    if (this.isParent && this.formGroup.invalid) {
       SnackBarHelper.show(this._snackBar, { Description: 'Choose Image Data', Type: "error" });
       return;
     }
+    if (this.submitting) {
+      return;
+    }
+    this.submitting = true;
     const obj = this.formGroup.getRawValue();
-
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_PROMOTION)
       .pipe(take(1))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
         this.dialogRef.close(obj);
+        this.submitting = false;
+
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-
       })
 
 

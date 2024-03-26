@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,46 +12,45 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { Controllers, Methods } from 'src/app/core/enums';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreApiService } from '../../platforms/core/services/core-api.service';
 import { SnackBarHelper } from "../../../core/helpers/snackbar.helper";
 import { HtmlEditorModule } from "../html-editor/html-editor.component";
+import { SelectDeviceTypeComponent } from "./core-partners-select.component";
 
 @Component({
-  selector: 'app-add-edit-translation',
-  templateUrl: './add-edit-translation.component.html',
-  styleUrls: ['./add-edit-translation.component.scss'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FormsModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    HtmlEditorModule,
-  ],
+    selector: 'app-add-edit-translation',
+    templateUrl: './add-edit-translation.component.html',
+    styleUrls: ['./add-edit-translation.component.scss'],
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatIconModule,
+        FormsModule,
+        TranslateModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        HtmlEditorModule,
+        SelectDeviceTypeComponent
+    ]
 })
 export class AddEditTranslationComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public objectId;
-  public objectTypeId;
-  public translationData = {
+  objectId;
+  objectTypeId;
+  translationData = {
     NickName: "",
     TranslationId: "",
     Translations: []
   };
-  public unModifiedData;
-  public openedIndex = 0;
+  unModifiedData;
+  openedIndex = 0;
+  deviceTypeId: number = 1;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any },
+    @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any, DeviceType: boolean },
     public dialogRef: MatDialogRef<AddEditTranslationComponent>,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
@@ -86,6 +85,10 @@ export class AddEditTranslationComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  onDeviceTypeChange(event) {
+    this.deviceTypeId = event;
+  }
+
   onSubmit() {
 
     this.translationData.Translations.forEach(translation => {
@@ -107,6 +110,11 @@ export class AddEditTranslationComponent implements OnInit {
   }
 
   saveTranslation(requestBody) {
+    if(this.data.DeviceType && requestBody.length > 0) {
+      requestBody.forEach(item => {
+        item.Type = this.deviceTypeId;
+      });      
+    }
     this.apiService.apiPost(this.configService.getApiUrl, requestBody,
       true, Controllers.BASE, Methods.SAVE_TRANSLATION_ENTRIES)
       .pipe(take(1))

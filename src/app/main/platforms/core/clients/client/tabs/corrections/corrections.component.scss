@@ -9,34 +9,9 @@
     @include action-style;
     height: 68px;
 
-    .custom-dropdown {
-      margin-right: 8px;
-      @include dropdown-style;
-    }
-
-    &.second {
-      justify-content: flex-end;
-    }
-
     .mat-btn {
       margin-left: 8px;
       @include mat-btn-style;
-    }
-
-    .date-time-tabs {
-      .tab-btn {
-        margin-right: 8px;
-      }
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      width: 11%;
-      &.start {
-        margin-right: 8px;
-      }
-      
-      @include calendar-picker-style;
     }
   }
 

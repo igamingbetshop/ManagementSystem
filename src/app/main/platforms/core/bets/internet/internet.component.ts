@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
@@ -18,11 +18,12 @@ import { DateAdapter } from "@angular/material/core";
 import { LocalStorageService } from "../../../../../core/services";
 import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
 import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes, GridMenuIds } from 'src/app/core/enums';
-import { DateTimeHelper } from "../../../../../core/helpers/datetime.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { formattedNumber } from "../../../../../core/utils";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import {ExportService} from "../../services/export.service";
 
 @Component({
   selector: 'app-internet',
@@ -192,6 +193,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
     private activateRoute: ActivatedRoute,
     public dateAdapter: DateAdapter<Date>,
     private localStorageService: LocalStorageService,
+    private exportService:ExportService
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.INTERNET;
@@ -565,7 +567,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
   }
 
   ngOnInit() {
-    this.startDate();
+    this.setTime();
     this.gridStateName = 'internet-grid-state';
     this.partners = this.commonDataService.partners;
     this.clientCategories = this.activateRoute.snapshot.data.clientCategories;
@@ -574,6 +576,21 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
     this.getDeviceTypes();
     this.getDocumentState();
     this.getBetTypes();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
+    this.getCurrentPage();
   }
 
   getDeviceTypes() {
@@ -634,37 +651,10 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
       { queryParams: { "clientId": rowData.ClientId } });
   }
 
-  onPartnerChange(value) {
-    this.partnerId = null;
-    this.partnerId = value;
-    this.go();
-  }
-
   showHide() {
     this.show = !this.show;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
 
   handleClientDate() {
     if (this.partnerId) {
@@ -875,17 +865,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
   }
 
   exportToCsv() {
-    this.apiService.apiPost(this.configService.getApiUrl, { ...this.clientData, adminMenuId: this.adminMenuId }, true,
-      Controllers.REPORT, Methods.EXPORT_INTERNET_BET).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          var iframe = document.createElement("iframe");
-          iframe.setAttribute("src", this.configService.defaultOptions.WebApiUrl + '/' + data.ResponseObject.ExportedFilePath);
-          iframe.setAttribute("style", "display: none");
-          document.body.appendChild(iframe);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_INTERNET_BET, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 
   get isRowSelected() {

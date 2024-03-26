@@ -21,30 +21,32 @@ import {MatInputModule} from "@angular/material/input";
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {AgDateTimeFilter} from '../../../../components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import {AgDropdownFilter} from '../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 
 @NgModule({
-  declarations: [AllClientsComponent, OpenerComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AllClientsRoutingModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    TranslateModule,
-    AgBooleanFilterModule,
-    AgGridModule,
-    MatSelectModule,
-    MatInputModule,
-    FormsModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    AgDateTimeFilter,
-    AgDropdownFilter
-  ],
+    declarations: [AllClientsComponent, OpenerComponent],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        AllClientsRoutingModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        TranslateModule,
+        AgBooleanFilterModule,
+        AgGridModule,
+        MatSelectModule,
+        MatInputModule,
+        FormsModule,
+        NgxMatDatetimePickerModule,
+        NgxMatNativeDateModule,
+        AgDateTimeFilter,
+        AgDropdownFilter,
+        PartnerDateFilterComponent
+    ]
 })
 export class AllClientsModule {
 

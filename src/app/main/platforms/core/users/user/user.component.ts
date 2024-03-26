@@ -41,6 +41,10 @@ export class UserComponent implements OnInit {
       label: 'Clients.Sessions',
       route: 'session'
     },
+    {
+      label: 'Home.Settings',
+      route: 'user-settings'
+    },
   ];
 
   userId: number;

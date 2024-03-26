@@ -61,6 +61,7 @@ export class AddPopupComponent implements OnInit {
   fragmentalSource: any = {};
   environments: any[] = [];
   selectedEnvironmentId = null;
+  selectedImage: "dasdasds";
 
   constructor(
     public dialogRef: MatDialogRef<AddPopupComponent>,
@@ -164,6 +165,7 @@ export class AddPopupComponent implements OnInit {
                     const base64data = reader.result as string;
                     this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
                     this.formGroup.get('Image').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
+                    this.selectedImage = files.name;
                   }
                 }
               },
@@ -181,6 +183,34 @@ export class AddPopupComponent implements OnInit {
       }
     }
   }
+
+  uploadFile1(evt) {
+    let files = evt.target.files;
+    if (!files || files.length === 0) {
+      SnackBarHelper.show(this._snackBar,
+        { Description: "Please choose a file", Type: "error" }
+      );
+      return;
+    }
+  
+    let file = files[0];
+    let fileName = file.name.split('.').pop();
+    
+    if (fileName != this.formGroup.get('ImageName').value) {
+      SnackBarHelper.show(this._snackBar,
+        { Description: "Chosen file format does not match the selected format", Type: "error" }
+      );
+      return;
+    }
+  
+    let reader = new FileReader();
+    reader.onload = () => {
+      const binaryString = reader.result as string;
+      this.formGroup.get('MobileImageData').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
+    };
+    reader.readAsDataURL(file);
+  }
+  
 
   getPartnerPaymentSegments(partnerId) {
     this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: partnerId }, true,
@@ -201,7 +231,8 @@ export class AddPopupComponent implements OnInit {
       Type: [null, [Validators.required]],
       State: [null, [Validators.required]],
       ImageName: [null, [Validators.required]],
-      ImageData: [null, [Validators.required]],
+      ImageData: [null],
+      MobileImageData: [null],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
       Page: [null],
       StartDate: [null, [Validators.required]],

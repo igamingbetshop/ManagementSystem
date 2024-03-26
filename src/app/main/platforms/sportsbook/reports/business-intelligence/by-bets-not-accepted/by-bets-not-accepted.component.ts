@@ -1,20 +1,21 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {SportsbookApiService} from '../../../services/sportsbook-api.service';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import 'ag-grid-enterprise';
-import {AgGridAngular} from 'ag-grid-angular';
-import {Paging} from 'src/app/core/models';
-import {take} from 'rxjs/operators';
-import {DatePipe, DecimalPipe} from '@angular/common';
-import {MatDialog} from '@angular/material/dialog';
-import {CellClickedEvent} from 'ag-grid-community';
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
+import { AgGridAngular } from 'ag-grid-angular';
+import { Paging } from 'src/app/core/models';
+import { take } from 'rxjs/operators';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { CellClickedEvent } from 'ag-grid-community';
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { AVAILABLEBETCATEGORIES, BETAVAILABLESTATUSES } from 'src/app/core/constantes/statuses';
 import { GridMenuIds } from 'src/app/core/enums';
-import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 //import { ActivatedRoute } from '@angular/router';
 
@@ -26,7 +27,7 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent implements OnInit {
 
-  @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
 
 
   public availableStatuses = BETAVAILABLESTATUSES;
@@ -34,23 +35,23 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   public availableBetCategories = AVAILABLEBETCATEGORIES;
 
   public betStatuses = [
-    {"Name": this.translate.instant('Sport.Uncalculated'), Id: 1},
-    {"Name": this.translate.instant('Sport.Won'), Id: 2},
-    {"Name": this.translate.instant('Sport.Lost'), Id: 3},
-    {"Name": this.translate.instant('Sport.Deleted'), Id: 4},
-    {"Name": this.translate.instant('Sport.CashoutedFully'), Id: 5},
-    {"Name": this.translate.instant('Sport.Returned'), Id: 6},
-    {"Name": this.translate.instant('Sport.NotAccepted'), Id: 7},
-    {"Name": this.translate.instant('Sport.CashoutedPartially'), Id: 8},
-    {"Name": this.translate.instant('Sport.Waiting'), Id: 9}
+    { "Name": this.translate.instant('Sport.Uncalculated'), Id: 1 },
+    { "Name": this.translate.instant('Sport.Won'), Id: 2 },
+    { "Name": this.translate.instant('Sport.Lost'), Id: 3 },
+    { "Name": this.translate.instant('Sport.Deleted'), Id: 4 },
+    { "Name": this.translate.instant('Sport.CashoutedFully'), Id: 5 },
+    { "Name": this.translate.instant('Sport.Returned'), Id: 6 },
+    { "Name": this.translate.instant('Sport.NotAccepted'), Id: 7 },
+    { "Name": this.translate.instant('Sport.CashoutedPartially'), Id: 8 },
+    { "Name": this.translate.instant('Sport.Waiting'), Id: 9 }
   ];
 
 
   public betTypesModel = [
-    {"Name": this.translate.instant('Sport.Single'), "Id": 1},
-    {"Name": this.translate.instant('Sport.Multiple'), "Id": 2},
-    {"Name": this.translate.instant('Sport.System'), "Id": 3},
-    {"Name": this.translate.instant('Sport.Chain'), "Id": 4}
+    { "Name": this.translate.instant('Sport.Single'), "Id": 1 },
+    { "Name": this.translate.instant('Sport.Multiple'), "Id": 2 },
+    { "Name": this.translate.instant('Sport.System'), "Id": 3 },
+    { "Name": this.translate.instant('Sport.Chain'), "Id": 4 }
   ];
 
   public commentTypes: any[] = [];
@@ -61,7 +62,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   public show = true;
   public fromDate = new Date();
   public toDate = new Date();
-
+  public filteredData: any;
   public rowData = [];
 
   constructor(
@@ -83,7 +84,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
         resizable: true,
         sortable: true,
         minWidth: 80,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500', 'padding-left': '10px',},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500', 'padding-left': '10px', },
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -123,7 +124,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ClientId',
         minWidth: 80,
-        cellStyle: {'text-decoration': 'underline', 'cursor ': 'pointer'},
+        cellStyle: { 'text-decoration': 'underline', 'cursor ': 'pointer' },
         onCellClicked: (event: CellClickedEvent) => this.goToPlayer(event),
       },
 
@@ -356,7 +357,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MatchId',
         minWidth: 80,
-        cellStyle: {'text-decoration': 'underline', 'cursor ': 'pointer'},
+        cellStyle: { 'text-decoration': 'underline', 'cursor ': 'pointer' },
         onCellClicked: (event: CellClickedEvent) => this.goToMatch(event),
       },
       {
@@ -461,9 +462,30 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   }
 
   ngOnInit() {
-    this.startDate();
     this.gridStateName = 'report-by-bet-not-accepted-grid-state';
     this.getCommentTypes();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
+
+  onSelectBetCategory(event) {
+    this.availableBetCategoriesStatus = event;
+    this.getCurrentPage();
+  }
+
+  onSelectBetStatus(event) {
+    this.availableStatusesStatus = event;
+    this.getCurrentPage();
   }
 
   // isRowSelected() {
@@ -476,7 +498,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
       if (data.Code === 0) {
         this.commentTypes = data.CommentTypes;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
 
     })
@@ -485,14 +507,14 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   goToPlayer(ev) {
     const row = ev.data;
     const url = this.router.serializeUrl(this.router.createUrlTree(['main/sportsbook/players/player/main'],
-      {queryParams: {"playerId": row.PlayerId,}}));
+      { queryParams: { "playerId": row.PlayerId, } }));
     window.open(url, '_blank');
   }
 
   goToMatch(ev) {
     const row = ev.data;
     const url = this.router.serializeUrl(this.router.createUrlTree(['/main/sportsbook/matches/active-matches/all-active/active/main'],
-      {queryParams: {"partnerId": row.PartnerId, "MatchId": row.MatchId, 'name': row.Competitors,}}));
+      { queryParams: { "partnerId": row.PartnerId, "MatchId": row.MatchId, 'name': row.Competitors, } }));
     window.open(url, '_blank');
   }
 
@@ -567,31 +589,10 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
     this.getCurrentPage();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
   onGridReady(params) {
     super.onGridReady(params);
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+    syncColumnSelectPanel();
     syncColumnReset();
   }
 
@@ -612,6 +613,8 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
 
         delete paging.StartDate;
         delete paging.EndDate;
+
+        this.filteredData = paging;
 
         this.apiService.apiPost('report/notacceptedbets', paging,
         ).pipe(take(1)).subscribe(data => {
@@ -652,13 +655,26 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
 
               bet['Competitors'] = bet['Competitors'].join("-");
             })
-            params.success({rowData: mappedRows, rowCount: data.TotalCount});
+            params.success({ rowData: mappedRows, rowCount: data.TotalCount });
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         });
       },
     };
+  }
+
+  exportToCsv() {
+    this.apiService.apiPost('report/exportnotacceptedbets',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
   }
 
   onPageSizeChanged() {

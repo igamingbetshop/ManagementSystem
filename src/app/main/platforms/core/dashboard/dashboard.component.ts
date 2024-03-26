@@ -67,7 +67,23 @@ export class DashboardComponent {
     dates: []
   }
 
-  public providerBetsChart: [];
+  public providerBetsChart = {
+    gameProviderId: [],
+    gameProviderName: [],
+    subProviderId: [],
+    subProviderName: [],
+    totalBetsAmount: [],
+    totalBetsAmountFromBetShop: [],
+    totalBetsAmountFromInternet: [],
+    totalBetsCount: [],
+    totalBonusBetsAmount: [],
+    totalBonusWinsAmount: [],
+    totalGGR: [],
+    totalNGR: [],
+    totalPlayersCount: [],
+    totalWinsAmount: [],
+    dates: [],
+  }
 
   public providerBets;
   public providers;
@@ -163,7 +179,7 @@ export class DashboardComponent {
     this.getWithdrawals();
     this.getPlayersInfo();
     this.getProviderBets();
-    this.providerBetsChart = [];
+    // this.providerBetsChart = [];
   }
 
   setCart(): void {
@@ -194,12 +210,13 @@ export class DashboardComponent {
     this.toDate = DateTimeHelper.getToDate();
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    }
     this.filteredData = this.getFilteredDate();
-    this.selectedItem = time;
     this.getDashboardApiCalls();
   }
 
@@ -514,7 +531,7 @@ export class DashboardComponent {
             this.pbt.TotalWinsAmount += pb.TotalWinsAmount;
 
             const subProviderName = pb.SubProviderName;
-            this.placedBetsChart[subProviderName] = {
+            this.providerBetsChart[subProviderName] = {
               gameProviderId: [],
               gameProviderName: [],
               subProviderId: [],
@@ -533,22 +550,22 @@ export class DashboardComponent {
             };
 
             pb.DailyInfo.forEach((data) => {
-              this.placedBetsChart[subProviderName].dates.push(this.datePipe.transform(data.Date, 'shortDate'));
-              this.placedBetsChart[subProviderName].totalBetsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsAmount]);
-              this.placedBetsChart[subProviderName].totalBetsAmountFromBetShop.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsAmountFromBetShop]);
-              this.placedBetsChart[subProviderName].totalBetsAmountFromInternet.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsAmountFromInternet]);
-              this.placedBetsChart[subProviderName].totalBetsCount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsCount]);
-              this.placedBetsChart[subProviderName].totalBonusBetsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBonusBetsAmount]);
-              this.placedBetsChart[subProviderName].totalBonusWinsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBonusWinsAmount]);
-              this.placedBetsChart[subProviderName].totalGGR.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalGGR]);
-              this.placedBetsChart[subProviderName].totalNGR.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalNGR]);
-              this.placedBetsChart[subProviderName].totalPlayersCount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalPlayersCount]);
-              this.placedBetsChart[subProviderName].totalWinsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalWinsAmount]);
+              this.providerBetsChart[subProviderName].dates.push(this.datePipe.transform(data.Date, 'shortDate'));
+              this.providerBetsChart[subProviderName].totalBetsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsAmount]);
+              this.providerBetsChart[subProviderName].totalBetsAmountFromBetShop.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsAmountFromBetShop]);
+              this.providerBetsChart[subProviderName].totalBetsAmountFromInternet.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsAmountFromInternet]);
+              this.providerBetsChart[subProviderName].totalBetsCount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBetsCount]);
+              this.providerBetsChart[subProviderName].totalBonusBetsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBonusBetsAmount]);
+              this.providerBetsChart[subProviderName].totalBonusWinsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalBonusWinsAmount]);
+              this.providerBetsChart[subProviderName].totalGGR.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalGGR]);
+              this.providerBetsChart[subProviderName].totalNGR.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalNGR]);
+              this.providerBetsChart[subProviderName].totalPlayersCount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalPlayersCount]);
+              this.providerBetsChart[subProviderName].totalWinsAmount.push([this.datePipe.transform(data.Date, 'shortDate'), data.TotalWinsAmount]);
             });
           });
           if (this.selectedGridName == 'Dashboard.BetsByProviders') {
             this.selectCart();
-          }
+          }          
           this.providersLoading = false;
         } else {
           this.providerBets = [];
@@ -560,20 +577,19 @@ export class DashboardComponent {
   }
 
   handleCartProviderBets(item) {
-
     this.chartItemName = item;
     this.options.title.text = item;
     this.options.series = [
-      { type: undefined, name: this.translate.instant('Dashboard.BetsAmount'), data: this.placedBetsChart[item]?.totalBetsAmount },
-      { type: undefined, name: this.translate.instant('Dashboard.BetsAmountFromBetShop'), data: this.placedBetsChart[item]?.totalBetsAmountFromBetShop },
-      { type: undefined, name: this.translate.instant('Dashboard.BetsAmountFromInternet'), data: this.placedBetsChart[item]?.totalBetsAmountFromInternet },
-      { type: undefined, name: this.translate.instant('Segments.TotalBetsCount'), data: this.placedBetsChart[item]?.totalBetsCount },
-      { type: undefined, name: this.translate.instant('Dashboard.BonusBetsAmount'), data: this.placedBetsChart[item]?.totalBonusBetsAmount },
-      { type: undefined, name: this.translate.instant('Dashboard.BonusWinsAmount'), data: this.placedBetsChart[item]?.totalBonusWinsAmount },
-      { type: undefined, name: this.translate.instant('Dashboard.TotalGGR'), data: this.placedBetsChart[item]?.totalGGR },
-      { type: undefined, name: this.translate.instant('Dashboard.TotalNGR'), data: this.placedBetsChart[item]?.totalNGR },
-      { type: undefined, name: this.translate.instant('Dashboard.TotalPlayersCount'), data: this.placedBetsChart[item]?.totalPlayersCount },
-      { type: undefined, name: this.translate.instant('Dashboard.TotalWinsAmount'), data: this.placedBetsChart[item]?.totalWinsAmount }
+      { type: undefined, name: this.translate.instant('Dashboard.BetsAmount'), data: this.providerBetsChart[item]?.totalBetsAmount },
+      { type: undefined, name: this.translate.instant('Dashboard.BetsAmountFromBetShop'), data: this.providerBetsChart[item]?.totalBetsAmountFromBetShop },
+      { type: undefined, name: this.translate.instant('Dashboard.BetsAmountFromInternet'), data: this.providerBetsChart[item]?.totalBetsAmountFromInternet },
+      { type: undefined, name: this.translate.instant('Segments.TotalBetsCount'), data: this.providerBetsChart[item]?.totalBetsCount },
+      { type: undefined, name: this.translate.instant('Dashboard.BonusBetsAmount'), data: this.providerBetsChart[item]?.totalBonusBetsAmount },
+      { type: undefined, name: this.translate.instant('Dashboard.BonusWinsAmount'), data: this.providerBetsChart[item]?.totalBonusWinsAmount },
+      { type: undefined, name: this.translate.instant('Dashboard.TotalGGR'), data: this.providerBetsChart[item]?.totalGGR },
+      { type: undefined, name: this.translate.instant('Dashboard.TotalNGR'), data: this.providerBetsChart[item]?.totalNGR },
+      { type: undefined, name: this.translate.instant('Dashboard.TotalPlayersCount'), data: this.providerBetsChart[item]?.totalPlayersCount },
+      { type: undefined, name: this.translate.instant('Dashboard.TotalWinsAmount'), data: this.providerBetsChart[item]?.totalWinsAmount }
     ];
     this.subscribeCart();
   }

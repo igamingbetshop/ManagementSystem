@@ -16,6 +16,22 @@ const routes: Routes = [
         loadChildren: () => import('./tabs/downline/downline.module').then(m => m.DownlineModule),
       },
       {
+        path: 'commission-plan',
+        loadChildren: () => import('./tabs/commission-plan/commision-plan.module').then(m => m.CommissionPlanModule),
+      },
+      {
+        path: 'user-settings',
+        loadChildren: () => import('./tabs/user-settings/user-settings.module').then(m => m.UserSettingsModule),
+      },
+      {
+        path: 'employees',
+        loadChildren: () => import('./tabs/employees/employees.module').then(m => m.EmployeesModule),
+      },
+      {
+        path: 'corrections',
+        loadChildren: () => import('./tabs/corrections/corrections.module').then(m => m.CorrectionsModule),
+      },
+      {
         path: '',
         redirectTo: 'main',
         pathMatch: 'full'

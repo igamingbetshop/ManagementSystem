@@ -18,10 +18,9 @@ import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helpe
 import { DateAdapter } from "@angular/material/core";
 import { OddsTypePipe } from "../../../../../../../core/pipes/odds-type.pipe";
 import { GridRowModelTypes, Controllers, Methods, OddsTypes, ModalSizes, GridMenuIds } from 'src/app/core/enums';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
-import { IsRowMaster } from 'ag-grid-enterprise';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-bets',
@@ -30,18 +29,18 @@ import { IsRowMaster } from 'ag-grid-enterprise';
 })
 export class BetsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowData = [];
-  public statusNames = [];
-  public statusFilterEntities = [];
-  public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public detailsInline;
-  public masterDetail;
-  public filteredData;
-  public nestedFrameworkComponents = {
+  clientId: number;
+  rowData = [];
+  statusNames = [];
+  statusFilterEntities = [];
+  rowModelType: string = GridRowModelTypes.SERVER_SIDE;
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  detailsInline;
+  masterDetail;
+  filteredData;
+  nestedFrameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
@@ -49,19 +48,18 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     agDateTimeFilter: AgDateTimeFilter
   };
 
-  public isRowMaster: IsRowMaster = (dataItem: any) => {
-    return this.providers.includes(dataItem.ProductId);
-  };
+  isRowMaster;
 
-  public detailCellRendererParams: any;
-  public totalBetAmount;
-  public totalWinAmount;
-  public playerCurrency;
-  public selectedItem = 'today';
+  detailCellRendererParams: any;
+  totalBetAmount;
+  totalWinAmount;
+  playerCurrency;
+  selectedItem = 'today';
   private oddsType: number;
-  public accounts = [];
-  public accountId = null;
+  accounts = [];
+  accountId = null;
   providers = [];
+  pageIdName: string;
 
   constructor(
     private apiService: CoreApiService,
@@ -454,12 +452,25 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   ngOnInit(): void {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.getClientAccounts();
-    this.startDate();
+    this.setTime();
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Bets')}`;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
     this.toDate = new Date(this.toDate.setDate(this.toDate.getDate()));
     this.getDocumenStatesEnum();
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.getProviders();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
   }
 
   getProviders() {
@@ -482,9 +493,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
       true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.providers = data.ResponseObject.Entities.map(provider => provider.Id);
-          if (this.rowData?.length > 0) {
-            this.getCurrentPage();
-          }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -581,6 +589,11 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
                   WinAmount: `${this.totalWinAmount.toLocaleString('en-US', { maximumFractionDigits: 2 }).replace(/,/g, ' ')} ${this.playerCurrency}`
                 }
               ]);
+
+              this.isRowMaster = (dataItem: any) => {
+                return this.providers.includes(dataItem.ProductId);
+              };
+
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
@@ -588,7 +601,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
       }
     }
   }
-
 
   onRowGroupOpened(params) {
     if (params.node.expanded) {
@@ -639,31 +651,13 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 
 }
