@@ -5,11 +5,6 @@
 
 <div class="container-popup">
 
-  @defer (when data?.DeviceType) {
-    <app-select-device-type (toDeviceChange)="onDeviceTypeChange($event)" />
-    <br>
-  }
-
   <div class="language-content"
        *ngFor="let item of translationData.Translations; let i = index">
     <div class="language-dropdown" (click)="openedIndex = i">

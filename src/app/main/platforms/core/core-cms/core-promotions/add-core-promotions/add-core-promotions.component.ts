@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,7 +30,6 @@ import { compressImage } from 'src/app/core/utils';
   imports: [
     CommonModule,
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -46,7 +44,6 @@ import { compressImage } from 'src/app/core/utils';
 })
 export class AddCorePromotionsComponent implements OnInit {
 
-
   partners: any[] = [];
   partnerId = null;
   formGroup: UntypedFormGroup;
@@ -59,7 +56,7 @@ export class AddCorePromotionsComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddCorePromotionsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { ParentId: number, Type: number},
+    @Inject(MAT_DIALOG_DATA) public data: { ParentId: number, Type: number },
 
     private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
@@ -95,7 +92,7 @@ export class AddCorePromotionsComponent implements OnInit {
   }
 
   getPromotionTypes(val) {
-    if(!this.isParent)  {
+    if (!this.isParent) {
       this.partnerId = +val;
     }
     this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
@@ -116,17 +113,14 @@ export class AddCorePromotionsComponent implements OnInit {
     fromDay.setMinutes(0);
     fromDay.setSeconds(0);
     fromDay.setMilliseconds(0);
-
     let toDay = new Date();
     toDay.setHours(0);
     toDay.setMinutes(0);
     toDay.setSeconds(0);
     toDay.setMilliseconds(0);
     toDay.setDate(toDay.getDate() + 1);
-
     this.formGroup.get('StartDate').setValue(fromDay);
     this.formGroup.get('FinishDate').setValue(toDay);
-
   }
 
 
@@ -150,34 +144,29 @@ export class AddCorePromotionsComponent implements OnInit {
     if (files) {
       const validDocumentSize = files.size < 5000000;
       const validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif)$/.test(event.target.value);
-      if (validDocumentFormat && validDocumentSize)
-      {
+      if (validDocumentFormat && validDocumentSize) {
         const reader = new FileReader();
         reader.onload = () => {
           const binaryString = reader.result as string;
-
-          if(files.size < 900000)
-          {
+          if (files.size < 900000) {
             this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
             this.formGroup.get('ImageName').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
           }
-          else
-          {
+          else {
             const img = new Image();
             img.src = binaryString;
             img.onload = (data) => {
-              compressImage(img, 0.7).toBlob( (blob) => {
-                  if (blob)
-                  {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(blob);
-                    reader.onloadend = () =>  {
-                      const base64data = reader.result as string;
-                      this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
-                      this.formGroup.get('ImageName').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
-                    }
+              compressImage(img, 0.7).toBlob((blob) => {
+                if (blob) {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(blob);
+                  reader.onloadend = () => {
+                    const base64data = reader.result as string;
+                    this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
+                    this.formGroup.get('ImageName').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
                   }
-                },
+                }
+              },
                 files.type,
                 0.7)
             }
@@ -188,7 +177,7 @@ export class AddCorePromotionsComponent implements OnInit {
       } else {
         this.formGroup.get('Image').patchValue(null);
         files = null;
-        SnackBarHelper.show(this._snackBar, {Description : 'Not valid format jpg, png, or Gif and size < 700KB', Type : "error"});
+        SnackBarHelper.show(this._snackBar, { Description: 'Not valid format jpg, png, or Gif and size < 700KB', Type: "error" });
       }
     }
   }
@@ -266,8 +255,8 @@ export class AddCorePromotionsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
-        this.dialogRef.close(obj);
-        this.submitting = false;
+          this.dialogRef.close(obj);
+          this.submitting = false;
 
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });

@@ -32,11 +32,12 @@ import { COUNTRY_STATUSES } from 'src/app/core/constantes/statuses';
   ]
 })
 export class AddCountrySettingComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public currencies = [];
-  public paymentSetting;
-  public countries: ServerCommonModel[] = [];
-  public statuses = COUNTRY_STATUSES;
+  formGroup: UntypedFormGroup;
+  currencies = [];
+  paymentSetting;
+  countries: ServerCommonModel[] = [];
+  statuses = COUNTRY_STATUSES;
+  isSendingReqest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddCountrySettingComponent>,
               private apiService: CoreApiService,
@@ -76,6 +77,7 @@ export class AddCountrySettingComponent implements OnInit {
 
   submit() {
     const setting = this.formGroup.getRawValue();
+    this.isSendingReqest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PARTNER, Methods.SAVE_PARTNER_COUNTRY_SETTING).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -83,6 +85,7 @@ export class AddCountrySettingComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false; 
     });
   }
 

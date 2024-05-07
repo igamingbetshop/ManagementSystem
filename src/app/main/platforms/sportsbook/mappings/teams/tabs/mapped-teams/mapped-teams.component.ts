@@ -184,7 +184,7 @@ export class MappedTeamsTabComponent extends BasePaginatedGridComponent implemen
         // paging.PageSize = this.cacheBlockSize;
         paging.PageSize = Number(this.cacheBlockSize);
         paging.ObjectTypeId = 1;
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         this.apiService.apiPost('teams/mapped', paging,
           ).pipe(take(1)).subscribe(data => {

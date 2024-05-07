@@ -14,7 +14,6 @@
         </div>
       </div>
 
-
       <div>
         <div class="first-hand">{{'Common.State' | translate}}</div>
         <div class="second-hand">{{ status[commonSettings?.Status - 1]?.Name}}</div>
@@ -139,9 +138,7 @@
         <div class="first-hand">{{'Bonuses.ValidForAwardingInHours' | translate}}</div>
         <div class="second-hand">{{commonSettings?.ValidForAwarding}}</div>
         <div class="form-field form-input">
-          <!-- <ng-container> -->
             <input matInput type="number" [formControlName]="'ValidForAwarding'">
-          <!-- </ng-container> -->
         </div>
       </div>
 
@@ -190,7 +187,7 @@
         <div class="first-hand">{{'Bonuses.TurnoverCount' | translate}}</div>
         <div class="second-hand">{{commonSettings?.TurnoverCount}}</div>
         <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'TurnoverCount'" readonly>
+            <input matInput type="number" [formControlName]="'TurnoverCount'" [readonly]="this.commonSettings?.BonusTypeId != 13 && this.commonSettings?.BonusTypeId != 10  ">
         </div>
       </div>
 

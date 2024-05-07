@@ -1,22 +1,22 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {CalculationComponent} from './calculation.component';
-import {RouterModule, Routes} from '@angular/router';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CalculationComponent } from './calculation.component';
+import { RouterModule, Routes } from '@angular/router';
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {MatGridListModule} from "@angular/material/grid-list";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
-import {MatSelectModule} from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
 
-import {MatInputModule} from "@angular/material/input";
+import { MatInputModule } from "@angular/material/input";
 
-import {MatButtonModule} from "@angular/material/button";
+import { MatButtonModule } from "@angular/material/button";
 
-import {AgGridModule} from "ag-grid-angular";
-import {TranslateModule} from "@ngx-translate/core";
+import { AgGridModule } from "ag-grid-angular";
+import { TranslateModule } from "@ngx-translate/core";
+import { ResultsComponent } from './results/results.component';
 
 const routes: Routes = [
   {
@@ -26,11 +26,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  declarations: [CalculationComponent],
   imports: [
     CommonModule,
     MatSnackBarModule,
     FormsModule,
-    FlexLayoutModule,
     MatGridListModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -39,9 +39,9 @@ const routes: Routes = [
     MatButtonModule,
     RouterModule.forChild(routes),
     AgGridModule,
-    TranslateModule
-  ],
-  declarations: [CalculationComponent]
+    TranslateModule,
+    ResultsComponent
+  ]
 })
 export class CalculationModule {
 }

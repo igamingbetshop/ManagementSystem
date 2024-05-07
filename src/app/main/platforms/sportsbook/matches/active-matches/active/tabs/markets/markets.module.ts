@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MarketsComponent } from './markets.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -12,10 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { AgGridModule } from 'ag-grid-angular';
 import { AddMarketComponent } from './add-market/add-market.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatIconModule} from "@angular/material/icon";
-import {TranslateModule} from "@ngx-translate/core";
-import {OddsTypePipe} from "../../../../../../../../core/pipes/odds-type.pipe";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+import { TranslateModule } from "@ngx-translate/core";
+import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe";
 
 const routes: Routes = [
   {
@@ -29,7 +28,6 @@ const routes: Routes = [
     CommonModule,
     MatSnackBarModule,
     FormsModule,
-    FlexLayoutModule,
     MatGridListModule,
     ReactiveFormsModule,
     MatFormFieldModule,

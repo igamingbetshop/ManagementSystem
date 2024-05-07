@@ -9,7 +9,6 @@ import {take} from "rxjs/operators";
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
@@ -19,20 +18,33 @@ import {MatButtonModule} from "@angular/material/button";
 @Component({
   selector: 'app-create-agent',
   templateUrl: './create-agent.component.html',
-  styleUrl: './create-agent.component.scss'
+  styleUrl: './create-agent.component.scss',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
 })
 export class CreateAgentComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partners: any[] = [];
-  public types: any[] = [];
-  public states: any[] = [];
-  public currencies: any[] = [];
-  public genders: any[] = [];
-  public languages: any[] = [];
-  public passRegEx;
-  public partnerId;
-  public typeId;
-  public typeName;
+  formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  types: any[] = [];
+  states: any[] = [];
+  currencies: any[] = [];
+  genders: any[] = [];
+  languages: any[] = [];
+  passRegEx;
+  partnerId;
+  typeId;
+  typeName;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateAgentComponent>,
@@ -143,6 +155,7 @@ export class CreateAgentComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.USER, Methods.SAVE_USER).pipe(take(1)).subscribe(data => {
@@ -151,26 +164,7 @@ export class CreateAgentComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false;
     });
   }
-}
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule
-  ],
-  declarations: [CreateAgentComponent]
-})
-
-export class CreateAgentModule {
-
 }

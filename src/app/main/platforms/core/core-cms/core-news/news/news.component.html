@@ -93,7 +93,7 @@
 
       <div *ngIf="isChilde">
         <div class="first-hand">{{'Partners.Type' | translate}}</div>
-        <div class="second-hand">{{news?.Type}}</div>
+        <div class="second-hand">{{news?.TypeName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Type'">
             <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>

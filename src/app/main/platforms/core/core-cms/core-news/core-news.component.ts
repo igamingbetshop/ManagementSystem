@@ -11,7 +11,7 @@ import { OpenerComponent } from 'src/app/main/components/grid-common/opener/open
 import { CellDoubleClickedEvent } from 'ag-grid-community';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import {ACTIVITY_STATUSES, NEWS_TYPES} from 'src/app/core/constantes/statuses';
 import { ActivatedRoute } from '@angular/router';
 import { NewsService } from './news.service';
 
@@ -34,10 +34,15 @@ export class CoreNewsComponent extends BasePaginatedGridComponent implements OnI
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    menuTabs: [
+      'filterMenuTab',
+      'generalMenuTab',
+    ],
     minWidth: 50,
   };
 
   states = ACTIVITY_STATUSES;
+  types = NEWS_TYPES;
   tableData = [];
   newsId: any;
   childId: any;
@@ -84,19 +89,26 @@ export class CoreNewsComponent extends BasePaginatedGridComponent implements OnI
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ImageName',
       },
-      {
-        headerName: 'Common.State',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'State',
-        filter: 'agTextColumnFilter',
-        filterParams:{
-          filterOptions:['startsWith']
-        }
-      },
+
       {
         headerName: 'Partners.StyleType',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'StyleType',
+      },
+      {
+        headerName: 'Common.State',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'State',
+        floatingFilter: false,
+        /* filter: 'agTextColumnFilter',
+         filterParams:{
+           filterOptions:['startsWith']
+         }*/
+        filter:'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.states
+        },
       },
       {
         headerName: 'Common.Order',
@@ -235,6 +247,7 @@ export class CoreNewsComponent extends BasePaginatedGridComponent implements OnI
             const _data = data.ResponseObject;
             _data.forEach((element) => {
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
+              element['Type'] = this.types.find((type) => type.Id == element.Type)?.Name;
             });
             this.tableData = _data;
           } else {

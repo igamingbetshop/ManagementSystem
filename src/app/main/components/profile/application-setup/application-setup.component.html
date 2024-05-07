@@ -5,7 +5,7 @@
 
 <div class="sub-title">{{'Profile.CreateAnAccountByScanningThisQRCodeWith' | translate}}</div>
 
-<img [src]="qrCodeImageSrc" alt="QR" class="qr" [width]="_qrCodeWidth" [height]="_qrCodeHeight">
+<img [src]="qrCodeImageSrc" alt="QR" class="qr" [width]="_qrCodeWidth + 20" [height]="_qrCodeHeight + 20">
 
 <span class="text">
   {{"Profile.TheNewAccountWillBeNamedAfterYourUsername" | translate}} {{userName}}

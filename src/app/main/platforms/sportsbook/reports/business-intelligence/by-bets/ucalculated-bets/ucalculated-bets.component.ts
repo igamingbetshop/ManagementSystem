@@ -1,10 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 
-import { take } from "rxjs/operators";
 import { MatIconModule } from "@angular/material/icon";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { TranslateModule } from "@ngx-translate/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -27,7 +25,6 @@ import { SportsbookApiService } from '../../../../services/sportsbook-api.servic
     CommonModule,
     MatIconModule,
     FormsModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -39,14 +36,14 @@ import { SportsbookApiService } from '../../../../services/sportsbook-api.servic
 })
 export class UcalculatedBetsComponent implements OnInit {
   public formGroup: UntypedFormGroup;
-  public finishedMatches: {[key: string]: any}[];
+  public finishedMatches: { [key: string]: any }[];
 
   constructor(
     public dialogRef: MatDialogRef<UcalculatedBetsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {[key: string]: any}[],
+    @Inject(MAT_DIALOG_DATA) public data: { [key: string]: any }[],
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
-    ) {
+  ) {
   }
 
   ngOnInit(): void {
@@ -61,21 +58,11 @@ export class UcalculatedBetsComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+  }
 
-    // this.apiService.apiPost(`report/${this.path}`,
-    //   {
-    //     BetIds: [this.betId],
-    //     TypeId: obj.Kind,
-    //     Comment: obj.Comment
-    //   })
-    //   .pipe(take(1))
-    //   .subscribe(res => {
-    //     if (res.Code === 0) {
-    //       this.dialogRef.close(obj);
-    //     } else {
-    //       SnackBarHelper.show(this._snackBar, { Description: obj.Description, Type: "error" });
-    //     }
-    //   })
+  onRedirectToFineshed(id: number) {
+    const url = `/main/sportsbook/matches/finished/finish/main?finishId=${id}`;
+    window.open(url, '_blank');
   }
 
 }

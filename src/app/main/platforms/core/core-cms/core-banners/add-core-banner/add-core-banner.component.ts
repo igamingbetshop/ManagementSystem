@@ -1,6 +1,5 @@
 import {CommonModule} from '@angular/common';
-import {Component, NgModule, OnInit} from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import {Component, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators, FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 
@@ -46,7 +45,6 @@ export const pagingSource = {
   imports: [
     CommonModule,
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -65,27 +63,27 @@ export const pagingSource = {
 })
 export class AddCoreBannerComponent implements OnInit {
 
-  public partners: any[] = [];
-  public fragments: any[] = [];
-  public widgets: any[] = [];
-  public partnerId = null;
-  public formGroup: UntypedFormGroup;
-  public bannerTypes: any = {};
-  public bannerTypeId: number = 1;
+  partners: any[] = [];
+  fragments: any[] = [];
+  widgets: any[] = [];
+  partnerId = null;
+  formGroup: UntypedFormGroup;
+  bannerTypes: any = {};
+  bannerTypeId: number = 1;
+  isSendingReqest = false; 
+  bannerVisibilityTypes:any[] = [];
 
-  public bannerVisibilityTypes:any[] = [];
-
-  public categorySource = {
+  categorySource = {
     types: [],
     selectedType: {Id: '1', Name: 'Category 1'}
   };
 
-  public mainTypes = ['Page Specific', 'Category Specific', 'Fragmental'];
-  public selectedMainType = 'Page Specific';
+  mainTypes = ['Page Specific', 'Category Specific', 'Fragmental'];
+  selectedMainType = 'Page Specific';
 
-  public fragmentalSource: any = {};
-  public environments: any[] = [];
-  public selectedEnvironmentId = null;
+  fragmentalSource: any = {};
+  environments: any[] = [];
+  selectedEnvironmentId = null;
 
   constructor(
     public dialogRef: MatDialogRef<AddCoreBannerComponent>,
@@ -275,7 +273,7 @@ export class AddCoreBannerComponent implements OnInit {
 
   onSubmit() {
     const request = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true;
     if (this.bannerTypes.types.length == 0) {
       delete request.Type;
     }
@@ -294,6 +292,7 @@ export class AddCoreBannerComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false;
       });
   }
 }

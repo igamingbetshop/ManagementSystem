@@ -122,7 +122,7 @@
 
     <mat-form-field *ngIf="bannerTypeId == 4 || bannerTypeId == 5">
       <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
-      <mat-select #ban (selectionChange)="onBannerTypeChange(ban.value)" [formControlName]="'SportId'"
+      <mat-select [formControlName]="'SportId'"
         placeholder="{{'Sport.SelectSport' | translate}}">
         <mat-option *ngFor="let sport of sports" [value]="sport.Id">{{sport.Name}}</mat-option>
       </mat-select>

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,7 +18,21 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
 @Component({
   selector: 'app-create-market',
   templateUrl: './create-market.component.html',
-  styleUrls: ['./create-market.component.scss']
+  styleUrls: ['./create-market.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule
+  ],
+
 })
 export class CreateMarketComponent implements OnInit {
 
@@ -103,29 +116,5 @@ export class CreateMarketComponent implements OnInit {
       }
     });
   }
-
-}
-
-
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule
-  ],
-  declarations: [CreateMarketComponent]
-})
-
-export class CreateMarketModule
-{
 
 }

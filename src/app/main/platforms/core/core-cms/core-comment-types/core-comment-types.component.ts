@@ -126,17 +126,7 @@ export class CoreCommentTypesComponent extends BasePaginatedGridComponent implem
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.apiService.apiPost(this.configService.getApiUrl, data,
-          true, Controllers.CONTENT, Methods.SAVE_COMMENT_TEMPLATE)
-          .pipe(take(1))
-          .subscribe(data => {
-            if (data.ResponseCode === 0) {
-              this.getPage();
-            } else {
-              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-            }
-          });
-
+        this.getPage();
       }
     })
   }

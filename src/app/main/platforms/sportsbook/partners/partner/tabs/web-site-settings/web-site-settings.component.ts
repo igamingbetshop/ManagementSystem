@@ -136,7 +136,8 @@ export class WebSiteSettingsComponent implements OnInit {
   async copyPartnerWebSiteSettings() {
     const { CopyWebsiteSettingsComponent } = await import('./copy-website-settings/copy-website-settings.component');
     const dialogRef = this.dialog.open(CopyWebsiteSettingsComponent, {
-      width: ModalSizes.MEDIUM
+      width: ModalSizes.MEDIUM,
+      data: {deviceType: this.deviceType,}
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {

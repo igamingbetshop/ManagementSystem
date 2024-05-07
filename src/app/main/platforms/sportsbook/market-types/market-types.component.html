@@ -66,20 +66,10 @@
       </div>
 
       <div class="grid-action">
-        <div class="partner-dropdown">
-          <mat-select
-            [(value)]="partnerId"
-            (selectionChange)="onPartnerChange1($event.value)"
-            placeholder="{{'Partners.SelectPartner' | translate}}"
-            panelClass="overlay-dropdown top"
-            disableOptionCentering>
-            <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
-            <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
-          </mat-select>
-        </div>
 
         <button mat-stroked-button class="mat-btn" [class.disabled]="!partnerId" (click)="onAddPartnerSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
         <button mat-stroked-button class="mat-btn"  (click)="addMarketType()">{{'Sport.AddMarketType' | translate}}</button>
+        <input class="pagination-input" readonly type="text" [value]="rowData.length">
       </div>
 
     </div>
@@ -112,6 +102,7 @@
 
       <div class="grid-action">
         <button mat-stroked-button class="mat-btn" (click)="addSelectionType()">{{'Sport.AddSelectionType' | translate}}</button>
+        <input class="pagination-input" readonly type="text" [value]="rowData1.length">
       </div>
 
     </div>

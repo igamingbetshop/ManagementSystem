@@ -39,17 +39,17 @@ import { RECEIVER_TYPES } from 'src/app/core/constantes/statuses';
   ]
 })
 export class AddAnnouncementsComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public announcementTypes: any[] = [];
+  formGroup: UntypedFormGroup;
+  announcementTypes: any[] = [];
+  isSendingReqest = false;
+  partners: any[] = [];
+  partnerId;
+  announcement: any;
+  isEdit = false;
+  openedIndex = 0;
+  validatorsDisabled = false;
 
-  public partners: any[] = [];
-  public partnerId;
-  public announcement: any;
-  public isEdit = false;
-  public openedIndex = 0;
-  public validatorsDisabled = false;
-
-  public ReceiverTypeIds = RECEIVER_TYPES;
+  ReceiverTypeIds = RECEIVER_TYPES;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { partners: any[], partnerId, announcementTypes: any[], announcement: any },
@@ -133,7 +133,7 @@ export class AddAnnouncementsComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-
+    this.isSendingReqest = true;
     let announcement = this.formGroup.getRawValue();
     announcement.State == 1 ? announcement.State = 1 : announcement.State = 2;
 
@@ -154,7 +154,7 @@ export class AddAnnouncementsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-
+        this.isSendingReqest = false;
       });
   }
 }

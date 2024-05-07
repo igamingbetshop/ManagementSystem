@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,7 +30,6 @@ import { compressImage } from 'src/app/core/utils';
   imports: [
     CommonModule,
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -52,6 +50,7 @@ export class AddCoreNewsComponent implements OnInit {
   types = NEWS_TYPES;
   environments: any[] = [];
   isParent: boolean;
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddCoreNewsComponent>,
@@ -224,7 +223,7 @@ export class AddCoreNewsComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true;
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_NEWS)
       .pipe(take(1))
@@ -234,7 +233,7 @@ export class AddCoreNewsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-
+        this.isSendingReqest = false;
       })
 
 

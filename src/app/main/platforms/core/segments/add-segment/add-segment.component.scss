@@ -43,3 +43,16 @@
     }
   }
 }
+
+.mat-mdc-form-field {
+  width: 98%!important;
+}
+
+.mat-datepicker-input {
+  background-color: transparent !important;
+}
+
+.mat-datepicker-toggle {
+  position: absolute;
+  top: -25px;
+}

@@ -188,7 +188,8 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
   async addKey() {
     const {AddKeyComponent} = await import('./add-key/add-key.component');
     const dialogRef = this.dialog.open(AddKeyComponent, {
-      width: ModalSizes.MEDIUM
+      width: ModalSizes.MEDIUM,
+      data: {type: 1}
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {

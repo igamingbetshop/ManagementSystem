@@ -1,19 +1,23 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {SportsbookApiService} from "../../../../../services/sportsbook-api.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ActivatedRoute} from "@angular/router";
-import {AgBooleanFilterComponent} from "../../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../../../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../../../../../components/grid-common/checkbox-renderer.component";
-import {TextEditorComponent} from "../../../../../../../components/grid-common/text-editor.component";
-import {SelectRendererComponent} from "../../../../../../../components/grid-common/select-renderer.component";
-import {GridRowModelTypes} from "../../../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+
+import { AgGridAngular } from "ag-grid-angular";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActivatedRoute } from "@angular/router";
+import { take } from "rxjs/operators";
+import { IRowNode } from "ag-grid-community";
+
+import { SportsbookApiService } from "../../../../../services/sportsbook-api.service";
+import { AgBooleanFilterComponent } from "../../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../../../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../../../../../components/grid-common/checkbox-renderer.component";
+import { TextEditorComponent } from "../../../../../../../components/grid-common/text-editor.component";
+import { SelectRendererComponent } from "../../../../../../../components/grid-common/select-renderer.component";
+import { GridRowModelTypes } from "../../../../../../../../core/enums";
+import { BasePaginatedGridComponent } from "../../../../../../../components/classes/base-paginated-grid-component";
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
+import { ResultsComponent } from '../../../../active-matches/active/tabs/calculation/results/results.component';
+import { BET_SELECTION_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-calculation',
@@ -21,7 +25,8 @@ import {IRowNode} from "ag-grid-community";
   styleUrls: ['./calculation.component.scss']
 })
 export class CalculationComponent extends BasePaginatedGridComponent implements OnInit {
-  @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
+  @ViewChild(ResultsComponent) results;
   public path: string = 'matches/uncalculatedselections';
   public name: string = '';
   public number: number;
@@ -49,138 +54,12 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public pageConfig = {};
-  public statusModel = [
-    {"Name": "Uncalculated", "Id": 1},
-    {"Name": "Won", "Id": 2},
-    {"Name": "Lost", "Id": 3},
-    {"Name": "Returned", "Id": 4},
-    {"Name": "PartiallyWon", "Id": 5},
-    {"Name": "PartiallyLost", "Id": 6}
-  ];
-  public calculateOutcomesScore;
-  public templateResults = {
-    "1": [
-      {
-        "RT": 1,
-        "MP": 1,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 5,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 6,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      }
-    ],
-    "2": [
-      {
-        "RT": 1,
-        "MP": 1,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 19,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 20,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 21,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 22,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      }
-    ]
-  }
+  public statusModel = BET_SELECTION_STATUSES
 
   constructor(protected injector: Injector,
-              private apiService: SportsbookApiService,
-              private _snackBar: MatSnackBar,
-              private activateRoute: ActivatedRoute) {
+    private apiService: SportsbookApiService,
+    private _snackBar: MatSnackBar,
+    private activateRoute: ActivatedRoute) {
     super(injector);
     this.columnDefs = [
       {
@@ -256,11 +135,6 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
     this.name = this.activateRoute.snapshot.queryParams.name;
     this.number = this.activateRoute.snapshot.queryParams.number;
     this.sportId = +this.activateRoute.snapshot.queryParams.sportId;
-    this.calculateOutcomesScore = {
-      "MatchId": this.matchId,
-      "Results":this.templateResults[this.sportId]
-      // "Results": this.templateResults[this.number]
-    };
     this.pageConfig = {
       MatchId: this.matchId
     };
@@ -282,7 +156,7 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
             }
           })
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -292,17 +166,17 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
     this.onCellValueChanged(event);
   }
 
-  onCellValueChanged(event){
-    if(event.oldValue !== event.value){
+  onCellValueChanged(event) {
+    if (event.oldValue !== event.value) {
       let findedNode: IRowNode;
       let node = event.node.rowIndex;
       this.gridApi.forEachNode(nod => {
-        if(nod.rowIndex == node){
+        if (nod.rowIndex == node) {
           findedNode = nod;
         }
       })
       this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.gridApi.redrawRows({rowNodes: [findedNode]});
+      this.gridApi.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
@@ -313,14 +187,14 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
       SelectionId: row.SelectionId,
       Index: -1
     };
-    let updatedSelections = {Selections: []};
+    let updatedSelections = { Selections: [] };
 
     updatedSelections.Selections.push(sData);
     if (row.SelectionStatus == 2 && row.MarketSuccessOutcomeCount == 1) {
       for (let i = 0; i < this.rowData.length; i++) {
         if (row.MarketId == this.rowData[i].MarketId) {
           if (this.rowData[i].SelectionId != sData.SelectionId)
-            updatedSelections.Selections.push({Status: 3, SelectionId: this.rowData[i].SelectionId, Index: i});
+            updatedSelections.Selections.push({ Status: 3, SelectionId: this.rowData[i].SelectionId, Index: i });
         }
       }
     }
@@ -334,7 +208,7 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
               this.rowData[updatedSelections.Selections[j].Index].SelectionStatus = updatedSelections.Selections[j].Status;
           }
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -344,48 +218,11 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   }
 
   autoCalculate() {
-    this.apiService.apiPost('markets/calculateoutcomes', this.calculateOutcomesScore)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.Code === 0) {
-          this.clear();
-
-        } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-        }
-      });
+    this.results.autoCalculate();
   }
 
-  calculateOutcomesScoreChange(type) {
-    if (this.isCalculate(type)) {
-      let result;
-
-      for (let i = 0; i < this.calculateOutcomesScore.Results.length - 1; i++) {
-        if (!result)
-          result = this.calculateOutcomesScore.Results[i].TR[type].V;
-        else {
-          result = result - this.calculateOutcomesScore.Results[i].TR[type].V;
-        }
-      }
-      if (!isNaN(result) && result !== '')
-        this.calculateOutcomesScore.Results[this.calculateOutcomesScore.Results.length - 1].TR[type].V = result;
-    }
-  }
-
-  isCalculate(type) {
-    let count = 0;
-    for (let i = 0; i < this.calculateOutcomesScore.Results.length; i++) {
-      if (this.calculateOutcomesScore.Results[i].TR[type].V === '') {
-        count++;
-      }
-    }
-    return count < 2;
-  }
-
-  clear() {
-    this.calculateOutcomesScore.Results.forEach(result => {
-      result.TR.forEach(tr => tr.V = undefined);
-    });
+  onEditChange() {
+    this.results.isEdit = true;
   }
 
 }

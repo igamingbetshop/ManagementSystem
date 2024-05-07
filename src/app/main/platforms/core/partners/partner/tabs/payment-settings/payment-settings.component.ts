@@ -1,19 +1,20 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {CoreApiService} from "../../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../../core/services";
-import {UntypedFormBuilder} from "@angular/forms";
-import {ActivatedRoute} from "@angular/router";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Controllers, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {Paging} from "../../../../../../../core/models";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { CoreApiService } from "../../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../../core/services";
+import { UntypedFormBuilder } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { Paging } from "../../../../../../../core/models";
 import 'ag-grid-enterprise';
-import {OpenerComponent} from "../../../../../../components/grid-common/opener/opener.component";
-import {MatDialog} from "@angular/material/dialog";
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
+import { MatDialog } from "@angular/material/dialog";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 
 @Component({
   selector: 'app-payment-settings',
@@ -30,25 +31,39 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public columnDefs = [];
   public statusName = [
-    {Id: 1, Name: 'Active'},
-    {Id: 3, Name: 'Hidden'},
-    {Id: 2, Name: 'Inactive'},
+    { Id: 1, Name: 'Active' },
+    { Id: 3, Name: 'Hidden' },
+    { Id: 2, Name: 'Inactive' },
   ];
   public typeNames = [
-    {Id: 2, NickName: null, Name: "Deposit", Info: null},
-    {Id: 1, NickName: null, Name: "Withdraw", Info: null}
-  ]
+    { Id: 2, NickName: null, Name: "Deposit", Info: null },
+    { Id: 1, NickName: null, Name: "Withdraw", Info: null }
+  ];
+  frameworkComponents = {
+    selectRenderer: SelectRendererComponent,
+  }
 
   constructor(
     private apiService: CoreApiService,
     private commonDataService: CommonDataService,
     private fb: UntypedFormBuilder,
-    private activateRoute: ActivatedRoute,
+    public activateRoute: ActivatedRoute,
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     protected injector: Injector,
     public dialog: MatDialog) {
     super(injector);
+  }
+
+  ngOnInit(): void {
+    this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
+    this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
+    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
+    this.getPartnerPayments();
+    this.setColumnDefs();
+  }
+
+  setColumnDefs() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -86,18 +101,39 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
           suppressFilterButton: true,
         },
       },
+      // {
+      //   headerName: 'Common.State',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'StatusName',
+      //   sortable: true,
+      //   resizable: true,
+      //   floatingFilter: true,
+      //   suppressMenu: true,
+      //   floatingFilterComponentParams: {
+      //     suppressFilterButton: true,
+      //   },
+      // },
+
       {
         headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'StatusName',
+        field: 'State',
         sortable: true,
         resizable: true,
-        floatingFilter: true,
-        suppressMenu: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
+        editable: true,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.statusName,
+          suppressAndOrCondition: true
+        },
+        cellRenderer: 'selectRenderer',
+        cellRendererParams: {
+          onchange: this.onSelectChange['bind'](this, "State"),
+          Selections: this.statusName,
         },
       },
+
       {
         headerName: 'Clients.Currency',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -188,20 +224,34 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
-          data.path = this.router.url.split('?')[0] + '/' + params.data.Id;
+          let data = { path: 'main-info', queryParams: null };
+          // data.path = this.router.url.split('?')[0] + '/' + params.data.Id;
+          data.queryParams = { id: params.data.Id };
           return data;
         },
         sortable: false
       }
-    ]
+    ];
   }
 
-  ngOnInit(): void {
-    this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
-    this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
-    this.getPartnerPayments();
+  onSelectChange(key, params, val, event) {
+    params[key] = val;
+    this.onCellValueChanged(event);
+  }
+
+  onCellValueChanged(event) {
+          SnackBarHelper.show(this._snackBar, { Description: "This functionality onder the construction", Type: "error" });
+
+    console.log(event.data, "event.data");
+    
+    // this.apiService.apiPost(this.configService.getApiUrl, event.data, true,
+    //   Controllers.PAYMENT, Methods.UPDATE_PARTNER_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
+    //     if (data.ResponseCode === 0) {
+    //       SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
+    //     } else {
+    //       SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+    //     }
+    //   });
   }
 
   onGridReady(params) {
@@ -215,21 +265,21 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
     paging.PartnerId = +this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, paging, true,
       Controllers.PAYMENT, Methods.GET_PARTNER_PAYMENT_SETTINGS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject.map((items) => {
-          items.PartnerName = this.commonDataService.partners.find((item => item.Id === items.PartnerId))?.Name;
-          items.StatusName = this.statusName.find((item => item.Id === items.State))?.Name;
-          items.TypeName = this.typeNames.find((item => item.Id === items.Type))?.Name;
-          return items;
-        });
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject.map((items) => {
+            items.PartnerName = this.commonDataService.partners.find((item => item.Id === items.PartnerId))?.Name;
+            // items.StatusName = this.statusName.find((item => item.Id === items.State))?.Name;
+            items.TypeName = this.typeNames.find((item => item.Id === items.Type))?.Name;
+            return items;
+          });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   async addPaymentSettings() {
-    const {AddPaymentSettingComponent} = await import('./add-payment-setting/add-payment-setting.component');
+    const { AddPaymentSettingComponent } = await import('./add-payment-setting/add-payment-setting.component');
     const dialogRef = this.dialog.open(AddPaymentSettingComponent, {
       width: ModalSizes.MEDIUM
     });
@@ -241,7 +291,7 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
   }
 
   async copyPartnerSettings() {
-    const {CopySettingsComponent} = await import('../copy-settings/copy-settings.component');
+    const { CopySettingsComponent } = await import('../copy-settings/copy-settings.component');
     const dialogRef = this.dialog.open(CopySettingsComponent, {
       width: ModalSizes.MEDIUM,
       data: {
@@ -250,7 +300,7 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if (data) {}
+      if (data) { }
     });
   }
 

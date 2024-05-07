@@ -22,9 +22,13 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
   @Output() childCharakterData: EventEmitter<any> = new EventEmitter<any>()
   @Output() getParentData: EventEmitter<any> = new EventEmitter<any>()
   partnerId;
+  rowData: any[];
+  states = ACTIVITY_STATUSES;
+  types = NEWS_TYPES;
   frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
   };
+
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   colDefs = [
     {
@@ -67,15 +71,7 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'ImageName',
     },
-    {
-      headerName: 'Common.State',
-      headerValueGetter: this.localizeHeader.bind(this),
-      field: 'State',
-      filter: 'agTextColumnFilter',
-      filterParams:{
-        filterOptions:['startsWith']
-      }
-    },
+
     {
       headerName: 'Common.StartDate',
       headerValueGetter: this.localizeHeader.bind(this),
@@ -107,6 +103,17 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
       field: 'Type',
     },
     {
+      headerName: 'Common.State',
+      headerValueGetter: this.localizeHeader.bind(this),
+      field: 'State',
+      floatingFilter: false,
+      filter:'agDropdownFilter',
+      filterParams: {
+        filterOptions: this.filterService.stateOptions,
+        filterData: this.states
+      },
+    },
+    {
       headerName: 'Common.Order',
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'Order',
@@ -133,11 +140,11 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
     filter: 'agTextColumnFilter',
     floatingFilter: true,
     minWidth: 50,
+    menuTabs: [
+      'filterMenuTab',
+      'generalMenuTab',
+    ],
   };
-
-  rowData: any[];
-  states = ACTIVITY_STATUSES;
-  types = NEWS_TYPES;
 
   constructor(
     protected injector: Injector,
@@ -180,7 +187,6 @@ export class NewsChildsComponent extends BaseGridComponent implements OnInit, On
             rowNode.data.NickName = news.NickName;
             rowNode.data.Order = news.Order;
             rowNode.data.Type = news['Type'] = this.types.find((type) => type.Id == news.Type)?.Name;
-            rowNode.data.State = news['State'] = this.states.find((state) => state.Id == news.State)?.Name;
             this.gridApi.redrawRows({ rowNodes: [rowNode] });
             break;
           }

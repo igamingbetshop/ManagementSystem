@@ -157,7 +157,7 @@ export class AllTeamsComponent extends BasePaginatedGridComponent implements OnI
         const paging = new Paging();
         paging.PageIndex =this.paginationPage - 1;
         paging.PageSize = Number(this.cacheBlockSize);
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
 
         this.apiService.apiPost(this.path, paging,)

@@ -464,6 +464,7 @@
   },
   "Agents": {
     "Agents": "Agents",
+    "Clients": "Clients",
     "Agent": "Agent",
     "MainInfo": "Main Info",
     "Downline": "Downline",
@@ -902,6 +903,7 @@
     "ParentId": "Parent Id",
     "FreeSpinSupport": "Free Spin Support",
     "MobileImageUrl": "Mobile Image Url",
+    "ImageUrl": "Image Url",
     "Jackpot": "Jackpot",
     "BackgroundImageUrl": "Background Image Url",
     "SubproviderId": "Subprovider Id",
@@ -1086,7 +1088,8 @@
     "EnterValidPassword": "Enter valid Password include letter, number, symbol",
     "PositiveNumbers": "Please enter only positive numbers",
     "NaturalNumbers": "Please enter only natural numbers",
-    "EnglishLetters": "Please enter only English letters and natural numbers"
+    "EnglishLetters": "Please enter only English letters and natural numbers",
+    "InvalidImageExtension": "Invalid file extension"
   },
   "Sport": {
     "AddSettings": "Add Settings",
@@ -1641,7 +1644,8 @@
     "SelectAll": "Select All",
     "Settings": "Settings",
     "SelectDeviceType": "Select Device Type",
-    "DeviceType": "Device Type"
+    "DeviceType": "Device Type",
+    "ImageExtension": "Image Extension"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",

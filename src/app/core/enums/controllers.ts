@@ -24,5 +24,8 @@ export enum Controllers {
 
 export enum PBControllers {
   ROUND = 'Round',
-  REPORT = 'Report'
+  REPORT = 'report',
+  PARTNERS = 'partners',
+  COMMON = 'common',
+  CMS = 'cms',
 }

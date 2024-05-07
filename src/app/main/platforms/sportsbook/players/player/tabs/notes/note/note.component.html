@@ -1,0 +1,40 @@
+<div mat-dialog-title>
+  <span>{{'View' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="read-note" *ngIf="isEdit === false">
+
+  <button mat-icon-button class="icon-btn" (click)="editNote()">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <mat-form-field >
+    <mat-label>{{'Clients.Message' | translate}}</mat-label>
+    <input matInput 
+      value={{noteText}} readonly>
+  </mat-form-field>
+
+</div>
+<div class="edit-note" *ngIf="isEdit === true">
+
+  <mat-form-field>
+    <mat-label>{{'Common.State' | translate}}</mat-label>
+    <mat-select [(ngModel)]="stateText" 
+      (selectionChange)="onChange($event)">
+      <mat-option *ngFor="let state of noteStates" [value]="state.Id">{{state.Text}}</mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+  <mat-form-field class="full-height">
+    <mat-label>{{'Clients.Message' | translate}}</mat-label>
+    <textarea matInput
+    [(ngModel)]="noteText"> </textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submitNote()">{{'Common.Save' | translate}}</button>
+</div>
+

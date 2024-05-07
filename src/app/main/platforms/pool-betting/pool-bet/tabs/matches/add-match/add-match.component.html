@@ -1,0 +1,24 @@
+<div mat-dialog-title>
+  <span class="title">{{'PoolBetting.AddMatchToRound' | translate}} : {{this.roundId}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'PoolBetting.RoundId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'PoolBetting.RoundId' | translate" [formControlName]="'RoundId'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'PoolBetting.MatchId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'PoolBetting.MatchId' | translate" [formControlName]="'MatchId'">
+    </mat-form-field>
+
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

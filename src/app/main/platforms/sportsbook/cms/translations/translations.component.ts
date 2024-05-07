@@ -94,7 +94,7 @@ export class TranslationsComponent extends BasePaginatedGridComponent implements
         this.filter.pageindex = params.request.startRow / Number(this.cacheBlockSize);
         this.filter.ObjectTypeId = this.objectTypeId;
         this.filter.SelectedLanguages = this.languageModel.map(el => el.Id);
-        this.setSort(params.request.sortModel, this.filter);
+        this.setSort(params.request.sortModel, this.filter, "OrderByDescending");
         this.setFilter(params.request.filterModel, this.filter);
 
         this.apiService.apiPost('common/translationentries', this.filter,).pipe(take(1)).subscribe(data => {

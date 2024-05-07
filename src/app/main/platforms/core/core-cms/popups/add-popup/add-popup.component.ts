@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -57,17 +57,18 @@ export class AddPopupComponent implements OnInit {
   types: any[] = [];
   status = ACTIVITY_STATUSES;
   segments = [];
-
   fragmentalSource: any = {};
   environments: any[] = [];
   selectedEnvironmentId = null;
-  selectedImage: "dasdasds";
-
+  selectedImage = '';
+  deviceTypes: any[];
+  submitting: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<AddPopupComponent>,
     private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
+    @Inject(MAT_DIALOG_DATA) public data: { deviceTypes: any[] },
     public commonDataService: CommonDataService,
     public configService: ConfigService,
     public dateAdapter: DateAdapter<Date>
@@ -77,6 +78,7 @@ export class AddPopupComponent implements OnInit {
 
   ngOnInit() {
     this.partners = this.commonDataService.partners;
+    this.deviceTypes = this.data.deviceTypes;
     this.createForm();
     this.getDate();
     this.getPopupTypes();
@@ -142,6 +144,7 @@ export class AddPopupComponent implements OnInit {
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
     if (files) {
+      this.selectedImage = files.name;
       const validDocumentSize = files.size < 5000000;
       const validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif)$/.test(event.target.value);
       if (validDocumentFormat && validDocumentSize) {
@@ -164,8 +167,8 @@ export class AddPopupComponent implements OnInit {
                   reader.onloadend = () => {
                     const base64data = reader.result as string;
                     this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
-                    this.formGroup.get('Image').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
-                    this.selectedImage = files.name;
+                    this.formGroup.get('Image').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));             
+  
                   }
                 }
               },
@@ -184,33 +187,6 @@ export class AddPopupComponent implements OnInit {
     }
   }
 
-  uploadFile1(evt) {
-    let files = evt.target.files;
-    if (!files || files.length === 0) {
-      SnackBarHelper.show(this._snackBar,
-        { Description: "Please choose a file", Type: "error" }
-      );
-      return;
-    }
-  
-    let file = files[0];
-    let fileName = file.name.split('.').pop();
-    
-    if (fileName != this.formGroup.get('ImageName').value) {
-      SnackBarHelper.show(this._snackBar,
-        { Description: "Chosen file format does not match the selected format", Type: "error" }
-      );
-      return;
-    }
-  
-    let reader = new FileReader();
-    reader.onload = () => {
-      const binaryString = reader.result as string;
-      this.formGroup.get('MobileImageData').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
-    };
-    reader.readAsDataURL(file);
-  }
-  
 
   getPartnerPaymentSegments(partnerId) {
     this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: partnerId }, true,
@@ -231,14 +207,14 @@ export class AddPopupComponent implements OnInit {
       Type: [null, [Validators.required]],
       State: [null, [Validators.required]],
       ImageName: [null, [Validators.required]],
-      ImageData: [null],
-      MobileImageData: [null],
+      ImageData: [null, [Validators.required]],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
       Page: [null],
       StartDate: [null, [Validators.required]],
       FinishDate: [null, [Validators.required]],
       SegmentIds: [null],
       ClientIds: [null, [this.clientIdsValidator()]],
+      DeviceType: [null],
     });
   }
 
@@ -271,21 +247,47 @@ export class AddPopupComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.formGroup.invalid || this.submitting) {
+      return;
+    }
+  
+    this.submitting = true;
+  
     const request = this.formGroup.getRawValue();
-
+  
     if (request.ClientIds != null) {
       request.ClientIds = request.ClientIds.split(',').map(Number);
     }
-
-    this.apiService.apiPost(this.configService.getApiUrl, request,
-      true, Controllers.CONTENT, Methods.SAVE_POPUP)
-      .pipe(take(1))
-      .subscribe(data => {
+  
+    this.apiService.apiPost(
+      this.configService.getApiUrl,
+      request,
+      true,
+      Controllers.CONTENT,
+      Methods.SAVE_POPUP
+    )
+    .pipe(take(1))
+    .subscribe(
+      (data) => {
         if (data.ResponseCode === 0) {
           this.dialogRef.close('success');
         } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          SnackBarHelper.show(this._snackBar, {
+            Description: data.Description,
+            Type: 'error'
+          });
         }
-      });
+      },
+      (error) => {
+        console.error('Error submitting form:', error);
+        SnackBarHelper.show(this._snackBar, {
+          Description: 'An error occurred while processing your request.',
+          Type: 'error'
+        });
+      }
+    )
+    .add(() => {
+      this.submitting = false;
+    });
   }
 }

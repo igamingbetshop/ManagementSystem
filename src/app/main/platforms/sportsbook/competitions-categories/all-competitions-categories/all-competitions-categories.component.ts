@@ -1,19 +1,18 @@
-import {Component, OnInit, Injector} from '@angular/core';
-import {SportsbookApiService} from '../../services/sportsbook-api.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {GridMenuIds, GridRowModelTypes, ModalSizes} from 'src/app/core/enums';
-import {take} from 'rxjs/operators';
-import {AgBooleanFilterComponent} from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
-import {ButtonRendererComponent} from 'src/app/main/components/grid-common/button-renderer.component';
-import {NumericEditorComponent} from 'src/app/main/components/grid-common/numeric-editor.component';
-import {CheckboxRendererComponent} from 'src/app/main/components/grid-common/checkbox-renderer.component';
-import {ColorEditorComponent} from 'src/app/main/components/grid-common/color-editor.component';
-import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener.component';
-import {MatDialog} from "@angular/material/dialog";
+import { Component, OnInit, Injector } from '@angular/core';
+import { SportsbookApiService } from '../../services/sportsbook-api.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { GridMenuIds, GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
+import { take } from 'rxjs/operators';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
+import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
+import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
+import { ColorEditorComponent } from 'src/app/main/components/grid-common/color-editor.component';
+import { MatDialog } from "@angular/material/dialog";
 import 'ag-grid-enterprise';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { CellClickedEvent, IRowNode } from "ag-grid-community";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
 
@@ -33,7 +32,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
   public clonePath: string = 'competitions/clonecategory';
   public deletePath: string = 'competitions/deletecategory';
 
-  public frameworkComponents  = {
+  public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
@@ -44,9 +43,9 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   private multipleBetsStates = [
-    {Id: null,  Name: this.translate.instant('Sport.None')},
-    {Id: true, Name: this.translate.instant('Common.Yes')},
-    {Id: false, Name: this.translate.instant('Common.No')},
+    { Id: null, Name: this.translate.instant('Sport.None') },
+    { Id: true, Name: this.translate.instant('Common.Yes') },
+    { Id: false, Name: this.translate.instant('Common.No') },
   ]
 
   constructor(
@@ -69,7 +68,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         filter: 'agNumberColumnFilter',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: '#076192', backgroundColor: params.data.Color};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -84,7 +83,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         filter: 'agNumberColumnFilter',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -99,7 +98,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         filter: 'agTextColumnFilter',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -116,7 +115,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         filter: 'agTextColumnFilter',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -142,7 +141,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -157,7 +156,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         filter: 'agTextColumnFilter',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -174,7 +173,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -191,7 +190,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -208,7 +207,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -225,7 +224,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -242,7 +241,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
           } else {
             return null;
           }
@@ -281,7 +280,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         },
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -298,39 +297,39 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellRenderer: 'buttonRenderer',
         cellRendererParams: {
           onClick: this.saveCategorySettings['bind'](this),
-          Label: this.translate.instant('Common.Save') ,
+          Label: this.translate.instant('Common.Save'),
           isDisabled: true,
           bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         },
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
         }
       },
       {
-        headerName: 'Common.View',
-        headerValueGetter: this.localizeHeader.bind(this),
-        cellRenderer: OpenerComponent,
-        filter: false,
-        valueGetter: params => {
-          let data = {path: '', queryParams: null};
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'competition-category');
-          data.queryParams = {categoryId: params.data.Id, sportId: params.data.SportId, name: params.data.Name};
-          return data;
+        headerName: 'View',
+        cellRenderer: function (params) {
+          if (params.node.rowPinned) {
+            return '';
+          } else {
+            return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+           visibility
+            </i>`
+          }
+
         },
-        sortable: false,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
-        }
+        },
+        onCellClicked: (event: CellClickedEvent) => this.goToCompetition(event),
       },
     ];
   }
@@ -346,7 +345,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         this.sports = data.ResponseObject;
         this.getPage();
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -357,8 +356,8 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
   }
 
   async addCategory() {
-    const {CreateCompetitionCategoryComponent} = await import('../../competitions-categories/create-competition-category/create-competition-category.component');
-    const dialogRef = this.dialog.open(CreateCompetitionCategoryComponent, {width: ModalSizes.LARGE});
+    const { CreateCompetitionCategoryComponent } = await import('../../competitions-categories/create-competition-category/create-competition-category.component');
+    const dialogRef = this.dialog.open(CreateCompetitionCategoryComponent, { width: ModalSizes.LARGE });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data)
         this.rowData.unshift(data);
@@ -368,21 +367,21 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
 
   clone() {
     const row = this.gridApi.getSelectedRows()[0];
-    this.apiService.apiPost(this.clonePath, {"Id": row.Id})
+    this.apiService.apiPost(this.clonePath, { "Id": row.Id })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.rowData.unshift(data.ResponseObject);
           this.gridApi.setRowData(this.rowData);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
 
   delete() {
     const row = this.gridApi.getSelectedRows()[0];
-    this.apiService.apiPost(this.deletePath, {"Id": row.Id})
+    this.apiService.apiPost(this.deletePath, { "Id": row.Id })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
@@ -392,7 +391,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
           this.rowData.splice(index, 1);
           this.gridApi.setRowData(this.rowData);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -422,7 +421,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         }
       })
       this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.gridApi.redrawRows({rowNodes: [findedNode]});
+      this.gridApi.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
@@ -437,7 +436,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
       if (data.Code === 0) {
         this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -462,8 +461,18 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
             }
           });
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
+  }
+
+  goToCompetition(ev) {
+    const url = this.router.serializeUrl(this.router.createUrlTree([`/main/sportsbook/competitions-categories/competition-category/main`],
+      { queryParams: { categoryId: ev.data.Id, sportId: ev.data.SportId, name: ev.data.Name } }));
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      console.error('Failed to construct URL');
+    }
   }
 }

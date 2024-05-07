@@ -53,7 +53,7 @@ export class ViewImageComponent implements OnInit {
     this.imgValue = this.configService.defaultOptions.WebApiUrl;
     const url = `${this.imgValue}/Statement/${this.value}/?token=${this.authService.token}`;
     this.fileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    this.isImage = ['jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png'].includes(url.split('.').pop());
+    this.isImage = (/\.(gif|jpe?g|png|webp|bmp)$/i).test(this.value);
     this.getClient();
   }
 

@@ -53,7 +53,7 @@
     .grid-action {
       margin-top: 12px;
       display: flex;
-
+      justify-content: flex-end;
       .partner-dropdown {
         margin-right: 8px;
         @include dropdown-style;
@@ -62,6 +62,24 @@
       .mat-btn {
         margin-right: 8px;
         @include mat-btn-style;
+      }
+
+      .pagination-input {
+        border: 1px solid $blue-light-8;
+        background-color: transparent;
+        padding: 2.5px 8px;
+        color: $blue-light-8;
+        border-radius: 4px;
+        margin: 0 3px;
+        font-size: 14px;
+        width: 40px;
+        text-align: center;
+
+        &:focus {
+          outline: none; 
+          border-color: $blue-light-8;
+        }
+
       }
     }
   }

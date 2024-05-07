@@ -12,6 +12,7 @@ import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import {syncColumnReset, syncColumnSelectPanel} from "../../../../../core/helpers/ag-grid.helper";
 import {Paging} from "../../../../../core/models";
 import {OpenerComponent} from "../../../../components/grid-common/opener/opener.component";
+import {GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup} from "ag-grid-community";
 
 @Component({
   selector: 'app-all-agents',
@@ -24,11 +25,42 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
   public genders: any[] = [];
   public userStates: any[] = [];
   public userTypes: any[] = [];
+  public agentsLevelsEnums: any[] = [];
   public filteredData;
 
   public rowData = [];
   public frameworkComponents;
   private typeFilters = [];
+  defaultColDef = {
+    width: 240,
+    editable: false,
+    flex: 1,
+    sortable: false,
+    resizable: true,
+    filter: false,
+    suppressMenu: true,
+    minWidth: 50,
+  };
+
+  autoGroupColumnDef = {
+    headerName: 'Id',
+    field: 'Id',
+    checkboxSelection: false,
+    cellRenderer: 'agGroupCellRenderer',
+    cellRendererParams: {
+      innerRenderer: (params: ICellRendererParams) => {
+        return params.data.Id;
+      },
+    },
+  };
+
+  isServerSideGroup: IsServerSideGroup = (dataItem: any) => {
+    return dataItem.group;
+  };
+
+  getServerSideGroupKey: GetServerSideGroupKey = (dataItem: any) => {
+    return dataItem.Id;
+  };
 
   constructor(
     protected injector: Injector,
@@ -40,7 +72,7 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
     super(injector);
     this.adminMenuId = GridMenuIds.AGENTS;
     this.initialTypes();
-
+    this.getAgentLevelsEnum();
 
     this.frameworkComponents = {
       agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -80,24 +112,23 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
 
   setColDefs() {
     this.columnDefs = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        tooltipField: 'Id',
-        minWidth: 90,
-        cellRendererParams: { suppressPadding: false },
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        suppressColumnsToolPanel: false,
-
-      },
+      // {
+      //   headerName: 'Common.Id',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'Id',hide: true,
+      //   sortable: true,
+      //   resizable: true,
+      //   tooltipField: 'Id',
+      //   minWidth: 90,
+      //   cellRendererParams: { suppressPadding: false },
+      //   filter: 'agNumberColumnFilter',
+      //   filterParams: {
+      //     buttons: ['apply', 'reset'],
+      //     closeOnApply: true,
+      //     filterOptions: this.filterService.numberOptions
+      //   },
+      //   suppressColumnsToolPanel: false
+      // },
       {
         headerName: 'Currency.FirstName',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -136,6 +167,20 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
           closeOnApply: true,
           filterOptions: this.filterService.textOptions
         }
+      },
+      {
+        headerName: 'Common.Balance',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Balance',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+        suppressColumnsToolPanel: false,
       },
       {
         headerName: 'Currency.Email',
@@ -205,16 +250,35 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         sortable: true
       },
       {
+        headerName: 'Common.Level',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Level',
+        sortable: true,
+        resizable: true,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.agentsLevelsEnums,
+        },
+      },
+      {
         headerName: 'View',
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'agent');
-          // data.queryParams = { userId: params.data.Id, partnerId: params.data.PartnerId, levelId: params.data.Level };
-          data.queryParams = { agentIds: params.data.Id };
-          return data;
+          if (params.data.UserId) {
+            let data = { path: '', queryParams: null };
+            data.path = '/main/platform/clients/all-clients/client/main';
+            data.queryParams = {clientId: params.data.Id};
+            return data;
+          } else {
+            let data = { path: '', queryParams: null };
+            let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
+            data.path = this.router.url.replace(replacedPart, 'agent');
+            // data.queryParams = { userId: params.data.Id, partnerId: params.data.PartnerId, levelId: params.data.Level };
+            data.queryParams = { agentIds: params.data.Id };
+            return data;
+          }
         },
         sortable: false
       },
@@ -250,48 +314,133 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         this.setFilterDropdown(params);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
-
-        this.apiService.apiPost(this.configService.getApiUrl, paging,
-          true, Controllers.USER, Methods.GET_AGENTS).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities;
-            mappedRows.forEach((entity) => {
-              let partnerName = this.partners.find((partner) => {
-                return partner.Id == entity.PartnerId;
-              })
-              if (partnerName) {
-                entity['PartnerName'] = partnerName.Name;
-              }
-              let genderName = this.genders.find((gender) => {
-                return gender.Id == entity.Gender;
-              })
-              if (genderName) {
-                entity['Gender'] = genderName.Name;
-              } else (
-                entity['Gender'] = ''
-              )
-
-              let userState = this.userStates.find((state) => {
-                return state.Id == entity.State;
-              })
-              if (userState) {
-                entity['State'] = userState.Name;
-              }
-
-              let userType = this.userTypes.find((type) => {
-                return type.Id == entity.Type
-              })
-              if (userType) {
-                entity['Type'] = userType.Name;
-              }
-            })
-            params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+        if (params.parentNode.data) {
+          if (params.parentNode.data?.LevelId === 6) {
+            paging['AgentId'] = params.parentNode.data.Id;
+            let dateString = "2015-04-01T00:00:00.000Z";
+            paging.CreatedFrom = new Date(dateString);
+            delete paging.Type;
+            this.getClients(paging, params);
           } else {
-            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            paging['ParentId'] = params.parentNode.data.Id;
+            delete paging.Type;
+            this.getAgents(paging, params);
           }
-        });
+        } else {
+          this.getAgents(paging, params);
+        }
       },
     };
+  }
+
+  getClients(paging, params) {
+    this.apiService.apiPost(this.configService.getApiUrl, paging,
+      true, Controllers.CLIENT, Methods.GET_CLIENTS).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          const mappedRows = data.ResponseObject.Entities;
+          mappedRows.forEach((entity) => {
+            entity.group = false;
+            let partnerName = this.partners.find((partner) => {
+              return partner.Id == entity.PartnerId;
+            })
+            if (partnerName) {
+              entity['PartnerName'] = partnerName.Name;
+            }
+            let genderName = this.genders.find((gender) => {
+              return gender.Id == entity.Gender;
+            })
+            if (genderName) {
+              entity['Gender'] = genderName.Name;
+            } else (
+              entity['Gender'] = ''
+            )
+            let userState = this.userStates.find((state) => {
+              return state.Id == entity.State;
+            })
+            if (userState) {
+              entity['State'] = userState.Name;
+            }
+
+            let userType = this.userTypes.find((type) => {
+              return type.Id == entity.Type
+            })
+            if (userType) {
+              entity['Type'] = userType.Name;
+            }
+            let levelId1 = this.agentsLevelsEnums.find((level) => {
+              return level.Id == entity.Level
+            })
+            if (levelId1) {
+              entity['LevelId'] = levelId1.Id;
+            }
+            let levelId = this.agentsLevelsEnums.find((level) => {
+              return level.Id == entity.Level
+            })
+            if (levelId) {
+              entity['Level'] = levelId.Name;
+            }
+          });
+          params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+      },
+    );
+  }
+
+  getAgents(paging, params) {
+    this.apiService.apiPost(this.configService.getApiUrl, paging,
+      true, Controllers.USER, Methods.GET_AGENTS).pipe(take(1)).subscribe(data => {
+      if (data.ResponseCode === 0) {
+        const mappedRows = data.ResponseObject.Entities;
+        mappedRows.forEach((entity) => {
+          entity.group = true;
+          let partnerName = this.partners.find((partner) => {
+            return partner.Id == entity.PartnerId;
+          })
+          if (partnerName) {
+            entity['PartnerName'] = partnerName.Name;
+          }
+          let genderName = this.genders.find((gender) => {
+            return gender.Id == entity.Gender;
+          })
+          if (genderName) {
+            entity['Gender'] = genderName.Name;
+          } else (
+            entity['Gender'] = ''
+          )
+
+          let userState = this.userStates.find((state) => {
+            return state.Id == entity.State;
+          })
+          if (userState) {
+            entity['State'] = userState.Name;
+          }
+
+          let userType = this.userTypes.find((type) => {
+            return type.Id == entity.Type
+          })
+          if (userType) {
+            entity['Type'] = userType.Name;
+          }
+          let levelId1 = this.agentsLevelsEnums.find((level) => {
+            return level.Id == entity.Level
+          })
+          if (levelId1) {
+            entity['LevelId'] = levelId1.Id;
+          }
+          let levelId = this.agentsLevelsEnums.find((level) => {
+            return level.Id == entity.Level
+          })
+          if (levelId) {
+            entity['Level'] = levelId.Name;
+          }
+        })
+        params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
   }
 
   setFilterDropdown(params) {
@@ -315,5 +464,17 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
       if (data)
         this.getCurrentPage();
     })
+  }
+
+  private getAgentLevelsEnum() {
+    this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION, Methods.GET_AGENT_LEVELS_ENUM)
+      .pipe(take(1)).subscribe(data => {
+      if (data.ResponseCode === 0) {
+        this.agentsLevelsEnums = data.ResponseObject;
+        this.setColDefs();
+      } else {
+        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+      }
+    });
   }
 }

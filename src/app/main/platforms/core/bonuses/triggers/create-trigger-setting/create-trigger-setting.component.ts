@@ -9,6 +9,7 @@ import { DateAdapter } from "@angular/material/core";
 import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { BonusesService } from "../../bonuses.service";
+import { DAYS } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-create-trigger-setting',
@@ -16,9 +17,9 @@ import { BonusesService } from "../../bonuses.service";
   styleUrls: ['./create-trigger-setting.component.scss']
 })
 export class CreateTriggerSettingComponent implements OnInit {
-  public partners = [];
-  public triggerTypes = [];
-  public conditions = [
+  partners = [];
+  triggerTypes = [];
+  conditions = [
     { Id: 1, Name: 'Sport', Type: 1 },
     { Id: 2, Name: 'Region', Type: 1 },
     { Id: 3, Name: 'Competition', Type: 1 },
@@ -37,7 +38,7 @@ export class CreateTriggerSettingComponent implements OnInit {
     { Id: 16, Name: 'Stake', Type: 1 },
     { Id: 17, Name: 'BetStatus', Type: 1 }
   ];
-  public addedConditions = {
+  addedConditions = {
     selectedGroupType: 1,
     groupTypes: [
       { Id: 1, Name: 'All' },
@@ -49,24 +50,17 @@ export class CreateTriggerSettingComponent implements OnInit {
     selectedConditionType: null,
     selectedConditionValue: null
   };
-  public days = [
-    { Id: 1, Name: "Monday" },
-    { Id: 2, Name: "Tuesday" },
-    { Id: 3, Name: "Wednesday" },
-    { Id: 4, Name: "Thursday" },
-    { Id: 5, Name: "Friday" },
-    { Id: 6, Name: "Saturday" },
-    { Id: 0, Name: "Sunday" },
-  ];
-  public sources = [
+  days = DAYS;
+  sources = [
     { Id: 1, Name: 'BetAmount' },
     { Id: 2, Name: 'WinAmount' }
   ];
-  public formGroup: UntypedFormGroup;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public type;
-  public conditionTypes;
+  formGroup: UntypedFormGroup;
+  fromDate = new Date();
+  toDate = new Date();
+  type;
+  conditionTypes;
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<CreateTriggerSettingComponent>,
@@ -172,11 +166,11 @@ export class CreateTriggerSettingComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
     const triggerSetting = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true; 
     if (triggerSetting.Type == 1 || triggerSetting.Type == 2 || triggerSetting.Type == 3) {
       triggerSetting.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     }
@@ -192,6 +186,7 @@ export class CreateTriggerSettingComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: trigger.Description, Type: "error" });
         }
+        this.isSendingReqest = false; 
       })
   }
 
@@ -256,7 +251,8 @@ export class CreateTriggerSettingComponent implements OnInit {
       UpToAmount: [null],
       BonusSettingCodes: [null],
       Sequence: [null],
-      Status: [1]
+      Status: [1],
+      ConsiderBonusBets: [null],
     });
   }
 

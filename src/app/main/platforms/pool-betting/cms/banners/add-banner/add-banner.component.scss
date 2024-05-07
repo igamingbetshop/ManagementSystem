@@ -1,0 +1,12 @@
+.modal-wrap {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  max-height: calc(80vh - 91px);
+  min-height: 200px;
+  padding: 0 14px 0 20px;
+}
+
+.mat-datepicker-input {
+  background-color: transparent!important;
+}

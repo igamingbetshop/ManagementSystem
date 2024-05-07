@@ -36,8 +36,10 @@ import {ConfigService} from "../../../../../../core/services";
 })
 export class SettleBetModalComponent implements OnInit {
 
-  public formGroup: UntypedFormGroup;
-  public selectedRowId: number;
+  formGroup: UntypedFormGroup;
+  selectedRowId: number;
+  isSendingReqest = false;
+
   constructor(
     public dialogRef: MatDialogRef<SettleBetModalComponent>,
     private apiService: CoreApiService,
@@ -58,7 +60,7 @@ export class SettleBetModalComponent implements OnInit {
 
   onSubmit() {
     const winAmount = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true; 
     const requestBody = {
       BetDocumentId: this.selectedRowId,
       ...winAmount
@@ -71,6 +73,7 @@ export class SettleBetModalComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false; 
     });
   }
 

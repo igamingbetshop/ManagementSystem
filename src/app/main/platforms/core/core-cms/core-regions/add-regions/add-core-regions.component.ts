@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators, FormsModule} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,13 +20,29 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-add-core-regions',
   templateUrl: './add-core-regions.component.html',
-  styleUrls: ['./add-core-regions.component.scss']
+  styleUrls: ['./add-core-regions.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSnackBarModule,
+    FormsModule,
+    MatDialogModule,
+    TranslateModule
+  ],
 })
 export class AddCoreRegionsComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public languages: any[] = [];
-  public regions: any[] = [];
-  public parentId: number | undefined;
+  formGroup: UntypedFormGroup;
+  languages: any[] = [];
+  regions: any[] = [];
+  parentId: number | undefined;
+  isSendingReqest = false; 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {Languages: any[],Regions: any[], parentId: number | undefined},
@@ -69,7 +84,7 @@ export class AddCoreRegionsComponent implements OnInit {
       return;
     }
     const request = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true;
     this.apiService.apiPost(this.configService.getApiUrl, request,
       true, Controllers.REGION, Methods.SAVE_REGION)
       .pipe(take(1))
@@ -79,27 +94,7 @@ export class AddCoreRegionsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false;
       });
   }
 }
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatSnackBarModule,
-    FormsModule,
-    MatDialogModule,
-    TranslateModule
-  ],
-  declarations: [AddCoreRegionsComponent]
-})
-export class AddCoreRegionsModule {}
-

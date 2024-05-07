@@ -9,7 +9,7 @@ import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
 import { CellDoubleClickedEvent, CellValueChangedEvent } from 'ag-grid-community';
 import { take } from 'rxjs/operators';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
@@ -22,13 +22,13 @@ export class CoreJobAreasComponent extends BasePaginatedGridComponent implements
   public CommentTypes: any[] = [];
   public partners: any[] = [];
   public frameworkComponents;
-  public rowModelType:string = GridRowModelTypes.CLIENT_SIDE;
+  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
-    protected injector:Injector,
+    protected injector: Injector,
     private _snackBar: MatSnackBar,
-    private apiService:CoreApiService,
-    public commonDataService:CommonDataService,
+    private apiService: CoreApiService,
+    public commonDataService: CommonDataService,
     public dialog: MatDialog,
   ) {
     super(injector);
@@ -39,7 +39,7 @@ export class CoreJobAreasComponent extends BasePaginatedGridComponent implements
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Id',
         resizable: true,
-        cellStyle: {color: '#076192', 'font-size' : '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
       },
       {
@@ -73,7 +73,7 @@ export class CoreJobAreasComponent extends BasePaginatedGridComponent implements
     ];
     this.frameworkComponents = {
 
-      textEditor : TextEditorComponent,
+      textEditor: TextEditorComponent,
     }
   }
 
@@ -85,64 +85,50 @@ export class CoreJobAreasComponent extends BasePaginatedGridComponent implements
 
 
 
- async addJobAreas(){
-      const {AddCoreJobAreasComponent} = await import('./add-job-areas/add-job-areas.component');
-      const dialogRef = this.dialog.open(AddCoreJobAreasComponent, {width:ModalSizes.SMALL});
-      dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if(data){
-        this.apiService.apiPost(this.configService.getApiUrl,data,
-          true, Controllers.CONTENT, Methods.SAVE_JOB_AREA)
-          .pipe(take(1))
-          .subscribe(data => {
-          if(data.ResponseCode === 0){
-            this.getPage();
-          }else{
-            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-          }
-        });
-
+  async addJobAreas() {
+    const { AddCoreJobAreasComponent } = await import('./add-job-areas/add-job-areas.component');
+    const dialogRef = this.dialog.open(AddCoreJobAreasComponent, { width: ModalSizes.SMALL });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data) {
+        this.getPage();
       }
-   })
- }
+    })
+  }
 
 
- onCellValueChanged(params){
-  const row = params.data;
+  onCellValueChanged(params) {
+    const row = params.data;
 
-  this.apiService.apiPost(this.configService.getApiUrl,row,
-    true, Controllers.CONTENT, Methods.SAVE_JOB_AREA
+    this.apiService.apiPost(this.configService.getApiUrl, row,
+      true, Controllers.CONTENT, Methods.SAVE_JOB_AREA
     )
-    .pipe(take(1))
-    .subscribe(data => {
-    if(data.ResponseCode === 0)
-    {
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
 
-    } else{
-      SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-    }
-  });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
 
- }
+  }
 
- onGridReady(params)
- {
-   super.onGridReady(params);
-   syncColumnReset();
- }
+  onGridReady(params) {
+    super.onGridReady(params);
+    syncColumnReset();
+  }
 
- getPage() {
-  this.apiService.apiPost(this.configService.getApiUrl,{},
-    true, Controllers.CONTENT, Methods.GET_JOB_AREA)
-    .pipe(take(1))
-    .subscribe(data => {
-    if(data.ResponseCode === 0)
-    {
-      this.rowData = data.ResponseObject;
-
-    } else{
-      SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-    }
-  });
+  getPage() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.CONTENT, Methods.GET_JOB_AREA)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
 
   }
 

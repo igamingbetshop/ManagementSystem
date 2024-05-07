@@ -11,7 +11,7 @@ import {BasePaginatedGridComponent} from "../../../../../../components/classes/b
 import {Paging} from "../../../../../../../core/models";
 import {AgBooleanFilterComponent} from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
 import {AgDropdownFilter} from "../../../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
-import {CellClickedEvent} from "ag-grid-community";
+import {CellClickedEvent, GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup} from "ag-grid-community";
 
 @Component({
   selector: 'app-downline',
@@ -26,8 +26,10 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
   userData: any;
   agentsEnums: any;
   agentsLevelsEnums: any;
-  levelTypes = [1];
+  // levelTypes = [1];
+  levelTypes = [];
   levelTypeNames = [];
+  public userNames: any[] = [];
   selectedAgentId;
   lastSelectedItem;
   selectedTabIndex: number = 0;
@@ -38,6 +40,28 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
   public userStates: any[] = [];
   public userTypes: any[] = [];
   public filteredData;
+  defaultColDef = {
+    width: 240,
+    editable: false,
+    flex: 1,
+    sortable: false,
+    resizable: true,
+    filter: false,
+    suppressMenu: true,
+    minWidth: 50,
+  };
+
+  autoGroupColumnDef = {
+    headerName: 'Id',
+    field: 'Id',
+    checkboxSelection: false,
+    cellRenderer: 'agGroupCellRenderer',
+    cellRendererParams: {
+      innerRenderer: (params: ICellRendererParams) => {
+        return params.data.Id;
+      },
+    },
+  };
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -78,10 +102,16 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
           this.selectedTabIndex = 0;
           this.getAgentChildLevels(this.agentId);
           this.getCurrentPage();
+          if (this.agentIds.length === 1) {
+            this.getAgent();
+          }
         } else if (this.agentIds[0].length === 1) {
           this.userId = this.agentIds[0];
-          this.getAgentLevels();
+          this.getAgentLevels(this.userId);
           this.getCurrentPage();
+          if (this.agentIds.length === 1) {
+            this.getAgent();
+          }
         }
       });
     });
@@ -94,16 +124,30 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
         this.selectedTabIndex = 0;
         this.getAgentChildLevels(this.agentId);
         this.getCurrentPage();
+        if (this.agentIds.length === 1) {
+          this.getAgent();
+        }
       } else if (this.agentIds[0].length === 1) {
         this.userId = this.agentIds[0];
-        this.getAgentLevels();
+        this.getAgentLevels(this.userId);
         this.getCurrentPage();
+        if (this.agentIds.length === 1) {
+          this.getAgent();
+        }
       }
     });
   }
 
-  private getAgentLevels() {
-    this.apiService.apiPost(this.configService.getApiUrl, +this.userId, true, Controllers.USER, Methods.GET_EXISTING_LEVELS)
+  isServerSideGroup: IsServerSideGroup = (dataItem: any) => {
+    return dataItem.group;
+  };
+
+  getServerSideGroupKey: GetServerSideGroupKey = (dataItem: any) => {
+    return dataItem.Id;
+  };
+
+  private getAgentLevels(userId) {
+    this.apiService.apiPost(this.configService.getApiUrl, +userId, true, Controllers.USER, Methods.GET_EXISTING_LEVELS)
       .pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
         this.agentsEnums = data.ResponseObject;
@@ -131,24 +175,24 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
 
   setColDefs() {
     this.columnDefs = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        tooltipField: 'Id',
-        minWidth: 90,
-        cellRendererParams: {suppressPadding: false},
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        suppressColumnsToolPanel: false,
-
-      },
+      // {
+      //   headerName: 'Common.Id',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'Id',
+      //   sortable: true,
+      //   resizable: true,
+      //   tooltipField: 'Id',
+      //   minWidth: 90,
+      //   cellRendererParams: {suppressPadding: false},
+      //   filter: 'agNumberColumnFilter',
+      //   filterParams: {
+      //     buttons: ['apply', 'reset'],
+      //     closeOnApply: true,
+      //     filterOptions: this.filterService.numberOptions
+      //   },
+      //   suppressColumnsToolPanel: false,
+      //
+      // },
       {
         headerName: 'Currency.FirstName',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -188,19 +232,19 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
           filterOptions: this.filterService.textOptions
         }
       },
-      // {
-      //   headerName: 'Common.Balance',
-      //   headerValueGetter: this.localizeHeader.bind(this),
-      //   field: 'Balance',
-      //   sortable: true,
-      //   resizable: true,
-      //   filter: 'agTextColumnFilter',
-      //   filterParams: {
-      //     buttons: ['apply', 'reset'],
-      //     closeOnApply: true,
-      //     filterOptions: this.filterService.textOptions
-      //   }
-      // },
+      {
+        headerName: 'Common.Balance',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Balance',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        }
+      },
       {
         headerName: 'Currency.Email',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -261,6 +305,18 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
         sortable: true
       },
       {
+        headerName: 'Common.Level',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'LevelName',
+        sortable: true,
+        resizable: true,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.agentsLevelsEnums,
+        },
+      },
+      {
         headerName: 'View',
         field: 'View',
         filter: false,
@@ -273,14 +329,28 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
             visibility
         </i>`;
         },
-        onCellClicked: (event: CellClickedEvent) => this.onViewIconClicked(event)
+        onCellClicked: (event: CellClickedEvent) => {
+          if (event.data.UserId) {
+            this.toRedirectToClient(event)
+          } else {
+            this.onViewIconClicked(event)
+          }
+        },
       },
     ];
+  }
+
+  toRedirectToClient(ev: { data: any; }) {
+    const id = ev.data.Id;
+    this.router.navigate([`/main/platform/clients/all-clients/client/main`], {
+      queryParams: {"clientId": id}
+    });
   }
 
   onViewIconClicked(params) {
     const agentId = params.data.Id;
     const level = params.data.Level;
+    const userName = params.data.UserName;
     const index = this.agentIds.indexOf(agentId);
     if (index !== -1) {
       this.agentIds.splice(index, 1);
@@ -292,10 +362,14 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
       if (levelName && !this.levelTypeNames.includes(levelName)) {
         this.levelTypeNames.push(levelName);
       }
+      if (userName && !this.userNames.includes(userName)) {
+        this.userNames.push(userName);
+      }
     });
     const dataToStore = this.agentIds.map((id, index) => ({
       Id: String(id),
-      LevelName: this.levelTypeNames[index]
+      LevelName: this.levelTypeNames[index],
+      UserName: this.userNames[index]
     }));
     localStorage.setItem('agentData', JSON.stringify(dataToStore));
     const queryParams1 = {
@@ -310,20 +384,20 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
         const paging = new Paging();
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
-        // paging.Level = this.selectedAgentId;
+        paging.Level = this.selectedAgentId;
         // paging.ParentId = +this.userId;
-        let responseMethod;
-        let responseController;
-        if (this.selectedAgentId === 7) {
-          responseController = Controllers.CLIENT;
-          responseMethod = Methods.GET_CLIENTS;
-          let dateString = "2015-04-01T00:00:00.000Z";
-          paging.CreatedFrom = new Date(dateString);
-        } else {
-          responseController = Controllers.USER;
-          responseMethod = Methods.GET_AGENTS;
-          paging.Level = this.selectedAgentId;
-        }
+        // let responseMethod;
+        // let responseController;
+        // if (this.selectedAgentId === 7) {
+        //   responseController = Controllers.CLIENT;
+        //   responseMethod = Methods.GET_CLIENTS;
+        //   let dateString = "2015-04-01T00:00:00.000Z";
+        //   paging.CreatedFrom = new Date(dateString);
+        // } else {
+        //   responseController = Controllers.USER;
+        //   responseMethod = Methods.GET_AGENTS;
+        //   paging.Level = this.selectedAgentId;
+        // }
         if (this.agentIds[0].length > 1) {
           if (this.selectedAgentId === 7) {
             paging.AgentId = +this.lastSelectedItem;
@@ -347,47 +421,137 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
         this.setFilterDropdown(params);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
-
-        this.apiService.apiPost(this.configService.getApiUrl, paging,
-          true, responseController, responseMethod).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities;
-            mappedRows.forEach((entity) => {
-              let partnerName = this.partners.find((partner) => {
-                return partner.Id == entity.PartnerId;
-              })
-              if (partnerName) {
-                entity['PartnerName'] = partnerName.Name;
-              }
-              let genderName = this.genders.find((gender) => {
-                return gender.Id == entity.Gender;
-              })
-              if (genderName) {
-                entity['Gender'] = genderName.Name;
-              } else (
-                entity['Gender'] = ''
-              )
-              let userState = this.userStates.find((state) => {
-                return state.Id == entity.State;
-              })
-              if (userState) {
-                entity['State'] = userState.Name;
-              }
-
-              let userType = this.userTypes.find((type) => {
-                return type.Id == entity.Type
-              })
-              if (userType) {
-                entity['Type'] = userType.Name;
-              }
-            })
-            params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
+        if (params.parentNode.data) {
+          if (params.parentNode.data?.Level === 6) {
+            paging['AgentId'] = params.parentNode.data.Id;
+            delete paging.ParentId;
+            delete paging.Level;
+            this.getClients(paging, params);
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            paging['ParentId'] = params.parentNode.data.Id;
+            delete paging['Level'];
+            this.getAgents(paging, params);
           }
-        });
+        } else {
+          if (this.selectedAgentId === 7) {
+            this.getClients(paging, params)
+          } else {
+            this.getAgents(paging, params);
+          }
+        }
       },
     };
+  }
+
+  getAgents(paging, params) {
+    // paging.Level = this.selectedAgentId;
+    this.apiService.apiPost(this.configService.getApiUrl, paging,
+      true, Controllers.USER, Methods.GET_AGENTS).pipe(take(1)).subscribe(data => {
+      if (data.ResponseCode === 0) {
+        const mappedRows = data.ResponseObject.Entities;
+        mappedRows.forEach((entity) => {
+          entity.group = true;
+          let partnerName = this.partners.find((partner) => {
+            return partner.Id == entity.PartnerId;
+          })
+          if (partnerName) {
+            entity['PartnerName'] = partnerName.Name;
+          }
+          let genderName = this.genders.find((gender) => {
+            return gender.Id == entity.Gender;
+          })
+          if (genderName) {
+            entity['Gender'] = genderName.Name;
+          } else (
+            entity['Gender'] = ''
+          )
+          let userState = this.userStates.find((state) => {
+            return state.Id == entity.State;
+          })
+          if (userState) {
+            entity['State'] = userState.Name;
+          }
+
+          let userType = this.userTypes.find((type) => {
+            return type.Id == entity.Type
+          })
+          if (userType) {
+            entity['Type'] = userType.Name;
+          }
+          let levelId1 = this.agentsLevelsEnums.find((level) => {
+            return level.Id == entity.Level
+          })
+          if (levelId1) {
+            entity['LevelId'] = levelId1.Id;
+          }
+          let levelId = this.agentsLevelsEnums.find((level) => {
+            return level.Id == entity.Level
+          })
+          if (levelId) {
+            entity['LevelName'] = levelId.Name;
+          }
+        })
+        params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
+      } else {
+        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+      }
+    });
+  }
+
+  getClients(paging, params) {
+    let dateString = "2015-04-01T00:00:00.000Z";
+    paging.CreatedFrom = new Date(dateString);
+    this.apiService.apiPost(this.configService.getApiUrl, paging,
+      true, Controllers.CLIENT, Methods.GET_CLIENTS).pipe(take(1)).subscribe(data => {
+      if (data.ResponseCode === 0) {
+        const mappedRows = data.ResponseObject.Entities;
+        mappedRows.forEach((entity) => {
+          entity.group = false;
+          let partnerName = this.partners.find((partner) => {
+            return partner.Id == entity.PartnerId;
+          })
+          if (partnerName) {
+            entity['PartnerName'] = partnerName.Name;
+          }
+          let genderName = this.genders.find((gender) => {
+            return gender.Id == entity.Gender;
+          })
+          if (genderName) {
+            entity['Gender'] = genderName.Name;
+          } else (
+            entity['Gender'] = ''
+          )
+          let userState = this.userStates.find((state) => {
+            return state.Id == entity.State;
+          })
+          if (userState) {
+            entity['State'] = userState.Name;
+          }
+
+          let userType = this.userTypes.find((type) => {
+            return type.Id == entity.Type
+          })
+          if (userType) {
+            entity['Type'] = userType.Name;
+          }
+          let levelId1 = this.agentsLevelsEnums.find((level) => {
+            return level.Id == entity.Level
+          })
+          if (levelId1) {
+            entity['LevelId'] = levelId1.Id;
+          }
+          let levelId = this.agentsLevelsEnums.find((level) => {
+            return level.Id == entity.Level
+          })
+          if (levelId) {
+            entity['LevelName'] = levelId.Name;
+          }
+        })
+        params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
+      } else {
+        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+      }
+    });
   }
 
   initialStates() {
@@ -430,19 +594,19 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
   onTabSelectionChange(event: MatTabChangeEvent): void {
     const selectedAgent = this.agentsEnums[event.index];
     this.selectedAgentId = selectedAgent.Id;
-    if (this.selectedAgentId === 7) {
-      const index = this.columnDefs.findIndex(col => col.field === "View");
-      if (index > -1) {
-        this.columnDefs.splice(index, 1);
-        this.gridApi.setColumnDefs(this.columnDefs);
-      }
-    } else {
-      const viewColumnIndex = this.columnDefs.findIndex(col => col.field === "View");
-      if (viewColumnIndex === -1) {
-        this.setColDefs();
-        this.gridApi.setColumnDefs(this.columnDefs);
-      }
-    }
+    // if (this.selectedAgentId === 7) {
+    //   const index = this.columnDefs.findIndex(col => col.field === "View");
+    //   if (index > -1) {
+    //     this.columnDefs.splice(index, 1);
+    //     this.gridApi.setColumnDefs(this.columnDefs);
+    //   }
+    // } else {
+    //   const viewColumnIndex = this.columnDefs.findIndex(col => col.field === "View");
+    //   if (viewColumnIndex === -1) {
+    //     this.setColDefs();
+    //     this.gridApi.setColumnDefs(this.columnDefs);
+    //   }
+    // }
     this.getCurrentPage();
   }
 
@@ -458,6 +622,31 @@ export class DownlineComponent extends BasePaginatedGridComponent implements OnI
         this.agentsEnums = data.ResponseObject;
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+      }
+    });
+  }
+
+  getAgent() {
+    this.apiService.apiPost(this.configService.getApiUrl, this.userId,
+      true, Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe(data => {
+      if (data.ResponseCode === 0) {
+        const agent = data.ResponseObject;
+        this.levelTypes.push(agent['Level']);
+        const levelName = `(${this.agentsLevelsEnums.find(ag => ag.Id === agent['Level'])?.Name})`;
+        if (levelName && !this.levelTypeNames.includes(levelName)) {
+          this.levelTypeNames.push(levelName);
+        }
+        if (agent['UserName'] && !this.userNames.includes(agent['UserName'])) {
+          this.userNames.push(agent['UserName']);
+        }
+        const dataToStore = this.agentIds.map((id, index) => ({
+          Id: String(id),
+          LevelName: this.levelTypeNames[index],
+          UserName: this.userNames[index]
+        }));
+        localStorage.setItem('agentData', JSON.stringify(dataToStore));
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }

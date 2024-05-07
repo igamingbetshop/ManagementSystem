@@ -32,6 +32,10 @@ const routes: Routes = [
         loadChildren: () => import('./tabs/corrections/corrections.module').then(m => m.CorrectionsModule),
       },
       {
+        path: 'clients',
+        loadChildren: () => import('./tabs/clients/clients.module').then(m => m.ClientsModule),
+      },
+      {
         path: '',
         redirectTo: 'main',
         pathMatch: 'full'

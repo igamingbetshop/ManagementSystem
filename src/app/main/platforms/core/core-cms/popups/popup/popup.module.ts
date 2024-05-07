@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,7 +29,6 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     FormsModule,

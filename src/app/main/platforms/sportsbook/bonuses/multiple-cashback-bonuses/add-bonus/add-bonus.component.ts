@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,7 +19,20 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-clone-role',
   templateUrl: './add-bonus.component.html',
-  styleUrls: ['./add-bonus.component.scss']
+  styleUrls: ['./add-bonus.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
 })
 export class AddBonusComponent implements OnInit {
   public formGroup: UntypedFormGroup;
@@ -92,25 +104,3 @@ export class AddBonusComponent implements OnInit {
   }
 
 }
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule
-  ],
-  declarations: [AddBonusComponent]
-})
-export class AddBonusModule
-{
-
-}
-

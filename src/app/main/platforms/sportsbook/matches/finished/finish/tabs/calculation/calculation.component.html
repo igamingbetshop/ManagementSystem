@@ -4,6 +4,7 @@
       <span class="title-span">{{matchId}}</span> &nbsp; {{name}}
     </div>
 
+    <button mat-stroked-button class="edit-btn" (click)="onEditChange()">{{'Common.Edit' | translate}}</button>
 
 </div>
 
@@ -28,9 +29,21 @@
       (gridReady)="onGridReady($event)"
       rowSelection="single">
     </ag-grid-angular>
+
+    <button 
+    mat-raised-button 
+    color="warn" 
+    (click)="autoCalculate()"
+    class="auto-calc-btn"
+    >{{'Sport.AutomaticCalculation' | translate}}</button>
+
   </div>
 
-  <div class="right-panel">
+  @if (sportId == 1) {
+    <app-results/>
+  }
+
+  <!-- <div class="right-panel">
       <div class="finished-calculation" *ngIf="sportId == 1">
         <div class="title">{{'Sport.Score' | translate}}</div>
         <table class="aut-calc-template">
@@ -90,7 +103,7 @@
         <button mat-raised-button color="warn" (click)="autoCalculate()">{{'Sport.AutomaticCalculation' | translate}}</button>
       </div>
 
-  </div>
+  </div> -->
 
 </div>
 

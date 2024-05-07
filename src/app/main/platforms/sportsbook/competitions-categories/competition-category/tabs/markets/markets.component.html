@@ -18,7 +18,7 @@
 
     <button mat-stroked-button class="mat-btn" (click)="addSettings()">{{'Sport.AddSettings' | translate}}
     </button>
-    <button mat-stroked-button class="mat-delete-btn" [disabled]="isRowSelected()"
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="!isRowSelected()"
             (click)="delete()">{{'Sport.DeleteSettings' | translate}}
     </button>
 

@@ -20,10 +20,10 @@ import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
 import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes, GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { formattedNumber } from "../../../../../core/utils";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-import {ExportService} from "../../services/export.service";
+import { ExportService } from "../../services/export.service";
 
 @Component({
   selector: 'app-internet',
@@ -32,42 +32,42 @@ import {ExportService} from "../../services/export.service";
 })
 export class InternetComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public DetailRowData = [];
-  public nestedFrameworkComponents = {
+  rowData = [];
+  DetailRowData = [];
+  nestedFrameworkComponents = {
     numericEditor: NumericEditorComponent,
     textEditor: TextEditorComponent,
   }
-  public rowClassRules;
+  rowClassRules;
 
-  public deviceTypes = [];
-  public documentStates = [];
-  public clientCategories = [];
-  public betTypes = [];
+  deviceTypes = [];
+  documentStates = [];
+  clientCategories = [];
+  betTypes = [];
 
-  public show = false;
-  public partners: any[] = [];
-  public partnerId = null;
-  public Currency;
-  public totalBetAmount;
-  public TotalWinAmount;
-  public TotalProfit;
+  show = false;
+  partners: any[] = [];
+  partnerId = null;
+  Currency;
+  totalBetAmount;
+  TotalWinAmount;
+  TotalProfit;
   private detailGridParams: any;
-  public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
+  selectedItem = 'today';
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
   private oddsType: number;
   private stateFilters = [];
   private selectedRowId: number;
-  public isResendDisabled = true;
-  public isSettleDisabled = true;
+  isResendDisabled = true;
+  isSettleDisabled = true;
   private firstApiCall = true;
-  public getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
-  public totalProfit: any;
-  public nestedColumnDefs = [];
+  getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.id;
+  totalProfit: any;
+  nestedColumnDefs = [];
 
-  public detailCellRendererParams: any = {
+  detailCellRendererParams: any = {
     detailGridOptions: {
       rowHeight: 47,
       defaultColDef: {
@@ -80,7 +80,6 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
     },
 
     getDetailRowData: params => {
-
       if (params && params.data.ProductName == 'Sportsbook') {
         this.setSportsbookColumnDefs();
       }
@@ -89,7 +88,11 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
         this.setEvalutionColumnDefs();
       }
 
-      if ((params && params.data.ProductName == 'Sportsbook') || (params && params.data.ProviderName == "Evolution")) {
+      if (params &&  params?.data.ProductName == "pregame") {
+        this.setBGGamesColdefs();
+      }
+
+      if ((params?.data?.ProductName == 'Sportsbook') || (params?.data?.ProviderName == "Evolution") || (params?.data.ProductName == "pregame")) {
         const row = params.data;
         this.apiService.apiPost(this.configService.getApiUrl, row.BetDocumentId,
           true, Controllers.REPORT, Methods.GET_BET_INFO)
@@ -118,6 +121,8 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
                   result = data.ResponseObject?.Results?.Participants[0][0]?.bets;
                 }
                 params.successCallback(result);
+              } else if (params?.data.ProductName == "pregame") {
+                params.successCallback(data.ResponseObject?.events);
               }
 
             } else {
@@ -193,7 +198,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
     private activateRoute: ActivatedRoute,
     public dateAdapter: DateAdapter<Date>,
     private localStorageService: LocalStorageService,
-    private exportService:ExportService
+    private exportService: ExportService
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.INTERNET;
@@ -531,6 +536,45 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
         },
       },
       {
+        headerName: 'Bonuses.OriginalBonusAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'OriginalBonusAmount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Clients.BonusWinAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'BonusWinAmount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Clients.OriginalBonusWinAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'OriginalBonusWinAmount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
         headerName: 'Clients.Notes',
         headerValueGetter: this.localizeHeader.bind(this),
         resizable: true,
@@ -589,6 +633,8 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }
@@ -782,6 +828,13 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
 
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          params.success({ rowData: [], rowCount: 0 });
+          this.gridApi?.setPinnedBottomRowData([{
+            PossibleWin: 0,
+            BetAmount: 0,
+            WinAmount: 0,
+          }
+          ]);
         }
 
         if (this.firstApiCall) {
@@ -865,7 +918,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_INTERNET_BET, { ...this.clientData, adminMenuId: this.adminMenuId });
+    this.exportService.exportToCsv(Controllers.REPORT, Methods.EXPORT_INTERNET_BET, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 
   get isRowSelected() {
@@ -1043,5 +1096,59 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
         filter: false,
       },
     )
+  }
+
+  setBGGamesColdefs() {
+    this.nestedColumnDefs.length = 0;
+    this.nestedColumnDefs.push({
+      headerName: 'Common.Name',
+      headerValueGetter: this.localizeHeader.bind(this),
+      field: 'name',
+      resizable: true,
+      filter: false,
+    },
+      {
+        headerName: 'Common.SelName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'selName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.OddName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'oddName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.OddValue',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'oddValue',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.EventTime',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'extra.eventTime',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.EventScore',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'extra.eventScore',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Bonuses.TimeAddedToBetslip',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'extra.timeAddedToBetslip',
+        resizable: true,
+        filter: false,
+      }
+    );
   }
 }

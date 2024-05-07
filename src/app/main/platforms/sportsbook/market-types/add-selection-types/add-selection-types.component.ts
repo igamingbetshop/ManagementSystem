@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +17,21 @@ import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-add-selection',
   templateUrl: './add-selection-types.component.html',
-  styleUrls: ['./add-selection-types.component.scss']
+  styleUrls: ['./add-selection-types.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    TranslateModule,
+    MatButtonModule,
+    FormsModule,
+    MatDialogModule
+  ],
 })
 export class AddSelectionTypesComponent implements OnInit {
   public formGroup: UntypedFormGroup;
@@ -76,26 +89,3 @@ export class AddSelectionTypesComponent implements OnInit {
   }
 
 }
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    TranslateModule,
-    MatButtonModule,
-    FormsModule,
-    MatDialogModule
-  ],
-  declarations: [AddSelectionTypesComponent]
-})
-export class CreatePartnerModule
-{
-
-}
-

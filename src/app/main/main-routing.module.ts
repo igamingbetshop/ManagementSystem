@@ -1,7 +1,6 @@
 import {RouterModule, Routes} from '@angular/router';
 import {NgModule} from '@angular/core';
 import {MainComponent} from './components/main/main.component';
-import {SettingsModule} from "./platforms/settings/settings.module";
 
 const routes: Routes = [
   {
@@ -25,6 +24,10 @@ const routes: Routes = [
         loadChildren: () => import('./platforms/virtual-games/virtual-games.module').then(m => m.VirtualGamesModule)
       },
       {
+        path: 'pool-betting',
+        loadChildren: () => import('./platforms/pool-betting/pool-betting.module').then(m => m.PoolBettingModule),
+      },
+      {
         path: 'skillGames',
         loadChildren: () => import('./platforms/skill-games/skill-games.module').then(m => m.SkillGamesModule)
       },
@@ -38,7 +41,7 @@ const routes: Routes = [
       },
       {
         path: 'help',
-        loadChildren: () => import('./platforms/help-center/help-center.module').then(m => m.HelpCenterModule)
+        loadChildren: () => import('./platforms/help-centers/help-center.module').then(m => m.HelpCenterModule)
       },
       {
         path: 'partner-levels',

@@ -1,0 +1,143 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">
+      <a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}}
+      :{{'Partners.WebSiteSettings' | translate}}
+    </div>
+
+    <button mat-stroked-button class="mat-btn" (click)="uploadConfig()">{{'Partners.UploadConfig' | translate}}
+    </button>
+    <button mat-stroked-button class="mat-btn" (click)="uploadMenus()">{{'Partners.UploadMenus' | translate}}
+    </button>
+    <button mat-stroked-button class="mat-btn" (click)="uploadStyles()">{{'Partners.UploadStyles' | translate}}
+    </button>
+    <button mat-stroked-button class="mat-btn" (click)="uploadTranslations()">
+      {{'Partners.UploadTranslations' | translate}}
+    </button>
+    <button mat-stroked-button class="mat-btn" (click)="ClearCloudCache()">
+      {{'Partners.ClearCloudCache' | translate}}
+    </button>
+  </div>
+
+  <div class="website-content-action">
+    <div class="title">{{'Partners.WebSiteSettings' | translate}}</div>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(1)" [class.active]="deviceType === 1">{{'Common.Desktop' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(2)" [class.active]="deviceType === 2">{{'Common.Mobile' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(3)" [class.active]="deviceType === 3">{{'Common.Tablet' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(4)" [class.active]="deviceType === 4">{{'Clients.BetShop' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(5)" [class.active]="deviceType === 5">{{'Common.Terminal' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(6)" [class.active]="deviceType === 6">{{'Common.Application' | translate}}</button>
+    <!-- <div class="input-container">
+      <div class="input-content">
+        <input matInput type="text" [placeholder]="'Partners.EnterStylesKey' | translate" [(ngModel)]="searchTitle"
+               (ngModelChange)="searchItemBySubTitle($event)">
+      </div>
+      <div class="search-result" [class.show]="showSearchedResult">{{searchedResultTitle}}</div>
+    </div> -->
+  </div>
+
+  <div class="website-settings">
+    <div class="web-site-menu-main">
+      <div class="table-content">
+        <table>
+          <thead>
+            <th>{{'Common.Id' | translate}}</th>
+            <th>{{'Common.Type' | translate}}</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let menu of menus" (click)="changeSelectedItem(0, menu)"
+              [ngClass]="{'selected' : menu.Id == selectedMenu.Id}">
+              <td>{{menu.Id}}</td>
+              <td>{{menu.Type}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <button mat-stroked-button class="mat-btn-copy" (click)="copyPartnerWebSiteSettings()">{{'Common.Copy' |
+        translate}}</button>
+    </div>
+
+
+    <div class="web-site-menu-content space">
+      <div class="table-content">
+        <table>
+          <thead>
+            <th>{{'Common.Id' | translate}}</th>
+            <th>{{'Partners.Title' | translate}}</th>
+            <th>{{'Common.Type' | translate}}</th>
+            <th>{{'Partners.StyleType' | translate}}</th>
+            <th>{{'Partners.Href' | translate}}</th>
+            <th>{{'Partners.Icon' | translate}}</th>
+            <th>{{'Partners.OpenInRouting' | translate}}</th>
+            <th>{{'Partners.Orientation' | translate}}</th>
+            <th>{{'Common.Order' | translate}}</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let menuItem of websiteMenuItems" (dblclick)="openDialog('Edit', menuItem)"
+              (click)="changeSelectedItem(1, menuItem)" [ngClass]="{'selected' : menuItem.Id == selectedMenuItem?.Id}">
+              <td>{{menuItem.Id}}</td>
+              <td>{{menuItem.Title}}</td>
+              <td>{{menuItem.Type}}</td>
+              <td>{{menuItem.StyleType}}</td>
+              <td>{{menuItem.Href}}</td>
+              <td>{{menuItem.Icon}}</td>
+              <td>{{menuItem.OpenInRouting}}</td>
+              <td>{{menuItem.Orientation}}</td>
+              <td>{{menuItem.Order}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-actions">
+        <div class="count">{{'Partners.Count' | translate}} : {{websiteMenuItems.length}}</div>
+        <button mat-stroked-button class="mat-btn" (click)="openDialog('Add', $event)">{{'Common.Add' | translate}}</button>
+        <button mat-stroked-button class="mat-delete-btn" [disabled]="!selectedMenuItem?.Id"
+          (click)="deleteWebsiteMenuItem()">
+          {{'Common.Delete' | translate}}
+        </button>
+      </div>
+    </div>
+
+
+    <div class="web-site-menu-sub-menu space" *ngIf="selectedMenuItem?.Id">
+      <div class="table-content">
+        <table>
+          <thead>
+            <th>{{'Common.Id' | translate}}</th>
+            <th>{{'Title' | translate}}</th>
+            <th>{{'Common.Type' | translate}}</th>
+            <th>{{'Partners.Href' | translate}}</th>
+            <th>{{'Partners.Icon' | translate}}</th>
+            <th>{{'Partners.OpenInRouting' | translate}}</th>
+            <th>{{'Common.Order' | translate}}</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subMenuItem of subMenuItems" (click)="changeSelectedItem(2, subMenuItem)"
+              (dblclick)="addEditSubMenuItem('Edit', subMenuItem)"
+              [ngClass]="{'selected' : subMenuItem.Id == selectedSubMenuItem?.Id}">
+              <td>{{subMenuItem.Id}}</td>
+              <td (dblclick)="addEditTranslation(subMenuItem, $event)">{{subMenuItem.Title}}</td>
+              <td>{{subMenuItem.Type}}</td>
+              <td>{{subMenuItem.Href}}</td>
+              <td>{{subMenuItem.Icon}}</td>
+              <td>{{subMenuItem.OpenInRouting}}</td>
+              <td>{{subMenuItem.Order}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-actions">
+        <div class="count">{{'Partners.Count' | translate}} : {{subMenuItems.length}}</div>
+        <button mat-stroked-button class="mat-btn" (click)="addEditSubMenuItem('Add', $event)">{{'Common.Add' |
+          translate}}</button>
+        <button mat-stroked-button class="mat-delete-btn" [class.disabled]="!selectedSubMenuItem?.Id"
+          (click)="deleteWebsiteSubMenuItem()">{{'Common.Delete' | translate}}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

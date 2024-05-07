@@ -31,18 +31,16 @@ import {ExportService} from "../../../../services/export.service";
 export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
-  public clientId: number;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowModelType2: string = GridRowModelTypes.CLIENT_SIDE;
-  public defaultColDef2
-  public rowData = [];
-  public rowData2 = [];
-  public columnDefs = [];
-  public columnDefs2 = [];
-  public blockedData;
-  public selected = false;
-  public selectedRowId: number = 0;
-  public frameworkComponents = {
+  clientId: number;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowModelType2: string = GridRowModelTypes.CLIENT_SIDE;
+  rowData = [];
+  rowData2 = [];
+  columnDefs = [];
+  columnDefs2 = [];
+  blockedData;
+  selected = false;
+  frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     textEditor: TextEditorComponent,
@@ -51,10 +49,10 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     imageRenderer: ImageRendererComponent,
     datePickerRenderer: DatePickerRendererComponent
   };
-  public rowClassRules;
-  public addedNotes;
-  public documentTypeName = [];
-  public documentStateName = []
+  rowClassRules;
+  addedNotes;
+  documentTypeName = [];
+  documentStateName = [];
 
   constructor(
     private apiService: CoreApiService,
@@ -154,6 +152,8 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         Controllers.ENUMERATION, Methods.GET_KYC_DOCUMENT_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
           if (data.ResponseCode === 0) {
             this.documentTypeName = data.ResponseObject;
+            console.log(this.documentTypeName, "this.documentTypeName");
+            
             return resolve('success');
           } else {
             return resolve('for continuing');
@@ -494,7 +494,6 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   onGridReady(params) {
     syncNestedColumnReset();
     this.gridApi = params.api;
-    this.selectedRowId = 0;
     super.onGridReady(params);
     syncColumnSelectPanel();
   }
@@ -556,6 +555,8 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   public onRowClicked(e) {
+    console.log(this.gridApi.getSelectedRows().length === 0, "this.gridApi.getSelectedRows().length === 0");
+    
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
@@ -588,7 +589,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_CLIENT_IDENTITY, this.clientId);
+    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENT_IDENTITY, this.clientId);
   }
 
 }

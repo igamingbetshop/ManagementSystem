@@ -1,6 +1,5 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { AgGridAngular } from "ag-grid-angular";
-import { ActivatedRoute } from "@angular/router";
 import { CoreApiService } from "../../../services/core-api.service";
 import { CommonDataService, ConfigService } from "../../../../../../core/services";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -12,8 +11,7 @@ import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DecimalPipe } from "@angular/common";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-import {ExportService} from "../../../services/export.service";
+import { ExportService } from "../../../services/export.service";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 
 @Component({
@@ -33,12 +31,12 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
   public partnerId;
   public selectedItem = 'today';
 
-  constructor(private activateRoute: ActivatedRoute,
+  constructor(
     private apiService: CoreApiService,
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
-    private exportService:ExportService,
+    private exportService: ExportService,
     protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_CLIENT;
@@ -208,24 +206,14 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'RealBalance',
         sortable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
+        filter: false
       },
       {
         headerName: 'Common.BonusBalance',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'BonusBalance',
         sortable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
+        filter: false
       },
       {
         headerName: 'Dashboard.CreditCorrection',
@@ -280,6 +268,45 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
         },
       },
       {
+        headerName: 'Clients.TotalBetsCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'TotalBetsCount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Segments.SportBetsCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SportBetsCount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Clients.ComplimentaryBalance',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'ComplementaryBalance',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
         headerName: 'Clients.TotalWithdrawalAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalWithdrawalAmount',
@@ -300,7 +327,6 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
     this.partners = this.commonDataService.partners;
   }
 
-
   startDate() {
     DateTimeHelper.startDate();
     this.fromDate = DateTimeHelper.getFromDate();
@@ -312,6 +338,8 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }
@@ -333,7 +361,7 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
         paging.ToDate = this.toDate;
         if (this.partnerId) {
           paging.PartnerId = this.partnerId;
-        } 
+        }
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
@@ -361,7 +389,7 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
 
   exportToCsv() {
 
-    this.exportService.exportToCsv( Controllers.DASHBOARD, Methods.EXPORT_CLIENTS_INFO_LIST, { ...this.filteredData, adminMenuId: this.adminMenuId });
+    this.exportService.exportToCsv(Controllers.DASHBOARD, Methods.EXPORT_CLIENTS_INFO_LIST, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

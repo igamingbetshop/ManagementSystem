@@ -1,4 +1,5 @@
 <div mat-dialog-title>
+  <span class="title">{{'Crm.CreateSettings' | translate}} </span>
   <title class="span">{{'Crm.CreateSettings' | translate}}</title>
   <mat-icon (click)="close()">close</mat-icon>
 </div>
@@ -68,6 +69,10 @@
 </div>
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Ok' | translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    (click)="onSubmit()">
+    {{'Common.Ok' | translate}}
+  </button>
 </div>
 

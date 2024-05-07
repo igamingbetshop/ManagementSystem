@@ -30,24 +30,24 @@ import {ExportService} from "../../services/export.service";
 })
 export class AllClientsComponent extends BasePaginatedGridComponent {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public countries: ServerCommonModel[] = [];
-  public frameworkComponents;
-  public partners = [];
-  public genders = [];
-  public underMonitoringTypes = [];
-  public categories = [];
-  public clientStates;
-  public languages = [];
-  public partnerId;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public selectedItem = 'today';
-  public paginationPage = 1;
-  public currencies = [];
-  public genderFilters = [];
-  public countriesEnum;
+  rowData = [];
+  countries: ServerCommonModel[] = [];
+  frameworkComponents;
+  partners = [];
+  genders = [];
+  underMonitoringTypes = [];
+  categories = [];
+  clientStates;
+  languages = [];
+  partnerId;
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  selectedItem = 'today';
+  paginationPage = 1;
+  currencies = [];
+  genderFilters = [];
+  countriesEnum;
 
   constructor(
     protected injector: Injector,
@@ -622,6 +622,8 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }

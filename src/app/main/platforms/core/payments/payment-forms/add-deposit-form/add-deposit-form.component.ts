@@ -16,13 +16,14 @@ import {DateAdapter} from "@angular/material/core";
   styleUrls: ['./add-deposit-form.component.scss']
 })
 export class AddDepositFormComponent implements OnInit {
-  public partnerBanks = [];
-  public partnerId;
-  public selectedBank = {
+  partnerBanks = [];
+  partnerId;
+  selectedBank = {
     Accounts: []
   };
-  public fromDate = new Date();
-  public formGroup: UntypedFormGroup;
+  fromDate = new Date();
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddDepositFormComponent>,
               private apiService: CoreApiService,
@@ -67,6 +68,7 @@ export class AddDepositFormComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
+    this.isSendingReqest = true; 
     const setting = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.CREATE_PAYMENT_FORM_REQUEST).pipe(take(1)).subscribe((data) => {
@@ -75,6 +77,7 @@ export class AddDepositFormComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

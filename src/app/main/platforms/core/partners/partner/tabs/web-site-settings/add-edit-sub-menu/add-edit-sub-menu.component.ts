@@ -133,6 +133,9 @@ export class AddEditSubMenuComponent implements OnInit {
   isValidFormat(files: any): boolean {
     return (files.size < 900000) && (
     files.type === 'image/png' ||
+    files.type === 'text/xml' ||
+    files.type === 'text/plain' ||
+    files.type === '' ||
     files.type === 'image/jpg' ||
     files.type === 'image/x-icon' ||
     files.type === 'image/svg+xml' ||
@@ -140,7 +143,7 @@ export class AddEditSubMenuComponent implements OnInit {
     files.type === 'image/gif' ||
     files.type === 'image/webp' ||
     files.type === 'application/pdf' ||
-    files.type === 'image/vnd.microsoft.icon' ||    
+    files.type === 'image/vnd.microsoft.icon' ||
     files.name.includes('.ttf'));
   }
 

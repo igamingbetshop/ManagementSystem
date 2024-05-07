@@ -1,0 +1,630 @@
+<div class="container">
+  <app-header-filter
+    [title]="'Dashboard.Dashboard'"
+    (toDateChange)="onDateChange($event)" />
+  <div class="chart-grid">
+    <div class="cart">
+      <div class="chart-header" collapse="true">
+        <span>{{'Dashboard.ActivitiesByCharts' | translate}}</span>
+        <span class="icon-arrow"></span>
+      </div>
+      <div class="chart-action">
+        <div class="chart-view-action">
+          <span class="icon-arrow" (click)="changeGraff(-1)"></span>
+          <div class="dash-text">{{ selectedGridName | translate }}</div>
+          <span class="icon-arrow" (click)="changeGraff(1)"></span>
+        </div>
+
+        <div class="custom-dropdown">
+          <mat-select (selectionChange)="changeCartType($event.value)"
+            placeholder="{{'Dashboard.SelectChartType' | translate}}" panelClass="overlay-dropdown"
+            disableOptionCentering>
+            <mat-option *ngFor="let cartType of cartTypes" [value]="cartType.value">{{cartType.id |
+              translate}}</mat-option>
+          </mat-select>
+        </div>
+
+        @if (selectedGrid === 1 || selectedGrid === 2 || selectedGrid === 5 || selectedGrid === 6 || selectedGrid === 4) {
+          <div class="chart-view-action" >
+            <div class="dash-text">{{ chartItemName }}</div>
+          </div>
+        }
+
+        <!-- <div class="custom-dropdown" *ngIf="selectedGrid === 1 || selectedGrid === 2 || selectedGrid === 5 || selectedGrid === 6">
+          <mat-select #matSelect (selectionChange)="onStateChange($event.value)"
+            placeholder="{{'Common.SelectState' | translate}}" panelClass="overlay-dropdown multiple"
+            disableOptionCentering multiple>
+            <div class="select-all">
+              <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
+                (change)="toggleAllSelection()">{{"Common.SelectAll" | translate}}</mat-checkbox>
+            </div>
+
+            <mat-option *ngFor="let state of paymentStates" [value]="state.Id">
+              {{state.Name}}
+            </mat-option>
+          </mat-select>
+        </div> -->
+      </div>
+      <div class="chart-content" [chart]="chart"></div>
+    </div>
+
+    <div class="players-info">
+      @if (playersLoading) {
+        <mat-spinner class="mat-spinner"></mat-spinner>
+      }
+
+      <div class="dashboard-panel players">
+        <div class="panel-header clickable"  (click)="selectGrid(3)">
+          <span>{{'Dashboard.Players' | translate}}</span>
+          @if (selectedGrid === 3) {
+            <i class="icon-stat-icon"></i>
+          }
+        </div>
+        <!-- <span class="icon-arrow"  collapse = "true"></span> -->
+        <div class="panel-content">
+          <div class="panel-scroller">
+            <div class="panel-row">
+              <i class="icon-visitors"></i>
+              <span>{{'Dashboard.Visitors' |translate}}</span>
+              <span>{{playersInfo?.VisitorsCount | number:'.'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-signups"></i>
+              <span>{{'Dashboard.SignUps' | translate}}</span>
+              <span>{{playersInfo?.SignUpsCount | number:'.'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-returns"></i>
+              <span>{{'Dashboard.Returns' | translate}}</span>
+              <span>{{playersInfo?.ReturnsCount | number:'.'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-bonuses"></i>
+              <span>{{'Dashboard.Bonuses' | translate}}</span>
+              <span>{{playersInfo?.TotalBonusAmount | number:'1.2-2'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-cashout"></i>
+              <span>{{'Dashboard.Cashout' | translate}}</span>
+              <span>{{playersInfo?.TotalCashoutAmount |number:'1.2-2'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-average"></i>
+              <span>{{'Dashboard.AverageBet' | translate}}</span>
+              <span>{{playersInfo?.AverageBet| number:'1.2-2'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-maxbet"></i>
+              <span>{{'Dashboard.MaxBet' | translate}}</span>
+              <span>{{playersInfo?.MaxBet |number:'1.2-2'}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-maxwin"></i>
+              <span>{{'Dashboard.MaxWin' | translate}}</span>
+              <span>{{playersInfo?.MaxWin | number:'1.2-2'}}</span>
+              <!-- <span class="max-win-bet">{{playersInfo?.MaxWinBet | number:'1.2-2'}}</span> -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid .w-30">
+    <div class="info place-bet pointer w-120" [ngClass]="{'select-grid': selectedGrid === 0}">
+      <div class="panel-header clickable"  (click)="selectGrid(0)">
+        <span>{{'Dashboard.PlacedBets' | translate}}</span>
+        @if (selectedGrid === 0) {
+          <i class="icon-stat-icon"></i>
+        }
+      </div>
+      <!-- <span class="icon-arrow" collapse></span> -->
+      <div class="dashboard-panel bets-provider">
+        @if (placedBetsLoading) {
+          <mat-spinner class="mat-spinner"></mat-spinner>
+        }
+
+        <div class="table-content">
+          <table class="table pointer">
+            <thead class="table dashboard-header-table">
+              <tr>
+                <th></th>
+                <th>{{'Dashboard.Amount' | translate}}</th>
+                <th>{{'Dashboard.GGR' | translate}}</th>
+                <th>{{'Dashboard.NGR' | translate}}</th>
+                <th>{{'Partners.Count' | translate}}</th>
+                <th>{{'Dashboard.Players' | translate}}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="row-title">{{'Dashboard.AllBets' | translate}}</td>
+                <td>{{betsInfo?.TotalBetsAmount | number:'.'}}</td>
+                <td>{{betsInfo?.TotalGGR | number:'.'}}</td>
+                <td>{{betsInfo?.TotalNGR | number:'.'}}</td>
+                <td>{{betsInfo?.TotalBetsCount | number:'.'}}</td>
+                <td>{{betsInfo?.TotalPlayersCount | number:'.'}}</td>
+              </tr>
+              <tr>
+                <td class="row-title">{{'Dashboard.MobileBets' | translate}}</td>
+                <td>{{betsInfo?.TotalBetsFromMobile | number:'.'}}</td>
+                <td>{{betsInfo?.TotalGGRFromMobile | number:'.'}}</td>
+                <td>{{betsInfo?.TotalNGRFromMobile | number:'.'}}</td>
+                <td>{{betsInfo?.TotalBetsCountFromMobile | number:'.'}}</td>
+                <td>{{betsInfo?.TotalPlayersCountFromMobile | number:'.'}}</td>
+              </tr>
+              <tr>
+                <td class="row-title">{{'Dashboard.WebsiteBets' | translate}}</td>
+                <td>{{betsInfo?.TotalBetsFromWebSite | number:'.'}}</td>
+                <td>{{betsInfo?.TotalGGRFromWebSite | number:'.'}}</td>
+                <td>{{betsInfo?.TotalNGRFromWebSite | number:'.'}}</td>
+                <td>{{betsInfo?.TotalBetsCountFromWebSite | number:'.'}}</td>
+                <td>{{betsInfo?.TotalPlayersCountFromWebSite | number:'.'}}</td>
+              </tr>
+              <tr>
+                <td class="row-title">{{'Dashboard.Tablet' | translate}}</td>
+                <td>{{betsInfo?.TotalBetsFromTablet | number:'.'}}</td>
+                <td>{{betsInfo?.TotalGGRFromTablet | number:'.'}}</td>
+                <td>{{betsInfo?.TotalNGRFromTablet | number:'.'}}</td>
+                <td>{{betsInfo?.TotalBetsCountFromTablet | number:'.'}}</td>
+                <td>{{betsInfo?.TotalPlayersCountFromTablet | number:'.'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="compact-list">
+          <li>
+            <label collapse>
+              <span>{{'Dashboard.AllBets' | translate}}</span>
+              <span class="icon-arrow"></span>
+            </label>
+            <div class="list-content">
+              <div class="list-item">
+                <span>{{'Dashboard.Amount' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsAmount | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.GGR' | translate}}</span>
+                <span>{{betsInfo?.TotalGGRFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.NGR' | translate}}</span>
+                <span>{{betsInfo?.TotalNGRFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Count' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsCountFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Players' | translate}}</span>
+                <span>{{betsInfo?.TotalPlayersCountFromTablet | number:'.'}}</span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <label collapse>
+              <span>{{'Dashboard.MobileBets' | translate}}</span>
+              <span class="icon-arrow"></span>
+            </label>
+            <div class="list-content">
+              <div class="list-item">
+                <span>{{'Dashboard.Amount' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsFromMobile | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.GGR' | translate}}</span>
+                <span>{{betsInfo?.TotalGGRFromMobile | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.NGR' | translate}}</span>
+                <span>{{betsInfo?.TotalNGRFromMobile | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Count' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsCountFromMobile | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Players' | translate}}</span>
+                <span>{{betsInfo?.TotalPlayersCountFromMobile | number:'.'}}</span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <label collapse>
+              <span>{{'Dashboard.WebsiteBets' | translate}}</span>
+              <span class="icon-arrow"></span>
+            </label>
+            <div class="list-content">
+              <div class="list-item">
+                <span>{{'Dashboard.Amount' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsFromWebSite | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.GGR' | translate}}</span>
+                <span>{{betsInfo?.TotalGGRFromWebSite | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.NGR' | translate}}</span>
+                <span>{{betsInfo?.TotalNGRFromWebSite | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Count' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsCountFromWebSite | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Players' | translate}}</span>
+                <span>{{betsInfo?.TotalPlayersCountFromWebSite | number:'.'}}</span>
+              </div>
+            </div>
+          </li>
+          <li>
+            <label collapse>
+              <span>{{'Dashboard.Tablet' | translate}}</span>
+              <span class="icon-arrow"></span>
+            </label>
+            <div class="list-content">
+              <div class="list-item">
+                <span>{{'Dashboard.Amount' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.GGR' | translate}}</span>
+                <span>{{betsInfo?.TotalGGRFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.NGR' | translate}}</span>
+                <span>{{betsInfo?.TotalNGRFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Count' | translate}}</span>
+                <span>{{betsInfo?.TotalBetsCountFromTablet | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.Players' | translate}}</span>
+                <span>{{betsInfo?.TotalPlayersCountFromTablet | number:'.'}}</span>
+              </div>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="info pointer" [ngClass]="{'select-grid': selectedGrid === 1}">
+      <div class="panel-header clickable" collapse (click)="selectGrid(1, deposits[0].key)">
+        <span>{{'Dashboard.Deposits' | translate}}</span>
+        <span class="icon-arrow"></span>
+      </div>
+      <div class="dashboard-panel">
+        @if (depositsLoading) {
+          <mat-spinner class="mat-spinner"></mat-spinner>
+        }
+
+        <table class="table dashboard-header-table">
+          <tr>
+            <th class="w-35">{{'Dashboard.StatusMethod' | translate}}</th>
+            <th>{{'Dashboard.Amount' | translate}}</th>
+            <th>{{'Partners.Count' | translate}}</th>
+            <th>{{'Dashboard.Players' | translate}}</th>
+          </tr>
+        </table>
+
+        <div class="table-content">
+          <table class="table pointer deposit-table">
+            <tbody *ngFor="let key of deposits; index as i" class="status-{{key.totals?.Status}}">
+              <tr class="status-text status-text bolded-row" (click)="selectGrid(1, key.key)" style="cursor: pointer;" [class.selected-row]="chartItemName == key.key && selectedGrid == 1">
+                <td class="w-35 row-title">{{key.key}}</td>
+                <td>{{key.totals?.TotalAmount | number:'1.2-2'}}</td>
+                <td>{{key.totals?.TotalDepositsCount }}</td>
+                <td>
+                  {{key.totals?.TotalPlayersCount}}
+                  @if (chartItemName == key.key && selectedGrid == 1) {
+                    <i class="icon-stat-icon" ></i>
+                  }
+                </td>
+              </tr>
+              <tr class="status-text status-text soft-row" *ngFor="let item of key.pSystems;"
+                  (click)="selectGrid(5, item.PaymentSystemName, key)"
+                  [class.selected-row]="chartItemName === item.PaymentSystemName && this.selectedKey == key.key">
+                <td class="w-35 row-title" style="cursor: pointer;">{{item.PaymentSystemName}}</td>
+                <td>{{item.TotalAmount | number:'1.2-2'}}</td>
+                <td>{{item.TotalDepositsCount }}</td>
+                <td>
+                    {{item.TotalPlayersCount}}
+                    @if (chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key) {
+                      <i class="icon-stat-icon" ></i>
+                    }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul class="compact-list deposit-list">
+          <ng-container *ngFor="let key of deposits">
+            <li class="status-{{key.totals?.Status}}">
+              <label  (click)="selectGrid(1, key.key)" [class.selected-row]="chartItemName == key.key && selectedGrid == 1">
+                <span>{{key.key}}</span>
+                @if (chartItemName == key.key && selectedGrid == 1) {
+                  <i class="icon-stat-icon" ></i>
+                }
+              </label>
+              <span class="icon-arrow" collapse></span>
+              <div class="list-content">
+                <div class="list-item">
+                  <span>{{'Dashboard.Amount' | translate}}</span>
+                  <span>{{key.totals?.TotalAmount | number:'1.2-2'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Partners.Count' | translate}}</span>
+                  <span>{{key.totals?.TotalDepositsCount }}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Dashboard.Players' | translate}}</span>
+                  <span>{{key.totals?.TotalPlayersCount}}</span>
+                </div>
+              </div>
+              <div class="pay-systems-block">
+                <div *ngFor="let item of key.pSystems" class="compact-list-content">
+                  <div class="list-item  bolded-row"  (click)="selectGrid(5, item.PaymentSystemName, key)"
+                       [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key">
+                    {{item.PaymentSystemName}}
+                    @if (chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key) {
+                      <i class="icon-stat-icon"></i>
+                    }
+                  </div>
+                  <div class="list-item">
+                    <span>{{'Dashboard.Amount' | translate}}</span>
+                    <span>{{item.TotalAmount | number:'1.2-2'}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span>{{'Partners.Count' | translate}}</span>
+                    <span>{{item.TotalDepositsCount }}</span>
+                  </div>
+                  <div class="list-item">
+                    <span>{{'Dashboard.Players' | translate}}</span>
+                    <span>{{item.TotalPlayersCount}}</span>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+    <div class="info pointer" [ngClass]="{'select-grid': selectedGrid === 2}">
+      <div class="panel-header clickable" collapse (click)="selectGrid(2, withdrawals[0].key)">
+        <span>{{'Dashboard.Withdrawals' | translate}}</span>
+        <span class="icon-arrow"></span>
+      </div>
+      <div class="dashboard-panel">
+        @if (withdrawalsLoading) {
+          <mat-spinner class="mat-spinner"></mat-spinner>
+        }
+
+        <table class="table dashboard-header-table">
+          <tr>
+            <th class="w-35">{{'Dashboard.StatusMethod' | translate}}</th>
+            <th>{{'Dashboard.Amount' | translate}}</th>
+            <th>{{'Partners.Count' | translate}}</th>
+            <th>{{'Dashboard.Players' | translate}}</th>
+          </tr>
+        </table>
+
+        <div class="table-content">
+          <table class="table pointer withdraw-table">
+            <tbody *ngFor="let key of withdrawals; index as i" class="status-{{key.totals?.Status}}">
+              <tr class="status-text status-text bolded-row" (click)="selectGrid(2, key.key)" style="cursor: pointer;" [class.selected-row]="chartItemName === key.key && selectedGrid == 2">
+                <td class="w-35 row-title">{{key.key}}</td>
+                <td>{{key.totals?.TotalAmount | number:'1.2-2'}}</td>
+                <td>{{key.totals?.TotalWithdrawalsCount }}</td>
+                <td>{{key.totals?.TotalPlayersCount}}
+                  @if (chartItemName === key.key && selectedGrid == 2) {
+                    <i class="icon-stat-icon"></i>
+                  }
+                </td>
+                </tr>
+              <tr class="status-text status-text soft-row" *ngFor="let item of key.pSystems" (click)="selectGrid(6, item.PaymentSystemName, key)" style="cursor: pointer;"
+                [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key">
+                <td class="w-35 row-title">{{item.PaymentSystemName}}</td>
+                <td>{{item.TotalAmount | number:'1.2-2'}}</td>
+                <td>{{item.TotalWithdrawalsCount }}</td>
+                <td>{{item.TotalPlayersCount}}
+                  @if (chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key) {
+                    <i class="icon-stat-icon" ></i>
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="compact-list withdraw-list">
+          <ng-container *ngFor="let key of withdrawals; index as i">
+            <li class="status-{{key.totals?.Status}}">
+              <label  (click)="selectGrid(2, key.key)"
+                     [class.selected-row]="chartItemName === key.key && selectedGrid == 2">
+                <span>{{key.key}}</span>
+                @if (chartItemName === key.key && selectedGrid == 2) {
+                  <i class="icon-stat-icon" ></i>
+                }
+              </label>
+              <span class="icon-arrow" collapse></span>
+              <div class="list-content">
+                <div class="list-item">
+                  <span>{{'Dashboard.Amount' | translate}}</span>
+                  <span>{{key.totals?.TotalAmount | number:'1.2-2'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Partners.Count' | translate}}</span>
+                  <span>{{key.totals?.TotalDepositsCount }}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Dashboard.Players' | translate}}</span>
+                  <span>{{key.totals?.TotalPlayersCount}}</span>
+                </div>
+              </div>
+              <div class="pay-systems-block">
+                <div *ngFor="let item of key.pSystems" class="compact-list-content">
+                  <div class="list-item bolded-row " (click)="selectGrid(6, item.PaymentSystemName, key)"
+                       [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key">
+                    {{item.PaymentSystemName}}
+                    @if (chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key) {
+                      <i class="icon-stat-icon" ></i>
+                    }
+                  </div>
+                  <div class="list-item">
+                    <span>{{'Dashboard.Amount' | translate}}</span>
+                    <span>{{item.TotalAmount | number:'1.2-2'}}</span>
+                  </div>
+                  <div class="list-item">
+                    <span>{{'Partners.Count' | translate}}</span>
+                    <span>{{item.TotalDepositsCount }}</span>
+                  </div>
+                  <div class="list-item">
+                    <span>{{'Dashboard.Players' | translate}}</span>
+                    <span>{{item.TotalPlayersCount}}</span>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+
+
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="chart-grid">
+    <!-- <mat-spinner class="mat-spinner" *ngIf="providersLoading"></mat-spinner> -->
+    <div class="info pointer">
+      <div class="panel-header clickable" collapse (click)="selectGrid(4, providerBets[0].SubProviderName,  0)">
+        <span>{{'Dashboard.BetsByProviders' | translate}}</span>
+        <span class="icon-arrow"></span>
+      </div>
+      <div class="dashboard-panel bets-provider">
+
+        <div class="table-content">
+          <table class="table pointer provider">
+            <thead class="table dashboard-header-table">
+              <tr>
+                <th>{{'Dashboard.Provider' | translate}}</th>
+                <th>{{'Dashboard.SubProvider' | translate}}</th>
+                <th>{{'Dashboard.TotalBets' | translate}}</th>
+                <th>{{'Dashboard.TotalWin' | translate}}</th>
+                <th>#{{'Dashboard.Bets' | translate}}</th>
+                <th>{{'Dashboard.TotalGGR' | translate}}</th>
+                <th>{{'Dashboard.TotalNGR' | translate}}</th>
+                <th>{{'Dashboard.UniquePlayers' | translate}}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody class="provider-list">
+              <tr>
+                <td class="row-title">{{pbt?.ProviderName}}</td>
+                <td class="row-title">-</td>
+                <td [ngClass]="{'positive': pbt?.TotalBetsAmount >= 0, 'negative': pbt?.TotalBetsAmount < 0}">
+                  {{pbt?.TotalBetsAmount | number:'1.2-2'}}/
+                  <span>{{1 | percent:'1.1'}}</span>
+                </td>
+                <td [ngClass]="{'positive': pbt?.TotalWinsAmount >= 0, 'negative': pbt?.TotalWinsAmount < 0}">
+                  {{pbt?.TotalWinsAmount | number:'1.2-2'}}/
+                  <span>{{1 | percent:'1.1'}}</span>
+                </td>
+                <td>{{pbt?.TotalBetsCount}}</td>
+                <td [ngClass]="{'positive': pbt?.TotalGGR >= 0, 'negative': pbt?.TotalGGR < 0}">
+                  {{pbt?.TotalGGR | number:'1.2-2'}}/
+                  <span>{{1 | percent:'1.1'}}</span>
+                </td>
+                <td [ngClass]="{'positive': pbt?.TotalNGR >= 0, 'negative': pbt?.TotalNGR < 0}">
+                  {{pbt?.TotalNGR | number:'1.2-2'}}
+                  <span>{{1 | percent:'1.1'}}</span>
+                </td>
+
+                <td>{{pbt?.TotalPlayersCount}}</td>
+                <td></td>
+              </tr>
+              <tr *ngFor="let bet of providerBets  let i = index" [class.selected-row]="i === selectedRowIndex"
+                [ngClass]="{'select-grid, select-row': selectedGrid === 4}"
+                (click)="selectGrid(4, bet.SubProviderName,  i)" style="cursor: pointer;">
+                <td class="row-title">{{bet.GameProviderName}}</td>
+                <td>{{bet.SubProviderName}}</td>
+                <td [ngClass]="{'positive': bet.TotalBetsAmount >= 0, 'negative': bet.TotalBetsAmount < 0}">
+                  {{bet.TotalBetsAmount | number:'1.2-2'}} /
+                  <span>{{bet.TotalBetsAmount / pbt.TotalBetsAmount | percent:'1.1'}}</span>
+                </td>
+                <td [ngClass]="{'positive': bet.TotalWinsAmount >= 0, 'negative': bet.TotalWinsAmount < 0}">
+                  {{bet.TotalWinsAmount | number:'1.2-2'}} /
+                  <span>{{bet.TotalWinsAmount / pbt.TotalWinsAmount | percent:'1.1'}}</span>
+                </td>
+                <td>{{bet.TotalBetsCount | number:'.'}}</td>
+                <td [ngClass]="{'positive': bet.TotalGGR >= 0, 'negative': bet.TotalGGR < 0}">
+                  {{bet.TotalGGR | number:'.'}} /
+                  <span>{{bet.TotalGGR / pbt.TotalGGR | percent:'1.1'}}</span>
+                </td>
+                <td [ngClass]="{'positive': bet.TotalNGR >= 0, 'negative': bet.TotalNGR < 0}">
+                  {{bet.TotalNGR | number:'1.2-2'}}
+                  <span>{{bet.TotalNGR / pbt.TotalNGR | percent:'1.1'}}</span>
+
+                </td>
+
+                <td>{{bet.TotalPlayersCount | number:'.'}}</td>
+                <td>
+                  @if (i === selectedRowIndex) {
+                    <i class="icon-stat-icon"></i>
+                  }
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+        <ul class="compact-list">
+          <li *ngFor="let bet of providerBets  let i = index">
+            <label  class="provider-label" [ngClass]="{'selected-row': selectedGrid === 4}"
+                   (click)="selectGrid(4, bet.SubProviderName,  i)">
+              <span>{{bet.GameProviderName}}</span>
+              @if (i === selectedRowIndex) {
+                <i class="icon-stat-icon"></i>
+              }
+            </label>
+            <span class="icon-arrow" collapse></span>
+            <div class="list-content">
+              <div class="list-item">
+                <span>{{'Dashboard.SubProvider' | translate}}</span>
+                <span>{{bet.SubProviderName}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.TotalBets' | translate}}</span>
+                <span>{{bet.TotalBetsAmount / pbt.TotalBetsAmount | percent:'1.1'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.TotalWin' | translate}}</span>
+                <span>{{bet.TotalWinsAmount / pbt.TotalWinsAmount | percent:'1.1'}}</span>
+              </div>
+              <div class="list-item">
+                <span>#{{'Dashboard.Bets' | translate}}</span>
+                <span>{{bet.TotalBetsCount | number:'.'}}</span>
+              </div>
+              <div class="list-item">
+                <span>#{{'Dashboard.TotalGGR' | translate}}</span>
+                <span>{{bet.TotalGGR / pbt.TotalGGR | percent:'1.1'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.TotalNGR' | translate}}</span>
+                <span>{{bet.TotalNGR | number:'1.2-2'}}</span>
+              </div>
+              <div class="list-item">
+                <span>{{'Dashboard.UniquePlayers' | translate}}</span>
+                <span>{{bet.TotalPlayersCount | number:'.'}}</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

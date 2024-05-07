@@ -60,7 +60,6 @@
       <span *ngIf = "betInfo.TeaserId">, {{'Reports.TeaserId' | translate}}: {{betInfo.TeaserId}}</span>
       <span *ngIf = "betInfo.Point">, {{'Reports.Point' | translate}}: {{betInfo.Point}}</span>
       <span *ngIf = "betInfo.Info">, {{'Common.Info' | translate}}: {{betInfo.Info}}</span>
-
     </div>
 
     <div class="footer-ag-grid">
@@ -92,6 +91,7 @@
 
 <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+<button mat-stroked-button class="mat-export-btns" (click)="exportMatchGrid()">{{'Sport.ExportToCSVSelections' | translate}}</button>
 
 <div *ngIf="show" class="match-grid">
 

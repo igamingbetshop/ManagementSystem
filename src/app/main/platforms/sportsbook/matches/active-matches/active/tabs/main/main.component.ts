@@ -13,7 +13,7 @@ import { GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
 import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MATCH_STATUSES } from 'src/app/core/constantes/statuses';
+import { MATCH_STATUSES, SETTELMENT_STATUSES } from 'src/app/core/constantes/statuses';
 import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
@@ -39,6 +39,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     buttonRenderer: ButtonRendererComponent,
     };
 
+    settlementStatuses = SETTELMENT_STATUSES;
+
   public Statuses = MATCH_STATUSES;
   matchName: string;
 
@@ -51,7 +53,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     public dialog: MatDialog,
   ) {
     super(injector);
-
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -184,6 +185,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       CurrentPhaseName: [null],
       currentPhase: [null],
       Status: [null],
+      AutoSettlement: [null],
     });
   }
 
@@ -230,6 +232,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
           this.activeMatch.currentPhase = this.activeMatch.CurrentPhaseId + ' - ' + this.activeMatch.CurrentPhaseName;
           this.formGroup.patchValue(this.activeMatch);
           this.activeMatch.StatusName = this.Statuses?.find(p =>p.status == this.activeMatch?.Status).Name
+          this.activeMatch.AutoSettlementName = this.settlementStatuses?.find(p =>p.Id == this.activeMatch?.AutoSettlement).Name || 'None'
           this.activeMatch.ProviderName = this.Providers?.find(p =>p.Id == this.activeMatch?.ProviderId).Name
           this.rowData = this.activeMatch.Competitors;
           this.matchName = this.rowData[0].TeamName + ' vs ' +this.rowData[1].TeamName

@@ -42,7 +42,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
     selectRenderer: SelectRendererComponent,
     buttonRenderer: ButtonRendererComponent,
   }
-  override defaultColDef =  {
+  override defaultColDef = {
     flex: 1,
     unSortIcon: false,
     copyHeadersToClipboard: true,
@@ -258,7 +258,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
 
   async addGroup() {
     let paretnId;
-    if(this.agGrid?.api.getSelectedRows()[0]) {
+    if (this.agGrid?.api.getSelectedRows()[0]) {
       paretnId = this.agGrid?.api.getSelectedRows()[0];
     }
 
@@ -269,16 +269,7 @@ export class BetShopsEditComponent extends BasePaginatedGridComponent implements
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.apiService.apiPost(this.configService.getApiUrl, data,
-          true, Controllers.BET_SHOP, Methods.SAVE_BET_SHOP_GROUPS)
-          .pipe(take(1))
-          .subscribe(data => {
-            if (data.ResponseCode === 0) {
-              this.getBetShops();
-            } else {
-              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-            }
-          });
+        this.getBetShops();
       }
     })
   }

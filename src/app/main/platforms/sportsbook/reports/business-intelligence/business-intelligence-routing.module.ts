@@ -2,6 +2,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { SportFilterOptionsResolver } from '../../resolvers/sport-filter-options.resolver';
 import { BusinessIntelligenceComponent } from './business-intelligence.component';
+import { SportPartnersResolver } from '../../resolvers/sport-partners.resolver';
 
 const routes: Routes = [
 
@@ -37,7 +38,8 @@ const routes: Routes = [
       {
         path: 'by-players',
         loadChildren: () => import('./by-players/by-players.module').then(m => m.ByPlayersModule),
-        resolve: { filterData: SportFilterOptionsResolver },
+        resolve: {partners: SportPartnersResolver, filterOptions: SportFilterOptionsResolver}
+
       },
       {
         path: 'results',

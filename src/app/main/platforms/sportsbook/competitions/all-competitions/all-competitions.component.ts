@@ -15,7 +15,7 @@ import { Paging } from 'src/app/core/models';
 import { GridMenuIds, ModalSizes } from 'src/app/core/enums';
 import { SelectRendererComponent } from "../../../../components/grid-common/select-renderer.component";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
-import { IRowNode } from "ag-grid-community";
+import { CellClickedEvent, IRowNode } from "ag-grid-community";
 import { AgGridAngular } from "ag-grid-angular";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { MatMenuTrigger } from "@angular/material/menu";
@@ -59,7 +59,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
   ];
 
   public detailCellRendererParams: any = {
-    // provide the Grid Options to use on the Detail Grid
     detailGridOptions: {
       rowHeight: 47,
       defaultColDef: {
@@ -181,19 +180,17 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         {
           headerName: 'Common.View',
           headerValueGetter: this.localizeHeader.bind(this),
-          cellRenderer: OpenerComponent,
-          valueGetter: params => {
-            let data = { path: '', queryParams: null };
-            let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-            data.path = this.router.url.replace(replacedPart, 'competition');
-            data.queryParams = {
-              competitionId: params.data.CompetitionId,
-              sportId: params.data.SportId,
-              partnerId: params.data.PartnerId
-            };
-            return data;
+          cellRenderer: function (params) {
+            if (params.node.rowPinned) {
+              return '';
+            } else {
+              return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+             visibility
+              </i>`
+            }
+
           },
-          sortable: false
+          onCellClicked: (event: CellClickedEvent) => this.goToCompetition(event),
         },
       ],
       onGridReady: params => {
@@ -515,22 +512,17 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       {
         headerName: 'Common.View',
         headerValueGetter: this.localizeHeader.bind(this),
-        cellRenderer: OpenerComponent,
-        field: 'View',
-        filter: false,
-        valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'competition');
-          data.queryParams = {
-            competitionId: params.data.Id,
-            sportId: params.data.SportId,
-            partnerId: params.data.PartnerId,
-            name: params.data.Name
-          };
-          return data;
+        cellRenderer: function (params) {
+          if (params.node.rowPinned) {
+            return '';
+          } else {
+            return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+           visibility
+            </i>`
+          }
+
         },
-        sortable: false
+        onCellClicked: (event: CellClickedEvent) => this.goToCompetition(event),
       },
     ];
     this.masterDetail = true;
@@ -669,7 +661,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         paging.PageSize = Number(this.cacheBlockSize);
         paging.PartnerId = this.partnerId;
 
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         this.filterData = { ...paging };
         this.apiService.apiPost(this.path, paging)
@@ -780,6 +772,23 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
+  }
+
+  goToCompetition(ev) {
+    const url = this.router.serializeUrl(this.router.createUrlTree([`/main/sportsbook/competitions/competition/main`],
+      {
+        queryParams: {
+          competitionId: ev.data?.CompetitionId || ev.data?.Id,
+          sportId: ev.data?.SportId,
+          partnerId: ev.data?.PartnerId,
+          name: ev.data?.Name
+        }
+      }));
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      console.error('Failed to construct URL');
+    }
   }
 
 }

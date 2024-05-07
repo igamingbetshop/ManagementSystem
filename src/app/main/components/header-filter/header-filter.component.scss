@@ -16,10 +16,10 @@
         overflow-x: auto;
         overflow-y: hidden;
         flex-wrap: nowrap !important;
-
         .date-time-tabs {
-          flex-wrap: nowrap !important;
+          display: flex;
           margin-left: 0 !important;
+          gap: 8px;
         }
       }
 
@@ -31,9 +31,8 @@
     .contianer-wrap {
       display: flex;
       flex-wrap: wrap;
-
       @media screen and (max-width: 1200px) {
-        margin-top: 16px
+        margin-top: 6px;
       }
 
       .date-time-tabs {

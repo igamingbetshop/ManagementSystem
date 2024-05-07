@@ -34,11 +34,12 @@ import { MatSelectModule } from '@angular/material/select';
   ]
 })
 export class AddNoteComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
+  formGroup: UntypedFormGroup;
   private objectId;
   public objectTypeId;
   notes = [];
   comments;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddNoteComponent>,
@@ -109,9 +110,10 @@ export class AddNoteComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true; 
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.UTIL,
       Methods.SAVE_NOTE).pipe(take(1)).subscribe((data) => {
@@ -120,6 +122,7 @@ export class AddNoteComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
         }
+        this.isSendingReqest = false; 
       });
   }
 

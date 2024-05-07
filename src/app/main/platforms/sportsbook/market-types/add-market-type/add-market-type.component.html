@@ -31,6 +31,13 @@
           <input matInput type="number" [placeholder]="'Bonuses.Priority' | translate" [(ngModel)]="selection.Priority" [ngModelOptions]="{standalone: true}">
         </mat-form-field>
 
+        <mat-form-field>
+          <input matInput type="number" [placeholder]="'Sport.SelectionsCount' | translate" [formControlName]="'SelectionsCount'">
+          <mat-error *ngIf="errorControl['SelectionsCount']?.touched && errorControl['SelectionsCount'].errors?.required">
+            {{'Sport.SelectionsCount' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </mat-form-field>
+
         <ul style="list-style-type: none; margin: 0; padding: 0; overflow-y: auto; max-height: 200px">
           <li *ngFor="let ar of arr; let i = index" ><mat-icon style="cursor: pointer; transform: scale(0.7); color: red;" (click)="delete(i)">close</mat-icon> <span>{{'Common.Name' | translate}}:</span> {{ar.SelectionTypeName}} &nbsp; <span>{{'Bonuses.Priority' | translate}}:</span> {{ar.Priority}}</li>
        </ul>
@@ -43,5 +50,8 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()" >{{'Sport.AddMarketType' | translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" (click)="onSubmit()">
+    {{'Sport.AddMarketType' | translate}}
+  </button>
 </div>

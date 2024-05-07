@@ -20,7 +20,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { TranslateModule } from "@ngx-translate/core";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, MATCH_STATUSES_OPTIONS } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-add-teaser',
@@ -52,11 +52,7 @@ export class AddTeaserComponent implements OnInit {
     { Id: 3, Name: 'Losses' },
     { Id: 4, Name: 'Demotes' },
   ];
-  public matchStatus = [
-    { Id: null, Name: 'All' },
-    { Id: 0, Name: 'Prematch' },
-    { Id: 1, Name: 'Live' }
-  ];
+  public matchStatus = MATCH_STATUSES_OPTIONS
   public partners = [];
   public selectedPoints = [];
   public action;

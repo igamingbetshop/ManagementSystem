@@ -15,10 +15,10 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-currency-rate.component.scss']
 })
 export class AddCurrencyRateComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public currencies = [];
-  public paymentSetting;
-
+  formGroup: UntypedFormGroup;
+  currencies = [];
+  paymentSetting;
+  isSendingReqest = false; 
   constructor(public dialogRef: MatDialogRef<AddCurrencyRateComponent>,
               private apiService: CoreApiService,
               private _snackBar: MatSnackBar,
@@ -52,6 +52,7 @@ export class AddCurrencyRateComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
+    this.isSendingReqest = true; 
     const setting = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.SAVE_PARTNER_PAYMENT_CURRENCY_RATE).pipe(take(1)).subscribe((data) => {
@@ -60,6 +61,7 @@ export class AddCurrencyRateComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false; 
     });
   }
 

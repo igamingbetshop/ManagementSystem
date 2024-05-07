@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatFormFieldModule} from "@angular/material/form-field";
 
@@ -17,6 +16,7 @@ import {MatButtonModule} from "@angular/material/button";
 
 import {AgGridModule} from "ag-grid-angular";
 import {TranslateModule} from "@ngx-translate/core";
+import { ResultsComponent } from '../../../../active-matches/active/tabs/calculation/results/results.component';
 
 const routes: Routes = [
   {
@@ -26,21 +26,21 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatSnackBarModule,
-    FormsModule,
-    FlexLayoutModule,
-    MatGridListModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    TranslateModule
-  ],
-  declarations: [CalculationComponent]
+    declarations: [CalculationComponent],
+    imports: [
+        CommonModule,
+        MatSnackBarModule,
+        FormsModule,
+        MatGridListModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        TranslateModule,
+        ResultsComponent
+    ]
 })
 export class CalculationModule { }

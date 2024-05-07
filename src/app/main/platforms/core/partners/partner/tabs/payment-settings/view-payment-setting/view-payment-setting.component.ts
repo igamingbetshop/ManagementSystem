@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CoreApiService} from "../../../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Controllers, Methods, ModalSizes} from "../../../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {MatDialog} from "@angular/material/dialog";
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { CoreApiService } from "../../../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Controllers, Methods, ModalSizes } from "../../../../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
 
 @Component({
   selector: 'app-view-payment-setting',
@@ -21,13 +21,13 @@ export class ViewPaymentSettingComponent implements OnInit {
   parentId;
   paymentCurrencies = [];
   statusName = [
-    {Id: 1, Name: 'Active'},
-    {Id: 3, Name: 'Hidden'},
-    {Id: 2, Name: 'Inactive'},
+    { Id: 1, Name: 'Active' },
+    { Id: 3, Name: 'Hidden' },
+    { Id: 2, Name: 'Inactive' },
   ];
   typeNames = [
-    {Id: 2, NickName: null, Name: "Deposit", Info: null},
-    {Id: 1, NickName: null, Name: "Withdraw", Info: null}
+    { Id: 2, NickName: null, Name: "Deposit", Info: null },
+    { Id: 1, NickName: null, Name: "Withdraw", Info: null }
   ];
   countries = [];
   editedPayment;
@@ -35,19 +35,20 @@ export class ViewPaymentSettingComponent implements OnInit {
   isEditCurrency = false;
   formGroup: UntypedFormGroup;
   enableEditIndex;
+  extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
 
   constructor(private activateRoute: ActivatedRoute,
-              private apiService: CoreApiService,
-              public configService: ConfigService,
-              private _snackBar: MatSnackBar,
-              private router: Router,
-              private fb: UntypedFormBuilder,
-              public dialog: MatDialog,
-              public commonDataService: CommonDataService) {
+    private apiService: CoreApiService,
+    public configService: ConfigService,
+    private _snackBar: MatSnackBar,
+    private router: Router,
+    private fb: UntypedFormBuilder,
+    public dialog: MatDialog,
+    public commonDataService: CommonDataService) {
   }
 
   ngOnInit(): void {
-    this.id = this.activateRoute.snapshot.params.id;
+    this.id = this.activateRoute.snapshot.queryParams.id;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.parentId = this.activateRoute.snapshot.queryParams.partnerId;
     this.getAllCountries();
@@ -59,21 +60,21 @@ export class ViewPaymentSettingComponent implements OnInit {
   getPartnerPaymentCurrency() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.id, true,
       Controllers.PAYMENT, Methods.GET_PARTNER_PAYMENT_CURRENCY_RATES).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.paymentCurrencies = data.ResponseObject
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.paymentCurrencies = data.ResponseObject
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getAllCountries() {
-    this.apiService.apiPost(this.configService.getApiUrl, {TypeId: 5}, true,
+    this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
       Controllers.REGION, Methods.GET_REGIONS).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        this.countries = data.ResponseObject;
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.countries = data.ResponseObject;
+        }
+      });
   }
 
   editPaymentSystem() {
@@ -88,33 +89,33 @@ export class ViewPaymentSettingComponent implements OnInit {
       partner.Countries = this.paymentSystem.Countries;
       this.apiService.apiPost(this.configService.getApiUrl, partner, true,
         Controllers.PAYMENT, Methods.UPDATE_PARTNER_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.paymentSystem = data.ResponseObject;
-          this.paymentSystem.PartnerName = this.commonDataService.partners.find((item => item.Id === this.paymentSystem.PartnerId))?.Name;
-          this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
-          this.isEdit = false;
-          this.getPartnerPaymentSystemId()
-        } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-        }
-      });
+          if (data.ResponseCode === 0) {
+            this.paymentSystem = data.ResponseObject;
+            this.paymentSystem.PartnerName = this.commonDataService.partners.find((item => item.Id === this.paymentSystem.PartnerId))?.Name;
+            this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
+            this.isEdit = false;
+            this.getPartnerPaymentSystemId()
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          }
+        });
     }
   }
 
   getPartnerPaymentSystemId() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.id, true,
       Controllers.PAYMENT, Methods.GET_PARTNER_PAYMENT_SETTING_BY_ID).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.paymentSystem = data.ResponseObject;
-        this.paymentSystem.PartnerName = this.commonDataService.partners.find((item => item.Id === this.paymentSystem.PartnerId))?.Name;
-        this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
-        this.paymentSystem.TypeName = this.typeNames.find((item => item.Id === this.paymentSystem.Type))?.Name;
-        this.formGroup.patchValue(this.paymentSystem);
+        if (data.ResponseCode === 0) {
+          this.paymentSystem = data.ResponseObject;
+          this.paymentSystem.PartnerName = this.commonDataService.partners.find((item => item.Id === this.paymentSystem.PartnerId))?.Name;
+          this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
+          this.paymentSystem.TypeName = this.typeNames.find((item => item.Id === this.paymentSystem.Type))?.Name;
+          this.formGroup.patchValue(this.paymentSystem);
 
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getForm() {
@@ -142,6 +143,7 @@ export class ViewPaymentSettingComponent implements OnInit {
       PaymentSystemId: [null],
       OpenMode: [null],
       ApplyPercentAmount: [null],
+      ImageExtension: [null],
     });
   }
 
@@ -167,13 +169,13 @@ export class ViewPaymentSettingComponent implements OnInit {
 
     this.apiService.apiPost(this.configService.getApiUrl, edited, true,
       Controllers.PAYMENT, Methods.SAVE_PARTNER_PAYMENT_CURRENCY_RATE).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.paymentCurrencies = data.ResponseObject;
-        this.isEditCurrency = false;
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.paymentCurrencies = data.ResponseObject;
+          this.isEditCurrency = false;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   editPaymentCurrency(currencyItem, index) {
@@ -182,10 +184,10 @@ export class ViewPaymentSettingComponent implements OnInit {
   }
 
   async AddCurrencyRate() {
-    const {AddCurrencyRateComponent} = await import('../add-currency-rate/add-currency-rate.component');
+    const { AddCurrencyRateComponent } = await import('../add-currency-rate/add-currency-rate.component');
     const dialogRef = this.dialog.open(AddCurrencyRateComponent, {
       width: ModalSizes.MEDIUM,
-      data: {PaymentSettingId: this.paymentSystem.Id}
+      data: { PaymentSettingId: this.paymentSystem.Id }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -197,6 +199,7 @@ export class ViewPaymentSettingComponent implements OnInit {
   onRedirectToPaymentSettings() {
     this.router.navigate(['/main/platform/partners/partner/payment-settings'], {
       queryParams: { "partnerId": this.parentId, "partnerName": this.partnerName }
-    });  }
+    });
+  }
 
 }

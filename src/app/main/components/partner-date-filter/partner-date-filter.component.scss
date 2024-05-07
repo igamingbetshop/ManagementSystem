@@ -12,81 +12,108 @@
       margin-right: auto;
     }
 
-    .stream-btn {
-        color: #fff;
-        border: none;
-        height: 35px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 8px;
-  
-        &.live-btn-pending {
-          background: $orange-3;
-        }
-        &.live-btn-on {
-          background: $green;
-        }
-  
-        &.live-btn-off {
+    .contianer-wrap {
+      display: flex;
+      .stream-btn {
           color: #fff;
-          background: linear-gradient(180deg, #791711 0%, #B91616 49.48%, #E42A1E 100%);
+          border: none;
+          height: 35px;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-right: 8px;
+    
+          &.live-btn-pending {
+            background: $orange-3;
+          }
+          &.live-btn-on {
+            background: $green;
+          }
+    
+          &.live-btn-off {
+            color: #fff;
+            background: linear-gradient(180deg, #791711 0%, #B91616 49.48%, #E42A1E 100%);
+          }
+    
         }
   
+      .partner-dropdown {
+          margin-left: 0px;
       }
-
-    .partner-dropdown {
-        margin-left: 0px;
-    }
-
-    .date-time-tabs {
+  
+      .date-time-tabs {
+          .tab-btn {
+              margin-right: 8px;
+              border: 1px solid $gray-light;
+              box-shadow: none;
+              transition: 0.3s ease-in;
+  
+              .mat-button-focus-overlay {
+                  background-color: $white !important;
+              }
+  
+              &:hover {
+                  border: 1px solid $blue-5 !important;
+  
+                  .mat-button-wrapper {
+                      color: $blue-5;
+                  }
+              }
+              &.selected-time {
+                background-color: $blue-light-3 !important;
+                border: 1px solid $blue-light-4 !important;
+                color: $blue-5 !important;
+              }
+          }
+  
+      }
+  
+      .calendar-picker {
+          margin-right: 8px;
+          
+          input {
+              border: 1px solid $gray-light;
+              border-radius: 8px;
+              background-color: $gray-light-13;
+              border-radius: 8px;
+              color: $gray-light-15;
+              height: 34px;
+              transition: background-color 0.3s, color 0.3s;
+              font-size: 14px;
+          }
+      }
+      
+      .mat-btn {
+          // margin-left: 8px;
+          @include mat-btn-style;
+          color: white!important;
+        }
+  
         .tab-btn {
-            margin-right: 8px;
-            border: 1px solid $gray-light;
-            box-shadow: none;
-            transition: 0.3s ease-in;
-
-            .mat-button-focus-overlay {
-                background-color: $white !important;
-            }
-
-            &:hover {
-                border: 1px solid $blue-5 !important;
-
-                .mat-button-wrapper {
-                    color: $blue-5;
-                }
-            }
-            &.selected-time {
-              background-color: $blue-light-3 !important;
-              border: 1px solid $blue-light-4 !important;
-              color: $blue-5 !important;
-            }
-        }
-
-    }
-
-    .calendar-picker {
-        margin-right: 8px;
-        
-        input {
-            border: 1px solid $gray-light;
-            border-radius: 8px;
-            background-color: $gray-light-13;
-            border-radius: 8px;
-            color: $gray-light-15;
-            height: 34px;
-            transition: background-color 0.3s, color 0.3s;
-            font-size: 14px;
+          @include tab-button-style;
         }
     }
-    
-    .mat-btn {
-        // margin-left: 8px;
-        @include mat-btn-style;
-        color: white!important;
-      }
+}
 
-      .tab-btn {
-        @include tab-button-style;
+
+@media screen and (max-width: 600px) {
+  .contianer-wrap {
+      display: flex;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap !important;
+      margin-top: 8px;
+      .date-time-tabs {
+          flex-wrap: nowrap !important;
+          margin-left: 0 !important;
       }
+  }
+
+  .content-action {
+      margin-bottom: 40px;
+  }
+
+  .contianer-wrap::-webkit-scrollbar {
+      height: 0;
+  }
 }

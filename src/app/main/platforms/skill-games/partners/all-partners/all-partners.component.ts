@@ -8,6 +8,7 @@ import {take} from "rxjs/operators";
 import {SkillGamesApiService} from "../../services/skill-games-api.service";
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-all-partners',
@@ -18,10 +19,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
   public path = 'partners';
   public rowData = [];
   public partners;
-  public status = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Inactive'},
-  ];
+  public status = ACTIVITY_STATUSES;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(protected injector: Injector,

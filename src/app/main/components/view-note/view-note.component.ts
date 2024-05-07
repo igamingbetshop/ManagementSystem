@@ -1,26 +1,38 @@
-import {Component, Inject, NgModule, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MatIconModule} from '@angular/material/icon';
-import {UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {TranslateModule} from '@ngx-translate/core';
-import {MatInputModule} from '@angular/material/input';
+import { Component, Inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { MatInputModule } from '@angular/material/input';
 
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {CoreApiService} from '../../platforms/core/services/core-api.service';
-import {ConfigService} from '../../../core/services';
-import {Controllers, Methods} from '../../../core/enums';
-import {take} from 'rxjs/operators';
-import {MatButtonModule} from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { CoreApiService } from '../../platforms/core/services/core-api.service';
+import { ConfigService } from '../../../core/services';
+import { Controllers, Methods } from '../../../core/enums';
+import { take } from 'rxjs/operators';
+import { MatButtonModule } from '@angular/material/button';
 
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-view-note',
   templateUrl: './view-note.component.html',
-  styleUrls: ['./view-note.component.scss']
+  styleUrls: ['./view-note.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    FormsModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatTabsModule
+  ],
 })
 export class ViewNoteComponent implements OnInit {
   public formGroup: UntypedFormGroup;
@@ -30,15 +42,15 @@ export class ViewNoteComponent implements OnInit {
   public enableEditIndex;
   public viewNotes = [];
   public noteStates = [
-    {Id: 1, Text: 'Active'},
-    {Id: 2, Text: 'Deleted'}
+    { Id: 1, Text: 'Active' },
+    { Id: 2, Text: 'Deleted' }
   ];
   public stateText;
   public noteText;
   public editedNote;
   public oldNote;
   public addNotes = false;
-  public  noteTypes = [{Id : 1, Name : 'Notes'}, { Id: 2, Name : 'Attentions'}];
+  public noteTypes = [{ Id: 1, Name: 'Notes' }, { Id: 2, Name: 'Attentions' }];
   public noteType = 1;
   public addNoteType = 1;
 
@@ -105,16 +117,16 @@ export class ViewNoteComponent implements OnInit {
     };
     this.apiService.apiPost(this.configService.getApiUrl, editedNote, true, Controllers.UTIL,
       Methods.SAVE_NOTE).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.isEdit = false;
-        this.editedNote = data.ResponseObject;
-        this.getNotes();
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.isEdit = false;
+          this.editedNote = data.ResponseObject;
+          this.getNotes();
+        }
+      });
   }
 
   changeNoteType(typeId: number) {
-    this.noteType =  typeId;
+    this.noteType = typeId;
     this.getNotes();
   }
 
@@ -148,34 +160,14 @@ export class ViewNoteComponent implements OnInit {
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.UTIL,
       Methods.SAVE_NOTE).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.dialogRef.close(data.ResponseObject);
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(data.ResponseObject);
+        }
+      });
   }
 
   get errorControl() {
     return this.formGroup.controls;
   }
-
-}
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FormsModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatTabsModule
-  ],
-  declarations: [ViewNoteComponent]
-})
-export class ViewNoteModule {
 
 }

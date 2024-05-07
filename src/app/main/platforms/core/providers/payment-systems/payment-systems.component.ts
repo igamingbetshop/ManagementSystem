@@ -154,12 +154,11 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
 
     this.apiService.apiPost(this.configService.getApiUrl,{ ...params},
       true, Controllers.PAYMENT, Methods.SAVE_PAYMENT_SYSTEM).pipe(take(1)).subscribe(data => {
+        const updatedRow = this.rowData.find(x => x.Id === params.Id);
         if (data.ResponseCode === 0) {
           SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
-          const updatedRow = this.rowData.find(x => x.Id === params.Id);
           if (updatedRow) {
             updatedRow.IsActive = params.IsActive;
-            const rowNode = this.gridApi.getRowNode(updatedRow.Id);
             this.gridApi.forEachNode((node) => {
               if (node.data.Id === params.Id) {
                 node.setData(updatedRow);
@@ -170,11 +169,15 @@ export class PaymentSystemsComponent extends BasePaginatedGridComponent implemen
           }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-          params.IsActive = !params.IsActive;
-          const rowIndex = this.rowData.findIndex(row => row.Id === params.Id);
-          if (rowIndex !== -1) {
-            this.rowData[rowIndex].IsActive = params.IsActive;
-            this.rowData = [...this.rowData];
+          if (updatedRow) {
+            updatedRow.IsActive = !params.IsActive;
+            this.gridApi.forEachNode((node) => {
+              if (node.data.Id === params.Id) {
+                node.setData(updatedRow);
+                this.gridApi.redrawRows({ rowNodes: [node] });
+                return;
+              }
+            });
           }
         }
       });

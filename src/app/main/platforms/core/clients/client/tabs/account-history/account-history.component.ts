@@ -10,10 +10,9 @@ import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { syncColumnNestedSelectPanel, syncColumnSelectPanel, syncNestedColumnReset } from "../../../../../../../core/helpers/ag-grid.helper";
-import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-import {ExportService} from "../../../../services/export.service";
+import { ExportService } from "../../../../services/export.service";
 
 @Component({
   selector: 'app-account-history',
@@ -39,7 +38,7 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
     protected injector: Injector,
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
-    private exportService:ExportService,
+    private exportService: ExportService,
     public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
@@ -213,7 +212,7 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENT_ACCOUNTS_BALANCE_HISTORY, this.clientData);
+    this.exportService.exportToCsv(Controllers.CLIENT, Methods.EXPORT_CLIENT_ACCOUNTS_BALANCE_HISTORY, this.clientData);
   }
 
   onNavigateToClient() {

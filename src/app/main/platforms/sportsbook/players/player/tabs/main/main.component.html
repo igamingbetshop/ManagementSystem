@@ -121,9 +121,18 @@
       </div>
 
       <div>
+        <div class="first-hand">{{'Sport.RepeatBetMaxCount' | translate}}</div>
+        <div class="second-hand">{{player?.RepeatBetMaxCount}}</div>
+        <div class="form-field form-input">
+          <!-- <mat-form-field> -->
+            <input matInput type="number" [placeholder]="'Sport.RepeatBetMaxCount' | translate"
+            [formControlName]="'RepeatBetMaxCount'">
+          <!-- </mat-form-field> -->
+        </div>
       </div>
 
-      <div></div>
+      <div>
+      </div>
 
 
       <div class="form-actions">

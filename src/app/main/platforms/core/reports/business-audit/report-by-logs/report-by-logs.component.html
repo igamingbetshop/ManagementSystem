@@ -6,13 +6,6 @@
     (toDateChange)="onDateChange($event)" 
   />
 
-  <div class="content-action">
-    <div class="input-content">
-      <input matInput [disabled]="!this.rowData.length" [placeholder]="'Reports.SearchByCaller' | translate" [(ngModel)]="filter" (ngModelChange)="inputChanged($event)">
-    </div>
-
-  </div>
-
   <div class="grid-content">
     <ag-grid-angular
       id="report-bets"
@@ -26,6 +19,7 @@
       [defaultColDef]="defaultColDef"
       [cacheBlockSize]="cacheBlockSize"
       [paginationPageSize]="cacheBlockSize"
+      (filterChanged)="onFilterChanged($event)"
       (paginationChanged)="onPaginationChanged($event)"
       [pagination]="pagination"
       [sideBar]="sideBar"

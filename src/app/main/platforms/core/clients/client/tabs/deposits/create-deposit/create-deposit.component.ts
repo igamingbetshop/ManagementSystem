@@ -14,8 +14,8 @@ import { take } from 'rxjs/operators';
 
 import { ConfigService } from 'src/app/core/services';
 import { Controllers, Methods } from 'src/app/core/enums';
-import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { CoreApiService } from '../../../../../services/core-api.service';
+import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 
 @Component({
   selector: 'app-create-deposit',
@@ -36,10 +36,10 @@ import { CoreApiService } from '../../../../../services/core-api.service';
 
 })
 export class CreateDepositComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-
-  public paymentSystems = [];
-  public currencyId;
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false; 
+  paymentSystems = [];
+  currencyId;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { clientId: number, partnerId: number, accountId: number, },
@@ -92,11 +92,20 @@ export class CreateDepositComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true; 
     const obj = this.formGroup.getRawValue();
-    this.dialogRef.close(obj);
+    this.apiService.apiPost(this.configService.getApiUrl, obj,
+      true, Controllers.PAYMENT, Methods.CREATE_MANUAL_DEPOSIT).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(data.ResponseObject);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+        this.isSendingReqest = false; 
+      });
   }
 
 }

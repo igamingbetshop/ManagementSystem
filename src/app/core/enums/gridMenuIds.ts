@@ -137,6 +137,7 @@ export enum GridMenuIds {
   //POOL BETTING
   POOL_BETTING = 198,
   PB_MATCHES = 0, // TODO add number
+  PB_BANERS = 237,
 
   VG_GAMES = 133,
   VG_PLAYERS = 134,

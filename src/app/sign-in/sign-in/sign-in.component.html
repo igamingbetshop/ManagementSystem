@@ -45,7 +45,7 @@
         </mat-card-content>
 
         <div class="btn-content">
-          <button type="submit" mat-stroked-button  class="login-btn" [class.disabled]="disabledButton">{{'Login.Submit' | translate}}</button>
+          <button type="submit" mat-stroked-button  class="login-btn" [class.disabled]="disabledButton || isSendingReqest ">{{'Login.Submit' | translate}}</button>
           <mat-error *ngIf="errorMessage">
             {{errorMessage}}
           </mat-error>

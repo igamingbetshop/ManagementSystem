@@ -11,14 +11,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { CellClickedEvent } from 'ag-grid-community';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
-import { AVAILABLEBETCATEGORIES, BETAVAILABLESTATUSES } from 'src/app/core/constantes/statuses';
+import { AVAILABLEBETCATEGORIES, BETAVAILABLESTATUSES, BETSTATUSES } from 'src/app/core/constantes/statuses';
 import { GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-
-//import { ActivatedRoute } from '@angular/router';
-
 
 @Component({
   selector: 'app-by-bets-not-accepted',
@@ -34,24 +30,14 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
 
   public availableBetCategories = AVAILABLEBETCATEGORIES;
 
-  public betStatuses = [
-    { "Name": this.translate.instant('Sport.Uncalculated'), Id: 1 },
-    { "Name": this.translate.instant('Sport.Won'), Id: 2 },
-    { "Name": this.translate.instant('Sport.Lost'), Id: 3 },
-    { "Name": this.translate.instant('Sport.Deleted'), Id: 4 },
-    { "Name": this.translate.instant('Sport.CashoutedFully'), Id: 5 },
-    { "Name": this.translate.instant('Sport.Returned'), Id: 6 },
-    { "Name": this.translate.instant('Sport.NotAccepted'), Id: 7 },
-    { "Name": this.translate.instant('Sport.CashoutedPartially'), Id: 8 },
-    { "Name": this.translate.instant('Sport.Waiting'), Id: 9 }
-  ];
-
+  public betStatuses = BETSTATUSES;
 
   public betTypesModel = [
     { "Name": this.translate.instant('Sport.Single'), "Id": 1 },
     { "Name": this.translate.instant('Sport.Multiple'), "Id": 2 },
     { "Name": this.translate.instant('Sport.System'), "Id": 3 },
-    { "Name": this.translate.instant('Sport.Chain'), "Id": 4 }
+    { "Name": this.translate.instant('Sport.Chain'), "Id": 4 },
+    { "Name": this.translate.instant('Sport.Teaser'), "Id": 5 }
   ];
 
   public commentTypes: any[] = [];
@@ -64,6 +50,8 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   public toDate = new Date();
   public filteredData: any;
   public rowData = [];
+  rowData1: any;
+  betsCount: any;
 
   constructor(
     protected injector: Injector,
@@ -488,11 +476,6 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
     this.getCurrentPage();
   }
 
-  // isRowSelected() {
-  //   return this.agGrid?.api && this.agGrid?.api.getSelectedRows().length > 0;
-  // };
-
-
   getCommentTypes() {
     this.apiService.apiPost('commenttypes').subscribe(data => {
       if (data.Code === 0) {
@@ -517,73 +500,6 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
       { queryParams: { "partnerId": row.PartnerId, "MatchId": row.MatchId, 'name': row.Competitors, } }));
     window.open(url, '_blank');
   }
-
-
-  // async addNotes(params) {
-  //   const {SbAddNoteComponent} = await import('../../../../../components/sb-add-bet-shop-note/sb-add-bet-shop-note.component');
-  //   const dialogRef = this.dialog.open(SbAddNoteComponent, {
-  //     width: ModalSizes.MEDIUM,
-  //     data: {CommentTypes: this.commentTypes, BetId: params.Id}
-  //   });
-  //   dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-  //     if (data) {
-  //       this.getCurrentPage();
-  //     }
-  //   });
-  // }
-
-  // async openNotes(params) {
-  //   const {SbViewNoteComponent} = await import('../../../../../components/sb-view-note/sb-view-note.component');
-  //   const dialogRef = this.dialog.open(SbViewNoteComponent, {
-  //     width: ModalSizes.EXTRA_LARGE,
-  //     data: {CommentTypes: this.commentTypes, BetId: params.Id}
-  //   });
-  //   dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-  //     if (data) {
-  //     }
-  //   });
-  // }
-
-  // public onRowClicked(e) {
-  //   let row = e.data;
-
-  //   this.apiService.apiPost('report/selections',{BetId: row.Id})
-  //   .pipe(take(1))
-  //   .subscribe(data => {
-  //     if(data.Code === 0){
-  //       for (var i = 0; i < data.Selections.length; i++) {
-  //         data.Selections[i].Competitors = data.Selections[i].Competitors.join('-');
-  //         data.Selections[i].ResettleStatus = data.Selections[i].SelectionStatus;
-  //     }
-  //       this.rowData1 = data.Selections;
-
-  //       this.rowData1.forEach(match => {
-  //         let statusName = this.betStatuses.find((status) => {
-  //           return status.Id == match.SelectionStatus;
-  //         })
-  //         if(statusName){
-  //           match['StatusName'] = statusName.Name;
-  //         }
-  //       })
-  //       row.SystemOutCountValue = row.SystemOutCount === null ? '' : row.SystemOutCount + '/' + data.Selections.length;
-  //     }else{
-  //       this._snackBar.open(data.Description, null, { duration: 3000 });
-  //     }
-
-  //   })
-
-  //   if (e.event.target !== undefined) {
-  //     let data = e.data;
-  //     let actionType = e.event.target.getAttribute("data-action-type");
-
-  //     switch (actionType) {
-  //       case "add-bet-shop":
-  //         return this.addNotes(data);
-  //       case "view":
-  //         return this.openNotes(data);
-  //     }
-  //   }
-  // }
 
   go() {
     this.getCurrentPage();
@@ -621,7 +537,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
           if (data.Code === 0) {
 
             const mappedRows = data.Objects;
-
+            this.rowData1 = [];
             mappedRows.forEach((bet) => {
 
               let betTypeName = this.betTypesModel.find((betType) => {
@@ -631,7 +547,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
                 bet['TypeName'] = betTypeName.Name;
               }
               let statusName = this.betStatuses.find((status) => {
-                return status.Id == bet.Status;
+                return status.Id == bet.State;
               })
               if (statusName) {
                 bet['StatusName'] = statusName.Name;
@@ -655,6 +571,12 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
 
               bet['Competitors'] = bet['Competitors'].join("-");
             })
+            if (!!mappedRows.length) {
+              this.onRowClicked(mappedRows[0]);
+              setTimeout(() => {
+                this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
+              }, 0)
+            }
             params.success({ rowData: mappedRows, rowCount: data.TotalCount });
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -665,7 +587,7 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   }
 
   exportToCsv() {
-    this.apiService.apiPost('report/exportnotacceptedbets',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+    this.apiService.apiPost('report/exportnotacceptedbets', { ...this.filteredData, adminMenuId: this.adminMenuId }).pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         let iframe = document.createElement("iframe");
         iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
@@ -680,5 +602,66 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  public onRowClicked(event) {
+
+    console.log(event, "EV");
+
+    this.show = true;
+    let row = event;
+    this.apiService.apiPost('report/selections', { BetId: row.Id })
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.Code === 0) {
+          this.rowData1 = data.Selections;
+          this.rowData1.forEach(match => {
+            if (match.ForcedChosen) {
+              this.betsCount++;
+            }
+            match['StatusName'] = this.betStatuses.find((status) => status.Id == match.SelectionStatus)?.Name;
+          })
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      })
+  }
+
+  goToFinishedMatchesMarket(ev) {
+    const row = ev.data;
+    let filter = {
+      matchId: row.MatchId,
+      PartnerId: 0
+    }
+    this.apiService.apiPost('matches/match', filter)
+      .pipe(take(1))
+      .subscribe(data => {
+        let res = data.ResponseObject;
+
+        if (res.Status == 1 || res.Status == 0) {
+          const url = this.router.serializeUrl(this.router.createUrlTree(['main/sportsbook/matches/active-matches/all-active/active/markets'],
+            {
+              queryParams: {
+                "partnerId": 0,
+                "MatchId": row.MatchId,
+                'number': row.MatchNumber,
+                'name': row.SportName,
+                'sportId': row.SportId
+              }
+            }));
+          window.open(url, '_blank');
+        } else {
+          const url = this.router.serializeUrl(this.router.createUrlTree(['/main/sportsbook/matches/finished/finish/markets'],
+            {
+              queryParams: {
+                "partnerId": 0,
+                "finishId": row.MatchId,
+                'number': row.MatchNumber,
+                'name': row.SportName,
+              }
+            }));
+          window.open(url, '_blank');
+        }
+      })
   }
 }

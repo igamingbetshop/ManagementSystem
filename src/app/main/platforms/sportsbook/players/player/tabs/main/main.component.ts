@@ -150,12 +150,13 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       NickName: [{value: null, disabled: true}],
       PlayerCurrencyId: [{value: null, disabled: true}],
       Description: [null],
-      LimitPercent: [null, [Validators.required]],
-      DelayPercentPrematch: [null, [Validators.required]],
-      DelayPercentLive: [null, [Validators.required]],
-      DelayBetweenBetsPrematch: [null, [Validators.required]],
-      DelayBetweenBetsLive: [null, [Validators.required]],
-      RestrictMaxBet: [null, [Validators.required]],
+      LimitPercent: [null],
+      DelayPercentPrematch: [null],
+      DelayPercentLive: [null],
+      DelayBetweenBetsPrematch: [null],
+      DelayBetweenBetsLive: [null],
+      RestrictMaxBet: [null],
+      RepeatBetMaxCount: [null],
     });
   }
 

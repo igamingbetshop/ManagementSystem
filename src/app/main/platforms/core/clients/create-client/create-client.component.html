@@ -17,6 +17,22 @@
 
       <ng-container *ngFor=" let item of items" [ngSwitch]="item.Type">
 
+        <mat-form-field *ngSwitchCase="'verify-email'">
+          <mat-label>{{item.Title}}</mat-label>
+          <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
+          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
+            {{item.Title}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngSwitchCase="'verify-sms'">
+          <mat-label>{{item.Title}}</mat-label>
+          <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
+          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
+            {{item.Title}} {{'Errors.Required' | translate}}
+          </mat-error>
+        </mat-form-field>
+
         <mat-form-field *ngSwitchCase="'Currency'">
           <mat-label>{{'selectCurrency' | translate}}</mat-label>
           <mat-select [formControlName]="item.Title">
@@ -172,6 +188,8 @@
             </mat-error>
           </mat-form-field>
         </ng-container>
+
+
       </ng-container>
     </ng-container>
 
@@ -188,7 +206,11 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid || partnerId === 0" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+  <button class="modal-primary-btn"
+    [class.disabled]="formGroup.invalid || partnerId === 0 || isSendingReqest" 
+    (click)="onSubmit()">
+    {{'Common.Save' |translate}}
+  </button>
 </div>
 
 

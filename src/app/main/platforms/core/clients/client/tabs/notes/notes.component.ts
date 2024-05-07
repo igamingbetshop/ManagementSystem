@@ -18,7 +18,6 @@ import 'ag-grid-enterprise';
 import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { CLIENT_BOUNUS_STATUSES } from 'src/app/core/constantes/statuses';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';

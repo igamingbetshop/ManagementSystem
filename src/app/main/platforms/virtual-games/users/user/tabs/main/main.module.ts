@@ -1,23 +1,22 @@
-import {RouterModule, Routes} from "@angular/router";
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {ReactiveFormsModule} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
-import {MatSelectModule} from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
 
-import {MatInputModule} from "@angular/material/input";
+import { MatInputModule } from "@angular/material/input";
 
-import {MatButtonModule} from "@angular/material/button";
+import { MatButtonModule } from "@angular/material/button";
 
-import {MatGridListModule} from "@angular/material/grid-list";
-import {AgGridModule} from "ag-grid-angular";
-import {MainComponent} from "./main.component";
-import {TranslateModule} from "@ngx-translate/core";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { AgGridModule } from "ag-grid-angular";
+import { MainComponent } from "./main.component";
+import { TranslateModule } from "@ngx-translate/core";
 
 
 const routes: Routes = [
@@ -32,7 +31,6 @@ const routes: Routes = [
     CommonModule,
     MatIconModule,
     MatSnackBarModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,

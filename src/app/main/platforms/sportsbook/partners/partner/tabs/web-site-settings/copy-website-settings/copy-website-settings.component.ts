@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { CommonDataService, ConfigService } from "../../../../../../../../core/services";
 import { SportsbookApiService } from "../../../../../services/sportsbook-api.service";
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
@@ -47,6 +47,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
+    @Inject(MAT_DIALOG_DATA) private data
   ) {
   }
 
@@ -76,7 +77,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
   }
 
   getWebsiteMenus() {
-    this.apiService.apiPost('cms/getwebsitemenus', { PartnerId: this.selectedPartner })
+    this.apiService.apiPost('cms/getwebsitemenus', { PartnerId: this.selectedPartner, DeviceType: this.data.deviceType, })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {

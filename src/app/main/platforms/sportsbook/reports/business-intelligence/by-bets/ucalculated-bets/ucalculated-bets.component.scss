@@ -25,6 +25,9 @@
       .grid-item {
         text-align: center;
         color: $title-color;
+        a {
+          cursor: pointer;
+        }
       }
     }
   }

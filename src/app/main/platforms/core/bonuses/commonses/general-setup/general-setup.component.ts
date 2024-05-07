@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {Controllers, Methods} from "../../../../../../core/enums";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
-import {take} from "rxjs/operators";
-import {BonusesService} from "../../bonuses.service";
+import { Component, Inject, OnInit } from '@angular/core';
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { Controllers, Methods } from "../../../../../../core/enums";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
+import { take } from "rxjs/operators";
+import { BonusesService } from "../../bonuses.service";
 import { ACTIVITY_STATUSES, DAYS, REGULARITY } from 'src/app/core/constantes/statuses';
 
 @Component({
@@ -17,20 +17,20 @@ import { ACTIVITY_STATUSES, DAYS, REGULARITY } from 'src/app/core/constantes/sta
   styleUrls: ['./general-setup.component.scss']
 })
 export class GeneralSetupComponent implements OnInit {
-  public bonusTypes = [];
-  public partners = [];
-  public clientType = [];
-  public finalAccountTypes = [];
-  public formGroup: UntypedFormGroup;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public conditions = [];
-  public status = ACTIVITY_STATUSES;
-  public addedConditions = {
+  bonusTypes = [];
+  partners = [];
+  clientType = [];
+  finalAccountTypes = [];
+  formGroup: UntypedFormGroup;
+  fromDate = new Date();
+  toDate = new Date();
+  conditions = [];
+  status = ACTIVITY_STATUSES;
+  addedConditions = {
     selectedGroupType: 1,
     groupTypes: [
-      {Id: 1, Name: 'All'},
-      {Id: 2, Name: 'Any'}
+      { Id: 1, Name: 'All' },
+      { Id: 2, Name: 'Any' }
     ],
     groups: [],
     conditions: [],
@@ -38,13 +38,13 @@ export class GeneralSetupComponent implements OnInit {
     selectedConditionType: null,
     selectedConditionValue: null
   };
-  public bonusTypeId;
-  public arr: UntypedFormArray;
-  public conditionTypes;
+  bonusTypeId;
+  arr: UntypedFormArray;
+  conditionTypes;
 
-  public regularitys = REGULARITY;
-  public days = DAYS;
-
+  regularitys = REGULARITY;
+  days = DAYS;
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<GeneralSetupComponent>,
@@ -61,7 +61,7 @@ export class GeneralSetupComponent implements OnInit {
 
   ngOnInit(): void {
     this.partners = this.commonDataService.partners;
-    this.conditions =  this.bonusesService.getConditions();
+    this.conditions = this.bonusesService.getConditions();
     this.getBounusTypes();
     this.formValues();
     this.getClientType();
@@ -107,9 +107,9 @@ export class GeneralSetupComponent implements OnInit {
     }
 
     this.bonusTypes.forEach(fields => {
-      if(fields.Id === this.bonusTypeId) {
+      if (fields.Id === this.bonusTypeId) {
         for (const key of fields.BonusValidators) {
-          if(key === 'Name') {
+          if (key === 'Name') {
             this.formGroup.get(key).setValidators([Validators.required]);
           } else {
             this.formGroup.get(key).setValidators([Validators.required, Validators.min(0)]);
@@ -130,6 +130,7 @@ export class GeneralSetupComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true; 
     const bonus = this.formGroup.getRawValue();
     if (bonus.BonusTypeId == 12 || bonus.BonusTypeId == 13 || bonus.BonusTypeId == 10) {
       bonus.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
@@ -144,8 +145,9 @@ export class GeneralSetupComponent implements OnInit {
         if (data1.ResponseCode === 0) {
           this.dialogRef.close('success');
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data1.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data1.Description, Type: "error" });
         }
+        this.isSendingReqest = false; 
       })
   }
 
@@ -153,8 +155,8 @@ export class GeneralSetupComponent implements OnInit {
     item.groups.push({
       selectedGroupType: 1,
       groupTypes: [
-        {Id: 1, Name: 'All'},
-        {Id: 2, Name: 'Any'}
+        { Id: 1, Name: 'All' },
+        { Id: 2, Name: 'Any' }
       ],
       groups: [],
       conditions: [],
@@ -233,13 +235,13 @@ export class GeneralSetupComponent implements OnInit {
   getClientType() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION,
       Methods.GET_CLIENT_ACCOUNT_TYPES_ENUM).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.clientType = data.ResponseObject;
-        this.finalAccountTypes = this.clientType.filter(elem => elem.Id != 12);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    })
+        if (data.ResponseCode === 0) {
+          this.clientType = data.ResponseObject;
+          this.finalAccountTypes = this.clientType.filter(elem => elem.Id != 12);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      })
   }
 
   get errorControl() {

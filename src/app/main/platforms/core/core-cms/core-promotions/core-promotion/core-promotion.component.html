@@ -96,7 +96,10 @@
           <div class="first-hand">{{'Common.DeviceType' | translate}}</div>
           <div class="second-hand">{{promotion?.DeviceName}}</div>
           <div class="form-field form-dropdown">
-            <mat-select [formControlName]="'DeviceType'">
+            <mat-select [formControlName]="'DeviceType'" 
+            placeholder="{{'Common.SelectDeviceType' | translate}}"
+            >
+              <mat-option [value]="null">{{'Common.SelectDeviceType' | translate}}</mat-option>
               <mat-option *ngFor="let type of deviceTypes" [value]="type.Id">{{type.Name}}</mat-option>
             </mat-select>
           </div>

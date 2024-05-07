@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +23,6 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
   imports: [
     CommonModule,
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -84,21 +82,22 @@ export class AddBonusComponent implements OnInit {
       SelectionsMinCount: [this.bonus.SelectionsMinCount, [Validators.required]],
       SelectionsMaxCount: [this.bonus.SelectionsMaxCount],
       BonusPercent: [this.bonus.BonusPercent],
-      MinTotalCoef: [this.bonus.MinTotalCoef],
+      MinTotalCoeff: [this.bonus.MinTotalCoeff],
       MinCoeff: [this.bonus.MinCoeff],
       MaxAmount: [this.bonus.MaxAmount],
       MinAmount: [this.bonus.MinAmount],
       State: [true],
       TurnoverCount: [this.bonus.TurnoverCount],
+      MaxTotalCoeff: [this.bonus.MaxTotalCoeff],
     });
     if (this.openForAdd) {
-      this.formGroup.controls['TypeId'].disable();
-      this.formGroup.controls['ChannelId'].disable();
-      this.formGroup.controls['SelectionsMinCount'].disable();
-      this.formGroup.controls['SelectionsMaxCount'].disable();
-      this.formGroup.controls['BonusPercent'].disable();
-      this.formGroup.controls['MinCoeff'].disable();
-      this.formGroup.controls['MinTotalCoef'].disable();
+      this.formGroup.controls?.['TypeId'].disable();
+      this.formGroup.controls?.['ChannelId'].disable();
+      this.formGroup.controls?.['SelectionsMinCount'].disable();
+      this.formGroup.controls?.['SelectionsMaxCount'].disable();
+      this.formGroup.controls?.['BonusPercent'].disable();
+      this.formGroup.controls?.['MinCoeff'].disable();
+      this.formGroup.controls?.['MinTotalCoef'].disable();
     }
 
   }
@@ -113,6 +112,9 @@ export class AddBonusComponent implements OnInit {
 
   changedType(event) {
     this.selectedType = event;
+
+    console.log(this.selectedType, );
+    
     if(this.selectedType === 3) {
       this.formGroup.controls['MinCoeff'].setValidators([Validators.required]);
     } else {
@@ -133,10 +135,11 @@ export class AddBonusComponent implements OnInit {
     this.bonus.SelectionsMaxCount = this.formGroup.get('SelectionsMaxCount').value;
     this.bonus.BonusPercent = this.formGroup.get('BonusPercent').value;
     this.bonus.MinCoeff = this.formGroup.get('MinCoeff').value;
-    this.bonus.MinTotalCoef = this.formGroup.get('MinTotalCoef').value;
+    this.bonus.MinTotalCoeff = this.formGroup.get('MinTotalCoeff').value;
     this.bonus.State = this.formGroup.get('State').value;
     this.bonus.MaxAmount = this.formGroup.get('MaxAmount').value;
     this.bonus.MinAmount = this.formGroup.get('MinAmount').value;
+    this.bonus.MaxTotalCoeff = this.formGroup.get('MaxTotalCoeff').value;
     delete this.bonus.LanguageId;
 
     this.apiService.apiPost(this.bonus.Id ? 'bonuses/updatebonussetting' : 'bonuses/addbonussetting', this.bonus)

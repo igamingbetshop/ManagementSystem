@@ -2,12 +2,17 @@
   <div class="content-action">
     <div class="title"><a [routerLink]="['../all-agents']" class="title-link">{{'Agents.Agents' | translate}}</a>
       <div class="title-container" *ngIf="showDatas">
+<!--        <span class="title-link-item" [style.text-decoration]="agentIdArray.length === 1 ? 'underline' : 'none'"-->
+<!--              (click)="resetClickItem()">{{ agentIds.includes(',') ? agentIds.split(',')[0] : agentIds }}{{agentLevelName}}</span>-->
         <span class="title-link-item" [style.text-decoration]="agentIdArray.length === 1 ? 'underline' : 'none'"
-              (click)="resetClickItem()">{{ agentIds.includes(',') ? agentIds.split(',')[0] : agentIds }}{{agentLevelName}}</span>
+              (click)="resetClickItem()"
+              *ngIf="agentIdArray.length === 1">{{ agentIds.includes(',') ? agentIds.split(',')[0] : agentIds }}_{{agentUserName}}{{agentLevelName}}
+            </span>
         <div class="agentIds" *ngIf="agentIds && agentIdArray.length > 1">
-          <div class="agentIdsItems" *ngFor="let agentId of agentIdArray.slice(1); let i = index;">
+<!--          <div class="agentIdsItems" *ngFor="let agentId of agentIdArray.slice(1); let i = index;">-->
+          <div class="agentIdsItems" *ngFor="let agentId of agentIdArray; let i = index;">
           <span class="agentIdsItems-list" (click)="handleIdClick(agentId?.Id, i + 1)">
-            /{{ agentId?.Id }}{{ agentId?.LevelName }}
+            <span class="slash">/</span>{{ agentId?.Id }}_{{agentId?.UserName}}{{ agentId?.LevelName }}
           </span>
           </div>
         </div>

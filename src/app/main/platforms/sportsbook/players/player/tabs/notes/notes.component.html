@@ -1,0 +1,38 @@
+<div class="container">
+
+  <app-partner-date-filter
+  [title]="'Sport.Players'"
+  [pageIdName]="pageIdName"  
+  [partners]="'Sportsbook'"
+  (toDateChange)="onDateChange($event)"
+  (titleClick)="onNavigateTo()"
+  />
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="sessions"
+      #agGrid
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [suppressCopyRowsToClipboard]="true"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [sideBar]="sideBar"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+  </div>
+
+  <button  class="mat-btn" mat-stroked-button color="primary" (click)="addNotes()">{{'Clients.AddNote' | translate}}</button>
+
+</div>
+
+
+

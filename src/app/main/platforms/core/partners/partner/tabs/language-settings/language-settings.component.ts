@@ -14,6 +14,7 @@ import { ConfigService } from "../../../../../../../core/services";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { PartnerLanguageSettingsComponent } from './grids/partner-languages/partner-language-settings.component';
 import { AllLanguageSettingsComponent } from './grids/all-languages/all-language-settings.component';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-language-settings',
@@ -29,10 +30,7 @@ export class LanguageSettingsComponent implements OnInit {
   public rowData = [];
   public partnersRowData = [];
   public selectedNode;
-  public statusName = [
-    { Id: 1, Name: 'Active' },
-    { Id: 2, Name: 'Inactive' },
-  ];
+  public statusName = ACTIVITY_STATUSES;
   public blockedData;
   public isCanNotSelect = true;
   public formGroup: UntypedFormGroup;

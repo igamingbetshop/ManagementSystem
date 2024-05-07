@@ -363,6 +363,8 @@ export class ReportByShiftsComponent extends BasePaginatedGridComponent implemen
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }

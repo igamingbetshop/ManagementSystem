@@ -234,12 +234,22 @@
 
       <div>
         <div class="first-hand">{{'Sport.FeedState' | translate}}</div>
-        <div class="second-hand">{{activeMatch.BlockedByFeed}}</div>
-        <div class="form-field form-checkbox">
-          <mat-slide-toggle labelPosition="before" color="primary" disabled [formControlName]="'BlockedByFeed'">{{'Sport.FeedState' | translate}}</mat-slide-toggle>
+        <div class="static-hand">{{!activeMatch.BlockedByFeed}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.AutoSettlement' | translate}}</div>
+        <div class="second-hand">{{activeMatch.AutoSettlementName}}</div>
+        <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'AutoSettlement'" placeholder="{{'None'}}">
+              <mat-option 
+                *ngFor="let status of settlementStatuses" 
+                  [value]="status.Id">
+                  {{status.Name}}
+              </mat-option>
+            </mat-select>
         </div>
       </div>
-      <div></div>
 
 
 

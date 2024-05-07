@@ -196,7 +196,7 @@ export class MappedCompetitionsTabComponent extends BasePaginatedGridComponent i
         // paging.PageSize = this.cacheBlockSize;
         paging.PageSize = Number(this.cacheBlockSize);
         paging.ObjectTypeId = 1;
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         if(paging.ObjectIds?.ApiOperationTypeList.length === 1) {
           paging.ObjectIds = {ApiOperationTypeList: [...paging.ObjectIds.ApiOperationTypeList]}

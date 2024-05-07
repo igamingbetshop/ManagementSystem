@@ -75,8 +75,15 @@
 
     <mat-form-field>
       <mat-label>{{'Sport.MinTotalCoef' | translate}}</mat-label>
-      <input matInput type="number" [placeholder]="'Sport.MinTotalCoef' | translate" [formControlName]="'MinCoeff'">
+      <input matInput type="number" [placeholder]="'Sport.MinTotalCoef' | translate" [formControlName]="'MinTotalCoeff'">
     </mat-form-field>
+
+    @if (this.formGroup.value.TypeId == 3 || this.bonus.TypeId == 3) {
+      <mat-form-field>
+        <mat-label>{{'Sport.MaxTotalCoeff' | translate}}</mat-label>
+        <input matInput type="number" [placeholder]="'Sport.MaxTotalCoeff' | translate" [formControlName]="'MaxTotalCoeff'">
+      </mat-form-field>
+    }
 
     <mat-form-field>
       <mat-label>{{'Sport.MinCoeff' | translate}}</mat-label>

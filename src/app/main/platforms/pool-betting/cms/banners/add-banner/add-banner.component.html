@@ -1,0 +1,127 @@
+<div mat-dialog-title>
+  <span class="title">{{'Cms.AddBanner' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <div class="field-content">
+      <mat-form-field class="calendar-picker start">
+        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartDate'">
+        <mat-datepicker-toggle matSuffix [for]="pickerStart">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+      </mat-form-field>
+
+      <mat-form-field class="calendar-picker" style="margin-left: 15px;">
+        <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'EndDate'">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select #part (selectionChange)="onPartnerChange(part.value)" [formControlName]="'PartnerId'"
+        placeholder="{{'Partners.SelectPartner' | translate}}">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      @if(errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required) {
+        <mat-error >
+          {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.Order' | translate}}</mat-label>
+      <input matInput type="number" [maxlength]="2" [placeholder]="'Common.Order' | translate"
+        [formControlName]="'Order'">
+        @if(errorControl['Order']?.touched && errorControl['Order'].errors?.required) {
+          <mat-error >
+            {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        }
+        @if(errorControl['Order']?.touched && errorControl['Order'].errors?.pattern) {
+          <mat-error>
+            {{'Common.Order' | translate}} {{'Errors.NaturalNumber' | translate}}
+          </mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Cms.Body' | translate}}</mat-label>
+      <input matInput [placeholder]="'Cms.Body' | translate" [formControlName]="'Body'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.NickName' | translate}}</mat-label>
+      <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate" [formControlName]="'NickName'">
+      @if(errorControl['NickName']?.touched && errorControl['NickName'].errors?.required) {
+        <mat-error>
+          {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+      @if(errorControl['NickName']?.touched && errorControl['NickName'].errors?.pattern) {
+        <mat-error>
+          {{'Common.NickName' | translate}} {{'Errors.EnglishLetters' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Cms.Head' | translate}}</mat-label>
+      <input matInput [placeholder]="'Cms.Head' | translate" [formControlName]="'Head'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Cms.Link' | translate}}</mat-label>
+      <input matInput [placeholder]="'Cms.Link' | translate" [formControlName]="'Link'">
+    </mat-form-field>
+
+    <input type="file" (change)="uploadFile($event)">
+    @if(errorControl['ImageData']?.touched && errorControl['ImageData'].errors?.required) {
+      <mat-error>
+        {{'Cms.ImageData' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    }
+
+    <mat-form-field>
+      <mat-label>{{'Cms.Image' | translate}}</mat-label>
+      <input matInput [placeholder]="'Cms.ImageType' | translate" [formControlName]="'Image'">
+      @if(errorControl['Image']?.touched && errorControl['Image'].errors?.required) {
+        <mat-error *ngIf="">
+          {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>{{'Visibility' | translate}}</mat-label>
+      <mat-select [formControlName]="'Visibility'" placeholder="{{'Visibility' | translate}}">
+        <mat-option *ngFor="let banVisType of bannerVisibilityTypes"
+          [value]="banVisType.id">{{banVisType.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox labelPosition="before" [formControlName]="'ShowDescription'">{{'Cms.ShowDescription' |
+      translate}}</mat-checkbox>
+    <mat-checkbox labelPosition="before" [formControlName]="'ShowLogin'">{{'Cms.ShowLogin' |
+      translate}}</mat-checkbox>
+    <mat-checkbox labelPosition="before" [formControlName]="'ShowRegistration'">{{'Cms.ShowRegistration'
+      | translate}}</mat-checkbox>
+    <mat-checkbox labelPosition="before" [formControlName]="'IsEnabled'">{{'Cms.IsEnabled' |
+      translate}}</mat-checkbox>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="!formGroup.valid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

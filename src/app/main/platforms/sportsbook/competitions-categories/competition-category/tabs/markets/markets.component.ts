@@ -299,11 +299,7 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
       .pipe(take(1))
       .subscribe((data) => {
         if (data.Code === 0) {
-          const index = this.rowData.findIndex((row) => {
-            return row.Id == data.Id;
-          });
-          this.rowData.splice(index, 1);
-          this.gridApi.setRowData(this.rowData);
+          this.getPage();
         } else {
           SnackBarHelper.show(this._snackBar, {
             Description: data.Description,

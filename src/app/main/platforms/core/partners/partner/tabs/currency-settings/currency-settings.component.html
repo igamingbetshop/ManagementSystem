@@ -38,12 +38,18 @@
       <div class="grid-action">
 
         <form [formGroup]="formGroup">
-          <mat-form-field>
+          <!-- <mat-form-field>
             <mat-label>{{'Common.SelectState' | translate}}</mat-label>
             <mat-select [formControlName]="'State'" [disabled]="isRowSelected()">
               <mat-option *ngFor="let state of statusName" [value]="state.Id">{{state.Name}}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+
+          <div class="custom-dropdown">
+            <mat-select [formControlName]="'State'"  placeholder="{{'Common.SelectState' | translate}}">
+              <mat-option *ngFor="let state of statusName" [value]="state.Id">{{state.Name}}</mat-option>
+            </mat-select>
+          </div>
           <button class="btn-success btn-success-dis" [disabled]="isRowSelected()"
                   (click)="addCurrencyToPartner()">{{'Partners.AddSelectedCurrencyToPartner' | translate}}
           </button>

@@ -2,7 +2,7 @@
   <div class="section-content" [class.selected]="selectedCategory === rootCategoryName"
     [matMenuTriggerFor]="sectionMenu" #menuContacts="matMenuTrigger">
     <mat-icon>{{categoryData?.Icon}}</mat-icon>
-    <span class="link-text" [class.show]="linkText">{{title | translate}}</span>
+    <span class="link-text" [class.show]="linkText">{{ rootCategoryName }}</span>
 
     <mat-menu #sectionMenu="matMenu" class="item-dropdown" xPosition="after">
 

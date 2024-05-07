@@ -1,10 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute} from '@angular/router';
-import {take} from 'rxjs/operators';
-import {SportsbookApiService} from '../../../../services/sportsbook-api.service';
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { SportsbookApiService } from '../../../../services/sportsbook-api.service';
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 
 @Component({
   selector: 'app-main',
@@ -19,9 +19,9 @@ export class MainComponent implements OnInit {
   category: any;
   isEdit = false;
   multipleBets = [
-    {Id: null, Name: 'NONE'},
-    {Id: true, Name: 'YES'},
-    {Id: false, Name: 'NO'},
+    { Id: null, Name: 'None' },
+    { Id: true, Name: 'Yes' },
+    { Id: false, Name: 'No' },
   ];
 
   constructor(
@@ -69,14 +69,14 @@ export class MainComponent implements OnInit {
   }
 
   getPartner() {
-    this.apiService.apiPost('competitions/categories', {"Id": this.categoryId})
+    this.apiService.apiPost('competitions/categories', { "Id": this.categoryId })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.category = data.ResponseObject[0];
           this.formGroup.patchValue(this.category);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -94,7 +94,7 @@ export class MainComponent implements OnInit {
           this.isEdit = false;
           this.getPartner();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }

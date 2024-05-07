@@ -13,6 +13,7 @@ import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { Paging } from 'src/app/core/models';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-by-bonuses',
@@ -44,21 +45,24 @@ export class ByBounusesComponent extends BasePaginatedGridComponent implements O
   }
 
   ngOnInit() {
-    this.startDate();
+    this.setTime();
     this.getPartners();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time) {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
+    }
     this.getCurrentPage();
   }
 
@@ -156,10 +160,6 @@ export class ByBounusesComponent extends BasePaginatedGridComponent implements O
     ];
   }
 
-  go() {
-    this.getCurrentPage();
-  }
-
   onGridReady(params) {
     super.onGridReady(params);
     syncColumnReset();
@@ -175,7 +175,8 @@ export class ByBounusesComponent extends BasePaginatedGridComponent implements O
         paging.PageSize = Number(this.cacheBlockSize);
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
-        this.setSort(params.request.sortModel, paging);
+        paging.PartnerId = this.partnerId;
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         this.apiService.apiPost(this.path, paging)
           .pipe(take(1))

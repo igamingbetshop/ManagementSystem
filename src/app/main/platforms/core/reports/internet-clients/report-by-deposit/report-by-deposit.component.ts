@@ -15,6 +15,7 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 import { ExportService } from "../../../services/export.service";
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { AgSelectableFilter } from 'src/app/main/components/grid-common/ag-selectable-filter/ag-selectable-filter.component';
 
 @Component({
   selector: 'app-report-by-deposit',
@@ -36,6 +37,7 @@ export class ReportByDepositComponent extends BasePaginatedGridComponent impleme
   frameworkComponents = {
     agDateTimeFilter: AgDateTimeFilter,
     agDropdownFilter: AgDropdownFilter,
+    agSelectableFilter: AgSelectableFilter
   };
   paymentSystems = [];
 
@@ -148,6 +150,40 @@ export class ReportByDepositComponent extends BasePaginatedGridComponent impleme
         },
       },
       {
+        headerName: 'Clients.CommissionPercent',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'CommissionPercent',
+        sortable: true,
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Clients.CommissionAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'CommissionAmount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Clients.FinalAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'FinalAmount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
         headerName: 'Payments.DepositCount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'DepositCount',
@@ -225,12 +261,10 @@ export class ReportByDepositComponent extends BasePaginatedGridComponent impleme
         field: 'State',
         sortable: true,
         resizable: true,
-        filter: 'agNumberColumnFilter',
+        filter: 'agSelectableFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.statusFilters,
-          suppressAndOrCondition: true,
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.status
         },
       },
       {
@@ -291,18 +325,10 @@ export class ReportByDepositComponent extends BasePaginatedGridComponent impleme
       Controllers.ENUMERATION, Methods.GET_PAYMENT_REQUEST_STATES_ENUM).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.status = data.ResponseObject;
-          this.mapStatusFilters();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-  }
-
-  mapStatusFilters(): void {
-    this.statusFilters.push("empty");
-    this.status.forEach(field => {
-      this.statusFilters.push({ displayKey: field.Id, displayName: field.Name, predicate: (_,) => false, numberOfInputs: 0, });
-    })
   }
 
 
@@ -311,6 +337,8 @@ export class ReportByDepositComponent extends BasePaginatedGridComponent impleme
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }
@@ -338,13 +366,7 @@ export class ReportByDepositComponent extends BasePaginatedGridComponent impleme
         this.changeFilerName(params.request.filterModel,
           ['PaymentSystemName'], ['PaymentSystemId']);
         this.setSort(params.request.sortModel, paging);
-        this.setFilterDropdown(params);
         this.setFilter(params.request.filterModel, paging);
-
-        if (paging.States) {
-          paging.States.ApiOperationTypeList[0].OperationTypeId = 1;
-        }
-
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, paging, true,
           Controllers.PAYMENT, Methods.GET_PAYMENT_REQUESTS_PAGING).pipe(take(1)).subscribe(data => {

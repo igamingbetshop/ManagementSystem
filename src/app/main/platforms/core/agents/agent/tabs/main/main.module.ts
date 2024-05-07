@@ -4,7 +4,6 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
@@ -26,7 +25,6 @@ const routes: Routes = [
     CommonModule,
     MatIconModule,
     MatSnackBarModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,

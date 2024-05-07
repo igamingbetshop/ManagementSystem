@@ -15,10 +15,11 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
   styleUrls: ['./add-withdraw-form.component.scss']
 })
 export class AddWithdrawFormComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public clientBanks = [];
-  public accounts = [];
-  public partnerId;
+  formGroup: UntypedFormGroup;
+  clientBanks = [];
+  accounts = [];
+  partnerId;
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<AddWithdrawFormComponent>,
               private apiService: CoreApiService,
@@ -56,9 +57,10 @@ export class AddWithdrawFormComponent implements OnInit {
   }
 
   submit() {
-    if (!this.formGroup.valid) {
+    if (!this.formGroup.valid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true;
     const setting = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.CREATE_PAYMENT_FORM_REQUEST).pipe(take(1)).subscribe((data) => {
@@ -67,6 +69,7 @@ export class AddWithdrawFormComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

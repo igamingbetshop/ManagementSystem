@@ -15,13 +15,14 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./create-new-document.component.scss']
 })
 export class CreateNewDocumentComponent implements OnInit {
-  public clientId: number;
-  public formGroup: UntypedFormGroup;
-  public documentTypeName = [];
-  public documentStateName = [];
-  public validDocumentSize;
-  public validDocumentFormat;
-  public checkDocumentSize;
+  clientId: number;
+  formGroup: UntypedFormGroup;
+  documentTypeName = [];
+  documentStateName = [];
+  validDocumentSize;
+  validDocumentFormat;
+  checkDocumentSize;
+  isSendingReqest = false; 
 
   constructor(public dialogRef: MatDialogRef<CreateNewDocumentComponent>,
               private apiService: CoreApiService,
@@ -73,6 +74,7 @@ export class CreateNewDocumentComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
+    this.isSendingReqest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.CLIENT,
       Methods.UPLOAD_IMAGE).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -80,6 +82,7 @@ export class CreateNewDocumentComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

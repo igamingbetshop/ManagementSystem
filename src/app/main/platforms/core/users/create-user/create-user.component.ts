@@ -1,6 +1,5 @@
 import {CommonModule} from '@angular/common';
 import {Component, NgModule, OnInit} from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 
@@ -22,20 +21,32 @@ import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss']
+  styleUrls: ['./create-user.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
 })
 export class CreateUserComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partners: any[] = [];
-  public types: any[] = [];
-  public states: any[] = [];
-  public currencies: any[] = [];
-  public genders: any[] = [];
-  public languages: any[] = [];
-  public passRegEx;
-  public partnerId;
-  public typeId;
-
+  formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  types: any[] = [];
+  states: any[] = [];
+  currencies: any[] = [];
+  genders: any[] = [];
+  languages: any[] = [];
+  passRegEx;
+  partnerId;
+  typeId;
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<CreateUserComponent>,
@@ -141,9 +152,10 @@ export class CreateUserComponent implements OnInit {
 
 
   onSubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true; 
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.USER, Methods.SAVE_USER).pipe(take(1)).subscribe(data => {
@@ -152,24 +164,7 @@ export class CreateUserComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 }
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule
-  ],
-  declarations: [CreateUserComponent]
-})
-export class CreateUserModule {}
-

@@ -207,6 +207,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.countriesEntites.push(this.commonSettings?.Countries.Ids.map(elem => {
       return this.countries.find((item) => elem === item.Id).Name
     }))
+
   }
 
   getBonusInfo() {
@@ -252,7 +253,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       ValidForSpending: [null],
       Sequence: [{ value: null, disabled: true }],
       MaxGranted: [{ value: null, disabled: true }],
-      TurnoverCount: [{ value: null, disabled: true }],
+      TurnoverCount: [null],
       MaxReceiversCount: [{ value: null, disabled: true }],
       TotalGranted: [{ value: null, disabled: true }],
       TotalReceiversCount: [{ value: null, disabled: true }],

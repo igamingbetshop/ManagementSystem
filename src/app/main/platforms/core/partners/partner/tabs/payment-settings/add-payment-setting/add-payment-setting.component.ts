@@ -1,13 +1,13 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {CoreApiService} from "../../../../../services/core-api.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {CommonDataService, ConfigService} from "../../../../../../../../core/services";
-import {ActivatedRoute} from "@angular/router";
-import {UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
-import {Controllers, Methods} from "../../../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { CoreApiService } from "../../../../../services/core-api.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { CommonDataService, ConfigService } from "../../../../../../../../core/services";
+import { ActivatedRoute } from "@angular/router";
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { Controllers, Methods } from "../../../../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
 
 @Component({
   selector: 'app-add-payment-setting',
@@ -15,29 +15,31 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-payment-setting.component.scss']
 })
 export class AddPaymentSettingComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partnerId;
-  public paymentSystems = [];
-  public currencies = [];
-  public statusName = [
-    {Id: 1, Name: 'Active'},
-    {Id: 3, Name: 'Hidden'},
-    {Id: 2, Name: 'Inactive'},
+  formGroup: UntypedFormGroup;
+  partnerId;
+  paymentSystems = [];
+  currencies = [];
+  statusName = [
+    { Id: 1, Name: 'Active' },
+    { Id: 3, Name: 'Hidden' },
+    { Id: 2, Name: 'Inactive' },
   ];
-  public typeNames = [
-    {Id: 2, NickName: null, Name: "Deposit", Info: null},
-    {Id: 1, NickName: null, Name: "Withdraw", Info: null}
+  typeNames = [
+    { Id: 2, NickName: null, Name: "Deposit", Info: null },
+    { Id: 1, NickName: null, Name: "Withdraw", Info: null }
   ];
+  extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
   partner;
+  isSendingReqest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddPaymentSettingComponent>,
-              private apiService: CoreApiService,
-              private _snackBar: MatSnackBar,
-              public configService: ConfigService,
-              private activateRoute: ActivatedRoute,
-              private fb: UntypedFormBuilder,
-              public commonDataService: CommonDataService,
-              @Inject(MAT_DIALOG_DATA) private data) {
+    private apiService: CoreApiService,
+    private _snackBar: MatSnackBar,
+    public configService: ConfigService,
+    private activateRoute: ActivatedRoute,
+    private fb: UntypedFormBuilder,
+    public commonDataService: CommonDataService,
+    @Inject(MAT_DIALOG_DATA) private data) {
   }
 
   ngOnInit(): void {
@@ -53,28 +55,30 @@ export class AddPaymentSettingComponent implements OnInit {
   }
 
   getPaymentSystems() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+    this.apiService.apiPost(this.configService.getApiUrl, { IsActive: true }, true,
       Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.paymentSystems = data.ResponseObject;
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.paymentSystems = data.ResponseObject;
+        }
+      });
   }
 
   submit() {
     if (!this.formGroup.valid) {
       return;
     }
+    this.isSendingReqest = true; 
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.ADD_PARTNER_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.dialogRef.close(data.ResponseObject);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(data.ResponseObject);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+        this.isSendingReqest = false;
+      });
   }
 
   private formValues() {
@@ -89,6 +93,7 @@ export class AddPaymentSettingComponent implements OnInit {
       Password: [null],
       MinAmount: [null],
       MaxAmount: [null],
+      ImageExtension: [null],
     })
   }
 

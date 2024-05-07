@@ -1,10 +1,11 @@
 <div class="container">
 
-
   <app-partner-date-filter 
   [title]="'Clients.Clients'" 
   [accounts]="{clientId: +clientId}" 
   [pageIdName]="pageIdName"
+  [allTimesFilter]="false"
+  [lastYearFilter]="true"
   (toDateChange)="onDateChange($event)"
   (accountTypeChange)="onSelectAccountType($event)"
   (titleClick)="onNavigateToClient()"

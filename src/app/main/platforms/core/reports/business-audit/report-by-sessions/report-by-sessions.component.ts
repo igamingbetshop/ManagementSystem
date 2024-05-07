@@ -17,6 +17,7 @@ import { syncColumnSelectPanel, syncColumnReset } from 'src/app/core/helpers/ag-
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import {ExportService} from "../../../services/export.service";
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-report-by-sessions',
@@ -48,10 +49,7 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   public reasons = [];
   public partnerId;
   public show = true;
-  public states = [
-    { Id: 1, Name: 'Active' },
-    { Id: 2, Name: 'Inactive' }
-  ];
+  public states = ACTIVITY_STATUSES;
 
   constructor(
     private apiService: CoreApiService,
@@ -384,6 +382,8 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }

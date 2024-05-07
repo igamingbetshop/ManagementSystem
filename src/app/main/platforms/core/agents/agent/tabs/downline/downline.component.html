@@ -1,34 +1,9 @@
 <div class="container">
-<!--  <div class="content-action">-->
-<!--    <div class="title"><a [routerLink]="['../../all-agents']" class="title-link">{{'Agents.Agents' | translate}} </a>-->
-<!--      <span class="title-link-item" (click)="resetClickItem()">{{userId}} ({{agentLevelName}})  </span>-->
-<!--&lt;!&ndash;      <div class="agentIds" *ngFor="let ids of agentIds; let i = index;">&ndash;&gt;-->
-<!--&lt;!&ndash;          <div class="agentIdsItems" *ngFor="let id of ids.split(',')">&ndash;&gt;-->
-<!--&lt;!&ndash;              <span class="agentIdsItems-list" (click)="handleIdClick(id)">/{{ id }}</span>&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;            <span class="agentIdsItems-list" style="cursor: pointer;" (click)="handleIdClick(id)">&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;              /{{ id }} - Level: {{ agentLevels[i] }}&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;            </span>&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;          </div>&ndash;&gt;-->
-<!--&lt;!&ndash;      </div>&ndash;&gt;-->
-<!--      <div class="agentIds" *ngFor="let ids of agentIds">-->
-<!--        <div class="agentIdsItems" *ngIf="isString(ids)">-->
-<!--&lt;!&ndash;          <span class="agentIdsItems-list" (click)="handleIdClick(ids)">{{ ids }}</span>&ndash;&gt;-->
-<!--          <span class="agentIdsItems-list" (click)="handleIdClick(id, i)" *ngFor="let id of ids.split(',');let i = index;">/{{ id }}</span>-->
-<!--&lt;!&ndash;          <span class="agentIdsItems-list" style="cursor: pointer;" (click)="handleIdClick(id)">&ndash;&gt;-->
-<!--&lt;!&ndash;                        /{{ id }} - Level: {{ agentLevels[i] }}&ndash;&gt;-->
-<!--&lt;!&ndash;                      </span>&ndash;&gt;-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <span>/ {{'Agents.Downline' | translate}}</span></div>-->
-<!--  </div>-->
-
   <div class="main-content">
-
     <div class="right-panel">
-
       <div class="downline-container">
         <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabSelectionChange($event)">
-          <mat-tab [label]="agent.Name + ' (' + agent.Count + ')'" *ngFor="let agent of agentsEnums" [id]="agent.Id">
+          <mat-tab [label]="agent.Name + ' (' + agent.Count + '/' + agent.TotalCount + ')'" *ngFor="let agent of agentsEnums" [id]="agent.Id">
           </mat-tab>
         </mat-tab-group>
       </div>
@@ -44,6 +19,7 @@
           [rowModelType]="rowModelType"
           [columnDefs]="columnDefs"
           [defaultColDef]="defaultColDef"
+          [autoGroupColumnDef]="autoGroupColumnDef"
           [cacheBlockSize]="cacheBlockSize"
           [components]="frameworkComponents"
           [paginationPageSize]="cacheBlockSize"
@@ -51,6 +27,9 @@
           [sideBar]="sideBar"
           [suppressCopyRowsToClipboard]="true"
           [animateRows]="true"
+          [treeData]="true"
+          [isServerSideGroup]="isServerSideGroup"
+          [getServerSideGroupKey]="getServerSideGroupKey"
           (paginationChanged)="onPaginationChanged($event)"
           [enableBrowserTooltips]="enableBrowserTooltips"
           (gridReady)="onGridReady($event)"

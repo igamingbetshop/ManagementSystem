@@ -1,6 +1,5 @@
 import {CommonModule} from '@angular/common';
 import {Component, NgModule, OnInit} from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 
@@ -26,12 +25,28 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-crm-settings-currency',
   templateUrl: './add-settings.component.html',
-  styleUrls: ['./add-settings.component.scss']
+  styleUrls: ['./add-settings.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModule
+  ],
 })
 export class AddSettingsComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partners: any[] = [];
-  public settingTypes: any[] = [];
+  formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  settingTypes: any[] = [];
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddSettingsComponent>,
@@ -85,9 +100,10 @@ export class AddSettingsComponent implements OnInit {
 
 
   onSubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     if (obj.State === false) {
       obj.State = 0;
@@ -103,30 +119,7 @@ export class AddSettingsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false;
       })
   }
 }
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatDialogModule
-  ],
-  declarations: [AddSettingsComponent],
-
-})
-export class AddSettingsModule {
-
-}
-

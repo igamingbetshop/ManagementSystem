@@ -16,6 +16,7 @@ import { ButtonRendererComponent } from "../../../components/grid-common/button-
 import { NumericEditorComponent } from "../../../components/grid-common/numeric-editor.component";
 import { CheckboxRendererComponent } from "../../../components/grid-common/checkbox-renderer.component";
 import { SelectRendererComponent } from "../../../components/grid-common/select-renderer.component";
+import { ACTIVITY_STATUSES, MATCH_STATUSES_OPTIONS } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-teasers',
@@ -34,10 +35,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
   public addPath: string = 'bets/addteaser';
   public frameworkComponents;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public status = [
-    { Id: 1, Name: 'Active' },
-    { Id: 2, Name: 'Inactive' },
-  ];
+  public status = ACTIVITY_STATUSES;
   public partners = [];
   public tieRules = [
     { Id: 1, Name: 'No Bet' },
@@ -45,11 +43,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
     { Id: 3, Name: 'Losses' },
     { Id: 4, Name: 'Demotes' },
   ];
-  public matchStatus = [
-    { Id: null, Name: 'All' },
-    { Id: 0, Name: 'Prematch' },
-    { Id: 1, Name: 'Live' }
-  ];
+  public matchStatus = MATCH_STATUSES_OPTIONS
   public selectedRow;
   public selectedRow1;
 

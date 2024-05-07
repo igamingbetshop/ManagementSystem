@@ -25,9 +25,8 @@ import { SportsbookSignalRService } from "../../../services/signal-r/sportsbook-
 import { CustomTooltip } from 'src/app/main/components/grid-common/tooltip.component';
 import { AVAILABLEBETCATEGORIES, BETAVAILABLESTATUSES, BETSTATUSES, BET_SELECTION_STATUSES } from "../../../../../../core/constantes/statuses";
 import { GridRowModelTypes, OddsTypes, ModalSizes, GridMenuIds } from 'src/app/core/enums';
-import { DateTimeHelper } from "../../../../../../core/helpers/datetime.helper";
 import { formattedNumber } from "../../../../../../core/utils";
-import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { syncColumnNestedSelectPanel, syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { Subscription } from "rxjs";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
@@ -60,12 +59,14 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   ];
 
   public betTypesModel = [
-    { Name: "Single", Id: 1 },
-    { Name: "Multiple", Id: 2 },
-    { Name: "System", Id: 3 },
-    { Name: "Chain", Id: 4 },
-    { Name: "Teaser", Id: 5 },
+    { "Name": this.translate.instant('Sport.Single'), "Id": 1 },
+    { "Name": this.translate.instant('Sport.Multiple'), "Id": 2 },
+    { "Name": this.translate.instant('Sport.System'), "Id": 3 },
+    { "Name": this.translate.instant('Sport.Chain'), "Id": 4 },
+    { "Name": this.translate.instant('Sport.Teaser'), "Id": 5 }
+
   ];
+
 
   public commentTypes: any[] = [];
 
@@ -415,6 +416,19 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         field: 'BonusWinAmount',
         filter: 'agNumberColumnFilter',
         tooltipField: 'BonusWinAmount',
+        tooltipComponentParams: { color: '#ececec' },
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Sport.SelectionsCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SelectionsCount',
+        filter: 'agNumberColumnFilter',
+        tooltipField: 'SelectionsCount',
         tooltipComponentParams: { color: '#ececec' },
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -1104,6 +1118,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnNestedSelectPanel();
     syncColumnSelectPanel();
     syncColumnReset();
     this.gridApi = params.api;
@@ -1125,7 +1140,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
         this.changeFilerName(params.request.filterModel, ['ExternalBetId'], ['PlatformId']);
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilterDropdown(params, ['State', 'PartnerName']);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
@@ -1205,8 +1220,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   onBet = (bet) => {
-    console.log(bet, "bet");
-    
     this.mapResponseData(bet);
     this.totalCount += 1;
     this.totals.totalBetAmount = this.totals.totalBetAmount + bet.BetAmount;
@@ -1218,7 +1231,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
       WinAmount: `${formattedNumber(this.totals.totalWinAmount)}  ${this.betCurrency}`,
       ProfitAmount: `${formattedNumber(this.totals.totalProfit)} (${(this.totals.totalProfit / this.totals.totalBetAmount * 100).toFixed(2)}%) ${this.betCurrency}`
     }]);
-    console.log(bet, "bet after map");
     this.gridApi.applyServerSideTransaction({addIndex:0,add:[bet]});
     this.playAlert();
   }
@@ -1304,6 +1316,33 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   exportToCsv() {
+    this.apiService.apiPost('report/exportbets',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+
+  exportMatchGrid() {
+    this.apiService.apiPost('report/exportbetselections',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+
+
+  onExportMatchGrid() {
     this.apiService.apiPost('report/exportbets',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         let iframe = document.createElement("iframe");

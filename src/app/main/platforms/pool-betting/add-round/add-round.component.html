@@ -1,0 +1,40 @@
+<div mat-dialog-title>
+  <span class="title">{{'PoolBetting.AddRound' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'PoolBetting.MarketTypeId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'PoolBetting.MarketTypeId' | translate" [formControlName]="'MarketTypeId'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'PoolBetting.NickName' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'PoolBetting.NickName' | translate" [formControlName]="'NickName'">
+    </mat-form-field>
+
+    <mat-form-field class="calendar-picker">
+      <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'OpenTime'">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+    <mat-form-field class="calendar-picker">
+      <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'CloseTime'">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+      </mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
+    </mat-form-field>
+
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

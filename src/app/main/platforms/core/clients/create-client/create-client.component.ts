@@ -59,18 +59,19 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
   ],
 })
 export class CreateClientComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public items: any[] = [];
-  public partners: any[] = [];
-  public selectedCities: any[] = [];
-  public partnerId: number = 0;
-  public countries: ServerCommonModel[] = [];
+  formGroup: UntypedFormGroup;
+  items: any[] = [];
+  partners: any[] = [];
+  selectedCities: any[] = [];
+  partnerId: number = 0;
+  countries: ServerCommonModel[] = [];
   private allCities: ServerCommonModel[] = [];
-  public clientStates: ServerCommonModel[] = [];
-  public clientCategories: ServerCommonModel[] = [];
-  public jobAreas: ServerCommonModel[] = [];
-  public partnerCurrencies = [];
-  public titles = [];
+  clientStates: ServerCommonModel[] = [];
+  clientCategories: ServerCommonModel[] = [];
+  jobAreas: ServerCommonModel[] = [];
+  partnerCurrencies = [];
+  titles = [];
+  isSendingReqest = false;
 
   constructor(private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<CreateClientComponent>,
@@ -272,7 +273,7 @@ export class CreateClientComponent implements OnInit {
 
   onSubmit() {
     const requestData = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true; 
     requestData['Gender'] = requestData['Gender'] == '' ? 0 : requestData['Gender'];
     requestData['PartnerId'] = this.partnerId;
     if(requestData['MobileNumber']) {
@@ -286,6 +287,7 @@ export class CreateClientComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false; 
       });
   }
 }

@@ -4,7 +4,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatFormFieldModule} from "@angular/material/form-field";
 
@@ -31,7 +30,6 @@ const routes: Routes = [
     CommonModule,
     MatSnackBarModule,
     FormsModule,
-    FlexLayoutModule,
     MatGridListModule,
     ReactiveFormsModule,
     MatFormFieldModule,

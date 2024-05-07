@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,7 +24,6 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
   imports: [
     CommonModule,
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -36,9 +34,9 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
   ]
 })
 export class AddRoleComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partners: any[] = [];
-
+  formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddRoleComponent>,
@@ -71,9 +69,10 @@ export class AddRoleComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     obj.RolePermissions = [];
     this.apiService.apiPost(this.configService.getApiUrl, obj,
@@ -85,6 +84,7 @@ export class AddRoleComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       })
   }
 }

@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Request} from '../models';
-
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ApiService
 {
   constructor(private http: HttpClient)

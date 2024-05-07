@@ -27,11 +27,17 @@ const routes: Routes = [
   {
     path: '',
     component: PaymentSettingsComponent,
+    children: [
+      {
+        path: 'main-info',
+        component: ViewPaymentSettingComponent,
+      }
+    ]
   },
-  {
-    path: ':id',
-    component: ViewPaymentSettingComponent,
-  }
+  // {
+  //   path: ':id',
+  //   component: ViewPaymentSettingComponent,
+  // }
 ]
 
 @NgModule({

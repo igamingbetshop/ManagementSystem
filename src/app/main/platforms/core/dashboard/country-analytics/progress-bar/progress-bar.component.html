@@ -1,0 +1,18 @@
+<div class="block-content">
+  <div class="content-row">
+    <img class="country-flag" src="../../../../../../assets/images/flags/{{src.CountryCode}}.png">
+    <span class="country-name">{{src.CountryName}}</span>
+    <span class="count">{{src.TotalCount}}</span>
+  </div>
+  <div class="progress-bar-thumb">
+    <div class="progress-track" [style.width.%]="src.Percent">
+      <div class="range">
+        {{src.Percent}}%
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

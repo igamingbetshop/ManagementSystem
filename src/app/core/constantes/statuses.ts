@@ -16,6 +16,12 @@ export const BETAVAILABLESTATUSES = [
   {Id: '3', Status: 1, Name: 'Common.Live'}
 ];
 
+export const MATCH_STATUSES_OPTIONS = [
+  { Id: null, Name: 'All' },
+  { Id: 0, Name: 'Prematch' },
+  { Id: 1, Name: 'Live' }
+];
+
 export const AVAILABLEBETCATEGORIES = [
   {Id: 1, status: -1, Name: 'Dashboard.AllBets'},
   {id: 2, status: 0, Name: 'Reports.RealBets'},
@@ -73,6 +79,12 @@ export const MATCH_STATUSES = [
   { id: 6, status: 5, name: 'Unknown', Name: 'Unknown' },
   { id: 7, status: 6, name: 'Resulted', Name: 'Resulted' }
 ];
+
+export const SETTELMENT_STATUSES = [
+  { Id: null, Name: 'None' },
+  { Id: true, Name: 'Yes' },
+  { Id: false, Name: 'No' },
+]
 
 export const RECEIVER_TYPES = [
   { Id: 2, Name: "Client" },

@@ -10,6 +10,7 @@ import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
 import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-partner-language-settings',
@@ -28,10 +29,7 @@ export class PartnerLanguageSettingsComponent extends BasePaginatedGridComponent
     selectRenderer: SelectRendererComponent,
   };
   public columnDefs = [];
-  public statusName = [
-    { Id: 1, Name: 'Active' },
-    { Id: 2, Name: 'Inactive' },
-  ];
+  public statusName = ACTIVITY_STATUSES;
 
   constructor(
     protected injector: Injector,

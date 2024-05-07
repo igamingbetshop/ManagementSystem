@@ -1,19 +1,18 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
-import {UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {FlexLayoutModule} from "@angular/flex-layout";
-import {TranslateModule} from "@ngx-translate/core";
-import {MatInputModule} from "@angular/material/input";
+import { Component, Inject, OnInit } from '@angular/core';
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { TranslateModule } from "@ngx-translate/core";
+import { MatInputModule } from "@angular/material/input";
 
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
-import {MatButtonModule} from "@angular/material/button";
+import { MatButtonModule } from "@angular/material/button";
 
 
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatSelectModule } from '@angular/material/select';
 
 import { CommonDataService } from 'src/app/core/services';
@@ -30,7 +29,6 @@ import { CoreApiService } from '../../../services/core-api.service';
     CommonModule,
     MatIconModule,
     FormsModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -47,19 +45,19 @@ export class AddShopComponent implements OnInit {
   public formGroup: UntypedFormGroup;
   public cashdeskStates: any[] = [];
   public currencies: any[] = [];
-  public cashdesktypes = [{Id:1, Name:"Cashier"},{Id:2, Name:"Client"},{Id:3, Name:"Terminal"}];
-  public restrictions  = [
+  public cashdesktypes = [{ Id: 1, Name: "Cashier" }, { Id: 2, Name: "Client" }, { Id: 3, Name: "Terminal" }];
+  public restrictions = [
     { Id: 1, Name: 'Pre-Ticket' },
     { Id: 2, Name: 'Customer Card' },
     { Id: 3, Name: 'Anonymus' },
   ];
 
   constructor(public dialogRef: MatDialogRef<AddShopComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { cashdeskstates: any,},
-              private apiService:CoreApiService,
-              private _snackBar: MatSnackBar,
-              public commonDataService:CommonDataService,
-              private fb: UntypedFormBuilder) {
+    @Inject(MAT_DIALOG_DATA) public data: { cashdeskstates: any, },
+    private apiService: CoreApiService,
+    private _snackBar: MatSnackBar,
+    public commonDataService: CommonDataService,
+    private fb: UntypedFormBuilder) {
   }
 
   ngOnInit(): void {
@@ -70,11 +68,11 @@ export class AddShopComponent implements OnInit {
 
   formValues() {
     this.formGroup = this.fb.group({
-      Name: [null,[Validators.required]],
-      State: [null,[Validators.required]],
-      Type: [null,[Validators.required]],
-      MacAddress: [null,[Validators.required]],
-      EncryptionKey: [null,[Validators.required,Validators.minLength(16),Validators.maxLength(16)]],
+      Name: [null, [Validators.required]],
+      State: [null, [Validators.required]],
+      Type: [null, [Validators.required]],
+      MacAddress: [null, [Validators.required]],
+      EncryptionKey: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(16)]],
       Restrictions: [null],
     });
   }

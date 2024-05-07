@@ -26,9 +26,10 @@ import {ActivatedRoute} from "@angular/router";
   styleUrls: ['./create-new-ticket.component.scss']
 })
 export class CreateNewTicketComponent implements OnInit {
-  public partners: any[] = [];
-  public formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  formGroup: UntypedFormGroup;
   private clientId = null;
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<CreateNewTicketComponent>,
@@ -69,16 +70,17 @@ export class CreateNewTicketComponent implements OnInit {
 
   onSubmit() {
     if(this.formGroup.valid){
+      this.isSendingReqest = true; 
       const requestBody = this.formGroup.getRawValue();
       requestBody.Token = this.localStorage.get('token');
       requestBody.ClientIds = requestBody.ClientIds.split(',');
-
       this._signalR.connection.invoke(Methods.CREATE_TICKET, requestBody).then(data => {
         if (data.ResponseCode === 0) {
           this.dialogRef.close(data.ResponseObject);
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false; 
       });
     }
   }

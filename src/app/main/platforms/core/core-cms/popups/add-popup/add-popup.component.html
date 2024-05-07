@@ -6,8 +6,8 @@
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
 
-    <div class="field-content">
       <mat-form-field class="calendar-picker start">
+        <mat-label>{{'Common.StartDate' | translate}}</mat-label>
         <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartDate'">
         <mat-datepicker-toggle matSuffix [for]="pickerStart">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
@@ -16,13 +16,13 @@
       </mat-form-field>
 
       <mat-form-field class="calendar-picker" style="margin-left: 5px;">
+        <mat-label>{{'Common.EndDate' | translate}}</mat-label>
         <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishDate'">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
         </mat-datepicker-toggle>
         <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
       </mat-form-field>
-    </div>
 
     <mat-form-field>
       <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
@@ -52,6 +52,16 @@
       </mat-select>
       <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
         {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.SelectDeviceType' | translate}}</mat-label>
+      <mat-select [formControlName]="'DeviceType'">
+        <mat-option *ngFor="let type of deviceTypes" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl?.['DeviceType']?.touched && errorControl?.['DeviceType'].errors?.required">
+        {{'Common.DeviceType' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
 
@@ -88,11 +98,15 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="field-content">
-      <div class="space-between">
-        <label for="imageFiles" class="btn">{{'Cms.Image' | translate}}</label>
-        <input class="file-input" type="file" (change)="uploadFile($event)">
+
+
+      <div class="img-div">
+        <label for="imageFiles" class="btn">{{'Clients.SelectImage' | translate}}</label>
+        <input id="imageFiles" type="file" (change)="uploadFile($event)">
+        <span class="img-text"> {{selectedImage}} </span>
       </div>
+
+      <div class="field-content">
       <mat-form-field style="margin-top: 10px;">
         <mat-label>{{'Cms.Image' | translate}}</mat-label>
         <input matInput [placeholder]="'Cms.ImageType' | translate" [formControlName]="'ImageName'">
@@ -100,11 +114,6 @@
           {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
         </mat-error>
       </mat-form-field>
-    </div>
-
-    <div class="space-between">
-      <label for="imageFiles" class="btn">{{'Products.MobileImage' | translate}}</label>
-      <input class="file-input" type="file" (change)="uploadFile1($event)">
     </div>
 
     <mat-form-field>
@@ -135,5 +144,5 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn"  (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid || submitting" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
 </div>

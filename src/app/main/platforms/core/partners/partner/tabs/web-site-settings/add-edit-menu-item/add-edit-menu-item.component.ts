@@ -122,7 +122,7 @@ export class AddEditMenuItemComponent implements OnInit {
     const files = event.target.files && event.target.files[0];
     if (files) {
       const validDocumentSize = files.size < 5000000;
-      const validDocumentFormat = /\.(jpg|jpeg|png|gif|svg)$/i.test(files.name);
+      const validDocumentFormat = /\.(jpg|jpeg|png|gif|svg|txt|xml|json)$/i.test(files.name);
       if (validDocumentFormat && validDocumentSize) {
         const reader = new FileReader();
         reader.onload = () => {

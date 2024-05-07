@@ -33,5 +33,8 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Cancle' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    (click)="onSubmit()">{{'Common.Save' |translate}}
+  </button>
 </div>

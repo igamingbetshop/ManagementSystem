@@ -156,10 +156,10 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
   ngOnInit() {
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
-    this.getKeys();
+    this.getSettings();
   }
 
-  getKeys() {
+  getSettings() {
     this.apiService.apiPost('partners/getpartnersettings', {PartnerId: +this.partnerId})
       .pipe(take(1))
       .subscribe(data => {
@@ -188,11 +188,12 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
   async addKey() {
     const {AddKeyComponent} = await import('../keys/add-key/add-key.component');
     const dialogRef = this.dialog.open(AddKeyComponent, {
-      width: ModalSizes.MEDIUM
+      width: ModalSizes.MEDIUM,
+      data: {type: 2}
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.getKeys();
+        this.getSettings();
       }
     });
   }
@@ -213,7 +214,7 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
       .subscribe(data => {
         if (data.Code === 0) {
           this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
-          this.getKeys();
+          this.getSettings();
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }

@@ -6,7 +6,7 @@
     <mat-nav-list>
       <a mat-list-item *ngFor = "let homeSection of homeSections; let i = index">
         <app-left-menu-item
-          [categoryData] = "homeSections[i]"
+          [categoryData] = "homeSection"
           [rootCategoryName] = "homeSection.Name"
           [linkText] = "linkText">
         </app-left-menu-item>

@@ -1,8 +1,7 @@
-import {Component, Inject, NgModule, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {TranslateModule} from "@ngx-translate/core";
 import {MatInputModule} from "@angular/material/input";
 
@@ -27,7 +26,21 @@ import {ActivatedRoute} from "@angular/router";
 @Component({
   selector: 'app-add-bet-shop',
   templateUrl: './add-bet-shop.component.html',
-  styleUrls: ['./add-bet-shop.component.scss']
+  styleUrls: ['./add-bet-shop.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    FormsModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatSelectModule,
+  ],
 })
 export class AddBetShopComponent implements OnInit {
 
@@ -106,24 +119,4 @@ export class AddBetShopComponent implements OnInit {
     return this.formGroup.controls;
   }
 
-}
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FormsModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatSelectModule,
-  ],
-  declarations: [AddBetShopComponent]
-})
-export class AddBetShopModule {
 }

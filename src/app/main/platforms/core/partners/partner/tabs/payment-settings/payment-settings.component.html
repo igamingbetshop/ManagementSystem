@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.id }">
   <div class="content-action">
     <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Clients.PaymentSettings' | translate}}</div>
     <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
@@ -20,6 +20,7 @@
       [suppressRowClickSelection]="true"
       [enableBrowserTooltips]="enableBrowserTooltips"
       [sideBar]="sideBar"
+      [components]="frameworkComponents"
       [animateRows]="true"
       [cacheBlockSize]="cacheBlockSize"
       (gridReady)="onGridReady($event)"
@@ -30,3 +31,8 @@
     </ag-grid-angular>
   </div>
 </div>
+
+@if(this.activateRoute.snapshot.queryParams.id) {
+  <router-outlet ></router-outlet>
+}
+

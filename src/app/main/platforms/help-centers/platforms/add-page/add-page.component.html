@@ -1,0 +1,6 @@
+<div class="quill-toolbar">
+  <input type="file" (change)="onSelectFile($event)" />
+  <quill-editor class="quill-editor" [(ngModel)]="editorContent"></quill-editor>
+</div>
+
+<button class="mat-btn" mat-stroked-button (click)="onSubmit()">Submit</button>

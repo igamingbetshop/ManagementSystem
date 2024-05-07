@@ -1,0 +1,202 @@
+@import "variables";
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 45px;
+
+    .partner-dropdown {
+      margin-right: 8px;
+      @include dropdown-style;
+    }
+
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .website-content-action {
+
+    @include action-style;
+    height: 40px;
+
+    .title {
+      font-size: 18px;
+    }
+    .mat-btn {
+      margin: 4px;
+      border: 1px solid $gray-light-14;
+      border-radius: 8px;
+      color: $gray-light-15;
+      background-color: $gray-light;
+      box-shadow: none;
+      transition: 0.3s ease-in;
+      &.active {
+        background-color: $bg-color;
+        color: white !important;
+      }
+    }    
+
+    .input-container {
+      position: relative;
+
+      .input-content {
+
+        @include input-style;
+        display: inline-block;
+        max-width: 190px;
+
+        input {
+          background-color: $content-bg-color;
+          border: 1px solid $gray-light-3;
+          color: $gray-light-3;
+          padding: 4px 8px;
+        }
+      }
+
+      .search-result {
+        position: absolute;
+        max-width: inherit;
+        width: 100%;
+        padding: 12px 8px;
+        display: none;
+        border: 1px solid #076192;
+        background-color: #FFFFFF;
+        border-radius: 4px;
+        top: 28px;
+        box-sizing: border-box;
+
+        &.show {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .website-settings {
+    width: 100%;
+    display: flex;
+
+    ::-webkit-scrollbar-thumb {
+      background-color: $blue-light-8;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      margin: 3px 0;
+      background-color: $gray-light-4;
+      border-radius: 5px;
+    }
+
+    .web-site-menu-main {
+      max-width: 21% !important;
+    }
+
+    .web-site-menu-main, .web-site-menu-content, .web-site-menu-sub-menu {
+      width: 100%;
+
+      &.space {
+        margin-left: 12px;
+      }
+
+      .table-content {
+        height: 100%;
+        max-height: 655px;
+        overflow-y: auto;
+        padding-right: 5px;
+
+        table {
+          width: 100%;
+          border-spacing: 0 3px;
+
+          tr:hover {
+            background-color: $blue-light-3;
+            cursor: pointer;
+          }
+
+          tr.selected {
+            background-color: $blue-light-3;
+          }
+
+          th, td {
+            padding: 10px;
+            white-space: normal;
+            word-break: break-word;
+            border: 1px solid transparent;
+            text-align: start;
+          }
+
+          th {
+            background-color: $blue-light-6;
+            &:first-child {
+              border-radius: 4px 0 0 4px;
+            }
+
+            &:last-child {
+              border-radius: 0 4px 4px 0;
+            }
+          }
+
+          td {
+            border-bottom: 1px solid $blue-light-4;
+            border-top: 1px solid $blue-light-4;
+
+            &:first-child {
+              border-left: 1px solid $blue-light-4;
+              border-radius: 4px;
+            }
+
+            &:last-child {
+              border-right: 1px solid $blue-light-4;
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+
+      .table-actions {
+        padding-top: 12px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .count {
+          font-size: 16px;
+          color: $blue-2;
+        }
+
+        .mat-btn {
+          margin-left: 8px;
+          @include mat-btn-style;
+        }
+
+        .mat-delete-btn {
+          margin-left: 8px;
+          @include mat-delete-style;
+        }
+      }
+
+      .mat-btn-copy {
+        @include mat-btn-style;
+        margin-top: 12px;
+        width: 100%;
+      }
+    }
+  }
+}

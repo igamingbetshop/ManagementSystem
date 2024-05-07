@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, NgModule, OnInit, ViewEncapsulation } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,7 +27,6 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
     CommonModule,
     MatIconModule,
     FormsModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatDialogModule,

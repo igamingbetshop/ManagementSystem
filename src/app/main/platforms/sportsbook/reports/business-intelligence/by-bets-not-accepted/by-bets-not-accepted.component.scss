@@ -6,8 +6,8 @@
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 62px);
-
+    height: 68%;
+    position: relative;
     ::ng-deep {
       ag-grid-angular {
         width: 100%;
@@ -15,19 +15,37 @@
       }
     }
 
-    .pages-sizes {
+    .footer-ag-grid {
       position: absolute;
-      left: 265px;
-      bottom: 2%;
+      left: 14%;
+      bottom: 3.2%;
+      display: flex;
+      align-items: center;
+      width: 75%;
+      z-index: 55;
       @include grid-dropdown-style;
 
-      ::ng-deep {
-        .mat-select {
-          height: 26px !important;
-          width: 60px !important;
-        }
+      .selections {
+        background-color: #C7DAE5;
+        margin-left: 14px;
+        padding: 4px 12px;
       }
+
     }
 
+  }
+
+  .match-grid {
+    width: 100%;
+    height: 24%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }

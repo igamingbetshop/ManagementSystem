@@ -28,6 +28,9 @@
     height: calc(100% - 62px);
 
     ::ng-deep {
+      .ag-theme-balham .ag-cell-wrapper {
+        align-items: center;
+      }
       ag-grid-angular {
         width: 100%;
         height: 100%;

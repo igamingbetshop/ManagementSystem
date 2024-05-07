@@ -24,7 +24,10 @@ const routes: Routes = [
         {
           path: 'bets',
           loadChildren:() => import('./tabs/bets/bets.module').then(m => m.BetsModule),
-
+        },
+        {
+          path: 'notes',
+          loadChildren:() => import('./tabs/notes/notes.module').then(m => m.NotesModule),
         },
 
         {

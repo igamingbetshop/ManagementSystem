@@ -3,8 +3,6 @@ import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 
 import { RouterModule, Routes } from '@angular/router';
 import { AgGridModule } from 'ag-grid-angular';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,8 +11,6 @@ import { ByPlayersComponent } from './by-players.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
-
-
 
 const routes: Routes = [
   {

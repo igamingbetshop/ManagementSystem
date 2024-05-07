@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Controllers, Methods} from "../../../../../../../../core/enums";
 import {ConfigService} from "../../../../../../../../core/services";
@@ -15,11 +15,15 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-blocked-payments.component.scss']
 })
 export class AddBlockedPaymentsComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public blockedPayments = [];
-  public clientId: number;
+  formGroup: UntypedFormGroup;
+  blockedPayments = [];
+  clientId: number;
+  states: any;
+  isSendingReqest = false;
 
-  constructor(public dialogRef: MatDialogRef<AddBlockedPaymentsComponent>,
+  constructor(
+              @Inject(MAT_DIALOG_DATA) public data: { clientId: number, partnerId: number, currencyId: string},
+              public dialogRef: MatDialogRef<AddBlockedPaymentsComponent>,
               private apiService: CoreApiService,
               private _snackBar: MatSnackBar,
               public configService: ConfigService,
@@ -30,7 +34,17 @@ export class AddBlockedPaymentsComponent implements OnInit {
   ngOnInit(): void {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.formValues();
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.PAYMENT,
+    this.featchPaymentSystems();
+  }
+
+  featchPaymentSystems() {
+    const data = {
+      Status: 1,
+      CurrencyId: this.data.currencyId,
+      Type: 2,
+      PartnerId: this.data.partnerId,
+    }
+    this.apiService.apiPost(this.configService.getApiUrl, data, true, Controllers.PAYMENT,
       Methods.GET_PARTNER_PAYMENT_SETTINGS).pipe(take(1)).subscribe((data) => {
       this.blockedPayments = data.ResponseObject;
     })
@@ -39,22 +53,25 @@ export class AddBlockedPaymentsComponent implements OnInit {
   formValues() {
     this.formGroup = this.fb.group({
       ClientId: [+this.clientId],
-      PartnerPaymentSettingId: [null, [Validators.required]]
+      PartnerPaymentSettingId: [null, [Validators.required]],
+      State: [3],
     })
   }
 
   submit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
     const obj = this.formGroup.getRawValue();
+    this.isSendingReqest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.CLIENT,
-      Methods.BLOCK_CLIENT_PAYMENT_SYSTEM).pipe(take(1)).subscribe((data) => {
+      Methods.SAVE_CLIENT_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.dialogRef.close(data.ResponseObject);
+          this.dialogRef.close(true);
         } else{
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
     })
   }
 

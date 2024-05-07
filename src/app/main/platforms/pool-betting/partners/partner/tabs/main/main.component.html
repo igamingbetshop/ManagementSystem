@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Main' | translate}}</div>
+    <!-- <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button> -->
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="second-hand">{{partner?.Id}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" readonly [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{partner?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{partner?.Name}}</div>
+        <div class="form-field form-input">
+            <input matInput [placeholder]="'Common.Name' | translate" readonly [formControlName]="'Name'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="second-hand">{{partner?.CurrencyId}}</div>
+        <div class="form-field form-input">
+            <input matInput [placeholder]="'Clients.Currency' | translate" readonly [formControlName]="'CurrencyId'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.RestrictMaxBet' | translate}}</div>
+        <div class="second-hand">{{partner?.RestrictMaxBet}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'RestrictMaxBet'"></mat-checkbox>
+        </div>
+      </div>
+
+
+
+      <div></div>
+      <div></div>
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

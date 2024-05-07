@@ -16,17 +16,18 @@ import { OPERATIONS } from 'src/app/core/constantes/statuses';
   styleUrls: ['./correction-modal.component.scss']
 })
 export class CorrectionModalComponent implements OnInit {
-  public clientId: number;
-  public account;
-  public modalHeaderName;
-  public products = [];
-  public operations = OPERATIONS
-  public selectedLanguage;
-  public formGroup: UntypedFormGroup;
-  public headerName;
-  public currencyId;
-  public showSelectAccountType;
-  public accountTypes = [];
+  clientId: number;
+  account;
+  modalHeaderName;
+  products = [];
+  operations = OPERATIONS
+  selectedLanguage;
+  formGroup: UntypedFormGroup;
+  headerName;
+  currencyId;
+  showSelectAccountType;
+  accountTypes = [];
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<CorrectionModalComponent>,
@@ -83,7 +84,6 @@ export class CorrectionModalComponent implements OnInit {
   getClientAccountTypes() {
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.ENUMERATION, Methods.GET_CLIENT_ACCOUNT_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
-
       if (data.ResponseCode === 0) {
         this.accountTypes = data.ResponseObject;
       }
@@ -95,9 +95,10 @@ export class CorrectionModalComponent implements OnInit {
   }
 
   onsubmit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     } else {
+      this.isSendingReqest = true; 
       const obj = this.formGroup.getRawValue();
       if (obj.OperationTypeId === null) {
           delete obj.OperationTypeId;
@@ -116,6 +117,7 @@ export class CorrectionModalComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
           }
+          this.isSendingReqest = false; 
         });
       } else {
         if(this.headerName == 'CreditFromClient') {

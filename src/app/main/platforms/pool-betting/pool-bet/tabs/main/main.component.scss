@@ -1,0 +1,24 @@
+@import "mixins";
+
+.container {
+  @include container-style;
+  height: auto;
+
+  .content-action {
+    @include action-style;
+    height: 60px;
+
+    .edit-btn {
+      margin-left: 8px;
+      @include mat-edit-btn-style;
+    }
+
+    .mat-btn {
+      @include mat-btn-style;
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  }
+}

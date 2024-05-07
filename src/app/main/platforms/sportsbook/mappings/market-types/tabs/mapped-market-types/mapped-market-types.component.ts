@@ -25,6 +25,75 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
     agDropdownFilter: AgDropdownFilter,
   };
 
+  public detailCellRendererParams: any = {
+    detailGridOptions: {
+      rowHeight: 47,
+      defaultColDef: {
+        sortable: true,
+        filter: false,
+        flex: 1,
+      },
+      components: this.frameworkComponents,
+      columnDefs: [
+        {
+          headerName: 'Sport.CompetitionId',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'Id',
+        },
+        {
+          headerName: 'Products.ExternalId',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'ObjectExternalId',
+        },
+        {
+          headerName: 'Sport.ExternalName',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'ObjectExternalName',
+        },
+        {
+          headerName: 'Partners.Provider',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'ProviderName',
+        },
+        {
+          headerName: 'Common.Name',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'ObjectNickName',
+        },
+      ],
+      onGridReady: params => {
+      },
+    },
+    getDetailRowData: params => {
+      if (params) {
+        this.apiService.apiPost("markettypes/mappedselectiontypes", { "MarketTypeId": params.data.ObjectId, "ProviderId": params.data.ProviderId, }).subscribe(data => {
+          if (data.Code === 0) {
+            this.rowDataNested = data.Objects;
+            this.rowDataNested.forEach(row => {
+              let providerName = this.providers.find((provider) => {
+                return provider.Id == row.ProviderId;
+              })
+              if (providerName) {
+                row['ProviderName'] = providerName.Name;
+              }
+            })
+            params.successCallback(this.rowDataNested);
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          }
+        })
+      }
+    },
+
+    template: params => {
+      return `<div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box;">
+                  <div style="height: 10%; font-weight: 700; font-size: 16px; color: #076192 "> Selections </div>
+                  <div ref="eDetailGrid" style="height: 90%;"></div>
+               </div>`
+    }
+  }
+  rowDataNested: any;
+
   constructor(
     protected injector: Injector,
     private apiService: SportsbookApiService,
@@ -32,7 +101,6 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
     public dialog: MatDialog,
   ) {
     super(injector);
-
   }
 
   ngOnInit() {
@@ -43,12 +111,14 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
   setColumnDefs() {
     this.columnDefs = [
       {
-        headerName: 'Common.Id',
+        headerName: 'Sport.CompetitionId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Id',
         sortable: true,
         resizable: true,
-        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
+        minWidth: 140,
+        tooltipField: 'Id',
+        cellRenderer: 'agGroupCellRenderer',
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -188,8 +258,8 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
         paging.ObjectTypeId = 6;
         this.changeFilerName(params.request.filterModel,
           ['SportName', 'ProviderName'], ['SportId', 'ProviderId']);
-        this.setSort(params.request.sortModel, paging);
-        this.setFilter(params.request.filterModel, paging);
+          this.setSort(params.request.sortModel, paging, "OrderByDescending");
+          this.setFilter(params.request.filterModel, paging);
 
         this.apiService.apiPost('markettypes/mapped', paging,
         ).pipe(take(1)).subscribe(data => {

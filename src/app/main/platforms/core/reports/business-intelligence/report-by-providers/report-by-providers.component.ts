@@ -232,6 +232,8 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getData();
   }

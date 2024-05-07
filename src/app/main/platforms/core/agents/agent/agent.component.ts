@@ -37,6 +37,10 @@ export class AgentComponent implements OnInit {
       route: 'commission-plan'
     },
     {
+      label: 'Agents.Clients',
+      route: 'clients'
+    },
+    {
       label: 'Agents.Settings',
       route: 'user-settings'
     }
@@ -46,13 +50,16 @@ export class AgentComponent implements OnInit {
   userId: number;
   partnerId: number;
   agentIds;
-  agentIdArray: { Id: string, LevelName: string }[];
-  agentLevelId: number = 1;
+  agentIdArray: { Id: string, LevelName: string, UserName: string }[];
+  level: any;
+  agentLevelId;
   agentLevelName;
+  agentUserName;
   agentsLevelsEnums: any;
   innerAgentLevelName;
   currentRoute: string;
   showDatas = false;
+  agentLevel: any;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -67,7 +74,7 @@ export class AgentComponent implements OnInit {
   }
 
   ngOnInit() {
-    localStorage.removeItem('agentData');
+    // localStorage.removeItem('agentData');
     this.setupAgentIds();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -77,9 +84,16 @@ export class AgentComponent implements OnInit {
       if (agent.length < this.agentIdArray.length) {
         this.agentIdArray.splice(-1, 1);
         localStorage.setItem('agentData', JSON.stringify(this.agentIdArray));
+      } else if (agent?.length === this.agentIdArray.length) {
+        localStorage.setItem('agentData', JSON.stringify(this.agentIdArray));
       }
       this.getUser();
       history.replaceState({selectedTab: this.selectedTab}, '');
+      if (!this.router.url.includes('/agents/agent')) {
+        localStorage.removeItem('agentData');
+        this.agentIdArray = [];
+        this.activateRoute.snapshot.queryParams = {};
+      }
     });
     const currentUrl = this.router.url;
     const urlBeforeQuestionMark = currentUrl.split('?')[0];
@@ -124,8 +138,6 @@ export class AgentComponent implements OnInit {
       }
       this.showDatas = true;
     } else {
-      this.agentIds = this.activateRoute.snapshot.queryParams.agentIds;
-      this.userId = this.agentIds.split(',')[0];
       this.agentIds = queryParams.agentIds;
       this.userId = this.agentIds.split(',')[0];
       let agent = this.agentIds.split(',');
@@ -142,9 +154,9 @@ export class AgentComponent implements OnInit {
         const agentData = localStorage.getItem('agentData');
         if (agentData) {
           this.agentIdArray = JSON.parse(agentData);
-          if (this.agentIdArray.some(agent => !agent.LevelName)) {
-            this.getUserForLevels();
-          }
+          // if (this.agentIdArray.some(agent => !agent.LevelName)) {
+          //   this.getUserForLevels();
+          // }
         } else {
           this.agentIdArray = this.agentIds.split(',').map(id => ({Id: id}));
         }
@@ -174,7 +186,11 @@ export class AgentComponent implements OnInit {
     this.apiService.apiPost(this.configService.getApiUrl, requestObject,
       true, Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
-
+        const agent = data.ResponseObject;
+        this.level = agent?.['Level'];
+        this.agentLevelId = agent?.['Level'];
+        this.agentUserName = agent?.['UserName'];
+        this.agentLevelName = this.getLevelNameById(this.agentLevelId);
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
@@ -182,7 +198,8 @@ export class AgentComponent implements OnInit {
   }
 
   getUserForLevels() {
-    if (this.agentIdArray && this.agentIdArray.length > 1) {
+    // if (this.agentIdArray && this.agentIdArray.length > 1) {
+    if (this.agentIdArray) {
       this.agentIdArray.forEach(agent => {
         const agentId = agent.Id;
         this.apiService.apiPost(this.configService.getApiUrl, agentId,
@@ -191,6 +208,7 @@ export class AgentComponent implements OnInit {
             const levelId = data.ResponseObject?.Level;
             const levelName = this.getLevelNameById(levelId);
             agent.LevelName = levelName;
+            agent.UserName = data.ResponseObject?.UserName;
             localStorage.setItem('agentData', JSON.stringify(this.agentIdArray));
           } else {
             SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
@@ -201,8 +219,12 @@ export class AgentComponent implements OnInit {
   }
 
   getLevelNameById(levelId: string): string {
-    const level = this.agentsLevelsEnums.find(level => level?.Id === levelId);
+    const level = this.agentsLevelsEnums?.find(level => level?.Id === levelId);
     return level ? '(' + level?.Name + ')' : '';
+  }
+
+  setAgentLevel() {
+    this.agentLevel = this.agentsLevelsEnums?.find((level: any) => level.Id == this.level)?.Name;
   }
 
   private getAgentLevelsEnum() {
@@ -210,7 +232,6 @@ export class AgentComponent implements OnInit {
       .pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
         this.agentsLevelsEnums = data.ResponseObject;
-        // this.agentLevelName =this.agentsLevelsEnums.find(agent => agent.Id === this.agentLevelId)?.Name;
         this.agentLevelName = `(${this.agentsLevelsEnums.find(agent => agent.Id === this.agentLevelId)?.Name})`;
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
@@ -233,7 +254,7 @@ export class AgentComponent implements OnInit {
           const newData = parsedData.slice(0, index + 1);
           localStorage.setItem('agentData', JSON.stringify(newData));
 
-          this.agentIdArray = newData.map(entry => entry.LevelName);
+          this.agentIdArray = newData.map(entry => ({ LevelName: entry.LevelName, UserName: entry.UserName }));
         }
       }
     } else {

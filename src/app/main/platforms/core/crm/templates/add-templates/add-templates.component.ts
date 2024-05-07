@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,12 +20,27 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-crm-templates',
   templateUrl: './add-templates.component.html',
-  styleUrls: ['./add-templates.component.scss']
+  styleUrls: ['./add-templates.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatDialogModule
+  ],
 })
 export class AddTemplatesComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partners: any[] = [];
-  public types: any[] = [];
+  formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  types: any[] = [];
+  isSendingReqest = false; 
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {partners: any[], types: any[]},
     public dialogRef: MatDialogRef<AddTemplatesComponent>,
@@ -66,10 +80,10 @@ export class AddTemplatesComponent implements OnInit {
 
   onSubmit()
   {
-    if(this.formGroup.invalid){
+    if(this.formGroup.invalid || this.isSendingReqest){
       return;
     }
-
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_MESSAGE_TEMPLATES)
@@ -80,29 +94,7 @@ export class AddTemplatesComponent implements OnInit {
         }else{
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
     })
   }
 }
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatDialogModule
-  ],
-  declarations: [AddTemplatesComponent],
-
-})
-export class AddTemplatesModule
-{
-
-}
-

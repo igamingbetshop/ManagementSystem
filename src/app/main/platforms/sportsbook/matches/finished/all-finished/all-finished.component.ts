@@ -257,11 +257,10 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
 
     const queryParams = {
       finishId: row.MatchId,
-      partnerId: row.PartnerId,
-      number: row.Number,
-      name: row.Name,
-      isMainPartner: row.isMainPartner,
-      sportId: row.SportId,
+      partnerId: row.PartnerId || '',
+      number: row.Number || '',
+      name: row.Name || '',
+      isMainPartner: row.isMainPartner || '',
     };
 
     const queryString = Object.keys(queryParams)
@@ -302,15 +301,11 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
   }
 
   onSportChange(value) {
-    console.log(value, "onSportChange");
-    
     this.sportId = value;
     this.go();
   }
 
   onProviderChange(val) {
-    console.log(val, "onProviderChange");
-    
     this.providerId = val;
     this.go();
   }

@@ -176,6 +176,8 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }

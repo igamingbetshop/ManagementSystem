@@ -37,11 +37,11 @@
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
         <div class="second-hand">{{popup?.FinishDate | date:'dd/MM/yyyy'}}</div>
         <div class="form-field form-calendar-edit">
-          <input matInput [matDatepicker]="picker" [formControlName]="'FinishDate'">
-          <mat-datepicker-toggle matSuffix [for]="picker">
+          <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
+          <mat-datepicker-toggle matSuffix [for]="picker1">
             <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
           </mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker #picker1></mat-datepicker>
       </div>
       </div>
 
@@ -89,7 +89,9 @@
       <div>
         <div class="first-hand">{{'Cms.SegmentIds' | translate}}</div>
         <div class="second-hand">
-          <ng-container *ngFor="let segment of segmentesEntites">{{segment}}</ng-container>
+          @for (segment of segmentesEntites; track $index) {
+            {{segment}}
+          }
         </div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'SegmentIds'" multiple>
@@ -98,22 +100,60 @@
         </div>
       </div>
 
-      <div>
+      <div style="height: auto;"> 
         <div class="first-hand">{{ 'Segments.ClientIds' | translate }}</div>
         <div class="second-hand">{{ popup?.ClientIds.join(', ') }}</div>
 
         <div class="form-field text-area">
-          <textarea matInput [placeholder]="'Segments.ClientIds' | translate"  [formControl]="formGroup.get('ClientIds')" (blur)="convertToArray('ClientIds')">
+          <textarea 
+            matInput [placeholder]="'Segments.ClientIds' | translate"  
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"
+            [formControl]="formGroup.get('ClientIds')" (blur)="convertToArray('ClientIds')">
           </textarea>
       </div>
       </div>
 
+      <div style="height: auto;">
+        <div class="first-hand">{{'Common.DeviceType' | translate}}</div>
+        <div class="second-hand">{{popup?.DeviceName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'DeviceType'" 
+          placeholder="{{'Common.SelectDeviceType' | translate}}"
+          >
+            <mat-option [value]="null">{{'Common.SelectDeviceType' | translate}}</mat-option>
+            <mat-option *ngFor="let type of deviceTypes" [value]="type.Id">{{type.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div  style="height: auto;">
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{popup?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Products.ImageUrl' | translate}}</div>
+        <div class="static-hand">{{image}}</div>
+        <!-- <div class="form-field form-input">
+            <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'ImageName'">
+        </div> -->
+      </div>
+
       @if (isEdit) {
-        <div>
-          <div class="first-hand">{{'Cms.Image' | translate}}</div>
-          <div class="second-hand">{{popup?.ImageName}}</div>
-          <div class="form-field form-input">
-              <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'ImageName'">
+
+        <div >
+          <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
+          <div class="second-hand"></div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'EnvironmentTypeId'">
+              <mat-option *ngFor="let environment of environments"
+                [value]="environment.Id">{{environment.Name}}</mat-option>
+            </mat-select>
           </div>
         </div>
   
@@ -124,28 +164,9 @@
             <input type="file" (change)="uploadFile($event)">
           </div>
         </div>
-  
-        <div>
-          <div class="first-hand">{{'Common.UploadMobileImage' | translate}}</div>
-          <div class="second-hand"></div>
-          <div class="form-field form-checkbox">
-            <input type="file" (change)="uploadFile1($event)">
-          </div>
-        </div>
+
       }
 
-      <div >
-        <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
-        <div class="second-hand"></div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'EnvironmentTypeId'">
-            <mat-option *ngFor="let environment of environments"
-              [value]="environment.Id">{{environment.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>
-
-      <div></div>
       <div></div>
 
       <div class="form-actions">
@@ -167,12 +188,6 @@
       <img mat-card-image class="img" [src]="image" alt="Image">
     </mat-card>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{"Products.MobileImage" | translate}}</mat-card-title>
-      </mat-card-header>
-      <img mat-card-image class="img" [src]="mobileImage" alt="Image">
-    </mat-card>
   </div>
 
 </div>

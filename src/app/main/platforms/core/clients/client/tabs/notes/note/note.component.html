@@ -4,17 +4,44 @@
 </div>
 
 <div class="read-note" *ngIf="isEdit === false">
-  <mat-icon (click)="editNote()">edit</mat-icon>
-  <div>{{noteText}}</div>
+
+  <button mat-icon-button class="icon-btn" (click)="editNote()">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <mat-form-field >
+    <mat-label>{{'Clients.Message' | translate}}</mat-label>
+    <input matInput 
+      value={{noteText}} readonly>
+  </mat-form-field>
+
+  <!-- <mat-icon (click)="editNote()">edit</mat-icon> -->
+  <!-- <div></div> -->
 </div>
 <div class="edit-note" *ngIf="isEdit === true">
-  <div>
+  <!-- <div>
     <label>{{'Common.State' | translate}}</label>
     <select [(ngModel)]="stateText" (change)="onChange($event)">
       <option *ngFor="let state of noteStates" [value]="state.Id">{{state.Text}}</option>
     </select>
-  </div>
-  <textarea [(ngModel)]="noteText"></textarea>
+  </div> -->
+
+  <mat-form-field>
+    <mat-label>{{'Common.State' | translate}}</mat-label>
+    <mat-select [(ngModel)]="stateText" 
+      (selectionChange)="onChange($event)">
+      <mat-option *ngFor="let state of noteStates" [value]="state.Id">{{state.Text}}</mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+  <!-- <textarea [(ngModel)]="noteText"></textarea> -->
+
+  <mat-form-field class="full-height">
+    <mat-label>{{'Clients.Message' | translate}}</mat-label>
+    <textarea matInput
+    [(ngModel)]="noteText"> </textarea>
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>

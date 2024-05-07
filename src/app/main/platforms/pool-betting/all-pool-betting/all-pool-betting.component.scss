@@ -1,0 +1,83 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.hide {
+  display: none;
+}
+
+.all-pool-betting {
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+
+  .content-action {
+    @include action-style;
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+
+      &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+
+    .mat-delete-btn {
+      margin-left: 8px;
+      @include mat-delete-style;
+    }
+
+  }
+
+  .grid-content {
+    width: 100%;
+    height: calc(100% - 62px);
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .custom-pagination {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+
+      .pages-sizes {
+        padding-left: 10px;
+        padding-right: 10px;
+        @include dropdown-style;
+
+        ::ng-deep {
+          .mat-select {
+            height: 26px !important;
+            width: 60px !important;
+          }
+        }
+      }
+
+      .current-paging {
+        .input {
+          background-color: #076192;
+          padding: 4.5px 0 !important;
+          border-radius: 4px;
+          color: #FFFFFF;
+          outline: 0;
+          border: initial;
+          max-width: 38px;
+          width: 100%;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+

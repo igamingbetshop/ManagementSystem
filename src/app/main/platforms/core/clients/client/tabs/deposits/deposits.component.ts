@@ -20,7 +20,6 @@ import { TextEditorComponent } from "../../../../../../components/grid-common/te
 import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
@@ -677,14 +676,8 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
       if (!result) {
         return;
       }
-      this.apiService.apiPost(this.configService.getApiUrl, result,
-        true, Controllers.PAYMENT, Methods.CREATE_MANUAL_DEPOSIT).pipe(take(1)).subscribe(data => {
-          if (data.ResponseCode === 0) {
-            this.gridApi.refreshServerSide({ purge: true });
-          } else {
-            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-          }
-        });
+      this.getCurrentPage();
+
     })
   }
 

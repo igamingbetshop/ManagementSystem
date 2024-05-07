@@ -6,7 +6,6 @@
 
   .grid-content {
     width: 100%;
-    // height: calc(100% - 360px);
     height: 65%;
     position: relative;
 
@@ -90,7 +89,6 @@
       }
     }
 
-
     .additional-bet-info {
       position: absolute;
       bottom: 6px;
@@ -122,7 +120,6 @@
       .match-action {
         margin-left: auto;
         order: 2;
-
         .mat-btn {
           margin-left: 8px;
           @include mat-btn-style;

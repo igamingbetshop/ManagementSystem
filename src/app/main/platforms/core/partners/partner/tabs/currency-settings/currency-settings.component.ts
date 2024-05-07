@@ -19,6 +19,7 @@ import {SelectRendererComponent} from "../../../../../../components/grid-common/
 import {IRowNode} from "ag-grid-community";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
 import { MatDialog } from '@angular/material/dialog';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-currency-settings',
@@ -44,10 +45,7 @@ export class CurrencySettingsComponent extends BasePaginatedGridComponent implem
   public rowData = [];
   public rowData1 = [];
   public columnDefs1 = [];
-  public statusName = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Inactive'},
-  ];
+  public statusName = ACTIVITY_STATUSES;
   public blockedData;
   public formGroup: UntypedFormGroup;
 

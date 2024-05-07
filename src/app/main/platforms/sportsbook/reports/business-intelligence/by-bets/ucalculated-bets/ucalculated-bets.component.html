@@ -12,7 +12,9 @@
   <div class="grid-container">
     <ng-container *ngFor="let match of finishedMatches">
       <div class="grid-item">
-        <span>{{ match.MatchId }}</span> - <span>{{ match.BetsCount }}</span>
+        <a>
+          <span (click)="onRedirectToFineshed(match.MatchId)">{{ match.MatchId }}</span> - <span>{{ match.BetsCount }}</span>
+        </a>
       </div>
     </ng-container>
   </div>

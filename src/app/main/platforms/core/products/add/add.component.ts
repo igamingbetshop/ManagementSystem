@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { TranslateModule } from "@ngx-translate/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -29,7 +28,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     CommonModule,
     MatIconModule,
     FormsModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -42,14 +40,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 })
 export class AddComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public gameProviderId: number;
-  public languages: any[] = [];
-  public gameProviders: any[] = [];
-  public productStates: any[] = [];
-  public parentProductName;
-  public parentId;
-
+  formGroup: UntypedFormGroup;
+  gameProviderId: number;
+  languages: any[] = [];
+  gameProviders: any[] = [];
+  productStates: any[] = [];
+  parentProductName;
+  parentId;
+  isSendingReqest = false; 
   message: string = '';
 
   constructor(
@@ -121,7 +119,20 @@ export class AddComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.dialogRef.close(obj);
+    this.isSendingReqest = true;
+    this.apiService.apiPost(this.configService.getApiUrl, obj,
+      true, Controllers.PRODUCT, Methods.ADD_PRODUCT)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(obj);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+        }
+        this.isSendingReqest = false;
+
+      });
+
   }
 
   get errorControl() {

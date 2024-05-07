@@ -13,7 +13,7 @@
       </mat-select>
     </div>
 
-    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="onBroadCast()">{{'Cms.Broadcast' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="this.rowType == 2" (click)="onBroadCast()">{{'Cms.Broadcast' | translate}}</button>
 
     <button mat-stroked-button class="mat-btn" (click)="onAddPopup()">{{'Cms.AddPopup' | translate}}</button>
     <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="onDeletePopup()">
@@ -45,6 +45,7 @@
       [enableCellTextSelection]="true"
       [components]="frameworkComponents"
       [getContextMenuItems]="getContextMenuItems"
+      (rowClicked)="onRowClicked($event)"
       (columnPinned)="onColumnPinned($event)"
       (columnMoved)="onColumnMoved($event)"
       (columnResized)="onColumnResized($event)"

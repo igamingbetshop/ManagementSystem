@@ -12,6 +12,7 @@ import { BasePaginatedGridComponent } from "../../../../../../components/classes
 import { MatDialog } from "@angular/material/dialog";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-payment-settings',
@@ -30,6 +31,8 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
   blockedData;
   selected = false;
   isEdit = false;
+  paymentsEnum: any;
+  currencyId: any;
 
   constructor(
     private apiService: CoreApiService,
@@ -42,16 +45,33 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
     public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
+
+  }
+
+  ngOnInit(): void {
+    this.getClientPaymentStatesEnum();
+    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
+    this.FormValues();
+    this.getClient();
+    this.getPaymentLimit();
+    this.getClientPaymetSettings();
+  }
+
+  getClient() {
+    this.apiService.apiPost(this.configService.getApiUrl, this.clientId, true,
+      Controllers.CLIENT, Methods.GET_CLIENT_BY_ID).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.client = data.ResponseObject.Client;
+          this.currencyId = data.ResponseObject.Client.CurrencyId;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+
+      });
+  }
+
+  setColdef() {
     this.columnDefs = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        filter: false,
-        suppressMenu: true
-      },
       {
         headerName: 'Payments.PaymentSettingId',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -80,29 +100,59 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         suppressMenu: true
       },
       {
-        headerName: 'Common.Type',
+        headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Type',
+        field: 'State',
         sortable: true,
         resizable: true,
         filter: false,
-        suppressMenu: true
+        suppressMenu: true,
+        cellRenderer: (params: { value: any; }) => {
+          const typeId = params.value;
+          const typeObject = this.paymentsEnum?.find((type) => type.Id === typeId);
+
+          if (typeObject) {
+            return typeObject.Name;
+          }
+          return 'Unknown type';
+        },
       },
-    ]
+      {
+        headerName: 'Clients.CreationTime',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'CreationTime',
+        sortable: true,
+        filter: false,
+        cellRenderer: function (params) {
+          let datePipe = new DatePipe('en-US');
+          let dat = datePipe.transform(params.data.CreationTime, 'medium');
+          return `${dat}`;
+        },
+      },
+      {
+        headerName: 'Common.LastUpdateTime',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'LastUpdateTime',
+        sortable: false,
+        filter: false,
+        cellRenderer: function (params) {
+          let datePipe = new DatePipe('en-US');
+          let dat = datePipe.transform(params.data.LastUpdateTime, 'medium');
+          return `${dat}`;
+        },
+      }
+
+    ];
   }
 
-  ngOnInit(): void {
-    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
-    this.FormValues();
-    this.getPaymentLimit();
+  getClientPaymetSettings() {
     this.apiService.apiPost(this.configService.getApiUrl, this.clientId,
-      true, Controllers.CLIENT, Methods.GET_CLIENT_BLOCKED_PAYMENTS).subscribe(data => {
+      true, Controllers.CLIENT, Methods.GET_CLIENT_PAYMENT_SETTINGS).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.rowData = data.ResponseObject;
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-
       })
   }
 
@@ -113,6 +163,16 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
           this.paymentLimits = data.ResponseObject;
           this.formGroup.patchValue(this.paymentLimits);
         }
+      });
+  }
+
+  getClientPaymentStatesEnum() {
+    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.ENUMERATION, Methods.GET_CLIENT_PAYMENT_STATES_ENUM).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          this.paymentsEnum = data.ResponseObject;
+        }
+        this.setColdef();
       });
   }
 
@@ -169,19 +229,23 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
     if (params.node.selected) {
       this.selected = true;
       this.blockedData = params
-    } else {
-      this.selected = false;
-      return;
-    }
+    } 
+    
   }
 
   async addBlockedPayments() {
     const { AddBlockedPaymentsComponent } = await import('../payment-settings/add-blocked-payments/add-blocked-payments.component');
-    const dialogRef = this.dialog.open(AddBlockedPaymentsComponent, { width: ModalSizes.MEDIUM });
+    const dialogRef = this.dialog.open(AddBlockedPaymentsComponent, 
+      { width: ModalSizes.MEDIUM, 
+        data: {
+          clientId: this.clientId,
+          currencyId: this.currencyId,
+          partnerId: this.client.PartnerId,
+        }
+      });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.rowData.push(data);
-        this.gridApi.setRowData(this.rowData);
+        this.getClientPaymetSettings();
       }
     });
   }
@@ -190,12 +254,14 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
     if (!this.blockedData) {
       this.selected = false;
     } else {
-      const blockedData = { Id: this.blockedData.data.Id }
+      const blockedData = { PartnerPaymentSettingId: this.blockedData.data.PartnerPaymentSettingId, State: 1, ClientId: +this.clientId }
       this.apiService.apiPost(this.configService.getApiUrl, blockedData, true,
-        Controllers.CLIENT, Methods.ACTIVATE_CLIENT_PAYMENT_SYSTEM).pipe(take(1)).subscribe((data) => {
-          this.rowData.splice(this.blockedData.rowIndex, 1);
-          this.gridApi.setRowData(this.rowData);
-          this.selected = false;
+        Controllers.CLIENT, Methods.SAVE_CLIENT_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
+          if (data.ResponseCode === 0) {
+            this.getClientPaymetSettings();
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          }
         })
     }
   }

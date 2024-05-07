@@ -10,7 +10,6 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import {RouterModule, Routes} from "@angular/router";
 import {MatIconModule} from "@angular/material/icon";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatInputModule} from "@angular/material/input";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatGridListModule} from "@angular/material/grid-list";
@@ -27,7 +26,6 @@ const routes: Routes = [
     CommonModule,
     MatIconModule,
     MatSnackBarModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,

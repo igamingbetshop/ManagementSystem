@@ -295,6 +295,20 @@
       @if (triggerSetting?.Type != 1 && triggerSetting?.Type != 2 && triggerSetting?.Type == 3) {
       <div></div>
       }
+
+      @if (triggerSetting?.Type == 10 || triggerSetting?.Type == 1 || triggerSetting?.Type == 3) {
+
+        <div>
+          <div class="first-hand">{{'Bonuses.ConsiderBonusBets' |translate}}</div>
+          <div class="second-hand">{{triggerSetting?.ConsiderBonusBets}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'ConsiderBonusBets'">{{'Bonuses.ConsiderBonusBets' |translate}}</mat-checkbox>
+          </div>
+        </div>
+
+        <div></div>
+      }
+
       @if (triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3) {
       <div class="types">
         <div class="additionally">
@@ -465,8 +479,10 @@
 
       }
 
-      <div></div>
 
+      
+      
+      <div></div>
 
 
       <div class="form-actions">

@@ -1,12 +1,12 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
-import {CommonDataService, ConfigService} from "../../../../../../../../core/services";
-import {ActivatedRoute} from "@angular/router";
-import {SportsbookApiService} from "../../../../../services/sportsbook-api.service";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { CommonDataService, ConfigService } from "../../../../../../../../core/services";
+import { ActivatedRoute } from "@angular/router";
+import { SportsbookApiService } from "../../../../../services/sportsbook-api.service";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -65,13 +65,14 @@ export class AddKeyComponent implements OnInit {
     }
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
+    setting.Type = this.data.type;
     this.apiService.apiPost('partners/savepartnerkey', setting)
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.dialogRef.close(data.ResponseObject);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }

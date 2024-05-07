@@ -24,7 +24,7 @@ const routes: Routes = [
         {
           path: 'dashboard',
           loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-          resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
+          resolve: {filterOptions: FilterOptionsResolver,commonData: CommonDataResolver, partners: PartnersResolver},
         },
         {
           path: 'affiliates',
@@ -126,8 +126,13 @@ const routes: Routes = [
           resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
         },
         {
-          path: 'reports/users-and-agents',
-          loadChildren: () => import('./reports/users-and-agents/users-and-agents.module').then(m => m.UsersAndAgentsModule),
+          path: 'reports/users',
+          loadChildren: () => import('./reports/users/users.module').then(m => m.UsersModule),
+          resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
+        },
+        {
+          path: 'reports/agents',
+          loadChildren: () => import('./reports/agents/agents.module').then(m => m.AgentsModule),
           resolve: {commonData: CommonDataResolver, partners: PartnersResolver},
         },
         {

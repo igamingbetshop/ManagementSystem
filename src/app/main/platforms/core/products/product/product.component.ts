@@ -243,7 +243,6 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.rowData = data.ResponseObject;
-
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -301,7 +300,6 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
       location.reload();
     });
   }
-
 
   onSubmit() {
     if (this.formGroup.invalid) {

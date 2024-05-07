@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -31,7 +30,6 @@ const routes: Routes = [
     MatIconModule,
     FormsModule,
     MatSnackBarModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,

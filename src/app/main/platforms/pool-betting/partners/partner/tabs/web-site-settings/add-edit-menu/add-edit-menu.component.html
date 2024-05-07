@@ -1,0 +1,46 @@
+<div mat-dialog-title>
+  <div class="title">{{action}} {{'Partners.Menu' | translate}}</div>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{'Partners.Title' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.Title' | translate" [formControlName]="'Title'" required>
+      <mat-error *ngIf="errorControl['Title'].touched && errorControl['Title'].hasError('required')">
+        {{'Partners.Title' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Type' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+    </mat-form-field>
+    <mat-form-field class="full-height">
+      <mat-label>{{'Partners.StyleType' | translate}}</mat-label>
+      <textarea matInput [placeholder]="'Partners.StyleType' | translate" [formControlName]="'StyleType'"> </textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.Icon' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'" (input)="changeIcon($event)">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Partners.Href' | translate}}</mat-label>
+      <input matInput type="text" [placeholder]="'Partners.Href' | translate" [formControlName]="'Href'">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.Order' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'" required>
+      <mat-error *ngIf="errorControl['Order'].touched && errorControl['Order'].hasError('required')">
+        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    <input type="file" (change)="uploadFile($event)" *ngIf="showFile">
+
+    <mat-checkbox [formControlName]="'OpenInRouting'">{{'Partners.Desabled' | translate}}</mat-checkbox>
+    <mat-checkbox [formControlName]="'Orientation'">{{'Partners.Orientation' | translate}}</mat-checkbox>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+</div>

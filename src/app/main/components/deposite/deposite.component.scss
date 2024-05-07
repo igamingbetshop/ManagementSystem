@@ -11,7 +11,7 @@
 
     .title {
       a {
-        color: $blue-5;
+        color:  $bg-color;
       }
     }
   }
@@ -58,7 +58,7 @@
     padding: 8px 0;
     font-size: 22px;
     letter-spacing: 0.04em;
-    color: $blue-5;
+    color: $bg-color;
     font-weight: 600;
     cursor: pointer;
 
@@ -333,7 +333,7 @@
       }
 
       th {
-        background-color: $blue-2;
+        background-color: $bg-color;
         color: #ddd;
 
         &:first-child {

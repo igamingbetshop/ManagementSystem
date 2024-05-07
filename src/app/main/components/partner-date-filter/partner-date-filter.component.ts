@@ -58,6 +58,7 @@ export class PartnerDateFilterComponent implements OnInit {
   allTimesFilter = input<boolean>(true);
   liveUpdateBTN = input<boolean>();
   isReconnected = input<boolean>(false);
+  lastYearFilter = input(false);
   @Output() toDateChange = new EventEmitter<any>();
   @Output() startDateChange = new EventEmitter<any>();
   @Output() titleClick = new EventEmitter<any>();

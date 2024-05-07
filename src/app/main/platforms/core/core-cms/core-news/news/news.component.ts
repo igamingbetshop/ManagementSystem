@@ -9,6 +9,7 @@ import {CoreApiService} from '../../../services/core-api.service';
 import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 import {DateAdapter} from "@angular/material/core";
 import { NewsService } from '../news.service';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-news',
@@ -31,10 +32,7 @@ export class NewsComponent implements OnInit {
   languageEntites = [];
   segmentesEntites = [];
   isEdit = false;
-  states = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Inactive '},
-  ];
+  states = ACTIVITY_STATUSES;
   types = [
     {Id: 0, Name: 'Sport'},
     {Id: 1, Name: 'Casino'},
@@ -84,6 +82,7 @@ export class NewsComponent implements OnInit {
           this.imageSmall = "https://" + this.news?.SiteUrl + '/assets/images/news/small/' + this.news?.ImageName;
 
           this.news.StatusName = this.news.State === 1 ? 'Active' : this.news.State === 2 ? 'Inactive' : '';
+          this.news.TypeName = this.news.Type === 0 ? 'Sport' : this.news.Type === 1 ? 'Casino' : this.news.Type === 2 ? 'Live Casino' : this.news.Type === 3 ? 'Virtual Games': this.news.Type === 4 ? 'Skill Games' : '';
           this.partnerId = this.news.PartnerId;
           this.formGroup.patchValue(this.news);
           this.formGroup.get('EnvironmentTypeId').setValue(1);

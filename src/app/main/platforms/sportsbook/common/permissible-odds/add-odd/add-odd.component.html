@@ -1,0 +1,38 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.AddPermissibleOdds' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'"
+        placeholder="{{'Partners.SelectPartner' | translate}}">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Sport.Coefficient' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Sport.Coefficient' | translate"
+        [formControlName]="'Coefficient'">
+      <mat-error *ngIf="errorControl['Coefficient']?.touched && errorControl['Coefficient'].errors?.required">
+        {{'Sport.Coefficient' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      <mat-error *ngIf="errorControl['Coefficient']?.touched && errorControl['Coefficient'].errors?.pattern">
+        {{'Sport.Coefficient' | translate}} {{'Errors.NaturalNumber' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" [class.disabled]="!formGroup.valid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+</div>

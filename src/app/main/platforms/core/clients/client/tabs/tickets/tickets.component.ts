@@ -1,19 +1,19 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {CommonDataService, ConfigService, LocalStorageService} from "../../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatDialog} from "@angular/material/dialog";
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { CommonDataService, ConfigService, LocalStorageService } from "../../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
 import 'ag-grid-enterprise';
-import {take} from "rxjs/operators";
-import {OpenerComponent} from "../../../../../../components/grid-common/opener/opener.component";
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {CoreSignalRService} from "../../../../services/core-signal-r.service";
-import {ExportService} from "../../../../services/export.service";
+import { take } from "rxjs/operators";
+import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { CoreSignalRService } from "../../../../services/core-signal-r.service";
+import { ExportService } from "../../../../services/export.service";
 
 
 @Component({
@@ -28,7 +28,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
   public rowData;
   public signalRSubscription: any;
   public partners: any[] = [];
-  private filteredClientId: {[key: string]: any };
+  private filteredClientId: { [key: string]: any };
 
   constructor(
     private apiService: CoreApiService,
@@ -39,7 +39,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
     public dialog: MatDialog,
     private commonDataService: CommonDataService,
     private _signalR: CoreSignalRService,
-    private exportService:ExportService,
+    private exportService: ExportService,
     private localStorage: LocalStorageService) {
     super(injector);
     this.adminMenuId = GridMenuIds.CLIENTS_TICKETS;
@@ -137,12 +137,12 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
         filter: false,
         suppressMenu: true,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          let url = this.router.url.replace(replacedPart, 'ticket') +'&';
+          let url = this.router.url.replace(replacedPart, 'ticket') + '&';
           data.path = url.split('?')[0];
           // data.path = url;
-          data.queryParams = {ticketId: params.data.Id, status: params.data.Status, clientId: this.clientId};
+          data.queryParams = { ticketId: params.data.Id, status: params.data.Status, clientId: this.clientId };
 
           return data;
         },
@@ -157,10 +157,10 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
     this._signalR.init();
     this.signalRSubscription = this._signalR.connectionEmitter.subscribe(connected => {
-        if (connected === true) {
-          this.getTickets();
-        }
-      });
+      if (connected === true) {
+        this.getTickets();
+      }
+    });
   }
 
   getTickets() {
@@ -169,7 +169,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
       SkipCount: 0,
       Token: this.localStorage.get('token'),
       UnreadsOnly: false,
-      ClientIds: {IsAnd: true, ApiOperationTypeList: [{IntValue: this.clientId, DecimalValue: this.clientId, OperationTypeId: 1}]}
+      ClientIds: { IsAnd: true, ApiOperationTypeList: [{ IntValue: this.clientId, DecimalValue: this.clientId, OperationTypeId: 1 }] }
     };
     this._signalR.connection.invoke(Methods.GET_TICKETS, request).then(data => {
       if (data.ResponseCode === 0) {
@@ -178,13 +178,13 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
           return question;
         });
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }
 
   async creteNewTicket() {
-    const {CreateNewTicketComponent} = await import('./create-new-ticket/create-new-ticket.component');
+    const { CreateNewTicketComponent } = await import('./create-new-ticket/create-new-ticket.component');
     const dialogRef = this.dialog.open(CreateNewTicketComponent, {
       width: ModalSizes.MEDIUM,
       // data: {partnetId: this.,}
@@ -198,7 +198,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENT_MESSAGES, {TakeCount:100,SkipCount:0, ClientIds:this.filteredClientId});
+    this.exportService.exportToCsv(Controllers.CLIENT, Methods.EXPORT_CLIENT_MESSAGES, { TakeCount: 100, SkipCount: 0, ClientIds: this.filteredClientId });
   }
 
 }

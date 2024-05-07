@@ -34,9 +34,9 @@ export function syncPaginationWithoutBtn() {
 export function syncColumnSelectPanel() {
   const agColumnSelect = document.querySelector('.ag-tool-panel-wrapper .ag-column-select');
   const matExportBtn = document.querySelector('.mat-export-btn');
-
   agColumnSelect.prepend(matExportBtn);
 }
+
 
 export function syncColumnNestedSelectPanel() {
   const agColumnSelectList = document.querySelectorAll('.ag-tool-panel-wrapper .ag-column-select');

@@ -246,7 +246,7 @@ export class ByChangeHistoryComponent extends BasePaginatedGridComponent impleme
         paging.PageSize = Number(this.cacheBlockSize);
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         delete paging.StartDate;
         delete paging.EndDate;

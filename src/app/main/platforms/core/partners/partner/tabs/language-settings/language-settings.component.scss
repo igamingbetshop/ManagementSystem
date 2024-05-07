@@ -3,12 +3,11 @@
 
 .container {
   @include container-style;
-
   height: 92%;
 
   .content-action {
     @include action-style;
-    height: 68px;
+    height: 60px;
 
     .mat-copy-btn {
       margin-left: 8px;
@@ -21,6 +20,7 @@
     height: calc(100% - 20%);
     display: flex;
     column-gap: 10px;
+
     .left-panel,
     .right-panel {
       width: 100%;
@@ -36,40 +36,20 @@
         padding-bottom: 5px;
       }
 
-      .mat-export-btn {
-        margin-left: 8px;
-        @include mat-export-btn-style;
-        line-height: 20px;
-        margin-bottom: 5px;
-
-        ::ng-deep {
-          .mat-button-wrapper {
-            padding: 0 6px;
-            height: 20px;
-            font-size: 13px;
-            &:after {
-              height: 22px;
-            }
-            &:before {
-              margin-right: 8px;
-              font-size: 13px;
-            }
-          }
-        }
-      }
     }
 
     .grid-content {
       width: 100%;
       height: 100%;
       position: relative;
+
       ::ng-deep {
         ag-grid-angular {
           width: 100%;
           height: 100%;
         }
       }
-      
+
       .pages-sizes {
         position: absolute;
         left: 262px;
@@ -88,13 +68,14 @@
     .grid-action {
       form {
         display: flex;
+
         .custom-dropdown {
           // margin-right: 8px;
-          @include dropdown-style;      
+          @include dropdown-style;
           display: flex;
-  
+
         }
-  
+
         .btn-success {
           align-items: center;
           background-color: $green;
@@ -106,7 +87,7 @@
           margin-left: 12px;
           display: flex;
         }
-  
+
         .btn-success-dis:disabled {
           background-color: #a3aaa3;
           opacity: 0.4;

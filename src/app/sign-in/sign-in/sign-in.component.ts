@@ -17,14 +17,15 @@ export class SignInComponent implements AfterViewInit {
 
   @ViewChild('user') user: ElementRef;
 
-  public defaultValue = 'en';
-  public errorMessage: string;
-  public changePassword: any;
-  public languages: any[];
-  public loginForm: UntypedFormGroup;
-  public imagePath: string = '';
-  public firstDisabled: boolean = false;
-  public ignoreAutofill = true;
+  defaultValue = 'en';
+  errorMessage: string;
+  changePassword: any;
+  languages: any[];
+  loginForm: UntypedFormGroup;
+  imagePath: string = '';
+  firstDisabled: boolean = false;
+  ignoreAutofill = true;
+  isSendingReqest = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -66,6 +67,7 @@ export class SignInComponent implements AfterViewInit {
     });
     this.authService.notifyGetUserLoginError.subscribe(value => {
       this.errorMessage = value;
+      this.isSendingReqest = false;
     });
 
     this.setLogoByDomain();
@@ -133,6 +135,7 @@ export class SignInComponent implements AfterViewInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.isSendingReqest = true;
       this.authService.logIn(this.loginForm.getRawValue());
     }
   }

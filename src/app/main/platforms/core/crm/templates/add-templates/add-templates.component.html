@@ -1,5 +1,5 @@
 <div mat-dialog-title>
-  <title class="span">{{'templates.addTemplate' | translate}}</title>
+  <span class="title">{{'Crm.AddTemplate' | translate}} </span>
   <mat-icon (click)="close()">close</mat-icon>
 </div>
 
@@ -39,5 +39,9 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="onSubmit()">{{'Common.Ok' | translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    (click)="onSubmit()">
+    {{'Common.Ok' | translate}}
+  </button>
 </div>

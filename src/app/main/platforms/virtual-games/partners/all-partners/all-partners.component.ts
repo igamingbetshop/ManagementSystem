@@ -1,12 +1,13 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../components/classes/base-paginated-grid-component";
-import {VirtualGamesApiService} from "../../services/virtual-games-api.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { Component, Injector, OnInit } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../components/classes/base-paginated-grid-component";
+import { VirtualGamesApiService } from "../../services/virtual-games-api.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import 'ag-grid-enterprise';
-import {GridMenuIds, GridRowModelTypes} from "../../../../../core/enums";
-import {CommonDataService} from "../../../../../core/services";
-import {OpenerComponent} from "../../../../components/grid-common/opener/opener.component";
+import { GridMenuIds, GridRowModelTypes } from "../../../../../core/enums";
+import { CommonDataService } from "../../../../../core/services";
+import { OpenerComponent } from "../../../../components/grid-common/opener/opener.component";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-all-partners',
@@ -17,10 +18,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
   public path = 'partners';
   public rowData = [];
   public partners;
-  public status = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Inactive'},
-  ];
+  public status = ACTIVITY_STATUSES;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
@@ -37,7 +35,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
         field: 'Id',
         sortable: true,
         resizable: true,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
       },
       {
         headerName: 'Common.Name',
@@ -107,10 +105,10 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'partner');
-          data.queryParams = {partnerId: params.data.Id, partnerName: params.data.Name};
+          data.queryParams = { partnerId: params.data.Id, partnerName: params.data.Name };
           return data;
         },
         sortable: false
@@ -130,7 +128,6 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
   getPartners() {
     this.partners = this.commonDataService.partners;
     this.rowData = this.partners;
-    setTimeout(() => {this.gridApi.sizeColumnsToFit();}, 1000);
   }
 
   createPartner() {

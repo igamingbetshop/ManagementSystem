@@ -9,6 +9,7 @@ import {CoreApiService} from '../../../services/core-api.service';
 import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 import {DateAdapter} from "@angular/material/core";
 import { PromotionsService } from '../core-promotions.service';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-core-promotion',
@@ -32,10 +33,7 @@ export class CorePromotionComponent implements OnInit {
   languageEntites = [];
   segmentesEntites = [];
   isEdit = false;
-  states = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Inactive '},
-  ];
+  states = ACTIVITY_STATUSES;
   image: any;
   imageMedium: any;
   imageSmall: any;

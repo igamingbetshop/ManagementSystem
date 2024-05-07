@@ -14,6 +14,8 @@ import { ActivatedRoute } from "@angular/router";
 import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
 import { IRowNode } from "ag-grid-community";
+import { BET_SELECTION_STATUSES } from 'src/app/core/constantes/statuses';
+import { ResultsComponent } from './results/results.component';
 
 @Component({
   selector: 'app-calculation',
@@ -22,6 +24,7 @@ import { IRowNode } from "ag-grid-community";
 })
 export class CalculationComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
+  @ViewChild(ResultsComponent) results;
   path: string = 'matches/uncalculatedselections';
   name: string = '';
   number: number;
@@ -31,7 +34,6 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   rowData;
   rowData1;
   columnDefs2;
-  isEdit = false;
   frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
@@ -43,134 +45,9 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   partners: any[] = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   pageConfig;
-  statusModel = [
-    { "Name": "Uncalculated", "Id": 1 },
-    { "Name": "Won", "Id": 2 },
-    { "Name": "Lost", "Id": 3 },
-    { "Name": "Returned", "Id": 4 },
-    { "Name": "PartiallyWon", "Id": 5 },
-    { "Name": "PartiallyLost", "Id": 6 }
-  ];
-  calculateOutcomesScore;
+  statusModel = BET_SELECTION_STATUSES;
   rowStyle;
-  templateResults = {
-    "1": [
-      {
-        "RT": 1,
-        "MP": 1,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 5,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 6,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      }
-    ],
-    "2": [
-      {
-        "RT": 1,
-        "MP": 1,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 19,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 20,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 21,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      },
-      {
-        "RT": 1,
-        "MP": 22,
-        "TR": [
-          {
-            "T": 1,
-            "V": ""
-          },
-          {
-            "T": 2,
-            "V": ""
-          },
-        ]
-      }
-    ]
-  }
+
   constructor(protected injector: Injector,
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
@@ -204,8 +81,7 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
         field: 'MarketStatus',
         sortable: true,
         resizable: true,
-        cellEditor: 'textEditor',
-        editable: true
+        editable: false,
       },
       {
         headerName: 'Segments.SelectionId',
@@ -257,11 +133,7 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
     this.name = this.activateRoute.snapshot.queryParams.name;
     this.number = this.activateRoute.snapshot.queryParams.number;
     this.partnerId = +this.activateRoute.snapshot.queryParams.partnerId;
-    this.sportId = +this.activateRoute.snapshot.queryParams.sportId;
-    this.calculateOutcomesScore = {
-      "MatchId": this.matchId,
-      "Results": this.templateResults[this.sportId]
-    };
+    this.sportId = +this.activateRoute.snapshot.queryParams.sportId;   
     this.getPartners();
     this.pageConfig = {
       MatchId: this.matchId,
@@ -294,13 +166,13 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
         if (data.Code === 0) {
           this.rowData = data.ResponseObject;
           this.rowData.forEach((entity) => {
-            let selectionStatusName = this.statusModel.find((stat) => {
+            let selectionStatusName = this.statusModel?.find((stat) => {
               return stat.Id == entity.SelectionStatus;
             })
             if (selectionStatusName) {
               entity['SelectionStatusName'] = selectionStatusName.Name;
             }
-          })
+          })          
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -364,52 +236,44 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   }
 
   autoCalculate() {
-    this.apiService.apiPost('markets/calculateoutcomes', this.calculateOutcomesScore)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.Code === 0) {
-          this.clear();
-
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
+    this.results.autoCalculate();
   }
 
-  calculateOutcomesScoreChange(type) {
-    if (this.isCalculate(type)) {
-      let result;
-
-      for (let i = 0; i < this.calculateOutcomesScore.Results.length - 1; i++) {
-        if (!result)
-          result = this.calculateOutcomesScore.Results[i].TR[type].V;
-        else {
-          result = result - this.calculateOutcomesScore.Results[i].TR[type].V;
-        }
-      }
-      if (!isNaN(result) && result !== '')
-        this.calculateOutcomesScore.Results[this.calculateOutcomesScore.Results.length - 1].TR[type].V = result;
-    }
+  onEditChange() {
+    this.results.isEdit = true;
   }
 
-  isCalculate(type) {
-    let count = 0;
-    for (let i = 0; i < this.calculateOutcomesScore.Results.length; i++) {
-      if (this.calculateOutcomesScore.Results[i].TR[type].V === '') {
-        count++;
-      }
-    }
-    return count < 2;
-  }
 
-  clear() {
-    this.calculateOutcomesScore.Results.forEach(result => {
-      result.TR.forEach(tr => tr.V = undefined);
-    });
-  }
+  // calculateOutcomesScoreChange(type) {
+  //   if (this.isCalculate(type)) {
+  //     let result;
 
-  onSave() {
+  //     for (let i = 0; i < this.calculateOutcomesScore.Results.length - 1; i++) {
+  //       if (!result)
+  //         result = this.calculateOutcomesScore.Results[i].TR[type].V;
+  //       else {
+  //         result = result - this.calculateOutcomesScore.Results[i].TR[type].V;
+  //       }
+  //     }
+  //     if (!isNaN(result) && result !== '')
+  //       this.calculateOutcomesScore.Results[this.calculateOutcomesScore.Results.length - 1].TR[type].V = result;
+  //   }
+  // }
 
-  }
+  // isCalculate(type) {
+  //   let count = 0;
+  //   for (let i = 0; i < this.calculateOutcomesScore.Results.length; i++) {
+  //     if (this.calculateOutcomesScore.Results[i].TR[type].V === '') {
+  //       count++;
+  //     }
+  //   }
+  //   return count < 2;
+  // }
+
+  // clear() {
+  //   this.calculateOutcomesScore.Results.forEach(result => {
+  //     result.TR.forEach(tr => tr.V = undefined);
+  //   });
+  // }
 
 }

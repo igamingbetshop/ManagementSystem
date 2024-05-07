@@ -33,9 +33,7 @@
         <div class="first-hand">{{'Partners.Commission' | translate}} %</div>
         <div class="second-hand">{{paymentSystem?.Commission}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" required [formControlName]="'Commission'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -48,9 +46,7 @@
         <div class="first-hand">{{'Partners.FixedFee' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.FixedFee}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" required [formControlName]="'FixedFee'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -73,9 +69,7 @@
         <div class="first-hand">{{'Bonuses.MinAmount' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.MinAmount}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" required [formControlName]="'MinAmount'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -83,9 +77,7 @@
         <div class="first-hand">{{'Bonuses.MaxAmount' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.MaxAmount}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" required [formControlName]="'MaxAmount'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -93,9 +85,7 @@
         <div class="first-hand">{{'Partners.ApplyPercentAmount' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.ApplyPercentAmount}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'ApplyPercentAmount'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -103,9 +93,7 @@
         <div class="first-hand">{{'Clients.UserName' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.UserName}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'UserName'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -113,9 +101,7 @@
         <div class="first-hand">{{'Clients.Password' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.Password}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Password'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -143,9 +129,7 @@
         <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.Priority}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Priority'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -153,9 +137,7 @@
         <div class="first-hand">{{'Common.Info' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.Info}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Info'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -163,9 +145,7 @@
         <div class="first-hand">{{'Partners.OpenMode' | translate}}</div>
         <div class="second-hand">{{paymentSystem?.OpenMode}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'OpenMode'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -185,7 +165,15 @@
       </div>
 
 
-      <div></div>
+      <div>
+        <div class="first-hand">{{'Common.ImageExtension' | translate}}</div>
+        <div class="second-hand">{{paymentSystem?.ImageExtension}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'ImageExtension'">
+            <mat-option *ngFor="let name of extensions" [value]="name">{{name}}</mat-option>
+          </mat-select>
+         </div>
+      </div>
       <div></div>
 
       <div>

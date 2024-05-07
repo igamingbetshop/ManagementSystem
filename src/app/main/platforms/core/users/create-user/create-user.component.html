@@ -104,5 +104,10 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="onSubmit()" [disabled]="formGroup.invalid" type="submit">{{'Users.CreateUser' | translate}}</button>
+  <button class="modal-primary-btn" 
+    (click)="onSubmit()" 
+    [disabled]="formGroup.invalid || isSendingReqest" 
+    type="submit">
+    {{'Users.CreateUser' | translate}}
+  </button>
 </div>

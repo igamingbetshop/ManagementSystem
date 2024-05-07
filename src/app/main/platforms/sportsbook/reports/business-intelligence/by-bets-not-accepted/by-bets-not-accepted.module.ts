@@ -12,6 +12,7 @@ import { ByBetsNotAcceptedComponent } from './by-bets-not-accepted.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
+import { SelectionsGridComponent } from './selections-grid/selections-grid.component';
 
 
 const routes: Routes = [
@@ -23,7 +24,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [ByBetsNotAcceptedComponent],
+    declarations: [ByBetsNotAcceptedComponent, SelectionsGridComponent],
     providers: [DatePipe, DecimalPipe],
     imports: [
         CommonModule,

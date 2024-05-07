@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,7 +26,6 @@ import { compressImage } from "../../../../../../core/utils";
   imports: [
     CommonModule,
     MatIconModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -222,7 +220,7 @@ export class AddBannerComponent implements OnInit {
       Image: [null, [Validators.required]],
       FragmentName: [null, [Validators.required]],
       SportId: [null],
-      Type: [null, [Validators.required]],
+      Type: [null],
       Visibility: ["null"],
       MarketTypeId: [null],
       ShowLogin: [false],

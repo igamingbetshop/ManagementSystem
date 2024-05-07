@@ -49,7 +49,6 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
     this.getPartners();
     this.setColdefs();
     this.getPage();
-
   }
 
   setColdefs() {
@@ -198,7 +197,6 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-
       });
   }
 
@@ -240,9 +238,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
     })
   }
 
-
   async addBonus() {
-
     const { AddBonusComponent } = await import('./add-bonus/add-bonus.component');
     const dialogRef = this.dialog.open(AddBonusComponent, {
       width: ModalSizes.SMALL, data: {
@@ -302,12 +298,27 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
               bonus['ChanelName'] = chanelName.Name;
             }
           });
-
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
+
+  onDeleteBounus() {
+    const row = this.gridApi.getSelectedRows()[0];
+    this.apiService.apiPost('bonuses/deletebonussetting', row).subscribe(data => {
+      if (data.Code === 0) {
+        SnackBarHelper.show(this._snackBar, { Description: "Deleted", Type: "success" });
+        this.getPage();
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+
+  isRowSelected() {
+    return  this.gridApi?.getSelectedRows().length == 0;
+  };
 
   onPartnerChange(value) {
     this.partnerId = value;

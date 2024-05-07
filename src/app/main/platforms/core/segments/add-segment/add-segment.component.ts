@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,6 +19,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { emailsWithCommasValidator, numbersAndCommas, stringAndCommaValidator } from 'src/app/core/validators';
+
+
+
 
 @Component({
   selector: 'app-add-segment',
@@ -43,22 +47,23 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
     MatDialogModule
   ]
 })
+
 export class AddSegmentComponent implements OnInit {
 
-  public clientStates: any[] = [];
-  public ClientStatus: any = {};
-  public partners: any[] = [];
-  public formGroup: UntypedFormGroup;
-  public operations: any[] = [];
+  clientStates: any[] = [];
+  ClientStatus: any = {};
+  partners: any[] = [];
+  formGroup: UntypedFormGroup;
+  operations: any[] = [];
 
-  public modes = [{ Id: 1, Name: "Common.Static" }, { Id: 2, Name: "Common.Dynamic" }];
-  public genders = [{ Id: null, Name: 'Common.All' }, { Id: 1, Name: 'Common.Male' }, { Id: 2, Name: 'Common.Female' }];
-  public KYCStates = [{ Id: null, Name: 'Common.All' }, { Id: 1, Name: 'Common.Yes' }, { Id: 0, Name: 'Common.No' }];
-  public termsConditionStates = [{ Id: null, Name: 'Common.All' }, { Id: 1, Name: 'Common.Yes' }, { Id: 0, Name: 'Common.No' }];
+  modes = [{ Id: 1, Name: "Common.Static" }, { Id: 2, Name: "Common.Dynamic" }];
+  genders = [{ Id: null, Name: 'Common.All' }, { Id: 1, Name: 'Common.Male' }, { Id: 2, Name: 'Common.Female' }];
+  KYCStates = [{ Id: null, Name: 'Common.All' }, { Id: 1, Name: 'Common.Yes' }, { Id: 0, Name: 'Common.No' }];
+  termsConditionStates = [{ Id: null, Name: 'Common.All' }, { Id: 1, Name: 'Common.Yes' }, { Id: 0, Name: 'Common.No' }];
+  isSendingReqest = false; 
+  arrayTypeProps = ['AffiliateId', 'Bonus', 'ClientId', 'Email', 'FirstName', 'LastName', 'UserName', 'MobileCode', 'Region', 'SegmentId', 'SuccessDepositPaymentSystem', 'SuccessWithdrawalPaymentSystem'];
 
-  public arrayTypeProps = ['AffiliateId', 'Bonus', 'ClientId', 'Email', 'FirstName', 'LastName', 'UserName', 'MobileCode', 'Region', 'SegmentId', 'SuccessDepositPaymentSystem', 'SuccessWithdrawalPaymentSystem'];
-
-  public addedConditions = {
+  addedConditions = {
     SessionPeriod: {
       conditions: [],
       selectedConditionType: null,
@@ -149,11 +154,9 @@ export class AddSegmentComponent implements OnInit {
     });
     this.clientStates = this.data.ClientStates.map(item => {
       item.Name = item.Name.split(" ").join("")
-
       item.checked = false;
       return item;
     });
-
     this.setForm();
   }
 
@@ -168,21 +171,21 @@ export class AddSegmentComponent implements OnInit {
   private setForm() {
     this.formGroup = this.fb.group({
       PartnerId: [null, [Validators.required]],
-      Name: [null, [Validators.required]],
+      Name: [null, [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
       Mode: [1],
       Gender: [null],
       IsKYCVerified: [null],
-      AffiliateId: [null],
-      Bonus: [null],
-      ClientId: [null],
-      SuccessDepositPaymentSystem: [null],
-      Email: [null],
-      FirstName: [null],
-      LastName: [null],
-      MobileCode: [null],
-      Region: [null],
-      SegmentId: [null],
-      SuccessWithdrawalPaymentSystem: [null],
+      AffiliateId: [null, [numbersAndCommas]], 
+      // Bonus: [null],
+      ClientId: [null, [numbersAndCommas]],
+      SuccessDepositPaymentSystem: [null, [numbersAndCommas]],
+      Email: [null, [emailsWithCommasValidator]],
+      FirstName: [null, [stringAndCommaValidator] ],
+      LastName: [null, [stringAndCommaValidator]],
+      MobileCode: [null, Validators.pattern(/^\+?\d+(\s*,\s*\+?\d+)*$/)],
+      Region: [null, [numbersAndCommas]],
+      SegmentId: [null, [numbersAndCommas]],
+      SuccessWithdrawalPaymentSystem: [null, [numbersAndCommas]],
     })
   }
 
@@ -210,13 +213,11 @@ export class AddSegmentComponent implements OnInit {
   };
 
   onSubmit() {
-
     if (!this.formGroup.valid) {
       return;
     }
-
     const obj = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true; 
     this.arrayTypeProps.filter(prop => !!obj[prop]).forEach(key => {
       obj[key] = {
         ConditionItems: obj[key].split(',').map(item => {
@@ -260,6 +261,7 @@ export class AddSegmentComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false; 
       });
   }
 }

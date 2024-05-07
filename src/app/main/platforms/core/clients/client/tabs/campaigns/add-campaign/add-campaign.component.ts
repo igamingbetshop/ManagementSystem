@@ -26,8 +26,9 @@ export class AddCampaignComponent implements OnInit {
     { Name: "Campaign Wager Sport", Id: 13 },
     { Name: "Campaign FreeSpin", Id: 14 },
   ];
-  public clientId: number;
-  public formGroup: UntypedFormGroup;
+  isSendingReqest = false;
+  clientId: number;
+  formGroup: UntypedFormGroup;
 
   constructor(public dialogRef: MatDialogRef<AddCampaignComponent>,
               private apiService: CoreApiService,
@@ -74,10 +75,11 @@ export class AddCampaignComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
     const obj = this.formGroup.getRawValue();
+    this.isSendingReqest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.CLIENT,
       Methods.GIVE_BONUS_TO_CLIENT).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -85,6 +87,7 @@ export class AddCampaignComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false; 
     });
 
   }

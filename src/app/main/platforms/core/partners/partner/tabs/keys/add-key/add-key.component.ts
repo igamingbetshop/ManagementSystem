@@ -15,9 +15,10 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-key.component.scss']
 })
 export class AddKeyComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partnerId;
-  public paymentSystems = [];
+  formGroup: UntypedFormGroup;
+  partnerId;
+  paymentSystems = [];
+  isSendingReqest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddKeyComponent>,
@@ -37,7 +38,7 @@ export class AddKeyComponent implements OnInit {
   }
 
   getPaymentSystems() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+    this.apiService.apiPost(this.configService.getApiUrl, {IsActive: true}, true,
       Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.paymentSystems = data.ResponseObject;
@@ -46,9 +47,10 @@ export class AddKeyComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.formGroup.valid) {
+    if (!this.formGroup.valid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true; 
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
@@ -58,6 +60,7 @@ export class AddKeyComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false; 
     });
   }
 

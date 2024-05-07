@@ -1,23 +1,23 @@
-import {Component, OnInit, Injector, ViewChild} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute} from '@angular/router';
-import {AgGridAngular} from 'ag-grid-angular';
-import {CellValueChangedEvent, IRowNode} from 'ag-grid-community';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute } from '@angular/router';
+import { AgGridAngular } from 'ag-grid-angular';
+import { CellValueChangedEvent, IRowNode } from 'ag-grid-community';
 import 'ag-grid-enterprise';
-import {take} from 'rxjs/operators';
-import {GridRowModelTypes, OddsTypes} from 'src/app/core/enums';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {AgBooleanFilterComponent} from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
-import {ButtonRendererComponent} from 'src/app/main/components/grid-common/button-renderer.component';
-import {CheckboxRendererComponent} from 'src/app/main/components/grid-common/checkbox-renderer.component';
-import {NumericEditorComponent} from 'src/app/main/components/grid-common/numeric-editor.component';
-import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener.component';
-import {SelectRendererComponent} from 'src/app/main/components/grid-common/select-renderer.component';
-import {TextEditorComponent} from 'src/app/main/components/grid-common/text-editor.component';
-import {SportsbookApiService} from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
-import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.helper";
-import {OddsTypePipe} from "../../../../../../../../core/pipes/odds-type.pipe";
-import {LocalStorageService} from "../../../../../../../../core/services";
+import { take } from 'rxjs/operators';
+import { GridRowModelTypes, OddsTypes } from 'src/app/core/enums';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
+import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
+import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
+import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
+import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
+import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
+import { SportsbookApiService } from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
+import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
+import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe";
+import { LocalStorageService } from "../../../../../../../../core/services";
 
 
 @Component({
@@ -27,7 +27,7 @@ import {LocalStorageService} from "../../../../../../../../core/services";
 })
 export class MarketsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGrid1') agGrid1: AgGridAngular;
 
   public name: string = '';
@@ -48,12 +48,12 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   public pageConfig = {};
 
   public statusModel = [
-    {'Name': "Uncalculated", 'Id': 1},
-    {'Name': "Won", 'Id': 2},
-    {'Name': "Lost", 'Id': 3},
-    {'Name': "Returned", 'Id': 4},
-    {'Name': "PartiallyWon", 'Id': 5},
-    {'Name': "PartiallyLost", 'Id': 6},
+    { 'Name': "Uncalculated", 'Id': 1 },
+    { 'Name': "Won", 'Id': 2 },
+    { 'Name': "Lost", 'Id': 3 },
+    { 'Name': "Returned", 'Id': 4 },
+    { 'Name': "PartiallyWon", 'Id': 5 },
+    { 'Name': "PartiallyLost", 'Id': 6 },
   ];
 
   public rowData = [];
@@ -89,7 +89,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         resizable: true,
         minWidth: 100,
         tooltipField: 'Id',
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         floatingFilter: true,
         suppressMenu: true,
         floatingFilterComponentParams: {
@@ -206,7 +206,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         resizable: true,
         minWidth: 100,
         tooltipField: 'Id',
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         filter: false,
       },
       {
@@ -329,10 +329,10 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'market').split('?')[0];
-          data.queryParams = {SelectionId: params.data.SelectionId};
+          data.queryParams = { SelectionId: params.data.SelectionId };
           return data;
         },
         sortable: false
@@ -342,7 +342,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
   ngOnInit() {
     this.finishId = +this.activateRoute.snapshot.queryParams.finishId;
-    this.name = this.activateRoute.snapshot.queryParams.name;
+    // this.name = this.activateRoute.snapshot.queryParams.name;
     this.number = this.activateRoute.snapshot.queryParams.number;
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
@@ -359,13 +359,13 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
   resetMarket() {
     let rows = this.rowData1;
-    this.apiService.apiPost('markets/recalculatemarket', {"Selections": rows})
+    this.apiService.apiPost('markets/recalculatemarket', { "Selections": rows })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -395,7 +395,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
           this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
           this.getPage();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -410,7 +410,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         }
       })
       this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.agGrid.api.redrawRows({rowNodes: [findedNode]});
+      this.agGrid.api.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
@@ -439,7 +439,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         if (data.Code === 0) {
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
 
@@ -507,7 +507,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
             this.showMe(data.Selections);
           } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         });
     }
@@ -527,12 +527,13 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       .subscribe(data => {
         if (data.Code === 0) {
           this.compatitionName = data.CompetitionName;
+          this.name = data.ResponseObject.Competitors[0].TeamName + ' vs ' + data.ResponseObject.Competitors[1].TeamName;
           this.rowData = data.ResponseObject.Markets;
           setTimeout(() => {
             this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
           }, 0)
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }

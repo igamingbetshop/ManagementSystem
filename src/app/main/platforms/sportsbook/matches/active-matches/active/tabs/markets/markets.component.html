@@ -81,20 +81,23 @@
         [sideBar]="sideBar"
         [animateRows]="true"
         [cacheBlockSize]="cacheBlockSize"
-
         (gridReady)="onGridReady1($event)"
         rowSelection="single">
-
         >
       </ag-grid-angular>
-
       </div>
     </div>
-
   </div>
 
   <div class="columns-data">
-    <span> {{'Partners.Count' | translate}}: {{itemsCount}} , &nbsp; {{'Sport.BaseCoefficient' | translate}}: {{baseCoefficientCount}}
-      %, &nbsp;{{'Sport.Coefficient' | translate}}: {{coefficientCount}} %</span>
+    <span> {{'Partners.Count' | translate}}: 
+      {{itemsCount}} , &nbsp; 
+      @if(selectedRowSuccessOutcomeCount != 10) {
+        {{'Sport.BaseCoefficient' | translate}}: 
+        {{baseCoefficientCount}}
+        %, &nbsp;{{'Sport.Coefficient' | translate}}: 
+        {{coefficientCount}} %
+      }
+    </span>
   </div>
 </div>

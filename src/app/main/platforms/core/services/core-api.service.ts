@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { ApiService } from "../../../../core/services";
 import { Request } from "../../../../core/models";
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class CoreApiService {
   constructor(private apiService: ApiService) {
   }

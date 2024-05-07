@@ -1,34 +1,75 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationExtras } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { SportsbookApiService } from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
 import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
 import { MATCH_STATUSES } from 'src/app/core/constantes/statuses';
+import { GridRowModelTypes } from 'src/app/core/enums';
+import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent extends BaseGridComponent implements OnInit {
 
-  public Providers: any[] = [];
-  public finishId: number;
-  public finishMatch: any = {};
-  public name: string = '';
-  public isEdit = false;
-  public Statuses = MATCH_STATUSES;
+  Providers: any[] = [];
+  finishId: number;
+  finishMatch: any = {};
+  name: string = '';
+  isEdit = false;
+  Statuses = MATCH_STATUSES;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
     private activateRoute: ActivatedRoute,
-  ) { }
+    protected injector: Injector,
+  ) {
+    super(injector);
+    this.columnDefs = [
+      {
+        headerName: 'Common.Id',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'TeamId',
+        sortable: false,
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.TeamName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'TeamName',
+        sortable: false,
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.TeamId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'TeamId',
+        sortable: false,
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.Type',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'TypeId',
+        sortable: false,
+        resizable: true,
+        filter: false,
+      },
+    ];
+   }
 
   ngOnInit() {
     this.finishId = +this.activateRoute.snapshot.queryParams.finishId;
-    this.name = this.activateRoute.snapshot.queryParams.name;
+    // this.name = this.activateRoute.snapshot.queryParams.name;
     this.getProviders();
     this.getPartner();
   }
@@ -81,7 +122,18 @@ export class MainComponent implements OnInit {
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
+          const queryParams = { ...this.activateRoute.snapshot.queryParams };
+          queryParams['sportId'] = data.ResponseObject.SportId;
+          const navigationExtras: NavigationExtras = {
+            queryParamsHandling: 'merge', 
+            replaceUrl: true
+          };
+  
+          this.router.navigate([], { ...navigationExtras, queryParams });
+  
           this.finishMatch = data.ResponseObject;
+          this.rowData = this.finishMatch.Competitors;
+          this.name = this.finishMatch.Competitors[0].TeamName + ' vs ' + this.finishMatch.Competitors[1].TeamName;
           this.finishMatch.Name = this.name;
           this.finishMatch.currentPhase = this.finishMatch.CurrentPhaseId + '-' + this.finishMatch.CurrentPhaseName;
           this.finishMatch.StatusName = this.Statuses.find(x => x.status === this.finishMatch.Status).name;

@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Location } from '@angular/common';
 import { Category } from '../../../../core/models';
 import { NavigationEnd, Router } from '@angular/router';
-import { ApiService, ConfigService } from '../../../../core/services';
+import { ConfigService } from '../../../../core/services';
 import { Subscription } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 
@@ -17,36 +16,24 @@ export class LeftMenuItemsComponent implements OnInit, OnDestroy {
   @Input() categoryData: any;
   @Input() rootCategoryName: string;
   @Input() linkText: string;
-  public title: string;
+  // public title: string;
   private url;
   public disableApiCall = false;
   private routerSubscription: Subscription;
   public routerLinkUrl = '';
   public selectedCategory: string;
-  public products = {
-    "Id": 26,
-    "Name": "Products.Products",
-    "Icon": "hub",
-    "ApiRequest": "products",
-    "Route": "/main/platform/product-edit",
-    "Path": "/1/26",
-    "ParentId": 1,
-    "Level": 2,
-    "Pages": []
-  }
+
 
   constructor(
     private router: Router,
     private configService: ConfigService,
-    private apiService: ApiService,
-    private location: Location,
     private route: Router
   ) {
     this.url = this.configService.getApiUrl + '/ApiRequest';
   }
 
   ngOnInit() {
-    this.title = this.getTitle();
+    // this.title = this.getTitle();
     this.getRouterEventsUrl();
     this.getRouter();
   }
@@ -117,8 +104,10 @@ export class LeftMenuItemsComponent implements OnInit, OnDestroy {
       case 'Help':
         title = 'Home.Help';
         break;
+      case 'PoolBetting':
+        title = 'Home.PoolBetting';
+        break;
     }
-
     return title;
   }
 

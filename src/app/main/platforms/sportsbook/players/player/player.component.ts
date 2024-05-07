@@ -22,6 +22,10 @@ export class PlayerComponent implements OnInit {
       label:'Clients.Bets',
       route:'bets'
     },
+    {
+      label:'Clients.Notes',
+      route:'notes'
+    },
   ];
 
   playerId:number;

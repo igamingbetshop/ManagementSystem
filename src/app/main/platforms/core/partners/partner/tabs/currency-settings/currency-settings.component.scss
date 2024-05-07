@@ -20,6 +20,7 @@
     height: calc(100% - 20%);
     display: flex;
     column-gap: 10px;
+
     .left-panel,
     .right-panel {
       width: 100%;
@@ -35,40 +36,20 @@
         padding-bottom: 5px;
       }
 
-      .mat-export-btn {
-        margin-left: 8px;
-        @include mat-export-btn-style;
-        line-height: 20px;
-        margin-bottom: 5px;
-
-        ::ng-deep {
-          .mat-button-wrapper {
-            padding: 0 6px;
-            height: 20px;
-            font-size: 13px;
-            &:after {
-              height: 22px;
-            }
-            &:before {
-              margin-right: 8px;
-              font-size: 13px;
-            }
-          }
-        }
-      }
     }
 
     .grid-content {
       width: 100%;
       height: 100%;
       position: relative;
+
       ::ng-deep {
         ag-grid-angular {
           width: 100%;
           height: 100%;
         }
       }
-      
+
       .pages-sizes {
         position: absolute;
         left: 262px;
@@ -85,47 +66,35 @@
     }
 
     .grid-action {
-      .input-content {
-        @include input-style;
-        display: inline-block;
-        max-width: 150px;
-        margin-right: 12px;
-      }
+      form {
+        display: flex;
 
-      .select-content {
-        display: inline-block;
-        max-width: 200px;
-        vertical-align: top;
-        margin-right: 12px;
-        @include popup-dropdown-style;
+        .custom-dropdown {
+          // margin-right: 8px;
+          @include dropdown-style;
+          display: flex;
 
+        }
 
-        ::ng-deep {
-          .mat-select {
+        .btn-success {
+          align-items: center;
+          background-color: $green;
+          color: #fff;
+          border: none;
+          height: 35px;
+          border-radius: 4px;
+          cursor: pointer;
+          margin-left: 12px;
+          display: flex;
+        }
 
-            &.mat-select-disabled {
-              background-color: $content-bg-color;
-              border: 1px solid $gray-light-3;
-              color: $gray-light-3;
-            }
-          }
+        .btn-success-dis:disabled {
+          background-color: #a3aaa3;
+          opacity: 0.4;
         }
       }
 
-      .btn-success {
-        background-color: $green;
-        color: #fff;
-        border: none;
-        height: 35px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 12px;
-      }
 
-      .btn-success-dis:disabled {
-        background-color: #a3aaa3;
-        opacity: 0.4;
-      }
     }
   }
 

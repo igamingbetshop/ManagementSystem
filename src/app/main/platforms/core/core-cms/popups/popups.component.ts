@@ -43,6 +43,8 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
     agDateTimeFilter: AgDateTimeFilter
   };
   status = ACTIVITY_STATUSES;
+  rowType = 2;
+  deviceTypes: any;
 
   constructor(
     protected injector: Injector,
@@ -57,10 +59,22 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   ngOnInit() {
-    this.gridStateName = 'core-banners-grid-state';
+    this.getDeviceTypes();
     this.partners = this.commonDataService.partners;
     this.getPopupTypes();
-    this.setColumnDefs();
+  }
+
+  getDeviceTypes() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.deviceTypes = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   setColumnDefs() {
@@ -127,6 +141,7 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Type',
         resizable: true,
+        filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,
           filterData: this.types,
@@ -185,10 +200,22 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
         },
       },
       {
+        headerName: 'Common.DeviceType',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'DeviceType',
+        resizable: true,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.deviceTypes,
+        },
+      },
+      {
         headerName: 'Common.Status',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'State',
         resizable: true,
+        filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,
           filterData: this.status,
@@ -243,6 +270,10 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
     return this.gridApi && this.gridApi.getSelectedRows().length === 0;
   };
 
+  onRowClicked(event) {
+    this.rowType = event.data.Type;
+  }
+
   getPopupTypes() {
     this.apiService.apiPost(this.configService.getApiUrl, {},
       true, Controllers.ENUMERATION, Methods.GET_POPUP_TYPES_ENUM)
@@ -253,12 +284,15 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.setColumnDefs();
       });
   }
 
   async onAddPopup() {
     const { AddPopupComponent } = await import('./add-popup/add-popup.component');
-    const dialogRef = this.dialog.open(AddPopupComponent, { width: ModalSizes.MIDDLE });
+    const dialogRef = this.dialog.open(AddPopupComponent, { width: ModalSizes.MIDDLE, data: {
+      deviceTypes: this.deviceTypes,
+    } });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.getCurrentPage();
@@ -323,6 +357,9 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
           true, Controllers.CONTENT, Methods.GET_POPUPS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject;
+              mappedRows.Entities.forEach((row) => {
+                row['DeviceType'] = this.deviceTypes.find((elem) => elem.Id == row?.DeviceType)?.Name;
+              });
               params.success({ rowData: mappedRows.Entities, rowCount: mappedRows.Count });
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
@@ -346,7 +383,6 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
       width: ModalSizes.MEDIUM, data: {
         ObjectId: id,
         ObjectTypeId: typeId,
-        DeviceType: true
       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {

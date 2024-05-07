@@ -9,6 +9,7 @@ import { OpenerComponent } from 'src/app/main/components/grid-common/opener/open
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { CellClickedEvent } from 'ag-grid-community';
 
 @Component({
   selector: 'app-all-players',
@@ -178,18 +179,17 @@ export class AllPlayersComponent extends BasePaginatedGridComponent implements O
         }
       },
       {
-        headerName: 'Common.View',
-        headerValueGetter: this.localizeHeader.bind(this),
-        cellRenderer: OpenerComponent,
-        filter: false,
-        valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'player');
-          data.queryParams = { playerId: params.data.Id };
-          return data;
+        headerName: 'View',
+        cellRenderer: function (params) {
+          if (params.node.rowPinned) {
+            return '';
+          } else {
+            return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+           visibility
+            </i>`
+          }
         },
-        sortable: false
+        onCellClicked: (event: CellClickedEvent) => this.goToPlayer(event),
       },
 
     ]
@@ -216,9 +216,8 @@ export class AllPlayersComponent extends BasePaginatedGridComponent implements O
       getRows: (params) => {
         const paging = new Paging();
         paging.PageIndex = this.paginationPage - 1;
-        // paging.pagesize = this.cacheBlockSize;
         paging.PageSize = Number(this.cacheBlockSize);
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
 
         this.apiService.apiPost(this.path, paging,)
@@ -243,6 +242,20 @@ export class AllPlayersComponent extends BasePaginatedGridComponent implements O
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  goToPlayer(event) {
+    const url = this.router.serializeUrl(this.router.createUrlTree([`/main/sportsbook/players/player/main`],
+      {
+        queryParams: {
+          playerId: event.data.Id
+        }
+      }));
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      console.error('Failed to construct URL');
+    }
   }
 
 }

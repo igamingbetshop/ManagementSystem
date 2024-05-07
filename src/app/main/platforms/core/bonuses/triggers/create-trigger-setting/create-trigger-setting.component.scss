@@ -1,3 +1,5 @@
+@import "mixins";
+
 .modal-wrap {
   position: relative;
   overflow: auto;
@@ -8,5 +10,15 @@
 }
 
 .mat-datepicker-input {
-  background-color: transparent!important;
+  background-color: transparent !important;
+}
+
+.btn-action {
+  // margin-left: auto;
+  .mat-btn {
+    margin-top: 4px;
+    margin-right: 4px;
+    @include mat-btn-style;
+
+  }
 }

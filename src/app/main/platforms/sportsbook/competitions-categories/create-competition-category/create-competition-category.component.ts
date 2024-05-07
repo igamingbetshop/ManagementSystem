@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +17,20 @@ import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-create-competition-category',
   templateUrl: './create-competition-category.component.html',
-  styleUrls: ['./create-competition-category.component.scss']
+  styleUrls: ['./create-competition-category.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule
+  ],
 })
 export class CreateCompetitionCategoryComponent implements OnInit {
 
@@ -83,29 +95,5 @@ export class CreateCompetitionCategoryComponent implements OnInit {
       }
     });
   }
-
-}
-
-
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule
-  ],
-  declarations: [CreateCompetitionCategoryComponent]
-})
-
-export class CreateCompetitionCategoryModule
-{
 
 }

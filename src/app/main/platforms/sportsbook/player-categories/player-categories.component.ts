@@ -221,6 +221,23 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         }
       },
       {
+        headerName: 'Sport.RepeatBetMaxCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'RepeatBetMaxCount',
+        resizable: true,
+        sortable: true,
+        editable: true,
+        filter: 'agNumberColumnFilter',
+        cellEditor: NumericEditorComponent,
+        cellStyle: function (params) {
+          if (params.data.Color !== '#FFFFFF') {
+            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+          } else {
+            return null;
+          }
+        }
+      },
+      {
         headerName: 'Common.Save',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'save',

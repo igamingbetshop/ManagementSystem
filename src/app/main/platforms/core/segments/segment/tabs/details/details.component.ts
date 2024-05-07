@@ -8,6 +8,7 @@ import { CoreApiService } from '../../../../services/core-api.service';
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { emailsWithCommasValidator, numbersAndCommas, stringAndCommaValidator } from 'src/app/core/validators';
 
 @Component({
   selector: 'app-details',
@@ -46,7 +47,7 @@ export class DetailsComponent implements OnInit {
     this.dateAdapter.setLocale('en-GB');
     this.formGroup = this.fb.group({
       Id: [null],
-      Name: [null],
+      Name: [null, [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
       PartnerId: [null],
       State: [null],
       Mode: [null],
@@ -73,21 +74,21 @@ export class DetailsComponent implements OnInit {
       IsTermsConditionAccepted: [null],
       ClientStatus: [null],
       ClientStatusSet: [null],
-      SegmentId: [null],
+      SegmentId: [null, [numbersAndCommas]],
       SegmentIdSet: [null],
       ClientId: [null],
       ClientIdSet: [null],
-      Email: [null, [ Validators.email, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}')]],
+      Email: [null,  [emailsWithCommasValidator]],
       EmailSet: [null],
-      FirstName: [null],
+      FirstName: [null, [stringAndCommaValidator]],
       FirstNameSet: [null],
-      LastName: [null],
+      LastName: [null, [stringAndCommaValidator]],
       LastNameSet: [null],
-      Region: [null],
+      Region: [null, [numbersAndCommas]],
       RegionSet: [null],
-      AffiliateId: [null],
+      AffiliateId: [null, [numbersAndCommas]],
       AffiliateIdSet: [null],
-      MobileCode: [null],
+      MobileCode: [null, Validators.pattern(/^\+?\d+(\s*,\s*\+?\d+)*$/)],
       MobileCodeSet: this.fb.group({
         ConditionItems: this.fb.array([
           this.fb.group({
@@ -104,7 +105,7 @@ export class DetailsComponent implements OnInit {
       ProfitObject: [null],
       Bonus: [null],
       BonusSet: [null],
-      SuccessDepositPaymentSystem: [null],
+      SuccessDepositPaymentSystem: [null, [numbersAndCommas]],
       SuccessDepositPaymentSystemObject: [null],
       SuccessWithdrawalPaymentSystem: [null],
       SuccessWithdrawalPaymentSystemObject: [null],
@@ -334,8 +335,8 @@ export class DetailsComponent implements OnInit {
             obj.PartnerName = this.partners.find((item => item.Id === obj.PartnerId))?.Name;
             return obj;
           })[0];
-          this.clientStates.forEach(item => {
-            item.checked = this.PaymentSegment.ClientStatus.includes('' + item.Id);
+          this.clientStates?.forEach(item => {
+            item.checked = this.PaymentSegment?.ClientStatus.includes(item.Id);
           });
 
           Object.keys(this.addedConditions).forEach(key => {

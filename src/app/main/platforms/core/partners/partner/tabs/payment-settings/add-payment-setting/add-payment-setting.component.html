@@ -80,9 +80,23 @@
         {{'Bonuses.MaxAmount' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
+    <mat-form-field>
+      <mat-label>{{'Common.ImageExtension' | translate}}</mat-label>
+      <mat-select [formControlName]="'ImageExtension'">
+        <mat-option *ngFor="let name of extensions" [value]="name">{{name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['ImageExtension'].touched && errorControl['ImageExtension'].hasError('required')">
+        {{'Common.ImageExtension' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+    
   </form>
 </div>
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    (click)="submit()">
+    {{'Common.Save' | translate}}
+  </button>
 </div>

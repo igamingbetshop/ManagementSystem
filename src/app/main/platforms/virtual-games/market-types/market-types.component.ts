@@ -7,12 +7,13 @@ import { NumericEditorComponent } from "../../../components/grid-common/numeric-
 import { CheckboxRendererComponent } from "../../../components/grid-common/checkbox-renderer.component";
 import { TextEditorComponent } from "../../../components/grid-common/text-editor.component";
 import { SelectRendererComponent } from "../../../components/grid-common/select-renderer.component";
-import { Controllers, GridRowModelTypes, Methods } from "../../../../core/enums";
+import { GridRowModelTypes } from "../../../../core/enums";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { VirtualGamesApiService } from "../services/virtual-games-api.service";
 import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from "../../../../core/helpers/snackbar.helper";
+import { CellValueChangedEvent } from 'ag-grid-community';
 
 @Component({
   selector: 'app-market-types',
@@ -148,6 +149,16 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         resizable: true,
         sortable: true,
         editable: true
+      },
+      {
+        headerName: 'Sport.Order',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Order',
+        resizable: true,
+        sortable: true,
+        editable: true,
+        cellEditor: 'numericEditor',
+        onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
       },
       {
         headerName: 'Bonuses.TranslationId',
@@ -298,6 +309,23 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
   onGridReady1(params) {
     super.onGridReady(params);
+  }
+
+  onCellValueChanged(event) {
+    const data = {
+      SelectionTypeId: event.data.Id,
+      Order: event.data.Order,
+    }
+    this.apiService.apiPost('markettypes/saveselectiontypes', data)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.agGrid1.api.getRenderedNodes()[0]?.setSelected(true);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+    
   }
 
   onGameChange(event) {

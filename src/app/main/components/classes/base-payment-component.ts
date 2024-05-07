@@ -201,7 +201,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   }
 
   getPaymentSystems() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS)
+    this.apiService.apiPost(this.configService.getApiUrl, {IsActive: true}, true, Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS)
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.paymentSystems = data.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);;
@@ -664,7 +664,6 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.PaymentRequests.Entities
               mappedRows.map((items) => {
-                items.Email = items.ClientEmail;
                 items.CategoryId = items.GroupId;
                 items.PartnerId = this.commonDataService.partners?.find((partner) => partner.Id == items.PartnerId)?.Name;
                 items.StateId = items.State;

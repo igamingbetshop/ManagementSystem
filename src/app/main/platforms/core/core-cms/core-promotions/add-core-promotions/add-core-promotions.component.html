@@ -5,19 +5,22 @@
 
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
-    <mat-form-field *ngIf="isParent">
-      <mat-label>{{'Common.StartDate' | translate}}</mat-label>
-      <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
 
-    <mat-form-field *ngIf="isParent">
-      <mat-label>{{'Common.EndDate' | translate}}</mat-label>
-      <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
-      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-      <mat-datepicker #picker1></mat-datepicker>
-    </mat-form-field>
+    @if (isParent) {
+      <mat-form-field>
+        <mat-label>{{'Common.StartDate' | translate}}</mat-label>
+        <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>{{'Common.EndDate' | translate}}</mat-label>
+        <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+    }
 
     <mat-form-field>
       <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
@@ -112,6 +115,7 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid" (click)="onSubmit()">{{'Common.Create'|
-    translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="this.formGroup.invalid" 
+    (click)="onSubmit()">{{'Common.Create'| translate}}</button>
 </div>

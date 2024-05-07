@@ -1,0 +1,27 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: auto;
+  height: 92%;
+
+  .grid-content {
+    width: 100%;
+    height: calc(100vh - 258px);
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  .mat-btn {
+    display: flex;
+    margin: 8px;
+    @include mat-btn-style;
+    margin-left: auto;
+  }
+}

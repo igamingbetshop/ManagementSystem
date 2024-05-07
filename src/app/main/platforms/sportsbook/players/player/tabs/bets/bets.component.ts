@@ -862,7 +862,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     });
   }
 
-  onNavigateToClient() {
+  onNavigateTo() {
     this.router.navigate(["/main/sportsbook/players/all-players"])
   }
 

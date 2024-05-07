@@ -1,0 +1,30 @@
+<ag-grid-angular
+  [class.hide-grid]="loadingUserState"
+  class="ag-theme-balham"
+  [headerHeight]="33"
+  [rowHeight]="42"
+  [rowData]="rowData"
+  [rowModelType]="rowModelType"
+  [columnDefs]="columnDefs"
+  [suppressCopyRowsToClipboard]="true"
+  [defaultColDef]="defaultColDef"
+  [enableBrowserTooltips]="enableBrowserTooltips"
+  [components]="frameworkComponents"
+  [animateRows]="true"
+  [sideBar]="sideBar"
+  [enableBrowserTooltips]="enableBrowserTooltips"
+  [cacheBlockSize]="cacheBlockSize"
+  (gridReady)="onGridReady($event)"
+  [ensureDomOrder]="true"
+  [enableCellTextSelection]="true"
+  [getContextMenuItems]="getContextMenuItemsForBets"
+  rowSelection="single"
+  (columnPinned)="onColumnPinned($event)"
+  (columnMoved)="onColumnMoved($event)"
+  (columnResized)="onColumnResized($event)"
+  (columnVisible)="onColumnVisible($event)"
+  >
+</ag-grid-angular>
+
+<button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+

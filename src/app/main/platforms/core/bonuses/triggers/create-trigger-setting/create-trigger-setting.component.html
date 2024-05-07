@@ -32,7 +32,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field *ngIf="type != 7 && type != 11 && type != 15 ">
+    <mat-form-field *ngIf="type != 7 && type != 11 ">
       <mat-label>{{'Payments.Amount' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Payments.Amount' | translate" [formControlName]="'Amount'">
       <mat-error *ngIf="errorControl['Amount']?.touched && errorControl['Amount'].errors?.required">
@@ -140,12 +140,12 @@
       <mat-label>{{'Bonuses.UpToAmount' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.UpToAmount' | translate" [formControlName]="'UpToAmount'">
     </mat-form-field>
-    @if (type == 15) {
+    <!-- @if (type == 15) {
       <mat-form-field >
         <mat-label>{{'Clients.Amount' | translate}}</mat-label>
         <input matInput type="text" [placeholder]="'Bonuses.Amount' | translate" [formControlName]="'UpToAmount'">
       </mat-form-field>
-    }
+    } -->
     <mat-form-field *ngIf="type == 4 || type == 11 || type == 12">
       <mat-label>{{'Bonuses.BonusSettingCodes' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.BonusSettingCodes' | translate" [formControlName]="'BonusSettingCodes'" request>
@@ -182,6 +182,11 @@
         </mat-select>
       </mat-form-field>
     }
+
+    @if (type === 3 ||  type === 1 || type === 10) {
+      <mat-checkbox [formControlName]="'ConsiderBonusBets'">{{'Bonuses.ConsiderBonusBets' |translate}}</mat-checkbox>
+    }
+
   </form>
 
   <div class="additionally" *ngIf="type === 1 ||  type === 2 || type === 3">
@@ -342,5 +347,9 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Create' | translate}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    (click)="onSubmit()">
+    {{'Common.Create' | translate}}
+  </button>
 </div>

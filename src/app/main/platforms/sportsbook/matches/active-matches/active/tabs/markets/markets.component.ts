@@ -19,6 +19,8 @@ import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.he
 import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe";
 import { LocalStorageService } from "../../../../../../../../core/services";
 import { GridRowModelTypes, OddsTypes, ModalSizes } from 'src/app/core/enums';
+import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
+import { SETTELMENT_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-markets',
@@ -30,29 +32,30 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGrid1') agGrid1: AgGridAngular;
 
-  public name: string = '';
-  public MatchId: number;
-  public number: number;
-  public partnerId: number;
-  public sportId: number;
+  name: string = '';
+  MatchId: number;
+  number: number;
+  partnerId: number;
+  sportId: number;
+  private settlementStatuses = SETTELMENT_STATUSES;
+  partners: any[] = [];
+  selectedMarketId: any[] = [];
+  checked = false;
 
-  public partners: any[] = [];
-  public selectedMarketId: any[] = [];
-  public checked = false;
-
-  public frameworkComponents = {
+  frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
     textEditor: TextEditorComponent,
     selectRenderer: SelectRendererComponent,
+    selectStateRenderer: SelectStateRendererComponent,
   };
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
-  public pageConfig: any = {};
+  pageConfig: any = {};
 
-  public statusModel = [
+  statusModel = [
     { 'Name': "Uncalculated", 'Id': 1 },
     { 'Name': "Won", 'Id': 2 },
     { 'Name': "Lost", 'Id': 3 },
@@ -61,26 +64,27 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
     { 'Name': "PartiallyLost", 'Id': 6 },
   ];
 
-  public rowData = [];
-  public rowData1 = [];
-  public columnDefs2;
+  rowData = [];
+  rowData1 = [];
+  columnDefs2;
 
-  public itemsCount;
-  public coefficientCount;
-  public baseCoefficientCount;
+  itemsCount;
+  coefficientCount = 0;
+  baseCoefficientCount = 0;
 
-  public CoefficientValue;
+  CoefficientValue;
 
-  public path: string = 'matches/match';
-  public selectPath: string = 'markets/selections';
+  path: string = 'matches/match';
+  selectPath: string = 'markets/selections';
 
-  public compatitionName;
+  compatitionName;
   private oddsType: number;
   selectedSelections: any;
   rowSuccessOutcomeCount: any;
   selectedRowData: { MarketId: any; PartnerId: number; MatchId: any; LineNumber: any; };
   selectedRowSuccessOutcomeCount: any;
   selectedSuccessOutcomeCount: any;
+  successOutcomeCount: any;
 
   constructor(
     protected injector: Injector,
@@ -185,6 +189,26 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         },
       },
       {
+        headerName: 'Sport.AutoSettlement',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AutoSettlement',
+        resizable: true,
+        sortable: true,
+        editable: true,
+        cellRenderer: 'selectStateRenderer',
+        cellRendererParams: {
+          onchange: this.onSelectSettlement['bind'](this),
+          Selections: this.settlementStatuses,
+        },
+        cellStyle: function (params) {
+          if (params.data.Color !== '#FFFFFF') {
+            return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+          } else {
+            return null;
+          }
+        }
+      },
+      {
         headerName: 'Common.Status',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Status',
@@ -195,6 +219,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         floatingFilterComponentParams: {
           suppressFilterButton: true,
         },
+        editable: true,
         cellEditor: 'numericEditor',
       },
       {
@@ -245,6 +270,11 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
     this.getPage();
     this.getSecondGridData();
+  }
+
+  onSelectSettlement(params, value: number, event) {
+    params.AutoSettlement = value;
+      this.onCellValueChanged(event);
   }
 
   getPartners() {
@@ -313,7 +343,9 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       MarketId: row.Id,
       PartnerId: this.partnerId,
       MatchId: this.MatchId,
-      IsBlocked: row.IsBlocked
+      IsBlocked: row.IsBlocked,
+      Status: row.Status,
+      AutoSettlement: row.AutoSettlement,
     };
     this.apiService.apiPost('markets/updatemarket', data)
       .pipe(take(1))
@@ -332,6 +364,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       PartnerId: this.pageConfig.PartnerId,
       MarketId: this.selectedMarketId,
       SelectionId: params.data.SelectionId,
+      AutoSettlement: params.data.AutoSettlement,
       LimitLeft: null,
       ResettleStatus: params.data.ResettleStatus,
       Coefficient: null,
@@ -360,6 +393,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   onRowSelected(params) {
     if (params.node.selected) {
       this.selectedMarketId = params.data.Id;
+      this.successOutcomeCount = params.data.SuccessOutcomeCount;
       this.getSecondGridData(params);
     } else {
       return;
@@ -367,24 +401,23 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   showMe(item, successOutComeCount) {
+    this.coefficientCount = 0;
+    this.baseCoefficientCount = 0;
     this.rowData1 = item;
     this.itemsCount = item.length;
     let itemCoef = 0;
+    let itemBaseCoef = 0;
     for (let i = 0; i < item.length; i++) {
       if (item[i]['Coefficient'] != 0) {
         itemCoef += 1 / item[i]['Coefficient'];
+        let calculateCofe = 100 * (1 - (successOutComeCount / itemCoef));
+        this.coefficientCount = this.precisionRound(calculateCofe, 2);
       }
-      let calculateCofe = 100 * (1 - successOutComeCount / itemCoef);
-      this.coefficientCount = this.precisionRound(calculateCofe, 2);
-    }
-
-    let itemBaseCoef = 0;
-    for (let i = 0; i < item.length; i++) {
       if (item[i]['BaseCoefficient'] != 0) {
         itemBaseCoef += 1 / item[i]['BaseCoefficient'];
+        let calculate = 100 * (1 - (successOutComeCount / itemBaseCoef));
+        this.baseCoefficientCount = this.precisionRound(calculate, 2);      
       }
-      let calculate = 100 * (1 - successOutComeCount / itemBaseCoef);
-      this.baseCoefficientCount = this.precisionRound(calculate, 2);
     }
   };
 
@@ -474,6 +507,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
           floatingFilterComponentParams: {
             suppressFilterButton: true,
           },
+          onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
           cellRenderer: (params) => {
             const oddsTypePipe = new OddsTypePipe();
             let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);

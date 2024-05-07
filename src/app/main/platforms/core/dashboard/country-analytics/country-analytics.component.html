@@ -1,0 +1,25 @@
+<div class="container">
+  <app-header-filter
+    [title]="'Dashboard.Analytics'"
+    (toDateChange)="onDateChange($event)" />
+  <div class="country-analytics-content">
+    <div class="visitors-block">
+      <div class="block-header">{{'Dashboard.Most Visitors By Country' | translate}}</div>
+      <div class="subtitles">
+        <span>{{'Dashboard.Country' | translate}}</span>
+        <span>{{'Dashboard.Count' | translate}}</span>
+      </div>
+      <app-progress-bar [src]="item" *ngFor="let item of topVisitors"></app-progress-bar>
+    </div>
+    <div class="registrations-block">
+      <div class="block-header">{{'Dashboard.Most Registrations By Country' | translate}}</div>
+      <div class="subtitles">
+        <span>{{'Dashboard.Country' | translate}}</span>
+        <span>{{'Dashboard.Count' | translate}}</span>
+      </div>
+      <app-progress-bar [src]="item" *ngFor="let item of topRegistrations"></app-progress-bar>
+    </div>
+  </div>
+</div>
+
+

@@ -13,7 +13,7 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.Id}}</div>
         <div class="form-field form-input">
-            <input matInput readonly formControlName="Id">
+          <input matInput readonly formControlName="Id">
         </div>
       </div>
 
@@ -22,7 +22,7 @@
         <div class="static-hand">{{PaymentSegment?.ModeName}}</div>
 
       </div>
-      
+
       <div>
         <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
         <div class="static-hand">{{PaymentSegment?.CreationTime | date: 'medium'}}</div>
@@ -47,7 +47,7 @@
         <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.FirstName}}</div>
         <div class="form-field form-input" *ngIf="isEdit">
-            <input matInput placeholder="{{'Clients.FirstName' | translate}}" formControlName="FirstName">
+          <input matInput placeholder="{{'Clients.FirstName' | translate}}" formControlName="FirstName">
         </div>
       </div>
 
@@ -55,7 +55,7 @@
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.LastName}}</div>
         <div class="form-field form-input" *ngIf="isEdit">
-            <input matInput placeholder="{{'Clients.LastName' | translate}}" formControlName="LastName">
+          <input matInput placeholder="{{'Clients.LastName' | translate}}" formControlName="LastName">
         </div>
       </div>
 
@@ -63,15 +63,15 @@
         <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.PartnerName}}</div>
         <div class="form-field form-input" *ngIf="isEdit">
-            <input matInput readonly [placeholder]="PaymentSegment?.PartnerName"
-              [(ngModel)]="PaymentSegment.PartnerName" [ngModelOptions]="{standalone: true}">
+          <input matInput readonly [placeholder]="PaymentSegment?.PartnerName" [(ngModel)]="PaymentSegment.PartnerName"
+            [ngModelOptions]="{standalone: true}">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Bonuses.SegmentId' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.SegmentId}}</div>
         <div class="form-field form-input" *ngIf="isEdit">
-            <input matInput placeholder="{{'Bonuses.SegmentId' | translate}}" formControlName="SegmentId">
+          <input matInput placeholder="{{'Bonuses.SegmentId' | translate}}" formControlName="SegmentId">
         </div>
       </div>
 
@@ -79,7 +79,7 @@
         <div class="first-hand">{{'Common.Name' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.Name}}</div>
         <div class="form-field form-input" *ngIf="isEdit">
-            <input matInput [placeholder]="PaymentSegment?.Name" formControlName="Name">
+          <input matInput [placeholder]="PaymentSegment?.Name" formControlName="Name">
         </div>
       </div>
 
@@ -89,8 +89,8 @@
         <div class="first-hand">{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.SuccessWithdrawalPaymentSystem}}</div>
         <div class="form-field form-input" *ngIf="isEdit">
-            <input matInput placeholder="{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}"
-              [(ngModel)]="PaymentSegment.SuccessWithdrawalPaymentSystem" [ngModelOptions]="{standalone: true}">
+          <input matInput placeholder="{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}"
+            [(ngModel)]="PaymentSegment.SuccessWithdrawalPaymentSystem" [ngModelOptions]="{standalone: true}">
         </div>
       </div>
 
@@ -103,9 +103,8 @@
         <div class="form-field form-dropdown">
           <mat-select formControlName="IsKYCVerified">
             @for (KYC of KYCStates; track $index) {
-              <mat-option
-                [value]="KYC.Id">{{KYC.Name}}
-              </mat-option>
+            <mat-option [value]="KYC.Id">{{KYC.Name}}
+            </mat-option>
             }
           </mat-select>
         </div>
@@ -128,9 +127,8 @@
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Gender'" [placeholder]="'All'">
             @for (gender of genders; track $index) {
-              <mat-option
-                [value]="gender.Id">{{gender.Name}}
-              </mat-option>
+            <mat-option [value]="gender.Id">{{gender.Name}}
+            </mat-option>
             }
           </mat-select>
         </div>
@@ -139,9 +137,8 @@
       <div>
         <div class="first-hand">{{'Segments.AffiliateId' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.AffiliateId}}</div>
-        <div class="form-field form-input"  *ngIf="isEdit">
-            <input matInput placeholder="{{'Segments.AffiliateIds' | translate}}"
-            formControlName="AffiliateId">
+        <div class="form-field form-input" *ngIf="isEdit">
+          <input matInput placeholder="{{'Segments.AffiliateIds' | translate}}" formControlName="AffiliateId">
         </div>
       </div>
 
@@ -149,7 +146,7 @@
         <div class="first-hand">{{'Segments.Bonus' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.Bonus}}</div>
         <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.Bonuses' | translate}}" formControlName="Bonuses">
+          <input matInput placeholder="{{'Segments.Bonuses' | translate}}" formControlName="Bonuses">
         </div>
       </div>
 
@@ -157,7 +154,7 @@
         <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.ClientId}}</div>
         <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.ClientIds' | translate}}" formControlName="ClientId">
+          <input matInput placeholder="{{'Segments.ClientIds' | translate}}" formControlName="ClientId">
         </div>
       </div>
 
@@ -165,8 +162,8 @@
         <div class="first-hand">{{'Segments.SuccessDepositPayment' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.SuccessDepositPaymentSystem}}</div>
         <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.SuccessDepositPaymentSystem' | translate}}"
-              [(ngModel)]="PaymentSegment.SuccessDepositPaymentSystem" formControlName="SuccessDepositPaymentSystem">
+          <input matInput placeholder="{{'Segments.SuccessDepositPaymentSystem' | translate}}"
+            [(ngModel)]="PaymentSegment.SuccessDepositPaymentSystem" formControlName="SuccessDepositPaymentSystem">
         </div>
       </div>
 
@@ -174,15 +171,16 @@
         <div class="first-hand">{{'Clients.Email' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.Email}}</div>
         <div class="form-field form-input">
-            <input matInput placeholder="{{'Clients.Email' | translate}}" formControlName="Email">
+          <input matInput placeholder="{{'Clients.Email' | translate}}" formControlName="Email">
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
         <div class="second-hand">{{PaymentSegment?.MobileCode}}</div>
-        <div class="form-field form-input" >
-            <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}" formControlName="MobileCode">
+        <div class="form-field form-input">
+          <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}"
+            formControlName="MobileCode">
         </div>
       </div>
 
@@ -213,7 +211,7 @@
             </span>
           </ng-container>
           <button mat-icon-button (click)="addedConditions.SessionPeriodObject.showNew=true">
-            <mat-icon >add_box</mat-icon>
+            <mat-icon>add_box</mat-icon>
           </button>
 
           <div class="nested" *ngIf="addedConditions.SessionPeriodObject.showNew == true">
@@ -225,12 +223,14 @@
             </mat-form-field>
 
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.SessionPeriodObject.selectedConditionValue"
-                [ngModelOptions]="{standalone: true}">
+
+            <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
+                     [(ngModel)]="addedConditions.SessionPeriodObject.selectedConditionValue"
+                     [ngModelOptions]="{standalone: true}" #valueInput="ngModel">
+              <mat-error *ngIf="valueInput.invalid">{{ 'Invalid value' | translate }}</mat-error>
             </mat-form-field>
-            <button mat-raised-button color="primary"
-              (click)="addDateCondition(addedConditions.SessionPeriodObject)">{{'Common.Add' | translate}}
+            <button mat-raised-button color="primary" [disabled]="valueInput.invalid"
+              (click)="addDateCondition(addedConditions.SessionPeriodObject)">{{ 'Common.Add' | translate }}
             </button>
           </div>
         </div>
@@ -248,7 +248,7 @@
                 {{condition?.ConditionType?.Name}} {{condition?.ConditionValue | date: 'short'}}
               </span>
               <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.SignUpPeriodObject, $index)">close</mat-icon>
+                (click)="removeCondition(addedConditions.SignUpPeriodObject, $index)">close</mat-icon>
 
             </span>
             <button mat-icon-button (click)="addedConditions.SignUpPeriodObject.showNew=true">
@@ -265,9 +265,11 @@
             </mat-form-field>
 
             <mat-form-field class="mr-15 picker">
-              <input matInput 
+                <input matInput type="numbrer" [matDatepicker]="picker1"
                 [(ngModel)]="addedConditions.SignUpPeriodObject.selectedConditionValue"
-                [ngModelOptions]="{standalone: true}">
+                  [ngModelOptions]="{'standalone': true}">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
             <button mat-raised-button color="primary"
               (click)="addDateCondition(addedConditions.SignUpPeriodObject)">{{'Common.Add' | translate}}
@@ -289,11 +291,11 @@
               </span>
 
               <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalBetsCountObject, $index)">close</mat-icon>
-              
+                (click)="removeCondition(addedConditions.TotalBetsCountObject, $index)">close</mat-icon>
+
             </span>
             <button mat-icon-button (click)="addedConditions.TotalBetsCountObject.showNew=true">
-              <mat-icon >add_box</mat-icon>
+              <mat-icon>add_box</mat-icon>
             </button>
           </ng-container>
           <div class="nested" *ngIf="addedConditions.TotalBetsCountObject.showNew == true">
@@ -305,11 +307,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.TotalBetsCountObject.selectedConditionValue"
+              <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
+                #valueInput2="ngModel" [(ngModel)]="addedConditions.TotalBetsCountObject.selectedConditionValue"
                 [ngModelOptions]="{'standalone': true}">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput2.invalid"
               (click)="addCondition(addedConditions.TotalBetsCountObject)">{{'Common.Add' | translate}}
             </button>
           </div>
@@ -331,7 +333,7 @@
               </span>
             </span>
             <button mat-icon-button (click)="addedConditions.SportBetsCountObject.showNew=true">
-              <mat-icon >add_box</mat-icon>
+              <mat-icon>add_box</mat-icon>
             </button>
           </ng-container>
 
@@ -344,11 +346,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="value"
+              <input matInput placeholder="value" type="number" pattern="^\d+$" #valueInput3="ngModel"
                 [(ngModel)]="addedConditions.SportBetsCountObject.selectedConditionValue"
                 [ngModelOptions]="{'standalone': true}">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput3.invalid"
               (click)="addCondition(addedConditions.SportBetsCountObject)">{{'Common.Add' | translate}}
             </button>
           </div>
@@ -367,7 +369,7 @@
                 {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
               </span>
               <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.CasinoBetsCountObject, $index)">close</mat-icon>
+                (click)="removeCondition(addedConditions.CasinoBetsCountObject, $index)">close</mat-icon>
             </span>
             <button mat-icon-button (click)="addedConditions.CasinoBetsCountObject.showNew=true">
               <mat-icon>add_box</mat-icon>
@@ -383,11 +385,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.CasinoBetsCountObject.selectedConditionValue"
+              <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
+                #valueInput4="ngModel" [(ngModel)]="addedConditions.CasinoBetsCountObject.selectedConditionValue"
                 [ngModelOptions]="{'standalone': true}">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput4.invalid"
               (click)="addCondition(addedConditions.CasinoBetsCountObject)">{{'Common.Add' | translate}}
             </button>
           </div>
@@ -422,11 +424,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
+              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
                 [(ngModel)]="addedConditions.TotalBetsAmountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
+                [ngModelOptions]="{'standalone': true}" #valueInput5="ngModel">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput5.invalid"
               (click)="addCondition(addedConditions.TotalBetsAmountObject)">{{'Common.Add' | translate}}
             </button>
           </div>
@@ -442,7 +444,7 @@
             <span *ngFor="let condition of addedConditions.TotalDepositsCountObject.conditions; let $index = index">
               <span
                 style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition.ConditionType.Name}} {{condition.ConditionValue}}
+                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
                 <mat-icon style="cursor: pointer"
                   (click)="removeCondition(addedConditions.TotalDepositsCountObject, $index)">close</mat-icon>
               </span>
@@ -461,11 +463,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
+              <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
                 [(ngModel)]="addedConditions.TotalDepositsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
+                [ngModelOptions]="{'standalone': true}" #valueInput6="ngModel">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput6.invalid"
               (click)="addCondition(addedConditions.TotalDepositsCountObject)">{{'Common.Add' | translate}}
             </button>
           </div>
@@ -500,11 +502,12 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
+              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
                 [(ngModel)]="addedConditions.TotalDepositsAmountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
+                [ngModelOptions]="{'standalone': true}" #valueInput7="ngModel">
             </mat-form-field>
-            <button mat-raised-button color="primary" (click)="addCondition(addedConditions.TotalDepositsAmountObject)">
+            <button mat-raised-button color="primary" [disabled]="valueInput7.invalid"
+              (click)="addCondition(addedConditions.TotalDepositsAmountObject)">
               {{'Common.Add' | translate}}
             </button>
           </div>
@@ -539,11 +542,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
+              <input matInput placeholder="{{'Bonuses.Value' | translate}}" type="number" pattern="^\d+$"
                 [(ngModel)]="addedConditions.TotalWithdrawalsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
+                [ngModelOptions]="{'standalone': true}" #valueInput8="ngModel">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput8.invalid"
               (click)="addCondition(addedConditions.TotalWithdrawalsCountObject)">
               {{'Common.Add' | translate}}
             </button>
@@ -560,7 +563,7 @@
             <span *ngFor="let condition of addedConditions.TotalWithdrawalsAmountObject.conditions; let $index = index">
               <span
                 style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition.ConditionType.Name}} {{condition.ConditionValue}}
+                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
                 <mat-icon style="cursor: pointer"
                   (click)="removeCondition(addedConditions.TotalWithdrawalsAmountObject, $index)">close</mat-icon>
               </span>
@@ -579,11 +582,11 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
+              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
                 [(ngModel)]="addedConditions.TotalWithdrawalsAmountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
+                [ngModelOptions]="{'standalone': true}" #valueInput9="ngModel">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput9.invalid"
               (click)="addCondition(addedConditions.TotalWithdrawalsAmountObject)">
               {{'Common.Add' | translate}}
             </button>
@@ -600,13 +603,13 @@
             <span *ngFor="let condition of addedConditions['ComplimentaryPointObject'].conditions; let $index = index">
               <span
                 style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition.ConditionType.Name}} {{condition.ConditionValue}}
+                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
                 <mat-icon style="cursor: pointer"
                   (click)="removeCondition(addedConditions.ComplimentaryPointObject, $index)">close</mat-icon>
               </span>
             </span>
             <button mat-icon-button (click)="addedConditions.ComplimentaryPointObject.showNew=true">
-              <mat-icon >add_box</mat-icon>
+              <mat-icon>add_box</mat-icon>
             </button>
           </ng-container>
 
@@ -619,21 +622,22 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}"
+              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
                 [(ngModel)]="addedConditions.ComplimentaryPointObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
+                [ngModelOptions]="{'standalone': true}" #valueInput10="ngModel">
             </mat-form-field>
-            <button mat-raised-button color="primary"
+            <button mat-raised-button color="primary" [disabled]="valueInput10.invalid"
               (click)="addCondition(addedConditions.ComplimentaryPointObject)">{{'Common.Add' | translate}}
             </button>
           </div>
         </div>
       </div>
 
-      <div  style="max-width: 600px!important; height: 50px">
+      <div style="max-width: 600px!important; height: 50px">
         <div class="first-hand">{{'Segments.ClientStatuses' | translate}}</div>
         <div class="second-hand" style="word-break: normal; overflow: visible; height: 35px;">
-          <ul style="padding: 0; display: flex; list-style-type: none;  background: white; padding: 8px; height: 35px; background-color: white;">
+          <ul
+            style="padding: 0; display: flex; list-style-type: none;  background: white; padding: 8px; height: 35px; background-color: white;">
             <li *ngFor="let state of  clientStates" style="margin-right: 7px ;">
               <mat-checkbox disabled="true" labelPosition="before" [(ngModel)]="state.checked"
                 [ngModelOptions]="{standalone: true}" color="primary">{{state.Name}}</mat-checkbox>

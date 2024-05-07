@@ -22,11 +22,20 @@ import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helpe
 })
 export class KeysComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public partnerId;
-  public partnerName;
-  public frameworkComponents;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  partnerId;
+  partnerName;
+  frameworkComponents;
+  defaultColDef = {
+    flex: 1,
+    editable: false,
+    sortable: true,
+    resizable: true,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    minWidth: 50,
+  };
 
   constructor(
     private apiService: CoreApiService,

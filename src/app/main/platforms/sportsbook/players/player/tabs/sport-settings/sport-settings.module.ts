@@ -4,15 +4,14 @@ import { SportSettingsComponent } from './sport-settings.component';
 import { Routes, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import {AgGridModule} from "ag-grid-angular";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {TranslateModule} from "@ngx-translate/core";
+import { AgGridModule } from "ag-grid-angular";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { TranslateModule } from "@ngx-translate/core";
 
 const routes: Routes = [
   {
@@ -27,7 +26,6 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatIconModule,
     MatSnackBarModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,

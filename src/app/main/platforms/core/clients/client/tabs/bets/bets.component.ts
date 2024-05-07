@@ -552,13 +552,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         paging.BetDateFrom = this.fromDate;
         paging.BetDateBefore = this.toDate;
         paging.AccountId = this.accountId;
-        paging.ClientIds = {
-          IsAnd: true,
-          ApiOperationTypeList: [{
-            OperationTypeId: 1,
-            IntValue: this.clientId
-          }]
-        }
+        paging.ClientId = this.clientId;
         this.setSort(params.request.sortModel, paging);
         this.setFilterDropdown(params, ['State']);
         this.setFilter(params.request.filterModel, paging);
@@ -596,6 +590,13 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
 
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+              params.success({ rowData: [], rowCount: 0 });
+              this.gridApi?.setPinnedBottomRowData([{
+                PossibleWin: 0,
+                BetAmount: 0,
+                WinAmount: 0,
+              }
+              ]);
             }
           });
       }

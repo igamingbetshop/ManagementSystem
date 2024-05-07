@@ -1,25 +1,23 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {KeysComponent} from './keys.component';
-import {RouterModule, Routes} from '@angular/router';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { KeysComponent } from './keys.component';
+import { RouterModule, Routes } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-import {MatSelectModule} from '@angular/material/select';
-import {MatInputModule} from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
-import {MatDialogModule} from "@angular/material/dialog";
-import {AgGridModule} from "ag-grid-angular";
-import {AddKeyComponent} from './add-key/add-key.component';
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {TranslateModule} from "@ngx-translate/core";
+import { MatDialogModule } from "@angular/material/dialog";
+import { AgGridModule } from "ag-grid-angular";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { TranslateModule } from "@ngx-translate/core";
 
 const routes: Routes = [
   {
@@ -34,7 +32,6 @@ const routes: Routes = [
     CommonModule,
     MatIconModule,
     MatSnackBarModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatSelectModule,

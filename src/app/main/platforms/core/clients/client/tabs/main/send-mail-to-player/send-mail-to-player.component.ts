@@ -43,11 +43,12 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
   ],
 })
 export class SendMailToPlayerComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public clientId;
-  public method;
-  public filterClient;
-  public translationData = {
+  formGroup: UntypedFormGroup;
+  clientId;
+  method;
+  filterClient;
+  isSendingReqest = false;
+  translationData = {
     Message: [
       {
         "Id": 4096,
@@ -57,7 +58,7 @@ export class SendMailToPlayerComponent implements OnInit {
       }
     ]
   };
-  public openedIndex = 0;
+  openedIndex = 0;
 
   constructor(private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<SendMailToPlayerComponent>,
@@ -89,9 +90,10 @@ export class SendMailToPlayerComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     } else {
+      this.isSendingReqest = true; 
       let obj = this.formGroup.getRawValue();
       obj = { ...obj, Message: this.translationData.Message[0]['newText'] }
 
@@ -106,6 +108,7 @@ export class SendMailToPlayerComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
+          this.isSendingReqest = false; 
         });
     }
   }

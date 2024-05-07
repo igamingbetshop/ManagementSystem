@@ -32,14 +32,12 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGridSecond') agGridSecond: AgGridAngular;
 
-  public partners: any[] = [];
-  public partnerId: number;
-  public sportId: number;
-  public sports: any[] = [];
-  private totals = {
-    Id: 0,
-  };
-  public frameworkComponents = {
+  partners: any[] = [];
+  partnerId: number;
+  sportId: number;
+  sports: any[] = [];
+
+  frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
@@ -49,32 +47,32 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     textEditor: TextEditorComponent,
   };
 
-  public filter = {
+  filter = {
     "pageindex": 0,
     "pagesize": 100,
     SportIds: {},
     PartnerId: undefined,
   };
-  public filteredData;
+  filteredData;
 
-  public masterDetail;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  masterDetail;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
-  public rowData = [];
-  public rowData1 = [];
+  rowData = [];
+  rowData1 = [];
+  cacheBlockSize = 5000;
+  columnDefs2;
 
-  public columnDefs2;
-
-  public path: string = 'markettypes';
-  public nestedPath: string = 'markettypes/settings';
-  public selectPath: string = 'markettypes/selectiontypes';
-  public updateSettingsPath: string = 'markettypes/updatesettings'
-  public addPartnerSettingsPath: string = 'markettypes/createsettings'
-  public updatePath = 'markettypes/update';
-  public updateSelectionType = 'markettypes/updateselectiontype';
+  path: string = 'markettypes';
+  nestedPath: string = 'markettypes/settings';
+  selectPath: string = 'markettypes/selectiontypes';
+  updateSettingsPath: string = 'markettypes/updatesettings'
+  addPartnerSettingsPath: string = 'markettypes/createsettings'
+  updatePath = 'markettypes/update';
+  updateSelectionType = 'markettypes/updateselectiontype';
 
 
-  public detailCellRendererParams: any = {
+  detailCellRendererParams: any = {
     // provide the Grid Options to use on the Detail Grid
     detailGridOptions: {
       rowHeight: 47,
@@ -370,6 +368,15 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         cellEditor: NumericEditorComponent,
       },
       {
+        headerName: 'Sport.SelectionsCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SelectionsCount',
+        resizable: true,
+        sortable: true,
+        editable: false,
+        filter: 'agNumberColumnFilter',
+      },
+      {
         headerName: 'Common.DisplayType',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'DisplayType',
@@ -378,6 +385,15 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         editable: true,
         filter: 'agNumberColumnFilter',
         cellEditor: NumericEditorComponent,
+      },
+      {
+        headerName: 'Sport.SelectionsCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SelectionsCount',
+        resizable: true,
+        sortable: true,
+        editable: false,
+        filter: 'agNumberColumnFilter',
       },
       {
         headerName: 'Common.State',

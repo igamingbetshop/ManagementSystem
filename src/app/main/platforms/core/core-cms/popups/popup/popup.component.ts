@@ -10,6 +10,7 @@ import { Controllers, Methods } from 'src/app/core/enums';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { CoreApiService } from '../../../services/core-api.service';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-popup',
@@ -34,7 +35,8 @@ export class PopupComponent implements OnInit {
   segmentesEntites = [];
   image: any;
   types: any;
-  mobileImage: string;
+  states = ACTIVITY_STATUSES;
+  deviceTypes = [];
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -50,6 +52,7 @@ export class PopupComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
+    this.getDeviceTypes();
     this.getPopupTypes();
     this.partners = this.commonDataService.partners;
     this.id = +this.activateRoute.snapshot.queryParams.id;
@@ -58,9 +61,22 @@ export class PopupComponent implements OnInit {
   }
 
   setSegmentsEntytes() {
-    this.segmentesEntites.push(this.formGroup.value.SegmentIds.map(elem => {
+    this.segmentesEntites.push(this.formGroup.value.SegmentIds?.map(elem => {
       return this.segments.find((item) => elem === item.Id).Name
     }))
+  }
+
+  getDeviceTypes() {
+    this.apiService.apiPost(this.configService.getApiUrl, {},
+      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.deviceTypes = data.ResponseObject;          
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getPopupTypes() {
@@ -84,7 +100,8 @@ export class PopupComponent implements OnInit {
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.popup = data.ResponseObject;
-          this.setPopup();
+          // this.setPopup();
+          this.getPartnerPaymentSegments(this.partnerId);
         }
       })
   }
@@ -93,11 +110,11 @@ export class PopupComponent implements OnInit {
     this.partnerId = this.popup?.PartnerId;
     this.popup.PartnerName = this.partners.find((item) => this.partnerId === item.Id).Name;
     this.popup.TypeName = this.types.find((item) => this.popup.Type === item.Id).Name;
+    this.popup.StateName = this.states.find((item) => this.popup.State === item.Id).Name;
+    this.popup.DeviceName = this.deviceTypes?.find(x => x.Id === this.popup.DeviceType)?.Name;
     this.image = "https://" + this.popup?.SiteUrl + '/assets/images/popup/web/' + this.popup?.ImageName;
-    this.mobileImage = "https://" + this.popup?.SiteUrl + '/assets/images/popup/mobile/' + this.popup?.ImageName;
     this.formGroup.patchValue(this.popup);
     this.getPartnerEnvironments();
-    this.getPartnerPaymentSegments(this.partnerId);
     this.formGroup.get('EnvironmentTypeId').setValue(1);
   }
 
@@ -108,6 +125,7 @@ export class PopupComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.segments = data.ResponseObject;
           this.setSegmentsEntytes();
+          this.setPopup();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -133,13 +151,12 @@ export class PopupComponent implements OnInit {
 
   public createForm() {
     this.formGroup = this.fb.group({
-      ClientIds: [null, ],
+      ClientIds: [null, Validators.pattern(/^(\d+,)*\d+$/)],
       EnvironmentTypeId: [null, [Validators.required]],
       FinishDate: [null, [Validators.required]],
       Id: [null],
       ImageData: [null],
       ImageName: [null],
-      MobileImageData: [null],
       LastUpdateTime: [null, [Validators.required]],
       NickName: [null, [Validators.required, Validators.pattern(/^[a-z][a-z0-9]*$/i)]],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
@@ -151,6 +168,7 @@ export class PopupComponent implements OnInit {
       TranslationId: [null],
       CreationTime: [null, [Validators.required]],
       Type: [null, [Validators.required]],
+      DeviceType: [null],
     });
   }
 
@@ -197,25 +215,6 @@ export class PopupComponent implements OnInit {
         SnackBarHelper.show(this._snackBar, { Description: 'Not valid format jpg, png, or Gif and size < 700KB', Type: "error" });
       }
     }
-  }
-
-  uploadFile1(evt) {
-    let files = evt.target.files;
-    if (!files || files.length === 0) {
-      SnackBarHelper.show(this._snackBar,
-        { Description: "Please choose a file", Type: "error" }
-      );
-      return;
-    }
-  
-    let file = files[0];
-  
-    let reader = new FileReader();
-    reader.onload = () => {
-      const binaryString = reader.result as string;
-      this.formGroup.get('MobileImageData').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
-    };
-    reader.readAsDataURL(file);
   }
 
   convertToArray(controlName: string): void {

@@ -16,7 +16,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CoreApiService } from '../../platforms/core/services/core-api.service';
 import { SnackBarHelper } from "../../../core/helpers/snackbar.helper";
 import { HtmlEditorModule } from "../html-editor/html-editor.component";
-import { SelectDeviceTypeComponent } from "./core-partners-select.component";
 
 @Component({
     selector: 'app-add-edit-translation',
@@ -34,7 +33,6 @@ import { SelectDeviceTypeComponent } from "./core-partners-select.component";
         MatInputModule,
         MatButtonModule,
         HtmlEditorModule,
-        SelectDeviceTypeComponent
     ]
 })
 export class AddEditTranslationComponent implements OnInit {
@@ -47,10 +45,10 @@ export class AddEditTranslationComponent implements OnInit {
   };
   unModifiedData;
   openedIndex = 0;
-  deviceTypeId: number = 1;
+  deviceTypeId: null | number;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any, DeviceType: boolean },
+    @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any, DeviceTypeId: number | null },
     public dialogRef: MatDialogRef<AddEditTranslationComponent>,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
@@ -61,13 +59,15 @@ export class AddEditTranslationComponent implements OnInit {
   ngOnInit() {
     this.objectId = this.data.ObjectId;
     this.objectTypeId = this.data.ObjectTypeId;
+    this.deviceTypeId = this.data.DeviceTypeId;    
     this.getTemplateTranslations();
   }
 
   public getTemplateTranslations() {
     this.apiService.apiPost(this.configService.getApiUrl, {
       ObjectId: this.objectId,
-      ObjectTypeId: this.objectTypeId || 66
+      ObjectTypeId: this.objectTypeId || 66,
+      Type: this.deviceTypeId
     },
       true, Controllers.CONTENT, Methods.GET_OBJECT_TRANSLATIONS)
       .pipe(take(1))
@@ -87,10 +87,10 @@ export class AddEditTranslationComponent implements OnInit {
 
   onDeviceTypeChange(event) {
     this.deviceTypeId = event;
+    this.getTemplateTranslations();
   }
 
   onSubmit() {
-
     this.translationData.Translations.forEach(translation => {
       translation.ObjectTypeId = this.objectTypeId;
       translation.TranslationId = this.translationData.TranslationId;
@@ -110,7 +110,7 @@ export class AddEditTranslationComponent implements OnInit {
   }
 
   saveTranslation(requestBody) {
-    if(this.data.DeviceType && requestBody.length > 0) {
+    if(this.data.DeviceTypeId && requestBody.length > 0) {
       requestBody.forEach(item => {
         item.Type = this.deviceTypeId;
       });      

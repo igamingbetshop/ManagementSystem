@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { TranslateModule } from "@ngx-translate/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -30,7 +29,6 @@ import { take } from 'rxjs';
     CommonModule,
     MatIconModule,
     FormsModule,
-    FlexLayoutModule,
     TranslateModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -41,9 +39,10 @@ import { take } from 'rxjs';
   ],
 })
 export class AddComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public parentGroup;
-  public languages: any[] = [];
+  formGroup: UntypedFormGroup;
+  parentGroup;
+  languages: any[] = [];
+  isSendingReqest = false;
 
 
   message: string = '';
@@ -79,9 +78,10 @@ export class AddComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid) {
+    if (this.formGroup.invalid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true; 
     const obj = this.formGroup.getRawValue();
     obj.ParentId = this.data?.Id ? this.data.Id : 1;
     obj.ProductId = 0;
@@ -94,6 +94,7 @@ export class AddComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false; 
       });
 
 

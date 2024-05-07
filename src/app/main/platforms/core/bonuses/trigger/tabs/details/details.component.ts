@@ -220,6 +220,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       MinBetCount: [null],
       UpToAmount: [null],
       BonusSettingCodes: [null],
+      ConsiderBonusBets: [null],
       PaymentSystemIds: this.fb.group({
         Ids: [null],
         Names: [null],

@@ -49,6 +49,9 @@
           pointer-events: none;
           cursor: default;
         }
+        .agentIdsItems:first-child .agentIdsItems-list .slash {
+          display: none;
+        }
       }
     }
   }

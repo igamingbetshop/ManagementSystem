@@ -29,7 +29,6 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
   public toDate = new Date();
   public selectedItem = 'today';
   filteredData: Paging;
-  // public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
     protected injector: Injector,
@@ -44,7 +43,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MatchId',
         resizable: true,
-        sortable: false,
+        sortable: true,
         cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500', 'padding-left': '10px', },
         filter: 'agNumberColumnFilter',
         filterParams: {
@@ -58,7 +57,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CompetitionName',
         resizable: true,
-        sortable: false,
+        sortable: true,
         filter: 'agTextColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -71,7 +70,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'SportName',
         resizable: true,
-        sortable: false,
+        sortable: true,
         filter: 'agTextColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -103,7 +102,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'BetAmount',
         resizable: true,
-        sortable: false,
+        sortable: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -116,7 +115,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'WinAmount',
         resizable: true,
-        sortable: false,
+        sortable: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -129,7 +128,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ProfitAmount',
         resizable: true,
-        sortable: false,
+        sortable: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -207,7 +206,7 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
         paging.ToDate = this.toDate;
         paging.CompetitionId = this.competitionId;
         paging.PartnerId = this.partnerId;
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
 
@@ -215,18 +214,22 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
           .pipe(take(1))
           .subscribe(data => {
             if (data.Code === 0) {
-              const {Matches} = data.ResponseObject;
-              params.success({ rowData: Matches, rowCount: Matches.length });
+              const { Matches } = data.ResponseObject;
+
+              console.log(data, 'data');
+              
+              params.success({ rowData: Matches, rowCount: Matches.TotalCount });
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+              params.success({ rowData: [], rowCount: 0 });
             }
           });
       }
     }
   }
-  
+
   exportToCsv() {
-    this.apiService.apiPost('report/exportmatches',  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
+    this.apiService.apiPost('report/exportmatches', { ...this.filteredData, adminMenuId: this.adminMenuId }).pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         let iframe = document.createElement("iframe");
         iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);

@@ -51,5 +51,9 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="onSubmit()" [class.disabled]="formGroup.invalid">{{'Partners.CreatePartner' | translate}}</button>
+  <button class="modal-primary-btn" 
+    (click)="onSubmit()" 
+    [class.disabled]="formGroup.invalid || isSendingReqest">
+    {{'Partners.CreatePartner' | translate}}
+  </button>
 </div>

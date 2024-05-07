@@ -259,12 +259,12 @@ export class BaseGridComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  protected setSort(sortModel, appendObj) {
+  protected setSort(sortModel, appendObj, name = 'OrderBy' ) {
     if (sortModel && sortModel.length) {
-      appendObj.OrderBy = sortModel[0].sort === 'asc' ? 0 : 1;
+      appendObj[name] = sortModel[0].sort === 'asc' ? 0 : 1;
       appendObj.FieldNameToOrderBy = sortModel[0].colId;
     } else {
-      appendObj.OrderBy = null;
+      appendObj[name] = null;
       appendObj.FieldNameToOrderBy = '';
     }
   }

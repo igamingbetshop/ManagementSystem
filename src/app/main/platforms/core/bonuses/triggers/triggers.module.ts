@@ -19,6 +19,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {BonusesService} from "../bonuses.service";
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const routes: Routes = [
   {
@@ -45,6 +46,7 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     FormsModule,
+    MatCheckboxModule,
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule
   ],

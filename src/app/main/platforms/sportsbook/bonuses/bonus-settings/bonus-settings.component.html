@@ -14,6 +14,13 @@
       </mat-select>
     </div>
 
+    <button 
+      mat-stroked-button 
+      class="mat-delete" 
+      [class.disabled]="isRowSelected()"
+      (click)="onDeleteBounus()"
+      >{{'Sport.DeleteBonus' | translate}}
+    </button>
     <button mat-stroked-button class="mat-btn"(click)="addBonus()">{{'Sport.AddBonus' | translate}}</button>  </div>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
@@ -24,20 +31,21 @@
     #agGrid
     [class.hide-grid]="loadingUserState"
     class="ag-theme-balham"
+    class="ag-theme-balham"
     [headerHeight]="33"
     [rowHeight]="42"
-    [suppressCopyRowsToClipboard]="true"
     [rowData]="rowData"
+    [suppressCopyRowsToClipboard]="true"
     [rowModelType]="rowModelType"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
-    [suppressRowClickSelection]="true"
-    [enableBrowserTooltips]="enableBrowserTooltips"
+    [cacheBlockSize]="cacheBlockSize"
+    [pagination]="pagination"
     [sideBar]="sideBar"
     [animateRows]="true"
-    [components]="frameworkComponents"
-    [enableBrowserTooltips]="enableBrowserTooltips"
-    [cacheBlockSize]="cacheBlockSize"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
     (gridReady)="onGridReady($event)"
     (columnPinned)="onColumnPinned($event)"
     (columnMoved)="onColumnMoved($event)"

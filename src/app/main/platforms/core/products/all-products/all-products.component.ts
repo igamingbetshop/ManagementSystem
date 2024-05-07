@@ -17,7 +17,7 @@ import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GridOptions } from 'ag-grid-enterprise';
-import {ExportService} from "../../services/export.service";
+import { ExportService } from "../../services/export.service";
 
 @Component({
   selector: 'app-all-products',
@@ -54,7 +54,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     protected injector: Injector,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
-    private exportService:ExportService,
+    private exportService: ExportService,
     public commonDataService: CommonDataService,
     public dialog: MatDialog,
     public activateRoute: ActivatedRoute,
@@ -316,18 +316,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.apiService.apiPost(this.configService.getApiUrl, data,
-          true, Controllers.PRODUCT, Methods.ADD_PRODUCT)
-          .pipe(take(1))
-          .subscribe(data => {
-            if (data.ResponseCode === 0) {
-              this.getCurrentPage();
-            } else {
-              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
-            }
-
-          });
-
+          this.getCurrentPage();
       }
     });
   }
@@ -398,7 +387,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   exportToCsv() {
 
-    this.exportService.exportToCsv( Controllers.PRODUCT, Methods.EXPORT_PRODUCTS, this.filteredData);
+    this.exportService.exportToCsv(Controllers.PRODUCT, Methods.EXPORT_PRODUCTS, this.filteredData);
   }
 
   async onBulkEditorOpen() {

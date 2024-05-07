@@ -111,11 +111,6 @@ const routes: Routes = [
           resolve: {partners: SportPartnersResolver, filterOptions: SportFilterOptionsResolver}
         },
         {
-          path: 'pool-betting',
-          loadChildren: () => import('./pool-betting/pool-betting.module').then(m => m.PoolBettingModule),
-          resolve: {partners: SportPartnersResolver, filterOptions: SportFilterOptionsResolver}
-        },
-        {
           path: 'result-types',
           loadComponent() {
             return import('./result-types/result-types.component').then(m => m.ResultTypesComponent);

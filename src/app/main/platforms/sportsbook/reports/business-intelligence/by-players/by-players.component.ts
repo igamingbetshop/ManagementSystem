@@ -12,7 +12,6 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DecimalPipe } from "@angular/common";
 import { DateAdapter } from "@angular/material/core";
 import { GridMenuIds } from 'src/app/core/enums';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
@@ -253,10 +252,20 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
     this.setTime();
   }
 
-  goToReportByBets(ev) {
-    const url = this.router.serializeUrl(this.router.createUrlTree(['main/sportsbook/business-intelligence/by-bets']));
-    window.open(url, '_blank');
-  }
+  goToReportByBets(ev) { 
+    const playerId = ev.data.PlayerId;       
+    if (playerId) {
+        const url = this.router.serializeUrl(this.router.createUrlTree([`/main/sportsbook/players/player/bets`], { queryParams: { playerId: playerId } }));
+        if (url) {
+            window.open(url, '_blank');
+        } else {
+            console.error('Failed to construct URL');
+        }
+    } else {
+        console.error('Player ID is missing or invalid');
+    }
+}
+
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
@@ -288,7 +297,7 @@ export class ByPlayersComponent extends BasePaginatedGridComponent implements On
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
 
-        this.setSort(params.request.sortModel, paging);
+        this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
 
         delete paging.StartDate;

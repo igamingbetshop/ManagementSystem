@@ -106,5 +106,27 @@
         </mat-select>
       </div>
     </form>
+
+    <br>
+    <br>
+    <div class="title">{{'Sport.Competitors' | translate}}</div>
+
+    <div class="grid-content">
+      <ag-grid-angular
+        #agGrid class="ag-theme-balham"
+        [headerHeight]="33" [rowHeight]="42"
+        [rowData]="rowData"
+        [suppressCopyRowsToClipboard]="true"
+        [rowModelType]="rowModelType"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        (gridReady)="onGridReady($event)"
+        [ensureDomOrder]="true"
+        [enableCellTextSelection]="true"
+        rowSelection="single">
+      </ag-grid-angular>
+    </div>
+
   </div>
-</div>
+
+  </div>

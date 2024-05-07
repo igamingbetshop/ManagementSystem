@@ -18,7 +18,7 @@ import { OddsTypePipe } from "../../../../../../core/pipes/odds-type.pipe";
 import { Controllers, Methods, OddsTypes, ModalSizes, GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-import {ExportService} from "../../../services/export.service";
+import { ExportService } from "../../../services/export.service";
 
 @Component({
   selector: 'app-report-by-bets',
@@ -67,7 +67,7 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
     public dialog: MatDialog,
-    private exportService:ExportService,
+    private exportService: ExportService,
     protected injector: Injector,
     private localStorageService: LocalStorageService) {
     super(injector);
@@ -822,6 +822,8 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
     this.toDate = event.toDate;
     if (event.partnerId) {
       this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
     }
     this.getCurrentPage();
   }
@@ -1058,7 +1060,7 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
   exportToCsv() {
     delete this.filteredData.StartDate;
     delete this.filteredData.EndDate;
-    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_INTERNET_BET, { ...this.filteredData, adminMenuId: this.adminMenuId });
+    this.exportService.exportToCsv(Controllers.REPORT, Methods.EXPORT_INTERNET_BET, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 

@@ -15,11 +15,12 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-account.component.scss']
 })
 export class AddAccountComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public clientId: number;
-  public bankNames = [];
-  public status;
-  public action;
+  formGroup: UntypedFormGroup;
+  clientId: number;
+  bankNames = [];
+  status;
+  action;
+  isSendingReqest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddAccountComponent>,
               private apiService: CoreApiService,
@@ -56,9 +57,10 @@ export class AddAccountComponent implements OnInit {
 
 
   submit() {
-    if (!this.formGroup.valid) {
+    if (!this.formGroup.valid || this.isSendingReqest) {
       return;
     }
+    this.isSendingReqest = true; 
     const accountValue = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, accountValue, true, Controllers.CLIENT,
       Methods.UPDATE_CLIENT_PAYMENT_ACCOUNT).pipe(take(1)).subscribe((data) => {
@@ -67,6 +69,7 @@ export class AddAccountComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

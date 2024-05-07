@@ -61,5 +61,9 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid"  (click)="onSubmit()">{{!isEdit ? 'Add' : 'Edit'}}</button>
+  <button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest"  
+    (click)="onSubmit()">
+    {{!isEdit ? 'Add' : 'Edit'}}
+  </button>
 </div>

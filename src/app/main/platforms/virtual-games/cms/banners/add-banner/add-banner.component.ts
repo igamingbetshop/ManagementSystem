@@ -1,7 +1,6 @@
 import {Component, NgModule, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
-import {FlexLayoutModule} from "@angular/flex-layout";
 import {TranslateModule} from "@ngx-translate/core";
 import {ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -23,7 +22,22 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
 @Component({
   selector: 'app-add-banner',
   templateUrl: './add-banner.component.html',
-  styleUrls: ['./add-banner.component.scss']
+  styleUrls: ['./add-banner.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModule
+  ],
 })
 export class AddBannerComponent implements OnInit {
   public sports: any[] = [];
@@ -194,28 +208,5 @@ export class AddBannerComponent implements OnInit {
     this.dialogRef.close(obj);
 
   }
-
-}
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    FlexLayoutModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatDialogModule
-  ],
-  declarations: [AddBannerComponent]
-})
-
-export class AddBannerModule {
 
 }
