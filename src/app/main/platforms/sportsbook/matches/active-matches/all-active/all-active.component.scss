@@ -52,10 +52,27 @@
       .custom-dropdown {
         margin-left: 8px;
         @include dropdown-style;
+        border-radius: 8px;
       }
+
       .input-content {
         margin-left: 8px;
         @include input-style;
+        border-radius: 8px !important;
+      }
+
+      .calendar-picker {
+        margin-left: 8px;
+
+        input {
+          border: 1px solid $gray-light;
+          background-color: $gray-light-13;
+          border-radius: 8px;
+          color: $gray-light-15;
+          height: 34px;
+          transition: background-color 0.3s, color 0.3s;
+          font-size: 14px;
+        }
       }
 
     }
@@ -77,7 +94,7 @@
 
         .sport-view-content {
           display: flex;
-          justify-content: space-between ;
+          justify-content: space-between;
           align-items: center;
           padding: 5px;
           border-radius: 5px;
@@ -164,7 +181,7 @@
           background-color: $green ;
         }
 
-        .opened > ul {
+        .opened>ul {
           display: block;
         }
       }
@@ -189,4 +206,3 @@ ul {
   margin: 0;
   list-style-type: none;
 }
-

@@ -66,7 +66,7 @@ export class MappedMarketTypesComponent extends BasePaginatedGridComponent imple
     },
     getDetailRowData: params => {
       if (params) {
-        this.apiService.apiPost("markettypes/mappedselectiontypes", { "MarketTypeId": params.data.ObjectId, "ProviderId": params.data.ProviderId, }).subscribe(data => {
+        this.apiService.apiPost("markettypes/mappedselectiontypes", { "MarketTypeId": params.data.ObjectId, "ProviderId": params.data.ProviderId, "UnknownId": params.data?.UnknownId }).subscribe(data => {
           if (data.Code === 0) {
             this.rowDataNested = data.Objects;
             this.rowDataNested.forEach(row => {

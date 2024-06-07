@@ -17,9 +17,9 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { compressImage } from "../../../../../../core/utils";
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
   selector: 'app-add-popup',
@@ -41,8 +41,8 @@ import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
     FormsModule,
     MatDialogModule,
     MatSnackBarModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
+    DateTimePickerComponent
+
   ],
 })
 export class AddPopupComponent implements OnInit {
@@ -57,7 +57,6 @@ export class AddPopupComponent implements OnInit {
   types: any[] = [];
   status = ACTIVITY_STATUSES;
   segments = [];
-  fragmentalSource: any = {};
   environments: any[] = [];
   selectedEnvironmentId = null;
   selectedImage = '';
@@ -113,19 +112,6 @@ export class AddPopupComponent implements OnInit {
       });
   }
 
-  getBannerFragments() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId,
-      true, Controllers.CONTENT, Methods.CET_BANNER_FRAGMENTS)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.fragmentalSource.types = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
-
   getPartnerEnvironments(val) {
     this.partnerId = +val
     this.getPartnerPaymentSegments(this.partnerId);
@@ -142,52 +128,51 @@ export class AddPopupComponent implements OnInit {
   }
 
   uploadFile(event) {
-    let files = event.target.files.length && event.target.files[0];
-    if (files) {
-      this.selectedImage = files.name;
-      const validDocumentSize = files.size < 5000000;
-      const validDocumentFormat = /(\.jpg|\.jpeg|\.png|\.gif)$/.test(event.target.value);
+    const files = event.target.files;
+    if (files.length > 0) {
+      const file = files[0];
+  
+      const validDocumentSize = file.size < 5000000; 
+      const validDocumentFormat = /\.(jpg|jpeg|png|gif)$/i.test(file.name);
+  
       if (validDocumentFormat && validDocumentSize) {
         const reader = new FileReader();
+  
         reader.onload = () => {
           const binaryString = reader.result as string;
-
-          if (files.size < 900000) {
+  
+          if (file.size < 900000) {
             this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
-            this.formGroup.get('ImageName').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));
-          }
-          else {
+            this.formGroup.get('ImageName').setValue(file.name.substring(file.name.lastIndexOf(".") + 1));
+          } else {
             const img = new Image();
             img.src = binaryString;
-            img.onload = (data) => {
+            img.onload = () => {
               compressImage(img, 0.7).toBlob((blob) => {
                 if (blob) {
                   const reader = new FileReader();
                   reader.readAsDataURL(blob);
                   reader.onloadend = () => {
                     const base64data = reader.result as string;
-                    this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
-                    this.formGroup.get('Image').setValue(files.name.substring(files.name.lastIndexOf(".") + 1));             
-  
-                  }
+                    this.formGroup.get('ImageData').setValue(base64data.substring(base64data.indexOf(',') + 1));
+                    this.formGroup.get('ImageName').setValue(file.name.substring(file.name.lastIndexOf(".") + 1));
+                  };
                 }
-              },
-                files.type,
-                0.7)
-            }
-
+              }, file.type, 0.7);
+            };
           }
         };
-        reader.readAsDataURL(files);
+  
+        reader.readAsDataURL(file);
       } else {
-        this.formGroup.get('Image').patchValue(null);
-        files = null;
-        SnackBarHelper.show(this._snackBar, { Description: 'Not valid format jpg, png, or Gif and size < 700KB', Type: "error" });
+        this.formGroup.get('ImageData').setValue(null);
+        this.formGroup.get('ImageName').setValue(null);
+
+        SnackBarHelper.show(this._snackBar, { Description: 'Invalid format or size. Please use jpg, jpeg, png, or gif files under 5MB.', Type: "error" });
       }
     }
   }
-
-
+  
   getPartnerPaymentSegments(partnerId) {
     this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: partnerId }, true,
       Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe(data => {
@@ -254,7 +239,7 @@ export class AddPopupComponent implements OnInit {
     this.submitting = true;
   
     const request = this.formGroup.getRawValue();
-  
+    
     if (request.ClientIds != null) {
       request.ClientIds = request.ClientIds.split(',').map(Number);
     }

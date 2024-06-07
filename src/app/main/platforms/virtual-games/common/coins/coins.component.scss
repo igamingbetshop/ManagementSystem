@@ -1,0 +1,40 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.partner-container {
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+
+  .partner-content {
+    @include action-style;
+  }
+
+  .mat-btn {
+    margin-left: 8px;
+    @include mat-btn-style;
+  }
+  
+  .mat-delete-btn {
+    margin-left: 8px;
+    @include mat-delete-style;
+  }
+
+    .mat-edit-btn {
+    margin-left: 8px;
+    @include mat-edit-btn-style;
+  }
+
+  .grid-content {
+    width: 100%;
+    height: calc(100% - 62px);
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

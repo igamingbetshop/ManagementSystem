@@ -18,6 +18,10 @@ export class CompetitionCategoryComponent implements OnInit {
       label:'Sport.Markets',
       route:'markets'
     },
+    {
+      label:'Sport.Competitions',
+      route:'competitions'
+    },
   ];
 
   categoryId:number;

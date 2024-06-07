@@ -15,6 +15,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
+import { IRowNode } from 'ag-grid-enterprise';
+import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
 
 @Component({
   selector: 'app-payment-settings',
@@ -41,6 +43,7 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
   ];
   frameworkComponents = {
     selectRenderer: SelectRendererComponent,
+    numericEditor: NumericEditorComponent,
   }
 
   constructor(
@@ -60,7 +63,7 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.getPartnerPayments();
-    this.setColumnDefs();
+    this.setColumnDefs();    
   }
 
   setColumnDefs() {
@@ -101,19 +104,6 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
           suppressFilterButton: true,
         },
       },
-      // {
-      //   headerName: 'Common.State',
-      //   headerValueGetter: this.localizeHeader.bind(this),
-      //   field: 'StatusName',
-      //   sortable: true,
-      //   resizable: true,
-      //   floatingFilter: true,
-      //   suppressMenu: true,
-      //   floatingFilterComponentParams: {
-      //     suppressFilterButton: true,
-      //   },
-      // },
-
       {
         headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -121,11 +111,13 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agDropdownFilter',
+        filter: 'agSetColumnFilter',
+        floatingFilter: true,
         filterParams: {
-          filterOptions: this.filterService.stateOptions,
-          filterData: this.statusName,
-          suppressAndOrCondition: true
+          valueFormatter: params => {
+            const state = Number(params.value);
+            return this.statusName.find(field => field.Id === state)?.Name;
+          }
         },
         cellRenderer: 'selectRenderer',
         cellRendererParams: {
@@ -133,7 +125,6 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
           Selections: this.statusName,
         },
       },
-
       {
         headerName: 'Clients.Currency',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -157,6 +148,8 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         floatingFilterComponentParams: {
           suppressFilterButton: true,
         },
+        editable: true,
+        cellEditor: 'numericEditor',
       },
       {
         headerName: 'Common.Name',
@@ -181,6 +174,8 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         floatingFilterComponentParams: {
           suppressFilterButton: true,
         },
+        editable: true,
+        cellEditor: 'numericEditor',
       },
       {
         headerName: 'Bonuses.MaxAmount',
@@ -193,6 +188,8 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         floatingFilterComponentParams: {
           suppressFilterButton: true,
         },
+        editable: true,
+        cellEditor: 'numericEditor',
       },
       {
         headerName: 'Bonuses.Priority',
@@ -205,6 +202,8 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
         floatingFilterComponentParams: {
           suppressFilterButton: true,
         },
+        editable: true,
+        cellEditor: 'numericEditor',
       },
       {
         headerName: 'Partners.LastUpdate',
@@ -236,22 +235,44 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
 
   onSelectChange(key, params, val, event) {
     params[key] = val;
-    this.onCellValueChanged(event);
+    this.saveCellValueChanged(event);
   }
 
   onCellValueChanged(event) {
-          SnackBarHelper.show(this._snackBar, { Description: "This functionality onder the construction", Type: "error" });
+    if (event.oldValue !== event.value) {
+      let findedNode: IRowNode;
+      let node = event.node.rowIndex;
+      this.gridApi.forEachNode(nod => {
+        if (nod.rowIndex == node) {
+          findedNode = nod;
+        }
+      })
+      this.saveCellValueChanged(event);
+    }
+  }
 
-    console.log(event.data, "event.data");
-    
-    // this.apiService.apiPost(this.configService.getApiUrl, event.data, true,
-    //   Controllers.PAYMENT, Methods.UPDATE_PARTNER_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
-    //     if (data.ResponseCode === 0) {
-    //       SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
-    //     } else {
-    //       SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-    //     }
-    //   });
+  saveCellValueChanged(event) {
+    const { Id, State, Priority, MinAmount, MaxAmount, Commission, PartnerId, PaymentSystemId, CurrencyId, Type } = event.data;
+    const payload = {
+      Id,
+      State,
+      Priority,
+      MinAmount,
+      MaxAmount,
+      Commission,
+      PartnerId,
+      PaymentSystemId, 
+      CurrencyId, 
+      Type
+    };
+    this.apiService.apiPost(this.configService.getApiUrl, payload, true,
+      Controllers.PAYMENT, Methods.UPDATE_PARTNER_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   onGridReady(params) {

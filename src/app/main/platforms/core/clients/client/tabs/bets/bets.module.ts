@@ -15,7 +15,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from "@angular/material/dialog";
 import {TranslateModule} from "@ngx-translate/core";
 import {OddsTypePipe} from "../../../../../../../core/pipes/odds-type.pipe";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import { MatSelectModule } from "@angular/material/select";
 import { PartnerDateFilterComponent } from "../../../../../../components/partner-date-filter/partner-date-filter.component";
 
@@ -43,8 +42,6 @@ const routes: Routes = [
         ReactiveFormsModule,
         MatDialogModule,
         TranslateModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
         PartnerDateFilterComponent
     ]
 })

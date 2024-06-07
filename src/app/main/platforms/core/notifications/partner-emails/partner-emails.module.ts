@@ -10,10 +10,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { AgGridModule } from 'ag-grid-angular';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatIconModule} from '@angular/material/icon';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { PartnerEmailsComponent } from './partner-emails.component';
 import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
@@ -27,28 +26,26 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [PartnerEmailsComponent],
-    providers: [DatePipe],
-    imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatSnackBarModule,
-        MatCheckboxModule,
-        TranslateModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
-        AgGridModule,
-        RouterModule.forChild(routes),
-        MatIconModule,
-        PartnerDateFilterComponent
-    ]
+  declarations: [PartnerEmailsComponent],
+  providers: [DatePipe],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatCheckboxModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    AgGridModule,
+    RouterModule.forChild(routes),
+    MatIconModule,
+    PartnerDateFilterComponent
+  ]
 })
 export class PartnerEmailsModule { }

@@ -7,7 +7,6 @@ import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
 import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
 import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
-import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
 import { MatDialog } from "@angular/material/dialog";
 import 'ag-grid-enterprise';
 import { CommonDataService } from 'src/app/core/services';
@@ -25,6 +24,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
   templateUrl: './all-competitions.component.html',
   styleUrls: ['./all-competitions.component.scss']
 })
+
 export class AllCompetitionsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
@@ -51,7 +51,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
     checkBoxRenderer: CheckboxRendererComponent,
     selectRenderer: SelectRendererComponent,
   };
-
+  isSendingReqest = false;
   private multipleBetsStates = [
     { Id: 1, Name: this.translate.instant('Sport.None'), State: null },
     { Id: 2, Name: this.translate.instant('Common.Yes'), State: true },
@@ -562,9 +562,8 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
   }
 
   async addSettings() {
-
+    this.isSendingReqest = true;
     const row = this.gridApi.getSelectedRows()[0];
-
     let settings = {
       CompetitionId: row.Id,
       PartnerId: this.partnerId,
@@ -573,7 +572,6 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
       AbsoluteLimit: row.AbsoluteLimit,
       Delay: row.Delay
     };
-
     this.apiService.apiPost(this.addPartnerSettingsPath, settings)
       .pipe(take(1))
       .subscribe(data => {
@@ -582,11 +580,8 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       })
-  }
-
-  go() {
-    this.getCurrentPage();
   }
 
   async AddCompetition() {
@@ -594,7 +589,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
     const dialogRef = this.dialog.open(CreateCompetitionComponent, { width: ModalSizes.MIDDLE });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.go();
+        this.getCurrentPage();
       }
     })
   }
@@ -789,6 +784,16 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
     } else {
       console.error('Failed to construct URL');
     }
+  }
+
+  async onMigrate() {
+    const { MigrateCompetitionComponent } = await import('../../competitions/migrate-competition/migrate-competition.component');
+    const dialogRef = this.dialog.open( MigrateCompetitionComponent, { width: ModalSizes.MIDDLE, data: this.agGrid.api.getSelectedRows()[0] });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data) {
+        this.getCurrentPage();
+      }
+    })
   }
 
 }

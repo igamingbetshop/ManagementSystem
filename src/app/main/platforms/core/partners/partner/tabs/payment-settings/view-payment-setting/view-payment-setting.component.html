@@ -150,17 +150,37 @@
       </div>
 
       <div>
-        <div class="first-hand">{{'Partners.Countries' | translate}}</div>
+        <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
         <div class="second-hand">
-          <select name="countries" id="countries" size="3" style="width: 100%;" disabled>
-            <option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</option>
-          </select>
+          <span class="second-left"> 
+            @if (paymentSystem?.Countries?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (paymentSystem?.Countries?.Type==2) {
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+          <span class="second-right">
+            @for (country of countriesEntites; track $index) {
+              {{country}}
+            }
+          </span>
         </div>
-        <div class="form-field form-dropdown" *ngIf="paymentSystem?.Countries" style="margin-top: 45px;">
-          <select size="5" style="width: 100%;" multiple [(ngModel)]="paymentSystem.Countries"
-            [ngModelOptions]="{'standalone': true}">
-            <option *ngFor="let country of countries" [ngValue]="country.Id">{{country.Name}}</option>
-          </select>
+
+        <div class="form-field group-field" [formGroupName]="'Countries'">
+          <div class="group-left-item">
+            <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+            <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+            translate}}
+          </div>
+
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Ids'" multiple>
+              @for (country of countries; track $index) {
+                <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
+
         </div>
       </div>
 

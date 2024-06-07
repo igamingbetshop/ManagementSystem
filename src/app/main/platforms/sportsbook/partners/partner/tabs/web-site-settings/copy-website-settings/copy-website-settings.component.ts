@@ -30,15 +30,15 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatButtonModule,
     MatDialogModule
-
   ]
 })
 export class CopyWebsiteSettingsComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partnerId;
-  public partners = [];
-  public menus = [];
-  public selectedPartner;
+  formGroup: UntypedFormGroup;
+  partnerId;
+  partners = [];
+  menus = [];
+  selectedPartner;
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<CopyWebsiteSettingsComponent>,
     private activateRoute: ActivatedRoute,
@@ -92,6 +92,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
+    this.isSendingReqest = true;
     const setting = this.formGroup.getRawValue();
     setting.ToPartnerId = +this.partnerId;
     this.apiService.apiPost('cms/clonewebsitemenubypartnerId', setting)
@@ -102,6 +103,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       });
   }
 

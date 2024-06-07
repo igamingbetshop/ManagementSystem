@@ -23,6 +23,7 @@ export class AddEditTranslationsComponent implements OnInit {
   public formGroup: UntypedFormGroup;
   public partnerId;
   public openedIndex = 0;
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditTranslationsComponent>,
               private apiService: CoreApiService,
@@ -56,6 +57,7 @@ export class AddEditTranslationsComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSendingReqest = true;
     let translations = this.currentItem.Translations.map((item) => {
       item.ObjectTypeId = 62;
       item.TranslationId = this.currentItem.TranslationId;
@@ -70,6 +72,7 @@ export class AddEditTranslationsComponent implements OnInit {
         changed.push(this.currentItem.Translations[i]);
     }
     if (changed.length === 0) {
+      this.isSendingReqest = false;
       return
     } else {
       this.apiService.apiPost(this.configService.getApiUrl, changed, true, Controllers.BASE,
@@ -79,6 +82,7 @@ export class AddEditTranslationsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
       });
     }
 

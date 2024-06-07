@@ -291,6 +291,11 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       trigger.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     }
 
+    if(trigger.Type === 12 ) {
+      trigger.MinAmount = trigger.Amount;
+      delete trigger.Amount;
+    }
+    
     this.apiService.apiPost(this.configService.getApiUrl, trigger, true,
       Controllers.BONUS, Methods.SAVE_TRIGGER_SETTING).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {

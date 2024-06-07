@@ -60,12 +60,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
         cellEditor: 'textEditor',
       },
       {
@@ -75,12 +69,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
         cellEditor: 'numericEditor',
       },
       {
@@ -90,12 +78,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
         cellEditor: 'numericEditor',
       },
       {
@@ -105,12 +87,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
         cellEditor: 'numericEditor',
       },
       {
@@ -120,12 +96,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
         cellEditor: 'numericEditor',
       },
       {
@@ -135,12 +105,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
       },
       {
         headerName: 'Common.DateValue',
@@ -149,12 +113,6 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
       },
     ];
     this.frameworkComponents = {

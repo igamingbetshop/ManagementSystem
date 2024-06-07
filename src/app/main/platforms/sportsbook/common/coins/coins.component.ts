@@ -20,16 +20,17 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
   styleUrls: ['./coins.component.scss']
 })
 export class CoinsComponent extends BasePaginatedGridComponent implements OnInit {
-  public frameworkComponents = {
+  frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
   };
-  public rowData = [];
-  public partners = [];
-  public path: string = 'utils/coins';
+  rowData = [];
+  partners = [];
+  path: string = 'utils/coins';
   private updateSettingsPath = 'utils/updatecoins';
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  isSendingReqest = false;
 
   constructor(
     private apiService: SportsbookApiService,
@@ -152,6 +153,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
   }
 
   onDeleteCoin() {
+    this.isSendingReqest = true;
     const coinId = this.gridApi.getSelectedRows()[0].Id;
     this.apiService.apiPost('utils/deletecoin', { Id: coinId })
       .pipe(take(1))
@@ -161,6 +163,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       });
   }
 

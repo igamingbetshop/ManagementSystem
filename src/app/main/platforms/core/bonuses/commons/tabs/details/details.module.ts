@@ -18,7 +18,6 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { ViewCommonComponent } from './view-common/view-common.component';
 import { TranslateModule } from "@ngx-translate/core";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { MatSelectModule } from "@angular/material/select";
 
 import { BonusesService } from "../../../bonuses.service";
@@ -54,8 +53,6 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
     MatSelectModule,
     CurrencySettingsComponent,
     MatDialogModule

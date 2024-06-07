@@ -2,7 +2,6 @@
 
   <app-partner-date-filter 
     [title]="'Reports.ReportByLogs'" 
-    [partners]="'CorePlatform'" 
     (toDateChange)="onDateChange($event)" 
   />
 
@@ -11,8 +10,10 @@
       id="report-bets"
       #agGrid
       class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
       [headerHeight]="33"
       [rowHeight]="42"
+      [class.load-grid]="filterUsed"
       [rowData]="rowData"
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"

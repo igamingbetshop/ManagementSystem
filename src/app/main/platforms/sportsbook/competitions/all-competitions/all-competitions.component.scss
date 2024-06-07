@@ -17,6 +17,11 @@
       @include mat-btn-style;
     }
 
+    .mat-edit-btn {
+      margin-right: 8px;
+      @include mat-bulke-edit-btn-style;
+    }
+
     .mat-export-btn {
       margin-left: 8px;
       @include mat-export-btn-style;
@@ -26,43 +31,7 @@
     .bulk-editor-dropdown {
       position: relative;
       .mat-bulk-btn {
-        background-color: $blue-light-7;
-        padding: 0 10px;
-        border: 1px solid transparent;
-
-        //&.opened {
-        //
-        //  & ~ .bulk-editor {
-        //    display: block;
-        //  }
-        //}
-
-        ::ng-deep {
-          .mat-button-wrapper {
-            color: $blue-2 !important;
-            position: relative;
-            padding-left: 23px;
-
-            &:before {
-              content: "\e903";
-              font-size: 14px;
-              font-family: 'iq-soft-icon';
-              position: absolute;
-              left: 0;
-              top: -6px;
-            }
-          }
-        }
-
-        &.disabled {
-          opacity: 0.7;
-          pointer-events: none;
-        }
-
-        &:hover {
-          border: 1px solid $blue-5;
-          background-color: $blue-light-22;
-        }
+        @include mat-bulke-edit-btn-style;
       }
 
     }

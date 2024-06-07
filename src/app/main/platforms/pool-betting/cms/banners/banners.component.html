@@ -13,7 +13,7 @@
     </div>
 
     <button mat-stroked-button class="mat-btn" (click)="addBanner()">{{'Cms.AddBanner' | translate}}</button>
-    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="deleteBanner()">
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected() || isSendingReqest" (click)="deleteBanner()">
       {{'Common.Delete' | translate}}
     </button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>

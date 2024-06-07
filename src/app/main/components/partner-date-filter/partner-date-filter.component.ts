@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewEncapsulation, effect, inject, input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,6 +16,8 @@ import { BetStatusesComponent } from './bet-statuses-select.component';
 import { CorePaymentsSelectComponent } from './core-payments-select.component';
 import { SportPartnersSelectComponent } from './sport-partners-select.component';
 import { SportSelectComponent } from './sport-select.component';
+import { DateTimePickerComponent } from "../data-time-picker/data-time-picker.component";
+import { BetShopsesComponent } from "./bet-shops-select.component";
 
 @Component({
     selector: 'app-partner-date-filter',
@@ -40,7 +42,9 @@ import { SportSelectComponent } from './sport-select.component';
         SportSelectComponent,
         BetStatusesComponent,
         BetCategoryComponent,
-        SportPartnersSelectComponent
+        SportPartnersSelectComponent,
+        DateTimePickerComponent,
+        BetShopsesComponent
     ]
 })
 export class PartnerDateFilterComponent implements OnInit {
@@ -59,6 +63,7 @@ export class PartnerDateFilterComponent implements OnInit {
   liveUpdateBTN = input<boolean>();
   isReconnected = input<boolean>(false);
   lastYearFilter = input(false);
+  betShopGroups = input();
   @Output() toDateChange = new EventEmitter<any>();
   @Output() startDateChange = new EventEmitter<any>();
   @Output() titleClick = new EventEmitter<any>();
@@ -70,6 +75,7 @@ export class PartnerDateFilterComponent implements OnInit {
   @Output() betCategoryChange = new EventEmitter<number>();
   @Output() betStatusesChange = new EventEmitter<number>();
   @Output() onLiveUpdateBTN = new EventEmitter<boolean>();
+  @Output() betShopChange = new EventEmitter<number>();
   titleName: string = '';
   fromDate: Date | undefined;
   toDate: Date | undefined;
@@ -80,6 +86,8 @@ export class PartnerDateFilterComponent implements OnInit {
   private translate = inject(TranslateService);
 
   ngOnInit(): void {
+    console.log(this.betShopGroups(), "this.betShopGroups");
+    
     this.startDate();
     if (this.title) {
       this.titleName = this.title();
@@ -193,7 +201,11 @@ export class PartnerDateFilterComponent implements OnInit {
   }
 
   onProviderChange(event) {
-    this.providerChange.emit(event)
+    this.providerChange.emit(event);
+  }
+
+  onBetShopChange(event) {
+    this.betShopChange.emit(event);
   }
 
   toggleLiveUpdate() {

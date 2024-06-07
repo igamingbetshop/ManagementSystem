@@ -99,10 +99,10 @@
       </div>
 
       <div>
-        <div class="first-hand">{{'Clients.Language' | translate}}</div>
-        <div class="second-hand">{{affiliate?.LanguageId}}</div>
+        <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
+        <div class="second-hand">{{affiliate?.ClientId}}</div>
         <div class="form-field form-input">
-            <input matInput [formControlName]="'LanguageId'" readonly>
+            <input matInput [formControlName]="'ClientId'" type="number">
         </div>
       </div>
 
@@ -125,6 +125,14 @@
       </div>
 
       <div>
+        <div class="first-hand">{{'Clients.Language' | translate}}</div>
+        <div class="second-hand">{{affiliate?.LanguageId}}</div>
+        <div class="form-field form-input">
+            <input matInput [formControlName]="'LanguageId'" readonly>
+        </div>
+      </div>
+
+      <div>
         <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
         <div class="static-hand">{{affiliate?.CreationTime | date: 'short'}}</div>
       </div>
@@ -134,10 +142,12 @@
         <div class="static-hand">{{affiliate?.LastUpdateTime | date: 'short'}}</div>
       </div>
 
+      <div></div>
+
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
           <button mat-stroked-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
         </div>
       </div>
     </form>

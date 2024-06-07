@@ -24,8 +24,9 @@ import {TranslateModule} from "@ngx-translate/core";
 })
 export class AddTeamComponent implements OnInit {
 
-  public formGroup: UntypedFormGroup;
-  public sports: any[] = [];
+  formGroup: UntypedFormGroup;
+  sports: any[] = [];
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddTeamComponent>,
@@ -68,6 +69,7 @@ export class AddTeamComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('teams/add', obj)
       .pipe(take(1))
@@ -77,6 +79,7 @@ export class AddTeamComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false;
       });
   }
 

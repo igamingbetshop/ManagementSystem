@@ -40,7 +40,6 @@
       </mat-select>
     </mat-form-field>
 
-
     <mat-form-field>
       <mat-label>{{'Common.Name' | translate}}</mat-label>
       <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
@@ -76,6 +75,11 @@
     <mat-form-field>
       <mat-label>{{'Sport.MinTotalCoef' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Sport.MinTotalCoef' | translate" [formControlName]="'MinTotalCoeff'">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Products.ExternalId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Products.ExternalId' | translate" [formControlName]="'ExternalId'">
     </mat-form-field>
 
     @if (this.formGroup.value.TypeId == 3 || this.bonus.TypeId == 3) {

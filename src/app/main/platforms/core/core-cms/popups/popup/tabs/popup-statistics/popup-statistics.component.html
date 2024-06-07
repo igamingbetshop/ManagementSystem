@@ -1,0 +1,13 @@
+<div class="container">
+
+  <app-partner-date-filter 
+  [title]="'Clients.Clients'" 
+  [pageIdName]="pageIdName"
+  [allTimesFilter]="false"
+  [lastYearFilter]="true"
+  (toDateChange)="onDateChange($event)"
+  (titleClick)="onNavigateToClient()"
+  />
+
+
+</div>

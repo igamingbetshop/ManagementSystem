@@ -20,7 +20,6 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { ViewDetailComponent } from './view-detail/view-detail.component';
 import { AgGridModule } from "ag-grid-angular";
 import { TranslateModule } from "@ngx-translate/core";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { BonusesService } from "../../../bonuses.service";
 import { CurrencySettingsComponent } from "../../../currency-settings/currency-settings.component";
 import { MatDialogModule } from '@angular/material/dialog';
@@ -54,8 +53,6 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
     MatSelectModule,
     CurrencySettingsComponent,
     MatDialogModule

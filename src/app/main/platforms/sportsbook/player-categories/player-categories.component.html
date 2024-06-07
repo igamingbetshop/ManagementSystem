@@ -3,7 +3,7 @@
   <div class="player-categories-content action">
     <div class="title">{{'Sport.PlayersCategories' | translate}}</div>
     <button mat-stroked-button class="mat-btn" (click)="addCategory()">{{'ClientCategories.AddCategory' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled] ="isRowSelected()" (click)="deleteCategory()">{{'ClientCategories.DeleteCategory' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled] ="isRowSelected() || isSendingReqest" (click)="deleteCategory()">{{'ClientCategories.DeleteCategory' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
   </div>
 

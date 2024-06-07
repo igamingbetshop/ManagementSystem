@@ -34,9 +34,10 @@ import { PBControllers, PBMethods } from 'src/app/core/enums';
   ],
 })
 export class CreatePartnerComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public states = ACTIVITY_STATUSES;
-  public currencies: any[] = [];
+  formGroup: UntypedFormGroup;
+  states = ACTIVITY_STATUSES;
+  currencies: any[] = [];
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreatePartnerComponent>,
@@ -72,6 +73,7 @@ export class CreatePartnerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(PBControllers.PARTNERS, PBMethods.ADD,  obj).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
@@ -79,6 +81,7 @@ export class CreatePartnerComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
 
 

@@ -15,9 +15,8 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
-import {OddsTypePipe} from "../../../../../core/pipes/odds-type.pipe";
-import {SettleBetModalComponent} from "./settle-bet-modal/settle-bet-modal.component";
+import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
+import { SettleBetModalComponent } from "./settle-bet-modal/settle-bet-modal.component";
 import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
@@ -28,29 +27,27 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [InternetComponent],
-    providers: [DatePipe, OddsTypePipe],
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatSnackBarModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatSlideToggleModule,
-        MatIconModule,
-        MatButtonModule,
-        TranslateModule,
-        MatDialogModule,
-        ReactiveFormsModule,
-        MatNativeDateModule,
-        MatDatepickerModule,
-        AgGridModule,
-        RouterModule.forChild(routes),
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
-        SettleBetModalComponent,
-        PartnerDateFilterComponent
-    ]
+  declarations: [InternetComponent],
+  providers: [DatePipe, OddsTypePipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatSnackBarModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatSlideToggleModule,
+    MatIconModule,
+    MatButtonModule,
+    TranslateModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    AgGridModule,
+    RouterModule.forChild(routes),
+    SettleBetModalComponent,
+    PartnerDateFilterComponent
+  ]
 })
 export class InternetModule { }

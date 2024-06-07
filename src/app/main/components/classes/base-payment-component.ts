@@ -1,4 +1,4 @@
-import {Directive, inject, Injector, OnInit, ViewChild} from "@angular/core";
+import { Directive, inject, Injector, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { DatePipe } from "@angular/common";
 
@@ -22,7 +22,7 @@ import { AgDateTimeFilter } from "../grid-common/ag-date-time-filter/ag-date-tim
 import { GetContextMenuItemsParams, MenuItemDef } from "ag-grid-enterprise";
 import { CellClickedEvent } from "ag-grid-community";
 import { DateHelper } from "../partner-date-filter/data-helper.class";
-import {ExportService} from "../../platforms/core/services/export.service";
+import { ExportService } from "../../platforms/core/services/export.service";
 
 @Directive()
 export class BasePaymentComponent extends BasePaginatedGridComponent implements OnInit {
@@ -201,7 +201,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   }
 
   getPaymentSystems() {
-    this.apiService.apiPost(this.configService.getApiUrl, {IsActive: true}, true, Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS)
+    this.apiService.apiPost(this.configService.getApiUrl, { IsActive: true }, true, Controllers.PAYMENT, Methods.GET_PAYMENT_SYSTEMS)
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.paymentSystems = data.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);;
@@ -329,6 +329,19 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
         headerName: 'Clients.Amount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Amount',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Clients.ConvertedAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'ConvertedAmount',
         sortable: true,
         resizable: true,
         filter: 'agNumberColumnFilter',
@@ -674,7 +687,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
               this.oldData = mappedRows;
               this.gridApi?.setPinnedBottomRowData([{
                 Amount: `${formattedNumber(data.ResponseObject.PaymentRequests.TotalAmount)} ${this.playerCurrency}`,
-                FinalAmount: data.ResponseObject.PaymentRequests.TotalFinalAmount ?  `${formattedNumber(data.ResponseObject.PaymentRequests.TotalFinalAmount)} ${this.playerCurrency}` : "",
+                FinalAmount: data.ResponseObject.PaymentRequests.TotalFinalAmount ? `${formattedNumber(data.ResponseObject.PaymentRequests.TotalFinalAmount)} ${this.playerCurrency}` : "",
                 UserName: `${data.ResponseObject.PaymentRequests.TotalUniquePlayers?.toFixed(0)}`,
               }
               ]);
@@ -753,7 +766,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.PAYMENT, Methods.EXPORT_DEPOSIT_PAYMENT_REQUESTS, {
+    this.exportService.exportToCsv(Controllers.PAYMENT, Methods.EXPORT_DEPOSIT_PAYMENT_REQUESTS, {
       ...this.filteredData,
       adminMenuId: this.adminMenuId
     });

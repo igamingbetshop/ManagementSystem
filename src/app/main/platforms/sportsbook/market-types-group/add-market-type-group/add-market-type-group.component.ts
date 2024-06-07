@@ -22,10 +22,11 @@ import {TranslateModule} from "@ngx-translate/core";
 })
 export class AddMarketTypeGroupComponent implements OnInit {
 
-  public formGroup: UntypedFormGroup;
-  public sports: any[] = [];
-  public partners: any[] = [];
-
+  formGroup: UntypedFormGroup;
+  sports: any[] = [];
+  partners: any[] = [];
+  isSendingReqest = false;
+  
   constructor(
     public dialogRef: MatDialogRef<AddMarketTypeGroupComponent>,
     private apiService:SportsbookApiService,

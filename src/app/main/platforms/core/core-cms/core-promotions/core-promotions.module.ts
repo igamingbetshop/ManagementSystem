@@ -27,7 +27,6 @@ const routes: Routes = [
         loadChildren: () => import('../core-promotions/core-promotion/core-promotion.module').then(m => m.CorePromotionModule),
       },
     ]
-
   }
 ];
 

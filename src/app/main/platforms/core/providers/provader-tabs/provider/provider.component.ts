@@ -141,14 +141,6 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         // filter: 'agBooleanColumnFilter',
       },
       {
-        headerName: 'Common.IsLeaf',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'IsLeaf',
-        resizable: true,
-        sortable: true,
-        filter: false,
-      },
-      {
         headerName: 'Bonuses.Description',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Description',

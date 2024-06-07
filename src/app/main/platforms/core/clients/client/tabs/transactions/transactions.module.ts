@@ -11,7 +11,6 @@ import {MatInputModule} from "@angular/material/input";
 import {MatNativeDateModule} from "@angular/material/core";
 import {FormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import { MatSelectModule } from '@angular/material/select';
 import { PartnerDateFilterComponent } from "../../../../../../components/partner-date-filter/partner-date-filter.component";
 
@@ -35,8 +34,6 @@ const routes: Routes = [
         MatInputModule,
         MatSelectModule,
         TranslateModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
         PartnerDateFilterComponent
     ]
 })

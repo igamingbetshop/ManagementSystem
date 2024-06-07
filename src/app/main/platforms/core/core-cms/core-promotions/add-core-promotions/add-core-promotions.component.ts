@@ -19,7 +19,7 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, DEVICE_TYPES } from 'src/app/core/constantes/statuses';
 import { compressImage } from 'src/app/core/utils';
 
 @Component({
@@ -50,7 +50,7 @@ export class AddCorePromotionsComponent implements OnInit {
   promotionTypes: any = [];
   states = ACTIVITY_STATUSES;
   environments: any[] = [];
-  deviceTypes = [];
+  deviceTypes = DEVICE_TYPES;
   isParent: boolean;
   submitting = false;
 
@@ -75,20 +75,6 @@ export class AddCorePromotionsComponent implements OnInit {
     this.getPromotionTypes(this.data?.ParentId);
     this.createForm();
     this.getDate();
-    this.getDeviceTypes();
-  }
-
-  getDeviceTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.deviceTypes = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
   }
 
   getPromotionTypes(val) {
@@ -250,6 +236,9 @@ export class AddCorePromotionsComponent implements OnInit {
     }
     this.submitting = true;
     const obj = this.formGroup.getRawValue();
+    if(obj.DeviceType == -1) {
+      obj.DeviceType = null;
+    }
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_PROMOTION)
       .pipe(take(1))
@@ -257,7 +246,6 @@ export class AddCorePromotionsComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.dialogRef.close(obj);
           this.submitting = false;
-
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

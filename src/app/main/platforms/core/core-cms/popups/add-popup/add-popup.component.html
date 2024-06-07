@@ -6,23 +6,15 @@
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
 
-      <mat-form-field class="calendar-picker start">
-        <mat-label>{{'Common.StartDate' | translate}}</mat-label>
-        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartDate'">
-        <mat-datepicker-toggle matSuffix [for]="pickerStart">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-      </mat-form-field>
-
-      <mat-form-field class="calendar-picker" style="margin-left: 5px;">
-        <mat-label>{{'Common.EndDate' | translate}}</mat-label>
-        <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishDate'">
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-      </mat-form-field>
+    <div class="calendar-content">
+      <div class="calendar-picker">
+        <app-date-time-picker formControlName="StartDate"></app-date-time-picker>
+      </div>
+      
+      <div class="calendar-picker field-content-seccond-child">
+        <app-date-time-picker formControlName="FinishDate"></app-date-time-picker>
+      </div>
+    </div>
 
     <mat-form-field>
       <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>

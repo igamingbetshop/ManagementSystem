@@ -1,17 +1,17 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {GridMenuIds, GridRowModelTypes} from "../../../../../core/enums";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {VirtualGamesApiService} from "../../services/virtual-games-api.service";
-import {BasePaginatedGridComponent} from "../../../../components/classes/base-paginated-grid-component";
-import {Paging} from "../../../../../core/models";
-import {take} from "rxjs/operators";
+import { Component, Injector, OnInit } from '@angular/core';
+import { GridMenuIds, GridRowModelTypes } from "../../../../../core/enums";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { VirtualGamesApiService } from "../../services/virtual-games-api.service";
+import { BasePaginatedGridComponent } from "../../../../components/classes/base-paginated-grid-component";
+import { Paging } from "../../../../../core/models";
+import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
-import {DatePipe} from "@angular/common";
-import {OpenerComponent} from "../../../../components/grid-common/opener/opener.component";
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
+import { DatePipe } from "@angular/common";
+import { OpenerComponent } from "../../../../components/grid-common/opener/opener.component";
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-results',
@@ -28,13 +28,13 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
   public clientData;
   public path = 'game/unitresults';
   public statusTypes = [
-    {Id: 1, Name: 'First Betting Period'},
-    {Id: 2, Name: 'Second Betting Period'},
-    {Id: 3, Name: 'Third Betting Period'},
-    {Id: 10, Name: 'Calculation Period'},
-    {Id: 11, Name: 'Finalizing Period'},
-    {Id: 12, Name: 'Closed Round'},
-    {Id: 20, Name: 'New Round Creation Period'}
+    { Id: 1, Name: 'First Betting Period' },
+    { Id: 2, Name: 'Second Betting Period' },
+    { Id: 3, Name: 'Third Betting Period' },
+    { Id: 10, Name: 'Calculation Period' },
+    { Id: 11, Name: 'Finalizing Period' },
+    { Id: 12, Name: 'Closed Round' },
+    { Id: 20, Name: 'New Round Creation Period' }
   ];
 
   constructor(
@@ -51,7 +51,7 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
         field: 'Id',
         sortable: true,
         resizable: true,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
         maxWidth: 130,
         filterParams: {
@@ -153,9 +153,9 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           data.path = this.router.url.split('?')[0] + '/' + params.data.Id;
-          data.queryParams = {GameId: params.data.GameId, RoundId: params.data.RoundId};
+          data.queryParams = { GameId: params.data.GameId, RoundId: params.data.RoundId };
           return data;
         },
         sortable: false
@@ -164,35 +164,23 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.startDate();
-    // this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
+    this.setTime();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   onGridReady(params) {
     super.onGridReady(params);
-    this.selectTime('today');
     syncColumnReset();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
@@ -217,9 +205,9 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
                 items.StateName = this.statusTypes.find((item => item.Id === items.Status))?.Name
                 return items;
               })
-              params.success({rowData: mappedRows, rowCount: data.ResponseObject.Count});
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
             } else {
-              SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
           });
       },

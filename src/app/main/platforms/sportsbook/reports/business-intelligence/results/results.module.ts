@@ -7,7 +7,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { ResultsComponent } from './results.component';
@@ -27,24 +26,22 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [ResultsComponent],
-    providers: [DatePipe],
-    imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        FormsModule,
-        MatSelectModule,
-        MatDialogModule,
-        MatNativeDateModule,
-        MatDatepickerModule,
-        ReactiveFormsModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
-        AgGridModule,
-        TranslateModule,
-        MatButtonModule,
-        MatInputModule,
-        PartnerDateFilterComponent
-    ]
+  declarations: [ResultsComponent],
+  providers: [DatePipe],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    FormsModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    ReactiveFormsModule,
+    AgGridModule,
+    TranslateModule,
+    MatButtonModule,
+    MatInputModule,
+    PartnerDateFilterComponent
+  ]
 })
 export class ResultsModule { }

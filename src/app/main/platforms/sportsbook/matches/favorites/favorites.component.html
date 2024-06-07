@@ -16,7 +16,7 @@
           <input matInput  type="number" [(value)] ="priority" #pr placeholder="{{'Bonuses.Priority' | translate}}" (input)="onPriorityChange(pr.value)" >
         </div>
 
-        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="onAddMatch()">{{'Sport.AddMatch' | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || isSendingReqest" (click)="onAddMatch()">{{'Sport.AddMatch' | translate}}</button>
       </div>
 
       <div class="grid-content">
@@ -46,7 +46,7 @@
       <div class="action-content">
         <div class="title">{{'Sport.FavoriteMatches' | translate}}</div>
         <div>
-          <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected1()"  (click)="onRemoveMatch()">{{'Sport.RemoveMatch' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected1() || isSendingReqest"  (click)="onRemoveMatch()">{{'Sport.RemoveMatch' | translate}}</button>
           <button mat-stroked-button class="mat-btn" (click)="onGo()">{{'Common.Go' | translate}}</button>
 
         </div>

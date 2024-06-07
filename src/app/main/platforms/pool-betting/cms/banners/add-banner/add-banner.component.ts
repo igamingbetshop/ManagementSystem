@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,10 +14,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { compressImage } from "../../../../../../core/utils";
 import { PBControllers, PBMethods } from 'src/app/core/enums';
 import { PoolBettingApiService } from 'src/app/main/platforms/sportsbook/services/pool-betting-api.service';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
   selector: 'app-add-banner',
@@ -37,21 +37,18 @@ import { PoolBettingApiService } from 'src/app/main/platforms/sportsbook/service
     MatDatepickerModule,
     MatNativeDateModule,
     TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    DateTimePickerComponent
   ],
 })
 export class AddBannerComponent implements OnInit {
 
-  public sports: any[] = [];
-  public partners: any[] = [];
-  public partnerId = null;
-  public formGroup: UntypedFormGroup;
-
-  public bannerTypeId: number = 1;
-
-  public bannerVisibilityTypes = [
+  sports: any[] = [];
+  partners: any[] = [];
+  partnerId = null;
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false;
+  bannerVisibilityTypes = [
     { id: 'null', name: 'Always' },
     { id: 1, name: 'Logged Out' },
     { id: 2, name: 'Logged In' },
@@ -97,10 +94,8 @@ export class AddBannerComponent implements OnInit {
     toDay.setSeconds(0);
     toDay.setMilliseconds(0);
     toDay.setDate(toDay.getDate() + 1);
-
     this.formGroup.get('StartDate').setValue(fromDay);
     this.formGroup.get('EndDate').setValue(toDay);
-
   }
 
   getPartners() {
@@ -171,11 +166,6 @@ export class AddBannerComponent implements OnInit {
     }
   }
 
-  onBannerTypeChange(val) {
-    this.bannerTypeId = val;
-  }
-
-
   public createForm() {
     this.formGroup = this.fb.group({
       PartnerId: [null, [Validators.required]],
@@ -193,6 +183,7 @@ export class AddBannerComponent implements OnInit {
       ShowDescription: [false],
       IsEnabled: [true],
       ImageData: [null, [Validators.required]],
+      Type: [null],
     });
     // this.formGroup.get('Type').disable();
   }
@@ -206,22 +197,11 @@ export class AddBannerComponent implements OnInit {
   }
 
   onSubmit() {
-
     if (this.formGroup.invalid) {
       return;
     }
-
+    this.isSendingReqest = true;
     const requestBody = this.formGroup.getRawValue();
-
-    if (this.bannerTypeId == 4 || this.bannerTypeId == 5) {
-      requestBody.Type = this.bannerTypeId;
-    }
-
-    if (this.bannerTypeId == 1 || this.bannerTypeId == 2) {
-      delete requestBody.SportId;
-    }
-
-    delete requestBody.FragmentName;
     if (requestBody.Visibility === "null") {
       requestBody.Visibility = null;
     }
@@ -230,13 +210,13 @@ export class AddBannerComponent implements OnInit {
   }
 
   saveBanner(request) {
-
     this.apiService.apiPost(PBControllers.CMS, PBMethods.SAVE_BANNER, request).pipe(take(1)).subscribe(data => {
       if (data.Code === 0) {
         this.dialogRef.close('success');
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 }

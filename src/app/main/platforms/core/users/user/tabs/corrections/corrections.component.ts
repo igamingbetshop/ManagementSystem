@@ -20,6 +20,7 @@ import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-corrections',
@@ -233,10 +234,10 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   }
 
   ngOnInit() {
+    this.setTime();
     this.userId = this.activateRoute.snapshot.queryParams.userId;
     this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.getUserAccounts();
-    this.startDate();
   }
 
   getUserAccounts() {
@@ -281,30 +282,16 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     }
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-    this.filteredData.FromDate = new Date(this.fromDate.setDate(this.fromDate.getDate() + 1));
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-    this.filteredData.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   onDebitToAccount() {

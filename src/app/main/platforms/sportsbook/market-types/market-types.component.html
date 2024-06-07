@@ -35,6 +35,7 @@
         <ag-grid-angular
           id="market-types"
           #agGrid
+          [class.hide-grid]="loadingUserState"
           class="ag-theme-balham"
           [headerHeight]="33"
           [rowHeight]="42"
@@ -50,6 +51,8 @@
           [components]="frameworkComponents"
           [enableBrowserTooltips]="enableBrowserTooltips"
           [cacheBlockSize]="cacheBlockSize"
+          [paginationPageSize]="5000"
+          pagination="true"
           (gridReady)="onGridReady($event)"
           (rowSelected)="onRowSelected($event)"
           (rowGroupOpened)="onRowGroupOpened($event)"
@@ -63,14 +66,12 @@
           (columnVisible)="onColumnVisible($event)"
           rowSelection="single">
         </ag-grid-angular>
+        <div class="grid-action">
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!partnerId || isSendingReqest" (click)="onAddPartnerSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
+          <button mat-stroked-button class="mat-btn"  (click)="addMarketType()">{{'Sport.AddMarketType' | translate}}</button>
+        </div>
       </div>
 
-      <div class="grid-action">
-
-        <button mat-stroked-button class="mat-btn" [class.disabled]="!partnerId" (click)="onAddPartnerSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
-        <button mat-stroked-button class="mat-btn"  (click)="addMarketType()">{{'Sport.AddMarketType' | translate}}</button>
-        <input class="pagination-input" readonly type="text" [value]="rowData.length">
-      </div>
 
     </div>
     <div class="right-panel">
@@ -92,18 +93,19 @@
           [components]="frameworkComponents"
           [suppressCopyRowsToClipboard]="true"
           [animateRows]="true"
+          pagination="true"
           [cacheBlockSize]="cacheBlockSize"
           (cellValueChanged)="onCellValueChanged1($event)"
           [ensureDomOrder]="true"
           [enableCellTextSelection]="true"
           rowSelection="single">
         </ag-grid-angular>
+
+        <div class="grid-action">
+          <button mat-stroked-button class="mat-btn" [class.disabled]="isSendingReqest" (click)="addSelectionType()">{{'Sport.AddSelectionType' | translate}}</button>
+        </div>
       </div>
 
-      <div class="grid-action">
-        <button mat-stroked-button class="mat-btn" (click)="addSelectionType()">{{'Sport.AddSelectionType' | translate}}</button>
-        <input class="pagination-input" readonly type="text" [value]="rowData1.length">
-      </div>
 
     </div>
   </div>

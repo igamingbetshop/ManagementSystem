@@ -5,7 +5,7 @@ import { AgGridAngular } from "ag-grid-angular";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import 'ag-grid-enterprise';
 import { take } from 'rxjs/operators';
-import {IRowNode} from "ag-grid-community";
+import { IRowNode } from "ag-grid-community";
 
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { SportsbookApiService } from '../services/sportsbook-api.service';
@@ -35,8 +35,8 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
   public cacheBlockSize = 500;
   public sportsNamesEntites = [];
   public partnerNamesEntites = [];
-
-  public rowModelType:string = GridRowModelTypes.CLIENT_SIDE;
+  isSendingReqest = false;
+  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
@@ -259,22 +259,22 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
     syncColumnReset();
   }
 
-  getPage(){
+  getPage() {
     this.apiService.apiPost(this.path)
-    .pipe(take(1))
-    .subscribe(data => {
-      if(data.Code === 0){
-        this.rowData = data.ResponseObject;
-              const mappedRows = this.rowData.map(part => {
-              part['PartnerName'] = this.partners.find((partner) => partner.Id == part.PartnerId)?.Name;
-              part['SportName'] = this.sports.find((sport) => sport.Id == part.SportId)?.Name;
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.Code === 0) {
+          this.rowData = data.ResponseObject;
+          const mappedRows = this.rowData.map(part => {
+            part['PartnerName'] = this.partners.find((partner) => partner.Id == part.PartnerId)?.Name;
+            part['SportName'] = this.sports.find((sport) => sport.Id == part.SportId)?.Name;
 
-              return part;
-            });
-      }else{
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+            return part;
+          });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   isRowSelected() {
@@ -283,18 +283,17 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
 
   onDeleteGroup() {
     const id = this.gridApi.getSelectedRows()[0]?.Id;
-
-    this.apiService.apiPost(this.delPath,{Id: id})
-    .pipe(take(1))
-    .subscribe(data => {
-
+    this.isSendingReqest = true;
+    this.apiService.apiPost(this.delPath, { Id: id })
+      .pipe(take(1))
+      .subscribe(data => {
         if (data.Code === 0) {
-          //  this.getPage();
           this.rowData = this.rowData.filter(elem => elem.Id !== id);
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       });
   }
 

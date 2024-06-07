@@ -1,3 +1,6 @@
+@import "mixins.scss";
+@import "variables.scss";
+
 .modal-wrap {
   position: relative;
   overflow: auto;
@@ -41,3 +44,4 @@
     margin-left: auto;
   }
 }
+

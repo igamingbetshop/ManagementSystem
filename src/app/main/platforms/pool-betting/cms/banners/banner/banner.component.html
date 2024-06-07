@@ -68,6 +68,14 @@
       </div>
 
       <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="second-hand">{{banner?.Type}}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+        </div>
+      </div>
+
+      <div>
         <div class="first-hand">{{'Common.Visibility' | translate}}</div>
         <div class="second-hand">{{visibilytyName}}</div>
         <div class="form-field form-dropdown">
@@ -118,6 +126,9 @@
           <input type="file" (change)="uploadFile($event)">
         </div>
       </div>
+
+      <div></div>
+
       }
 
       <div class="form-actions">

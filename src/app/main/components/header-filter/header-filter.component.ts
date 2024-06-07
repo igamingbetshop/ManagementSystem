@@ -29,7 +29,7 @@ export class HeaderFilterComponent implements OnInit{
   partners;
   fromDate = new Date();
   toDate = new Date();
-  selectedItem = 'today';
+  selectedItem = 'week';
   partnerId: number | undefined;
   @Output() toDateChange = new EventEmitter<any>();
   titleName: string = '';
@@ -39,9 +39,9 @@ export class HeaderFilterComponent implements OnInit{
 
   
   ngOnInit(): void {
-    this.startDate();
-    this.partners = this.commonDataService.partners;
     this.titleName = this.title();
+    this.selectTime(this.selectedItem);
+    this.partners = this.commonDataService.partners;
     this.translate.get(this.titleName).subscribe((translatedTitle: string) => {
       this.titleName = translatedTitle;
     }); 

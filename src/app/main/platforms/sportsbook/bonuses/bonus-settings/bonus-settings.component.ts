@@ -18,17 +18,18 @@ import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdow
 })
 export class BonusSettingsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public path: string = 'bonuses/bonussettings';
-  public bonusTypes: any[] = [];
-  public bonusChannels: any[] = [];
-  public partners: any[] = [];
-  public partnerId: number;
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  path: string = 'bonuses/bonussettings';
+  bonusTypes: any[] = [];
+  bonusChannels: any[] = [];
+  partners: any[] = [];
+  partnerId: number;
   regions: any;
   frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
   };
+  isSendingReqest = false;
 
   constructor(
     private apiService: SportsbookApiService,
@@ -145,6 +146,14 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
         headerName: 'Bonuses.MinAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MinAmount',
+        resizable: true,
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+      },
+      {
+        headerName: 'Products.ExternalId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'ExternalId',
         resizable: true,
         sortable: true,
         filter: 'agNumberColumnFilter',
@@ -305,6 +314,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   }
 
   onDeleteBounus() {
+    this.isSendingReqest = true;
     const row = this.gridApi.getSelectedRows()[0];
     this.apiService.apiPost('bonuses/deletebonussetting', row).subscribe(data => {
       if (data.Code === 0) {
@@ -313,6 +323,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

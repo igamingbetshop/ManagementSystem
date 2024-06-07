@@ -1,41 +1,56 @@
-import {Component, Inject, NgModule, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { Component, Inject, OnInit } from '@angular/core';
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
-import {MatInputModule} from "@angular/material/input";
+import { MatInputModule } from "@angular/material/input";
 
-import {MatSelectModule} from "@angular/material/select";
+import { MatSelectModule } from "@angular/material/select";
 
-import {ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
-import {MatButtonModule} from "@angular/material/button";
+import { MatButtonModule } from "@angular/material/button";
 
-import {TranslateModule} from "@ngx-translate/core";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {SportsbookApiService} from "../../services/sportsbook-api.service";
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {take} from "rxjs/operators";
+import { TranslateModule } from "@ngx-translate/core";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { SportsbookApiService } from "../../services/sportsbook-api.service";
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { take } from "rxjs/operators";
 
 @Component({
   selector: 'app-add-setting',
   templateUrl: './add-setting.component.html',
-  styleUrls: ['./add-setting.component.scss']
+  styleUrls: ['./add-setting.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatSnackBarModule,
+    MatButtonModule,
+    TranslateModule,
+    MatCheckboxModule,
+    MatDialogModule
+  ],
 })
 export class AddSettingComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public partners = [];
-  public marketTypes = [];
-  public sportId;
-  public sports = [];
-  public path: string = 'markettypes';
-  public filter = {
+  formGroup: UntypedFormGroup;
+  partners = [];
+  marketTypes = [];
+  sportId;
+  sports = [];
+  path: string = 'markettypes';
+  filter = {
     "pageindex": 0,
     "pagesize": 100,
     SportIds: {},
   };
+  isSendingReqest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { TeaserId: number },
@@ -80,7 +95,7 @@ export class AddSettingComponent implements OnInit {
       if (data.Code === 0) {
         this.sports = data.ResponseObject;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -92,7 +107,7 @@ export class AddSettingComponent implements OnInit {
 
   getMarketTypes() {
     if (this.sportId) {
-      this.filter.SportIds = {IsAnd: true, ApiOperationTypeList: [{IntValue: this.sportId, OperationTypeId: 1}]}
+      this.filter.SportIds = { IsAnd: true, ApiOperationTypeList: [{ IntValue: this.sportId, OperationTypeId: 1 }] }
     }
     this.apiService.apiPost(this.path, this.filter)
       .pipe(take(1))
@@ -104,28 +119,9 @@ export class AddSettingComponent implements OnInit {
             }
           })
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
-}
-
-@NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatSnackBarModule,
-    MatButtonModule,
-    TranslateModule,
-    MatCheckboxModule,
-    MatDialogModule
-  ],
-  declarations: [AddSettingComponent]
-})
-export class AddSettingModule {
 }

@@ -85,24 +85,14 @@
       </mat-form-field>
     </ng-container>
 
-    <div class="field-content">
-      <mat-form-field class="calendar-picker start">
-        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'"
-          (dateChange)="onStartDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="pickerStart">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-      </mat-form-field>
-
-      <mat-form-field class="calendar-picker field-content-seccond-child" style="margin-left: 15px;">
-        <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'FinishTime'"
-          (dateChange)="onFinishDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-      </mat-form-field>
+    <div class="calendar-content">
+      <div class="calendar-picker">
+        <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
+      </div>
+      
+      <div class="calendar-picker field-content-seccond-child">
+        <app-date-time-picker formControlName="FinishTime"></app-date-time-picker>
+      </div>
     </div>
 
     <div class="field-content">

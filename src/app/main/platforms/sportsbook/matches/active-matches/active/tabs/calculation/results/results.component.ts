@@ -50,7 +50,7 @@ export class ResultsComponent implements OnInit {
   isEdit = false;
   partners: any[] = [];
   rowStyle;
-
+  integerPattern = '^[0-9]+$';
   EventType = {
     Goal: 1,
     YellowCard: 2,
@@ -196,6 +196,7 @@ export class ResultsComponent implements OnInit {
     this.apiService.apiPost('matches/updatescores', data).subscribe(data => {
       if (data.Code === 0) {
         SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
+        this.isEdit = false;
         this.getMatch();
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -206,6 +207,15 @@ export class ResultsComponent implements OnInit {
   onEditChange() {
     this.isEdit = false;
     this.getMatch();
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    const inputChar = event.key;
+    const pattern = /[0-9]/;
+
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+    }
   }
 
 }

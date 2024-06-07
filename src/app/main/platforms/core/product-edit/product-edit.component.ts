@@ -40,7 +40,8 @@ export class ProductEditComponent extends BaseGridComponent {
     {
       headerName: 'Common.Id',
       headerValueGetter: this.localizeHeader.bind(this),
-      field: 'Id', hide: true
+      field: 'Id', hide: true,
+      filter: false,
     },
     {
       headerName: 'Common.Name',
@@ -48,12 +49,7 @@ export class ProductEditComponent extends BaseGridComponent {
       field: 'Name',
       editable: true,
       onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-      filter: 'agTextColumnFilter',
-      filterParams: {
-        buttons: ['apply', 'reset'],
-        closeOnApply: true,
-        filterOptions: this.filterService.textOptions
-      },
+      filter: false,
     },
     {
       headerName: 'Common.Description',
@@ -70,7 +66,7 @@ export class ProductEditComponent extends BaseGridComponent {
       cellRenderer: (params) => {
         return params.data.State === 0 ? 'Inactive' : params.data.State === 1 ? 'Active' : '';
       },
-      filter: 'agBooleanColumnFilter',
+      filter: false,
     },
     {
       headerName: 'Common.View',

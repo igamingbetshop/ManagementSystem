@@ -31,7 +31,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGridSecond') agGridSecond: AgGridAngular;
-
+  isSendingReqest = false;
   partners: any[] = [];
   partnerId: number;
   sportId: number;
@@ -48,13 +48,13 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   };
 
   filter = {
-    "pageindex": 0,
-    "pagesize": 100,
+    PageIndex: 0,
+    PageSize: 5000,
     SportIds: {},
     PartnerId: undefined,
   };
+  
   filteredData;
-
   masterDetail;
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
@@ -73,7 +73,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
 
   detailCellRendererParams: any = {
-    // provide the Grid Options to use on the Detail Grid
     detailGridOptions: {
       rowHeight: 47,
       defaultColDef: {
@@ -368,9 +367,9 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         cellEditor: NumericEditorComponent,
       },
       {
-        headerName: 'Sport.SelectionsCount',
+        headerName: 'Sport.SuccessOutcomeCount',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'SelectionsCount',
+        field: 'SuccessOutcomeCount',
         resizable: true,
         sortable: true,
         editable: false,
@@ -648,8 +647,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     this.apiService.apiPost(this.updatePath, row).subscribe(data => {
       if (data.Code === 0) {
         this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
-        // this.getPage();
-        // this.getSecondGridData();
+        SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
@@ -661,8 +659,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     this.apiService.apiPost(this.updateSelectionType, row).subscribe(data => {
       if (data.Code === 0) {
         this.agGridSecond.api.getColumnDef('save').cellRendererParams.isDisabled = true;
-        this.getPage();
-        this.getSecondGridData();
+        SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
@@ -674,6 +671,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       SnackBarHelper.show(this._snackBar, { Description: 'Select Partner', Type: "error" });
       return;
     }
+    this.isSendingReqest = true;
     let row = this.agGrid.api.getSelectedRows()[0];
     let settings = {
       MarketTypeId: row.Id,
@@ -691,6 +689,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Descriptio, Type: "error" });
       }
+      this.isSendingReqest = false;
     })
   }
 
@@ -705,6 +704,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   }
 
   async addSelectionType() {
+    this.isSendingReqest = true;
     let id = +this.agGrid.api.getSelectedRows()[0].Id;
     const { AddSelectionTypesComponent } = await import('../market-types/add-selection-types/add-selection-types.component');
     const dialogRef = this.dialog.open(AddSelectionTypesComponent, { width: ModalSizes.SMALL, data: { Id: id } });
@@ -713,14 +713,12 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         this.apiService.apiPost(this.selectPath, { 'MarketTypeId': id })
           .pipe(take(1))
           .subscribe(data => {
-
             if (data.Code === 0) {
-
               this.rowData1 = data.Selections;
-
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
+            this.isSendingReqest = false;
           });
       }
     })
@@ -782,7 +780,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   }
 
   exportToCsv() {
-
     this.apiService.apiPost('/markettypes/exportmarkettypes', this.filter).pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         let iframe = document.createElement("iframe");

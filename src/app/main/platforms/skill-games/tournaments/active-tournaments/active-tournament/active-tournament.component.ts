@@ -26,6 +26,7 @@ export class ActiveTournamentComponent implements OnInit {
     { Id: 2, Name: 'VIP Tournament' },
     { Id: 3, Name: 'Sit&Go' }
   ]
+  isSendingReqest = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -82,15 +83,15 @@ export class ActiveTournamentComponent implements OnInit {
 
   onSubmit() {
     const obj = this.formGroup.getRawValue();
-
+    this.isSendingReqest = true;
     this.apiService.apiPost(this.path2, obj).subscribe(data => {
       if (data.ResponseCode === 0) {
         SnackBarHelper.show(this._snackBar, {Description: 'Success', Type: "success"});
         this.router.navigate(['/main/skillGames/tournaments/active-tournaments'])
-
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

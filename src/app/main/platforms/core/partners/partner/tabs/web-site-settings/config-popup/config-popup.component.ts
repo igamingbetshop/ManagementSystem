@@ -33,7 +33,6 @@ export class ConfigPopupComponent implements OnInit {
   public dataSource;
   displayedColumns: string[] = ['name', 'type', 'content', 'proxied', 'created_on', "delete"];
 
-
   constructor(public dialogRef: MatDialogRef<ConfigPopupComponent>,
     private apiService: CoreApiService,
     private _snackBar: MatSnackBar,

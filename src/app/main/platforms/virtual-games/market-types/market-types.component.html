@@ -15,7 +15,7 @@
 
     <div class="partner-dropdown">
       <mat-select
-      (selectionChange)="onGameChange($event)"
+      (selectionChange)="onGameChange($event.value)"
         placeholder="{{'SelectGame' | translate}}"
         panelClass="overlay-dropdown"
         disableOptionCentering>
@@ -44,41 +44,23 @@
       [masterDetail]="masterDetail"
       [detailCellRendererParams]="detailCellRendererParams"
       [animateRows]="true"
-      [components]="frameworkComponents"
-      [cacheBlockSize]="cacheBlockSize"
+      [paginationPageSize]="5000"
+      (paginationChanged)="onPaginationChanged($event)"
+      [pagination]="pagination"
+      [components]="nestedFrameworkComponents"
+      [cacheBlockSize]="5000"
       (gridReady)="onGridReady($event)"
-      (rowSelected)="onRowSelected($event)"
+      (rowClicked)="onRowSelected($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       rowSelection="single">
     </ag-grid-angular>
+
     </div>
 
   </div>
   <div class="right-panel">
-    <div class="grid-content">
-      <ag-grid-angular
-      id="finished-markets-2"
-      #agGrid1
-      class="ag-theme-balham"
-      [headerHeight]="33"
-      [rowHeight]="42"
-      [suppressCopyRowsToClipboard]="true"
-      [rowData]="rowData1"
-      [rowModelType]="rowModelType"
-      [columnDefs]="columnDefs2"
-      [defaultColDef]="defaultColDef"
-      [suppressRowClickSelection]="true"
-      [components]="frameworkComponents"
-      [sideBar]="sideBar"
-      [animateRows]="true"
-      [cacheBlockSize]="cacheBlockSize"
-      (gridReady)="onGridReady1($event)"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      rowSelection="single">
-    </ag-grid-angular>
-    </div>
+    <app-selections-grid [selectedRowId]="selectedRowId"></app-selections-grid>
   </div>
 </div>
 

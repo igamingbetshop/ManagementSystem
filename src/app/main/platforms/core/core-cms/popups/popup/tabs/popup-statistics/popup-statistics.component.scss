@@ -1,0 +1,10 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: auto;
+
+
+
+}

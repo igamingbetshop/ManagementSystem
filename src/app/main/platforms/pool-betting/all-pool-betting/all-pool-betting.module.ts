@@ -16,7 +16,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.module';
 
 @NgModule({
@@ -36,8 +35,6 @@ import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-bo
     AgGridModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
   ],
   declarations: [AllPoolBettingComponent]
 })

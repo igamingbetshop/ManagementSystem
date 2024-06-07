@@ -1,19 +1,19 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {GridRowModelTypes, ModalSizes} from "../../../../../../../core/enums";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService} from "../../../../../../../core/services";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {SportsbookApiService} from "../../../../services/sportsbook-api.service";
-import {take} from "rxjs/operators";
-import {AgBooleanFilterComponent} from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../../../../components/grid-common/checkbox-renderer.component";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { GridRowModelTypes, ModalSizes } from "../../../../../../../core/enums";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService } from "../../../../../../../core/services";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { SportsbookApiService } from "../../../../services/sportsbook-api.service";
+import { take } from "rxjs/operators";
+import { AgBooleanFilterComponent } from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../../../../components/grid-common/checkbox-renderer.component";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { IRowNode } from "ag-grid-community";
 
 @Component({
   selector: 'app-settings',
@@ -29,11 +29,11 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
   public frameworkComponents;
 
   constructor(private activateRoute: ActivatedRoute,
-              protected injector: Injector,
-              public configService: ConfigService,
-              public dialog: MatDialog,
-              private apiService: SportsbookApiService,
-              private _snackBar: MatSnackBar) {
+    protected injector: Injector,
+    public configService: ConfigService,
+    public dialog: MatDialog,
+    private apiService: SportsbookApiService,
+    private _snackBar: MatSnackBar) {
     super(injector);
     this.columnDefs = [
       {
@@ -160,36 +160,36 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
   }
 
   getSettings() {
-    this.apiService.apiPost('partners/getpartnersettings', {PartnerId: +this.partnerId})
+    this.apiService.apiPost('partners/getpartnersettings', { PartnerId: +this.partnerId })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.rowData = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
 
-  onCellValueChanged(event){
-    if(event.oldValue !== event.value){
+  onCellValueChanged(event) {
+    if (event.oldValue !== event.value) {
       let findedNode: IRowNode;
       let node = event.node.rowIndex;
       this.gridApi.forEachNode(nod => {
-        if(nod.rowIndex == node){
+        if (nod.rowIndex == node) {
           findedNode = nod;
         }
       })
       this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.gridApi.redrawRows({rowNodes: [findedNode]});
+      this.gridApi.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
   async addKey() {
-    const {AddKeyComponent} = await import('../keys/add-key/add-key.component');
+    const { AddKeyComponent } = await import('../keys/add-key/add-key.component');
     const dialogRef = this.dialog.open(AddKeyComponent, {
       width: ModalSizes.MEDIUM,
-      data: {type: 2}
+      data: { type: 2 }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -216,7 +216,7 @@ export class SettingsComponent extends BasePaginatedGridComponent implements OnI
           this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
           this.getSettings();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }

@@ -28,13 +28,14 @@ const commentTypeKinds = [
 export class CommentTypeComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
 
-  public rowData = [];
-  public path: string = 'commenttypes';
-  public updatePath: string = 'commenttypes/update';
-  public removePath: string = 'commenttypes/remove';
+  rowData = [];
+  path: string = 'commenttypes';
+  updatePath: string = 'commenttypes/update';
+  removePath: string = 'commenttypes/remove';
 
-  public frameworkComponents;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  frameworkComponents;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  isSendingReqest = false;
 
   constructor(
     private apiService: SportsbookApiService,

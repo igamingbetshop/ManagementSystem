@@ -84,6 +84,11 @@ export class AllAffiliatesComponent extends BasePaginatedGridComponent implement
         field: 'NickName',
       },
       {
+        headerName: 'Clients.ClientId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'ClientId',
+      },
+      {
         headerName: 'Common.Gender',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Gender',

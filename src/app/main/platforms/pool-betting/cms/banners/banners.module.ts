@@ -7,7 +7,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule } from "@ngx-translate/core";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -34,8 +33,6 @@ const routes: Routes = [
     MatNativeDateModule,
     AgGridModule,
     MatSnackBarModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
     RouterModule.forChild(routes),
     TranslateModule,
     MatSelectModule,

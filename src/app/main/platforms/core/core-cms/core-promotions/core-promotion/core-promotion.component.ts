@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute, Router} from '@angular/router';
-import {take} from 'rxjs/operators';
-import {Controllers, Methods} from 'src/app/core/enums';
-import {CommonDataService, ConfigService} from 'src/app/core/services';
-import {CoreApiService} from '../../../services/core-api.service';
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
+import { Component, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { Controllers, Methods } from 'src/app/core/enums';
+import { CommonDataService, ConfigService } from 'src/app/core/services';
+import { CoreApiService } from '../../../services/core-api.service';
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
 import { PromotionsService } from '../core-promotions.service';
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, DEVICE_TYPES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-core-promotion',
@@ -39,7 +39,7 @@ export class CorePromotionComponent implements OnInit {
   imageSmall: any;
   startDates: any;
   finishDates: any;
-  deviceTypes = [];
+  deviceTypes = DEVICE_TYPES;
   childe: any;
 
   constructor(
@@ -57,7 +57,6 @@ export class CorePromotionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getDeviceTypes();
     this.createForm();
     this.getPromotionTypes();
     this.id = +this.activateRoute.snapshot.queryParams.Id;
@@ -75,39 +74,22 @@ export class CorePromotionComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.promotionTypes = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-        }
-      });
-  }
-
-  getDeviceTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.deviceTypes = data.ResponseObject;          
-        } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
   getPromotionById() {
-    this.apiService.apiPost(this.configService.getApiUrl, {Id: this.id}, true, Controllers.CONTENT, Methods.Get_Promotion_By_Id)
+    this.apiService.apiPost(this.configService.getApiUrl, { Id: this.id }, true, Controllers.CONTENT, Methods.Get_Promotion_By_Id)
       .pipe(take(1))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.promotion = data.ResponseObject;
-
           this.image = "https://" + this.promotion?.SiteUrl + '/assets/images/promotions/' + this.promotion?.ImageName;
-
           this.imageMedium = "https://" + this.promotion?.SiteUrl + '/assets/images/promotions/medium/' + this.promotion?.ImageName;
-
           this.imageSmall = "https://" + this.promotion?.SiteUrl + '/assets/images/promotions/small/' + this.promotion?.ImageName;
-
           this.promotion.StatusName = this.promotion.State === 1 ? 'Active' : this.promotion.State === 2 ? 'Inactive' : '';
-          this.promotion.DeviceName = this.deviceTypes.find(x => x.Id === this.promotion.DeviceType)?.Name;
+          this.promotion.DeviceName = this.deviceTypes.find(x => x.Id === this.promotion.DeviceType)?.Name || 'All';
           this.promotion.TypeName = this.promotionTypes.find(x => x.Id === this.promotion.Type)?.Name;
           this.partnerId = this.promotion.PartnerId;
           this.formGroup.patchValue(this.promotion);
@@ -124,13 +106,13 @@ export class CorePromotionComponent implements OnInit {
           this.LanguageNames = this.promotion?.Languages?.Names;
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
 
   getSegments(id) {
-    this.apiService.apiPost(this.configService.getApiUrl, {PartnerId: id},
+    this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: id },
       true, Controllers.CONTENT, Methods.GET_SEGMENTS)
       .pipe(take(1))
       .subscribe(data => {
@@ -139,7 +121,7 @@ export class CorePromotionComponent implements OnInit {
           this.setSegmentsEntytes();
           this.setLanguageEntytes();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -151,7 +133,7 @@ export class CorePromotionComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.environments = data.ResponseObject;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -269,8 +251,9 @@ export class CorePromotionComponent implements OnInit {
     request.PartnerId = this.partnerId;
     request.ParentId = this.promotion.ParentId;
     request.Id = this.id;
-    request.Segments = {Ids: this.Segments, Type: +this.SegmentType};
-    request.Languages = {Type: +this.LanguageType, Names: this.LanguageNames};
+    if(request.DeviceType == -1) {
+      request.DeviceType = null;
+    }
     this.apiService.apiPost(this.configService.getApiUrl, request, true, Controllers.CONTENT, Methods.SAVE_PROMOTION)
       .pipe(take(1))
       .subscribe(data => {
@@ -279,14 +262,14 @@ export class CorePromotionComponent implements OnInit {
           this.isEdit = false;
           this.languageEntites = [];
           this.segmentesEntites = [];
-          SnackBarHelper.show(this._snackBar, {Description: 'success', Type: "success"});
+          SnackBarHelper.show(this._snackBar, { Description: 'success', Type: "success" });
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
 
-  onNavigateToTromotions() {
+  onNavigateToPromotions() {
     this.promotionsService.update(this.promotion);
     this.router.navigate(['/main/platform/cms/promotions'])
   }

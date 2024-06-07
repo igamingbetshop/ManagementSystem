@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
@@ -18,8 +18,8 @@ import { LocalStorageService } from '../../../../../core/services';
 import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes, GridMenuIds } from 'src/app/core/enums';
 import { formattedNumber } from "../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import {ExportService} from "../../services/export.service";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-bet-bet-shops',
@@ -228,7 +228,6 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
     public dialog: MatDialog,
     public dateAdapter: DateAdapter<Date>,
     private localStorageService: LocalStorageService,
-    private changeDetector: ChangeDetectorRef,
     private exportService:ExportService
   ) {
     super(injector);
@@ -550,7 +549,7 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
   }
 
   ngOnInit() {
-    this.startDate();
+    this.setTime();
     this.gridStateName = 'bets-betshop-bets-grid-state';
     this.partners = this.commonDataService.partners;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
@@ -559,6 +558,12 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
     this.GetDocumentState();
     this.GetBetTypes();
     this.GetProviders();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   GetProviders() {
@@ -613,16 +618,11 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
       });
   }
 
-  onPartnerChange(value) {
-    this.partnerId = null;
-    this.partnerId = value;
-    this.go();
-  }
 
   onBetshioChange(value) {
     this.betshopId = null;
     this.betshopId = value;
-    this.go();
+    this.getCurrentPage();
   }
 
   getDateTime(): Date {
@@ -631,34 +631,18 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
     dateTime.setMinutes(0);
     dateTime.setSeconds(0);
     dateTime.setMilliseconds(0);
-
     return dateTime;
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  go() {
-    this.agGrid.api.refreshServerSideStore({ purge: true });
   }
 
   onRowGroupOpened(params) {
@@ -696,7 +680,7 @@ export class BetBetShopsComponent extends BasePaginatedGridComponent implements 
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.go();
+        this.getCurrentPage();
       }
     });
   }

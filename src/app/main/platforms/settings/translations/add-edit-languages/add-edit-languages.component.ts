@@ -14,11 +14,12 @@ import {Controllers, Methods} from "../../../../../core/enums";
   styleUrls: ['./add-edit-languages.component.scss']
 })
 export class AddEditLanguagesComponent implements OnInit {
-  public translationItemId;
+  translationItemId;
   private translationId;
-  public originTranslations;
-  public translations = [];
-  public partnerId;
+  originTranslations;
+  translations = [];
+  partnerId;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditLanguagesComponent>,
@@ -55,6 +56,7 @@ export class AddEditLanguagesComponent implements OnInit {
     if (changed.length === 0) {
       return;
     } else {
+      this.isSendingReqest = true;
       this.apiService.apiPost(this.configService.getApiUrl, changed, true, Controllers.BASE,
         Methods.SAVE_TRANSLATION_ENTRIES).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
@@ -62,6 +64,7 @@ export class AddEditLanguagesComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false;
       });
     }
   }

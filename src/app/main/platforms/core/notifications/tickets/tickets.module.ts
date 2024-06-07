@@ -12,7 +12,6 @@ import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-bo
 import { AgGridModule } from 'ag-grid-angular';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CoreSignalRService } from "../../services/core-signal-r.service";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -38,8 +37,6 @@ import { PartnerDateFilterComponent } from "../../../../components/partner-date-
         ReactiveFormsModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
         AgGridModule,
         PartnerDateFilterComponent
     ]

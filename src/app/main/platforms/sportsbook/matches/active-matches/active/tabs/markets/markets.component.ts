@@ -20,7 +20,7 @@ import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe"
 import { LocalStorageService } from "../../../../../../../../core/services";
 import { GridRowModelTypes, OddsTypes, ModalSizes } from 'src/app/core/enums';
 import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
-import { SETTELMENT_STATUSES } from 'src/app/core/constantes/statuses';
+import { BET_SELECTION_STATUSES, SETTELMENT_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-markets',
@@ -55,14 +55,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
   pageConfig: any = {};
 
-  statusModel = [
-    { 'Name': "Uncalculated", 'Id': 1 },
-    { 'Name': "Won", 'Id': 2 },
-    { 'Name': "Lost", 'Id': 3 },
-    { 'Name': "Returned", 'Id': 4 },
-    { 'Name': "PartiallyWon", 'Id': 5 },
-    { 'Name': "PartiallyLost", 'Id': 6 },
-  ];
+  statusModel = BET_SELECTION_STATUSES;
 
   rowData = [];
   rowData1 = [];
@@ -533,6 +526,18 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
           },
         },
         {
+          headerName: 'Sport.GoLiveCoefficient',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'GoLiveCoefficient',
+          resizable: true,
+          sortable: true,
+          floatingFilter: true,
+          suppressMenu: true,
+          floatingFilterComponentParams: {
+            suppressFilterButton: true,
+          },
+        },
+        {
           headerName: 'Sport.LimitLeft',
           headerValueGetter: this.localizeHeader.bind(this),
           field: 'LimitLeft',
@@ -741,6 +746,19 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         this.getPage();
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+
+  async onBuildMarket() {
+    const { BuildMarketComponent } = await import('../markets/build-market/build-market.component');
+    const dialogRef = this.dialog.open(BuildMarketComponent, {
+      width: ModalSizes.LARGE,
+      data: { PartnerId: this.pageConfig.PartnerId, MatchId: this.pageConfig.MatchId }
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data) {
+        this.getPage();
       }
     });
   }

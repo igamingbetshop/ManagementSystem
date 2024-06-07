@@ -12,10 +12,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { AgGridModule } from "ag-grid-angular";
 import { TranslateModule } from "@ngx-translate/core";
 import { MainComponent } from "./main.component";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { MatNativeDateModule } from "@angular/material/core";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { NgxMatDatetimePickerModule } from "@angular-material-components/datetime-picker";
 
 const routes: Routes = [
   {
@@ -40,9 +37,6 @@ const routes: Routes = [
     AgGridModule,
     TranslateModule,
     FormsModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    NgxMatDatetimePickerModule,
   ],
   declarations: [MainComponent]
 })

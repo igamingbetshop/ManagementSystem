@@ -13,12 +13,10 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-  NgxMatTimepickerModule,
-} from '@angular-material-components/datetime-picker';
 import { SportsbookApiService } from '../../../../services/sportsbook-api.service';
+import { take } from 'rxjs';
+import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
   standalone: true,
@@ -38,10 +36,8 @@ import { SportsbookApiService } from '../../../../services/sportsbook-api.servic
     MatNativeDateModule,
     MatDatepickerModule,
     AddMatchComponent,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    NgxMatTimepickerModule,
-    MatDialogModule
+    MatDialogModule,
+    DateTimePickerComponent
   ],
 })
 export class AddMatchComponent implements OnInit {
@@ -49,7 +45,7 @@ export class AddMatchComponent implements OnInit {
   providers: any[] = [];
   competition: any;
   private index = 1;
-
+  isSendingReqest = false;
   TeamIds: TeamInput[] = [{ Id: 1, Value: '' }];
 
   matchTypes = [
@@ -89,7 +85,7 @@ export class AddMatchComponent implements OnInit {
       Type: ['1']
     });
 
-    if(this.competition.SportId) {
+    if (this.competition.SportId) {
       this.formGroup.controls['SportId'].disable();
     }
     this.formGroup.controls['RegionName'].disable();
@@ -129,7 +125,7 @@ export class AddMatchComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-
+    this.isSendingReqest = true;
     const value = this.TeamIds.map((v) => {
       return v.Value;
     }).filter(el => el != '');
@@ -138,8 +134,18 @@ export class AddMatchComponent implements OnInit {
     delete obj.RegionName;
     delete obj.CompetitionName;
     obj.TeamIds = value;
-    this.dialogRef.close(obj);
+
+    this.apiService.apiPost('matches/creatematch', obj)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.Code === 0) {
+          this.dialogRef.close(true);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
+
 }
 export interface TeamInput {
   Id: number;

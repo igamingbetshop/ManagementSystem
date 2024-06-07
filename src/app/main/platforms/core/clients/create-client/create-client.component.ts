@@ -13,11 +13,6 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatButtonModule } from "@angular/material/button";
 import { MatSnackBar, } from "@angular/material/snack-bar";
-import {
-  NgxMatNativeDateModule,
-  NgxMatDatetimePickerModule,
-  NgxMatTimepickerModule,
-} from '@angular-material-components/datetime-picker';
 
 import {
   AbstractControlOptions,
@@ -51,9 +46,6 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
     MatCheckboxModule,
     MatButtonModule,
     MatDatepickerModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    NgxMatTimepickerModule,
     FormsModule,
     MatDialogModule
   ],
@@ -177,7 +169,6 @@ export class CreateClientComponent implements OnInit {
     subMenuItems.forEach((item) => {
       let obj = {};
       const href = JSON.parse(item.Href);
-
       obj["Required"] = !!(+href.mandatory);
       if (href.regEx) {
         const regEx = href.regEx;
@@ -203,7 +194,6 @@ export class CreateClientComponent implements OnInit {
 
       if (item.Type === 'MobileData') {
         let obj2 = {};
-
         obj2["Required"] = !!(+href.mandatory);
         obj2["Title"] = 'MobileNumber';
         obj2["Type"] = 'mobileNumber';
@@ -249,7 +239,7 @@ export class CreateClientComponent implements OnInit {
   }
 
   private getRegions() {
-    this.apiService.apiPost(this.configService.getApiUrl, { TypeId: null }, true,
+    this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
       Controllers.REGION, Methods.GET_REGIONS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           data.ResponseObject.forEach(r => {

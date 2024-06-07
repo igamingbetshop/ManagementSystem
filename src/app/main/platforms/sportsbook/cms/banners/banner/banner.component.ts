@@ -19,7 +19,7 @@ export class BannerComponent implements OnInit {
   formGroup: UntypedFormGroup;
   banner;
   isEdit = false;
-
+  isSendingReqest = false;
   bannerVisibilityTypes = [
     { id: 0, name: 'Always' },
     { id: 1, name: 'Logged Out' },
@@ -128,16 +128,17 @@ export class BannerComponent implements OnInit {
     if (obj.Visibility == 0) {
       obj.Visibility = null;
     }
+    this.isSendingReqest = true;
     obj.PartnerId = this.partnerId;
     this.apiService.apiPost('cms/savebanner', obj).subscribe(data => {
       if (data.Code === 0) {
         this.getBanner();
         this.isEdit = false;
         SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
-
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

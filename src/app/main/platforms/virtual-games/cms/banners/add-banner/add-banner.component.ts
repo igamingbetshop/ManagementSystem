@@ -1,23 +1,20 @@
-import {Component, NgModule, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
-import {TranslateModule} from "@ngx-translate/core";
-import {ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
-
-import {MatSelectModule} from "@angular/material/select";
-
-import {MatInputModule} from "@angular/material/input";
-
-import {MatButtonModule} from "@angular/material/button";
-
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {DateAdapter, MatNativeDateModule} from "@angular/material/core";
-import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {VirtualGamesApiService} from "../../../services/virtual-games-api.service";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+import { Component, NgModule, OnInit } from '@angular/core';
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { TranslateModule } from "@ngx-translate/core";
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { DateAdapter, MatNativeDateModule } from "@angular/material/core";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { VirtualGamesApiService } from "../../../services/virtual-games-api.service";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-add-banner',
@@ -47,31 +44,32 @@ export class AddBannerComponent implements OnInit {
   public partnerId = null;
   public formGroup: UntypedFormGroup;
   public bannerTypes = [
-    {id: 1, name: 'Fragmental'},
-    {id: 2, name: 'Widget'},
-    {id: 4, name: 'SportSpecificWeb'},
-    {id: 5, name: 'SportSpecificMobile'}
+    { id: 1, name: 'Fragmental' },
+    { id: 2, name: 'Widget' },
+    { id: 4, name: 'SportSpecificWeb' },
+    { id: 5, name: 'SportSpecificMobile' }
   ];
   public types = [
-    {Id: '1', Name: 'Home Page'},
-    {Id: '2', Name: 'Mobile Home Page'},
+    { Id: '1', Name: 'Home Page' },
+    { Id: '2', Name: 'Mobile Home Page' },
   ]
   public bannerTypeId: number = 1;
 
   public bannerVisibilityTypes = [
-    {id: 'null', name: 'Always'},
-    {id: 1, name: 'Logged Out'},
-    {id: 2, name: 'Logged In'},
-    {id: 3, name: 'No Deposit'},
-    {id: 4, name: 'One Deposit Only'},
-    {id: 5, name: 'Two Or More Deposits'}
+    { id: 'null', name: 'Always' },
+    { id: 1, name: 'Logged Out' },
+    { id: 2, name: 'Logged In' },
+    { id: 3, name: 'No Deposit' },
+    { id: 4, name: 'One Deposit Only' },
+    { id: 5, name: 'Two Or More Deposits' }
   ];
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<AddBannerComponent>,
-              private fb: UntypedFormBuilder,
-              private _snackBar: MatSnackBar,
-              public apiService: VirtualGamesApiService,
-              public dateAdapter: DateAdapter<Date>) {
+    private fb: UntypedFormBuilder,
+    private _snackBar: MatSnackBar,
+    public apiService: VirtualGamesApiService,
+    public dateAdapter: DateAdapter<Date>) {
     this.dateAdapter.setLocale('en-GB');
   }
 
@@ -80,7 +78,7 @@ export class AddBannerComponent implements OnInit {
       if (data.ResponseCode === 0) {
         this.sports = data.ResponseObject;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
     this.getPartners();
@@ -113,7 +111,7 @@ export class AddBannerComponent implements OnInit {
       if (data.ResponseCode === 0) {
         this.partners = data.ResponseObject.Entities;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }
@@ -123,7 +121,7 @@ export class AddBannerComponent implements OnInit {
       if (data.ResponseCode === 0) {
         this.sports = data.ResponseObject;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }
@@ -202,11 +200,15 @@ export class AddBannerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
-    console.log(obj);
-    this.dialogRef.close(obj);
-
+      this.apiService.apiPost('cms/addbanner', obj).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(true);
+        } else {
+          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        }
+      });
   }
 
 }

@@ -12,10 +12,10 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatSelectModule} from "@angular/material/select";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {TranslateModule} from "@ngx-translate/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {CorrectionModalComponent} from "./correction-modal/correction-modal.component";
+import { PartnerDateFilterComponent } from "../../../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -24,27 +24,26 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    MatIconModule,
-    MatButtonModule
-  ],
-  declarations: [CorrectionsComponent, CorrectionModalComponent],
-  providers: [DatePipe]
+    declarations: [CorrectionsComponent, CorrectionModalComponent],
+    providers: [DatePipe],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        MatFormFieldModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        TranslateModule,
+        MatIconModule,
+        MatButtonModule,
+        PartnerDateFilterComponent
+    ]
 })
 
 export class CorrectionsModule {

@@ -15,11 +15,12 @@ import {Controllers, Methods} from "../../../../../core/enums";
   styleUrls: ['./add-edit-translation.component.scss']
 })
 export class AddEditTranslationComponent implements OnInit {
-  public partnerId;
-  public dialogData;
-  public formGroup: UntypedFormGroup;
-  public action: string;
-
+  partnerId;
+  dialogData;
+  formGroup: UntypedFormGroup;
+  action: string;
+  isSendingReqest = false;
+  
   constructor(
     public dialogRef: MatDialogRef<AddEditTranslationComponent>,
     private apiService: CoreApiService,
@@ -51,6 +52,7 @@ export class AddEditTranslationComponent implements OnInit {
   onSubmit() {
     const requestBody = this.formGroup.getRawValue();
     requestBody.PartnerId = this.partnerId;
+    this.isSendingReqest = true;
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true, Controllers.CONTENT,
       Methods.SAVE_ADMIN_TRANSLATION).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -58,6 +60,7 @@ export class AddEditTranslationComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

@@ -1,6 +1,5 @@
 <div mat-dialog-title>
   <div class="title">{{'Partners.CopyWebSiteSettings' | translate}}</div>
-
   <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
 </div>
 
@@ -23,5 +22,5 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+  <button class="modal-primary-btn" [disabled]="formGroup.invalid || isSendingReqest" (click)="submit()">{{'Common.Save' | translate}}</button>
 </div>

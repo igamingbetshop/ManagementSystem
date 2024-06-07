@@ -1,0 +1,55 @@
+<div class="container">
+
+  <app-partner-date-filter
+    [title]="'Reports.ReportByAgents'"
+    [partners]="'CorePlatform'"
+    (toDateChange)="onDateChange($event)"
+  />
+  <div class="grid-content">
+    <ag-grid-angular
+      id="users"
+      [class.hide-grid]="loadingUserState"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [autoGroupColumnDef]="autoGroupColumnDef"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [isServerSideGroup]="isServerSideGroup"
+      [getServerSideGroupKey]="getServerSideGroupKey"
+      [treeData]="true"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      [sideBar]="sideBar"
+      [suppressCopyRowsToClipboard]="true"
+      [animateRows]="true"
+      (paginationChanged)="onPaginationChanged($event)"
+      [enableBrowserTooltips]="enableBrowserTooltips"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="multiple">
+    </ag-grid-angular>
+
+    <div class="pages-sizes">
+      <mat-select
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+</div>

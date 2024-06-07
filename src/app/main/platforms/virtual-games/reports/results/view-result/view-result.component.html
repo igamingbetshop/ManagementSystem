@@ -157,14 +157,18 @@
           <div class="first-hand">{{'VirtualGames.DrawDate' | translate}}</div>
           <div class="third-hand" *ngIf="!isEditModeDrawDate">{{data?.drawDate | date:'dd/MM/yyyy HH:mm'}}</div>
           <div lass="third-hand" *ngIf="isEditModeDrawDate">
-            <mat-form-field>
+            <!-- <mat-form-field>
               <input matInput [ngxMatDatetimePicker]="picker" [(ngModel)]="CurrentDrawDate" (dateChange)="onDrawDateChange($event)">
               <mat-datepicker-toggle matSuffix [for]="picker">
                 <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
               </mat-datepicker-toggle>
               <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
-            </mat-form-field>
+            </mat-form-field> -->
+            <!-- TODO -->
           </div>
+          <div class="form-field form-calendar" *ngIf="isEditModeDrawDate">
+            <app-date-time-picker [(ngModel)]="CurrentDrawDate"></app-date-time-picker>
+        </div>
         </div>
       </div>
 

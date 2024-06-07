@@ -96,7 +96,7 @@ export const categories = localStorage.getItem("adminmenu")
 //             Name: 'Users.Users&Agents', Icon: "next_week", NestedData: [
 
 //               {Name: 'Reports.ReportByUserTransactions', Icon: "manage_history", RedirectUrl: '/main/platform/reports/users-and-agents/report-by-user-transactions'},
-//               {Name: 'Reports.ReportByAgentTransfers', Icon: "manage_history", RedirectUrl: '/main/platform/reports/users-and-agents/report-by-agent-transfers'},
+//               {Name: 'Reports.ReportByAgentTransfers', Icon: "manage_history", RedirectUrl: '/main/platform/reports/users-and-agents/report-by-agent-transactions'},
 //             ]
 //           },
 //           {
@@ -230,7 +230,7 @@ export const categories = localStorage.getItem("adminmenu")
 //           {Name: 'Currencies.Currencies', Icon: "currency_exchange", RedirectUrl: '/main/sportsbook/common/currencies'},
 //           {Name: 'Sport.PermissibleOdds', Icon: "smart_toy", RedirectUrl: '/main/sportsbook/common/permissible-odds'},
 //           {Name: 'Common.Coins', Icon: "toll", RedirectUrl: '/main/sportsbook/common/coins'},
-//         ]        
+//         ]
 //       },
 //     ]
 //   },

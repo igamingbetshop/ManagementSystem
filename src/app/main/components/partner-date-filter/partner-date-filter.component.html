@@ -7,68 +7,67 @@
   <div class="contianer-wrap">
     @if ( !!liveUpdateBTN() ) {
     <button mat-stroked-button class="stream-btn"
-      [ngClass] = "{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected}"
+      [ngClass]="{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected}"
       (click)="toggleLiveUpdate()">
-      {{ isLiveUpdateOn ? ('Reports.LiveUpdatesOff' | translate)  : ('Reports.LiveUpdatesOn' | translate) }}
-      </button>
-  
+      {{ isLiveUpdateOn ? ('Reports.LiveUpdatesOff' | translate) : ('Reports.LiveUpdatesOn' | translate) }}
+    </button>
     }
-  
+
     @defer (when partners() === "CorePlatform") {
     <app-core-partners-select (toPartnerChange)="getByPartnerData($event)" />
     }
-  
+
     @defer (when partners() === "Sportsbook") {
-      <app-sport-partners-select (toPartnerChange)="getByPartnerData($event)" />
-      }
-  
+    <app-sport-partners-select (toPartnerChange)="getByPartnerData($event)" />
+    }
+
     @defer (when !!sportChange()) {
-      <app-sport-select (toSportChange)="onSportChange($event)" />
+    <app-sport-select (toSportChange)="onSportChange($event)" />
     }
-  
+
     @defer (when !!betCategory()) {
-      <app-bet-category-select (toBetCategoryChange)="onBetCategoryChange($event)" />
+    <app-bet-category-select (toBetCategoryChange)="onBetCategoryChange($event)" />
     }
-  
+
     @defer (when !!betStatuses()) {
-      <app-bet-status-select (toBetStatusChange)="onBetStatusChange($event)" />
+    <app-bet-status-select (toBetStatusChange)="onBetStatusChange($event)" />
     }
-    
+
+    @if (betShopGroups()) {
+      <app-bet-shops-select (toBetShopsChange)="onBetShopChange($event)" />
+    }
+
     @if (porviders()) {
-      <div class="partner-dropdown">
-        <mat-select
-          (selectionChange)="onProviderChange($event.value)"
-          placeholder="{{'Sport.SelectProvider' | translate}}"
-          panelClass="overlay-dropdown"
-          disableOptionCentering>
-          <mat-option  [value]='null'>{{'Sport.SelectProvider' | translate}}</mat-option>
-          <mat-option *ngFor="let provider of porviders()"  [value]="provider.Id">{{provider.Name}}</mat-option>
-        </mat-select>
-      </div>
+    <div class="partner-dropdown">
+      <mat-select (selectionChange)="onProviderChange($event.value)"
+        placeholder="{{'Sport.SelectProvider' | translate}}" panelClass="overlay-dropdown" disableOptionCentering>
+        <mat-option [value]='null'>{{'Sport.SelectProvider' | translate}}</mat-option>
+        <mat-option *ngFor="let provider of porviders()" [value]="provider.Id">{{provider.Name}}</mat-option>
+      </mat-select>
+    </div>
     }
-  
-  
+
     @defer (when hasPeyments()) {
-      <app-core-payments-select (onPaymentsChange)="onPaymentsChange($event)" />
+    <app-core-payments-select (onPaymentsChange)="onPaymentsChange($event)" />
     }
-  
+
     @defer (when !!accounts()) {
-      <app-core-accounts-select [clientId]="accounts()['clientId']" (toAccountChange)="onAccountTypeChange($event)" />
+    <app-core-accounts-select [clientId]="accounts()['clientId']" (toAccountChange)="onAccountTypeChange($event)" />
     }
-  
+
     @if (checkBoxText()) {
     <mat-checkbox labelPosition="before" color="primary" (change)="onCheckBoxClick($event)">{{checkBoxTextTranslated}}
     </mat-checkbox>
     }
-  
+
     <div class="date-time-tabs">
       @if (allTimesFilter()) {
-        <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button
-          (click)="selectTime('All Times')">{{'Common.AllTimes' | translate }}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='All Times'" mat-stroked-button
+        (click)="selectTime('All Times')">{{'Common.AllTimes' | translate }}</button>
       }
       @if (lastYearFilter()) {
-        <button class="tab-btn" [class.selected-time]="selectedItem ==='LastYear'" mat-stroked-button
-          (click)="selectTime('LastYear')">{{'Common.LastYear' | translate }}</button>
+      <button class="tab-btn" [class.selected-time]="selectedItem ==='LastYear'" mat-stroked-button
+        (click)="selectTime('LastYear')">{{'Common.LastYear' | translate }}</button>
       }
       <button class="tab-btn" [class.selected-time]="selectedItem ==='month'" mat-stroked-button
         (click)="selectTime('month')">{{'Common.Month' | translate }}</button>
@@ -79,18 +78,21 @@
       <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button
         (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
     </div>
-  
-  
-    <div class="calendar-picker" Dropdown (openedDropdown)="onDropdownOpen($event, dropdownContent)">
-      <input matInput type="datetime-local" #dropdownContent (ngModelChange)="onStartDateChange($event)"
-        name="meeting-time" [ngModel]="formatDateTime(fromDate)">
+
+    <div class="calendar-picker">
+      <app-date-time-picker 
+       [dateTime]="formatDateTime(fromDate)"
+       (dateTimeChange)="onStartDateChange($event)">
+    </app-date-time-picker>
     </div>
-  
-    <div class="calendar-picker" DropdownEnd (openedDropdown)="onDropdownOpen($event, dropdownEndContent)">
-      <input matInput type="datetime-local" #dropdownEndContent (ngModelChange)="onEndDateChange($event)"
-        name="meeting-time" [ngModel]="formatDateTime(toDate)">
+
+    <div class="calendar-picker">
+      <app-date-time-picker 
+        [dateTime]="formatDateTime(toDate)"
+        (dateTimeChange)="onEndDateChange($event)">
+      </app-date-time-picker>
     </div>
-  
+
     <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>
 
   </div>

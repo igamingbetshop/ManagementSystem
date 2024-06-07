@@ -20,7 +20,9 @@
         <div class="form-field form-dropdown">
           <mat-select
           [formControlName]="'Status'">
-          <mat-option *ngFor="let state of status" [value]="state.Id">{{state.Name}}</mat-option>
+          @for (state of status; track $index) {
+            <mat-option [value]="state.Id">{{state.Name}}</mat-option>
+          }
         </mat-select>
         </div>
       </div>
@@ -31,7 +33,9 @@
         <div class="form-field form-dropdown">
           <mat-select
           [formControlName]="'WinAccountTypeId'">
-          <mat-option *ngFor="let type of clientType" [value]="type.Id">{{type.Name}}</mat-option>
+          @for (type of clientType; track $index) {
+            <mat-option [value]="type.Id">{{type.Name}}</mat-option>
+          }
         </mat-select>
         </div>
       </div>
@@ -44,13 +48,15 @@
         </div>
       </div>
 
-      <div *ngIf="commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14">
-        <div class="first-hand">{{'Bonuses.ResetOnWithdraw' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.ResetOnWithdraw}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'ResetOnWithdraw'">{{'Bonuses.ResetOnWithdraw' | translate}}</mat-checkbox>
+      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14) {
+        <div>
+          <div class="first-hand">{{'Bonuses.ResetOnWithdraw' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.ResetOnWithdraw}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'ResetOnWithdraw'">{{'Bonuses.ResetOnWithdraw' | translate}}</mat-checkbox>
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
@@ -92,29 +98,35 @@
         </div>
       </div>
 
-      <div *ngIf="commonSettings?.BonusTypeId == 10 || commonSettings?.BonusTypeId == 13">
-        <div class="first-hand">{{'Bonuses.LinkedCampaign' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.LinkedCampaign}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'LinkedCampaign'">{{'Bonuses.LinkedCampaign' | translate}}</mat-checkbox>
+      @if (commonSettings?.BonusTypeId == 10 || commonSettings?.BonusTypeId == 13) {
+        <div>
+          <div class="first-hand">{{'Bonuses.LinkedCampaign' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.LinkedCampaign}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'LinkedCampaign'">{{'Bonuses.LinkedCampaign' | translate}}</mat-checkbox>
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="commonSettings?.BonusTypeId == 1 || commonSettings?.BonusTypeId == 3">
-        <div class="first-hand">{{'Bonuses.PeriodInHours' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.Period}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'Period'">
+      @if (commonSettings?.BonusTypeId == 1 || commonSettings?.BonusTypeId == 3) {
+        <div>
+          <div class="first-hand">{{'Bonuses.PeriodInHours' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.Period}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'Period'">
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="commonSettings?.BonusTypeId == 1 || commonSettings?.BonusTypeId == 3">
-        <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.Percent}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'Percent'">
+      @if (commonSettings?.BonusTypeId == 1 || commonSettings?.BonusTypeId == 3) {
+        <div >
+          <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.Percent}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'Percent'">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
@@ -134,13 +146,15 @@
         </div>
       </div>
 
-      <div *ngIf="commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14">
-        <div class="first-hand">{{'Bonuses.ValidForAwardingInHours' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.ValidForAwarding}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'ValidForAwarding'">
+      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14) {
+        <div >
+          <div class="first-hand">{{'Bonuses.ValidForAwardingInHours' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.ValidForAwarding}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'ValidForAwarding'">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Type' | translate}}</div>
@@ -150,14 +164,15 @@
         </div>
       </div>
 
-
-      <div *ngIf="commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14">
-        <div class="first-hand">{{'Bonuses.ValidForSpendingInHours' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.ValidForSpending}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'ValidForSpending'">
+      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14) {
+        <div >
+          <div class="first-hand">{{'Bonuses.ValidForSpendingInHours' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.ValidForSpending}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'ValidForSpending'">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.Sequence' | translate}}</div>
@@ -215,13 +230,15 @@
         </div>
       </div>
 
-      <div *ngIf="commonSettings?.BonusTypeId === 10 || commonSettings?.BonusTypeId === 13">
-        <div class="first-hand">{{'Bonuses.PercentFromBonusAmount' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.Percent}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'Percent'">
+      @if (commonSettings?.BonusTypeId === 10 || commonSettings?.BonusTypeId === 13) {
+        <div>
+          <div class="first-hand">{{'Bonuses.PercentFromBonusAmount' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.Percent}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'Percent'">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.LinkedBonusId' | translate}}</div>
@@ -231,174 +248,221 @@
         </div>
       </div>
 
-      <div *ngIf="commonSettings?.BonusTypeId === 10 || commonSettings?.BonusTypeId === 13">
-        <div class="first-hand">{{'Bonuses.FreezeBonusBalance' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.FreezeBonusBalance}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'FreezeBonusBalance'">{{'Bonuses.FreezeBonusBalance' |
-            translate}}</mat-checkbox>
+      @if (commonSettings?.BonusTypeId === 10 || commonSettings?.BonusTypeId === 13) {
+        <div>
+          <div class="first-hand">{{'Bonuses.FreezeBonusBalance' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.FreezeBonusBalance}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'FreezeBonusBalance'">{{'Bonuses.FreezeBonusBalance' |
+              translate}}</mat-checkbox>
+          </div>
         </div>
-      </div>
+      }
       
-      <div *ngIf="bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14">
-        <div class="first-hand">{{'Bonuses.Regularity' | translate}}</div>
-        <div class="second-hand" >{{regularitys[commonSettings?.Regularity]?.Name}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'Regularity'">
-            <mat-option *ngFor="let regularity of regularitys" [value]="regularity.Id">{{regularity.Name}}</mat-option>
-          </mat-select>
+      @if (bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14) {
+        <div >
+          <div class="first-hand">{{'Bonuses.Regularity' | translate}}</div>
+          <div class="second-hand" >{{regularitys[commonSettings?.Regularity]?.Name}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'Regularity'">
+              @for (regularity of regularitys; track $index) {
+                <mat-option [value]="regularity.Id">{{regularity.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14">
-        <div class="first-hand">{{'Bonuses.DayOfWeek' | translate}}</div>
-        <div class="second-hand">{{days[commonSettings?.DayOfWeek]?.Name}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'DayOfWeek'">
-            <mat-option *ngFor="let day of days" [value]="day.Id">{{day.Name}}</mat-option>
-          </mat-select>
+      @if(bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14) {
+        <div>
+          <div class="first-hand">{{'Bonuses.DayOfWeek' | translate}}</div>
+          <div class="second-hand">{{days[commonSettings?.DayOfWeek]?.Name}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'DayOfWeek'">
+              @for (day of days; track $index) {
+                <mat-option [value]="day.Id">{{day.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14">
-        <div class="first-hand">{{'Bonuses.ReusingMaxCountInPeriod' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.ReusingMaxCountInPeriod}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'ReusingMaxCountInPeriod'">
+      @if (bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14) {
+        <div>
+          <div class="first-hand">{{'Bonuses.ReusingMaxCountInPeriod' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.ReusingMaxCountInPeriod}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'ReusingMaxCountInPeriod'">
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="commonSettings?.BonusTypeId == 12">
-        <div class="first-hand">{{'Bonuses.AllowSplit' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.AllowSplit}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'AllowSplit'">{{'Bonuses.AllowSplit' | translate}}</mat-checkbox>
+      @if (commonSettings?.BonusTypeId == 12) {
+        <div>
+          <div class="first-hand">{{'Bonuses.AllowSplit' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.AllowSplit}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'AllowSplit'">{{'Bonuses.AllowSplit' | translate}}</mat-checkbox>
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="commonSettings?.BonusTypeId == 12">
-        <div class="first-hand">{{'Bonuses.RefundRollbacked' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.RefundRollbacked}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'RefundRollbacked'">{{'Bonuses.RefundRollbacked' | translate}}</mat-checkbox>
+      @if (commonSettings?.BonusTypeId == 12) {
+        <div >
+          <div class="first-hand">{{'Bonuses.RefundRollbacked' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.RefundRollbacked}}</div>
+          <div class="form-field form-checkbox">
+            <mat-checkbox [formControlName]="'RefundRollbacked'">{{'Bonuses.RefundRollbacked' | translate}}</mat-checkbox>
+          </div>
         </div>
-      </div>
+      }
 
-      <div *ngIf="bonusTypeId != 1 && bonusTypeId != 14 && bonusTypeId != 12"></div>
+      @if (bonusTypeId != 1 && bonusTypeId != 14 && bonusTypeId != 12) {
+        <div></div>
+      }
+      
 
-      <div [class.group-left-item]="isEdit">
+      <div>
         <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
-        <div class="second-hand" *ngIf="commonSettings?.Countries?.Type==1">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="commonSettings?.Countries?.Type==2">
-          {{'Bonuses.OutOfSet' | translate}}
+        <div class="second-hand">
+          <span class="second-left"> 
+            @if (commonSettings?.Countries?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (commonSettings?.Countries?.Type==2) {
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+          <span class="second-right">
+            @for (country of countriesEntites; track $index) {
+              {{country}}
+            }
+          </span>
         </div>
 
-        <div class="form-field form-checkbox" [formGroupName]="'Countries'">
-          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
-          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
-          translate}}
+        <div class="form-field group-field" [formGroupName]="'Countries'">
+          <div class="group-left-item">
+            <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+            <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+            translate}}
+          </div>
+
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Ids'" multiple>
+              @for (country of countries; track $index) {
+                <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
+
         </div>
       </div>
 
-      <div [class.group-right-item]="isEdit">
-        <div class="first-hand">{{'Clients.SelectCountry' | translate}}</div>
-        <div class="second-hand" >
-          <ng-container *ngFor="let country of countriesEntites">
-            {{country}}
-          </ng-container>
-        </div>
-        <div class="form-field form-dropdown" [formGroupName]="'Countries'">
-          <mat-select [formControlName]="'Ids'" multiple>
-            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>
-
-      <div  [class.group-left-item]="isEdit">
+      <div  >
         <div class="first-hand">{{'Bonuses.ChooseLanguages' | translate}}</div>
-        <div class="second-hand" *ngIf="commonSettings?.Languages?.Type==1">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="commonSettings?.Languages?.Type==2">
-          {{'Bonuses.OutOfSet' | translate}}
+        <div class="second-hand">
+          <span class="second-left"> 
+            @if (commonSettings?.Languages?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (commonSettings?.Languages?.Type==2) {
+
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+
+            <span class="second-right">
+              @for ( language of languageEntites; track $index) {
+                {{languageEntites}}
+              }
+            </span>
         </div>
 
-        <div class="form-field form-checkbox" [formGroupName]="'Languages'">
+
+        <div class="form-field group-field" [formGroupName]="'Languages'">
+          <div class="group-left-item">
           <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
           <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
           translate}}
+          </div>
+
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Names'" multiple>
+              @for (language of languages; track $index) {
+                <mat-option [value]="language.Id" >{{language.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
         </div>
       </div>
 
-      <div [class.group-right-item]="isEdit">
-        <div class="first-hand">{{'Clients.SelectLanguage' | translate}}</div>
-        <div class="second-hand">
-          <ng-container *ngFor="let language of languageEntites">
-            {{languageEntites}}
-          </ng-container>
-        </div>
-        <div class="form-field form-dropdown" [formGroupName]="'Languages'">
-          <mat-select [formControlName]="'Names'" multiple>
-            <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>
-
-      <div [class.group-left-item]="isEdit">
+      <div>
         <div class="first-hand">{{'Bonuses.ChooseSegment' | translate}}</div>
-        <div class="second-hand" *ngIf="commonSettings?.SegmentIds?.Type==1">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="commonSettings?.SegmentIds?.Type==2">
-          {{'Bonuses.OutOfSet' | translate}}
+        <div class="second-hand" >
+          <span class="second-left"> 
+            @if (commonSettings?.SegmentIds?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (commonSettings?.SegmentIds?.Type==2) {
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+
+          <span class="second-right">
+            @for (item of segmentesEntites; track $index) {
+              {{item}}
+            }
+          </span>
         </div>
 
-        <div class="form-field form-checkbox" [formGroupName]="'SegmentIds'">
+
+        <div class="form-field group-field" [formGroupName]="'SegmentIds'">
+          <div class="group-left-item">
           <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
           <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
           translate}}
+          </div>
+          
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Ids'" multiple>
+              @for (segment of segments; track $index) {
+                <mat-option [value]="segment.Id">{{segment.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
+
         </div>
       </div>
 
-      <div [class.group-right-item]="isEdit">
-        <div class="first-hand">{{'Bonuses.SelectSegment' | translate}}</div>
-        <div class="second-hand">
-          <ng-container *ngFor="let segment of segmentesEntites">{{segment}}</ng-container>
-        </div>
-        <div class="form-field form-dropdown" [formGroupName]="'SegmentIds'">
-          <mat-select [formControlName]="'Ids'" multiple>
-            <mat-option *ngFor="let segment of segments" [value]="segment.Id">{{segment.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>
 
-      <div [class.group-left-item]="isEdit">
+      <div>
         <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
-        <div class="second-hand" *ngIf="commonSettings?.Currencies?.Type==1">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="commonSettings?.Currencies?.Type==2">
-          {{'Bonuses.OutOfSet' | translate}}
+        <div class="second-hand">
+          <span class="second-left"> 
+            @if (commonSettings?.Currencies?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (commonSettings?.Currencies?.Type==2) {
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+            </span>
         </div>
 
-        <div class="form-field form-checkbox" [formGroupName]="'Currencies'">
-          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
-          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
-          translate}}
+        <div class="form-field  group-field" [formGroupName]="'Currencies'">
+          <div class="group-left-item">
+            <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+            <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+            translate}}
+          </div>
+
+          <div class="group-right-item">
+
+            <mat-select [formControlName]="'Ids'" multiple>
+              @for (currency of currencies; track $index) {
+                <mat-option [value]="currency.Id">{{currency.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
         </div>
       </div>
 
-      <div [class.group-right-item]="isEdit">
-        <div class="first-hand">{{'Clients.SelectCurrency' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.Currencies.Names}}</div>
-        <div class="form-field form-dropdown" [formGroupName]="'Currencies'">
-          <mat-select [formControlName]="'Names'" multiple>
-            <mat-option *ngFor="let Currency of currencies" [value]="Currency.Id">{{Currency.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>
+
       <div></div>
 
       <div>
@@ -411,179 +475,207 @@
       </div>
 
       <div class="types">
-        <div class="additionally" *ngIf="bonusTypeId === 12 || bonusTypeId === 13 ||bonusTypeId === 10 ">
-          <mat-form-field>
-            <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
-            <mat-select [(value)]="addedConditions.selectedGroupType"
-              (selectionChange)="addedConditions.selectedGroupType = $event.value">
-              <mat-option *ngFor="let name of addedConditions.groupTypes" [value]="name.Id">{{name.Name}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <div  class="condition-list" *ngFor="let condition of addedConditions.conditions;let index = index">
-            <div>{{condition?.Condition?.Name}}</div>
-            <div>{{condition?.ConditionType?.NickName}}</div>
-            <div>{{condition?.ConditionValue}}</div>
-            <mat-icon (click)="removeCondition(addedConditions, index)">close</mat-icon>
-          </div>
-          <div class="condition-action">
-            <div class="selection-action">
-              <mat-form-field>
-                <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
-                <mat-select [ngModel]="addedConditions.selectedCondition"
-                  (selectionChange)="addedConditions.selectedCondition = $event.value"
-                  [ngModelOptions]="{standalone: true}">
-                  <mat-option *ngFor="let name of conditions" [value]="name">{{name.Name}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-                <mat-select #selectedOperation [ngModel]="addedConditions.selectedConditionType"
-                  (selectionChange)="addedConditions.selectedConditionType = selectedOperation.value"
-                  [ngModelOptions]="{standalone: true}">
-                  <mat-option *ngFor="let name of conditionTypes" [value]="name">{{name.NickName}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label>{{'Bonuses.Value' | translate}}</mat-label>
-                <input matInput type="text" [placeholder]="'Bonuses.Value' | translate"
-                  [ngModel]="addedConditions.selectedConditionValue"
-                  (ngModelChange)="this.addedConditions.selectedConditionValue = $event"
-                  [ngModelOptions]="{standalone: true}">
-              </mat-form-field>
-            </div>
-
-            <div class="btn-action">
-              <button mat-stroked-button class="mat-btn" (click)="addCondition(addedConditions)"
-                [class.disabled]="!addedConditions.selectedCondition || !addedConditions.selectedConditionType || !this.addedConditions.selectedConditionValue">
-                {{'Common.Add' | translate}}
-              </button>
-              <button mat-stroked-button class="mat-btn" (click)="addGroup(addedConditions)">{{'Bonuses.AddGroup' |
-                translate}}</button>
-            </div>
-
-          </div>
-
-          <div *ngFor="let group of addedConditions.groups; let i = index" class="group-container">
+        @if(bonusTypeId === 12 || bonusTypeId === 13 ||bonusTypeId === 10) {
+          <div class="additionally" >
             <mat-form-field>
               <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
-              <mat-select [ngModel]="group.selectedGroupType" (selectionChange)="group.selectedGroupType = $event.value"
-                [ngModelOptions]="{standalone: true}">
-                <mat-option *ngFor="let groupType of group.groupTypes"
-                  [value]="groupType.Id">{{groupType.Name}}</mat-option>
+              <mat-select [(value)]="addedConditions.selectedGroupType"
+                (selectionChange)="addedConditions.selectedGroupType = $event.value">
+                @for (name of addedConditions.groupTypes; track $index) {
+                  <mat-option [value]="name.Id">{{name.Name}}</mat-option>
+                }
               </mat-select>
             </mat-form-field>
-            <div class="condition-list" *ngFor="let condition of group.conditions">
-              <div>{{condition.Condition.Name}}</div>
-              <div>{{condition.ConditionType.NickName}}</div>
-              <div>{{condition.ConditionValue}}</div>
-              <mat-icon (click)="removeCondition(group, i)">close</mat-icon>
-            </div>
-
+  
+            @for (condition of addedConditions.conditions; track $index) {
+              <div  class="condition-list">
+                <div>{{condition?.Condition?.Name}}</div>
+                <div>{{condition?.ConditionType?.NickName}}</div>
+                <div>{{condition?.ConditionValue}}</div>
+                <mat-icon (click)="removeCondition(addedConditions, $index)">close</mat-icon>
+              </div>
+            }
             <div class="condition-action">
-
               <div class="selection-action">
                 <mat-form-field>
                   <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
-                  <mat-select [ngModel]="group.selectedCondition"
-                    (selectionChange)="group.selectedCondition = $event.value" [ngModelOptions]="{standalone: true}">
-                    <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
-                    <mat-option *ngFor="let condition of conditions" [value]="condition">{{condition.Name}}</mat-option>
+                  <mat-select [ngModel]="addedConditions.selectedCondition"
+                    (selectionChange)="addedConditions.selectedCondition = $event.value"
+                    [ngModelOptions]="{standalone: true}">
+                    @for (name of conditions; track $index) {
+                      <mat-option [value]="name">{{name.Name}}</mat-option>
+                    }
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-                  <mat-select [ngModel]="group.selectedConditionType"
-                    (selectionChange)="group.selectedConditionType = $event.value"
+                  <mat-select #selectedOperation [ngModel]="addedConditions.selectedConditionType"
+                    (selectionChange)="addedConditions.selectedConditionType = selectedOperation.value"
                     [ngModelOptions]="{standalone: true}">
-                    <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                    <mat-option *ngFor="let conditionType of conditionTypes"
-                      [value]="conditionType">{{conditionType.NickName}}</mat-option>
+                    @for (name of conditionTypes; track $index) {
+                      <mat-option [value]="name">{{name.NickName}}</mat-option>
+                    }
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field>
-                  <input matInput [placeholder]="'Value'" [ngModel]="group.selectedConditionValue"
-                    (ngModelChange)="group.selectedConditionValue = $event" [ngModelOptions]="{standalone: true}">
+                  <mat-label>{{'Bonuses.Value' | translate}}</mat-label>
+                  <input matInput type="text" [placeholder]="'Bonuses.Value' | translate"
+                    [ngModel]="addedConditions.selectedConditionValue"
+                    (ngModelChange)="this.addedConditions.selectedConditionValue = $event"
+                    [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
-
               </div>
-
+  
               <div class="btn-action">
-                <button mat-stroked-button class="mat-btn" (click)="addCondition(group)"
-                  [class.disabled]="!group.selectedCondition || !group.selectedConditionType || !group.selectedConditionValue">{{'Common.Add'
-                  | translate}}
+                <button mat-stroked-button class="mat-btn" (click)="addCondition(addedConditions)"
+                  [class.disabled]="!addedConditions.selectedCondition || !addedConditions.selectedConditionType || !this.addedConditions.selectedConditionValue">
+                  {{'Common.Add' | translate}}
                 </button>
-                <button mat-stroked-button class="mat-btn" (click)="addGroup(group)">{{'Bonuses.AddGroup' |
+                <button mat-stroked-button class="mat-btn" (click)="addGroup(addedConditions)">{{'Bonuses.AddGroup' |
                   translate}}</button>
-                <button mat-stroked-button class="mat-btn"
-                  (click)="removeGroup(addedConditions, i)">{{'Bonuses.RemoveGroup' | translate}}</button>
               </div>
-
+  
             </div>
-            <div *ngFor="let subgroup of group.groups" class="sub-group-container">
-              <mat-form-field>
-                <mat-label>Select</mat-label>
-                <mat-select [ngModel]="subgroup.selectedGroupType"
-                  (selectionChange)="subgroup.selectedGroupType = $event.value" [ngModelOptions]="{standalone: true}">
-                  <mat-option *ngFor="let groupType of subgroup.groupTypes"
-                    [value]="groupType.Id">{{groupType.Name}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <div class="condition-list" *ngFor="let condition of subgroup.conditions; let i = index">
-                <div>{{condition.Condition.Name}}</div>
-                <div>{{condition.ConditionType.NickName}}</div>
-                <div>{{condition.ConditionValue}}</div>
-                <mat-icon style="cursor: pointer" (click)="removeCondition(subgroup, i)">close</mat-icon>
-              </div>
-
-              <div class="condition-action">
-                <div class="selection-action sub-group">
-                  <mat-form-field>
-                    <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
-                    <mat-select [ngModel]="subgroup.selectedCondition"
-                      (selectionChange)="subgroup.selectedCondition = $event.value"
-                      [ngModelOptions]="{standalone: true}">
-                      <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
-                      <mat-option *ngFor="let condition of conditions"
-                        [value]="condition">{{condition.Name}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-                    <mat-select [ngModel]="subgroup.selectedConditionType"
-                      (selectionChange)="subgroup.selectedConditionType = $event.value"
-                      [ngModelOptions]="{standalone: true}">
-                      <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                      <mat-option *ngFor="let conditionType of conditionTypes"
-                        [value]="conditionType">{{conditionType.NickName}}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field>
-                    <input matInput [placeholder]="'Value'" [ngModel]="subgroup.selectedConditionValue"
-                      (ngModelChange)="subgroup.selectedConditionValue = $event" [ngModelOptions]="{standalone: true}">
-                  </mat-form-field>
+  
+            @for (group of addedConditions.groups; track $index) {
+              <div class="group-container">
+                <mat-form-field>
+                  <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+                  <mat-select [ngModel]="group.selectedGroupType" (selectionChange)="group.selectedGroupType = $event.value"
+                    [ngModelOptions]="{standalone: true}">
+                    @for (groupType of group.groupTypes; track $index) {
+                      <mat-option
+                        [value]="groupType.Id">{{groupType.Name}}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+                @for (condition of group.conditions; track condition) {
+                  <div class="condition-list">
+                    <div>{{condition.Condition.Name}}</div>
+                    <div>{{condition.ConditionType.NickName}}</div>
+                    <div>{{condition.ConditionValue}}</div>
+                    <mat-icon (click)="removeCondition(group, $index)">close</mat-icon>
+                  </div>
+                }
+    
+                <div class="condition-action">
+    
+                  <div class="selection-action">
+                    <mat-form-field>
+                      <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+                      <mat-select [ngModel]="group.selectedCondition"
+                        (selectionChange)="group.selectedCondition = $event.value" [ngModelOptions]="{standalone: true}">
+                        <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
+                        @for (condition of conditions; track $index) {
+                          <mat-option [value]="condition">{{condition.Name}}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                      <mat-select [ngModel]="group.selectedConditionType"
+                        (selectionChange)="group.selectedConditionType = $event.value"
+                        [ngModelOptions]="{standalone: true}">
+                        <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                        @for (conditionType of conditionTypes; track $index) {
+                          <mat-option [value]="conditionType">{{conditionType.NickName}}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <input matInput [placeholder]="'Value'" [ngModel]="group.selectedConditionValue"
+                        (ngModelChange)="group.selectedConditionValue = $event" [ngModelOptions]="{standalone: true}">
+                    </mat-form-field>
+    
+                  </div>
+    
+                  <div class="btn-action">
+                    <button mat-stroked-button class="mat-btn" (click)="addCondition(group)"
+                      [class.disabled]="!group.selectedCondition || !group.selectedConditionType || !group.selectedConditionValue">{{'Common.Add'
+                      | translate}}
+                    </button>
+                    <button mat-stroked-button class="mat-btn" (click)="addGroup(group)">{{'Bonuses.AddGroup' |
+                      translate}}</button>
+                    <button mat-stroked-button class="mat-btn"
+                      (click)="removeGroup(addedConditions, $index)">{{'Bonuses.RemoveGroup' | translate}}</button>
+                  </div>
                 </div>
-                <div class="btn-action">
-                  <button mat-stroked-button class="mat-btn" (click)="addCondition(subgroup)"
-                    [class.disabled]="!subgroup.selectedCondition || !subgroup.selectedConditionType || !subgroup.selectedConditionValue">{{'Common.Add'
-                    | translate}}
-                  </button>
-                  <button mat-stroked-button class="mat-btn" (click)="removeGroup(group, i)">{{'Bonuses.RemoveGroup' |
-                    translate}}</button>
-                </div>
+
+                @for (subgroup of group.groups; track $index) {
+                  <div class="sub-group-container">
+                    <mat-form-field>
+                      <mat-label>Select</mat-label>
+                      <mat-select [ngModel]="subgroup.selectedGroupType"
+                        (selectionChange)="subgroup.selectedGroupType = $event.value" [ngModelOptions]="{standalone: true}">
+                        @for (groupType of subgroup.groupTypes; track $index) {
+                          <mat-option [value]="groupType.Id">{{groupType.Name}}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+      
+                    @for (condition of subgroup.conditions; track $index) {
+                      <div class="condition-list">
+                        <div>{{condition.Condition.Name}}</div>
+                        <div>{{condition.ConditionType.NickName}}</div>
+                        <div>{{condition.ConditionValue}}</div>
+                        <mat-icon style="cursor: pointer" (click)="removeCondition(subgroup, $index)">close</mat-icon>
+                      </div>
+                    }
+      
+                    <div class="condition-action">
+                      <div class="selection-action sub-group">
+                        <mat-form-field>
+                          <mat-label>{{'Bonuses.SelectCondition' | translate}}</mat-label>
+                          <mat-select [ngModel]="subgroup.selectedCondition"
+                            (selectionChange)="subgroup.selectedCondition = $event.value"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option value="" disabled>{{'Bonuses.SelectCondition' | translate}}</mat-option>
+                            @for (condition of conditions; track $index) {
+                              <mat-option [value]="condition">{{condition.Name}}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                          <mat-select [ngModel]="subgroup.selectedConditionType"
+                            (selectionChange)="subgroup.selectedConditionType = $event.value"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option value="" disabled>{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                            @for (conditionType of conditionTypes; track $index) {
+                              <mat-option [value]="conditionType">{{conditionType.NickName}}</mat-option>
+                            }
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field>
+                          <input matInput [placeholder]="'Value'" [ngModel]="subgroup.selectedConditionValue"
+                            (ngModelChange)="subgroup.selectedConditionValue = $event" [ngModelOptions]="{standalone: true}">
+                        </mat-form-field>
+                      </div>
+                      <div class="btn-action">
+                        <button mat-stroked-button class="mat-btn" (click)="addCondition(subgroup)"
+                          [class.disabled]="!subgroup.selectedCondition || !subgroup.selectedConditionType || !subgroup.selectedConditionValue">{{'Common.Add'
+                          | translate}}
+                        </button>
+                        <button mat-stroked-button class="mat-btn" (click)="removeGroup(group, $index)">{{'Bonuses.RemoveGroup' |
+                          translate}}</button>
+                      </div>
+                    </div>
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
-        </div>
+        }
       </div>
 
       <div class="form-actions">
-        <div class="actions" *ngIf="isEdit">
-          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
-            translate}}</button>
-          <button mat-raised-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Save' | translate}}</button>
-        </div>
+        @if (isEdit) {
+          <div class="actions">
+            <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
+              translate}}</button>
+            <button mat-raised-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Save' | translate}}</button>
+          </div>
+        }
       </div>
     </form>
   </div>

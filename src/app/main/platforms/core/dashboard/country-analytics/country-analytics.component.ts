@@ -7,7 +7,7 @@ import {CoreApiService} from "../../services/core-api.service";
 import {ConfigService} from "../../../../../core/services";
 import {DateTimeHelper} from "../../../../../core/helpers/datetime.helper";
 import {TranslateModule} from "@ngx-translate/core";
-import {ProgressBarComponent} from "./progress-bar/progress-bar.component";
+import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
 
 
 @Component({
@@ -90,7 +90,10 @@ export class CountryAnalyticsComponent implements OnInit{
       Controllers.DASHBOARD, Methods.GET_TOP_VISITORS, null, false).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.topVisitors = data.ResponseObject.slice(0, 5).map(item => {
-          item.CountryCode =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";
+          item.Name = item.CountryName;
+          item.Icon =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";
+          item.ImageUrl = '../../../../../../assets/images/flags/' + item.Icon + '.png';
+          item.Amount = item.TotalCount;
           return item;
         })
       }
@@ -102,7 +105,10 @@ export class CountryAnalyticsComponent implements OnInit{
       Controllers.DASHBOARD, Methods.GET_TOP_REGISTRATIONS, null, false).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.topRegistrations = data.ResponseObject.slice(0, 5).map(item => {
-          item.CountryCode =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";
+          item.Name = item.CountryName;
+          item.Amount = item.TotalCount;
+          item.Icon =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";
+          item.ImageUrl = '../../../../../../assets/images/flags/' + item.Icon + '.png';
           return item;
         })
       }

@@ -21,7 +21,7 @@ import { take } from 'rxjs';
 })
 export class PermissibleOddsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-
+  isSendingReqest = false;
   rowData = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   frameworkComponents = {
@@ -128,7 +128,7 @@ export class PermissibleOddsComponent extends BasePaginatedGridComponent impleme
       if (data.Code === 0) {
         this.rowData = data.ResponseObject;
         this.rowData.forEach(x => {
-          x.PartnerName = this.partners.find(y => y.Id === x.PartnerId)?.Name 
+          x.PartnerName = this.partners.find(y => y.Id === x.PartnerId)?.Name
         })
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -137,15 +137,16 @@ export class PermissibleOddsComponent extends BasePaginatedGridComponent impleme
   }
 
   deleteOdd() {
+    this.isSendingReqest = true
     const row = this.gridApi.getSelectedRows()[0];
     delete row.UserId;
     this.apiService.apiPost('utils/deletepermissibleodd', row).subscribe(data => {
-
       if (data.Code === 0) {
         this.rowData = this.rowData.filter(x => x.Id !== row.Id);
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

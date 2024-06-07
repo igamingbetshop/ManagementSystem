@@ -14,13 +14,14 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-edit-translations.component.scss']
 })
 export class AddEditTranslationsComponent implements OnInit {
-  public menuItem;
-  public menuItemId;
-  public items;
-  public currentItem;
-  public translations = [];
-  public formGroup: UntypedFormGroup;
-  public partnerId;
+  menuItem;
+  menuItemId;
+  items;
+  currentItem;
+  translations = [];
+  formGroup: UntypedFormGroup;
+  partnerId;
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditTranslationsComponent>,
               private apiService: SportsbookApiService,
@@ -63,6 +64,7 @@ export class AddEditTranslationsComponent implements OnInit {
       item.TranslationId = this.currentItem.TranslationId;
       return item;
     })
+    this.isSendingReqest = true;
     let changed = [];
     for (let i = 0; i < translations.length; i++) {
       if (translations[i].Text != this.items.Translations[i].Text)
@@ -79,6 +81,7 @@ export class AddEditTranslationsComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
           }
+          this.isSendingReqest = false;
         });
     }
 

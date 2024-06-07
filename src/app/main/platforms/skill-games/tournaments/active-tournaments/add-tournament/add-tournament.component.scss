@@ -6,3 +6,12 @@
   margin-right: 15px;
   padding-right: 15px;
 }
+
+.mat-datepicker-input {
+  background-color: transparent!important;
+}
+
+.mat-datepicker-toggle {
+  position: absolute;
+  top: -25px;
+}

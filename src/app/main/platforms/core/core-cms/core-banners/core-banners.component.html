@@ -4,6 +4,7 @@
     <div class="title">{{'Cms.Banners' | translate}}</div>
     <div class="partner-dropdown">
       <mat-select
+        [(value)]="partnerId"
         (selectionChange)="onPartnerChange($event.value)"
         placeholder="{{'Partners.SelectPartner' | translate}}"
         panelClass="overlay-dropdown"

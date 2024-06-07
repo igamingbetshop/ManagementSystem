@@ -1,0 +1,121 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+  height: 91%;
+  .content-action {
+    @include action-style;
+
+    .partner-dropdown {
+      margin-left: 8px;
+      @include dropdown-style;
+    }
+
+    .mat-btn {
+      margin-left: 8px;
+      @include mat-btn-style;
+    }
+
+    .mat-edit-btn {
+      margin-right: 8px;
+      @include mat-bulke-edit-btn-style;
+    }
+
+    .mat-export-btn {
+      margin-left: 8px;
+      @include mat-export-btn-style;
+    }
+
+
+    .bulk-editor-dropdown {
+      position: relative;
+      .mat-bulk-btn {
+        @include mat-bulke-edit-btn-style;
+      }
+
+    }
+  }
+
+  .grid-content {
+    position: relative;
+    width: 100%;
+    height: 93%;
+
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .checkbox {
+      position: absolute;
+      top: 13px;
+      z-index: 2;
+      left: 12px;
+
+      ::ng-deep {
+
+        .mat-checkbox-inner-container {
+          width: 16px;
+          height: 16px;
+
+          .mat-checkbox-frame {
+            border: 1px solid black;
+            background-color: white;
+            border-radius: 3px;
+          }
+        }
+      }
+
+      ::ng-deep {
+        .mat-checkbox-checked {
+          .mat-checkbox-layout {
+            .mat-checkbox-inner-container {
+
+              .mat-checkbox-frame {
+                border: 1px solid #0091EA;
+              }
+
+
+              .mat-checkbox-checkmark-path {
+                stroke: #0091EA !important;
+              }
+
+              .mat-checkbox-background {
+                background-color: unset;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .pages-sizes {
+      position: absolute;
+      left: 262px;
+      bottom: 2.4%;
+      @include grid-dropdown-style;
+
+      ::ng-deep {
+        .mat-select {
+          height: 26px !important;
+          width: 60px !important;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .bulk-editor-menu {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: unset;
+    background: transparent;
+    .mat-mat-mdc-menu-content {
+      padding: 0 !important;
+    }
+  }
+}

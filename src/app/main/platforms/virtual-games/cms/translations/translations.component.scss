@@ -30,7 +30,7 @@
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 92px);
+    height: calc(100% - 62px);
 
     ::ng-deep {
       ag-grid-angular {
@@ -43,10 +43,12 @@
       display: flex;
       flex-direction: row-reverse;
       align-items: center;
-
+      position: absolute;
+      bottom: 2.2%;
+      left: 262px;
       .pages-sizes {
         padding-left: 10px;
-        @include dropdown-style;
+        @include grid-dropdown-style;
 
         ::ng-deep {
           .mat-select {

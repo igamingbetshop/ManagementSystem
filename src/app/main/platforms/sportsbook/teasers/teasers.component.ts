@@ -26,26 +26,27 @@ import { ACTIVITY_STATUSES, MATCH_STATUSES_OPTIONS } from 'src/app/core/constant
 export class TeasersComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGridSecond') agGridSecond: AgGridAngular;
-  public rowData = [];
-  public rowData1 = [];
-  public columnDefs2;
-  public selectedItem;
-  public path: string = 'bets/teasers';
-  public updatePath: string = 'bets/updateteaser';
-  public addPath: string = 'bets/addteaser';
-  public frameworkComponents;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public status = ACTIVITY_STATUSES;
-  public partners = [];
-  public tieRules = [
+  rowData = [];
+  rowData1 = [];
+  columnDefs2;
+  selectedItem;
+  path: string = 'bets/teasers';
+  updatePath: string = 'bets/updateteaser';
+  addPath: string = 'bets/addteaser';
+  frameworkComponents;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  status = ACTIVITY_STATUSES;
+  partners = [];
+  tieRules = [
     { Id: 1, Name: 'No Bet' },
     { Id: 2, Name: 'Wins' },
     { Id: 3, Name: 'Losses' },
     { Id: 4, Name: 'Demotes' },
   ];
-  public matchStatus = MATCH_STATUSES_OPTIONS
-  public selectedRow;
-  public selectedRow1;
+  matchStatus = MATCH_STATUSES_OPTIONS
+  selectedRow;
+  selectedRow1;
+  isSendingReqest = false;
 
   constructor(
     private apiService: SportsbookApiService,
@@ -565,6 +566,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   async addSetting() {
+    this.isSendingReqest = true;
     let teaserId = +this.agGrid.api.getSelectedRows()[0].Id;
     const { AddSettingComponent } = await import('../teasers/add-setting/add-setting.component');
     const dialogRef = this.dialog.open(AddSettingComponent, { width: ModalSizes.LARGE, data: { TeaserId: teaserId } });
@@ -580,12 +582,14 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
+            this.isSendingReqest = false;
           });
       }
     })
   }
 
   deleteSetting() {
+    this.isSendingReqest = true;
     let teaserId = +this.agGrid.api.getSelectedRows()[0].Id;
     if (this.selectedItem.Id === this.selectedRow1.TeaserId) {
       let index = this.selectedItem.Settings.findIndex((item) => {
@@ -609,6 +613,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
+          this.isSendingReqest = false;
         });
     }
   }
@@ -633,7 +638,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
 
   onClone() {
     const row = this.agGrid.api.getSelectedRows()[0];
-
+    this.isSendingReqest = true;
     this.apiService.apiPost("bets/cloneteaser", { "Id": row.Id })
       .pipe(take(1))
       .subscribe(data => {
@@ -643,6 +648,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       })
   }
 }

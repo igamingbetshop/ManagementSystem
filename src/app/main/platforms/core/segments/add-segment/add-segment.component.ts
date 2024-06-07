@@ -22,8 +22,6 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { emailsWithCommasValidator, numbersAndCommas, stringAndCommaValidator } from 'src/app/core/validators';
 
 
-
-
 @Component({
   selector: 'app-add-segment',
   templateUrl: './add-segment.component.html',
@@ -171,7 +169,7 @@ export class AddSegmentComponent implements OnInit {
   private setForm() {
     this.formGroup = this.fb.group({
       PartnerId: [null, [Validators.required]],
-      Name: [null, [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
+      Name: [null, [Validators.required]],
       Mode: [1],
       Gender: [null],
       IsKYCVerified: [null],

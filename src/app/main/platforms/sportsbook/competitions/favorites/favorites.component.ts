@@ -1,17 +1,17 @@
-import {Component, OnInit, Injector, ViewChild, ChangeDetectorRef} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {AgGridAngular} from 'ag-grid-angular';
-import {take} from 'rxjs/operators';
-import {GridRowModelTypes} from 'src/app/core/enums';
-import {Paging} from 'src/app/core/models';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {ButtonRendererComponent} from 'src/app/main/components/grid-common/button-renderer.component';
-import {NumericEditorComponent} from 'src/app/main/components/grid-common/numeric-editor.component';
-import {TextEditorComponent} from 'src/app/main/components/grid-common/text-editor.component';
-import {SportsbookApiService} from '../../services/sportsbook-api.service';
+import { Component, OnInit, Injector, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AgGridAngular } from 'ag-grid-angular';
+import { take } from 'rxjs/operators';
+import { GridRowModelTypes } from 'src/app/core/enums';
+import { Paging } from 'src/app/core/models';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
+import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
+import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
+import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import 'ag-grid-enterprise';
-import {CellValueChangedEvent} from 'ag-grid-community';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
+import { CellValueChangedEvent } from 'ag-grid-community';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 
 @Component({
   selector: 'app-favorites',
@@ -20,7 +20,7 @@ import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 })
 export class FavoritesComponent extends BasePaginatedGridComponent implements OnInit {
 
-  @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGrid1') agGrid1: AgGridAngular;
 
   public path: string = 'competitions';
@@ -36,7 +36,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
   };
   public rowModelType1: string = GridRowModelTypes.CLIENT_SIDE;
   public columnDefs2;
-
+  isSendingReqest = false;
 
   public partners: any[] = [];
   public partnerId: number = null;
@@ -58,7 +58,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         field: 'Id',
         sortable: true,
         resizable: true,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -114,7 +114,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         field: 'Id',
         sortable: true,
         resizable: true,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -194,7 +194,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
       if (data.Code === 0) {
         this.partners = data.ResponseObject;
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }
@@ -210,8 +210,9 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
   }
 
   onAddCompetition() {
+    this.isSendingReqest = true;
     if (this.partnerId == null) {
-      SnackBarHelper.show(this._snackBar, {Description: 'Select partner', Type: "error"});
+      SnackBarHelper.show(this._snackBar, { Description: 'Select partner', Type: "error" });
       return;
     }
     let row = this.agGrid.api.getSelectedRows()[0];
@@ -227,8 +228,9 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
           this.rowData1.unshift(data);
           this.agGrid1.api.setRowData(this.rowData1);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       });
     this.partnerId = null;
     this.priority = null;
@@ -236,8 +238,9 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
   }
 
   onRemoveCompetition() {
+    this.isSendingReqest = true;
     let row = this.agGrid1.api.getSelectedRows()[0];
-    this.apiService.apiPost('competitions/removefavorite', {CompetitionId: row.Id})
+    this.apiService.apiPost('competitions/removefavorite', { CompetitionId: row.Id })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
@@ -249,8 +252,9 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
           }
           this.agGrid1.api.setRowData(this.rowData1);
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       });
   }
 
@@ -279,7 +283,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         if (data.Code === 0) {
 
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -292,7 +296,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         if (data.Code === 0) {
           this.rowData1 = data.Competitions;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
@@ -307,13 +311,13 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         this.apiService.apiPost(this.path, paging)
-        .pipe(take(1)).subscribe(data => {
-          if (data.Code === 0) {
-            params.success({rowData: data.Objects, rowCount: data.TotalCount});
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
+          .pipe(take(1)).subscribe(data => {
+            if (data.Code === 0) {
+              params.success({ rowData: data.Objects, rowCount: data.TotalCount });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       },
     };
   }

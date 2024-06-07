@@ -20,7 +20,8 @@ import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, DEVICE_TYPES } from 'src/app/core/constantes/statuses';
+import { PopupService } from './popup.service';
 
 
 @Component({
@@ -31,7 +32,7 @@ import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 export class PopupsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   partners: any[] = [];
-  partnerId = 1;
+  partnerId = null;
   fromDate = new Date();
   toDate = new Date();
   rowData = [];
@@ -44,7 +45,7 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
   };
   status = ACTIVITY_STATUSES;
   rowType = 2;
-  deviceTypes: any;
+  deviceTypes = DEVICE_TYPES;
 
   constructor(
     protected injector: Injector,
@@ -52,6 +53,7 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
     private apiService: CoreApiService,
     public commonDataService: CommonDataService,
     public dialog: MatDialog,
+    private popupService: PopupService,
     public activateRoute: ActivatedRoute,
   ) {
     super(injector);
@@ -59,22 +61,30 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   ngOnInit() {
-    this.getDeviceTypes();
     this.partners = this.commonDataService.partners;
     this.getPopupTypes();
+    this.subscribeToCurrentUpdate();
   }
 
-  getDeviceTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.deviceTypes = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+  subscribeToCurrentUpdate() {
+    this.popupService.currentUpdate.subscribe((promotion) => {
+      const rowIdToUpdate = promotion?.Id;
+      if (promotion && this.gridApi.getDisplayedRowCount() > 0) {
+        const displayedRows = this.gridApi.getDisplayedRowCount();
+        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+          const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+          if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+            rowNode.data.FinishDate = promotion.FinishDate;
+            rowNode.data.StartDate = promotion.StartDate;
+            rowNode.data.State = promotion.State;
+            rowNode.data.DeviceType = this.deviceTypes.find((elem) => elem.Id == promotion?.DeviceType)?.Name;;
+            rowNode.data.Order = promotion.Order;
+            this.gridApi.redrawRows({ rowNodes: [rowNode] });
+            break;
+          }
         }
-      });
+      }
+    });
   }
 
   setColumnDefs() {
@@ -132,10 +142,19 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
           closeOnApply: true,
           filterOptions: this.filterService.textOptions,
         },
+
+      },
+      {
+        headerName: 'Common.Description',
+        headerValueGetter: this.localizeHeader.bind(this),
+        cellRenderer: function (params) {
+          return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+          translate
+          </i>`
+        },
         onCellDoubleClicked: (event: CellDoubleClickedEvent) => {
           this.cellDoubleClicked(event, 100);
-        }
-      },
+        }      },
       {
         headerName: 'Common.Type',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -290,9 +309,11 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
 
   async onAddPopup() {
     const { AddPopupComponent } = await import('./add-popup/add-popup.component');
-    const dialogRef = this.dialog.open(AddPopupComponent, { width: ModalSizes.MIDDLE, data: {
-      deviceTypes: this.deviceTypes,
-    } });
+    const dialogRef = this.dialog.open(AddPopupComponent, {
+      width: ModalSizes.MIDDLE, data: {
+        deviceTypes: this.deviceTypes,
+      }
+    });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.getCurrentPage();
@@ -353,12 +374,16 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
         }
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
+        if(paging?.DeviceTypes?.ApiOperationTypeList[0].IntValue == -1 ) {
+          paging.DeviceTypes = {IsAnd: true, ApiOperationTypeList: []};
+        }
+          
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.CONTENT, Methods.GET_POPUPS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject;
               mappedRows.Entities.forEach((row) => {
-                row['DeviceType'] = this.deviceTypes.find((elem) => elem.Id == row?.DeviceType)?.Name;
+                row['DeviceType'] = this.deviceTypes.find((elem) => elem.Id == row?.DeviceType)?.Name || "All";
               });
               params.success({ rowData: mappedRows.Entities, rowCount: mappedRows.Count });
             } else {
@@ -375,7 +400,6 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
-
   async cellDoubleClicked(event: CellDoubleClickedEvent, typeId) {
     const id = event.data.Id;
     const { AddEditTranslationComponent } = await import('../../../../components/add-edit-translation/add-edit-translation.component');
@@ -387,9 +411,13 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.getCurrentPage();
+        SnackBarHelper.show(this._snackBar, { Description: `Succsess`, Type: "success" });
       }
     })
+  }
+
+  ngOnDestroy(): void {
+    this.popupService.update(null);
   }
 
 }

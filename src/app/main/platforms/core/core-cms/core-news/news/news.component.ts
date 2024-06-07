@@ -64,6 +64,8 @@ export class NewsComponent implements OnInit {
     this.id = +this.activateRoute.snapshot.queryParams.Id;
     this.isChilde = this.activateRoute.snapshot.queryParams.Childe;
     this.languages = this.commonDataService.languages;
+    console.log(this.languages, 'languages');
+    
     this.getNewsById();
     this.getDate();
   }
@@ -240,8 +242,8 @@ export class NewsComponent implements OnInit {
     request.PartnerId = this.partnerId;
     request.ParentId = this.news.ParentId;
     request.Id = this.id;
-    request.Segments = {Ids: this.Segments, Type: +this.SegmentType};
-    request.Languages = {Type: +this.LanguageType, Names: this.LanguageNames};
+    // request.Segments = {Ids: this.Segments, Type: +this.SegmentType};
+    // request.Languages = {Type: +this.LanguageType, Names: this.LanguageNames};
     this.apiService.apiPost(this.configService.getApiUrl, request, true, Controllers.CONTENT, Methods.SAVE_NEWS)
       .pipe(take(1))
       .subscribe(data => {

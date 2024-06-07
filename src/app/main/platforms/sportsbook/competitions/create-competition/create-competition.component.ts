@@ -37,9 +37,10 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 })
 export class CreateCompetitionComponent implements OnInit {
 
-  public sports: any[] = [];
-  public providers: any[] = [];
-  public formGroup: UntypedFormGroup;
+  sports: any[] = [];
+  providers: any[] = [];
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateCompetitionComponent>,
@@ -90,7 +91,7 @@ export class CreateCompetitionComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.isSendingReqest = true;
     const requestBody = this.formGroup.getRawValue();
     this.apiService.apiPost('competitions/add', requestBody).pipe(take(1)).subscribe(data => {
       if (data.Code === 0) {
@@ -98,6 +99,7 @@ export class CreateCompetitionComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 }

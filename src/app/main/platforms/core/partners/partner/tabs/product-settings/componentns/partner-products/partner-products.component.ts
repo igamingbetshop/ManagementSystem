@@ -31,6 +31,7 @@ import { Paging } from "../../../../../../../../../core/models";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { forkJoin } from 'rxjs';
 import {ExportService} from "../../../../../../services/export.service";
+import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/grid-common/ag-checkbox-seected-renderer.component';
 
 
 @Component({
@@ -51,6 +52,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     selectRenderer: SelectRendererComponent,
     selectArrayRenderer: SelectArrayRendererComponent,
     arraySelectableEditorComponent: ArraySelectableEditorComponent,
+    aGCheckboxSelectedRendererComponent: AGCheckboxSelectedRendererComponent
   };
   public selectedRowIds: number[] = [];
   public rowData = [];
@@ -347,11 +349,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         sortable: true,
         resizable: true,
         filter: 'agBooleanColumnFilter',
-        cellRenderer: 'checkBoxRenderer',
-        cellRendererParams: {
-          onchange: this.onCheckBoxChange['bind'](this, "IsForDesktop"),
-          onCellValueChanged: this.onCheckBoxChange.bind(this)['bind'](this, "IsForDesktop"),
-        }
+        cellRenderer: 'aGCheckboxSelectedRendererComponent',
       },
       {
         headerName: 'Products.IsForMobile',
@@ -360,20 +358,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         sortable: true,
         resizable: true,
         filter: 'agBooleanColumnFilter',
-        cellRenderer: 'checkBoxRenderer',
-        cellRendererParams: {
-          onchange: this.onCheckBoxChange['bind'](this, "IsForMobile"),
-          onCellValueChanged: this.onCheckBoxChange.bind(this)['bind'](this, "IsForMobile"),
-
-        }
-      },
-      {
-        headerName: 'Products.Jackpot',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Jackpot',
-        hide: true,
-        sortable: false,
-        resizable: true,
+        cellRenderer: 'aGCheckboxSelectedRendererComponent',
       },
       {
         headerName: 'Products.RTP',
@@ -441,6 +426,19 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         if (paging.HasImages) {
           paging.HasImages = paging.HasImages.ApiOperationTypeList[0].BooleanValue;
         }
+        if (paging.IsForMobiles) {
+          paging.IsForMobile = paging.IsForMobiles.ApiOperationTypeList[0].BooleanValue;
+          delete paging.IsForMobiles;
+        }
+        if (paging.IsForDesktops) {
+          paging.IsForDesktop = paging.IsForDesktops.ApiOperationTypeList[0].BooleanValue;
+          delete paging.IsForDesktops;
+        }
+        if (paging.HasDemos) {
+          paging.HasDemo = paging.HasDemos.ApiOperationTypeList[0].BooleanValue;
+          delete paging.HasDemos;
+        }   
+
         this.filteredData = { ...paging };
 
         if(this.filteredData.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {

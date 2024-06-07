@@ -1,0 +1,49 @@
+<div class="container">
+  <app-header-filter
+    [title]="'Dashboard.Analytics'"
+    (toDateChange)="onDateChange($event)" />
+  <div class="payment-analytics-content">
+    <div class="payin-block">
+      <div class="block-header">{{'Dashboard.PayinMethods' | translate}}</div>
+      @if (topDeposits?.length){
+        <div class="block-content">
+          @for (item of topDeposits; track $index){
+            <div class="block-row">
+              <div class="row-number payin-number">{{$index + 1}}</div>
+              <app-progress-bar [src]="item" [number]="'1.2-2'" class="payin"></app-progress-bar>
+            </div>
+          }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+
+    </div>
+
+    <div class="payout-block">
+      <div class="block-header">{{'Dashboard.PayoutMethods' | translate}}</div>
+      @if (topWithdraws?.length){
+        <div class="block-content">
+          @for (item of topWithdraws; track $index){
+            <div class="block-row">
+              <div class="row-number payout-number">{{$index + 1}}</div>
+              <app-progress-bar [src]="item" [number]="'1.2-2'" class="payout"></app-progress-bar>
+            </div>
+          }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+

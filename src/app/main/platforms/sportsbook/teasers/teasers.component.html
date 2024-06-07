@@ -33,10 +33,10 @@
       </div>
       <div class="grid-action">
         <button mat-stroked-button class="mat-btn" (click)="addTeaser('Add', $event)">{{'Sport.AddTeaser' | translate}}</button>
-        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected()" (click)="addTeaser('Edit', selectedRow)">
+        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="addTeaser('Edit', selectedRow)">
           {{'Sport.EditTeaser' | translate}}
         </button>
-        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="onClone()">{{'Sport.Clone' | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || isSendingReqest" (click)="onClone()">{{'Sport.Clone' | translate}}</button>
       </div>
     </div>
     <div class="right-panel">
@@ -71,7 +71,7 @@
 
       <div class="grid-action">
         <button mat-stroked-button class="mat-btn" (click)="addSetting()">{{'Settings.AddSetting' | translate}}</button>
-        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected1()" (click)="deleteSetting()">
+        <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected1() || isSendingReqest" (click)="deleteSetting()">
           {{'Sport.DeleteSetting' | translate}}
         </button>
       </div>

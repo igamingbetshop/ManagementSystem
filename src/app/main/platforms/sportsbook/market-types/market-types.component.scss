@@ -3,7 +3,7 @@
 
 .container {
   @include container-style;
-
+  height: 100%;
   .main-content {
     width: 100%;
     height: 100%;
@@ -39,48 +39,77 @@
 
     .grid-content {
       width: 100%;
-      height: calc(100% - 123px);
+      height: calc(100% - 62px);
       position: relative;
-
       ::ng-deep {
         ag-grid-angular {
           width: 100%;
           height: 100%;
         }
       }
-    }
-
-    .grid-action {
-      margin-top: 12px;
-      display: flex;
-      justify-content: flex-end;
-      .partner-dropdown {
-        margin-right: 8px;
-        @include dropdown-style;
+  
+      .custom-pagination {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+  
+  
+        .pages-sizes {
+          padding-left: 10px;
+          padding-right: 10px;
+  
+          @include grid-dropdown-style;
+          
+        }
+  
+        .current-paging {
+          .input {
+            background-color: #076192;
+            padding: 4.5px 0 !important;
+            border-radius: 4px;
+            color: #FFFFFF;
+            outline: 0;
+            border: initial;
+            max-width: 38px;
+            width: 100%;
+            font-size: 14px;
+          }
+        }
       }
-
-      .mat-btn {
-        margin-right: 8px;
-        @include mat-btn-style;
-      }
-
-      .pagination-input {
-        border: 1px solid $blue-light-8;
-        background-color: transparent;
-        padding: 2.5px 8px;
-        color: $blue-light-8;
-        border-radius: 4px;
-        margin: 0 3px;
-        font-size: 14px;
-        width: 40px;
-        text-align: center;
-
-        &:focus {
-          outline: none; 
-          border-color: $blue-light-8;
+  
+      // .btn-action {
+      //   display: flex;
+      //   column-gap: 10px;
+  
+      //   .mat-btn {
+      //     @include mat-btn-style;
+      //   }
+      // }
+      .grid-action {
+        position: absolute;
+        right: 0;
+        bottom: 15px;
+        display: flex;
+        justify-content: flex-end;
+        .partner-dropdown {
+          margin-right: 8px;
+          @include dropdown-style;
+        }
+  
+        .mat-btn {
+          margin-right: 8px;
+          @include mat-btn-style;
         }
 
       }
     }
+
   }
+}
+
+::ng-deep {
+.ag-paging-panel {
+    justify-content: flex-end !important;
+  }
+
 }

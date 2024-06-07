@@ -12,33 +12,32 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { MatInputModule } from '@angular/material/input';
 import { HtmlEditorModule } from 'src/app/main/components/html-editor/html-editor.component';
 import { AnnouncementsRoutingModule } from './announcements-routing.module';
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    FormsModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    MatCheckboxModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    TranslateModule,
-    NgxMatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    MatInputModule,
-    HtmlEditorModule,
-    AgGridModule,
-    AnnouncementsRoutingModule
-  ],
-  declarations: [AnnouncementsComponent],
+    declarations: [AnnouncementsComponent],
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        FormsModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        MatCheckboxModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        TranslateModule,
+        MatInputModule,
+        HtmlEditorModule,
+        AgGridModule,
+        AnnouncementsRoutingModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class AnnouncementsModule { }

@@ -15,8 +15,8 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
-import {OddsTypePipe} from "../../../../../core/pipes/odds-type.pipe";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from '@angular-material-components/datetime-picker';
+import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
+import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -26,6 +26,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
+  declarations: [BetBetShopsComponent],
+  providers: [DatePipe, OddsTypePipe],
   imports: [
     CommonModule,
     FormsModule,
@@ -43,10 +45,7 @@ const routes: Routes = [
     MatDatepickerModule,
     AgGridModule,
     RouterModule.forChild(routes),
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
-  ],
-  declarations: [BetBetShopsComponent],
-  providers: [DatePipe, OddsTypePipe],
+    PartnerDateFilterComponent
+  ]
 })
 export class BetBetShopsModule { }

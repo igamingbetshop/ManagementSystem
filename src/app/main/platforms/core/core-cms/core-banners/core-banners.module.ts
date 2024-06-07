@@ -13,7 +13,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 
 const routes: Routes = [
   {
@@ -45,10 +44,7 @@ const routes: Routes = [
     AgBooleanFilterModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    AgGridModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
-
+    AgGridModule
   ],
   declarations: [CoreBannersComponent],
   providers: [DatePipe],

@@ -10,9 +10,9 @@
     <div class="contianer-wrap">
       <div class="date-time-tabs">
         <button class="tab-btn" [class.selected-time]="selectedItem === 'month'" mat-stroked-button
-          (click)="selectTime('month')">{{'Common.Month' | translate}}</button>
+          (click)="selectTime('month')">{{'Common.LastThirtyDays' | translate}}</button>
         <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button
-          (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+          (click)="selectTime('week')">{{'Common.LastSevenDays' | translate}}</button>
         <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button
           (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
         <button class="tab-btn" [class.selected-time]="selectedItem === 'today'" mat-stroked-button

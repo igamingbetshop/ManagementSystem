@@ -3,7 +3,6 @@
 
 .container {
   @include container-style;
-
   .content-action {
     @include action-style;
     height: 60px;

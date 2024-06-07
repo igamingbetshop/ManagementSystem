@@ -111,6 +111,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       NickName: [{ value: null, disabled: true }],
       Gender: [{ value: null, disabled: true }],
       State: [null, [Validators.required]],
+      ClientId: [null],
       RegionId: [{ value: null, disabled: true }],
       LanguageId: [{ value: null, disabled: true }],
       PartnerId: [{ value: null, disabled: true }],

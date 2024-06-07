@@ -15,7 +15,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 
 const routes: Routes = [
@@ -43,8 +43,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule,
     MatSlideToggleModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
+    DateTimePickerComponent
   ],
   declarations: [MainComponent],
   providers: [DatePipe],

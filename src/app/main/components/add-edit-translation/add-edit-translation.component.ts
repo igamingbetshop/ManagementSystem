@@ -46,6 +46,7 @@ export class AddEditTranslationComponent implements OnInit {
   unModifiedData;
   openedIndex = 0;
   deviceTypeId: null | number;
+  isSendingReqest = false; 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any, DeviceTypeId: number | null },
@@ -110,6 +111,7 @@ export class AddEditTranslationComponent implements OnInit {
   }
 
   saveTranslation(requestBody) {
+    this.isSendingReqest = true; 
     if(this.data.DeviceTypeId && requestBody.length > 0) {
       requestBody.forEach(item => {
         item.Type = this.deviceTypeId;
@@ -124,6 +126,7 @@ export class AddEditTranslationComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false; 
       })
   }
 }

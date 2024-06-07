@@ -3,7 +3,7 @@
   <div class="content-action">
     <div class="title">{{'Sport.MarketTypesGroup' | translate}}</div>
 
-    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="onDeleteGroup()">{{'Common.Delete' | translate}}</button>
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected() || isSendingReqest" (click)="onDeleteGroup()">{{'Common.Delete' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
     <button mat-stroked-button  class="mat-btn"  (click)="addTypeGroup()">{{'Sport.AddTypeGroup' | translate}}</button>
   </div>

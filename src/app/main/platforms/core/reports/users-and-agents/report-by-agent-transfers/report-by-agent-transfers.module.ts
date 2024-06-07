@@ -18,7 +18,6 @@ import { MatSelectModule } from "@angular/material/select";
 
 import { MatDialogModule } from "@angular/material/dialog";
 import { TranslateModule } from "@ngx-translate/core";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
@@ -46,8 +45,6 @@ const routes: Routes = [
     MatSelectModule,
     MatDialogModule,
     TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
     PartnerDateFilterComponent
   ]
 })

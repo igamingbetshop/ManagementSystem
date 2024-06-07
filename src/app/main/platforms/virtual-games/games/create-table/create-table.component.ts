@@ -31,7 +31,8 @@ import { VirtualGamesApiService } from '../../services/virtual-games-api.service
   ],
 })
 export class CreateTableComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateTableComponent>,
@@ -64,7 +65,7 @@ export class CreateTableComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('game/createtable', obj).pipe(take(1)).subscribe(data => {
       if(data.ResponseCode === 0)
@@ -73,6 +74,7 @@ export class CreateTableComponent implements OnInit {
       }else{
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.isSendingReqest = false;
     });
 
   }

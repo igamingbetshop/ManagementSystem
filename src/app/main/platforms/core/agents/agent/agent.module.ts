@@ -1,11 +1,10 @@
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {MatTabsModule} from "@angular/material/tabs";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
-import {TranslateModule} from "@ngx-translate/core";
-import {AgentComponent} from "./agent.component";
-import {AgentRoutingModule} from "./agent-routing.module";
-import {RouterModule} from "@angular/router";
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatTabsModule } from "@angular/material/tabs";
+import { TranslateModule } from "@ngx-translate/core";
+import { AgentComponent } from "./agent.component";
+import { AgentRoutingModule } from "./agent-routing.module";
+import { RouterModule } from "@angular/router";
 
 
 @NgModule({
@@ -13,8 +12,6 @@ import {RouterModule} from "@angular/router";
     CommonModule,
     AgentRoutingModule,
     MatTabsModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
     TranslateModule,
     RouterModule
   ],

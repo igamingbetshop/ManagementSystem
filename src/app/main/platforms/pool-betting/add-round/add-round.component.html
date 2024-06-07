@@ -16,25 +16,24 @@
       <input matInput type="text" [placeholder]="'PoolBetting.NickName' | translate" [formControlName]="'NickName'">
     </mat-form-field>
 
-    <mat-form-field class="calendar-picker">
-      <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'OpenTime'">
-      <mat-datepicker-toggle matSuffix [for]="pickerStart">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-    </mat-form-field>
-
-    <mat-form-field class="calendar-picker">
-      <input matInput [ngxMatDatetimePicker]="pickerEnd" [formControlName]="'CloseTime'">
-      <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-        <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-      </mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #pickerEnd></ngx-mat-datetime-picker>
-    </mat-form-field>
+    <div class="calendar-content">
+      <div class="calendar-picker">
+        <app-date-time-picker formControlName="OpenTime"></app-date-time-picker>
+      </div>
+      
+      <div class="calendar-picker field-content-seccond-child">
+        <app-date-time-picker formControlName="CloseTime"></app-date-time-picker>
+      </div>
+    </div>
 
   </form>
 </div>
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+  <button 
+    class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    (click)="onSubmit()">
+    {{'Common.Save' | translate}}
+  </button>
 </div>

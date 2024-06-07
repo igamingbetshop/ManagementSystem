@@ -30,18 +30,14 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
     {
       headerName: 'Common.Id',
       headerValueGetter: this.localizeHeader.bind(this),
-      field: 'Id', hide: true
+      field: 'Id', hide: true,
+      filter: false,
     },
     {
       headerName: 'Common.Name',
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'Name',
-      filter: 'agTextColumnFilter',
-      filterParams: {
-        buttons: ['apply', 'reset'],
-        closeOnApply: true,
-        filterOptions: this.filterService.textOptions
-      },
+      filter: false,
     },
     {
       headerName: 'Bonuses.Percent',
@@ -49,13 +45,8 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
       field: 'Percent',
       editable: true,
       onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-      filter: 'agNumberColumnFilter',
       minWidth: 90,
-      filterParams: {
-        buttons: ['apply', 'reset'],
-        closeOnApply: true,
-        filterOptions: this.filterService.numberOptions
-      },
+      filter: false,
     },
 
   ];
@@ -68,6 +59,7 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
         return params.data.Id;
       },
     },
+    filter: false,
   };
   public rowModelType: GridRowModelTypes = GridRowModelTypes.SERVER_SIDE;
 

@@ -47,7 +47,7 @@ export class DetailsComponent implements OnInit {
     this.dateAdapter.setLocale('en-GB');
     this.formGroup = this.fb.group({
       Id: [null],
-      Name: [null, [Validators.required, Validators.pattern('^[a-zA-Z0-9]*$')]],
+      Name: [null, [Validators.required]],
       PartnerId: [null],
       State: [null],
       Mode: [null],

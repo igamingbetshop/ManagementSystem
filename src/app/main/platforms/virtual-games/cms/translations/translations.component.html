@@ -32,7 +32,7 @@
 
   <div class="grid-content">
     <ag-grid-angular
-      id="translations-sportsbook-grid-state"
+      id="translations-core"
       #agGrid
       class="ag-theme-balham"
       [headerHeight]="33"
@@ -53,7 +53,6 @@
       (paginationChanged)="onPaginationChanged($event)"
       [enableBrowserTooltips]="enableBrowserTooltips"
       (gridReady)="onGridReady($event)"
-      (firstDataRendered)="onFirstDataRendered($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
@@ -64,19 +63,19 @@
     <div class="custom-pagination">
       <div class="pages-sizes">
         <mat-select
-          (selectionChange)="onPageSizeChanged()"
-          [(ngModel)]="cacheBlockSize"
-          [(value)]="defaultPageSize"
-          panelClass="overlay-dropdown small"
-          disableOptionCentering>
-          <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
-        </mat-select>
+        (selectionChange)="onPageSizeChanged()"
+        [(ngModel)]="cacheBlockSize"
+        [(value)]="defaultPageSize"
+        panelClass="overlay-dropdown small"
+        disableOptionCentering>
+        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+      </mat-select>
       </div>
 
       <span class="current-paging">
         <input class="input" type="number" [(ngModel)]="paginationPage" (keypress)="onPaginationGoToPage($event)">
       </span>
-    </div>
 
   </div>
+
 </div>

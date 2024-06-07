@@ -19,6 +19,11 @@
         opacity: 0.5;
       }
     }
+
+    .mat-delete {
+      margin-left: 8px;
+      @include mat-delete-style;
+    }
   }
 
   .grid-content {

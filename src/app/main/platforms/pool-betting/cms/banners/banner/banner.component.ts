@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -92,6 +92,7 @@ export class BannerComponent implements OnInit {
       ShowDescription: [false],
       IsEnabled: [true],
       ImageData: [null],
+      Type: [null],
     });
     this.formGroup.get('Head').disable();
     this.formGroup.get('Body').disable();

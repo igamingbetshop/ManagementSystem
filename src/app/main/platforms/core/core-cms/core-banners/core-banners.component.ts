@@ -20,6 +20,8 @@ import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-ti
 import { AgSelectableFilter } from 'src/app/main/components/grid-common/ag-selectable-filter/ag-selectable-filter.component';
 import { ActivatedRoute } from '@angular/router';
 import { BannerService } from './core-banners.service';
+import { pagingSource } from './add-core-banner/add-core-banner.component';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 
 export enum BannerVisibilityTypes {
@@ -31,12 +33,6 @@ export enum BannerVisibilityTypes {
   'Two Or More Deposits' = 5,
 }
 
-export function getVisibilityTypeOptions(): { Id: number; Name: string }[] {
-  const enumValues = Object.values(BannerVisibilityTypes).filter(value => typeof value === 'number');
-
-  return enumValues.map(value => ({ Id: value as number, Name: BannerVisibilityTypes[value as number] }));
-}
-
 
 @Component({
   selector: 'app-core-banners',
@@ -46,7 +42,7 @@ export function getVisibilityTypeOptions(): { Id: number; Name: string }[] {
 export class CoreBannersComponent extends BasePaginatedGridComponent implements OnInit, OnDestroy {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public partners: any[] = [];
-  public partnerId = 1;
+  public partnerId: number = null;
   public fromDate = new Date();
   public toDate = new Date();
   public rowData = [];
@@ -54,10 +50,11 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     agSelectableFilter: AgSelectableFilter,
-    agDateTimeFilter: AgDateTimeFilter
+    agDateTimeFilter: AgDateTimeFilter,
+    agDropdownFilter: AgDropdownFilter,
   };
 
-  banersTypes = getVisibilityTypeOptions();
+  banersTypes: any = [...pagingSource.types];
 
   constructor(
     protected injector: Injector,
@@ -70,6 +67,81 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_BANERS;
+
+  }
+
+  ngOnInit() {
+    this.gridStateName = 'core-banners-grid-state';
+    this.partners = this.commonDataService.partners;
+    this.setPartnerId();
+    this.subscribeToCurrentUpdate();
+    this.initCategorySource();
+    this.getBannerFragments();
+  }
+
+  setPartnerId() {
+    const hasPartnerIdOtherThanOne = this.partners.some(partner => partner.Id == 1);
+
+    if (hasPartnerIdOtherThanOne) {
+      const partnerWithIdOtherThanOne = this.partners.find(partner => partner.Id == 1);
+      this.partnerId = partnerWithIdOtherThanOne.Id;
+    } else {
+      this.partnerId = this.partners.length > 0 ? this.partners[0].Id : null;
+    }
+  }
+
+  subscribeToCurrentUpdate() {
+    this.bannerService.currentUpdate.subscribe((banner) => {
+      if (banner && this.gridApi.getDisplayedRowCount() > 0) {
+        const rowIdToUpdate = banner?.Id;
+        const displayedRows = this.gridApi.getDisplayedRowCount();
+        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+          const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+          if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+            rowNode.data.StartDate = banner.StartDate;
+            rowNode.data.EndDate = banner.EndDate;
+            rowNode.data.Type = banner.Type;
+            rowNode.data.Order = banner.Order;
+            rowNode.data.ShowDescription = banner.ShowDescription;
+            rowNode.data.ShowLogin = banner.ShowLogin;
+            rowNode.data.ShowRegistration = banner.ShowRegistration;
+            rowNode.data.Image = banner.Image;
+            rowNode.data.IsEnabled = banner.IsEnabled;
+            rowNode.data.Visibility = banner.Visibility;
+            rowNode.data.Type = banner.Type;
+            this.gridApi.redrawRows({ rowNodes: [rowNode] });
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  initCategorySource(): void {
+    const types = []
+    for (let i = 1; i < 100; i++) {
+      const webId = i + 100;
+      const mobileId = i + 200;
+      types.push({ Id: `${+webId}`, Name: `Category ${i} Web` }, { Id: `${+mobileId}`, Name: `Category ${i} Mobile` });
+    }
+    this.banersTypes.push(...types);
+  }
+
+  getBannerFragments() {
+    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId,
+      true, Controllers.CONTENT, Methods.GET_BANNER_FRAGMENTS)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.banersTypes.push(...data.ResponseObject);
+          this.setColdefts();
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  setColdefts() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -132,18 +204,6 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         headerName: 'Common.NickName',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'NickName',
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions,
-        }
-      },
-      {
-        headerName: 'Cms.FragmentName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'FragmentName',
         resizable: true,
         filter: 'agTextColumnFilter',
         filterParams: {
@@ -224,14 +284,23 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
       {
         headerName: 'Common.Type',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'FragmentName',
+        field: 'Type',
         resizable: true,
-        filter: 'agTextColumnFilter',
+        cellRenderer: (params: { value: any; }) => {
+          const _type = params.value;
+          const typeObject = this.banersTypes?.find((type) => type.Id == _type);
+
+          if (typeObject) {
+            return typeObject.Name;
+          }
+          return _type;
+        },
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions,
-        }
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.banersTypes,
+        },
+
       },
       {
         headerName: 'Common.Visibility',
@@ -242,11 +311,11 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         filterParams: {
           filterOptions: this.filterService.stateOptions,
           filterData: Object.keys(BannerVisibilityTypes)
-          .filter(key => !isNaN(Number(BannerVisibilityTypes[key])))
-          .map(key => ({
-            Id: BannerVisibilityTypes[key],
-            Name: key,
-          }))
+            .filter(key => !isNaN(Number(BannerVisibilityTypes[key])))
+            .map(key => ({
+              Id: BannerVisibilityTypes[key],
+              Name: key,
+            }))
           ,
         },
       },
@@ -266,38 +335,6 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         sortable: false
       },
     ];
-  }
-
-  ngOnInit() {
-    this.gridStateName = 'core-banners-grid-state';
-    this.partners = this.commonDataService.partners;
-    this.subscribeToCurrentUpdate();
-  }
-
-  subscribeToCurrentUpdate() {
-    this.bannerService.currentUpdate.subscribe((banner) => {
-      if (banner && this.gridApi.getDisplayedRowCount() > 0) {
-        const rowIdToUpdate = banner?.Id;
-        const displayedRows = this.gridApi.getDisplayedRowCount();
-        for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
-          const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
-          if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
-            rowNode.data.StartDate = banner.StartDate;
-            rowNode.data.EndDate = banner.EndDate;
-            rowNode.data.Type = banner.Type;
-            rowNode.data.Order = banner.Order;
-            rowNode.data.ShowDescription = banner.ShowDescription;
-            rowNode.data.ShowLogin = banner.ShowLogin;
-            rowNode.data.ShowRegistration = banner.ShowRegistration;
-            rowNode.data.Image = banner.Image;
-            rowNode.data.IsEnabled = banner.IsEnabled;
-            rowNode.data.Visibility = banner.Visibility;
-            this.gridApi.redrawRows({ rowNodes: [rowNode] });
-            break;
-          }
-        }
-      }
-    });
   }
 
   startDate() {
@@ -389,6 +426,7 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
                 payment.Visibility = payment.Visibility.map(element => {
                   return BannerVisibilityTypes[element]
                 });
+
                 // payment['Type'] = this.getType(payment.Type);
               });
               params.success({ rowData: mappedRows.Entities, rowCount: mappedRows.Count });
@@ -420,7 +458,6 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
         this.getCurrentPage();
       }
     })
-
   }
 
   ngOnDestroy(): void {

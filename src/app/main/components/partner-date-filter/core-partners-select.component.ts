@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { CommonDataService } from 'src/app/core/services';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-core-partners-select',
@@ -11,12 +12,13 @@ import { CommonDataService } from 'src/app/core/services';
     CommonModule,
     FormsModule,
     MatSelectModule,
+    TranslateModule
   ],
   template: `
       <div class="partner-dropdown">
-      <mat-select (selectionChange)="getByPartnerData($event.value)" placeholder="{{'SelectPartner'}}"
+      <mat-select (selectionChange)="getByPartnerData($event.value)" placeholder="{{'Partners.SelectPartner' | translate}}"
         panelClass="overlay-dropdown" disableOptionCentering>
-        <mat-option [value]="null">{{'SelectPartner'}}</mat-option>
+        <mat-option [value]="null">{{'Partners.SelectPartner' | translate }}</mat-option>
         @for (partner of partners; track partner.Id) {
         <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
         }

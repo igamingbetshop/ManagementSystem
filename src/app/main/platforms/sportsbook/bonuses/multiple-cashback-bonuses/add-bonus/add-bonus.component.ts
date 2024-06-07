@@ -35,12 +35,12 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
   ],
 })
 export class AddBonusComponent implements OnInit {
-  public formGroup: UntypedFormGroup;
-  public bonusSettings: any[] = [];
-  public partners: any[] = [];
-  public bonus: any;
-  public openForAdd;
-
+  formGroup: UntypedFormGroup;
+  bonusSettings: any[] = [];
+  partners: any[] = [];
+  bonus: any;
+  openForAdd;
+  isSendingReqest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {partners: any[], bonusSettings: any[],   bonus: any },
@@ -87,6 +87,7 @@ export class AddBonusComponent implements OnInit {
     if(this.formGroup.invalid){
       return;
     }
+    this.isSendingReqest = true;
     this.bonus.PartnerId = this.formGroup.get('PartnerId').value;
     this.bonus.BonusSettingId = this.formGroup.get('BonusSettingId').value;
     this.bonus.State = this.formGroup.get('State').value;
@@ -99,6 +100,7 @@ export class AddBonusComponent implements OnInit {
         }else{
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
       })
 
   }

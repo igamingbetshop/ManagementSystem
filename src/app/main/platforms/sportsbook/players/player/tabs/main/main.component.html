@@ -10,9 +10,7 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{player?.Id}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" readonly [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
       
@@ -30,9 +28,7 @@
         <div class="first-hand">{{'Common.NickName' | translate}}</div>
         <div class="second-hand">{{player?.NickName}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [placeholder]="'Clients.NickName' | translate" readonly [formControlName]="'NickName'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -40,10 +36,8 @@
         <div class="first-hand">{{'Sport.LimitPercent' | translate}}</div>
         <div class="second-hand">{{player?.LimitPercent}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [placeholder]="'Sport.LimitPercent' | translate"
             [formControlName]="'LimitPercent'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -51,10 +45,8 @@
         <div class="first-hand">{{'Sport.DelayPercentPrematch' | translate}}</div>
         <div class="second-hand">{{player?.DelayPercentPrematch}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [placeholder]="'Sport.DelayPercentPrematch' | translate"
             [formControlName]="'DelayPercentPrematch'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -62,10 +54,8 @@
         <div class="first-hand">{{'Sport.DelayPercentLive' | translate}}</div>
         <div class="second-hand">{{player?.DelayPercentLive}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [placeholder]="'Sport.DelayPercentLive' | translate"
             [formControlName]="'DelayPercentLive'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -73,10 +63,8 @@
         <div class="first-hand">{{'Sport.DelayBetweenBetsPrematch' | translate}}</div>
         <div class="second-hand">{{player?.DelayBetweenBetsPrematch}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [placeholder]="'Sport.DelayBetweenBetsPrematch' | translate"
             [formControlName]="'DelayBetweenBetsPrematch'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -84,10 +72,8 @@
         <div class="first-hand">{{'Sport.DelayBetweenBetsLive' | translate}}</div>
         <div class="second-hand">{{player?.DelayBetweenBetsLive}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [placeholder]="'Sport.DelayBetweenBetsLive' | translate"
             [formControlName]="'DelayBetweenBetsLive'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -95,10 +81,8 @@
         <div class="first-hand">{{'Clients.Currency' | translate}}</div>
         <div class="second-hand">{{player?.PlayerCurrencyId}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [placeholder]="'Clients.Currency' | translate" readonly
             [formControlName]="'PlayerCurrencyId'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -106,9 +90,7 @@
         <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
         <div class="second-hand">{{player?.ExternalId}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [placeholder]="'Products.ExternalId' | translate" readonly [formControlName]="'ExternalId'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -124,14 +106,27 @@
         <div class="first-hand">{{'Sport.RepeatBetMaxCount' | translate}}</div>
         <div class="second-hand">{{player?.RepeatBetMaxCount}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [placeholder]="'Sport.RepeatBetMaxCount' | translate"
             [formControlName]="'RepeatBetMaxCount'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
       <div>
+        <div class="first-hand">{{'BetShops.AllowCashout' | translate}}</div>
+        <div class="second-hand">
+          @if (player?.AllowCashout) {
+            {{"Yes"}}
+          } @else if (player?.AllowCashout === false) {
+            {{"No"}}
+          } @else {
+            {{"None"}}
+          }
+        </div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'AllowCashout'" [placeholder]="'None'">
+            <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+          </mat-select>
+        </div>
       </div>
 
 
@@ -140,7 +135,7 @@
         <div class="actions" *ngIf = "isEdit">
           
           <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
-          <button mat-raised-button class="mat-btn" [disabled]="formGroup.invalid" type="submit" (click)="onSubmit()">
+          <button mat-raised-button class="mat-btn" [class.disabled]="formGroup.invalid || isSendingReqest" type="submit" (click)="onSubmit()">
             {{'Common.Save' | translate}}
           </button>
 

@@ -21,7 +21,7 @@
 
 .grid-content {
   width: 100%;
-  height: calc(100vh - 395px);
+  height: calc(100vh - 555px);
   padding-top: 12px;
 
   ::ng-deep {
@@ -43,3 +43,13 @@
 }
 
 
+.card-content {
+  padding-top: 15px;
+  display: flex;
+  gap: 10px;
+  .mat-mdc-card {
+    max-width: 150px;
+    max-height: 150px;
+    margin-right: 20px;
+  }
+}

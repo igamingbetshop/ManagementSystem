@@ -1,0 +1,79 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container
+{
+  padding: 0 16px;
+  .payment-analytics-content
+  {
+    display: flex;
+    gap: 16px;
+    .payin-block,.payout-block
+    {
+      flex: 1;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 8px;
+      padding: 4vh 2vw 0 2vw;
+      min-height: 76vh;
+      .block-header
+      {
+        font-size: 2.4vh;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 1);
+        text-transform: capitalize;
+        margin-bottom: 3.9vh;
+      }
+      .block-content
+      {
+        width: 100%;
+        .block-row
+        {
+          display: flex;
+          align-items: center;
+          margin-bottom: 4vh;
+          height: 8.5vh;
+          .row-number
+          {
+            width: 24px;
+            height: 100%;
+            border-right: 2px solid rgba(211, 211, 221, 1);
+            font-size: 3.2vh;
+            font-weight: 500;
+            text-align: left;
+            line-height: 8.5vh;
+            &.payin-number
+            {
+              color: rgba(75, 204, 111, 1);
+            }
+            &.payout-number
+            {
+              color: rgba(218, 80, 88, 1);
+            }
+          }
+          app-progress-bar
+          {
+            width: calc(100% - 24px);
+            margin-left: 16px;
+          }
+        }
+      }
+      .empty-block
+      {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .empty-block-icon
+        {
+          width: 11.2vh;
+        }
+        p
+        {
+          color: rgba(91, 99, 114, 1);
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}

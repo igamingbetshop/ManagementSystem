@@ -26,6 +26,8 @@ export class TeamComponent extends BasePaginatedGridComponent implements OnInit 
   public formGroup: UntypedFormGroup;
   public rowData = [];
   public isEdit = false;
+  isSendingReqest = false;
+  image: any;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -130,13 +132,14 @@ export class TeamComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   getTeamById() {
-    this.apiService.apiPost(this.path, {Id: this.teamId})
+    this.apiService.apiPost('teams/team', {Id: this.teamId})
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.teamData = data.Objects[0];
-          this.sportId = data.Objects[0].SportId;
+          this.teamData = data.ResponseObject;
+          this.sportId = data.ResponseObject.SportId;
           this.formGroup.patchValue(this.teamData);
+          this.image = "https://resources.iqsoftllc.com/" + this.teamData.LogoImageUrl;
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
@@ -150,9 +153,11 @@ export class TeamComponent extends BasePaginatedGridComponent implements OnInit 
       ParentId: [null],
       Rating: [null],
       SportId: [null, [Validators.required]],
-      SportName: [null, [Validators.required]],
+      SportName: [null],
       TranslationId: [null, [Validators.required]],
       TypeId: [null, [Validators.required]],
+      LogoImage: [null],
+      LogoImageUrl: [null],
     });
   }
 
@@ -165,6 +170,35 @@ export class TeamComponent extends BasePaginatedGridComponent implements OnInit 
       }
     })
   }
+
+  uploadLogoImage(evt) {
+    let files = evt.target.files;
+    let file = files[0];
+    const maxSizeInBytes = 900000;
+    const validDocumentFormat = file && file.type === 'image/svg+xml';
+    const validDocumentSize = file && file.size <= maxSizeInBytes;
+  
+    if (files && file && validDocumentFormat && validDocumentSize) {
+      let reader = new FileReader();
+      reader.onload = () => {
+        const binaryString = reader.result as string;
+        this.formGroup.get('LogoImage').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
+      };
+      reader.readAsDataURL(file);
+      this.isSendingReqest = false;
+    } else {
+      this.isSendingReqest = true;
+      let errorMessage = 'Invalid file format or size. ';
+      if (!validDocumentFormat) {
+        errorMessage += 'Please upload an SVG format file. ';
+      }
+      if (!validDocumentSize) {
+        errorMessage += 'File size must be less than 900 KB.';
+      }
+      SnackBarHelper.show(this._snackBar, {Description: errorMessage, Type: "error"});
+    }
+  }
+  
 
   onSubmit() {
     const requestBody =  this.formGroup.getRawValue();

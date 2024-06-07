@@ -13,8 +13,8 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TranslateModule } from '@ngx-translate/core';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 import { CoreApiService } from 'src/app/main/platforms/core/services/core-api.service';
+import { PartnerDateFilterComponent } from "../../../partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
   {
@@ -24,27 +24,26 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatNativeDateModule,
-    TranslateModule,
-    MatDatepickerModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-  ],
-  declarations: [AccountsComponent],
-  providers: [
-    CoreApiService
-  ]
+    declarations: [AccountsComponent],
+    providers: [
+        CoreApiService
+    ],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        MatNativeDateModule,
+        TranslateModule,
+        MatDatepickerModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        PartnerDateFilterComponent
+    ]
 })
 export class AccountsModule { }

@@ -12,6 +12,7 @@ import {GridMenuIds, ModalSizes} from 'src/app/core/enums';
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import {OpenerComponent} from "../../../../components/grid-common/opener/opener.component";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { CellClickedEvent } from 'ag-grid-community';
 
 @Component({
   selector: 'app-teams',
@@ -117,15 +118,18 @@ export class AllTeamsComponent extends BasePaginatedGridComponent implements OnI
       {
         headerName: 'Common.View',
         headerValueGetter: this.localizeHeader.bind(this),
-        cellRenderer: OpenerComponent,
         filter: false,
-        valueGetter: params => {
-          let data = {path: '', queryParams: null};
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'team').split('?')[0];
-          data.queryParams = {teamId: params.data.Id};
-          return data;
+        cellRenderer: function (params) {
+          if (params.node.rowPinned) {
+            return '';
+          } else {
+            return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+           visibility
+            </i>`
+          }
+
         },
+        onCellClicked: (event: CellClickedEvent) => this.goToTeam(event),
         sortable: false
       },
     ]
@@ -171,6 +175,20 @@ export class AllTeamsComponent extends BasePaginatedGridComponent implements OnI
           });
       },
     };
+  }
+
+  goToTeam(ev) {
+    const url = this.router.serializeUrl(this.router.createUrlTree([`/main/sportsbook/teams/team`],
+      {
+        queryParams: {
+          teamId: ev.data?.Id,
+        }
+      }));
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      console.error('Failed to construct URL');
+    }
   }
 
   onPageSizeChanged() {

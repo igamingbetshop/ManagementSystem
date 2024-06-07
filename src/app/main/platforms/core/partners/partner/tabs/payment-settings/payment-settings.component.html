@@ -27,6 +27,7 @@
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
+      (cellValueChanged)="onCellValueChanged($event)"
       rowSelection="single">
     </ag-grid-angular>
   </div>

@@ -10,6 +10,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MarketTypesComponent } from "./market-types.component";
 import { MarketTypesRoutingModule } from "./market-types-routing.module";
 import { TranslateModule } from "@ngx-translate/core";
+import { SelectionsGridComponent } from "./selections-grid/selections-grid.component";
 
 @NgModule({
   imports: [
@@ -22,7 +23,7 @@ import { TranslateModule } from "@ngx-translate/core";
     MatSelectModule,
     TranslateModule
   ],
-  declarations: [MarketTypesComponent]
+  declarations: [MarketTypesComponent, SelectionsGridComponent]
 })
 
 export class MarketTypesModule { }

@@ -13,23 +13,20 @@
       [headerHeight]="33"
       [rowHeight]="42"
       [rowData]="rowData"
+      [enableGroupEdit] = "true"
+      [autoGroupColumnDef]="autoGroupColumnDef"
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
-      [suppressCopyRowsToClipboard]="true"
-      [components]="frameworkComponents"
-      [animateRows]="true"
-      [cacheBlockSize]="cacheBlockSize"
-      [autoGroupColumnDef]="autoGroupColumnDef"
       [treeData]="true"
       [animateRows]="true"
-      [groupDefaultExpanded]="groupDefaultExpanded"
-      [getDataPath]="getDataPath"
+      [cacheBlockSize]="10000"
+      [components]="frameworkComponents"
+      [isServerSideGroup]="isServerSideGroup"
+      [getServerSideGroupKey]="getServerSideGroupKey"
+      (gridReady)="onGridReady($event)"
       [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-
+      [enableCellTextSelection]="true">
     </ag-grid-angular>
 
   </div>

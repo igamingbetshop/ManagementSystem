@@ -70,24 +70,14 @@
       <input matInput [placeholder]="'SkillGames.RegularityTime' | translate" [formControlName]="'RegularityTime'">
     </mat-form-field>
 
-    <div class="picker-content">
-      <mat-form-field class="calendar-picker start">
-        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
-        <mat-label>{{'Clients.StartTime' | translate}}</mat-label>
-        <mat-datepicker-toggle matSuffix [for]="pickerStart">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-      </mat-form-field>
-
-      <mat-form-field class="calendar-picker">
-        <mat-label>{{'SkillGames.AnnounceDate' | translate}}</mat-label>
-        <input matInput [ngxMatDatetimePicker]="pickerOpenTime" [formControlName]="'OpenTime'">
-        <mat-datepicker-toggle matSuffix [for]="pickerOpenTime">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerOpenTime></ngx-mat-datetime-picker>
-      </mat-form-field>
+    <div class="calendar-content">
+      <div class="calendar-picker">
+        <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
+      </div>
+      
+      <div class="calendar-picker field-content-seccond-child">
+        <app-date-time-picker formControlName="OpenTime"></app-date-time-picker>
+      </div>
     </div>
 
     <label for="file1">{{'SkillGames.LobbyPicture' | translate}}*
@@ -101,6 +91,6 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' |
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingReqest" (click)="onSubmit()">{{'Common.Save' |
     translate}}</button>
 </div>

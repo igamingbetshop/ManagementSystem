@@ -1,0 +1,43 @@
+<div class="partner-container">
+
+  <div class="partner-content action">
+    <div class="title">{{'Common.Coins' | translate}}</div>
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected() || isSendingReqest" (click)="onDeleteCoin()">{{'Sport.DeleteCoin' | translate}}</button>
+    <button mat-stroked-button class="mat-edit-btn" [class.disabled]="isRowSelected()" (click)="onAddEditCoin(true)">{{'Sport.EditCoin' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" (click)="onAddEditCoin(false)">{{'Sport.AddCoin' | translate}}</button>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
+  </div>
+
+
+  <div class="grid-content">
+    <ag-grid-angular
+      id="corrections"
+      #agGrid
+      class="ag-theme-balham first-ag-grid"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [cacheBlockSize]="cacheBlockSize"
+      [components]="frameworkComponents"
+      [suppressCopyRowsToClipboard]="true"
+      (gridReady)="onGridReady($event)"
+      [ensureDomOrder]="true"
+      [sideBar]="sideBar"
+      [paginationPageSize]="cacheBlockSize"
+      [pagination]="pagination"
+      [paginationAutoPageSize]="cacheBlockSize"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
+      rowSelection="single">
+    </ag-grid-angular>
+
+  </div>
+</div>

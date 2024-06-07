@@ -14,8 +14,20 @@
     </div>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="addCategory()">{{'ClientCategories.AddCategory' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="clone()">{{'Sport.Clone' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="delete()">{{'Common.Delete' | translate}}</button>
+    <button 
+      mat-stroked-button 
+      class="mat-btn" 
+      [class.disabled]="isRowSelected() || isSendingReqest" 
+      (click)="clone()">
+      {{'Sport.Clone' | translate}}
+    </button>
+    <button 
+      mat-stroked-button 
+      class="mat-btn" 
+      [class.disabled]="isRowSelected() || isSendingReqest" 
+      (click)="delete()">
+      {{'Common.Delete' | translate}}
+    </button>
   </div>
 
   <div class="grid-content">

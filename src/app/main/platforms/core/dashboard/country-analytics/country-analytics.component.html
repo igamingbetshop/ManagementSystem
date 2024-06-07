@@ -4,20 +4,47 @@
     (toDateChange)="onDateChange($event)" />
   <div class="country-analytics-content">
     <div class="visitors-block">
-      <div class="block-header">{{'Dashboard.Most Visitors By Country' | translate}}</div>
+      <div class="block-header">{{'Dashboard.MostVisitorsByCountry' | translate}}</div>
       <div class="subtitles">
         <span>{{'Dashboard.Country' | translate}}</span>
         <span>{{'Dashboard.Count' | translate}}</span>
       </div>
-      <app-progress-bar [src]="item" *ngFor="let item of topVisitors"></app-progress-bar>
+      @if (topVisitors?.length){
+        <div class="block-content">
+          @for (item of topVisitors; track $index){
+            <app-progress-bar [src]="item" [number]="''" class="country"></app-progress-bar>
+          }
+        </div>
+      }
+
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+
     </div>
     <div class="registrations-block">
-      <div class="block-header">{{'Dashboard.Most Registrations By Country' | translate}}</div>
+      <div class="block-header">{{'Dashboard.MostRegistrationsByCountry' | translate}}</div>
       <div class="subtitles">
         <span>{{'Dashboard.Country' | translate}}</span>
         <span>{{'Dashboard.Count' | translate}}</span>
       </div>
-      <app-progress-bar [src]="item" *ngFor="let item of topRegistrations"></app-progress-bar>
+      @if (topRegistrations?.length){
+        <div class="block-content">
+          @for(item of topRegistrations; track $index){
+            <app-progress-bar [src]="item"   [number]="''" class="country"></app-progress-bar>
+          }
+        </div>
+      }
+
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
     </div>
   </div>
 </div>

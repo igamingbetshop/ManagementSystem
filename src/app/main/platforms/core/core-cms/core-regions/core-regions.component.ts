@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import 'ag-grid-enterprise';
 import { Controllers, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
-import { CellValueChangedEvent, ColDef } from 'ag-grid-community';
+import { CellValueChangedEvent, ColDef, GetServerSideGroupKey, GridReadyEvent, ICellRendererParams, IsServerSideGroup } from 'ag-grid-community';
 import { take } from 'rxjs/operators';
 import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
 import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
@@ -33,23 +33,35 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     textEditor: TextEditorComponent,
     selectRenderer: SelectRendererComponent,
   }
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  public rowModelType: GridRowModelTypes = GridRowModelTypes.SERVER_SIDE;
 
   public autoGroupColumnDef: ColDef = {
-    headerName: 'Common.Id',
+    headerName: 'Common.GroupId',
     headerValueGetter: this.localizeHeader.bind(this),
-    floatingFilter: true,
-    floatingFilterComponentParams: {
-      suppressFilterButton: true,
-    },
+    field: 'Id',
     checkboxSelection: true,
-    filter: 'agNumberColumnFilter',
     cellRendererParams: {
-      suppressCount: true,
+      innerRenderer: (params: ICellRendererParams) => {
+        return params.data.Id;
+      },
+    },
+    minWidth: 90,
+    filter: 'agNumberColumnFilter',
+    filterParams: {
+      buttons: ['apply', 'reset'],
+      closeOnApply: true,
+      filterOptions: ['IsGreaterThanOrEqual'],
     },
   };
   public groupDefaultExpanded = 0;
 
+  public isServerSideGroup: IsServerSideGroup = (dataItem: any) => {
+    return dataItem.group;
+  };
+
+  public getServerSideGroupKey: GetServerSideGroupKey = (dataItem: any) => {
+    return dataItem.Id;
+  };
   constructor(
     protected injector: Injector,
     private _snackBar: MatSnackBar,
@@ -66,7 +78,12 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     this.partners = this.commonDataService.partners;
     this.languages = this.commonDataService.languages;
     this.getRegions();
-    this.getPage();
+    // this.getPage();
+  }
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
   init() {
@@ -76,11 +93,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Name',
         resizable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
       },
       {
         headerName: 'Cms.IsoCode',
@@ -88,11 +101,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         field: 'IsoCode',
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
         onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event.data),
         cellEditor: 'textEditor',
       },
@@ -102,11 +111,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         field: 'IsoCode3',
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
         onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event.data),
         cellEditor: 'textEditor',
       },
@@ -116,11 +121,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         field: 'LanguageId',
         resizable: true,
         editable: true,
-        filter: 'agNumberColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
         onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event.data),
         cellEditor: 'textEditor',
       },
@@ -129,14 +130,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'State',
         resizable: true,
-        filter: 'agSetColumnFilter',
-        floatingFilter: true,
-        filterParams: {
-          valueFormatter: params => {
-            const state = Number(params.value);
-            return this.sessionStates.find(field => field.Id === state)?.Name;
-          }
-        },
+        filter: false,
         floatingFilterComponentParams: {
           suppressFilterButton: true,
         },
@@ -152,11 +146,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         field: 'ParentId',
         resizable: true,
         editable: true,
-        filter: 'agNumberColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
         onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event.data),
         cellEditor: 'numericEditor',
       },
@@ -166,28 +156,14 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         field: 'CurrencyId',
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
       },
       {
         headerName: 'Common.Type',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TypeId',
         resizable: true,
-        filter: 'agSetColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
-        filterParams: {
-          valueFormatter: params => {
-            const region = Number(params.value);
-            return this.regions.find(field => field.Id === region)?.Name;
-          }
-        },
+        filter: false,
         cellRenderer: 'selectRenderer',
         cellRendererParams: {
           onchange: this.onSelectChangeType['bind'](this),
@@ -200,11 +176,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         field: 'Info',
         resizable: true,
         editable: true,
-        filter: 'agTextColumnFilter',
-        floatingFilter: true,
-        floatingFilterComponentParams: {
-          suppressFilterButton: true,
-        },
+        filter: false,
         onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event.data),
         cellEditor: 'textEditor',
       },
@@ -214,6 +186,38 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
   public getDataPath = (data: any) => {
     return data.groupKey;
   };
+
+
+  createServerSideDatasource = () => {
+    return {
+      getRows: (params) => {
+        const filter: any = {};
+        filter.SkipCount = 0;
+        filter.TakeCount = -1;
+        if (params.parentNode.level == -1) {
+          filter.ProductId = 1;
+        } else {
+          filter.ParentId = params.parentNode.data.Id;
+        }
+        this.setFilter(params.request.filterModel, filter);
+        if( !!filter['ag-Grid-AutoColumns'] && params.parentNode.level != -1 ) {
+          filter.Id = filter['ag-Grid-AutoColumns'].ApiOperationTypeList[0].DecimalValue;
+          delete filter['ag-Grid-AutoColumns'];
+        }
+
+        this.apiService.apiPost(this.configService.getApiUrl, filter,
+          true, Controllers.REGION, Methods.GET_REGIONS).pipe(take(1)).subscribe(data => {
+            if (data.ResponseCode === 0) {
+              const enitities = (data.ResponseObject);
+              enitities.forEach(entity => {
+                entity.group = !entity.IsLeaf;
+              })
+              params.success({ rowData: enitities, rowCount: enitities.length });
+            }
+          });
+      },
+    };
+  }
 
   getRegions() {
     this.apiService.apiPost(this.configService.getApiUrl, {},
@@ -252,7 +256,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.getPage();
+        this.getCurrentPage();
       }
     })
   }
@@ -281,28 +285,28 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     }
   };
 
-  getPage() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.REGION, Methods.GET_REGIONS)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          let mappedData = [];
-          data.ResponseObject.forEach(field => {
-            if (field.ParentId === null) {
-              field.groupKey = [field.Id];
-              mappedData.push(field);
-              this.handleDataRecursively(data.ResponseObject, field, mappedData);
-            }
-          })
-          this.rowData = mappedData;
+  // getPage() {
+  //   this.apiService.apiPost(this.configService.getApiUrl, {},
+  //     true, Controllers.REGION, Methods.GET_REGIONS)
+  //     .pipe(take(1))
+  //     .subscribe(data => {
+  //       if (data.ResponseCode === 0) {
+  //         let mappedData = [];
+  //         data.ResponseObject.forEach(field => {
+  //           if (field.ParentId === null) {
+  //             field.groupKey = [field.Id];
+  //             mappedData.push(field);
+  //             this.handleDataRecursively(data.ResponseObject, field, mappedData);
+  //           }
+  //         })
+  //         this.rowData = mappedData;
 
 
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
+  //       } else {
+  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+  //       }
+  //     });
+  // }
 
   getFormattedState(params) {
     const state = Number(params.value);

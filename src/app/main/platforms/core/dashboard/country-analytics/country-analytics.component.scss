@@ -12,10 +12,12 @@
     {
       flex: 1;
       background: rgba(255, 255, 255, 1);
-      padding: 40px;
+      border-radius: 8px;
+      padding: 4vh 2vw 0 2vw;
+      min-height: 76vh;
       .block-header
       {
-        font-size: 22px;
+        font-size: 2.4vh;
         font-weight: 700;
         color: rgba(0, 0, 0, 1);
         text-transform: capitalize;
@@ -25,16 +27,35 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 38px 0;
+        margin: 3.9vh 0;
         width: 100%;
-        height: 34px;
+        height: 3.6vh;
         border-bottom: 2px solid rgba(231, 232, 240, 1);
         font-size: 16px;
         font-weight: 500;
         color: rgba(62, 77, 102, 1);
       }
-
-
+      .block-content
+      {
+        width: 100%;
+      }
+      .empty-block
+      {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .empty-block-icon
+        {
+          width: 11.2vh;
+        }
+        p
+        {
+          color: rgba(91, 99, 114, 1);
+          font-size: 14px;
+        }
+      }
     }
   }
 }

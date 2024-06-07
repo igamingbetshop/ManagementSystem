@@ -23,6 +23,7 @@ const bannerVisibilityTypes = [
   { id: '5', name: 'Two Or More Deposits' }
 ];
 
+
 @Component({
   selector: 'app-banners',
   templateUrl: './banners.component.html',
@@ -31,7 +32,7 @@ const bannerVisibilityTypes = [
 export class BannersComponent extends BasePaginatedGridComponent implements OnInit {
 
   public rowData = [];
-
+  isSendingReqest = false;
   public partners: any[] = [];
   public partnerId = null;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
@@ -112,6 +113,11 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
         field: 'IsEnabled',
       },
       {
+        headerName: 'Common.Type',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Type',
+      },
+      {
         headerName: 'Common.Visibility',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Visibility',
@@ -176,7 +182,7 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
     const row = this.gridApi.getSelectedRows()[0];
     delete row.UserId;
     delete row.CurrencyId;
-
+    this.isSendingReqest = true;
     this.apiService.apiPost(PBControllers.CMS, PBMethods.DELETE_BANNER,row).subscribe(data => {
 
       if (data.Code === 0) {
@@ -184,6 +190,7 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

@@ -129,6 +129,11 @@
                  [placeholder]="'Partners.SearchByExternalId' | translate">
         </div>
 
+        <div class="calendar-picker" Dropdown>
+          <input matInput type="datetime-local" #dropdownContent (ngModelChange)="onStartDateChange($event)"
+            name="meeting-time" [ngModel]="formatDateTime(fromDate)">
+        </div>
+
       </div>
 
       <ul class="tree-content">

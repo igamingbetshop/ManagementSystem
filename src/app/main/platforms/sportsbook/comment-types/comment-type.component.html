@@ -3,7 +3,13 @@
   <div class="comment-type-content action">
     <div class="title">{{'Cms.CommentTypes' | translate}}</div>
     <button mat-stroked-button class="mat-btn" (click)="addTeam()">{{'Sport.AddComment' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled] ="isRowSelected()" (click)="delateTeam()">{{'Sport.DeleteComment' | translate}}</button>
+    <button 
+      mat-stroked-button 
+      class="mat-delete" 
+      [class.disabled] ="isRowSelected() || isSendingReqest" 
+      (click)="delateTeam()">
+        {{'Sport.DeleteComment' | translate}}
+    </button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
   </div>
 

@@ -6,11 +6,6 @@ import {ClientsComponent} from "./clients.component";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonDataResolver } from '../resolvers/common-data.resolver';
 import { PartnersResolver } from '../resolvers/partners.resolver';
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-  NgxMatTimepickerModule,
-} from '@angular-material-components/datetime-picker';
 
 
 @NgModule({
@@ -21,9 +16,6 @@ import {
     CommonModule,
     ClientsRoutingModule,
     MatSnackBarModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    NgxMatTimepickerModule,
   ],
   providers:[
     DocumentTypesResolver,

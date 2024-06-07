@@ -13,6 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from "@ngx-translate/core";
 import { TeamComponent } from './team.component';
+import { MatCardModule } from '@angular/material/card';
 
 const routes: Routes = [
   {
@@ -37,6 +38,7 @@ const routes: Routes = [
     MatButtonModule,
     MatSelectModule,
     AgGridModule,
+    MatCardModule,
     RouterModule.forChild(routes),
     TranslateModule,
   ],

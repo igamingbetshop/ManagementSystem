@@ -10,6 +10,7 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { BannerService } from '../core-banners.service';
+import { pagingSource } from '../add-core-banner/add-core-banner.component';
 
 @Component({
   selector: 'app-core-banner',
@@ -41,8 +42,23 @@ export class CoreBannerComponent implements OnInit {
     { id: 4, name: 'One Deposit Only' },
     { id: 5, name: 'Two Or More Deposits' }
   ];
+  // bannerTypes: any = {};
+  selectedMainType = 1 as number;
+  mainTypes = [
+    { Id: 1, Name: 'Page Specific' },
+    { Id: 2, Name: 'Category Specific' },
+    { Id: 3, Name: 'Fragmental' }
+  ]
 
-  public sizes = [
+  fragmentalSource: any = {};
+  bannerTypes: any = { 1: pagingSource.types };
+
+  categorySource = {
+    types: [],
+    selectedType: { Id: '1', Name: 'Category 1' }
+  };
+
+  sizes = [
     { id: null, name: 'No Size', selected: false },
     { id: '320-480', name: '320-480', selected: false },
     { id: '480-768', name: '480-768', selected: false },
@@ -74,12 +90,27 @@ export class CoreBannerComponent implements OnInit {
     this.languages = this.commonDataService.languages;
     this.getBannerById();
     this.startDate();
+    this.initCategorySource();
+
+    setTimeout(() => {
+      this.getPartnerEnvironments();
+    }, 500);
   }
 
   setSegmentsEntytes() {
     this.segmentesEntites.push(this.formGroup.value.Segments.Ids.map(elem => {
       return this.segments.find((item) => elem === item.Id).Name
     }))
+  }
+
+  initCategorySource(): void {
+    const types = []
+    for (let i = 1; i < 100; i++) {
+      const webId = i + 100;
+      const mobileId = i + 200;
+      types.push({ Id: `${+webId}`, Name: `Category ${i} Web` }, { Id: `${+mobileId}`, Name: `Category ${i} Mobile` });
+    }
+    this.bannerTypes[2] = types;
   }
 
   setLanguageEntytes() {
@@ -98,7 +129,6 @@ export class CoreBannerComponent implements OnInit {
 
 
   comparer(o1: any, o2: any): boolean {
-    // if possible compare by object's name, and not by reference.
     return o1 && o2 ? o1.Id === o2.Id : o2 === o2;
   }
 
@@ -110,6 +140,7 @@ export class CoreBannerComponent implements OnInit {
         if (data.ResponseCode === 0) {
           this.banner = data.ResponseObject;
           this.setBanner();
+          this.getBannerFragments();
         }
       })
   }
@@ -125,12 +156,11 @@ export class CoreBannerComponent implements OnInit {
     this.SegmentType = this.banner?.Segments?.Type;
     this.SegmentIds = this.banner?.Segments?.Ids;
     this.checkSelectedSizes();
-    this.getPartnerEnvironments();
     this.getSegments();
     this.formGroup.get('EnvironmentTypeId').setValue(1)
   }
   updateStartDate(event: any) {
-    this.startDate = event; // Update the startDate property when the input changes
+    this.startDate = event;
   }
 
   getSegments() {
@@ -188,7 +218,7 @@ export class CoreBannerComponent implements OnInit {
       EndDate: [null],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
       Body: [null],
-      NickName: [null, [Validators.required, ]],
+      NickName: [null, [Validators.required]],
       Head: [null],
       Link: [null],
       Image: [null, [Validators.required]],
@@ -255,7 +285,8 @@ export class CoreBannerComponent implements OnInit {
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.isEdit = false;
-          this.getBannerById();
+          this.banner = data.ResponseObject;
+          this.banner.TypeName = this.getTypeName(this.banner.Type);
           SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -270,9 +301,48 @@ export class CoreBannerComponent implements OnInit {
     });
   }
 
+  getBannerFragments() {
+    this.apiService.apiPost(this.configService.getApiUrl, this.banner.PartnerId,
+      true, Controllers.CONTENT, Methods.GET_BANNER_FRAGMENTS)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.bannerTypes[3] = data.ResponseObject;
+          this.banner.TypeName = this.getTypeName(this.banner.Type);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  getTypeName(type: number): string {
+    let typeName = '';
+    if (type <= 3) {
+      typeName = this.findNameById(this.bannerTypes["1"], type);
+      this.selectedMainType = 1;
+    } else if (type >= 101 && type <= 199) {
+      typeName = this.findNameById(this.bannerTypes["2"], String(type));
+      this.selectedMainType = 2;
+    } else {
+      typeName = this.findNameById(this.bannerTypes["3"], type);
+      this.selectedMainType = 3;
+    }
+
+    return typeName;
+  }
+
+  private findNameById(dataArray: any[], id: any): string {
+    const item = dataArray.find(item => String(item.Id) === String(id));
+    return item ? item.Name : '';
+  }
+
   onNavigateToBanners() {
     this.bannerService.update(this.banner);
     this.router.navigate(['/main/platform/cms/banners']);
+  }
+
+  setBannerTypeSource(ev) {
+    this.selectedMainType = ev;
   }
 
 

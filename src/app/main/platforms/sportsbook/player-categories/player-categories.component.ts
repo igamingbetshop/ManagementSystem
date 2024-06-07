@@ -31,6 +31,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
   public removePath: string = 'players/removecategory';
   public frameworkComponents;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  isSendingReqest = false;
 
   constructor(
     private apiService: SportsbookApiService,
@@ -288,6 +289,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
 
   deleteCategory() {
     const row = this.gridApi.getSelectedRows()[0];
+    this.isSendingReqest = true;
     this.apiService.apiPost(this.removePath, {Id: row.Id})
       .pipe(take(1))
       .subscribe(data => {
@@ -300,6 +302,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
+        this.isSendingReqest = false;
       });
   }
 

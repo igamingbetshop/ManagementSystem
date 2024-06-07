@@ -55,7 +55,7 @@ export class AddMarketTypeComponent implements OnInit {
     this.formGroup = this.fb.group({
       SportId: [null, [Validators.required]],
       MarketTypeName: [null, [Validators.required]],
-      SelectionsCount: [null, [Validators.required]],
+      SuccessOutcomeCount: [null, [Validators.required]],
     });
     this.formGroup['SelectionTypes'] = [];
   }

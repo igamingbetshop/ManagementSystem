@@ -87,6 +87,7 @@ export class AddBonusComponent implements OnInit {
       MaxAmount: [this.bonus.MaxAmount],
       MinAmount: [this.bonus.MinAmount],
       State: [true],
+      ExternalId: [this.bonus.ExternalId],
       TurnoverCount: [this.bonus.TurnoverCount],
       MaxTotalCoeff: [this.bonus.MaxTotalCoeff],
     });
@@ -139,6 +140,7 @@ export class AddBonusComponent implements OnInit {
     this.bonus.State = this.formGroup.get('State').value;
     this.bonus.MaxAmount = this.formGroup.get('MaxAmount').value;
     this.bonus.MinAmount = this.formGroup.get('MinAmount').value;
+    this.bonus.ExternalId = this.formGroup.get('ExternalId').value;
     this.bonus.MaxTotalCoeff = this.formGroup.get('MaxTotalCoeff').value;
     delete this.bonus.LanguageId;
 

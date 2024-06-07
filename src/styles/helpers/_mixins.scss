@@ -289,34 +289,41 @@
   }
 }
 
-// @mixin mat-btn-style {
-//   background-color: $bg-color;
-//   padding: 0 10px;
-//   border-radius: 8px;
+@mixin mat-bulke-edit-btn-style {
+  background-color: $blue-light-7;
+  // padding: 0 10px;
+  // color: $blue-2;
+  border-radius: 8px;
 
-//   ::ng-deep {
-//     .mat-button-wrapper {
-//       color: $white !important;
-//     }
-//   }
+  ::ng-deep {
+    .mat-mdc-button-wrapper {
+      color: $blue-2 !important;
+    }
+  }
 
-//   &.disabled {
-//     color: $gray-light-15 !important;
-//     background-color: $gray-light-13;
-//     pointer-events: none;
-//     ::ng-deep {
-//       .mat-button-wrapper {
-//         color: $gray-light-15 !important;
-//       }
-//     }
-//   }
+  &.disabled {
+    color: $gray-light-15 !important;
+    background-color: $gray-light-13;
+    pointer-events: none;
 
-//   &:hover {
-//     cursor: pointer;
-//     border-radius: 8px;
-//     background-color: $bg-color;  
-//   }
-// }
+    ::ng-deep {
+      .mat-mdc-button-wrapper {
+        color: $gray-light-15 !important;
+      }
+    }
+  }
+
+  &:hover {
+    border: 1px solid $blue-5;
+    background-color: $blue-light-22;
+
+    ::ng-deep {
+      .mat-mdc-button-wrapper {
+        color: $bg-color !important;
+      }
+    }
+  }
+}
 
 @mixin mat-supsend-style {
   background-color: $orange-yellow;

@@ -29,5 +29,5 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">Cancel</button>
-  <button class="modal-primary-btn" [disabled]="formGroup.invalid" (click)="submit()">Add Note</button>
+  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingReqest" (click)="submit()">Add Note</button>
 </div>

@@ -14,6 +14,14 @@ const routes: Routes = [
       {
         path: 'country-analytics',
         loadComponent: () => import('./country-analytics/country-analytics.component').then(m => m.CountryAnalyticsComponent)
+      },
+      {
+        path: 'payment-analytics',
+        loadComponent: () => import('./payment-analytics/payment-analytics.component').then(m => m.PaymentAnalyticsComponent)
+      },
+      {
+        path: 'client-analytics',
+        loadComponent: () => import('./client-analytics/client-analytics.component').then(m => m.ClientAnalyticsComponent)
       }
     ]
   }

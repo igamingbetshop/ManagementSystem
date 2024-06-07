@@ -1,6 +1,11 @@
 <div class="container">
   <div class="content-action">
     <div class="title">{{'Sport.Competition' | translate}}</div>
+    
+
+    <button mat-stroked-button class="mat-edit-btn" [class.disabled]="isRowSelected()" (click)="onMigrate()">{{'Sport.Migrate' | translate}}</button>
+
+
     <div class = "bulk-editor-dropdown">
       <button mat-stroked-button class="mat-bulk-btn"
               [matMenuTriggerFor]="bulkMenu"
@@ -23,7 +28,7 @@
       </mat-select>
     </div>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || !partnerId" (click)="addSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || !partnerId || isSendingReqest" (click)="addSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="AddCompetition()">{{'Sport.AddCompetition' | translate}}</button>
     <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 

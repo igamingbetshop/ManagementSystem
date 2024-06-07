@@ -28,6 +28,10 @@
       <div *ngIf="payment?.Amount" class="second-hand">{{payment?.Amount}}</div>
     </div>
     <div>
+      <div class="first-hand">{{'Clients.ConvertedAmount' | translate}}</div>
+      <div *ngIf="payment?.ConvertedAmount" class="second-hand">{{payment?.ConvertedAmount}}</div>
+    </div>
+    <div>
       <div class="first-hand">{{'Partners.PaymentSystem' | translate}}</div>
       <div class="second-hand">{{paymentSystemName}}</div>
     </div>

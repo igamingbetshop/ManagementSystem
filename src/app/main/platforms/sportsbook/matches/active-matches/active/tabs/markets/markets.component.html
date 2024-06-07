@@ -39,7 +39,7 @@
     <div class="right-panel">
       <div class="action-content">
         <div class="title">
-          &nbsp; {{name}}
+          {{name}}
         </div>
 
         <div>
@@ -49,6 +49,13 @@
         <div>
           <button mat-stroked-button  class="mat-btn" (click)="AddMarket()">{{'Sport.AddMarket' | translate}}</button>
         </div>
+
+        @if(sportId == 1) {
+          <div>
+            <button mat-stroked-button  class="mat-btn" (click)="onBuildMarket()">{{'Sport.BuildMarket' | translate}}</button>
+          </div>
+        }
+
         <div class="partner-dropdown">
           <mat-select
           #part  (selectionChange)="onPartnerChange(part.value)"

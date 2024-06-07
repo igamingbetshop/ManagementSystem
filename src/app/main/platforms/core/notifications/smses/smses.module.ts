@@ -10,8 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgGridModule } from 'ag-grid-angular';
-import {MatIconModule} from '@angular/material/icon';
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -26,27 +25,25 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [SmsesComponent],
-    imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatSnackBarModule,
-        MatCheckboxModule,
-        TranslateModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
-        AgGridModule,
-        RouterModule.forChild(routes),
-        MatIconModule,
-        PartnerDateFilterComponent
-    ]
+  declarations: [SmsesComponent],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatCheckboxModule,
+    TranslateModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    AgGridModule,
+    RouterModule.forChild(routes),
+    MatIconModule,
+    PartnerDateFilterComponent
+  ]
 })
 export class SmsesModule { }

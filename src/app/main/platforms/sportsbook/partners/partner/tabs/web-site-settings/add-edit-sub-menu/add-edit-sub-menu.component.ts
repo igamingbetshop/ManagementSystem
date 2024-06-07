@@ -14,15 +14,16 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-edit-sub-menu.component.scss']
 })
 export class AddEditSubMenuComponent implements OnInit {
-  public action;
-  public partnerId;
-  public menuItem;
-  public formGroup: UntypedFormGroup;
-  public validDocumentSize;
-  public validDocumentFormat;
-  public checkDocumentSize;
-  public iconChanging;
-  public showFile = false;
+  action;
+  partnerId;
+  menuItem;
+  formGroup: UntypedFormGroup;
+  validDocumentSize;
+  validDocumentFormat;
+  checkDocumentSize;
+  iconChanging;
+  showFile = false;
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditSubMenuComponent>,
               private apiService: SportsbookApiService,
@@ -114,6 +115,7 @@ export class AddEditSubMenuComponent implements OnInit {
   }
 
   submit() {
+    this.isSendingReqest = true;
     const value = this.formGroup.getRawValue();
     this.apiService.apiPost('cms/savewebsitesubmenuitem', value)
       .pipe(take(1))
@@ -123,6 +125,7 @@ export class AddEditSubMenuComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
       });
   }
 

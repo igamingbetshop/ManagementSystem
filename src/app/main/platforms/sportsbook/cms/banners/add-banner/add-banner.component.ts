@@ -15,8 +15,8 @@ import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { NgxMatDatetimePickerModule, NgxMatNativeDateModule } from "@angular-material-components/datetime-picker";
 import { compressImage } from "../../../../../../core/utils";
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
   selector: 'app-add-banner',
@@ -36,28 +36,27 @@ import { compressImage } from "../../../../../../core/utils";
     MatDatepickerModule,
     MatNativeDateModule,
     TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    DateTimePickerComponent
   ],
 })
 export class AddBannerComponent implements OnInit {
 
-  public sports: any[] = [];
-  public partners: any[] = [];
-  public fragments: any[] = [];
-  public widgets: any[] = [];
-  public partnerId = null;
-  public formGroup: UntypedFormGroup;
-  public bannerTypes = [
+  sports: any[] = [];
+  partners: any[] = [];
+  fragments: any[] = [];
+  widgets: any[] = [];
+  partnerId = null;
+  formGroup: UntypedFormGroup;
+  bannerTypes = [
     { id: 1, name: 'Fragmental' },
     { id: 2, name: 'Widget' },
     { id: 4, name: 'SportSpecificWeb' },
     { id: 5, name: 'SportSpecificMobile' }
   ];
-  public bannerTypeId: number = 1;
-
-  public bannerVisibilityTypes = [
+  bannerTypeId: number = 1;
+  isSendingReqest = false;
+  bannerVisibilityTypes = [
     { id: 'null', name: 'Always' },
     { id: 1, name: 'Logged Out' },
     { id: 2, name: 'Logged In' },
@@ -245,7 +244,7 @@ export class AddBannerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-
+    this.isSendingReqest = true;
     const requestBody = this.formGroup.getRawValue();
 
     if (this.bannerTypeId == 4 || this.bannerTypeId == 5) {
@@ -272,6 +271,7 @@ export class AddBannerComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 }

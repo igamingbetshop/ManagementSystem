@@ -1,0 +1,114 @@
+<div class="container">
+  <app-header-filter
+    [title]="'Dashboard.Analytics'"
+    (toDateChange)="onDateChange($event)" />
+  <div class="client-analytics-content">
+    <div class="profitable-block">
+      <div class="block-header">{{'Dashboard.ProfitableClients' | translate}}</div>
+      @if (topProfitableClients?.length){
+        <div class="block-content">
+          @for (item of topProfitableClients; track $index){
+            <div class="block-row">
+              <div class="row-number profitable-number">{{$index + 1}}</div>
+              <app-progress-bar [src]="item" [number]="'1.2-2'" class="profitable"></app-progress-bar>
+            </div>
+          }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+
+    </div>
+
+    <div class="damaging-block">
+      <div class="block-header">{{'Dashboard.DamagingClients' | translate}}</div>
+      @if (topDamagingClients?.length){
+        <div class="block-content">
+            @for (item of topDamagingClients; track $index){
+        <div class="block-row">
+          <div class="row-number damaging-number">{{$index + 1}}</div>
+          <app-progress-bar [src]="item" [number]="'1.2-2'" class="damaging"></app-progress-bar>
+        </div>
+      }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+    </div>
+
+    <div class="turnover-block">
+      <div class="block-header">{{'Dashboard.TurnoverClients' | translate}}</div>
+      @if (topTurnoverClients?.length){
+        <div class="block-content">
+         @for (item of topTurnoverClients; track $index){
+        <div class="block-row">
+          <div class="row-number turnover-number">{{$index + 1}}</div>
+          <app-progress-bar [src]="item" [number]="'1.2-2'" class="turnover"></app-progress-bar>
+        </div>
+      }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+    </div>
+
+    <div class="bonuses-block">
+      <div class="block-header">{{'Dashboard.BonusReceivers' | translate}}</div>
+      @if (emptyBlock){
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+      @else {
+        <div class="block-content">
+          @for (item of topBonusReceivers; track $index){
+            @if (item.TotalBonusAmount != 0){
+              <div class="block-row">
+                <div class="row-number bonuses-number">{{$index + 1}}</div>
+                <app-progress-bar [src]="item" [number]="'1.2-2'" class="bonuses"></app-progress-bar>
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <div class="bonuses-block">
+      <div class="block-header">{{'Dashboard.GrantedBonuses' | translate}}</div>
+      @if (topGrantedBonuses?.length){
+        <div class="block-content">
+        @for (item of topGrantedBonuses; track $index){
+          @if (item.MaxAmount != 0){
+          <div class="block-row">
+             <div class="row-number bonuses-number">{{$index + 1}}</div>
+             <app-progress-bar [src]="item"  [number]="'1.2-2'" class="bonuses"></app-progress-bar>
+          </div>
+          }
+      }
+        </div>
+      }
+      @else{
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
+
+

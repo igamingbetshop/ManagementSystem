@@ -34,6 +34,7 @@ export class AddTournamentComponent implements OnInit {
   };
   public images = [];
   private sendResponseOnce = false;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddTournamentComponent>,
@@ -123,7 +124,7 @@ export class AddTournamentComponent implements OnInit {
     if (this.formGroup.invalid || this.sendResponseOnce) {
       return;
     }
-
+    this.isSendingReqest = true;
     this.sendResponseOnce = true;
     this.tournament = this.formGroup.getRawValue();
     this.tournament.Images = this.images;
@@ -135,6 +136,7 @@ export class AddTournamentComponent implements OnInit {
         this.sendResponseOnce = false;
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

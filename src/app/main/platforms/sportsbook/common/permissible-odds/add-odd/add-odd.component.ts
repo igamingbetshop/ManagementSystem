@@ -31,9 +31,10 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
   ],
 })
 export class AddOddComponent implements OnInit {
-  public partners: any[] = [];
-  public partnerId = null;
-  public formGroup: UntypedFormGroup;
+  partners: any[] = [];
+  partnerId = null;
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddOddComponent>,
@@ -75,12 +76,14 @@ export class AddOddComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSendingReqest = true;
     this.apiService.apiPost('utils/addpermissibleodd', this.formGroup.value).subscribe(data => {
       if (data.Code === 0) {
         this.dialogRef.close(true);
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

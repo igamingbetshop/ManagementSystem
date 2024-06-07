@@ -8,33 +8,6 @@
 .container {
   @include container-style;
 
-  .content-action {
-    @include action-style;
-    height: 62px;
-    .partner-dropdown {
-      margin-right: 8px;
-      @include dropdown-style;
-    }
-
-    .date-time-tabs {
-
-      .tab-btn {
-        margin-right: 8px;
-      }
-
-      @include tab-button-style;
-    }
-
-    .calendar-picker {
-      @include calendar-picker-style;
-    }
-
-    .mat-btn {
-      margin-left: 8px;
-      @include mat-btn-style;
-    }
-  }
-
   .grid-content {
     width: 100%;
     height: calc(100% - 62px);
@@ -48,19 +21,40 @@
 
     .pages-sizes {
       position: absolute;
-      left: 262px;
-      bottom: 2%;
+      width: 79%;
+      display: flex;
+      left: 20%;
+      bottom: 1.2%;
       @include grid-dropdown-style;
 
       ::ng-deep {
         .mat-select {
           height: 26px !important;
           width: 60px !important;
+          margin-left: 35px;
+        }
+      }
+
+      .btn-content {
+        width: 100%;
+        margin-left: auto;
+        display: flex;
+        flex-direction: row-reverse;
+        .mat-btn {
+          margin-left: 8px;
+          @include mat-btn-style;
         }
       }
     }
   }
 }
+
+::ng-deep {
+  .ag-paging-panel {
+      justify-content: flex-end !important;
+    }
+  
+  }
 
 
 

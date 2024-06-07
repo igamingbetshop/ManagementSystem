@@ -28,13 +28,12 @@ const bannerVisibilityTypes = [
 })
 export class BannersComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public rowData = [];
-
-  public partners: any[] = [];
-  public partnerId = null;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-
-  public defaultColDef = {
+  rowData = [];
+  isSendingReqest = false;
+  partners: any[] = [];
+  partnerId = null;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  defaultColDef = {
     flex: 1,
     editable: false,
     sortable: true,

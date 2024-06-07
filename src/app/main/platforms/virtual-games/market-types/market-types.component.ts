@@ -5,15 +5,13 @@ import { AgBooleanFilterComponent } from "../../../components/grid-common/ag-boo
 import { ButtonRendererComponent } from "../../../components/grid-common/button-renderer.component";
 import { NumericEditorComponent } from "../../../components/grid-common/numeric-editor.component";
 import { CheckboxRendererComponent } from "../../../components/grid-common/checkbox-renderer.component";
-import { TextEditorComponent } from "../../../components/grid-common/text-editor.component";
-import { SelectRendererComponent } from "../../../components/grid-common/select-renderer.component";
 import { GridRowModelTypes } from "../../../../core/enums";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { VirtualGamesApiService } from "../services/virtual-games-api.service";
 import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from "../../../../core/helpers/snackbar.helper";
-import { CellValueChangedEvent } from 'ag-grid-community';
+import { Paging } from 'src/app/core/models';
 
 @Component({
   selector: 'app-market-types',
@@ -22,35 +20,28 @@ import { CellValueChangedEvent } from 'ag-grid-community';
 })
 export class MarketTypesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
-  @ViewChild('agGrid1') agGrid1: AgGridAngular;
-  public frameworkComponents = {
-    agBooleanColumnFilter: AgBooleanFilterComponent,
-    buttonRenderer: ButtonRendererComponent,
-    numericEditor: NumericEditorComponent,
-    checkBoxRenderer: CheckboxRendererComponent,
-    textEditor: TextEditorComponent,
-    selectRenderer: SelectRendererComponent,
-  };
-  public masterDetail;
-  public nestedFrameworkComponents = {
-    agBooleanColumnFilter: AgBooleanFilterComponent,
-    buttonRenderer: ButtonRendererComponent,
-    numericEditor: NumericEditorComponent,
-    checkBoxRenderer: CheckboxRendererComponent,
-  };
-  public detailCellRendererParams: any;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowData1 = [];
-  public columnDefs2;
-  public rowData = [];
-  public games = [];
-  public partners = [];
-  public path: string = 'markettypes';
-  public path2: string = 'markettypes/selectiontypes';
-  public path3: string = 'markettypes/settings';
-  public selectedPartner;
-  public pageConfig;
 
+  masterDetail;
+  nestedFrameworkComponents = {
+    agBooleanColumnFilter: AgBooleanFilterComponent,
+    buttonRenderer: ButtonRendererComponent,
+    numericEditor: NumericEditorComponent,
+    checkBoxRenderer: CheckboxRendererComponent,
+  };
+  detailCellRendererParams: any;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowData1 = [];
+  columnDefs2;
+  rowData = [];
+  games = [];
+  partners = [];
+  path: string = 'markettypes';
+  path3: string = 'markettypes/settings';
+  partnerId: number | null = null;
+  pageConfig;
+  gameId: number | null = null;
+  selectedRowId: any;
+  cacheBlockSize = 5000;
   constructor(protected injector: Injector, private _snackBar: MatSnackBar,
     private apiService: VirtualGamesApiService) {
     super(injector);
@@ -116,49 +107,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-      },
-      {
-        headerName: 'Bonuses.TranslationId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'TranslationId',
-        resizable: true,
-        sortable: true,
-      }
-    ]
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        minWidth: 100,
-        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
-      },
-      {
-        headerName: 'Common.Name',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Name',
-        resizable: true,
-        sortable: true,
-      },
-      {
-        headerName: 'Clients.NickName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'NickName',
-        resizable: true,
-        sortable: true,
-        editable: true
-      },
-      {
-        headerName: 'Sport.Order',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Order',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        cellEditor: 'numericEditor',
-        onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
       },
       {
         headerName: 'Bonuses.TranslationId',
@@ -259,19 +207,43 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
   ngOnInit(): void {
     this.getPartners();
+    this.getRows();
     this.getGames();
-    this.getMarketTypes();
-    this.getSecondGridData();
   }
 
-  getMarketTypes() {
-    this.apiService.apiPost(this.path, this.pageConfig)
+  onGridReady(params: any): void {
+    super.onGridReady(params);
+    // this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+
+  getRows() {
+    const paging = new Paging();
+    paging.PageIndex = this.paginationPage - 1;
+    paging.PageSize = this.cacheBlockSize;
+    if (this.gameId) {
+      paging.GameIds = {
+        IsAnd: true,
+        ApiOperationTypeList: [{ IntValue: this.gameId, DecimalValue: this.gameId, OperationTypeId: 1 }],
+      }
+    }
+    if (this.partnerId) {
+      paging.PartnerIds = {
+        PartnerIds: {
+          IsAnd: true,
+          ApiOperationTypeList: [{ IntValue: this.partnerId, DecimalValue: this.partnerId, OperationTypeId: 1 }],
+        }
+      }
+    }
+
+    this.apiService.apiPost(this.path, paging)
       .pipe(take(1))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.rowData = data.ResponseObject.Entities;
           setTimeout(() => {
             this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
+            this.selectedRowId = this.agGrid.api.getSelectedRows()[0]?.Id;
           }, 0)
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -280,71 +252,17 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   }
 
   onRowSelected(params) {
-
-    if (params.node.selected) {
-      this.getSecondGridData(params);
-    } else {
-      return;
-    }
-  }
-
-  getSecondGridData(params?) {
-    const row = params?.data;
-    let countRows = this.agGrid?.api.getSelectedRows().length;
-    if (countRows) {
-      let data = {
-        MarketTypeId: row.Id
-      };
-      this.apiService.apiPost(this.path2, data)
-        .pipe(take(1))
-        .subscribe(data => {
-          if (data.ResponseCode === 0) {
-            this.rowData1 = data.ResponseObject;
-          } else {
-            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-          }
-        });
-    }
-  }
-
-  onGridReady1(params) {
-    super.onGridReady(params);
-  }
-
-  onCellValueChanged(event) {
-    const data = {
-      SelectionTypeId: event.data.Id,
-      Order: event.data.Order,
-    }
-    this.apiService.apiPost('markettypes/saveselectiontypes', data)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.agGrid1.api.getRenderedNodes()[0]?.setSelected(true);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-    
+    this.selectedRowId = params.data.Id;
   }
 
   onGameChange(event) {
-    if (event) {
-      this.pageConfig = {
-        GameIds: {
-          IsAnd: true,
-          ApiOperationTypeList: [{ IntValue: event, DecimalValue: event, OperationTypeId: 1 }],
-        }
-      }
-    } else {
-      this.pageConfig = undefined
-    }
-    this.getMarketTypes();
+    this.gameId = event;
+    this.getRows();
   }
 
-  onPartnerChange(event) {
-    this.selectedPartner = event;
-    // this.pageConfig.PartnerId = event;
+  onPartnerChange(partnerId: number) {
+    this.partnerId = partnerId;
+    this.getRows();
   }
 
   getGames() {
@@ -385,5 +303,10 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
       })
   }
+
+  // onPageSizeChanged() {
+  //   this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
+  //   this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  // }
 
 }

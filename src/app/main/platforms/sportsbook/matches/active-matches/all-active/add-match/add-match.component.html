@@ -65,13 +65,12 @@
         {{'Bonuses.SelectType' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
-
-      <mat-form-field class="calendar-picker start">
-        <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
-        <mat-datepicker-toggle matSuffix [for]="pickerStart">
-        </mat-datepicker-toggle>
-        <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-      </mat-form-field>
+      <div class="calendar-content">
+        <div class="calendar-picker">
+          <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
+        </div>
+        
+      </div>
 
     <mat-form-field>
       <mat-label>{{'Products.ExternalId' | translate}}</mat-label>
@@ -95,5 +94,10 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="onSubmit()" [class.disabled]="formGroup.invalid">{{'Common.Add'| translate}}</button>
+  <button 
+    class="modal-primary-btn" 
+    (click)="onSubmit()" 
+    [class.disabled]="formGroup.invalid || isSendingReqest">
+    {{'Common.Add'| translate}}
+  </button>
 </div>

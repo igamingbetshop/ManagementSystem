@@ -15,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { CellClickedEvent } from 'ag-grid-community';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-all-active',
@@ -38,7 +39,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
   public view: string = 'tree'
   public path = 'matches/activematchestree';
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-
+  fromDate: Date;
   public defaultColDef = {
     flex: 1,
     editable: false,
@@ -72,8 +73,10 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
   public teamSearchText: string;
   public searchMatchId: number | string;
   public searchExternalId: number | string;
+  public searchByTimeField: string | Date;
   private searchCompetition$: Subject<string> = new Subject();
   private searchTeam$: Subject<string> = new Subject();
+  private searchByTime$: Subject<string | Date> = new Subject();
   private searchMatchId$: Subject<string> = new Subject();
   private searchExternalId$: Subject<string> = new Subject();
   private timeInterval = 500;
@@ -246,11 +249,17 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
   }
 
   ngOnInit() {
+    this.setTime();
     this.partners = this.commonDataService.partners;
     this.getProviders();
     this.getSports();
     this.gridStateName = 'all-active=matches-grid-state';
     this.getPage();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
   }
 
   redirectToMatch(ev) {
@@ -290,6 +299,11 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
 
     this.searchExternalId$.pipe(debounceTime(this.timeInterval)).subscribe(value => {
       this.searchExternalId = value;
+      this.onTeamsFind();
+    });
+
+    this.searchByTime$.pipe(debounceTime(this.timeInterval)).subscribe(value => {
+      this.searchByTimeField = value;
       this.onTeamsFind();
     });
 
@@ -383,6 +397,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     this.filterTeam();
     this.filterByMatch();
     this.filterByExternal();
+    this.filterByTime();
   }
 
   filterTeam(): void {
@@ -447,6 +462,27 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     });
   }
 
+  filterByTime(): void {
+    if (!this.searchByTimeField) {
+        return;
+    }
+    const searchedDate = new Date(this.searchByTimeField);
+    this.sportTree = this.sportTree.filter(sport => {
+        sport.Regions = sport.Regions.filter(region => {
+            region.Competitions = region.Competitions.filter(competition => {
+                competition.Matches = competition.Matches.filter(match => {
+                    const matchStartTime = new Date(match.StartTime);
+                    return matchStartTime <= searchedDate;
+                });
+                return competition.Matches.length > 0;
+            });
+            return region.Competitions.length > 0;
+        });
+        return sport.Regions.length > 0;
+    });
+}
+
+
   searchCompetition(value: string) {
     this.searchCompetition$.next(value);
   }
@@ -461,6 +497,10 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
 
   searchByExternalId(value: string) {
     this.searchExternalId$.next(value);
+  }
+
+  searchByTime() {
+    this.searchByTime$.next(this.fromDate)
   }
 
   getProviders() {
@@ -576,81 +616,143 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     syncColumnReset();
   }
 
+  // getPage() {
+  //   this.apiService.apiPost(this.path, {})
+  //     .pipe(take(1))
+  //     .subscribe(data => {
+  //       if (data.Code === 0) {
+  //         let matches = [];
+  //         this.sportTree = this.order(data.Sports);
+  //         for (let i = 0; i < this.sportTree.length; i++) {
+  //           this.sportTree[i].show = false;
+
+  //           for (let j = 0; j < this.sportTree[i].Regions.length; j++) {
+  //             this.sportTree[i].Regions[j].show = false;
+
+  //             for (let k = 0; k < this.sportTree[i].Regions[j].Competitions.length; k++) {
+  //               this.sportTree[i].Regions[j].Competitions[k].show = false;
+
+  //               for (let m = 0; m < this.sportTree[i].Regions[j].Competitions[k].Matches.length; m++) {
+  //                 this.sportTree[i].Regions[j].Competitions[k].Matches[m].show = false;
+
+  //                 let teams = [];
+
+  //                 for (let t = 0; t < this.sportTree[i].Regions[j].Competitions[k].Matches[m].Competitors.length; t++) {
+
+  //                   teams.push(this.sportTree[i].Regions[j].Competitions[k].Matches[m].Competitors[t].TeamName);
+  //                 }
+
+  //                 this.sportTree[i].Regions[j].Competitions[k].Matches[m].Name = teams.join(' - ');
+  //                 this.sportTree[i].Regions[j].Competitions[k].Matches[m].SportName = this.sportTree[i].Name;
+  //                 this.sportTree[i].Regions[j].Competitions[k].Matches[m].SportId = this.sportTree[i].SportId;
+  //                 this.sportTree[i].Regions[j].Competitions[k].Matches[m].CompetitionName = this.sportTree[i].Regions[j].Competitions[k].Name;
+  //               }
+  //               matches.push.apply(matches, this.sportTree[i].Regions[j].Competitions[k].Matches);
+  //             }
+  //           }
+  //         }
+  //         this.sportTreeReference = JSON.parse(JSON.stringify(this.sportTree));
+  //         this.rowData = matches;
+          
+  //         this.rowData.forEach(element => {
+  //           element.StartTime = this.formatDate(element.StartTime)
+  //         })
+  //         this.matches = matches;
+  //         this.availableProviders = [];
+
+  //         matches.forEach(item => {
+  //           let provider = this.allProviders.find(elem => elem.Id == item.ProviderId);
+
+  //           if (provider) {
+  //             let index = this.availableProviders.findIndex(elem => elem.Id == provider.Id);
+
+  //             if (index == -1)
+  //               this.availableProviders.push(provider);
+  //           }
+  //           let statusName = this.availableStatuses.statuses.find((state) => {
+  //             return state.status == item.Status;
+  //           })
+  //           if (statusName) {
+  //             item['StatusName'] = statusName.name;
+  //           }
+  //         });
+  //         this.sportProviders = this.availableProviders;
+  //       } else {
+  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+  //       }
+  //     })
+
+  // }
+
   getPage() {
     this.apiService.apiPost(this.path, {})
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.Code === 0) {
-          let matches = [];
-          this.sportTree = this.order(data.Sports);
-          for (let i = 0; i < this.sportTree.length; i++) {
-            this.sportTree[i].show = false;
+        .pipe(take(1))
+        .subscribe(data => {
+            if (data.Code === 0) {
+                this.sportTree = this.order(data.Sports);
+                const matches = this.extractMatches(this.sportTree);
+                
+                this.sportTreeReference = JSON.parse(JSON.stringify(this.sportTree));
+                this.rowData = matches;
+                this.rowData.forEach(element => {
+                    element.StartTime = this.formatDate(element.StartTime);
+                });
 
-            for (let j = 0; j < this.sportTree[i].Regions.length; j++) {
-              this.sportTree[i].Regions[j].show = false;
-
-              for (let k = 0; k < this.sportTree[i].Regions[j].Competitions.length; k++) {
-                this.sportTree[i].Regions[j].Competitions[k].show = false;
-
-                for (let m = 0; m < this.sportTree[i].Regions[j].Competitions[k].Matches.length; m++) {
-                  this.sportTree[i].Regions[j].Competitions[k].Matches[m].show = false;
-
-                  let teams = [];
-
-                  for (let t = 0; t < this.sportTree[i].Regions[j].Competitions[k].Matches[m].Competitors.length; t++) {
-
-                    teams.push(this.sportTree[i].Regions[j].Competitions[k].Matches[m].Competitors[t].TeamName);
-                  }
-
-                  this.sportTree[i].Regions[j].Competitions[k].Matches[m].Name = teams.join(' - ');
-                  this.sportTree[i].Regions[j].Competitions[k].Matches[m].SportName = this.sportTree[i].Name;
-                  this.sportTree[i].Regions[j].Competitions[k].Matches[m].SportId = this.sportTree[i].SportId;
-                  this.sportTree[i].Regions[j].Competitions[k].Matches[m].CompetitionName = this.sportTree[i].Regions[j].Competitions[k].Name;
-                }
-                matches.push.apply(matches, this.sportTree[i].Regions[j].Competitions[k].Matches);
-              }
+                this.matches = matches;
+                this.availableProviders = this.extractAvailableProviders(matches);
+                this.sportProviders = this.availableProviders;
+            } else {
+                SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
-          }
-          this.sportTreeReference = JSON.parse(JSON.stringify(this.sportTree));
-          this.rowData = matches;
-          this.rowData.forEach(element => {
-            element.StartTime = this.formatDate(element.StartTime)
-          })
-          this.matches = matches;
-          this.availableProviders = [];
+        });
+}
 
-          matches.forEach(item => {
-            let provider = this.allProviders.find(elem => elem.Id == item.ProviderId);
+extractMatches(sportTree) {
+    let matches = [];
 
-            if (provider) {
-              let index = this.availableProviders.findIndex(elem => elem.Id == provider.Id);
+    sportTree.forEach(sport => {
+        sport.show = false;
+        sport.Regions.forEach(region => {
+            region.show = false;
+            region.Competitions.forEach(competition => {
+                competition.show = false;
+                competition.Matches.forEach(match => {
+                    match.show = false;
 
-              if (index == -1)
-                this.availableProviders.push(provider);
-            }
-            let statusName = this.availableStatuses.statuses.find((state) => {
-              return state.status == item.Status;
-            })
-            if (statusName) {
-              item['StatusName'] = statusName.name;
-            }
+                    match.Name = match.Competitors.map(comp => comp.TeamName).join(' - ');
+                    match.SportName = sport.Name;
+                    match.SportId = sport.SportId;
+                    match.CompetitionName = competition.Name;
 
-          });
-          this.sportProviders = this.availableProviders;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+                    matches.push(match);
+                });
+            });
+        });
+    });
+
+    return matches;
+}
+
+extractAvailableProviders(matches) {
+    let availableProviders = [];
+    matches.forEach(item => {
+        const provider = this.allProviders.find(provider => provider.Id === item.ProviderId);
+        if (provider && !availableProviders.some(prov => prov.Id === provider.Id)) {
+            availableProviders.push(provider);
         }
-      })
-
-  }
+        const statusName = this.availableStatuses.statuses.find(state => state.status === item.Status);
+        if (statusName) {
+            item['StatusName'] = statusName.name;
+        }
+    });
+    return availableProviders;
+}
 
   async addMatch(sport?, region?, competition?) {
     competition = competition || {};
     competition.SportId = sport?.SportId || null;
     competition.SportName = sport?.Name || null;
-
     if (typeof region !== 'undefined') {
-
       competition.RegionId = region.RegionId;
       competition.RegionName = region.Name;
     }
@@ -664,15 +766,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        this.apiService.apiPost('matches/creatematch', data)
-          .pipe(take(1))
-          .subscribe(data => {
-            if (data.Code === 0) {
-              this.getPage();
-            } else {
-              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-            }
-          });
+        this.getPage();
       }
     })
   }
@@ -685,7 +779,6 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
 
   formatDate(inputDate) {
     const date = new Date(inputDate);
-
     const months = [
       "Jan", "Feb", "Mar", "Apr", "May", "Jun",
       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
@@ -701,6 +794,56 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
 
     return formattedDate;
   }
+
+  onStartDateChange(event: any) {
+    if (event instanceof Date) {
+      this.fromDate = event;
+    } else {
+      const formattedDateTime = event;
+      this.fromDate = this.parseDateTimeString(formattedDateTime);
+      this.searchByTime$.next(this.formatDateForSearch(this.fromDate));      
+    }
+  }
+
+  private parseDateTimeString(dateTimeString: string): Date {
+    const dateTimeParts = dateTimeString.split('T');
+    if (dateTimeParts.length === 2) {
+      const [datePart, timePart] = dateTimeParts;
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hours, minutes] = timePart.split(':').map(Number);
+      return new Date(year, month - 1, day, hours, minutes);
+    }
+    return new Date();
+  }
+
+  formatDateTime(date: any): string {
+    if (date) {
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+    return '';
+  }
+
+  formatDateForSearch(date) {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    let month = months[date.getMonth()];
+    let day = date.getDate();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; 
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    seconds = seconds < 10 ? '0'+seconds : seconds;
+    return `${month} ${day}, ${year}, ${hours}:${minutes}:${seconds} ${ampm}`;
+}
+
 
 
 }

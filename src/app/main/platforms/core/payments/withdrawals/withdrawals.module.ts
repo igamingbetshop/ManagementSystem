@@ -15,8 +15,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.module';
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
-
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import { PartnerDateFilterComponent } from "../../../../components/partner-date-filter/partner-date-filter.component";
 
 const routes: Routes = [
@@ -51,8 +49,6 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         FormsModule,
         MatInputModule,
-        NgxMatDatetimePickerModule,
-        NgxMatNativeDateModule,
         PartnerDateFilterComponent
     ]
 })

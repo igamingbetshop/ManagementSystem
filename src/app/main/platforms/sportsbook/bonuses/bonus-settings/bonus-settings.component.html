@@ -17,7 +17,7 @@
     <button 
       mat-stroked-button 
       class="mat-delete" 
-      [class.disabled]="isRowSelected()"
+      [class.disabled]="isRowSelected() || isSendingReqest"
       (click)="onDeleteBounus()"
       >{{'Sport.DeleteBonus' | translate}}
     </button>

@@ -90,13 +90,14 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field *ngSwitchCase="'BirthDate'">
+         <mat-form-field *ngSwitchCase="'BirthDate'">
           <mat-label>{{'Clients.ChooseDate' | translate}}</mat-label>
-          <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="item.Title">
-          <mat-datepicker-toggle matSuffix [for]="pickerStart">
+          <input matInput  [matDatepicker]="pickerEnd" [formControlName]="item.Title" >
+          <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+            <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
           </mat-datepicker-toggle>
-          <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
-        </mat-form-field>
+          <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field> 
 
         <mat-form-field *ngSwitchCase="'password'">
           <mat-label>{{item.Title}}</mat-label>

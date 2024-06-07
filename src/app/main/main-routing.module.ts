@@ -20,7 +20,7 @@ const routes: Routes = [
         loadChildren: () => import('./platforms/core/core.module').then(m => m.CoreModule)
       },
       {
-        path: 'virtualGames',
+        path: 'virtualgames',
         loadChildren: () => import('./platforms/virtual-games/virtual-games.module').then(m => m.VirtualGamesModule)
       },
       {

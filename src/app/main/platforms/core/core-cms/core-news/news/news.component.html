@@ -13,60 +13,59 @@
 
   <div class="content-edit">
     <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
-      <div *ngIf="isChilde">
-        <div class="first-hand">{{'Common.StartDate' | translate}}</div>
-        <div class="second-hand">{{news?.StartDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar form-calendar-edit">
-          <!-- <mat-form-field> -->
-            <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          <!-- </mat-form-field> -->
+      @if(isChilde) {
+        <div >
+          <div class="first-hand">{{'Common.StartDate' | translate}}</div>
+          <div class="second-hand">{{news?.StartDate | date:'dd/MM/yyyy'}}</div>
+          <div class="form-field form-calendar form-calendar-edit">
+              <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
+              <mat-datepicker-toggle matSuffix [for]="picker">
+                <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+          </div>
         </div>
-      </div>
 
-      <div *ngIf="isChilde">
-        <div class="first-hand">{{'Common.EndDate' | translate}}</div>
-        <div class="second-hand">{{news?.FinishDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar  form-calendar-edit">
-          <!-- <mat-form-field> -->
-            <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker1">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-          <!-- </mat-form-field> -->
+        <div>
+          <div class="first-hand">{{'Common.EndDate' | translate}}</div>
+          <div class="second-hand">{{news?.FinishDate | date:'dd/MM/yyyy'}}</div>
+          <div class="form-field form-calendar  form-calendar-edit">
+              <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
+              <mat-datepicker-toggle matSuffix [for]="picker1">
+                <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
+              </mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+          </div>
         </div>
-      </div>
+      }
+
 
       <div>
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{news?.NickName}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [placeholder]="'Clients.NickName' | translate" [formControlName]="'NickName'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
-      <div *ngIf="isChilde">
-        <div class="first-hand">{{'Cms.Image' | translate}}</div>
-        <div class="second-hand">{{news?.ImageName}}</div>
-        <div class="form-field form-input">
-          <!-- <mat-form-field> -->
-            <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'ImageName'">
-          <!-- </mat-form-field> -->
+      @if(isChilde) {
+        <div>
+          <div class="first-hand">{{'Cms.Image' | translate}}</div>
+          <div class="second-hand">{{news?.ImageName}}</div>
+          <div class="form-field form-input">
+              <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'ImageName'">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Common.SelectState' | translate}}</div>
         <div class="second-hand">{{news?.StatusName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'State'">
-            <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
+            @for (state of states; track $index) {
+              <mat-option [value]="state.Id">{{state.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -75,9 +74,7 @@
         <div class="first-hand">{{'Common.Order' | translate}}</div>
         <div class="second-hand">{{news?.Order}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [placeholder]="'Common.Order' | translate" [formControlName]="'Order'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -91,38 +88,56 @@
         </div>
       </div>
 
-      <div *ngIf="isChilde">
-        <div class="first-hand">{{'Partners.Type' | translate}}</div>
-        <div class="second-hand">{{news?.TypeName}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'Type'">
-            <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
-          </mat-select>
+      @if (isChilde) {
+        <div>
+          <div class="first-hand">{{'Partners.Type' | translate}}</div>
+          <div class="second-hand">{{news?.TypeName}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'Type'">
+              @for (type of types; track $index) {
+                <mat-option [value]="type.Id">{{type.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
         </div>
-      </div>
+      }
 
-
-      <div [class.group-left-item]="isEdit">
+      <div>
         <div class="first-hand">{{'Bonuses.ChooseSegment' | translate}}</div>
-        <div class="second-hand" *ngIf="news?.Segments?.Type==1">
-          {{'Bonuses.InSet' | translate}}
-        </div>
-        <div class="second-hand" *ngIf="news?.Segments?.Type==2">
-          {{'Bonuses.OutOfSet' | translate}}
+        <div class="second-hand">
+          <span class="second-left">
+            @if (news?.Segments?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (news?.Segments?.Type==2) {
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+
+          <span class="second-right">
+            @for (segment of segmentesEntites; track $index) {
+              {{segment}}
+            }
+          </span>
         </div>
 
-        <div class="form-field form-checkbox" [formGroupName]="'Segments'">
-          <mat-radio-group (change)="SegmentType = $event.value" aria-label="2">
-            <mat-radio-button [checked]="SegmentType == 1" color="primary" [value]="1">{{'Bonuses.InSet' |
-              translate}}</mat-radio-button>
-            <mat-radio-button style="margin-left: 5px;" [checked]="SegmentType == 2" color="primary"
-              [value]="2">{{'Bonuses.OutOfSet' |
-              translate}}</mat-radio-button>
-          </mat-radio-group>
+        <div class="form-field group-field" [formGroupName]="'Segments'">
+
+            <div class="group-left-item">
+              <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+              <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+              translate}}
+            </div>
+          <div class="group-right-item">
+              <mat-select placeholder="{{'Bonuses.SelectSegment' | translate}}" [formControlName]="'Ids'" multiple>
+                @for (segment of segments; track $index) {
+                  <mat-option [value]="segment.Id">{{segment.Name}}</mat-option>
+                }
+            </mat-select>
+          </div>
         </div>
       </div>
 
-      <div [class.group-right-item]="isEdit">
+      <!-- <div [class.group-right-item]="isEdit">
         <div class="first-hand">{{'Bonuses.SelectSegment' | translate}}</div>
         <div class="second-hand">
           <ng-container *ngFor="let segment of segmentesEntites">{{segment}}</ng-container>
@@ -133,9 +148,9 @@
             <mat-option *ngFor="let segment of segments" [value]="segment.Id">{{segment.Name}}</mat-option>
           </mat-select>
         </div>
-      </div>
+      </div> -->
 
-      <div  [class.group-left-item]="isEdit">
+      <!-- <div  [class.group-left-item]="isEdit">
         <div class="first-hand">{{'Bonuses.ChooseLanguages' | translate}}</div>
         <div class="second-hand" *ngIf="news?.Languages?.Type==1">
           {{'Bonuses.InSet' | translate}}
@@ -152,100 +167,129 @@
               [value]="2">{{'Bonuses.OutOfSet' | translate}}</mat-radio-button>
           </mat-radio-group>
         </div>
-      </div>
+      </div> -->
 
-      <div [class.group-right-item]="isEdit">
-        <div class="first-hand">{{'Clients.SelectLanguage' | translate}}</div>
+      <div  >
+        <div class="first-hand">{{'Bonuses.ChooseLanguages' | translate}}</div>
         <div class="second-hand">
-          <ng-container *ngFor="let language of languageEntites">
-            {{languageEntites}}
-          </ng-container>
-        </div>
-        <div class="form-field form-dropdown">
-          <mat-select (selectionChange)="LanguageNames = $event.value" [(value)]="LanguageNames"
-            placeholder="{{'Clients.SelectLanguage' | translate}}" multiple>
-            <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
-          </mat-select>
-        </div>
-      </div>
+          <span class="second-left"> 
+            @if (news?.Languages?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (news?.Languages?.Type==2) {
 
-      <ng-container *ngIf="isEdit">
-        <div>
-          <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
-          <div class="second-hand"></div>
-          <div class="form-field form-dropdown">
-            <mat-select [formControlName]="'EnvironmentTypeId'">
-              <mat-option *ngFor="let environment of environments"
-                [value]="environment.Id">{{environment.Name}}</mat-option>
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+
+            <span class="second-right">
+              @for ( language of languageEntites; track $index) {
+                {{languageEntites}}
+              }
+            </span>
+        </div>
+
+
+        <div class="form-field group-field" [formGroupName]="'Languages'">
+          <div class="group-left-item">
+          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+          </div>
+
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Names'" multiple>
+              @for (language of languages; track $index) {
+                <mat-option [value]="language.Id" >{{language.Name}}</mat-option>
+              }
             </mat-select>
           </div>
         </div>
+      </div>
 
-        <ng-container *ngIf="isChilde">
+      @if (isEdit) {
           <div>
-            <div class="first-hand">{{'Common.ImageData' | translate}}</div>
-            <div class="second-hand">{{ news?.ImageData}}</div>
-            <div class="form-field form-checkbox">
-              <input type="file" (change)="uploadFile($event)" [formControlName]="'ImageData'">
+            <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
+            <div class="second-hand"></div>
+            <div class="form-field form-dropdown">
+              <mat-select [formControlName]="'EnvironmentTypeId'">
+                @for ( environment of environments; track $index) {
+                  <mat-option [value]="environment.Id">{{environment.Name}}</mat-option>
+                }
+              </mat-select>
             </div>
           </div>
-
-          <div>
-            <div class="first-hand">{{'Common.ImageDataMedium' | translate}}</div>
-            <div class="second-hand">{{ news?.ImageDataMedium}}</div>
-            <div class="form-field form-checkbox">
-              <input type="file" (change)="uploadFile2($event)" [formControlName]="'ImageDataMedium'">
-            </div>
-          </div>
-
-          <div>
-            <div class="first-hand">{{'Cms.ImageDataSmall' | translate}}</div>
-            <div class="second-hand">{{ news?.ImageDataMedium}}</div>
-            <div class="form-field form-checkbox">
-              <input type="file" (change)="uploadFile1($event)" [formControlName]="'ImageDataSmall'">
-            </div>
-          </div>
-        </ng-container>
-
-
-      </ng-container>
+  
+          @if (isChilde) {
+              <div>
+                <div class="first-hand">{{'Common.ImageData' | translate}}</div>
+                <div class="second-hand">{{ news?.ImageData}}</div>
+                <div class="form-field form-checkbox">
+                  <input type="file" (change)="uploadFile($event)" [formControlName]="'ImageData'">
+                </div>
+              </div>
+    
+              <div>
+                <div class="first-hand">{{'Common.ImageDataMedium' | translate}}</div>
+                <div class="second-hand">{{ news?.ImageDataMedium}}</div>
+                <div class="form-field form-checkbox">
+                  <input type="file" (change)="uploadFile2($event)" [formControlName]="'ImageDataMedium'">
+                </div>
+              </div>
+    
+              <div>
+                <div class="first-hand">{{'Cms.ImageDataSmall' | translate}}</div>
+                <div class="second-hand">{{ news?.ImageDataMedium}}</div>
+                <div class="form-field form-checkbox">
+                  <input type="file" (change)="uploadFile1($event)" [formControlName]="'ImageDataSmall'">
+                </div>
+              </div>
+          }
+  
+      }
 
       <div></div>
 
-      <div *ngIf="!isChilde"></div>
+      @if(!isChilde) {
+        <div></div>
+      }
 
-      <div class="form-actions">
-        <div class="actions" *ngIf="isEdit">
-          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
-            translate}}</button>
-          <button mat-raised-button class="mat-btn" (click)="onSubmit()" [disabled]="formGroup.invalid"
-            type="submit">{{'Common.Save' | translate}}</button>
+
+      @if(isEdit) {
+        <div class="form-actions">
+          <div class="actions" >
+            <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
+              translate}}</button>
+            <button mat-raised-button class="mat-btn" (click)="onSubmit()" [disabled]="formGroup.invalid"
+              type="submit">{{'Common.Save' | translate}}</button>
+          </div>
         </div>
-      </div>
+      }
     </form>
   </div>
 
-   <div class="card-content" *ngIf="isChilde">
-     <mat-card>
-       <mat-card-header>
-         <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
-       </mat-card-header>
-       <img mat-card-image [src]="image" alt="Image">
-     </mat-card>
-
-     <mat-card>
-       <mat-card-header>
-         <mat-card-title>{{"Cms.ImageMedum" | translate}}</mat-card-title>
-       </mat-card-header>
-       <img mat-card-image [src]="imageMedium" alt="Image">
-     </mat-card>
-
-     <mat-card>
-       <mat-card-header>
-         <mat-card-title>{{"Cms.ImageSmall" | translate}}</mat-card-title>
-       </mat-card-header>
-       <img mat-card-image [src]="imageSmall" alt="Image">
-     </mat-card>
-   </div>
+  @if(isChilde) {
+    <div class="card-content">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image [src]="image" alt="Image">
+      </mat-card>
+ 
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.ImageMedum" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image [src]="imageMedium" alt="Image">
+      </mat-card>
+ 
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.ImageSmall" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image [src]="imageSmall" alt="Image">
+      </mat-card>
+    </div>
+  }
 
 </div>

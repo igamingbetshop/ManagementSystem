@@ -13,15 +13,15 @@ import { AgBooleanFilterModule } from 'src/app/main/components/grid-common/ag-bo
 import { AgGridModule } from 'ag-grid-angular';
 import { DatePipe } from '@angular/common';
 import { GeneralSetupComponent } from './general-setup/general-setup.component';
-import {MatIconModule} from "@angular/material/icon";
-import {MatInputModule} from "@angular/material/input";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
-import {BonusesService} from "../bonuses.service";
-import {DialogModule} from "@angular/cdk/dialog";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { BonusesService } from "../bonuses.service";
+import { DialogModule } from "@angular/cdk/dialog";
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @NgModule({
   imports: [
@@ -42,9 +42,8 @@ import {DialogModule} from "@angular/cdk/dialog";
     FormsModule,
     MatNativeDateModule,
     MatCheckboxModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    DialogModule
+    DialogModule,
+    DateTimePickerComponent
   ],
   declarations: [CommonsesComponent, GeneralSetupComponent],
   providers: [

@@ -22,8 +22,8 @@ import {ActiveTournamentComponent} from "./active-tournament/active-tournament.c
 import {AddTournamentComponent} from "./add-tournament/add-tournament.component";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {AddEditSkillTranslationModule} from "./add-edit-translation/add-edit-translation.component";
+import { DateTimePickerComponent } from "src/app/main/components/data-time-picker/data-time-picker.component";
 
 
 @NgModule({
@@ -44,9 +44,8 @@ import {AddEditSkillTranslationModule} from "./add-edit-translation/add-edit-tra
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    AddEditSkillTranslationModule
+    AddEditSkillTranslationModule,
+    DateTimePickerComponent
   ],
   declarations: [ActiveTournamentsComponent, ActiveTournamentComponent, AddTournamentComponent]
 })

@@ -38,6 +38,7 @@ export class AddNoteComponent implements OnInit {
   public objectTypeId;
   notes = [];
   comments;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddNoteComponent>,
@@ -55,9 +56,6 @@ export class AddNoteComponent implements OnInit {
     this.formValues();
   }
 
-
-
-
   onCommentTypeChange() {
     let typeId = this.formGroup.get('CommentTemplateId').value;
     if(typeId) {
@@ -66,7 +64,6 @@ export class AddNoteComponent implements OnInit {
       this.formGroup.get('Type').setValue(3);
       this.formGroup.get('Message').setValue('')
     }
-
   }
 
 
@@ -90,6 +87,7 @@ export class AddNoteComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('players/createnote', obj).pipe(take(1)).pipe(take(1)).subscribe((data) => {
 
@@ -98,6 +96,7 @@ export class AddNoteComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

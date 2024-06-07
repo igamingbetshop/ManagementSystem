@@ -68,7 +68,13 @@
     <mat-error *ngIf="errorControl['ImageData']?.touched && errorControl['ImageData'].errors?.required">
       {{'Cms.ImageData' | translate}} {{'Errors.Required' | translate}}
     </mat-error>
-    <button mat-raised-button color="primary" type="submit">{{'Common.Save' | translate}}</button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      [class.disabled]="isSendingReqest"
+      type="submit">
+      {{'Common.Save' | translate}}
+    </button>
   </form>
 
 

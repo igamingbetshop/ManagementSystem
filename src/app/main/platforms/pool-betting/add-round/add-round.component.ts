@@ -7,7 +7,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatInputModule} from "@angular/material/input";
 
 import {TranslateModule} from "@ngx-translate/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {MatFormFieldModule} from "@angular/material/form-field";
 
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -19,6 +18,7 @@ import { PBControllers, PBMethods } from 'src/app/core/enums';
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { PoolBettingApiService } from '../../sportsbook/services/pool-betting-api.service';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
   selector: 'app-add-round',
@@ -36,13 +36,13 @@ import { PoolBettingApiService } from '../../sportsbook/services/pool-betting-ap
     MatDatepickerModule,
     MatNativeDateModule,
     TranslateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    DateTimePickerComponent
   ]
 })
 export class AddRoundComponent implements OnInit {
   public formGroup: UntypedFormGroup;
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddRoundComponent>,
@@ -81,12 +81,14 @@ export class AddRoundComponent implements OnInit {
 
   onSubmit() {
     const requestData = this.formGroup.getRawValue();
+    this.isSendingReqest = true;
     this.apiService.apiPost(PBControllers.ROUND, PBMethods.ADD_ROUND, requestData).pipe(take(1)).subscribe(data => {
       if (data.Code === 0) {
         this.dialogRef.close(data);
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
+      this.isSendingReqest = false;
     });
   }
 

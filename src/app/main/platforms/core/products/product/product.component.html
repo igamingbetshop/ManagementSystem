@@ -200,39 +200,41 @@
         </div>
       </div>
 
-      <div [class.group-left-item]="isEdit">
+      <div>
         <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
-        @if (currentProduct?.Countries?.Type==2) {
-          <div class="second-hand">
-            {{'Bonuses.InSet' | translate}}
-          </div>
-        }
-        @if (currentProduct?.Countries?.Type==1) {
-          <div class="second-hand">
-            {{'Bonuses.OutOfSet' | translate}}
-          </div>
-        }
 
-        <div class="form-field form-checkbox" [formGroupName]="'Countries'">
-          <input [value]="2" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
-          <input [value]="1" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
-          translate}}
-        </div>
-      </div>
-
-      <div [class.group-right-item]="isEdit">
-        <div class="first-hand">{{'Clients.SelectCountry' | translate}}</div>
-        @for (country of countriesEntites; track $index) {
-          <div class="second-hand">{{country}}</div>
-        }
-        <div class="form-field form-dropdown" [formGroupName]="'Countries'">
-          <mat-select [formControlName]="'Ids'" multiple>
-            @for (country of countries; track $index) {
-              <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+        <div class="second-hand" >
+          <span class="second-left"> 
+            @if (currentProduct?.Countries?.Type==2) {
+                {{'Bonuses.InSet' | translate}}
+            } @else if (currentProduct?.Countries?.Type==1) {
+                {{'Bonuses.OutOfSet' | translate}}
             }
-          </mat-select>
+          </span>
+
+          <span class="second-right">
+            @for (country of countriesEntites; track $index) {
+              {{country}}
+            }
+          </span>
+        </div>
+
+        <div class="form-field group-field" [formGroupName]="'Countries'">
+          <div class="group-left-item">
+            <input [value]="2" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+            <input [value]="1" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+            translate}}
+          </div>
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Ids'" multiple>
+              @for (country of countries; track $index) {
+                <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
         </div>
       </div>
+
 
 
       <div>
@@ -287,7 +289,6 @@
         </div>
       </div> -->
 
-      <div></div>
       <div></div>
       <div class="form-actions">
 

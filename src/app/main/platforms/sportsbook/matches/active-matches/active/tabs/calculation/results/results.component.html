@@ -18,19 +18,47 @@
             <span>H2</span>
 
             <span class="table-left">Home:</span>
-            <input type="number" [(ngModel)]="result.TR[0].V" [readonly]="!isEdit">
-            <input type="number" *ngIf="dataObjects[i + 1]" [(ngModel)]="dataObjects[i + 1].TR[0].V"
-              [readonly]="!isEdit">
-            <input type="number" *ngIf="dataObjects[i + 2]" [(ngModel)]="dataObjects[i + 2].TR[0].V"
-              [readonly]="!isEdit">
-
-
+            <input type="text" 
+              [(ngModel)]="result.TR[0].V" 
+              [readonly]="!isEdit"
+              (keypress)="onKeyPress($event)"
+              #inputField="ngModel" 
+              [pattern]="integerPattern"
+              >
+            <input type="text" *ngIf="dataObjects[i + 1]" 
+              [(ngModel)]="dataObjects[i + 1].TR[0].V"
+              [readonly]="!isEdit"
+              (keypress)="onKeyPress($event)"
+              #inputField="ngModel" 
+              [pattern]="integerPattern"
+              >
+            <input type="text" *ngIf="dataObjects[i + 2]" 
+              [(ngModel)]="dataObjects[i + 2].TR[0].V"
+              [readonly]="!isEdit"
+              (keypress)="onKeyPress($event)"
+              #inputField="ngModel" 
+              [pattern]="integerPattern"
+              >
             <span class="table-left">Away:</span>
-            <input type="number" [(ngModel)]="result.TR[1].V" [readonly]="!isEdit">
-            <input type="number" *ngIf="dataObjects[i + 1]" [(ngModel)]="dataObjects[i + 1].TR[1].V"
-              [readonly]="!isEdit">
-            <input type="number" *ngIf="dataObjects[i + 2]" [(ngModel)]="dataObjects[i + 2].TR[1].V"
-              [readonly]="!isEdit">
+            <input type="text" 
+              [(ngModel)]="result.TR[1].V" 
+              [readonly]="!isEdit"   
+              (keypress)="onKeyPress($event)"
+              #inputField="ngModel" 
+              [pattern]="integerPattern"
+              >
+            <input type="text" *ngIf="dataObjects[i + 1]" 
+              [(ngModel)]="dataObjects[i + 1].TR[1].V"
+              [readonly]="!isEdit"   
+              (keypress)="onKeyPress($event)"
+              #inputField="ngModel" 
+              [pattern]="integerPattern">
+            <input type="text" *ngIf="dataObjects[i + 2]" 
+              [(ngModel)]="dataObjects[i + 2].TR[1].V"
+              [readonly]="!isEdit"   
+              (keypress)="onKeyPress($event)"
+                #inputField="ngModel" 
+              [pattern]="integerPattern">
           </div>
         </div>
         }

@@ -67,21 +67,16 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   ];
 
-
   public commentTypes: any[] = [];
-
   public availableBetCategoriesStatus: number = -1;
   public availableStatusesStatus: number = -1;
   public show = false;
-
   public path = "report/bets";
-
   public rowData = [];
   public rowData1 = [];
   public rowModelType1: string = GridRowModelTypes.CLIENT_SIDE;
   public isLiveUpdateOn: boolean;
   public isReconnected: boolean;
-  private statusFilterArray = [];
 
   public frameworkComponents = {
     selectRenderer: SelectRendererComponent,
@@ -343,14 +338,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        // cellRenderer: (params) => {
-        //   if (params.node.rowPinned) {
-        //     return '';
-        //   }
-        //   const oddsTypePipe = new OddsTypePipe();
-        //   let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-        //   return `${data}`;
-        // },
       },
       {
         headerName: 'SkillGames.BetAmount',
@@ -463,12 +450,10 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'State',
         sortable: false,
-        filter: 'agNumberColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.statusFilterArray,
-          suppressAndOrCondition: true,
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.betStatuses,
         },
         cellClass: params => {
           let state = params.data?.State;
@@ -649,6 +634,24 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         headerName: 'Common.CommentTypeId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CommentTypeId',
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+        cellStyle: function (params) {
+          if (params.data.CommentTypeColor !== '#FFFFFF') {
+            return { color: 'black', backgroundColor: params.data.CommentTypeColor, borderRadius: '4px' };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
+        headerName: 'Sport.CLVValue',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Value',
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -884,12 +887,9 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      // Set the flag to indicate that the popup is closed
       this.isPopupOpen = false;
-
-      // Handle any data returned from the popup if needed
       if (data) {
-        // Your logic here
+        // logic here
       }
     });
   }
@@ -985,7 +985,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
       .subscribe(data => {
         if (data.Code === 0) {
           this.getRowById(rows['BetId'])
-          // this.getCurrentPage();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -1123,7 +1122,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     syncColumnReset();
     this.gridApi = params.api;
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-    this.mapStatusFilter();
   }
 
   onDragStopped(event: DragStoppedEvent) {
@@ -1235,18 +1233,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     this.playAlert();
   }
 
-  mapStatusFilter(): void {
-    this.statusFilterArray.push("empty");
-    this.betStatuses.forEach(field => {
-      this.statusFilterArray.push({
-        displayKey: field.Id,
-        displayName: field.Name,
-        predicate: (_,) => false,
-        numberOfInputs: 0,
-      });
-    })
-  }
-
   mapResponseData(bet) {
     bet.Competition = bet.CompetitionName;
     bet['Gender'] = this.genders.find((gender) => gender.Id == bet.Gender)?.Name;
@@ -1257,9 +1243,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     bet['SystemOutCountValue'] = bet.SystemOutCounts ? '' : bet.SystemOutCounts + '/...';
     bet['Competitors'] = bet['Competitors'].join("-");
     bet['Info'] = bet.Info ? (bet.Info) : '';
-    // if(bet.CommentTypeId === 6) {
-    //   bet['State'] = "Waiting";
-    // }
     bet.CalculationDate = bet.CalculationDate ? bet.CalculationDate : '';
   }
 
@@ -1301,7 +1284,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         if (data.Code === 0) {
           this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
           SnackBarHelper.show(this._snackBar, { Description: "Blocked", Type: "succses" });
-
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -1360,8 +1342,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     this.subscription.unsubscribe();
     this.unSubscribeFromUpdates();
   }
-  
-
 
 }
 

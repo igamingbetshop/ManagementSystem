@@ -2,10 +2,8 @@
 
   <div class="partner-content action">
     <div class="title">{{'Common.Coins' | translate}}</div>
-    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="onDeleteCoin()">{{'Sport.DeleteCoin' | translate}}</button>
-
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected() || isSendingReqest" (click)="onDeleteCoin()">{{'Sport.DeleteCoin' | translate}}</button>
     <button mat-stroked-button class="mat-edit-btn" [class.disabled]="isRowSelected()" (click)="onAddEditCoin(true)">{{'Sport.EditCoin' | translate}}</button>
-
     <button mat-stroked-button class="mat-btn" (click)="onAddEditCoin(false)">{{'Sport.AddCoin' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 

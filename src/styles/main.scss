@@ -65,6 +65,91 @@
   }
 }
 
+app-progress-bar
+{
+  &.country
+  {
+    .block-content
+    {
+      margin-bottom: 4vh;
+      .content-row
+      {
+        .icon{
+          width: 3.2vh!important;
+          height: 3.2vh!important;
+          border-radius: 50%!important;
+        }
+      }
+      .progress-bar-thumb
+      {
+        .progress-track
+        {
+          background: rgba(154, 182, 228, 1);
+        }
+      }
+    }
+
+  }
+  &.payin, &.profitable
+  {
+    .block-content
+    {
+      .progress-bar-thumb
+      {
+        .progress-track
+        {
+          background: rgba(75, 204, 111, 1);
+          .range{display: none}
+        }
+      }
+    }
+  }
+
+  &.payout, &.damaging
+  {
+    .block-content
+    {
+      .progress-bar-thumb
+      {
+        .progress-track
+        {
+          background: rgba(218, 80, 88, 1);
+          .range{display: none}
+        }
+      }
+    }
+  }
+  &.turnover
+  {
+    .block-content
+    {
+      .progress-bar-thumb
+      {
+        .progress-track
+        {
+          background: rgba(80, 152, 218, 1);
+          .range{display: none}
+        }
+      }
+    }
+  }
+  &.bonuses
+  {
+    .block-content
+    {
+      .progress-bar-thumb
+      {
+        .progress-track
+        {
+          background: rgba(218, 179, 80, 1);
+          .range{display: none}
+        }
+      }
+    }
+  }
+}
+
+
 .disabled-header
 {
   position: relative;

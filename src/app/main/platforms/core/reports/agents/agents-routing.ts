@@ -9,8 +9,13 @@ const routes: Routes = [
     component: AgentsComponent,
     children: [
       {
-        path: 'report-by-agent-transfers',
-        loadChildren: () => import('../users-and-agents/report-by-agent-transfers/report-by-agent-transfers.module').then(m => m.ReportByAgentTransfersModule),
+        path: 'report-by-agent-transactions',
+        loadChildren: () => import('./report-by-agent-transactions/report-by-agent-transactions.module').then(m => m.ReportByAgentTransactionsModule),
+        resolve: { filterData: FilterOptionsResolver },
+      },
+      {
+        path: 'report-by-agents',
+        loadChildren: () => import('./report-by-agents/report-by-agents.module').then(m => m.ReportByAgentsModule),
         resolve: { filterData: FilterOptionsResolver },
       },
     ]

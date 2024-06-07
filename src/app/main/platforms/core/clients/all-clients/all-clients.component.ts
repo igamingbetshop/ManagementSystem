@@ -21,7 +21,7 @@ import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-ti
 import { ServerCommonModel } from 'src/app/core/models/server-common-model';
 import { GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-enterprise';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-import {ExportService} from "../../services/export.service";
+import { ExportService } from "../../services/export.service";
 
 @Component({
   selector: 'all-clients',
@@ -55,7 +55,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     private apiService: CoreApiService,
     private _snackBar: MatSnackBar,
     public activateRoute: ActivatedRoute,
-    private exportService:ExportService,
+    private exportService: ExportService,
     private commonDataService: CommonDataService) {
     super(injector);
     this.getCountry();
@@ -671,6 +671,10 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
           paging.UnderMonitoringTypes = paging.UnderMonitoringTypess.ApiOperationTypeList[0].IntValue;
           delete paging.UnderMonitoringTypess;
         }
+        if (paging.IsDocumentVerifieds) {
+          paging.IsDocumentVerified = paging.IsDocumentVerifieds.ApiOperationTypeList[0].BooleanValue;
+          delete paging.IsDocumentVerifieds;
+        }
 
         this.clientData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, paging,
@@ -678,7 +682,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Entities;
               mappedRows.forEach((items) => {
-                if(this.countriesEnum?.[items.CountryId]){
+                if (this.countriesEnum?.[items.CountryId]) {
                   items.CountryId = this.countriesEnum[items.CountryId];
                 }
               });
@@ -703,8 +707,9 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
       payment.HasNote = payment.HasNote ? 'Yes' : 'No';
       if (payment.UnderMonitoringTypes) {
         let underMonitoringTypesNames = '';
-        payment.UnderMonitoringTypes.forEach(element => { underMonitoringTypesNames += this.underMonitoringTypes.find((category) => category.Id === element)?.Name + " ";
-        payment.UnderMonitoringTypes = underMonitoringTypesNames
+        payment.UnderMonitoringTypes.forEach(element => {
+          underMonitoringTypesNames += this.underMonitoringTypes.find((category) => category.Id === element)?.Name + " ";
+          payment.UnderMonitoringTypes = underMonitoringTypesNames
         });
       }
       return payment;
@@ -780,9 +785,8 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     ];
   }
 
-  exportToCsv()
-  {
-    this.exportService.exportToCsv( Controllers.CLIENT, Methods.EXPORT_CLIENTS, {...this.clientData, adminMenuId: this.adminMenuId});
+  exportToCsv() {
+    this.exportService.exportToCsv(Controllers.CLIENT, Methods.EXPORT_CLIENTS, { ...this.clientData, adminMenuId: this.adminMenuId });
   }
 
   async sendMailToPlayer() {
@@ -790,10 +794,10 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     this.agGrid.api.forEachNode((node) => {
       _filterClient.push(node.data.Id)
     });
-    if(_filterClient.length == 0) {
+    if (_filterClient.length == 0) {
       return
     }
-    const {SendMailToPlayerComponent} = await import('../client/tabs/main/send-mail-to-player/send-mail-to-player.component');
+    const { SendMailToPlayerComponent } = await import('../client/tabs/main/send-mail-to-player/send-mail-to-player.component');
     const dialogRef = this.dialog.open(SendMailToPlayerComponent, {
       width: ModalSizes.MEDIUM,
       data: {

@@ -318,8 +318,8 @@
     "PEPSanctioned": "PEP Sanctioned",
     "CheckStatus": "Check Status",
     "BonusWinAmount": "Bonus Win Amount",
-    "OriginalBonusWinAmount": "Original Bonus Win Amount"
-
+    "OriginalBonusWinAmount": "Original Bonus Win Amount",
+    "ConvertedAmount": "Converted Amount"
   },
   "Partners": {
     "AddPartner": "Add Partner",
@@ -872,7 +872,8 @@
     "AllowLive": "Allow Live",
     "UsePin": "Use Pin",
     "BetShopGroups": "BetShop Groups",
-    "AddBetShopGroup": "Add BetShop Group"
+    "AddBetShopGroup": "Add BetShop Group",
+    "SelectBetShop": "Select Bet Shop"
   },
   "Providers": {
     "Providers": "Providers",
@@ -1079,7 +1080,9 @@
     "ReportByDocuments": "Report By Documents",
     "ReportBySports": "Report By Sports",
     "ReportByClientGames": "Report By Client Games",
-    "SearchByCaller": "Search By Caller"
+    "SearchByCaller": "Search By Caller",
+    "ReportByAgentTransactions": "Report By Agent Transactions",
+    "ReportByAgents": "Report By Agents"
   },
   "Errors": {
     "Required": "required.",
@@ -1355,7 +1358,12 @@
     "TheFollowingMatchesAreFinished": "The following matches are finished with non-seattled bets",
     "Supsend": "Supsend",
     "UnSupsend": "Unsupsend",
-    "Loading": "Loading..."
+    "Loading": "Loading...",
+    "BuildMarket": "Build Market",
+    "AreYouSureToMgarate": "Are you sure to migrate",
+    "With": "With",
+    "AcceptToMgarate": "Accept to migrate",
+    "LogoImageUrl": "Logo Image Url"
   },
   "PoolBetting": {
     "PoolBetting": "Pool Betting",
@@ -1645,7 +1653,10 @@
     "Settings": "Settings",
     "SelectDeviceType": "Select Device Type",
     "DeviceType": "Device Type",
-    "ImageExtension": "Image Extension"
+    "ImageExtension": "Image Extension",
+    "UploadDescription": "Upload Description",
+    "LastThirtyDays": "Last Thirty Days",
+    "LastSevenDays": "Last Seven Days"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",

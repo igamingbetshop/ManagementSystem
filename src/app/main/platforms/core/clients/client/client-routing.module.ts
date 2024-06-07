@@ -117,6 +117,10 @@ const routes: Routes = [
           loadChildren:() => import('./tabs/transactions/transactions.module').then(m => m.TransactionsModule)
         },
         {
+          path: 'duplicates',
+          loadChildren:() => import('./tabs/duplicates/duplicates.module').then(m => m.DuplicatesModule)
+        },
+        {
           path: 'provider-settings',
           loadChildren:() => import('./tabs/provider-settings/provider-settings.module').then(m => m.ProviderSettingsModule)
         },

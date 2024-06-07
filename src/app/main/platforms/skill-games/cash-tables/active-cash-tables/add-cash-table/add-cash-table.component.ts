@@ -28,6 +28,7 @@ export class AddCashTableComponent implements OnInit {
     ],
     selectedType: { 'id': 1, 'name': 'Short' }
   };
+  isSendingReqest = false;
   // public selectedBackgammonType = this.tableTypes.types[0].id;
   // public selectedTableType = this.backgammonTypes.types[0].id;
 
@@ -77,6 +78,7 @@ export class AddCashTableComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('cashtable/create', obj).pipe(take(1)).subscribe(data => {
 
@@ -85,6 +87,7 @@ export class AddCashTableComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+      this.isSendingReqest = false;
     });
   }
 

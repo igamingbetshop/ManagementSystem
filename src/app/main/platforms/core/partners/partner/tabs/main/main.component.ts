@@ -68,7 +68,6 @@ export class MainComponent implements OnInit {
       Controllers.PARTNER, Methods.GET_PARTNERS).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
           this.partner = data.ResponseObject.Entities[0];
-
           this.partner.StateName = this.states.find((item) => {
             return item.Id === this.partner.State;
           })?.Name;
@@ -81,7 +80,6 @@ export class MainComponent implements OnInit {
           this.partner.SiteUrl = this.partner.SiteUrl.split(',');
           this.siteUrl = this.partner.SiteUrl;
           this.siteUrlSelected = [...this.siteUrl.keys()][0];
-
           this.formGroup.patchValue(this.partner);
         }
       });
@@ -146,7 +144,7 @@ export class MainComponent implements OnInit {
       Controllers.PARTNER, Methods.SAVE_PASSWORD_REG_EX).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
           this.isEdit = false;
-
+          this.getPartners();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

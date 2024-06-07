@@ -147,12 +147,9 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
   onPartnerChange(val) {
     this.partnerId = null;
     this.partnerId = val;
-    this.go();
-  }
-
-  go() {
     this.getCurrentPage();
   }
+
 
   deleteBanner() {
     const row = this.gridApi.getSelectedRows()[0];
@@ -162,7 +159,7 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
     this.apiService.apiPost('cms/deletebanner', row).subscribe(data => {
 
       if (data.ResponseCode === 0) {
-        this.go();
+        this.getCurrentPage();
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
@@ -173,16 +170,7 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
     const {AddBannerComponent} = await import('./add-banner/add-banner.component');
     const dialogRef = this.dialog.open(AddBannerComponent, {width: ModalSizes.LARGE,});
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if (data) {
-        this.apiService.apiPost('cms/addbanner', data).pipe(take(1)).subscribe(data => {
-
-          if (data.ResponseCode === 0) {
-            this.go();
-          } else {
-            SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-          }
-        });
-      }
+      this.getCurrentPage();
     })
   }
 

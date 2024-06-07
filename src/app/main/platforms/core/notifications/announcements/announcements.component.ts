@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RECEIVER_TYPES } from 'src/app/core/constantes/statuses';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { AnnouncementsService } from './announcements.service';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 const states = [
   { "Name": 'Active', "Id": 1 },
@@ -57,10 +58,10 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
   }
 
   ngOnInit() {
+    this.setTime();
     this.fetchAnnucementTypesEnum()
     this.partners = this.commonDataService.partners;
     this.gridStateName = 'announcements-grid-state';
-    this.startDate();
     this.announcementsService.currentAnnouncement.subscribe((announcement) => {
       if (announcement) {
         const rowIdToUpdate = announcement?.Id;
@@ -217,30 +218,20 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
       });
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
-
-  onPartnerChange(val: number) {
-    this.partnerId = val;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId) {
+      this.partnerId = event.partnerId;
+    } else {
+      this.partnerId = null;
+    }
     this.getCurrentPage();
   }
 

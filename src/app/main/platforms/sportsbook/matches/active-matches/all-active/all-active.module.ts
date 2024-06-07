@@ -13,8 +13,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AgGridModule } from 'ag-grid-angular';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
-
 
 @NgModule({
   imports: [
@@ -31,8 +29,6 @@ import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-mater
     MatSnackBarModule,
     TranslateModule,
     AgGridModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
   ],
   declarations: [AllActiveComponent],
   providers: [DatePipe],

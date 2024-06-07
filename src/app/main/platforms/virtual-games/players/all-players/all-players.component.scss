@@ -19,7 +19,7 @@
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 92px);
+    height: calc(100% - 62px);
 
     ::ng-deep {
       ag-grid-angular {
@@ -31,8 +31,8 @@
     .pages-sizes {
       position: absolute;
       left: 262px;
-      bottom: 20px;
-      @include dropdown-style;
+      bottom: 2%;
+      @include grid-dropdown-style;
 
       ::ng-deep {
         .mat-select {
@@ -41,5 +41,6 @@
         }
       }
     }
+    
   }
 }

@@ -180,3 +180,14 @@
     }
   }
 }
+
+.mat-mdc-snack-bar-container 
+.mdc-snackbar__surface {
+  background-color: transparent!important;
+  box-shadow: none!important;
+}
+
+
+.mdc-snackbar__label {
+  padding: 0!important;
+}

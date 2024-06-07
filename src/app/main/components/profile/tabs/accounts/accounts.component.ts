@@ -5,8 +5,8 @@ import {ApiService, ConfigService, LocalStorageService} from 'src/app/core/servi
 import 'ag-grid-enterprise';
 import {take} from 'rxjs/operators';
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { BaseGridComponent } from '../../../classes/base-grid-component';
+import { DateHelper } from '../../../partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-accounts',
@@ -124,36 +124,27 @@ export class AccountsComponent extends BaseGridComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.startDate();
+    this.setTime();
     this.id = this.localStorage.get('user')?.UserId;
     this.getPage();
+  }
+
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
+
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   go() {
     this.getPage();
   }
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-  }
-
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
-    this.getPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
-  }
 
   getPage() {
     this.filter.FromDate = this.fromDate;

@@ -74,13 +74,9 @@
       <div>
         <div class="first-hand">{{'Clients.StartTime' | translate}}</div>
         <div class="second-hand">{{activeMatch.StartTime}}</div>
-        <div class="form-field form-calendar-edit">
+        <div class="form-field form-calendar">
           <div class="calendar-picker start">
-            <input matInput [ngxMatDatetimePicker]="pickerStart" [formControlName]="'StartTime'">
-            <mat-datepicker-toggle matSuffix [for]="pickerStart">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #pickerStart></ngx-mat-datetime-picker>
+            <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
           </div>
         </div>
       </div>

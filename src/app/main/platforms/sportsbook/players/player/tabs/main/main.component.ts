@@ -18,13 +18,19 @@ import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper"
 })
 export class MainComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public player;
-  public playerId: number;
-  public formGroup: UntypedFormGroup;
-  public Categories: any[] = [];
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public isEdit = false;
+  player;
+  playerId: number;
+  formGroup: UntypedFormGroup;
+  Categories: any[] = [];
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  isEdit = false;
+  isSendingReqest = false;
+  statuses = [
+    { Name: `Yes`, Id: true },
+    { Name: `No`, Id: false },
+    { Name: `None`, Id: null },
+  ]
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -117,6 +123,27 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         sortable: true,
         resizable: true,
       },
+      {
+        headerName: 'Sport.RestrictMaxBet',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'RestrictMaxBet',
+        sortable: true,
+        resizable: true,
+      },
+      {
+        headerName: 'Sport.RepeatBetMaxCount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'RepeatBetMaxCount',
+        sortable: true,
+        resizable: true,
+      },
+      {
+        headerName: 'Sport.AllowCashout',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AllowCashout',
+        sortable: true,
+        resizable: true,
+      }
     ]
   }
 
@@ -157,6 +184,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       DelayBetweenBetsLive: [null],
       RestrictMaxBet: [null],
       RepeatBetMaxCount: [null],
+      AllowCashout: [null],
     });
   }
 
@@ -166,18 +194,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       .subscribe(data => {
         if (data.Code === 0) {
           this.player = data;
-          this.formGroup.get('Id').setValue(this.player['Id']);
-          this.formGroup.get('NickName').setValue(this.player['NickName']);
-          this.formGroup.get('ExternalId').setValue(this.player['ExternalId']);
-          this.formGroup.get('PlayerCurrencyId').setValue(this.player['PlayerCurrencyId']);
-          this.formGroup.get('CategoryId').setValue(this.player['CategoryId']);
-          this.formGroup.get('LimitPercent').setValue(this.player['LimitPercent']);
-          this.formGroup.get('DelayPercentPrematch').setValue(this.player['DelayPercentPrematch']);
-          this.formGroup.get('DelayPercentLive').setValue(this.player['DelayPercentLive']);
-          this.formGroup.get('DelayBetweenBetsPrematch').setValue(this.player['DelayBetweenBetsPrematch']);
-          this.formGroup.get('DelayBetweenBetsLive').setValue(this.player['DelayBetweenBetsLive']);
-          this.formGroup.get('Description').setValue(this.player['Description']);
-          this.formGroup.get('RestrictMaxBet').setValue(this.player['RestrictMaxBet']);
+          this.formGroup.patchValue(this.player)
           this.player.CategoryName = this.Categories.find(item => item.Id === this.player.CategoryId)?.Name
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
@@ -199,6 +216,9 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
           items.DelayPercentLive = items.Object.DelayPercentLive;
           items.DelayBetweenBetsPrematch = items.Object.DelayBetweenBetsPrematch;
           items.DelayBetweenBetsLive = items.Object.DelayBetweenBetsLive;
+          items.RepeatBetMaxCount = items.Object.RepeatBetMaxCount;
+          items.RestrictMaxBet = items.Object.RestrictMaxBet;
+          items.AllowCashout = items.Object.AllowCashout;
           return items
         });
       }
@@ -209,6 +229,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     if (this.formGroup.invalid) {
       return;
     }
+    this.isSendingReqest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('players/update', obj)
       .pipe(take(1))
@@ -222,6 +243,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
       })
   }
 

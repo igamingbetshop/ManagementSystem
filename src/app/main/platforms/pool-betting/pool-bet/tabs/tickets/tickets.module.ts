@@ -15,7 +15,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
-import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {RouterModule, Routes} from "@angular/router";
 
 const routes: Routes = [
@@ -41,8 +40,6 @@ const routes: Routes = [
     AgGridModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule,
   ],
   declarations: [TicketsComponent]
 })

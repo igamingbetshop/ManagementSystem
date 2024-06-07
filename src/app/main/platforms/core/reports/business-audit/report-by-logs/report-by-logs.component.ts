@@ -22,15 +22,14 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 })
 export class ReportByLogsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  @ViewChild('caller') callerInput: ElementRef;
 
   rowData = [];
+  filteredRowData = [];
   fromDate = new Date();
   toDate = new Date();
   clientData = {};
   filteredData;
   partners = [];
-  partnerId;
   selectedItem = 'today';
   filter;
   callerFilterChanged: Subject<string> = new Subject<string>();
@@ -39,12 +38,14 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   frameworkComponents = {
     agDateTimeFilter: AgDateTimeFilter
   };
+  
 
   idFilterChange: boolean = false;
   typeModel: any;
   filterModel: any;
   messageModel: any;
   paginationTotal: any;
+  filterUsed: boolean = false;
   constructor(
     private apiService: CoreApiService,
     public configService: ConfigService,
@@ -114,15 +115,7 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   ngOnInit(): void {
     this.setTime();
     this.partners = this.commonDataService.partners;
-    this.callerFilterChanged.pipe(debounceTime(600)).subscribe(event => {
-      this.applyFilter(event, "Caller");
-    });
-    this.typeFilterChanged.pipe(debounceTime(600)).subscribe(event => {
-      this.applyFilter(event, 'Type');
-    });
-    this.messageFilterChanged.pipe(debounceTime(600)).subscribe(event => {
-      this.applyFilter(event, 'Message');
-    });
+    this.setupFilterListeners();
   }
 
   setTime() {
@@ -135,12 +128,13 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
     this.fromDate = event.fromDate;
     this.toDate = event.toDate;
     this.filter.Active = false;
-    if (event.partnerId) {
-      this.partnerId = event.partnerId;
-    } else {
-      this.partnerId = null;
-    }
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  setupFilterListeners() {
+    this.typeFilterChanged.pipe(debounceTime(600)).subscribe(event => this.applyFilter(event, 'Type'));
+    this.callerFilterChanged.pipe(debounceTime(620)).subscribe(event => this.applyFilter(event, 'Caller'));
+    this.messageFilterChanged.pipe(debounceTime(640)).subscribe(event => this.applyFilter(event, 'Message'));
   }
 
   onGridReady(params) {
@@ -153,6 +147,9 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
     if (data) {
       return {
         getRows: (params) => {
+          setTimeout(() => {
+            this.filterUsed = false;
+          }, 1000);
           params.success({ rowData: data, rowCount: length || data.length });
         }
       };
@@ -167,11 +164,9 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
         paging.TakeCount = Number(this.cacheBlockSize);
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
-        if (this.partnerId) {
-          paging.PartnerId = this.partnerId;
-        }
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
+        this.filteredRowData = [];
         if (paging.Ids) {
           paging.Id = paging.Ids.ApiOperationTypeList[0].IntValue;
           delete paging.Ids;
@@ -187,13 +182,12 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
 
               if (!!this.filterModel || !!this.typeModel || !!this.messageModel) {
                 setTimeout(() => {
-                  this.callerChanged(this.filterModel || null);
-                  this.typeChanged(this.typeModel || null);
-                  this.messageChanged(this.messageModel || null);
+                  this.applyFilters();
                 }, 0);
               }
 
               this.paginationTotal = data.ResponseObject.Count;
+              this.filterUsed = false;
               params.success({ rowData: data.ResponseObject.Entities, rowCount: data.ResponseObject.Count });
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -203,39 +197,19 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
     };
   }
 
-  callerChanged(event?) {
-    if (event) {
-      this.callerFilterChanged.next(event);
-    } else {
-      this.setRowData()
-    }
-  }
-
-  typeChanged(event?) {
-    if (event) {
-      this.typeFilterChanged.next(event);
-    } else {
-      this.setRowData()
-    }
-  }
-
-  messageChanged(event?) {
-    if (event) {
-      this.messageFilterChanged.next(event);
-    } else {
-      this.setRowData()
-    }
-  }
-
   onFilterChanged(event: any) {
     const IdInstance = event.api.getFilterInstance('Id');
     const filterInstance = event.api.getFilterInstance('Caller');
     const typeFilterInstance = event.api.getFilterInstance('Type');
     const messageFilterInstance = event.api.getFilterInstance('Message');
+    this.filterModel = filterInstance?.getModel()?.filter;
+    this.typeModel = typeFilterInstance?.getModel()?.filter;
+    this.messageModel = messageFilterInstance?.getModel()?.filter;
+
+
     const filterModel = filterInstance?.getModel();
     const typeModel = typeFilterInstance?.getModel();
     const messageModel = messageFilterInstance?.getModel();
-
     this.typeModel = typeModel?.filter;
     this.filterModel = filterModel?.filter;
     this.messageModel = messageModel?.filter;
@@ -244,36 +218,42 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
       this.idFilterChange = true;
       this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
       return;
-    } else if (this.idFilterChange && !IdInstance.getModel()) {
-      this.idFilterChange = false;
-      this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-      return;
-    }
+    } else this.applyFilters();
+  }
 
-    this.callerChanged(this.filterModel);
-    this.typeChanged(this.typeModel);
-    this.messageChanged(this.messageModel);
-    if (!!this.filterModel) {
+  applyFilters() {
+    let filteredData = this.rowData;
+    this.filterUsed = false;
+    if (this.filterModel) {
+      filteredData = filteredData.filter(item => item.Caller.toLowerCase().includes(this.filterModel.toLowerCase()));
+      this.filterUsed = true;
     }
-    if (!!this.typeModel) {
+    if (this.typeModel) {
+      filteredData = filteredData.filter(item => item.Type.toLowerCase().includes(this.typeModel.toLowerCase()));
+      this.filterUsed = true;
     }
-    if (!!this.messageModel) {
+    if (this.messageModel) {
+      filteredData = filteredData.filter(item => item.Message.toLowerCase().includes(this.messageModel.toLowerCase()));
+      this.filterUsed = true;
     }
-    return;
-    if (!filterInstance) {
-      this.filter = null
+    if(this.filterUsed) {
+      setTimeout(() => {
+        this.gridApi.setServerSideDatasource(this.createServerSideDatasourceManual(filteredData))
+      }, 0);
+    } else {
+      setTimeout(() => {
+        this.gridApi.setServerSideDatasource(this.createServerSideDatasourceManual(filteredData, this.paginationTotal))
+      }, 0);
     }
+  }
+
+  applyFilter(event: string, type: string) {
+    this[type + 'Model'] = event.toLowerCase();
+    this.applyFilters();
   }
 
   setRowData() {
     this.gridApi.setServerSideDatasource(this.createServerSideDatasourceManual(this.rowData, this.paginationTotal));
-  }
-
-  applyFilter(event, type) {
-    event = event.toLowerCase();
-    const data = this.rowData;
-    const myData = data.filter(item => item[type].toLowerCase().includes(event));
-    this.gridApi.setServerSideDatasource(this.createServerSideDatasourceManual(myData))
   }
 
   onPageSizeChanged() {

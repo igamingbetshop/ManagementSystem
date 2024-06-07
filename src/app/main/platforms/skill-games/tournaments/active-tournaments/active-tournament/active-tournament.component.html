@@ -22,10 +22,8 @@
       <div>
         <div class="first-hand">{{'StartTime' | translate}}</div>
         <div class="second-hand"></div>
-        <div class="form-field form-calendar-edit">
-            <input matInput [ngxMatDatetimePicker]="picker" [formControlName]="'StartTime'">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
+        <div class="form-field form-calendar">
+            <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
         </div>
       </div>
 
@@ -41,9 +39,7 @@
         <div class="first-hand">{{'SkillGames.AnnounceDate' | translate}}</div>
         <div class="second-hand"></div>
         <div class="form-field form-calendar">
-            <input matInput [ngxMatDatetimePicker]="picker1" [formControlName]="'OpenTime'">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker1></ngx-mat-datetime-picker>
+          <app-date-time-picker formControlName="OpenTime"></app-date-time-picker>
         </div>
       </div>
 
@@ -122,7 +118,7 @@
 
       <div class="form-actions">
         <div class="actions">
-          <button mat-raised-button class="mat-btn" (click)="onSubmit()" [disabled]="formGroup.invalid"
+          <button mat-raised-button class="mat-btn" (click)="onSubmit()" [disabled]="formGroup.invalid || isSendingReqest"
             type="submit">{{'Common.Save' | translate}}</button>
         </div>
       </div>

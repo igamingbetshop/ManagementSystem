@@ -1,0 +1,59 @@
+<div mat-dialog-title>
+  <span class="title">{{!isEdit ? ('Sport.AddCoin'  | translate)  : ('Sport.EditCoin'  | translate) }}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Sport.CommentType' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'VirtualGames.SelectGame' | translate}}</mat-label>
+      <mat-select [formControlName]="'GameId'">
+        <mat-option *ngFor="let game of games" [value]="game.Id">{{game.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['GameId']?.touched && errorControl['GameId'].errors?.required">
+        {{'SkillGames.Game' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+      <mat-select [formControlName]="'CurrencyId'">
+        <mat-option *ngFor="let currency of currencies" [value]="currency.Id">{{currency.Id}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['CurrencyId']?.touched && errorControl['CurrencyId'].errors?.required">
+        {{'Clients.Currency' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Bonuses.Value' | translate" [formControlName]="'Value'">
+      <mat-error *ngIf="errorControl['Value']?.touched && errorControl['Value'].errors?.required">
+        {{'Bonuses.Value' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button 
+    class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingReqest"
+    (click)="onSubmit()" 
+    type="submit">
+      {{!isEdit ? ('Common.Add' | translate) : ('Common.Edit' | translate)}}
+    </button>
+</div>

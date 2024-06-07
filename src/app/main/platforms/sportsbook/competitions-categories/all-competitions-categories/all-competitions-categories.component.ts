@@ -23,14 +23,15 @@ import { SelectStateRendererComponent } from 'src/app/main/components/grid-commo
 })
 export class AllCompetitionsCategoriesComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public sports: any[] = [];
-  public sportsId: number;
+  sports: any[] = [];
+  sportsId: number;
 
-  public rowData = [];
-  public path: string = 'competitions/categories';
-  public updatePath: string = 'competitions/updatecategory';
-  public clonePath: string = 'competitions/clonecategory';
-  public deletePath: string = 'competitions/deletecategory';
+  rowData = [];
+  path: string = 'competitions/categories';
+  updatePath: string = 'competitions/updatecategory';
+  clonePath: string = 'competitions/clonecategory';
+  deletePath: string = 'competitions/deletecategory';
+  isSendingReqest = false;
 
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -367,6 +368,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
 
   clone() {
     const row = this.gridApi.getSelectedRows()[0];
+    this.isSendingReqest = true;
     this.apiService.apiPost(this.clonePath, { "Id": row.Id })
       .pipe(take(1))
       .subscribe(data => {
@@ -376,10 +378,12 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       })
   }
 
   delete() {
+    this.isSendingReqest = true;
     const row = this.gridApi.getSelectedRows()[0];
     this.apiService.apiPost(this.deletePath, { "Id": row.Id })
       .pipe(take(1))
@@ -393,6 +397,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       })
   }
 

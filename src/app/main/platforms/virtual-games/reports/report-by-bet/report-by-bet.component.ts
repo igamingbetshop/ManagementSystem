@@ -1,23 +1,23 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {take} from "rxjs/operators";
-import {AgBooleanFilterComponent} from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../components/grid-common/button-renderer.component";
-import {NumericEditorComponent} from "../../../../components/grid-common/numeric-editor.component";
-import {CheckboxRendererComponent} from "../../../../components/grid-common/checkbox-renderer.component";
-import {BasePaginatedGridComponent} from "../../../../components/classes/base-paginated-grid-component";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {VirtualGamesApiService} from "../../services/virtual-games-api.service";
-import {Paging} from "../../../../../core/models";
+import { Component, Injector, OnInit } from '@angular/core';
+import { take } from "rxjs/operators";
+import { AgBooleanFilterComponent } from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../components/grid-common/button-renderer.component";
+import { NumericEditorComponent } from "../../../../components/grid-common/numeric-editor.component";
+import { CheckboxRendererComponent } from "../../../../components/grid-common/checkbox-renderer.component";
+import { BasePaginatedGridComponent } from "../../../../components/classes/base-paginated-grid-component";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { VirtualGamesApiService } from "../../services/virtual-games-api.service";
+import { Paging } from "../../../../../core/models";
 import 'ag-grid-enterprise';
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {DateAdapter} from "@angular/material/core";
-import {OddsTypePipe} from "../../../../../core/pipes/odds-type.pipe";
-import {LocalStorageService} from "../../../../../core/services";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { DateAdapter } from "@angular/material/core";
+import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
+import { LocalStorageService } from "../../../../../core/services";
 import { GridMenuIds, GridRowModelTypes, OddsTypes } from 'src/app/core/enums';
-import {formattedNumber} from "../../../../../core/utils";
+import { formattedNumber } from "../../../../../core/utils";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
   selector: 'app-report-by-bet',
@@ -49,15 +49,15 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
   private oddsType: number;
 
   public betStatuses = [
-    {"Name": "Uncalculated", Id: 1},
-    {"Name": "Won", Id: 2},
-    {"Name": "Lost", Id: 3},
-    {"Name": "Deleted", Id: 4},
-    {"Name": "CashoutedFully", Id: 5},
-    {"Name": "Returned", Id: 6},
-    {"Name": "NotAccepted", Id: 7},
-    {"Name": "CashoutedPartially", Id: 8},
-    {"Name": "Waiting", Id: 9}
+    { "Name": "Uncalculated", Id: 1 },
+    { "Name": "Won", Id: 2 },
+    { "Name": "Lost", Id: 3 },
+    { "Name": "Deleted", Id: 4 },
+    { "Name": "CashoutedFully", Id: 5 },
+    { "Name": "Returned", Id: 6 },
+    { "Name": "NotAccepted", Id: 7 },
+    { "Name": "CashoutedPartially", Id: 8 },
+    { "Name": "Waiting", Id: 9 }
   ];
 
   constructor(
@@ -472,7 +472,7 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
       },
       getDetailRowData: params => {
         if (params) {
-          this.apiService.apiPost('bet/selections', {BetId: params.data.Id})
+          this.apiService.apiPost('bet/selections', { BetId: params.data.Id })
             .pipe(take(1))
             .subscribe((data) => {
               const nestedRowData = data.ResponseObject;
@@ -484,7 +484,7 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
   }
 
   ngOnInit(): void {
-    this.startDate();
+    this.setTime();
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
   }
@@ -505,14 +505,14 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
 
   deleteBet() {
 
-    this.apiService.apiPost('bet/delete', {BetId: this.selectedData.data.Id})
+    this.apiService.apiPost('bet/delete', { BetId: this.selectedData.data.Id })
       .pipe(take(1))
       .subscribe((data) => {
         if (data.ResponseCode === 0) {
-          SnackBarHelper.show(this._snackBar, {Description: 'The bet has been deleted successfully', Type: "success"});
+          SnackBarHelper.show(this._snackBar, { Description: 'The bet has been deleted successfully', Type: "success" });
           this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }
@@ -535,26 +535,16 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
     return this.gridApi && this.gridApi?.getSelectedRows().length === 0;
   };
 
-  startDate() {
-    DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event) {
-    this.fromDate = event.value;
-  }
-
-  onEndDateChange(event) {
-    this.toDate = event.value;
   }
 
   onRowSelected(params) {
@@ -582,10 +572,10 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
               this.winAmount = data.ResponseObject.TotalWinAmount;
               this.profit = data.ResponseObject.TotalProfit;
               this.gridApi?.setPinnedBottomRowData([{
-                  BetAmount: `${formattedNumber(this.amount)} ${this.playerCurrency}`,
-                  WinAmount: `${formattedNumber(this.winAmount)} ${this.playerCurrency}`,
-                  ProfitAmount: `${formattedNumber(this.profit)} ${this.playerCurrency}`
-                }
+                BetAmount: `${formattedNumber(this.amount)} ${this.playerCurrency}`,
+                WinAmount: `${formattedNumber(this.winAmount)} ${this.playerCurrency}`,
+                ProfitAmount: `${formattedNumber(this.profit)} ${this.playerCurrency}`
+              }
               ]);
 
               const mappedData = data.ResponseObject.Entities.map(bet => {
@@ -593,9 +583,9 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
                 return bet;
               });
 
-              params.success({rowData: mappedData, rowCount: data.ResponseObject.Count});
+              params.success({ rowData: mappedData, rowCount: data.ResponseObject.Count });
             } else {
-              SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
           });
       }
@@ -604,12 +594,12 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
 
   calculateBet() {
     let row = this.gridApi?.getSelectedRows()[0];
-    this.apiService.apiPost('bet/calculate', {BetId: row.Id})
+    this.apiService.apiPost('bet/calculate', { BetId: row.Id })
       .pipe(take(1))
       .subscribe((data) => {
         if (data.Code === 0) {
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
   }

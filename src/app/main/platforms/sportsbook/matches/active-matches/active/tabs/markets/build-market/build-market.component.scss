@@ -1,0 +1,59 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.modal-wrap {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  height: calc(80vh - 91px);
+  min-height: 200px;
+  padding-right: 14px;
+
+  .form-fields {
+    div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      ::ng-deep .mat-form-field-wrapper {
+        width: 150px;
+      }
+    }
+  }
+}
+
+.mat-mdc-tab-label-container {
+  background-color: $bg-color!important;
+}
+
+.accordion-item {
+
+  .accordion-item-header {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 6px;
+  }
+}
+
+.accordion-items {
+  display: flex;
+}
+
+.input-checkbox {
+  // margin-top: -4px;
+}
+
+.mdc-tab {
+  background-color: $grey-blue-3!important;
+  color: $white!important;
+  &.mdc-tab--active {
+    background-color: $bg-color!important;
+    color: $white!important;
+  }
+}
+
+.accordion-item-body {
+  padding-left: 20px;
+  // padding-top: 3px;
+}

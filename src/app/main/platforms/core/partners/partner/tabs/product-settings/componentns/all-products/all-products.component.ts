@@ -29,7 +29,8 @@ import { Controllers, Methods } from "../../../../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { Paging } from "../../../../../../../../../core/models";
 import { syncColumnSelectPanel } from "../../../../../../../../../core/helpers/ag-grid.helper";
-import {ExportService} from "../../../../../../services/export.service";
+import { ExportService } from "../../../../../../services/export.service";
+import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/grid-common/ag-checkbox-seected-renderer.component';
 
 @Component({
   selector: 'all-products-settings',
@@ -39,8 +40,8 @@ import {ExportService} from "../../../../../../services/export.service";
 export class AllProductsComponent extends BasePaginatedGridComponent implements OnInit {
 
   @Output("onUpdate") onUpdate: EventEmitter<any> = new EventEmitter<any>();
-  public partnerId:any;
-  public partnerName:any;
+  public partnerId: any;
+  public partnerName: any;
   public frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -50,6 +51,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     selectRenderer: SelectRendererComponent,
     selectArrayRenderer: SelectArrayRendererComponent,
     arraySelectableEditorComponent: ArraySelectableEditorComponent,
+    aGCheckboxSelectedRendererComponent: AGCheckboxSelectedRendererComponent
   };
   public columnDefs = [];
   public rowData = [];
@@ -73,7 +75,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     protected injector: Injector,
     public dialog: MatDialog,
     private ref: ChangeDetectorRef,
-    private exportService:ExportService,
+    private exportService: ExportService,
     private _snackBar: MatSnackBar) {
     super(injector);
     this.autoGroupColumnDef = {
@@ -122,7 +124,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
           if (data.ResponseCode === 0) {
             this.productCategories = data.ResponseObject;
           }
-          return this.apiService.apiPost(this.configService.getApiUrl, {PartnerId: this.partnerId}, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS);
+          return this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: this.partnerId }, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS);
         }))
       .subscribe(data => {
         if (data.ResponseCode === 0) {
@@ -249,11 +251,8 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         sortable: true,
         resizable: true,
         filter: 'agBooleanColumnFilter',
-        cellRenderer: 'checkBoxRenderer',
-        cellRendererParams: {
-          onchange: this.onCheckBoxChange['bind'](this),
-          onCellValueChanged: this.onCheckBoxChange.bind(this)
-        }
+        cellRenderer: 'aGCheckboxSelectedRendererComponent',
+
       },
       {
         headerName: 'Products.IsForMobile',
@@ -262,11 +261,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         sortable: true,
         resizable: true,
         filter: 'agBooleanColumnFilter',
-        cellRenderer: 'checkBoxRenderer',
-        cellRendererParams: {
-          onchange: this.onCheckBoxChange['bind'](this),
-          onCellValueChanged: this.onCheckBoxChange.bind(this)
-        }
+        cellRenderer: 'aGCheckboxSelectedRendererComponent',
       },
     ]
   }
@@ -299,16 +294,32 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         this.setFilter(params.request.filterModel, paging);
         if (paging.HasImages) {
           paging.HasImages = paging.HasImages.ApiOperationTypeList[0].BooleanValue;
+        } 
+        if (paging.IsForMobiles) {
+          paging.IsForMobile = paging.IsForMobiles.ApiOperationTypeList[0].BooleanValue;
+          delete paging.IsForMobiles;
+        }
+        if (paging.IsForDesktops) {
+          paging.IsForDesktop = paging.IsForDesktops.ApiOperationTypeList[0].BooleanValue;
+          delete paging.IsForDesktops;
+        }
+        if (paging.HasDemos) {
+          paging.HasDemo = paging.HasDemos.ApiOperationTypeList[0].BooleanValue;
+          delete paging.HasDemos;
         }
 
-        this.filteredDataAll = {...paging};
-        if(this.filteredDataAll.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {
+        this.filteredDataAll = { ...paging };
+        if (this.filteredDataAll.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {
           params.success({ rowData: [], rowCount: 0 });
           return;
         }
-        if(this.filteredDataAll.SubproviderIds) {
+        if (this.filteredDataAll.SubproviderIds) {
           this.filteredDataAll.SubproviderIds.ApiOperationTypeList[0].ArrayValue = this.transformArrayToNumbers(this.filteredDataAll.SubproviderIds.ApiOperationTypeList[0].ArrayValue, this.subProvidersTypesEnum);
         }
+
+
+
+        console.log(paging, 'paging');
 
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredDataAll, true,
           Controllers.PRODUCT, Methods.GET_PARTNER_PRODUCTS).pipe(take(1)).subscribe((data) => {
@@ -407,7 +418,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   onPaginationChanged(event): void {
     super.onPaginationChanged(event);
-      this.cleanSelectedRowAll();
+    this.cleanSelectedRowAll();
   }
 
   cleanSelectedRowAll(): void {
@@ -422,7 +433,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   exportToCsv() {
 
-    this.exportService.exportToCsv( Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCTS, this.filteredDataAll);
+    this.exportService.exportToCsv(Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCTS, this.filteredDataAll);
   }
 
   update() {

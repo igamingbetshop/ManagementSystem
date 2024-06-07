@@ -16,6 +16,12 @@
   }
 }
 
+.load-grid {
+  .ag-body {
+    visibility: hidden!important;
+  }
+}
+
 .ag-theme-balham {
   background-color: transparent !important;
 

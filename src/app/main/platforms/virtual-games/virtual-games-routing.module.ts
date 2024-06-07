@@ -24,11 +24,11 @@ const routes: Routes = [
         loadChildren: () => import('./player-categories/player-categories.module').then(m => m.PlayerCategoriesModule),
         resolve: { partners: VirtualGamesPartnersResolver, filterOptions: VirtualGamesFilterOptionsResolver}
       },
-      {
-        path: 'currencies',
-        loadChildren: () => import('./currencies/currencies.module').then(m => m.CurrenciesModule),
-        resolve: { partners: VirtualGamesPartnersResolver, filterOptions: VirtualGamesFilterOptionsResolver}
-      },
+      // {
+      //   path: 'currencies',
+      //   loadChildren: () => import('./currencies/currencies.module').then(m => m.CurrenciesModule),
+      //   resolve: { partners: VirtualGamesPartnersResolver, filterOptions: VirtualGamesFilterOptionsResolver}
+      // },
       {
         path: 'users',
         loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
@@ -57,6 +57,11 @@ const routes: Routes = [
       {
         path: 'cms',
         loadChildren: () => import('./cms/cms.module').then(m => m.CmsModule),
+        resolve: { partners: VirtualGamesPartnersResolver, filterOptions: VirtualGamesFilterOptionsResolver}
+      },
+      {
+        path: 'common',
+        loadChildren: () => import('./common/vg-common.module').then(m => m.VirtualGamesCommonModule),
         resolve: { partners: VirtualGamesPartnersResolver, filterOptions: VirtualGamesFilterOptionsResolver}
       },
       {

@@ -1,0 +1,63 @@
+<div mat-dialog-title>
+  <span class="title">{{'Sport.BuildMarket' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<nav mat-tab-nav-bar class ="tab-content" >
+  @for (item of LabelForMarketTypes; track item; let index = $index) {
+    <a mat-tab-link 
+      (click)="selectLabel(index, item.Name)"
+      [active]="selectedLabel === item.Name"
+      > {{item.Name}} </a>
+  }
+</nav>
+
+<div class="modal-wrap">
+
+  <cdk-accordion class="accordion">
+    @if(marketTypes.length) {
+      @for (market of dysplayMarkets; track market; let index = $index) {
+        <cdk-accordion-item 
+          #accordionItem="cdkAccordionItem"
+          class="accordion-item"
+          role="button"
+          tabindex="0"
+          [attr.id]="'accordion-header-' + index"
+          [attr.aria-expanded]="accordionItem.expanded"
+          [attr.aria-controls]="'accordion-body-' + index">
+      
+          <div class="accordion-items">
+            <input type="checkbox" 
+              class="input-checkbox" 
+              [(ngModel)]="market.selected" 
+              (click)="toggleSelection(market); $event.stopPropagation()"
+              
+              />
+        
+            <div class="accordion-item-header" (click)="accordionItem.toggle(); getMarketTypeSelections(market, index)">
+              {{ market.N }}
+              <mat-icon matListItemIcon>{{ accordionItem.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </div>
+          </div>
+    
+          <div class="accordion-item-body"
+            role="region"
+            [style.display]="accordionItem.expanded ? '' : 'none'"
+            [attr.id]="'accordion-body-' + index"
+            [attr.aria-labelledby]="'accordion-header-' + index">
+            <div>
+              <pre>betSelections</pre>
+            </div>
+          </div>
+      
+        </cdk-accordion-item>
+      }
+    }
+  </cdk-accordion>
+</div>
+
+
+<div mat-dialog-actions>
+  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button class="modal-primary-btn" (click)="submit()">{{'Sport.AddMarketType' | translate}}</button>
+</div>

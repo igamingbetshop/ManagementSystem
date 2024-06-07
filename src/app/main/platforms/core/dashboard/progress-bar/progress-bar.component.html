@@ -1,0 +1,28 @@
+<div class="block-content">
+  <div class="content-row">
+    @if (src.PaymentSystemId || src.CountryCode){
+      <img class="icon" [src]=src.ImageUrl>
+    }
+    @if (src.PaymentSystemId == ''){
+      <img class="empty-payment-id" src="../../../../../../assets/images/payments/pay-icon.png">
+    }
+    <span class="name">
+      <span>{{src.Name}}</span>
+      @if (src.ClientId){
+        <span class="client-id">- {{src.ClientId}}</span>
+      }
+    </span>
+    <span class="amount">{{src.Amount  | number:number()}}<span class="currency-id">{{src.CurrencyId}}</span></span>
+  </div>
+  <div class="progress-bar-thumb">
+    <div class="progress-track" [style.width.%]="src.Percent">
+      <div class="range">
+        {{src.Percent}}%
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

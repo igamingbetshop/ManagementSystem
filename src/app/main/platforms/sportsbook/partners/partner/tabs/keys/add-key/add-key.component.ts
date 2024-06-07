@@ -42,6 +42,7 @@ export class AddKeyComponent implements OnInit {
   public formGroup: UntypedFormGroup;
   public partnerId;
   public fromDate = new Date();
+  isSendingReqest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddKeyComponent>,
@@ -63,6 +64,7 @@ export class AddKeyComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
+    this.isSendingReqest = true;
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
     setting.Type = this.data.type;
@@ -74,6 +76,7 @@ export class AddKeyComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingReqest = false;
       })
   }
 

@@ -30,21 +30,17 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
 
   public rowData = [];
   public frameworkComponents;
-  private typeFilters = [];
-  defaultColDef = {
-    width: 240,
-    editable: false,
-    flex: 1,
-    sortable: false,
-    resizable: true,
-    filter: false,
-    suppressMenu: true,
-    minWidth: 50,
-  };
+
 
   autoGroupColumnDef = {
     headerName: 'Id',
     field: 'Id',
+    filter: 'agNumberColumnFilter',
+    filterParams: {
+      buttons: ['apply', 'reset'],
+      closeOnApply: true,
+      filterOptions: this.filterService.numberOptions
+    },
     checkboxSelection: false,
     cellRenderer: 'agGroupCellRenderer',
     cellRendererParams: {
@@ -52,6 +48,8 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         return params.data.Id;
       },
     },
+    minWidth: 90,
+
   };
 
   isServerSideGroup: IsServerSideGroup = (dataItem: any) => {
@@ -112,23 +110,6 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
 
   setColDefs() {
     this.columnDefs = [
-      // {
-      //   headerName: 'Common.Id',
-      //   headerValueGetter: this.localizeHeader.bind(this),
-      //   field: 'Id',hide: true,
-      //   sortable: true,
-      //   resizable: true,
-      //   tooltipField: 'Id',
-      //   minWidth: 90,
-      //   cellRendererParams: { suppressPadding: false },
-      //   filter: 'agNumberColumnFilter',
-      //   filterParams: {
-      //     buttons: ['apply', 'reset'],
-      //     closeOnApply: true,
-      //     filterOptions: this.filterService.numberOptions
-      //   },
-      //   suppressColumnsToolPanel: false
-      // },
       {
         headerName: 'Currency.FirstName',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -313,6 +294,12 @@ export class AllAgentsComponent extends BasePaginatedGridComponent implements On
         this.setSort(params.request.sortModel, paging);
         this.setFilterDropdown(params);
         this.setFilter(params.request.filterModel, paging);
+
+        if(!!paging['ag-Grid-AutoColumns']) {
+          paging['Ids'] = paging['ag-Grid-AutoColumns'];
+          delete paging['ag-Grid-AutoColumns'];          
+        }
+
         this.filteredData = paging;
         if (params.parentNode.data) {
           if (params.parentNode.data?.LevelId === 6) {

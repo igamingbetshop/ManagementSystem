@@ -13,10 +13,11 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
   styleUrls: ['./add-edit-sub-menu.component.scss']
 })
 export class AddEditSubMenuComponent implements OnInit {
-  public action;
-  public partnerId;
-  public menuItem;
-  public formGroup: UntypedFormGroup;
+  action;
+  partnerId;
+  menuItem;
+  formGroup: UntypedFormGroup;
+  isSendingReqest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditSubMenuComponent>,
               public apiService: SkillGamesApiService,
@@ -71,6 +72,7 @@ export class AddEditSubMenuComponent implements OnInit {
   }
 
   submit() {
+    this.isSendingReqest = true;
     const value = this.formGroup.getRawValue();
     this.apiService.apiPost('cms/savewebsitesubmenuitem', value)
       .pipe(take(1))
@@ -80,6 +82,7 @@ export class AddEditSubMenuComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
+        this.isSendingReqest = false;
       });
   }
 

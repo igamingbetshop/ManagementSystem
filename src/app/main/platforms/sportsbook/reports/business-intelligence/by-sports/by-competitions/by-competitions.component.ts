@@ -21,23 +21,24 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 })
 export class ByCompetitionsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public partners: any[] = [];
-  public partnerId: number;
-  public path = "report/competitions";
-  public rowData = [];
-  public sportName: string;
-  public regionName: string;
-  public sportId: number;
-  public regionId: number;
-  public filter: any = {};
-  public fromDate = new Date();
-  public toDate = new Date();
-  public selectedItem = 'today';
+  partners: any[] = [];
+  partnerId: number;
+  path = "report/competitions";
+  rowData = [];
+  sportName: string;
+  regionName: string;
+  sportId: number;
+  regionId: number;
+  filter: any = {};
+  fromDate = new Date();
+  toDate = new Date();
+  selectedItem = 'today';
   private totals = {
     totalBetAmount: 0,
     totalWinAmount: 0,
     totalProfit: 0
   };
+  pageIdName =  '';
   constructor(
     protected injector: Injector,
     private apiService: SportsbookApiService,
@@ -175,6 +176,7 @@ export class ByCompetitionsComponent extends BasePaginatedGridComponent implemen
     this.partnerId = this.route.snapshot.queryParams.partnerId || 1;
     this.getPartners();
     this.startDate();
+    this.pageIdName = `/ ${this.sportName} / ${this.regionName} : ${this.translate.instant('Sport.Competitions')}`;
   }
 
   startDate() {
@@ -183,33 +185,13 @@ export class ByCompetitionsComponent extends BasePaginatedGridComponent implemen
     this.toDate = toDate;
   }
 
-  selectTime(time: string): void {
-    const [fromDate, toDate] = DateHelper.selectTime(time);
-    this.fromDate = fromDate;
-    this.toDate = toDate;
-    this.selectedItem = time;
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    if (event.partnerId !== undefined) {
+      this.partnerId = event.partnerId;
+    }
     this.getCurrentPage();
-  }
-
-  onStartDateChange(event: any) {
-    if (event instanceof Date) {
-      this.fromDate = event;
-    } else {
-      const formattedDateTime = event;
-      this.fromDate = this.parseDateTimeString(formattedDateTime);
-    }
-  }
-
-  formatDateTime(date: any): string {
-    if (date) {
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0');
-      const day = date.getDate().toString().padStart(2, '0');
-      const hours = date.getHours().toString().padStart(2, '0');
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
-    }
-    return '';
   }
 
   private parseDateTimeString(dateTimeString: string): Date {
@@ -221,15 +203,6 @@ export class ByCompetitionsComponent extends BasePaginatedGridComponent implemen
       return new Date(year, month - 1, day, hours, minutes);
     }
     return new Date();
-  }
-
-  onEndDateChange(event: any) {
-    if (event instanceof Date) {
-      this.toDate = event;
-    } else {
-      const formattedDateTime = event;
-      this.toDate = this.parseDateTimeString(formattedDateTime);
-    }
   }
 
   getPartners() {
