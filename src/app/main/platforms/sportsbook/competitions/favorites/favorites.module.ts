@@ -8,6 +8,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { FavoritesGridComponent } from './favorites-grid/favorites-grid.component';
 
 const routes: Routes = [
   {
@@ -17,16 +18,17 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatSelectModule,
-    MatGridListModule,
-    AgGridModule,
-    MatButtonModule,
-    RouterModule.forChild(routes),
-    TranslateModule
-  ],
-  declarations: [FavoritesComponent]
+    declarations: [FavoritesComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatSelectModule,
+        MatGridListModule,
+        AgGridModule,
+        MatButtonModule,
+        RouterModule.forChild(routes),
+        TranslateModule,
+        FavoritesGridComponent
+    ]
 })
 export class FavoritesModule { }

@@ -29,7 +29,8 @@ export class CreateNewTicketComponent implements OnInit {
   partners: any[] = [];
   formGroup: UntypedFormGroup;
   private clientId = null;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
+  partnetId;
 
   constructor(
     public dialogRef: MatDialogRef<CreateNewTicketComponent>,
@@ -48,12 +49,13 @@ export class CreateNewTicketComponent implements OnInit {
   ngOnInit() {
     this.partners = this.commonDataService.partners;
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
-    this.createForm();
+    this.partnetId = this.data.partnetId;
+    this.createForm();    
   }
 
   public createForm() {
     this.formGroup = this.fb.group({
-      PartnerId: [null, [Validators.required]],
+      PartnerId: [this.partnetId],
       Subject: [null,[Validators.required]],
       Message: [null,[Validators.required]],
       ClientIds: [{value: this.clientId, disabled: true}],
@@ -70,17 +72,17 @@ export class CreateNewTicketComponent implements OnInit {
 
   onSubmit() {
     if(this.formGroup.valid){
-      this.isSendingReqest = true; 
+      this.isSendingRequest = true; 
       const requestBody = this.formGroup.getRawValue();
       requestBody.Token = this.localStorage.get('token');
-      requestBody.ClientIds = requestBody.ClientIds.split(',');
+      requestBody.ClientIds = requestBody.ClientIds.split(',');      
       this._signalR.connection.invoke(Methods.CREATE_TICKET, requestBody).then(data => {
         if (data.ResponseCode === 0) {
           this.dialogRef.close(data.ResponseObject);
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
     }
   }

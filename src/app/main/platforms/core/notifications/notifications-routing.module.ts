@@ -17,19 +17,36 @@ const routes: Routes = [
         loadChildren: () => import('./tickets/ticket/ticket.module').then(m => m.TicketModule),
       },
       {
-        path: 'emails',
+        path: 'email/client',
         loadChildren: () => import('./emails/emails.module').then(m => m.EmailsModule),
         resolve:{filterData:FilterOptionsResolver , commonData:CommonDataResolver},
       },
       {
-        path: 'partner-emails',
-        loadChildren: () => import('./partner-emails/partner-emails.module').then(m => m.PartnerEmailsModule),
+        path: 'email/agent',
+        loadComponent:()=>import('./emails/agents-emails').then(c=>c.AgentEmailsComponent),
+      },
+      {
+        path: 'email/affiliate',
+        loadComponent:()=>import('./emails/affiliates-emails').then(c=>c.AffiliatesEmailsComponent),
+      },
+      {
+        path: 'email/partner',
+        loadComponent:()=>import('./emails/partners-emails').then(c=>c.PartnersEmailsComponent),
+      },
+      {
+        path: 'sms/client',
+        loadChildren: () => import('./smses/smses.module').then(m => m.SmsesModule),
         resolve:{filterData:FilterOptionsResolver , commonData:CommonDataResolver},
       },
       {
-        path: 'smses',
-        loadChildren: () => import('./smses/smses.module').then(m => m.SmsesModule),
-        resolve:{filterData:FilterOptionsResolver , commonData:CommonDataResolver},
+        path: 'sms/agent',
+        loadComponent:()=>import('./smses/agents-smses').then(c=>c.AgentSmsesComponent),
+
+      },
+      {
+        path: 'sms/affiliate',
+        loadComponent:()=>import('./smses/agents-smses').then(c=>c.AgentSmsesComponent),
+
       },
       {
         path: 'announcements',

@@ -21,6 +21,17 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select #part [formControlName]="'PartnerId'"
+        placeholder="{{'Partners.SelectPartner' | translate}}">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
       <input matInput type="number" [placeholder]="'Sport.LimitPercent' | translate" [formControlName]="'LimitPercent'">
       <mat-error *ngIf="errorControl['LimitPercent']?.touched && errorControl['LimitPercent'].errors?.required">
         {{'Sport.LimitPercent' | translate}} {{'Errors.Required' | translate}}
@@ -54,14 +65,16 @@
         {{'Sport.DelayBetweenBetsLive' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
+
+    <mat-checkbox labelPosition="before" color="primary" [formControlName]="'IsDefault'">{{'Segments.IsDefault' | translate}}</mat-checkbox>
   </form>
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button 
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button 
     class="modal-primary-btn" 
-    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    [class.disabled]="formGroup.invalid || isSendingRequest" 
     (click)="onSubmit()">
     {{'ClientCategories.CreateCategory' | translate}}
   </button>

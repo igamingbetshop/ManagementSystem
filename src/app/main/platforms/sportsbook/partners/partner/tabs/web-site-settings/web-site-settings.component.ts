@@ -1,4 +1,4 @@
-import { Component, HostListener, Injector, OnInit } from '@angular/core';
+import {Component, HostListener, Injector, OnInit, signal} from '@angular/core';
 import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { ConfigService } from "../../../../../../../core/services";
@@ -9,6 +9,7 @@ import { debounceTime, take } from "rxjs/operators";
 import { Controllers, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { CoreApiService } from "../../../../../core/services/core-api.service";
+import {DEVICE_TYPES} from "../../../../../../../core/constantes/types";
 
 @Component({
   selector: 'app-web-site-settings',
@@ -31,7 +32,8 @@ export class WebSiteSettingsComponent implements OnInit {
   searchTitle = '';
   searchedResultTitle: string;
   showSearchedResult: boolean = false;
-  deviceType = 1
+  deviceTypes = signal(DEVICE_TYPES);
+  deviceType = this.deviceTypes()[0].Id;
 
 
   constructor(private activateRoute: ActivatedRoute,
@@ -61,8 +63,8 @@ export class WebSiteSettingsComponent implements OnInit {
     }
   }
 
-  changeDeviceType(number) {
-    this.deviceType = number;
+  changeDeviceType(deviceType:number) {
+    this.deviceType = deviceType;
     this.getWebsiteMenus();
   }
 

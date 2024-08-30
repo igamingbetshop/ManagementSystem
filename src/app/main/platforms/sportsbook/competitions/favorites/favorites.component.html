@@ -16,7 +16,7 @@
           <input matInput  type="number" [(value)] ="priority" #pr placeholder="{{'Common.Order' | translate}}" (input)="onPriorityChange(pr.value)" >
         </div>
 
-        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || isSendingReqest" class="btn-block add-settings1"   (click)="onAddCompetition()">{{'Sport.AddFavoriteCompetition' | translate}}</button>
+        <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || this.partnerId == null || isSendingRequest" (click)="onAddCompetition()">{{'Sport.AddFavoriteCompetition' | translate}}</button>
 
       </div>
 
@@ -63,35 +63,15 @@
       <div class="action-content">
         <div class="title">{{'Sport.PartnerFavoritesCompetitions' | translate}}</div>
         <div>
-          <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected1() || isSendingReqest"  (click)="onRemoveCompetition()">{{'Sport.RemoveCompetition' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!selectedRowId || isSendingRequest"  (click)="onRemoveCompetition()">{{'Sport.RemoveCompetition' | translate}}</button>
         </div>
       </div>
-      <div class="grid-content">
-        <ag-grid-angular
-        id="favorites-2"
-        #agGrid1
-        class="ag-theme-balham"
-        [headerHeight]="33"
-        [rowHeight]="42"
-        [rowData]="rowData1"
-        [suppressCopyRowsToClipboard]="true"
-        [rowModelType]="rowModelType1"
-        [columnDefs]="columnDefs2"
-        [defaultColDef]="defaultColDef"
-        [components]="frameworkComponents"
-        [sideBar]="sideBar"
-        [animateRows]="true"
-        [cacheBlockSize]="cacheBlockSize"
-        (gridReady)="onGridReady1($event)"
-        rowSelection="single">
-        >
-    </ag-grid-angular>
 
-        <div class="pages-sizes">
+      <app-favorites-grid 
+        [rowData]="favoritesRowData"
+        (isRowSelected)="onRowSelected($event)"
+        ></app-favorites-grid>
 
-        </div>
-
-      </div>
     </div>
 
   </div>

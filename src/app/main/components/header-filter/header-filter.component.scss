@@ -4,17 +4,20 @@
 .content-action {
     @include action-style;
     padding: 0 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    
 
     .custom-dropdown {
       @include dropdown-style;
     }
 
     @media screen and (max-width: 600px) {
+      width: 100%;
+      padding: 0;
       .contianer-wrap {
         display: flex;
         width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
         flex-wrap: nowrap !important;
         .date-time-tabs {
           display: flex;
@@ -22,21 +25,21 @@
           gap: 8px;
         }
       }
-
-      .contianer-wrap::-webkit-scrollbar {
-        height: 0;
-      }
     }
 
     .contianer-wrap {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
       @media screen and (max-width: 1200px) {
         margin-top: 6px;
       }
 
       .date-time-tabs {
         margin-left: 8px;
+        display: flex;
+        flex-wrap: nowrap;
 
         .tab-btn {
           margin-right: 8px;
@@ -56,22 +59,30 @@
 
       .calendar-picker {
         width: 202px;
-        input{background-color: transparent!important;}
+        input {
+          background-color: transparent !important;
+        }
+        
         &.start {
           margin-right: 8px;
-
+      
           @media screen and (max-width: 1200px) {
-            margin-left: 8px
+            margin-left: 8px;
           }
         }
-
+      
         @include calendar-picker-style;
-
+      
         @media screen and (max-width: 600px) {
           width: calc(40% - 8px);
           margin: 0;
           padding: 0;
         }
+
+        ::ng-deep [dir="rtl"] & {
+          margin-left: 8px;
+        }
+        
       }
 
       .mat-btn {
@@ -83,5 +94,10 @@
         }
       }
     }
-
+  @media screen and (max-width: 1400px) {
+    margin-bottom: 26px;
+  }
+}
+.contianer-wrap::-webkit-scrollbar {
+  height: 0;
 }

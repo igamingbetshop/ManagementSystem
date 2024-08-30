@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../commonses']">{{'Bonuses.Commons' | translate}}</a> / : {{'Bonuses.Products' | translate}}</div>
+    <div class="title"><a [routerLink]="['../../commonses']">{{'Bonuses.Commons' | translate}}</a> /: {{commonId()}} {{'Bonuses.Products' | translate}}</div>
 
     <div class="input-content">
       <input matInput [placeholder]="'Partners.SearchByName' | translate" [(ngModel)]="searchName" (ngModelChange)="inputChanged($event)">

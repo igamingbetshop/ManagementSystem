@@ -40,7 +40,7 @@ export class CreateCompetitionComponent implements OnInit {
   sports: any[] = [];
   providers: any[] = [];
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateCompetitionComponent>,
@@ -75,7 +75,8 @@ export class CreateCompetitionComponent implements OnInit {
       Name: [null, [Validators.required]],
       Priority: [null],
       Rating: [null, [Validators.required]],
-      AbsoluteLimit: [null, [Validators.required]],
+      MarketLimit: [null],
+      PlayerLimit: [null],
       Delay: [null, [Validators.required]],
       ProviderId: [null, [Validators.required]],
       Enabled: [false],
@@ -91,7 +92,7 @@ export class CreateCompetitionComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const requestBody = this.formGroup.getRawValue();
     this.apiService.apiPost('competitions/add', requestBody).pipe(take(1)).subscribe(data => {
       if (data.Code === 0) {
@@ -99,7 +100,7 @@ export class CreateCompetitionComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 }

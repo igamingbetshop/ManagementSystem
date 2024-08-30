@@ -378,8 +378,7 @@
       <div class="self-exclusion">
         <div class="first-hand">{{'Clients.SelfExcludedUntil' | translate}}</div>
         <div class="second-hand">{{selfExcludedUntil?.ExcludedUntil | date:'dd/MM/yyyy HH:mm:ss'}} {{ selfExcludedUntil?.Reason}}
-
-          <button mat-stroked-button class="mat-btn" [class.disabled]="!diactivateSelfReasonType" type="button"
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!exclusions?.SelfExcluded.ExcludedUntil" type="button"
                   (click)="onDeactivate('REMOVE_SELF_EXCLUCION')">{{'Clients.Deactivate' |translate}}
           </button>
         </div>
@@ -426,7 +425,7 @@
           <mat-select (selectionChange)="changeSelectedType($event.value)"
                       placeholder="{{'Clients.SelectType' | translate}}" disableOptionCentering
                       [formControlName]="'Type'"
-                      required [disabled]="systemExcludedUntil.ExcludedUntil">
+                      required [disabled]="systemExcludedUntil?.ExcludedUntil">
                       @for (type of types; track $index) {
                         <mat-option [value]="type.Id">{{type.Name}}</mat-option>
                       }
@@ -439,7 +438,7 @@
             placeholder="{{'Clients.SelectComment' | translate}}"
             panelClass="overlay-dropdown"
             disableOptionCentering
-            [disabled]="systemExcludedUntil.ExcludedUntil"
+            [disabled]="systemExcludedUntil?.ExcludedUntil"
             >
             @for (comment of commentTemplates; track $index) {
               <mat-option [value]="comment.Id">{{comment.Name}}</mat-option>

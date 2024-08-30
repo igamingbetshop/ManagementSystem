@@ -3,7 +3,7 @@
 
 .container {
   @include container-style;
-  height: auto;
+  height: 92%;
   .content-action {
     @include action-style;
     height: 60px;
@@ -82,39 +82,44 @@
       border-radius: 5px;
     }
     .web-site-menu-main {
-      max-width: 21% !important;
+      max-width: 20% !important;
     }
     .web-site-menu-main, .web-site-menu-content, .web-site-menu-sub-menu {
       width: 100%;
       &.space {
-        margin-left: 12px;
+        margin-left: 6px;
       }
       .table-content {
-        max-height: 640px;
+        height: 620px;
         overflow-y: auto;
-        padding-right: 5px;
         table {
           width: 100%;
           border-spacing: 0 3px;
-          tr:hover {
+          .table-row:hover {
             background-color: $blue-light-3;
             cursor: pointer;
+            width: 100%;
           }
           tr.selected {
             background-color: $blue-light-3;
           }
-          th, td {
+          td {
             padding: 10px;
+            font-size: 14px;
             white-space: normal;
             word-break: break-word;
             border: 1px solid transparent;
             text-align: start;
+            
           }
           th {
-            background-color: $blue-light-6;
+            padding: 10px;
+            background-color: $bg-color;
+            font-size: 11px;
             &:first-child, &:last-child {
               border-radius: 4px 0 0 4px;
             }
+            color: #FFFFFF;
           }
           td {
             border-bottom: 1px solid $blue-light-4;
@@ -122,6 +127,17 @@
             &:first-child, &:last-child  {
               border-left: 1px solid $blue-light-4;
               border-radius: 4px;
+            }
+          }
+          .filter-column {
+            background-color: $bg-color;
+            padding: 4px;
+            margin: 0;
+            .filter-input {
+              background-color: $content-bg-color;
+              color: $gray-light-3;
+              // padding: 2px;
+              width: 80px;
             }
           }
         }
@@ -132,7 +148,7 @@
         justify-content: flex-end;
         align-items: center;
         .count {
-          font-size: 16px;
+          font-size: 14px;
           color: $blue-2;
         }
         .mat-btn {

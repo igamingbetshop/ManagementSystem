@@ -282,58 +282,82 @@
         }
 
         .panel-content {
-          padding: 16px;
-          background-color: rgba(255, 255, 255, 1);
-          height: calc(100% - 104px);
+          padding: 4px 16px 0 16px;
+          background-color: rgb(255, 255, 255);
+          height: calc(100% - 75px);
           border-bottom-left-radius: 8px;
           border-bottom-right-radius: 8px;
-
+      
           .panel-scroller {
-            padding: 0;
-            margin: 0;
-            cursor: default;
-            padding-top: 5px;
-            padding-right: 10px;
-            overflow-y: auto;
-            height: 100%;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-
-            .panel-row {
-              line-height: 45px;
-              height: 45px;
-              background-color: $white;
-              display: flex;
-              align-items: center;
-              color: $gray-light-12;
-              font-size: 16px;
-              font-weight: 500;
-              border-bottom: 1px solid $grey-blue-3;
-
-              i {
-                margin-right: 16px;
-                color: #717171;
-                font-size: 24px;
+              padding: 0;
+              margin: 0;
+              cursor: default;
+              padding-top: 5px;
+              padding-right: 10px;
+              overflow-y: auto;
+              height: 100%;
+              border-bottom-left-radius: 8px;
+              border-bottom-right-radius: 8px;
+      
+              .panel-row {
+                  line-height: 40px;
+                  height: 40px;
+                  background-color: $white;
+                  display: flex;
+                  align-items: center;
+                  color: $gray-light-12;
+                  font-size: 16px;
+                  font-weight: 500;
+                  border-bottom: 1px solid $grey-blue-3;
+      
+                  i {
+                      margin-right: 16px;
+                      color: #717171;
+                      font-size: 24px;
+                  }
+      
+                  span {
+                      &:last-child {
+                          color: rgba(19, 26, 44, 1);
+                          font-weight: 700;
+                          margin-left: auto;
+                      }
+                  }
+      
+                  .max-win-bet {
+                      color: $red;
+                  }
+      
+                  &:last-child {
+                      border-bottom: none;
+                  }
               }
-
-              span {
-                &:last-child {
-                  color: rgba(19, 26, 44, 1);
-                  font-weight: 700;
-                  margin-left: auto;
-                }
-              }
-
-              .max-win-bet {
-                color: $red;
-              }
-
-              &:last-child {
-                border-bottom: none
-              }
-            }
           }
-        }
+      
+          // RTL Styles using host-context
+          :host-context([dir="rtl"]) & {
+              padding-left: 16px;
+              padding-right: 16px;
+      
+              .panel-scroller {
+                  padding-left: 10px;
+                  padding-right: 0;
+              }
+      
+              .panel-row {
+                  i {
+                      margin-left: 16px;
+                      margin-right: 0;
+                  }
+      
+                  span:last-child {
+                      margin-right: auto;
+                      margin-left: 0;
+                  }
+              }
+          }
+      }
+      
 
       }
     }
@@ -367,9 +391,23 @@
         z-index: 1;
         position: relative;
         margin-bottom: -4px;
-        &.clickable{cursor: pointer}
-        .icon-arrow{display: none}
+      
+        &.clickable {
+          cursor: pointer;
+        }
+      
+        .icon-arrow {
+          display: none;
+        }
       }
+      
+      // Specific RTL styles using `:host-context`
+      :host-context([dir="rtl"]) .panel-header {
+        padding-right: 50px !important;
+        padding-left: 20px !important;
+      }
+      
+      
 
       .dashboard-panel {
         position: relative;
@@ -637,6 +675,12 @@
 }
 
 @media only screen and (max-width: 1200px) {
+
+  .toggle-btn {
+    bottom: 9%!important;
+    left: 45%!important;
+  }
+
   .container {
     padding-bottom: 16px;
     .content-action {
@@ -1076,6 +1120,43 @@
   height: 10px;
 }
 
-// .icon-arrow {
-//   display: none!important;
-// }
+.toggle-btn {
+  position: absolute;
+  bottom: 0;
+  left: 4.5%;
+  z-index: 10;
+  font-size: 22px;
+}
+::ng-deep [dir="rtl"] {
+  .toggle-btn {
+    left: 29%;
+  }
+}
+
+
+
+::ng-deep {
+  .mdc-switch__icons {
+    display: none!important;
+  }
+
+  .mdc-switch__handle {
+    height: 11px!important;
+    width: 11px!important;
+  }
+
+  .mdc-switch__track {
+    width: 29px!important;
+  }
+
+  .mdc-switch__track {
+    height: 16px!important;
+  }
+}
+
+.icon-arrow {
+  cursor: pointer;
+  color: $gray-light-12;
+  font-size: 5px;
+  transition: background-color 0.3s ease-in;
+}

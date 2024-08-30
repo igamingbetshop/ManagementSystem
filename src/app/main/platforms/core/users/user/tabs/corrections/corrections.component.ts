@@ -28,14 +28,10 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
   styleUrls: ['./corrections.component.scss']
 })
 export class CorrectionsComponent extends BasePaginatedGridComponent implements OnInit {
-  @ViewChild('agGrid') agGrid: AgGridAngular;
-  @ViewChild('agGrid2') agGrid2: AgGridAngular;
   public userId: number;
   public rowData = [];
-  public rowData2 = [];
   public clientUnusedId;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowModelType2: string = GridRowModelTypes.SERVER_SIDE;
+  public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   public columnDefs = [];
   public columnDefs2 = [];
   public fromDate = new Date();
@@ -52,6 +48,7 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     numericEditor: NumericEditorComponent,
     imageRenderer: ImageRendererComponent
   };
+  accountsRowData: any;
 
   constructor(
     private apiService: CoreApiService,
@@ -63,59 +60,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
+
     this.columnDefs = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Common.Balance',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Balance',
-        sortable: true,
-        resizable: true,
-        valueFormatter: params => params.data.Balance.toFixed(2),
-      },
-      {
-        headerName: 'Clients.Currency',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CurrencyId',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Payments.Debit',
-        headerValueGetter: this.localizeHeader.bind(this),
-        resizable: true,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.debitToAccount['bind'](this),
-          Label: 'Debit To Account',
-          bgColor: '#3E4D66',
-          textColor: '#FFFFFF'
-        }
-      },
-      {
-        headerName: 'Payments.Credit',
-        headerValueGetter: this.localizeHeader.bind(this),
-        resizable: true,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.creditFromAccount['bind'](this),
-          Label: 'Credit From Account',
-          bgColor: '#3E4D66',
-          textColor: '#FFFFFF'
-        }
-      }
-    ];
-    this.columnDefs2 = [
       {
         headerName: 'Common.Id',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -244,8 +190,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     this.apiService.apiPost(this.configService.getApiUrl, this.userId, true,
       Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.rowData = data.ResponseObject.Accounts;
-          this.clientUnusedId = this.rowData.find((item) => item.TypeId === 1);
+          this.accountsRowData = data.ResponseObject.Accounts;
+          this.clientUnusedId = this.accountsRowData.find((item) => item.TypeId === 1);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -368,6 +314,11 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) { }
     });
+  }
+
+  getData() {
+    this.getUserAccounts();
+    this.getCurrentPage();
   }
 
 }

@@ -1,12 +1,13 @@
-import {CommonModule} from '@angular/common';
-import {Component, Inject, OnInit} from '@angular/core';
-import {MatIconModule} from '@angular/material/icon';
-import {TranslateModule} from "@ngx-translate/core";
-import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {SportsbookApiService} from "../../../services/sportsbook-api.service";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+import { CommonModule } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from "@ngx-translate/core";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SportsbookApiService } from "../../../services/sportsbook-api.service";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-add-edit-translation',
@@ -17,10 +18,11 @@ import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
     CommonModule,
     MatIconModule,
     TranslateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatButtonModule
   ]
 })
-export class ConfirmComponent implements OnInit{
+export class ConfirmComponent implements OnInit {
 
   private bulkUpdateRequest: BulkUpdateRequest;
 
@@ -29,7 +31,7 @@ export class ConfirmComponent implements OnInit{
     public dialogRef: MatDialogRef<ConfirmComponent>,
     private _snackBar: MatSnackBar,
     private apiService: SportsbookApiService,
-  ) {}
+  ) { }
 
   close() {
     this.dialogRef.close();
@@ -45,7 +47,7 @@ export class ConfirmComponent implements OnInit{
       if (data.Code === 0) {
         this.dialogRef.close('success');
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     })
   }

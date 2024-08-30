@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 
 import { take } from "rxjs/operators";
 import { IRowNode } from "ag-grid-community";
@@ -30,8 +29,9 @@ import { Controllers, Methods, ModalSizes } from "../../../../../../../../../cor
 import { Paging } from "../../../../../../../../../core/models";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { forkJoin } from 'rxjs';
-import {ExportService} from "../../../../../../services/export.service";
+import { ExportService } from "../../../../../../services/export.service";
 import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/grid-common/ag-checkbox-seected-renderer.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 
 @Component({
@@ -41,6 +41,10 @@ import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/gri
 })
 export class PartnerProductsComponent extends BasePaginatedGridComponent implements OnInit {
   @Output("onRequireHistoryUpdate") onRequireHistoryUpdate: EventEmitter<number> = new EventEmitter<number>();
+
+  @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
+  @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
+
   public partnerId;
   public partnerName;
   public frameworkComponents = {
@@ -61,7 +65,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
   public selectedChangeCheckbox = false;
   public subProvidersTypesEnum;
   public statuses = [];
-  public formGroup: UntypedFormGroup;
   public productCategories = [];
   public gameProviders = [];
   public rowSelection = 'multiple';
@@ -71,13 +74,12 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
 
   constructor(
     private apiService: CoreApiService,
-    private fb: UntypedFormBuilder,
     private activateRoute: ActivatedRoute,
     public configService: ConfigService,
     protected injector: Injector,
     public dialog: MatDialog,
     private ref: ChangeDetectorRef,
-    private exportService:ExportService,
+    private exportService: ExportService,
     private _snackBar: MatSnackBar) {
     super(injector);
   }
@@ -86,7 +88,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     this.getAllProductStates();
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
-    this.formValues();
     this.mergeProductApi();
   }
 
@@ -113,7 +114,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         if (productCategoriesData.ResponseCode === 0) {
           this.productCategories = productCategoriesData.ResponseObject;
         }
-
         if (gameProvidersData.ResponseCode === 0) {
           this.gameProviders = gameProvidersData.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
         }
@@ -139,7 +139,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         field: 'Id',
         sortable: true,
         resizable: true,
-        editable: true,
+        editable: false,
         hide: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
@@ -147,7 +147,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        cellEditor: 'numericEditor',
       },
       {
         headerName: 'Clients.ProductId',
@@ -285,10 +284,14 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         filterParams: {
           values: this.gameProviders.map((item) => item.Name),
         },
-        cellRenderer: 'selectRenderer',
-        cellRendererParams: {
-          onchange: this.onSelectChange['bind'](this, "SubproviderId"),
-          Selections: this.gameProviders,
+        cellRenderer: (params: { value: any; }) => {
+          const providerId = params.value;
+          const providerObject = this.gameProviders?.find((gender) => gender.Id === providerId);
+
+          if (providerObject) {
+            return providerObject.Name;
+          }
+          return '';
         },
       },
       {
@@ -437,15 +440,15 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
         if (paging.HasDemos) {
           paging.HasDemo = paging.HasDemos.ApiOperationTypeList[0].BooleanValue;
           delete paging.HasDemos;
-        }   
+        }
 
         this.filteredData = { ...paging };
 
-        if(this.filteredData.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {
+        if (this.filteredData.SubproviderIds?.ApiOperationTypeList[0].ArrayValue.length === 0) {
           params.success({ rowData: [], rowCount: 0 });
           return;
         }
-        if(this.filteredData.SubproviderIds) {
+        if (this.filteredData.SubproviderIds) {
           this.filteredData.SubproviderIds.ApiOperationTypeList[0].ArrayValue = this.transformArrayToNumbers(this.filteredData.SubproviderIds.ApiOperationTypeList[0].ArrayValue, this.subProvidersTypesEnum);
         }
 
@@ -453,10 +456,10 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
           Controllers.PRODUCT, Methods.GET_PARTNER_PRODUCT_SETTINGS).pipe(take(1)).subscribe((data) => {
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Entities
-              .map((items) => {
-                items['GameProviderId'] = items.GameProviderName;
-                return items;
-              });
+                .map((items) => {
+                  items['GameProviderId'] = items.GameProviderName;
+                  return items;
+                });
               this.checkedRow = false;
               this.cleanSelectedRow();
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
@@ -506,7 +509,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
   }
 
   rowClicked(params) {
-    this.formGroup.enable();
     this.onRequireHistoryUpdate.emit(params.data.Id);
   }
 
@@ -546,50 +548,6 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     });
   }
 
-  updateProduct() {
-    if (!this.formGroup.valid) {
-      return;
-    }
-    const setting = this.formGroup.getRawValue();
-
-    setting.PartnerId = +this.partnerId;
-    setting.ProductIds = this.getSelectedProductIds();
-    if (setting.Percent === null) {
-      delete setting.Percent;
-    }
-
-    this.apiService.apiPost(this.configService.getApiUrl, setting, true,
-      Controllers.PRODUCT, Methods.SAVE_PARTNER_PRODUCT_SETTINGS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.gridApi.refreshServerSide({ purge: true });
-          this.gridApi.deselectAll();
-          this.formGroup.reset();
-          SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
-
-  private formValues() {
-    this.formGroup = this.fb.group({
-      Percent: [null],
-      Rating: [null],
-      OpenMode: [null],
-      RTP: [null],
-      CategoryIds: [[]],
-      State: [null, [Validators.required]],
-    })
-  }
-
-  get errorControl() {
-    return this.formGroup.controls;
-  }
-
-  get errorControl2() {
-    return this.formGroup.controls;
-  }
-
   onCellValueChanged(event) {
     if (event.oldValue !== event.value) {
       let findedNode: IRowNode;
@@ -619,7 +577,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
 
   onPaginationChanged(event): void {
     super.onPaginationChanged(event);
-      this.cleanSelectedRow();
+    this.cleanSelectedRow();
   }
 
   onPageSizeChanged() {
@@ -639,7 +597,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCT_SETTINGS, this.filteredData);
+    this.exportService.exportToCsv(Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCT_SETTINGS, this.filteredData);
   }
 
   getSelectedProductIds(): number[] {
@@ -665,6 +623,29 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
       }
     }
     return result;
+  }
+
+
+  async onBulkEditorOpen() {
+    if (this.bulkEditorRef) {
+      this.bulkEditorRef.clear();
+    }
+    const componentInstance = await import('../all-products/add-partners-product/add-partners-product.component').then(c => c.AddPartnersProductComponent);
+    const componentRef = this.bulkEditorRef.createComponent(componentInstance);
+    componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
+    componentRef.instance.productCategories = this.productCategories;
+    componentRef.instance.statuses = this.statuses;
+    componentRef.instance.partnerId = +this.partnerId;
+    componentRef.instance.productIds = this.getSelectedProductIds();
+    componentRef.instance.isRTPVisible = true;
+    componentRef.instance.afterClosed.subscribe((data) => {
+      if (data) {
+        this.gridApi.refreshServerSide({ purge: true });
+        this.gridApi.deselectAll();
+        SnackBarHelper.show(this._snackBar, { Description: 'Updated successfully', Type: "success" });
+      }
+    });
+
   }
 
 }

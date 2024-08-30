@@ -5,25 +5,12 @@
   </div>
 
   <div class="grid-content">
-    <ag-grid-angular
-      id="corrections"
-      #agGrid
-      class="ag-theme-balham first-ag-grid"
-      [headerHeight]="33"
-      [rowHeight]="42"
-      [rowData]="rowData"
-      [rowModelType]="rowModelType"
-      [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef"
-      [cacheBlockSize]="cacheBlockSize"
-      [components]="frameworkComponents"
-      [suppressCopyRowsToClipboard]="true"
-      (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
+
+    <app-corrections-grid 
+      [rowData]="accountsRowData" 
+      [clientId]="userId" 
+      (getClientCorrections)="getData()"/>
+
   </div>
 
 
@@ -31,6 +18,7 @@
     [lastYearFilter]="false"
     [allTimesFilter]="false"
     (toDateChange)="onDateChange($event)" />
+    
   <div class="grid-content">
     <ag-grid-angular
       id="all-finished"
@@ -38,11 +26,11 @@
       class="ag-theme-balham second-ag-grid"
       [headerHeight]="33"
       [rowHeight]="42"
-      [rowData]="rowData2"
-      [rowModelType]="rowModelType2"
+      [rowData]="rowData"
+      [rowModelType]="rowModelType"
       [sideBar]="sideBar"
       [suppressRowClickSelection]="true"
-      [columnDefs]="columnDefs2"
+      [columnDefs]="columnDefs"
       [cacheBlockSize]="cacheBlockSize"
       [suppressCopyRowsToClipboard]="true"
       [paginationAutoPageSize]="paginationAutoPageSize"

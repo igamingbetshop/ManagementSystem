@@ -6,7 +6,7 @@
     <button 
       mat-stroked-button 
       class="mat-delete" 
-      [class.disabled] ="isRowSelected() || isSendingReqest" 
+      [class.disabled] ="isRowSelected() || isSendingRequest" 
       (click)="delateTeam()">
         {{'Sport.DeleteComment' | translate}}
     </button>
@@ -25,7 +25,7 @@
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
-      [cacheBlockSize]="cacheBlockSize"
+      [cacheBlockSize]="5000"
       [components]="frameworkComponents"
       [suppressCopyRowsToClipboard]="true"
       [sideBar]="sideBar"
@@ -34,6 +34,8 @@
       (gridReady)="onGridReady($event)"
       (cellValueChanged)="onCellValueChanged($event)"
       [ensureDomOrder]="true"
+      pagination="true"
+      [paginationPageSize]="5000"
       [enableCellTextSelection]="true"
       (columnPinned)="onColumnPinned($event)"
       (columnMoved)="onColumnMoved($event)"

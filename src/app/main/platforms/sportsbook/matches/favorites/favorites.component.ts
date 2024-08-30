@@ -24,7 +24,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
 
   public path: string = 'matches/activematchestree';
   public path1: string = 'matches/favorites';
-  isSendingReqest = false;
+  isSendingRequest = false;
   public sportTree;
   public sportTreeReference;
   public matches;
@@ -389,7 +389,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
       SnackBarHelper.show(this._snackBar, { Description: 'Select partner', Type: "error" });
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     let row = this.agGrid.api.getSelectedRows()[0];
     let model = {
       MatchId: row.MatchId,
@@ -407,7 +407,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
 
     this.partnerId = null;
@@ -426,7 +426,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
 
   onRemoveMatch() {
     let row = this.agGrid1.api.getSelectedRows()[0];
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
 
     this.apiService.apiPost('matches/removefavorite', { MatchId: row.MatchId, PartnerId: row.PartnerId  })
       .pipe(take(1))
@@ -444,7 +444,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

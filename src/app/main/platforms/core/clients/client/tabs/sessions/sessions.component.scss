@@ -1,14 +1,11 @@
 @import "mixins.scss";
 @import "variables.scss";
 
+
+
 .container {
   @include container-style;
   height: auto;
-
-  .content-action {
-    @include action-style;
-    height: 60px;
-  }
 
   .grid-content {
     width: 100%;
@@ -20,5 +17,39 @@
         height: 100%;
       }
     }
+
+    .pages-sizes {
+      position: absolute;
+      left: 14%;
+      bottom: 2.2%;
+      display: flex;
+      align-items: center;
+      width: 80%;
+
+      @include grid-dropdown-style;
+
+      ::ng-deep {
+        .mat-select {
+          height: 26px !important;
+          width: 60px !important;
+          position: absolute;
+          top: 3px;
+        }
+      }
+
+      .btn-action {
+        margin-left: auto;
+        margin-right: 10px;
+        order: 2;
+
+        .mat-btn {
+          margin-left: 8px;
+          @include mat-btn-style;
+        }
+      }
+    }
+
   }
 }
+
+

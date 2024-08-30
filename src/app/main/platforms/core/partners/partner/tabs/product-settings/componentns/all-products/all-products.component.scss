@@ -1,5 +1,6 @@
 @import "mixins.scss";
 @import "variables.scss";
+
 .action-content {
   @include action-style;
   height: auto;
@@ -10,34 +11,19 @@
     padding-bottom: 5px;
   }
 
-  .mat-export-btn {
-    margin-left: 8px;
-    @include mat-export-btn-style;
-    line-height: 20px;
-    margin-bottom: 5px;
+  .bulk-editor-dropdown {
+    position: relative;
 
-    ::ng-deep {
-      .mat-button-wrapper {
-        padding: 0 6px;
-        height: 20px;
-        font-size: 13px;
-
-        &:after {
-          height: 22px;
-        }
-
-        &:before {
-          margin-right: 8px;
-          font-size: 13px;
-        }
-      }
+    .mat-bulk-btn {
+      @include mat-bulke-edit-btn-style;
+      margin-bottom: 5px;
     }
   }
 }
 
 .grid-content {
   width: 100%;
-  height: calc(100% - 275px);
+  height: 80%;
   position: relative;
 
   ::ng-deep {
@@ -52,6 +38,7 @@
     top: -3px;
     z-index: 2;
     left: -8px;
+
     ::ng-deep {
 
       .mat-checkbox-inner-container {
@@ -92,7 +79,7 @@
   .pages-sizes {
     position: absolute;
     left: 262px;
-    bottom: 3%;
+    bottom: 2.6%;
     @include grid-dropdown-style;
 
     ::ng-deep {
@@ -102,6 +89,7 @@
       }
     }
   }
+
   .selected {
     color: $blue-5;
     position: absolute;
@@ -115,9 +103,11 @@
 .grid-action {
   display: flex;
   position: relative;
+
   form {
-    display: flex!important;
+    display: flex !important;
   }
+
   .input-content {
     @include input-style;
 
@@ -129,7 +119,8 @@
       border: 1px solid $gray-light-3;
       color: $gray-light-3;
 
-      &.ng-invalid, &.ng-valid {
+      &.ng-invalid,
+      &.ng-valid {
 
         border: 1px solid $blue-2;
         color: $blue-2;

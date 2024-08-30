@@ -22,6 +22,7 @@ import { ViewProfitInfoComponent } from './view-profit-info/view-profit-info.com
 import {TranslateModule} from "@ngx-translate/core";
 import { DropdownDirective } from 'src/app/core/directives/dropdown.directive';
 import { MatMenuModule } from '@angular/material/menu';
+import { MarketTypesButtonsComponent } from "../../../../../sb-components/market-types-buttons/market-types-buttons.component";
 
 const routes: Routes = [
   {
@@ -31,24 +32,25 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatButtonModule,
-    MatSnackBarModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AgGridModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatIconModule,
-    MatInputModule,
-    MatCheckboxModule,
-    TranslateModule,
-    DropdownDirective,
-    MatMenuModule
-  ],
-  declarations: [ProfitComponent, AddSettingComponent, ViewProfitInfoComponent]
+    declarations: [ProfitComponent, AddSettingComponent, ViewProfitInfoComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatButtonModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        AgGridModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatIconModule,
+        MatInputModule,
+        MatCheckboxModule,
+        TranslateModule,
+        DropdownDirective,
+        MatMenuModule,
+        MarketTypesButtonsComponent
+    ]
 })
 export class ProfitModule { }

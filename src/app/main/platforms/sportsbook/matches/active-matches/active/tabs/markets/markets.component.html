@@ -4,8 +4,9 @@
     <div class="left-panel">
       <div class="action-content">
         <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> /
-          {{MatchId}} : {{'Sport.Markets' | translate}}
+          {{matchId}} : {{'Sport.Markets' | translate}}
         </div>
+
       </div>
 
       <div class="grid-content">
@@ -15,7 +16,7 @@
         class="ag-theme-balham"
         [headerHeight]="33"
         [rowHeight]="42"
-        [rowData]="rowData"
+        [rowData]="mappedRowData()"
         [rowModelType]="rowModelType"
         [suppressCopyRowsToClipboard]="true"
         [columnDefs]="columnDefs"
@@ -26,6 +27,8 @@
         [components]="frameworkComponents"
         [enableBrowserTooltips]="enableBrowserTooltips"
         [cacheBlockSize]="cacheBlockSize"
+        [pagination]="true"
+        [paginationPageSize]="5000"
         (gridReady)="onGridReady($event)"
         (rowSelected)="onRowSelected($event)"
         (cellValueChanged)="onCellValueChanged1($event)"

@@ -66,66 +66,36 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalWinsAmount',
         valueFormatter: params => params.data.TotalWinsAmount.toFixed(2),
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Dashboard.TotalGGR',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalGGR',
         valueFormatter: params => params.data.TotalGGR.toFixed(2),
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Dashboard.TotalBetsAmountFromBetShop',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalBetsAmountFromBetShop',
         valueFormatter: params => params.data.TotalBetsAmountFromBetShop.toFixed(2),
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Dashboard.TotalBetsAmountFromInternet',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalBetsAmountFromInternet',
         valueFormatter: params => params.data.TotalBetsAmountFromInternet.toFixed(2),
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Segments.TotalBetsCount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalBetsCount',
         valueFormatter: params => params.data.TotalBetsCount.toFixed(2),
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Dashboard.TotalPlayersCount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalPlayersCount',
         valueFormatter: params => params.data.TotalPlayersCount.toFixed(2),
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
     ]
   }

@@ -1,624 +1,1275 @@
-<div mat-dialog-title>
-  <span class="title"> {{'Partners.AddPartner' | translate}}</span>
-  <mat-icon (click)="close()">close</mat-icon>
+<div mat-dialog-title class="header">
+    <span class="title"> {{'Segments.AddSegment' | translate}}</span>
+    <mat-icon (click)="close()">close</mat-icon>
+    <div class="header-button-actions">
+        <button mat-button class="modal-cancel-btn" [ngClass]="{'active-btn': !showReview()}" (click)="toggleEdit()"><i
+                class="icon-edit1"></i>{{'Common.Edit' | translate}}</button>
+        <button mat-button class="modal-primary-btn" [ngClass]="{'active-btn': showReview()}"
+            (click)="toggleShowReview()"><i class="icon-eye"></i>{{'Common.Review' | translate}}</button>
+    </div>
 </div>
 
+@if (!showReview()){
 <div class="modal-wrap">
-  <form class="modal-form" [formGroup]="formGroup">
+    <form class="modal-form" [formGroup]="formGroup">
 
-    <mat-form-field>
-      <mat-label>{{'Partners.Partners' | translate}}</mat-label>
-      <mat-select [formControlName]="'PartnerId'">
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
-        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>{{'Common.Name' | translate}}</mat-label>
-      <input matInput [formControlName]="'Name'" placeholder="{{'Common.Name' | translate}}" required>
-      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
-        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
-    </mat-form-field>
-
-    <div class="wraper">
-      <div>{{'Segments.Mode' | translate}}</div>
-      <mat-radio-group [formControlName]="'Mode'" aria-label="Select an option">
-        <mat-radio-button *ngFor="let mode of modes" color="primary" [value]="mode.Id">{{mode.Name |
-          translate}}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="wraper">
-      <div>{{'Common.Gender' | translate}}</div>
-      <mat-radio-group [formControlName]="'Gender'" aria-label="Select an option">
-        <mat-radio-button *ngFor="let gender of genders" color="primary" [value]="gender.Id">{{gender.Name |
-          translate}}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="wraper">
-      <div>{{'Segments.IsKYCVerified' | translate}}</div>
-      <mat-radio-group [formControlName]="'IsKYCVerified'" aria-label="Select an option">
-        <mat-radio-button *ngFor="let KYC of KYCStates" color="primary" [value]="KYC.Id">{{KYC.Name |
-          translate}}</mat-radio-button>
-      </mat-radio-group>
-    </div>
-
-    <div class="wraper">
-      <div>{{'Segments.ClientStatuses' | translate}}</div>
-      <div class="check-box">
-        <ul>
-          @for (state of clientStates; track $index) {
-          <li>
-            <div>
-              <mat-checkbox labelPosition="before" [(ngModel)]="state.checked" [ngModelOptions]="{'standalone': true}"
-                color="primary">{{"Segments." +state.Name | translate}}</mat-checkbox>
+        <div class="block-segments-content basic-info">
+            <div class="block-title" appToggleContent> {{'Common.BasicInfo' | translate}}
+                <i class="icon-arrow" ></i>
             </div>
-          </li>
-          }
-        </ul>
-      </div>
-    </div>
+            <div>
+                <mat-label> {{'Partners.Partner' | translate}}</mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Partners.ChoosePartner' | translate}}</mat-label>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.AffiliateIds' | translate}}</mat-label>
-      <input matInput [formControlName]="'AffiliateId'" placeholder="{{'Segments.AffiliateIds' | translate}}">
-      <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.NumbersAndCommas' | translate}}
-      </mat-error>
+                    <mat-select [formControlName]="'PartnerId'">
+                        @for (partner of partners; track $index) {
+                        <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
+                        }
+                    </mat-select>
+                    @if (errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required) {
+                    <mat-error>
+                        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+                    </mat-error>
+                    }
+                </mat-form-field>
 
-    </mat-form-field>
+                <mat-label> {{'Partners.Name' | translate}}</mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Common.WritePartnerName' | translate}}</mat-label>
+                    <input matInput [formControlName]="'Name'" placeholder="{{'Common.Name' | translate}}" required>
+                    @if (errorControl['Name']?.touched && errorControl['Name'].errors?.required) {
+                    <mat-error>
+                        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+                    </mat-error>
+                    }
+                </mat-form-field>
 
-    <!-- <div class="wraper">
-          <div>{{'Segments.Bonuses' | translate}}</div>
-          <mat-form-field>
-            <input matInput [formControlName]="'Bonus'" placeholder="{{'Segments.Bonuses' | translate}}">
-          </mat-form-field>
-         </div> -->
+                <mat-label>{{'Segments.Mode' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.SelectMode' | translate}}</mat-label>
+                    <!-- <mat-select [formControlName]="'Mode'">
+            @for (mode of modes; track $index) {
+              <mat-option [value]="mode.Id" >
+                 <mat-radio-button color="primary">{{mode.Name |
+                   translate}}</mat-radio-button>
+              </mat-option>
+              <div class="mode-info-text">{{mode.Info}}</div>
+            }
+          </mat-select> -->
+                    <mat-select [formControlName]="'Mode'">
+                        @for (mode of modes; track $index) {
+                        <mat-option [value]="mode.Id">{{mode.Name |
+                            translate}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.ClientIds' | translate}}</mat-label>
-      <input matInput [formControlName]="'ClientId'" placeholder="{{'Segments.ClientIds' | translate}}">
-      <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.NumbersAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+                <mat-label>{{'Common.Status' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Common.SelectStatus' | translate}}</mat-label>
+                    <mat-select [formControlName]="'State'">
+                        @for (state of statuses; track $index) {
+                        <mat-option [value]="state.Id">{{state.Name |
+                            translate}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+            </div>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.DepositPaymentSystems' | translate}}</mat-label>
-      <input matInput [formControlName]="'SuccessDepositPaymentSystem'"
-        placeholder="{{'Segments.DepositPaymentSystems' | translate}}">
-      <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.NumbersAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+        </div>
 
-    <mat-form-field>
-      <mat-label>{{'Clients.Emails' | translate}}</mat-label>
-      <input matInput [formControlName]="'Email'" placeholder="{{'Clients.Emails' | translate}}">
-      <mat-hint> {{'Errors.EmailsAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.EmailsAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+        <div class="block-segments-content user-parameters">
+            <div class="block-title" appToggleContent>{{'Common.ProfileParameters' | translate}}
+                <i class="icon-arrow" ></i>
+            </div>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.FirstNames' | translate}}</mat-label>
-      <input matInput [formControlName]="'FirstName'" placeholder="{{'Segments.FirstNames' | translate}}">
-      <mat-hint> {{'Errors.StringsAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.StringsAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+            <div>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.LastNames' | translate}}</mat-label>
-      <input matInput [formControlName]="'LastName'" placeholder="{{'Segments.LastNames' | translate}}">
-      <mat-hint> {{'Errors.StringsAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.StringsAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+                <div class="user-parameters-box-row">
+                    <div class="label">{{'Common.Gender' | translate}}<i class="icon-info1"></i></div>
+                    <mat-radio-group [formControlName]="'Gender'" aria-label="Select an option">
+                        @for (gender of genders; track $index) {
+                        <mat-radio-button color="primary" [value]="gender.Id">{{gender.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                </div>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.MobileCodes' | translate}}</mat-label>
-      <input matInput [formControlName]="'MobileCode'" placeholder="{{'Segments.MobileCodes' | translate}}">
-      <mat-hint> {{'Errors.StringsAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.StringsAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+                <div class="user-parameters-box-row">
+                    <div class="label">{{'Segments.IsKYCVerified' | translate}}<i class="icon-info1"></i></div>
+                    <mat-radio-group [formControlName]="'IsKYCVerified'" aria-label="Select an option">
+                        @for (state of commonStates; track $index) {
+                        <mat-radio-button color="primary" [value]="state.Id">{{state.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                </div>
 
+                <div class="user-parameters-box-row">
+                    <div class="label">{{'Clients.IsEmailVerified' | translate}}<i class="icon-info1"></i></div>
+                    <mat-radio-group [formControlName]="'IsEmailVerified'" aria-label="Select an option">
+                        @for (state of commonStates; track $index) {
+                        <mat-radio-button color="primary" [value]="state.Id">{{state.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                </div>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.RegionIds' | translate}}</mat-label>
-      <input matInput [formControlName]="'Region'" placeholder="{{'Segments.RegionIds' | translate}}">
-      <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.NumbersAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+                <div class="user-parameters-box-row">
+                    <div class="label">{{'Clients.IsMobileNumberVerified' | translate}}<i class="icon-info1"></i></div>
+                    <mat-radio-group [formControlName]="'IsMobileNumberVerified'" aria-label="Select an option">
+                        @for (state of commonStates; track $index) {
+                        <mat-radio-button color="primary" [value]="state.Id">{{state.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                </div>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.SegmentIds' | translate}}</mat-label>
-      <input matInput [formControlName]="'SegmentId'" placeholder="{{'Segments.SegmentIds' | translate}}">
-      <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.NumbersAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+                <mat-label>{{'Segments.ClientStatuses' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.ChooseStatus' | translate}}</mat-label>
+                    <mat-select [formControlName]="'Status'" multiple (selectionChange)="onSetStatusNames($event)">
+                        @for (state of clientStates; track $index) {
+                        <mat-option [value]="state.Id" class="client-statuses">
+                            <div class="status-circle">
+                                <i [class]="state.icon"></i>
+                            </div>
+                            <span>{{"Segments." +state.Name | translate}}</span>
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{'Segments.WithdrawPaymentSystems' | translate}}</mat-label>
-      <input matInput [formControlName]="'SuccessWithdrawalPaymentSystem'"
-        placeholder="{{'Segments.WithdrawPaymentSystems' | translate}}">
-      <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
-      </mat-hint>
-      <mat-error>
-        {{'Errors.NumbersAndCommas' | translate}}
-      </mat-error>
-    </mat-form-field>
+            </div>
 
-    <div class="wraper">
-      <div>{{'Segments.SessionPeriod' | translate}}</div>
-
-      <div>
-        <span *ngFor="let condition of addedConditions.SessionPeriod.conditions; let $index = index">
-          <span>
-            {{condition.ConditionType.Name}} {{condition.ConditionValue }}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.SessionPeriod, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
-
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.SessionPeriod.showNew = !addedConditions.SessionPeriod.showNew">
-          {{addedConditions.SessionPeriod.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.SessionPeriod.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.SessionPeriod.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+$" #valueInput="ngModel"
-          [placeholder]="'Common.InsertMinutes' | translate"
-          [(ngModel)]="addedConditions.SessionPeriod.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button style="margin-top: 10px;" [disabled]="valueInput.invalid" mat-raised-button color="primary"
-        (click)="addDateCondition(addedConditions.SessionPeriod)">{{'Common.Add'
-        | translate}}</button>
-    </div>
+        </div>
 
 
-    <div class="wraper">
-      <div>{{'Segments.SignUpPeriod' | translate}}</div>
+        <div class="block-segments-content basic-info">
+            <div class="block-title" appToggleContent> {{'Common.AdditionalParameters' | translate}}
+                <i class="icon-arrow" ></i>
+            </div>
+            <div>
+                <!-- <mat-label>{{'Segments.AffiliateIds' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'AffiliateId'"
+                        placeholder="{{'Segments.AffiliateIds' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field> -->
 
-      <div>
-        <span *ngFor="let condition of addedConditions.SignUpPeriod.conditions; let $index = index">
-          <span>
-            {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.SignUpPeriod, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <mat-label>{{'Segments.ClientIds' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'ClientId'" placeholder="{{'Segments.ClientIds' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.SignUpPeriod.showNew = !addedConditions.SignUpPeriod.showNew">
-          {{addedConditions.SignUpPeriod.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.SignUpPeriod.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="numbrer" [matDatepicker]="picker1"
-          [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="addDateCondition(addedConditions.SignUpPeriod)">{{'Common.Add'
-        | translate}}</button>
-    </div>
+                <mat-label>{{'Clients.Emails' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'Email'" placeholder="{{'Clients.Emails' | translate}}">
+                    <mat-hint> {{'Errors.EmailsAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.EmailsAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-    <div class="wraper">
-      <div>{{'Segments.TotalBetsCount' | translate}}</div>
+                <mat-label>{{'Segments.FirstNames' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'FirstName'" placeholder="{{'Segments.FirstNames' | translate}}">
+                    <mat-hint> {{'Errors.StringsAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.StringsAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.TotalBetsCount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalBetsCount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <mat-label>{{'Segments.LastNames' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'LastName'" placeholder="{{'Segments.LastNames' | translate}}">
+                    <mat-hint> {{'Errors.StringsAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.StringsAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.TotalBetsCount.showNew = !addedConditions.TotalBetsCount.showNew">
-          {{addedConditions.TotalBetsCount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.TotalBetsCount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.TotalBetsCount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+$" #totalBetsCount="ngModel" placeholder="value"
-          [(ngModel)]="addedConditions.TotalBetsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button [disabled]="totalBetsCount.invalid" color="primary" (click)="addCondition(addedConditions.TotalBetsCount)">{{'Common.Add' |
-        translate}}</button>
-    </div>
+                <mat-label>{{'Segments.MobileCodes' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'MobileCode'"
+                        placeholder="{{'Segments.MobileCodes' | translate}}">
+                    <mat-hint> {{'Errors.StringsAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.StringsAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-    <div class="wraper">
-      <div>{{'Segments.SportBetsCount' | translate}}</div>
+                <mat-label>{{'Segments.RegionIds' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'Region'" placeholder="{{'Segments.RegionIds' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.SportBetsCount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.SportBetsCount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <mat-label>{{'Segments.SegmentIds' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'SegmentId'" placeholder="{{'Segments.SegmentIds' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.SportBetsCount.showNew = !addedConditions.SportBetsCount.showNew">
-          {{addedConditions.SportBetsCount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.SportBetsCount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.SportBetsCount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+$" #valueInput2="ngModel" placeholder="value"
-          [(ngModel)]="addedConditions.SportBetsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput2.invalid"
-        (click)="addCondition(addedConditions.SportBetsCount)">{{'Common.Add' | translate}}</button>
-    </div>
+                <mat-label>{{'Segments.WithdrawPaymentSystems' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'SuccessWithdrawalPaymentSystem'"
+                        placeholder="{{'Segments.WithdrawPaymentSystems' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
+                <mat-label>{{'Segments.DepositPaymentSystems' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'SuccessDepositPaymentSystem'"
+                        placeholder="{{'Segments.DepositPaymentSystems' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
 
-    <div class="wraper">
-      <div>{{'Segments.CasinoBetsCount' | translate}}</div>
+            </div>
+            <!-- } -->
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.CasinoBetsCount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.CasinoBetsCount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
-
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.CasinoBetsCount.showNew = !addedConditions.CasinoBetsCount.showNew">
-          {{addedConditions.CasinoBetsCount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.CasinoBetsCount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.CasinoBetsCount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+$" #valueInput3="ngModel"
-          placeholder="{{'Bonuses.Value' | translate}}"
-          [(ngModel)]="addedConditions.CasinoBetsCount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput3.invalid"
-        (click)="addCondition(addedConditions.CasinoBetsCount)">{{'Common.Add' | translate}}</button>
-    </div>
+        </div>
 
 
-    <div class="wraper">
-      <div>{{'Segments.TotalBetsAmount' | translate}}</div>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.TotalBetsAmount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalBetsAmount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+        <div class="block-segments-content condition">
+            <div class="block-title" appToggleContent>{{'Common.Condition' | translate}}
+                <i class="icon-arrow"></i>
+            </div>
 
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.TotalBetsAmount.showNew = !addedConditions.TotalBetsAmount.showNew">
-          {{addedConditions.TotalBetsAmount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.TotalBetsAmount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.TotalBetsAmount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+(\.\d+)?$" #valueInput4="ngModel"
-          placeholder="{{'Bonuses.Value' | translate}}"
-          [(ngModel)]="addedConditions.TotalBetsAmount.selectedConditionValue" [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput4.invalid"
-        (click)="addCondition(addedConditions.TotalBetsAmount)">{{'Common.Add' | translate}}</button>
-    </div>
+            <div>
+                <app-condition-input label="{{ 'Segments.AffiliateIds' | translate }}"
+                    [conditions]="addedConditions.AffiliateId.conditions" [operations]="operations"
+                    inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                    (conditionsChange)="addedConditions.AffiliateId.conditions = $event">
+                </app-condition-input>
 
-    <div class="wraper">
-      <div>{{'Segments.TotalDepositsCount' | translate}}</div>
+                <app-condition-input label="{{ 'Segments.AgentIds' | translate }}"
+                    [conditions]="addedConditions.AgentId.conditions" [operations]="operations"
+                    inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                    (conditionsChange)="addedConditions.AgentId.conditions = $event">
+                </app-condition-input>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.TotalDepositsCount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalDepositsCount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <app-condition-input label="{{ 'Segments.SessionPeriod' | translate }}"
+                    [conditions]="addedConditions.SessionPeriod.conditions" [operations]="operations"
+                    inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                    (conditionsChange)="addedConditions.SessionPeriod.conditions = $event">
+                </app-condition-input>
 
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.TotalDepositsCount.showNew = !addedConditions.TotalDepositsCount.showNew">
-          {{addedConditions.TotalDepositsCount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.TotalDepositsCount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.TotalDepositsCount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+$" #valueInput5="ngModel"
-          placeholder="{{'Bonuses.Value' | translate}}"
-          [(ngModel)]="addedConditions.TotalDepositsCount.selectedConditionValue"
-          [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput5.invalid"
-        (click)="addCondition(addedConditions.TotalDepositsCount)">{{'Common.Add' | translate}}</button>
-    </div>
+                <div class="condition-content">
+                    <div class="label-condition">{{'Segments.SignUpPeriod' | translate}}</div>
+                    <div class="condition-row">
+                        <mat-form-field class="mr-15">
+                            <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                            <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType"
+                                [ngModelOptions]="{'standalone': true}">
+                                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                                @for (operation of operations; track $index) {
+                                <mat-option [value]="operation">{{operation.Name}}</mat-option>
+                                }
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="mr-15">
+                            <input matInput type="numbrer" [matDatepicker]="picker1" #valueInput1="ngModel"
+                                [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue"
+                                [ngModelOptions]="{'standalone': true}">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                        <button [disabled]="valueInput1.invalid || !addedConditions.SignUpPeriod.selectedConditionType"
+                            mat-raised-button color="primary"
+                            (click)="addDateCondition(addedConditions.SignUpPeriod, true);">+</button>
+                    </div>
+                    <div class="condition-box">
+                        @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
+                        <span class="condition-box-item">
+                            {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
+                            <mat-icon class="close-icon"
+                                (click)="removeCondition(addedConditions.SignUpPeriod, $index)">close</mat-icon>
+                        </span>
+                        }
+                    </div>
+                </div>
 
-    <div class="wraper">
-      <div>{{'Segments.TotalDepositsAmount' | translate}}</div>
+                <app-condition-input label="{{ 'Segments.TotalBetsCount' | translate }}"
+                    [conditions]="addedConditions.TotalBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.TotalBetsCount.conditions = $event">
+                </app-condition-input>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.TotalDepositsAmount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalDepositsAmount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <app-condition-input label="{{ 'Segments.SportBetsCount' | translate }}"
+                    [conditions]="addedConditions.SportBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.SportBetsCount.conditions = $event">
+                </app-condition-input>
 
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.TotalDepositsAmount.showNew = !addedConditions.TotalDepositsAmount.showNew">
-          {{addedConditions.TotalDepositsAmount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.TotalDepositsAmount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.TotalDepositsAmount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+(\.\d+)?$" #valueInput6="ngModel"
-          placeholder="{{'Bonuses.Value' | translate}}"
-          [(ngModel)]="addedConditions.TotalDepositsAmount.selectedConditionValue"
-          [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput6.invalid"
-        (click)="addCondition(addedConditions.TotalDepositsAmount)">{{'Common.Add' | translate}}</button>
-    </div>
+                <app-condition-input label="{{ 'Segments.CasinoBetsCount' | translate }}"
+                    [conditions]="addedConditions.CasinoBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.CasinoBetsCount.conditions = $event">
+                </app-condition-input>
 
+                <app-condition-input label="{{ 'Segments.TotalBetsAmount' | translate }}"
+                    [conditions]="addedConditions.TotalBetsAmount.conditions" [operations]="operations" inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.TotalBetsAmount.conditions = $event">
+                </app-condition-input>
 
-    <div class="wraper">
-      <div>{{'Segments.TotalWithdrawalsCount' | translate}}</div>
+                <app-condition-input label="{{ 'Segments.TotalDepositsCount' | translate }}"
+                    [conditions]="addedConditions.TotalDepositsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.TotalDepositsCount.conditions = $event">
+                </app-condition-input>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.TotalWithdrawalsCount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalWithdrawalsCount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <app-condition-input label="{{ 'Segments.TotalDepositsAmount' | translate }}"
+                    [conditions]="addedConditions.TotalDepositsAmount.conditions" [operations]="operations"
+                    inputPattern="^\d+(\.\d+)?$"
+                    (conditionsChange)="addedConditions.TotalDepositsAmount.conditions = $event">
+                </app-condition-input>
 
-      <div class="add-box">
-        <mat-icon
-          (click)="addedConditions.TotalWithdrawalsCount.showNew = !addedConditions.TotalWithdrawalsCount.showNew">
-          {{addedConditions.TotalWithdrawalsCount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.TotalWithdrawalsCount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.TotalWithdrawalsCount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+$" #valueInput7="ngModel"
-          placeholder="{{'Bonuses.Value' | translate}}"
-          [(ngModel)]="addedConditions.TotalWithdrawalsCount.selectedConditionValue"
-          [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput7.invalid"
-        (click)="addCondition(addedConditions.TotalWithdrawalsCount)">{{'Common.Add' | translate}}</button>
-    </div>
+                <app-condition-input label="{{ 'Segments.TotalWithdrawalsCount' | translate }}"
+                    [conditions]="addedConditions.TotalWithdrawalsCount.conditions" [operations]="operations"
+                    inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.TotalWithdrawalsCount.conditions = $event">
+                </app-condition-input>
 
-    <div class="wraper">
-      <div>{{'Segments.TotalWithdrawalsAmount' | translate}}</div>
+                <app-condition-input label="{{ 'Segments.TotalWithdrawalsAmount' | translate }}"
+                    [conditions]="addedConditions.TotalWithdrawalsAmount.conditions" [operations]="operations"
+                    inputPattern="^\d+(\.\d+)?$"
+                    (conditionsChange)="addedConditions.TotalWithdrawalsAmount.conditions = $event">
+                </app-condition-input>
 
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.TotalWithdrawalsAmount.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.TotalWithdrawalsAmount, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
+                <app-condition-input label="{{ 'Segments.ComplimentaryPoint' | translate }}"
+                    [conditions]="addedConditions.ComplimentaryPoint.conditions" [operations]="operations"
+                    inputPattern="^\d+(\.\d+)?$"
+                    (conditionsChange)="addedConditions.ComplimentaryPoint.conditions = $event">
+                </app-condition-input>
 
-      <div class="add-box">
-        <mat-icon
-          (click)="addedConditions.TotalWithdrawalsAmount.showNew = !addedConditions.TotalWithdrawalsAmount.showNew">
-          {{addedConditions.TotalWithdrawalsAmount.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.TotalWithdrawalsAmount.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.TotalWithdrawalsAmount.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" pattern="^\d+(\.\d+)?$" #valueInput8="ngModel"
-          placeholder="{{'Bonuses.Value' | translate}}"
-          [(ngModel)]="addedConditions.TotalWithdrawalsAmount.selectedConditionValue"
-          [ngModelOptions]="{'standalone': true}">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput8.invalid"
-        (click)="addCondition(addedConditions.TotalWithdrawalsAmount)">{{'Common.Add' | translate}}</button>
-    </div>
-
-    <div class="wraper">
-      <div>{{'Segments.ComplimentaryPoint' | translate}}</div>
-
-      <div style="display: inline-block; width: calc(100% - 30px)">
-        <span *ngFor="let condition of addedConditions.ComplimentaryPoint.conditions; let $index = index">
-          <span
-            style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-            {{condition.ConditionType.Name}} {{condition.ConditionValue}}
-            <mat-icon style="cursor: pointer"
-              (click)="removeCondition(addedConditions.ComplimentaryPoint, $index)">close</mat-icon>
-          </span>
-          <span ng-if="$index">&</span>
-        </span>
-      </div>
-
-      <div class="add-box">
-        <mat-icon (click)="addedConditions.ComplimentaryPoint.showNew = !addedConditions.ComplimentaryPoint.showNew">
-          {{addedConditions.ComplimentaryPoint.showNew ? 'remove_circle' : 'add_circle'}}
-        </mat-icon>
-      </div>
-    </div>
-    <div *ngIf="addedConditions.ComplimentaryPoint.showNew == true">
-      <mat-form-field class="mr-15">
-        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-        <mat-select [(ngModel)]="addedConditions.ComplimentaryPoint.selectedConditionType"
-          [ngModelOptions]="{'standalone': true}">
-          <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-          <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="mr-15">
-        <input matInput type="number" placeholder="{{ 'Bonuses.Value' | translate }}"
-          [(ngModel)]="addedConditions.ComplimentaryPoint.selectedConditionValue"
-          [ngModelOptions]="{ 'standalone': true }" pattern="^\d+(\.\d+)?$" #valueInput9="ngModel">
-      </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="valueInput9.invalid"
-        (click)="addCondition(addedConditions.ComplimentaryPoint)">{{'Common.Add' | translate}}</button>
-    </div>
-  </form>
+            </div>
+        </div>
+    </form>
 </div>
+}
+
+@if (showReview()){
+<form class="review-block" [formGroup]="formGroup">
+    <div class="block-segments-content">
+        @if (PartnerName){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'PartnerName'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+                @if (isInputFocused !== 'PartnerName'){
+                <div class="second-hand">{{PartnerName}}</div>
+                }
+                @if (isInputFocused === 'PartnerName'){
+                <mat-form-field>
+                    <mat-select [formControlName]="'PartnerId'">
+                        @for (partner of partners; track $index) {
+                        <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
+                        }
+                    </mat-select>
+                    @if (errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required) {
+                    <mat-error>
+                        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+                    </mat-error>
+                    }
+                </mat-form-field>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('PartnerName', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('PartnerName', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+        @if (Name || isInputFocused === 'Name'){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'Name'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Partners.Name' | translate}}</div>
+                @if (isInputFocused !== 'Name' && Name){
+                <div class="second-hand">{{Name}}</div>
+                }
+                @if (isInputFocused === 'Name' || !Name){
+                <mat-form-field>
+                    <input matInput [formControlName]="'Name'" placeholder="{{'Common.Name' | translate}}" required>
+                    @if (errorControl['Name']?.touched && errorControl['Name'].errors?.required) {
+                    <mat-error>
+                        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+                    </mat-error>
+                    }
+                </mat-form-field>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('Name', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('Name', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}</div>
+        </div>
+        }
+
+        @if (Mode){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'Mode'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.Mode' | translate}}</div>
+                @if (isInputFocused !== 'Mode'){
+                <div class="second-hand">{{Mode}}</div>
+                }
+                @if (isInputFocused === 'Mode'){
+                <mat-form-field>
+                    <mat-select [formControlName]="'Mode'">
+                        @for (mode of modes; track $index) {
+                        <mat-option [value]="mode.Id">
+                            <mat-radio-button color="primary">{{mode.Name |
+                                translate}}</mat-radio-button>
+                        </mat-option>
+                        <div class="mode-info-text">{{mode.Info}}</div>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('Mode', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('Mode', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}</div>
+        </div>
+        }
+
+        @if(Status) {
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'Status'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Common.Status' | translate}}</div>
+                @if (isInputFocused !== 'Status'){
+                <div class="second-hand">{{Status}}</div>
+                }
+                @if (isInputFocused === 'Status'){
+                <mat-form-field>
+                    <mat-select [formControlName]="'State'">
+                        @for (status of statuses; track $index) {
+                        <mat-option [value]="status.Id">{{status.Name |
+                            translate}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('Status', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('Status', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (GenderName){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'Gender'? 'focused' : ''">
+
+            <div>
+                <div class="first-hand">{{'Partners.Gender' | translate}}</div>
+                @if (isInputFocused !== 'Gender'){
+                <div class="second-hand">{{GenderName}}</div>
+                }
+                @if (isInputFocused === 'Gender'){
+                <div class="editable-row">
+                    <mat-radio-group [formControlName]="'Gender'" aria-label="Select an option">
+                        @for (gender of genders; track $index) {
+                        <mat-radio-button color="primary" [value]="gender.Id">{{gender.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                    <div mat-dialog-actions>
+                        <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('Gender', false)">
+                            {{'Common.Save' | translate}}
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('Gender', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+        @if (KYCVerifiedName){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'IsKYCVerified'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Partners.KYCVerified' | translate}}</div>
+                @if (isInputFocused !== 'IsKYCVerified'){
+                <div class="second-hand">{{KYCVerifiedName}}</div>
+                }
+                @if (isInputFocused === 'IsKYCVerified'){
+                <div class="editable-row">
+                    <mat-radio-group [formControlName]="'IsKYCVerified'" aria-label="Select an option">
+                        @for (state of commonStates; track $index) {
+                        <mat-radio-button color="primary" [value]="state.Id">{{state.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                    <div mat-dialog-actions>
+                        <button mat-raised-button class="modal-primary-btn"
+                            (click)="toggleInput('IsKYCVerified', false)">
+                            {{'Common.Save' | translate}}
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('IsKYCVerified', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+        @if (EmailVerifiedName){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'IsEmailVerified'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Partners.EmailVerified' | translate}}</div>
+                @if (isInputFocused !== 'IsEmailVerified'){
+                <div class="second-hand">{{EmailVerifiedName}}</div>
+                }
+                @if (isInputFocused === 'IsEmailVerified'){
+                <div class="editable-row">
+                    <mat-radio-group [formControlName]="'IsEmailVerified'" aria-label="Select an option">
+                        @for (state of commonStates; track $index) {
+                        <mat-radio-button color="primary" [value]="state.Id">{{state.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                    <div mat-dialog-actions>
+                        <button mat-raised-button class="modal-primary-btn"
+                            (click)="toggleInput('IsEmailVerified', false)">
+                            {{'Common.Save' | translate}}
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('IsEmailVerified', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+        @if (MobileNumberVerifiedName){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'IsMobileNumberVerified'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Partners.MobileNumberVerified' | translate}}</div>
+                @if (isInputFocused !== 'IsMobileNumberVerified'){
+                <div class="second-hand">{{MobileNumberVerifiedName}}</div>
+                }
+                @if (isInputFocused === 'IsMobileNumberVerified'){
+                <div class="editable-row">
+                    <mat-radio-group [formControlName]="'IsMobileNumberVerified'" aria-label="Select an option">
+                        @for (state of commonStates; track $index) {
+                        <mat-radio-button color="primary" [value]="state.Id">{{state.Name |
+                            translate}}</mat-radio-button>
+                        }
+                    </mat-radio-group>
+                    <div mat-dialog-actions>
+                        <button mat-raised-button class="modal-primary-btn"
+                            (click)="toggleInput('IsMobileNumberVerified', false)">
+                            {{'Common.Save' | translate}}
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('IsMobileNumberVerified', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+
+        @if(StatusName){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'StatusName'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.ClientStatuses' | translate}}</div>
+
+                @if (isInputFocused !== 'StatusName'){
+                <div class="second-hand status-div">
+                    <span class="status-names">
+                        {{StatusName}}
+                    </span>
+                </div>
+                }
+                @if (isInputFocused === 'StatusName'){
+                <mat-form-field>
+                    <mat-label>{{'Segments.ChooseStatus' | translate}}</mat-label>
+                    <mat-select [formControlName]="'Status'" multiple (selectionChange)="onSetStatusNames($event)">
+                        @for (state of clientStates; track $index) {
+                        <mat-option [value]="state.Id" class="client-statuses">
+                            <div class="status-circle">
+                                <i [class]="state.icon"></i>
+                            </div>
+                            <span>{{"Segments." +state.Name | translate}}</span>
+                        </mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('StatusName', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('StatusName', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+
+            <!-- <div class="second-hand">{{StatusName}}</div>
+      </div>
+      <div class="edit" (click)="toggleEdit()"><i class="icon-edit1"></i>{{'Edit' | translate}}</div>-->
+        </div>
+        }
+
+        @if (AffiliateId || isInputFocused === 'affiliateId'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'affiliateId'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.AffiliateIds' | translate}}</div>
+                @if (isInputFocused === 'affiliateId' || !AffiliateId){
+                <mat-form-field>
+                    <input matInput (blur)="toggleInput('affiliateId', false)" [formControlName]="'AffiliateId'"
+                        placeholder="{{'Segments.AffiliateIds' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'affiliateId' && AffiliateId){
+                <div class="second-hand">{{AffiliateId}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('affiliateId', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+
+        @if (ClientId || isInputFocused === 'clientId'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'clientId'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.ClientIds' | translate}}</div>
+                @if (isInputFocused === 'clientId' || !ClientId){
+                <mat-form-field>
+                    <input matInput (blur)="toggleInput('clientId', false)" [formControlName]="'ClientId'"
+                        placeholder="{{'Segments.ClientIds' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'clientId' && ClientId){
+                <div class="second-hand">{{ClientId}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('clientId', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (Email || isInputFocused === 'email'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'email'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.Emails' | translate}}</div>
+                @if (isInputFocused === 'email' || !Email){
+                <mat-form-field>
+                    <input matInput [formControlName]="'Email'" (blur)="toggleInput('email', false)"
+                        placeholder="{{'Clients.Emails' | translate}}">
+                    <mat-error>
+                        {{'Errors.EmailsAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'email' && Email){
+                <div class="second-hand">{{Email}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('email', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (FirstName || isInputFocused === 'firstName'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'firstName'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.FirstNames' | translate}}</div>
+                @if (isInputFocused === 'firstName' || !FirstName){
+                <mat-form-field>
+                    <input matInput [formControlName]="'FirstName'" (blur)="toggleInput('firstName', false)"
+                        placeholder="{{'Segments.FirstNames' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'firstName' && FirstName){
+                <div class="second-hand">{{FirstName}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('firstName', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (LastName || isInputFocused === 'lastName'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'lastName'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.LastNames' | translate}}</div>
+                @if (isInputFocused === 'lastName' || !LastName){
+                <mat-form-field>
+                    <input matInput [formControlName]="'LastName'" (blur)="toggleInput('lastName', false)"
+                        placeholder="{{'Segments.LastName' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'lastName' && LastName){
+                <div class="second-hand">{{LastName}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('lastName', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (MobileCode || isInputFocused === 'mobileCode'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'mobileCode'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.MobileCodes' | translate}}</div>
+                @if (isInputFocused === 'mobileCode' || !MobileCode){
+                <mat-form-field>
+                    <input matInput [formControlName]="'MobileCode'" (blur)="toggleInput('mobileCode', false)"
+                        placeholder="{{'Segments.MobileCodes' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'mobileCode' && MobileCode){
+                <div class="second-hand">{{MobileCode}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('mobileCode', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (Region || isInputFocused === 'region'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'region'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.RegionIds' | translate}}</div>
+                @if (isInputFocused === 'region' || !Region){
+                <mat-form-field>
+                    <input matInput [formControlName]="'Region'" (blur)="toggleInput('region', false)"
+                        placeholder="{{'Segments.RegionIds' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'region' && Region){
+                <div class="second-hand">{{Region}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('region', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (SegmentId || isInputFocused === 'segmentId'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'segmentId'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.SegmentIds' | translate}}</div>
+                @if (isInputFocused === 'segmentId' || !SegmentId){
+                <mat-form-field>
+                    <input matInput [formControlName]="'SegmentId'" (blur)="toggleInput('segmentId', false)"
+                        placeholder="{{'Segments.SegmentIds' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'segmentId' && SegmentId){
+                <div class="second-hand">{{SegmentId}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('segmentId', true)"><i class="icon-edit1"></i>{{'Edit' | translate}}
+            </div>
+        </div>
+        }
+
+        @if (SuccessWithdrawalPaymentSystem || isInputFocused === 'successWithdrawalPaymentSystem'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'successWithdrawalPaymentSystem'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.WithdrawPaymentSystems' | translate}}</div>
+                @if (isInputFocused === 'successWithdrawalPaymentSystem' || !SuccessWithdrawalPaymentSystem){
+                <mat-form-field>
+                    <input matInput [formControlName]="'SuccessWithdrawalPaymentSystem'"
+                        (blur)="toggleInput('successWithdrawalPaymentSystem', false)"
+                        placeholder="{{'Segments.WithdrawPaymentSystems' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'successWithdrawalPaymentSystem' && SuccessWithdrawalPaymentSystem){
+                <div class="second-hand">{{SuccessWithdrawalPaymentSystem}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('successWithdrawalPaymentSystem', true)"><i
+                    class="icon-edit1"></i>{{'Edit'
+                | translate}}</div>
+        </div>
+
+        }
+
+
+        @if (SuccessDepositPaymentSystem || isInputFocused === 'successDepositPaymentSystem'){
+        <div class="review-block-row" [ngClass]="isInputFocused === 'successDepositPaymentSystem'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.SuccessDepositPaymentSystem' | translate}}</div>
+                @if (isInputFocused === 'successDepositPaymentSystem' || !SuccessDepositPaymentSystem){
+                <mat-form-field>
+                    <input matInput [formControlName]="'SuccessDepositPaymentSystem'"
+                        (blur)="toggleInput('successDepositPaymentSystem', false)"
+                        placeholder="{{'Segments.DepositPaymentSystems' | translate}}">
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+                }
+                @if (isInputFocused !== 'successDepositPaymentSystem' && SuccessDepositPaymentSystem){
+                <div class="second-hand">{{SuccessDepositPaymentSystem}}</div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('successDepositPaymentSystem', true)"><i
+                    class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+
+
+        @if (addedConditions.AffiliateId.conditions.length){
+            <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'AffiliateId'? 'focused' : ''">
+                <div>
+                    @if (isInputFocused !== 'AffiliateId'){
+                    <div class="first-hand">{{'Segments.AffiliateIds' | translate}}</div>
+                    @for (condition of addedConditions.AffiliateId.conditions; track $index) {
+                    <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue }}</div>
+                    }
+                    }
+                    @if (isInputFocused === 'AffiliateId'){
+    
+                    <app-condition-input label="{{ 'Segments.AffiliateIds' | translate }}"
+                        [conditions]="addedConditions.AffiliateId.conditions" [operations]="operations"
+                        inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                        (conditionsChange)="addedConditions.AffiliateId.conditions = $event"></app-condition-input>
+    
+                    <div mat-dialog-actions>
+                        <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('AffiliateId', false)">
+                            {{'Common.Save' | translate}}
+                        </button>
+                    </div>
+                    }
+    
+                </div>
+                <div class="edit" (click)="toggleInput('AffiliateId', true)"><i class="icon-edit1"></i>{{'Edit' |
+                    translate}}
+                </div>
+            </div>
+            }
+
+
+        @if (addedConditions.SessionPeriod.conditions.length){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'SessionPeriod'? 'focused' : ''">
+            <div>
+                @if (isInputFocused !== 'SessionPeriod'){
+                <div class="first-hand">{{'Segments.SessionPeriod' | translate}}</div>
+                @for (condition of addedConditions.SessionPeriod.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue }}</div>
+                }
+                }
+                @if (isInputFocused === 'SessionPeriod'){
+
+                <app-condition-input label="{{ 'Segments.SessionPeriod' | translate }}"
+                    [conditions]="addedConditions.SessionPeriod.conditions" [operations]="operations"
+                    inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                    (conditionsChange)="addedConditions.SessionPeriod.conditions = $event"></app-condition-input>
+
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('SessionPeriod', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+
+            </div>
+            <div class="edit" (click)="toggleInput('SessionPeriod', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+
+        @if (addedConditions.SignUpPeriod.conditions.length){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'SignUpPeriod'? 'focused' : ''">
+            <div>
+                <div class="first-hand">{{'Segments.SignUpPeriod' | translate}}</div>
+                @if (isInputFocused !== 'SignUpPeriod'){
+                @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
+                </div>
+                }
+                }
+                @if (isInputFocused === 'SignUpPeriod'){
+                <div class="condition-row">
+                    <mat-form-field class="mr-15">
+                        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType"
+                            [ngModelOptions]="{'standalone': true}">
+                            <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                            @for (operation of operations; track $index) {
+                            <mat-option [value]="operation">{{operation.Name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="mr-15">
+                        <input matInput type="numbrer" [matDatepicker]="picker1" #valueInput1="ngModel"
+                            [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue"
+                            [ngModelOptions]="{'standalone': true}">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <button
+                        [disabled]="!addedConditions.SignUpPeriod.selectedConditionValue || !addedConditions.SignUpPeriod.selectedConditionType"
+                        mat-raised-button color="primary"
+                        (click)="addDateCondition(addedConditions.SignUpPeriod)">+</button>
+                </div>
+                <div class="condition-box">
+                    @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
+                    <span class="condition-box-item">
+                        {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
+                        <mat-icon class="close-icon"
+                            (click)="removeCondition(addedConditions.SignUpPeriod, $index)">close</mat-icon>
+                    </span>
+                    }
+                </div>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('SignUpPeriod', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('SignUpPeriod', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+
+        @if (addedConditions.TotalBetsCount.conditions.length){
+        <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'TotalBetsCount'? 'focused' : ''">
+            <div>
+                @if (isInputFocused !== 'TotalBetsCount'){
+                <div class="first-hand">{{'Segments.TotalBetsCount' | translate}}</div>
+                @for (condition of addedConditions.TotalBetsCount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'TotalBetsCount'){
+                <app-condition-input label="{{ 'Segments.TotalBetsCount' | translate }}"
+                    [conditions]="addedConditions.TotalBetsCount.conditions" [operations]="operations"
+                    (conditionsChange)="addedConditions.TotalBetsCount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('TotalBetsCount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('TotalBetsCount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+
+        @if (addedConditions.SportBetsCount.conditions.length){
+        <div class="review-block-row  review-conditions"
+            [ngClass]="isInputFocused === 'SportBetsCount'? 'focused' : ''">
+
+            <div>
+                @if (isInputFocused !== 'SportBetsCount'){
+                <div class="first-hand">{{'Segments.SportBetsCount' | translate}}</div>
+                @for (condition of addedConditions.SportBetsCount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'SportBetsCount'){
+                <app-condition-input label="{{ 'Segments.SportBetsCount' | translate }}"
+                    [conditions]="addedConditions.SportBetsCount.conditions" [operations]="operations"
+                    (conditionsChange)="addedConditions.SportBetsCount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('SportBetsCount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('SportBetsCount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+
+        </div>
+        }
+
+        @if (addedConditions.CasinoBetsCount.conditions.length){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'CasinoBetsCount'? 'focused' : ''">
+            <div>
+                @if (isInputFocused !== 'CasinoBetsCount'){
+                <div class="first-hand">{{'Segments.CasinoBetsCount' | translate}}</div>
+                @for (condition of addedConditions.CasinoBetsCount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'CasinoBetsCount'){
+                <app-condition-input label="{{ 'Segments.CasinoBetsCount' | translate }}"
+                    [conditions]="addedConditions.CasinoBetsCount.conditions" [operations]="operations"
+                    (conditionsChange)="addedConditions.CasinoBetsCount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('CasinoBetsCount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('CasinoBetsCount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+        </div>
+        }
+
+        @if (addedConditions.TotalBetsAmount.conditions.length){
+        <div class="review-block-row  review-conditions"
+            [ngClass]="isInputFocused === 'TotalBetsAmount'? 'focused' : ''">
+            <div>
+                @if (isInputFocused !== 'TotalBetsAmount'){
+                <div class="first-hand">{{'Segments.TotalBetsAmount' | translate}}</div>
+                @for (condition of addedConditions.TotalBetsAmount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'TotalBetsAmount'){
+                <app-condition-input label="{{ 'Segments.TotalBetsAmount' | translate }}"
+                    [conditions]="addedConditions.TotalBetsAmount.conditions" [operations]="operations"
+                    (conditionsChange)="addedConditions.TotalBetsAmount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('TotalBetsAmount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('TotalBetsAmount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}
+            </div>
+
+        </div>
+        }
+
+        @if (addedConditions.TotalDepositsCount.conditions.length){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'TotalDepositsCount'? 'focused' : ''">
+
+            <div>
+                @if (isInputFocused !== 'TotalDepositsCount'){
+                <div class="first-hand">{{'Segments.TotalDepositsCount' | translate}}</div>
+                @for (condition of addedConditions.TotalDepositsCount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'TotalDepositsCount'){
+                <app-condition-input label="{{ 'Segments.TotalDepositsCount' | translate }}"
+                    [conditions]="addedConditions.TotalDepositsCount.conditions" [operations]="operations"
+                    (conditionsChange)="addedConditions.TotalDepositsCount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn"
+                        (click)="toggleInput('TotalDepositsCount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('TotalDepositsCount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+
+        @if (addedConditions.TotalDepositsAmount.conditions.length){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'TotalDepositsAmount'? 'focused' : ''">
+            <div>
+                @if (isInputFocused !== 'TotalDepositsAmount'){
+                <div class="first-hand">{{'Segments.TotalDepositsAmount' | translate}}</div>
+                @for (condition of addedConditions.TotalDepositsAmount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'TotalDepositsAmount'){
+                <app-condition-input label="{{ 'Segments.TotalDepositsAmount' | translate }}"
+                    [conditions]="addedConditions.TotalDepositsAmount.conditions" [operations]="operations"
+                    inputPattern="^\d+(\.\d+)?$"
+                    (conditionsChange)="addedConditions.TotalDepositsAmount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn"
+                        (click)="toggleInput('TotalDepositsAmount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('TotalDepositsAmount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+
+        @if (addedConditions.TotalWithdrawalsCount.conditions.length){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'TotalWithdrawalsCount'? 'focused' : ''">
+
+            <div>
+                @if (isInputFocused !== 'TotalWithdrawalsCount'){
+                <div class="first-hand">{{'Segments.TotalWithdrawalsCount' | translate}}</div>
+                @for (condition of addedConditions.TotalWithdrawalsCount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'TotalWithdrawalsCount'){
+                <app-condition-input label="{{ 'Segments.TotalWithdrawalsCount' | translate }}"
+                    [conditions]="addedConditions.TotalWithdrawalsCount.conditions" [operations]="operations"
+                    inputPattern="^\d+$"
+                    (conditionsChange)="addedConditions.TotalWithdrawalsCount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn"
+                        (click)="toggleInput('TotalWithdrawalsCount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('TotalWithdrawalsCount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+
+        @if (addedConditions.TotalWithdrawalsAmount.conditions.length){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'TotalWithdrawalsAmount'? 'focused' : ''">
+
+            <div>
+                @if (isInputFocused !== 'TotalWithdrawalsAmount'){
+                <div class="first-hand">{{'Segments.TotalWithdrawalsAmount' | translate}}</div>
+                @for (condition of addedConditions.TotalWithdrawalsAmount.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'TotalWithdrawalsAmount'){
+                <app-condition-input label="{{ 'Segments.TotalWithdrawalsAmount' | translate }}"
+                    [conditions]="addedConditions.TotalWithdrawalsAmount.conditions" [operations]="operations"
+                    inputPattern="^\d+(\.\d+)?$"
+                    (conditionsChange)="addedConditions.TotalWithdrawalsAmount.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn"
+                        (click)="toggleInput('TotalWithdrawalsAmount', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('TotalWithdrawalsAmount', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+
+        @if (addedConditions.ComplimentaryPoint.conditions.length){
+        <div class="review-block-row review-conditions"
+            [ngClass]="isInputFocused === 'ComplimentaryPoint'? 'focused' : ''">
+
+            <div>
+                @if (isInputFocused !== 'ComplimentaryPoint'){
+                <div class="first-hand">{{'Segments.ComplimentaryPoint' | translate}}</div>
+                @for (condition of addedConditions.ComplimentaryPoint.conditions; track $index) {
+                <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue}}</div>
+                }
+                }
+                @if (isInputFocused === 'ComplimentaryPoint'){
+                <app-condition-input label="{{ 'Segments.ComplimentaryPoint' | translate }}"
+                    [conditions]="addedConditions.ComplimentaryPoint.conditions" [operations]="operations"
+                    inputPattern="^\d+(\.\d+)?$"
+                    (conditionsChange)="addedConditions.ComplimentaryPoint.conditions = $event"></app-condition-input>
+                <div mat-dialog-actions>
+                    <button mat-raised-button class="modal-primary-btn"
+                        (click)="toggleInput('ComplimentaryPoint', false)">
+                        {{'Common.Save' | translate}}
+                    </button>
+                </div>
+                }
+            </div>
+            <div class="edit" (click)="toggleInput('ComplimentaryPoint', true)"><i class="icon-edit1"></i>{{'Edit' |
+                translate}}</div>
+        </div>
+        }
+    </div>
+</form>
+}
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" 
-    [class.disabled]="this.formGroup.invalid || isSendingReqest" 
-    (click)="onSubmit()">
-    {{'Common.Save' | translate}}
-  </button>
+    <button mat-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+    <button mat-button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid || isSendingRequest"
+        (click)="onSubmit()">
+        {{'Common.Save' | translate}}
+    </button>
 </div>

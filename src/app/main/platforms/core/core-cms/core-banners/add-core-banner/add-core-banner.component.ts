@@ -22,6 +22,7 @@ import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { compressImage } from "../../../../../../core/utils";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
+import { VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
 
 export const pagingSource = {
   types: [
@@ -69,8 +70,8 @@ export class AddCoreBannerComponent implements OnInit {
   formGroup: UntypedFormGroup;
   bannerTypes: any = {};
   bannerTypeId: number = 1;
-  isSendingReqest = false;
-  bannerVisibilityTypes: any[] = [];
+  isSendingRequest = false;
+  bannerVisibilityTypes: any[] = VISIBILITY_TYPES;
 
   categorySource = {
     types: [],
@@ -95,13 +96,6 @@ export class AddCoreBannerComponent implements OnInit {
     public dateAdapter: DateAdapter<Date>
   ) {
     this.dateAdapter.setLocale('en-GB');
-    this.bannerVisibilityTypes = [
-      { id: 1, name: this.translate.instant('Clients.LoggedOut') },
-      { id: 2, name: this.translate.instant('Clients.LoggedIn') },
-      { id: 3, name: this.translate.instant('Clients.NoDeposit') },
-      { id: 4, name: this.translate.instant('Clients.OneDepositOnly') },
-      { id: 5, name: this.translate.instant('Clients.TwoOrMoreDeposits') },
-    ];
   }
 
   ngOnInit() {
@@ -265,7 +259,7 @@ export class AddCoreBannerComponent implements OnInit {
 
   onSubmit() {
     const request = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     if (this.bannerTypes.types.length == 0) {
       delete request.Type;
     }
@@ -284,7 +278,7 @@ export class AddCoreBannerComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 }

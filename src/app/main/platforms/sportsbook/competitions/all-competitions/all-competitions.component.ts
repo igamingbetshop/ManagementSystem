@@ -51,7 +51,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
     checkBoxRenderer: CheckboxRendererComponent,
     selectRenderer: SelectRendererComponent,
   };
-  isSendingReqest = false;
+  isSendingRequest = false;
   private multipleBetsStates = [
     { Id: 1, Name: this.translate.instant('Sport.None'), State: null },
     { Id: 2, Name: this.translate.instant('Common.Yes'), State: true },
@@ -100,9 +100,18 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           cellEditor: 'numericEditor',
         },
         {
-          headerName: 'Sport.AbsoluteLimit',
+          headerName: 'Sport.MarketLimit',
           headerValueGetter: this.localizeHeader.bind(this),
-          field: 'AbsoluteLimit',
+          field: 'MarketLimit',
+          resizable: true,
+          sortable: true,
+          editable: true,
+          cellEditor: 'numericEditor',
+        },
+        {
+          headerName: 'Sport.PlayerLimit',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'PlayerLimit',
           resizable: true,
           sortable: true,
           editable: true,
@@ -154,9 +163,9 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
           cellEditor: 'numericEditor',
         },
         {
-          headerName: 'Products.CategoryId',
+          headerName: 'Products.TemplateId',
           headerValueGetter: this.localizeHeader.bind(this),
-          field: 'CategoryId',
+          field: 'TemplateId',
           resizable: true,
           sortable: true,
           editable: true,
@@ -332,9 +341,24 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         cellEditor: 'numericEditor',
       },
       {
-        headerName: 'Sport.AbsoluteLimit',
+        headerName: 'Sport.MarketLimit',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AbsoluteLimit',
+        field: 'MarketLimit',
+        resizable: true,
+        sortable: true,
+        editable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+        cellEditor: 'numericEditor',
+      },
+      {
+        headerName: 'Sport.PlayerLimit',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'PlayerLimit',
         resizable: true,
         sortable: true,
         editable: true,
@@ -450,9 +474,9 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         cellEditor: 'numericEditor',
       },
       {
-        headerName: 'Products.CategoryId',
+        headerName: 'Products.TemplateId',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CategoryId',
+        field: 'TemplateId',
         resizable: true,
         sortable: true,
         editable: true,
@@ -562,14 +586,15 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
   }
 
   async addSettings() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const row = this.gridApi.getSelectedRows()[0];
     let settings = {
       CompetitionId: row.Id,
       PartnerId: this.partnerId,
       Enabled: row.Enabled,
       Priority: row.Priority,
-      AbsoluteLimit: row.AbsoluteLimit,
+      MarketLimit: row.MarketLimit,
+      PlayerLimit: row.PlayerLimit,
       Delay: row.Delay
     };
     this.apiService.apiPost(this.addPartnerSettingsPath, settings)
@@ -580,7 +605,7 @@ export class AllCompetitionsComponent extends BasePaginatedGridComponent impleme
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 

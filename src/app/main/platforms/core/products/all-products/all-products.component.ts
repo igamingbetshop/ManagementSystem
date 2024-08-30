@@ -328,7 +328,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   }
 
   redirectToAllProducts() {
-    const newUrl = '/main/platform/products/all-products'
+    const newUrl = '/main/platform/product-edit'
     this.reloadPage(newUrl)
   }
 

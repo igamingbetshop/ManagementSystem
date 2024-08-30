@@ -13,6 +13,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {TranslateModule} from "@ngx-translate/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonModule } from "@angular/material/button";
+import { PartnerCurrencySettingsComponent } from "./partner-currency-settings/partner-currency-settings.component";
 
 const routes: Routes = [
   {
@@ -22,7 +23,10 @@ const routes: Routes = [
 ]
 
 @NgModule({
-  declarations: [CurrencySettingsComponent],
+  declarations: [
+    CurrencySettingsComponent,
+    PartnerCurrencySettingsComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,

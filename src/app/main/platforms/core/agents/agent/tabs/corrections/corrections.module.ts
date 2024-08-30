@@ -16,6 +16,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {CorrectionModalComponent} from "./correction-modal/correction-modal.component";
 import { PartnerDateFilterComponent } from "../../../../../../components/partner-date-filter/partner-date-filter.component";
+import { CorrectionsGridComponent } from "./corrections-grid/corrections-grid.component";
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
   }
 ];
 @NgModule({
-    declarations: [CorrectionsComponent, CorrectionModalComponent],
+    declarations: [CorrectionsComponent, CorrectionModalComponent, CorrectionsGridComponent],
     providers: [DatePipe],
     imports: [
         CommonModule,
@@ -42,7 +43,7 @@ const routes: Routes = [
         TranslateModule,
         MatIconModule,
         MatButtonModule,
-        PartnerDateFilterComponent
+        PartnerDateFilterComponent,
     ]
 })
 

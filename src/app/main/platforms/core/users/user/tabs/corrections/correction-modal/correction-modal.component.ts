@@ -21,7 +21,7 @@ export class CorrectionModalComponent implements OnInit {
   showCurrency: boolean;
   userId: string = '';
   currencyId;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CorrectionModalComponent>,
@@ -72,10 +72,10 @@ export class CorrectionModalComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     if (this.headerName === 'Debit') {
       this.createDebitCorrection();
     } else {
@@ -92,7 +92,7 @@ export class CorrectionModalComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 
@@ -105,7 +105,7 @@ export class CorrectionModalComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

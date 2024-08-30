@@ -65,7 +65,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   errorMessage: string;
   imagePath: string = '';
   isSuccess = false;
-  isSendingReqest = false;
+  isSendingRequest = false;
   passwordsMatching = false;
   isConfirmPasswordDirty = false;
 
@@ -108,7 +108,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   onSubmit() {
     const request = this.formGroup.getRawValue();
     delete request.CunfirmPassword;
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.configService.getApiUrl, request, true,
       Controllers.USER, Methods.CHANGE_PASSWORD).pipe().subscribe((data) => {
         if (data.ResponseCode === 0) {
@@ -118,7 +118,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

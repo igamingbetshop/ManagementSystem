@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['/main/platform/bonuses/jackpots']">{{'Bonuses.Jackpots' | translate}}</a> /
+      {{commonId}} : {{"Segments.Details" | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="static-hand">{{jackpot?.Id}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.PartnerName' | translate}}</div>
+        <div class="static-hand">{{jackpot?.PartnerName}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{jackpot?.Name}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'Name'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Amount' | translate}}</div>
+        <div class="static-hand">{{jackpot?.Amount}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.FinishTime' | translate}}</div>
+        <div class="second-hand">{{jackpot?.FinishTimes}}</div>
+        <div class="form-field form-calendar">
+          <app-date-time-picker formControlName="FinishTime"></app-date-time-picker>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="first-hand">{{'Common.Type' | translate}}</div>
+        <div class="static-hand">{{jackpot?.Types}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.CreationDate' | translate}}</div>
+        <div class="static-hand">{{jackpot?.CreationDate}}</div>
+      </div>
+
+
+      @if(jackpot?.Type == 1) {
+        <div>
+          <div class="first-hand">{{'Common.LastUpdateDate' | translate}}</div>
+          <div class="static-hand">{{jackpot?.LastUpdateDate}}</div>
+        </div>
+  
+        <div>
+          <div class="first-hand">{{'Common.LeftBorder' | translate}}</div>
+          <div class="static-hand">{{jackpot?.LeftBorder}}</div>
+        </div>
+      }
+
+
+      <div>
+        <div class="first-hand">{{'Common.RightBorder' | translate}}</div>
+        <div class="static-hand">{{jackpot?.RightBorder}}</div>
+      </div>
+
+      <div></div>
+
+
+      <div class="form-actions">
+        @if (isEdit) {
+        <div class="actions">
+          <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
+            translate}}</button>
+          <button mat-raised-button class="mat-btn" type="submit" (click)="onSubmit()"
+            [class.disabled]="formGroup.invalid">{{'Save' | translate}}</button>
+        </div>
+        }
+      </div>
+    </form>
+  </div>
+
+</div>

@@ -4,6 +4,10 @@
 .container {
   @include container-style;
 
+  .content-action {
+    @include action-style;
+  }
+
 
   .grid-content {
     width: 100%;

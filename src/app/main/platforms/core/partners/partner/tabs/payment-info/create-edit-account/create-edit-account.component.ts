@@ -24,7 +24,7 @@ export class CreateEditAccountComponent implements OnInit {
     {Id: 1, Name: "Bank For Company"},
     {Id: 2, Name: "Bank For Customer"}
   ];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(public dialogRef: MatDialogRef<CreateEditAccountComponent>,
               private apiService: CoreApiService,
@@ -95,7 +95,7 @@ export class CreateEditAccountComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const accountValue = this.formGroup.getRawValue();
     if(this.formGroup.controls.AccountsStr.value)
       accountValue.Accounts = this.formGroup.controls.AccountsStr.value.split(',');
@@ -109,7 +109,7 @@ export class CreateEditAccountComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

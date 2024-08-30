@@ -12,6 +12,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { AgGridModule } from 'ag-grid-angular';
 import {TranslateModule} from "@ngx-translate/core";
 import {OddsTypePipe} from "../../../../../../../../core/pipes/odds-type.pipe";
+import { SelectionsGridComponent } from "./selections-grid/selections-grid.component";
 
 const routes: Routes = [
   {
@@ -33,9 +34,10 @@ const routes: Routes = [
     MatButtonModule,
     RouterModule.forChild(routes),
     AgGridModule,
-    TranslateModule
-  ],
-  declarations: [MarketsComponent],
+    TranslateModule,
+    
+],
+  declarations: [MarketsComponent, SelectionsGridComponent],
   providers: [OddsTypePipe],
 })
 export class MarketsModule { }

@@ -17,11 +17,13 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-height">
-      <mat-label>{{'Bonuses.Description' | translate}}</mat-label>
+    <mat-label>{{'Bonuses.Description' | translate}}<i class="icon-info1"></i></mat-label>
+
+    <div class="full-height">
+      <!-- <mat-label>{{'Bonuses.Description' | translate}}</mat-label> -->
       <textarea matInput [placeholder]="'Bonuses.Description' | translate"
         [formControlName]="'Description'"> </textarea>
-    </mat-form-field>
+    </div>
 
     <mat-form-field>
       <mat-label>{{'Clients.NickName' | translate}}</mat-label>
@@ -112,6 +114,11 @@
             <label>{{'Clients.SelectMobileBackgroundImage' | translate}} </label>
             <input type="file" (change)="uploadMobileImage($event)">
           </div>
+
+          <div>
+            <label>{{'Clients.SelectItemBackgroundImage' | translate}} </label>
+            <input type="file" (change)="uploadItemBackgroundImageData($event)">
+          </div>
     
     </ng-container>
 
@@ -120,7 +127,7 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()"
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()"
     type="submit">{{'Common.Save' | translate}}</button>
 </div>

@@ -55,10 +55,10 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
 
   constructor(
     protected injector: Injector,
-    private apiService: SportsbookApiService,
-    private _snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    public dateAdapter: DateAdapter<Date>
+    protected apiService: SportsbookApiService,
+    protected _snackBar: MatSnackBar,
+    protected dialog: MatDialog,
+    protected dateAdapter: DateAdapter<Date>
     //public router: ActivatedRoute,
   ) {
     super(injector);
@@ -106,7 +106,6 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
           filterOptions: this.filterService.numberOptions
         },
       },
-
       {
         headerName: 'SkillGames.PlayerId',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -114,6 +113,12 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
         minWidth: 80,
         cellStyle: { 'text-decoration': 'underline', 'cursor ': 'pointer' },
         onCellClicked: (event: CellClickedEvent) => this.goToPlayer(event),
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.textOptions
+        },
       },
 
       {
@@ -445,8 +450,6 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
       //   }
       // }
     ];
-
-
   }
 
   ngOnInit() {
@@ -605,9 +608,6 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   }
 
   public onRowClicked(event) {
-
-    console.log(event, "EV");
-
     this.show = true;
     let row = event;
     this.apiService.apiPost('report/selections', { BetId: row.Id })

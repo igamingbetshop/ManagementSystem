@@ -107,22 +107,32 @@
               right: 1px;
               font-size: 18px;
               color: $bg-color;
+            
+              [dir="rtl"] & {
+                right: unset;
+                left: 1px;
+              }
             }
           }
-          .bordered{
-            input{border: 1px solid $blue-9;
+
+          .bordered {
+            input {
+              border: 1px solid $blue-9;
             }
-            &:before{
+            &:before {
               color: $blue-9;
             }
           }
+
           .has-error {
-            input
-            {
+            input {
               border: 1px solid $red-7;
             }
-            &:before{color: $red-7}
+            &:before {
+              color: $red-7;
+            }
           }
+
           .input {
             width: calc(100% - 36px);
             height: 52px;
@@ -139,15 +149,12 @@
               opacity: 0.5;
             }
 
-
-
             &:-webkit-autofill,
             &:-webkit-autofill:hover,
             &:-webkit-autofill:focus {
               -webkit-text-fill-color: $text-color;
               -webkit-box-shadow: 0 0 0 1000px #E7E8F0 inset;
               transition: background-color 5000s ease-in-out 0s;
-
             }
           }
 
@@ -213,10 +220,7 @@
         }
       }
     }
-
   }
-
-
 
   .btn-content {
     position: relative;
@@ -231,6 +235,7 @@
       border: unset;
       border-radius: 8px;
       font-size: 16px;
+
       ::ng-deep {
         .mat-button-wrapper {
           color: $white !important;
@@ -249,11 +254,10 @@
     }
 
     .mat-error {
-     margin-bottom: 0;
+      margin-bottom: 0;
     }
   }
 }
-
 
 .mat-select-panel {
   background-color: $text-color !important;
@@ -270,13 +274,24 @@
   margin-bottom: 22px;
   display: flex;
   align-items: center;
-  &:before
-  {
+  &:before {
     font-family: "iq-soft-icon";
     color: $red-7;
     content: "\e921";
     font-size: 16px;
-    margin-right: 6px
+    margin-right: 6px;
   }
+}
 
+
+::ng-deep [dir="rtl"] {
+  .sign-in {
+    flex-direction: row-reverse;
+    .password-input {
+      .mat-icon.visibility {
+        left: 28px !important;
+        right: auto !important;
+      }
+    }
+  }
 }

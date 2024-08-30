@@ -41,6 +41,13 @@ export class CorePromotionComponent implements OnInit {
   finishDates: any;
   deviceTypes = DEVICE_TYPES;
   childe: any;
+  visibilityTypes = [
+    { Id: 1, Name: 'Logged Out' },
+    { Id: 2, Name: 'Logged In' },
+    { Id: 3, Name: 'No Deposit' },
+    { Id: 4, Name: 'One Deposit Only' },
+    { Id: 5, Name: 'Two Or More Deposits' }
+  ]
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -184,6 +191,7 @@ export class CorePromotionComponent implements OnInit {
       StyleType: [null],
       DeviceType: [null],
       ImageDataMedium: [null],
+      Visibility: [null],
       Order: [null, [Validators.required]],
       Segments: this.fb.group({
         Ids: [null],

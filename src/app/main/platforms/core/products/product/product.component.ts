@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { Controllers, GridRowModelTypes, Methods } from 'src/app/core/enums';
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { CoreApiService } from '../../services/core-api.service';
@@ -11,6 +11,7 @@ import 'ag-grid-enterprise';
 import { DatePipe } from '@angular/common';
 import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product',
@@ -41,9 +42,9 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
-
     private fb: UntypedFormBuilder,
     protected injector: Injector,
+    public dialog: MatDialog
   ) {
     super(injector);
     this.columnDefs = [
@@ -195,7 +196,6 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-
   }
 
   public createForm() {
@@ -295,10 +295,10 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
 
   onNaviagetToProducts() {
     this.router.navigate(['/main/platform/products/all-products'])
-    .then(() => {
-      // Manually reload the page
-      location.reload();
-    });
+      .then(() => {
+        // Manually reload the page
+        location.reload();
+      });
   }
 
   onSubmit() {
@@ -318,6 +318,19 @@ export class ProductComponent extends BasePaginatedGridComponent implements OnIn
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
+  }
+
+  async onOpenAddValuePopup() {
+    const { AddBetValuesComponent } = await import('./add-bet-values/add-bet-values.component');
+    const dialogRef = this.dialog.open(AddBetValuesComponent, {
+      width: ModalSizes.XXL,
+      data: this.currentProduct?.BetValues
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data) {
+        this.formGroup.get('BetValues').setValue(data);
+      }
+    });
   }
 
 }

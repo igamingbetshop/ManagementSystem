@@ -4,12 +4,11 @@
 
 .container {
   @include container-style;
-  height: 91%;
+  height: 92%;
 
   .content-action {
     @include action-style;
     height: 68px;
-
   }
 
   .main-content {
@@ -81,3 +80,10 @@
 }
 
 }
+
+::ng-deep {
+  .ag-paging-panel {
+      justify-content: flex-end !important;
+    }
+  
+  }

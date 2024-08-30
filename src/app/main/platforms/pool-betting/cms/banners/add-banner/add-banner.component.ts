@@ -47,7 +47,7 @@ export class AddBannerComponent implements OnInit {
   partners: any[] = [];
   partnerId = null;
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
   bannerVisibilityTypes = [
     { id: 'null', name: 'Always' },
     { id: 1, name: 'Logged Out' },
@@ -200,7 +200,7 @@ export class AddBannerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const requestBody = this.formGroup.getRawValue();
     if (requestBody.Visibility === "null") {
       requestBody.Visibility = null;
@@ -216,7 +216,7 @@ export class AddBannerComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 }

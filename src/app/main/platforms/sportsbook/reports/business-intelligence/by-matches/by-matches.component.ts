@@ -215,9 +215,6 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
           .subscribe(data => {
             if (data.Code === 0) {
               const { Matches } = data.ResponseObject;
-
-              console.log(data, 'data');
-              
               params.success({ rowData: Matches, rowCount: Matches.TotalCount });
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });

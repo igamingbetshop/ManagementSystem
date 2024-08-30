@@ -222,6 +222,18 @@ export class TriggersComponent extends BasePaginatedGridComponent implements OnI
         },
       },
       {
+        headerName: 'Bonuses.UpToAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'UpToAmount',
+        sortable: true,
+        resizable: true,
+        floatingFilter: true,
+        filter: 'agTextColumnFilter',
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
         headerName: 'Bonuses.MaxAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MaxAmount',

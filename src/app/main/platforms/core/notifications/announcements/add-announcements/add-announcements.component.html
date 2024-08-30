@@ -41,13 +41,15 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="full-height">
+    <mat-label>{{'Clients.NickName' | translate}}<i class="icon-info1"></i></mat-label>
+
+    <div class="full-height">
       <textarea matInput placeholder="{{'Clients.NickName' | translate}}"
         [formControlName]="'NickName'"></textarea>
-      <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
+      <!-- <mat-error *ngIf="errorControl['NickName']?.touched && errorControl['NickName'].errors?.required">
         {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
-    </mat-form-field>
+      </mat-error> -->
+    </div>
 
     <mat-checkbox labelPosition="before"
       class="chackbox"
@@ -60,9 +62,9 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" 
-    [class.disabled]="formGroup.invalid || isSendingReqest"  
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingRequest"  
     (click)="onSubmit()">
     {{!isEdit ? 'Add' : 'Edit'}}
   </button>

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AuthService, ConfigService, LocalStorageService } from "../../../core/services";
 import { interval, Subject, Subscription } from "rxjs";
 import { Router } from "@angular/router";
@@ -13,9 +13,11 @@ import { MatSelect } from "@angular/material/select";
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  @ViewChild('matSelect') matSelect: MatSelect;
+  @ViewChild('matSelect') matSelect: MatSelect; 
+  @ViewChild('languageContainer', { static: false }) languageContainer: ElementRef;
   public currentDateTime = new Date();
   public userName = '';
+  public vipLevel;
   private timeInterval = 1000;
   private subscription$: Subscription;
   public showSearchBox = false;
@@ -26,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public defaultLanguage: string = "";
 
   constructor(
-    public authService: AuthService,
+    private authService: AuthService,
     public localStorageService: LocalStorageService,
     private router: Router,
     private searchService: SearchService,
@@ -41,22 +43,32 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.languages = this.configService.langList;
     this.defaultLanguage = this.getLanguage();
+    this.translate.use(this.defaultLanguage); // Use the default language on init
+    this.setGlobalDirection(this.defaultLanguage); // Set the global direction on init
     this.setDateTime();
     this.userName = this.localStorageService.get('user')?.UserName;
+    this.vipLevel = this.localStorageService.get('user')?.VipLevel;
     this.debounceSearchTime();
     this.setLogoByDomain();
   }
 
   getLanguage(): string {
-    if (!this.localStorageService.getLanguage('lang')) {
-      return 'en';
-    }
-    return this.localStorageService.getLanguage('lang');
+    const storedLanguage = this.localStorageService.getLanguage('lang');
+    return storedLanguage ? storedLanguage : 'en';
   }
 
   changeLanguage(language: string) {
     this.translate.use(language);
     this.localStorageService.addLanguage('lang', language);
+    this.setGlobalDirection(language);
+  }
+
+  setGlobalDirection(language: string) {
+    if (['ar', 'fa'].includes(language)) {
+      document.body.setAttribute('dir', 'rtl');
+  } else {
+      document.body.setAttribute('dir', 'ltr');
+  }
   }
 
   debounceSearchTime(): void {
@@ -98,10 +110,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/main/home']);
   }
 
+  onLogOut() {
+
+    this.authService.logOut()
+  }
+
   ngOnDestroy() {
     if (this.subscription$) {
       this.subscription$.unsubscribe();
     }
   }
-
 }

@@ -105,11 +105,11 @@ const routes: Routes = [
           loadChildren:() => import('./tabs/limits-and-exclusions/limits-and-exclusions.module').then(m => m.LimitsAndExclusionsModule)
         },
         {
-          path: 'emails',
+          path: 'email',
           loadChildren:() => import('./tabs/emails/emails.module').then(m => m.EmailsModule)
         },
         {
-          path: 'smses',
+          path: 'sms',
           loadChildren:() => import('./tabs/smses/smses.module').then(m => m.SmsesModule)
         },
         {
@@ -128,7 +128,11 @@ const routes: Routes = [
           path: '',
           redirectTo: 'main',
           pathMatch:'full'
-        }
+        },
+        {
+          path: 'segments',
+          loadChildren:() => import('./tabs/segments/segments.module').then(m => m.SegmentsModule)
+        },
       ]
   }
 

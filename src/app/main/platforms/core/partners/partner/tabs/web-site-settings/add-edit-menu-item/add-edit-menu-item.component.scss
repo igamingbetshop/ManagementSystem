@@ -1,10 +1,12 @@
+@import "variables";
+@import "mixins";
 .modal-wrap {
-  position: relative;
-  overflow: auto;
-  height: 100%;
-  max-height: calc(80vh - 91px);
-  min-height: 200px;
-  padding-right: 14px;
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    max-height: calc(80vh - 91px);
+    min-height: 200px;
+    padding-right: 14px;
 }
 
 .mat-datepicker-input {
@@ -18,13 +20,13 @@ background-color: transparent!important;
   label {
     margin: 3px 0;
     padding: 10px;
-    background-color: #378FC8;
+    background-color: $dark-blue;
     cursor: pointer;
     color: white;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color:#076192;
+      background-color: $bg-color;
     }
   }
 
@@ -36,4 +38,8 @@ background-color: transparent!important;
   .img-text {
     margin-left: auto;
   }
+}
+
+textarea { 
+  max-width: 512px!important;
 }

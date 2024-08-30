@@ -17,16 +17,14 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
 export class AddCampaignComponent implements OnInit {
   campaigns = [];
   campaignTypes = [
-    { Name: "Cash Back", Id: 1 },
-    { Name: "Affiliate", Id: 3 },
-    { Name: "Signup Real", Id: 5 },
+    { Name: "Spin Wheel", Id: 4 },
     { Name: "Campaign Wager Casino", Id: 10 },
     { Name: "Campaign Cash", Id: 11 },
     { Name: "Campaign FreeBet", Id: 12 },
     { Name: "Campaign Wager Sport", Id: 13 },
     { Name: "Campaign FreeSpin", Id: 14 },
   ];
-  isSendingReqest = false;
+  isSendingRequest = false;
   clientId: number;
   formGroup: UntypedFormGroup;
 
@@ -75,11 +73,11 @@ export class AddCampaignComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.CLIENT,
       Methods.GIVE_BONUS_TO_CLIENT).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -87,7 +85,7 @@ export class AddCampaignComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false; 
+      this.isSendingRequest = false; 
     });
 
   }

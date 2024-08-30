@@ -30,8 +30,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   };
   detailCellRendererParams: any;
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  rowData1 = [];
-  columnDefs2;
   rowData = [];
   games = [];
   partners = [];
@@ -303,10 +301,5 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
       })
   }
-
-  // onPageSizeChanged() {
-  //   this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
-  //   this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  // }
 
 }

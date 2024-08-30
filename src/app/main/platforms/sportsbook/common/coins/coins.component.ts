@@ -30,7 +30,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
   path: string = 'utils/coins';
   private updateSettingsPath = 'utils/updatecoins';
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     private apiService: SportsbookApiService,
@@ -153,7 +153,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
   }
 
   onDeleteCoin() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const coinId = this.gridApi.getSelectedRows()[0].Id;
     this.apiService.apiPost('utils/deletecoin', { Id: coinId })
       .pipe(take(1))
@@ -163,7 +163,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

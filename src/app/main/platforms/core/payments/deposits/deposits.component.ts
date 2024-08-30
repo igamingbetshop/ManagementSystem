@@ -2,7 +2,6 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { BasePaymentComponent } from 'src/app/main/components/classes/base-payment-component';
 import { DateAdapter } from "@angular/material/core";
 import { GridMenuIds } from 'src/app/core/enums';
-//import { syncPaginationWithBtn } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-deposits',
@@ -10,7 +9,6 @@ import { GridMenuIds } from 'src/app/core/enums';
   styleUrls: ['./deposits.component.scss']
 })
 export class DepositsComponent extends BasePaymentComponent implements OnInit {
-
   constructor(protected injector: Injector,
     public dateAdapter: DateAdapter<Date>,
   ) {
@@ -21,6 +19,7 @@ export class DepositsComponent extends BasePaymentComponent implements OnInit {
 
   ngOnInit() {
     super.ngOnInit();
+    this.title = this.translate.instant('Payments.Deposits');
   }
 
   onGridReady(params: any): void {

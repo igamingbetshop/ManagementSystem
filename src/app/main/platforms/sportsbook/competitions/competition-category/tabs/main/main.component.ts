@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { SportsbookApiService } from '../../../../services/sportsbook-api.service';
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
@@ -31,8 +31,10 @@ export class MainComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private apiService: SportsbookApiService,
     private activateRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private commonDataService: CommonDataService,
     private translate: TranslateService,
+    private router: Router,
   ) {
     this.multipleBets = [
       { Id: null, Name: this.translate.instant('Sport.None') },
@@ -49,7 +51,7 @@ export class MainComponent implements OnInit {
     this.featchRegions();
     this.handlePartner();
     this.createForm();
-    this.getPartner();
+    this.featchCompetiton();
   }
 
   featchProviders() {
@@ -88,19 +90,20 @@ export class MainComponent implements OnInit {
       Priority: [null],
       ProviderId: [null, [Validators.required]],
       Id: [null],
-      CategoryId: [null,],
+      TemplateId: [null],
       Delay: [null,],
       Rating: [null,],
       MaxWinPrematchSingle: [null],
       MaxWinPrematchMultiple: [null],
       MaxWinLiveSingle: [null],
       MaxWinLiveMultiple: [null],
-      AbsoluteLimit: [null],
+      MarketLimit: [null],
+      PlayerLimit: [null],
       Enabled: [false],
     });
   }
 
-  getPartner() {
+  featchCompetiton() {
     const filter = {
       Id: this.competitionId
     }
@@ -111,8 +114,18 @@ export class MainComponent implements OnInit {
         if (data.Code === 0) {
           this.competition = data.ResponseObject;
           this.formGroup.patchValue(this.competition);
-          this.competition.RegionName = this.regions.find(p => p.Id === this.competition?.RegionId)?.Name;
-          this.competition.ProviderName = this.providers.find(p => p.Id === this.competition?.ProviderId)?.Name;
+          if(this.name !== this.competition.Name) {
+            this.name = this.competition.Name;
+          }
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+              competitionId: this.competition.Id,
+              sportId: this.competition.SportId,
+              name: this.competition.Name,
+             },
+            queryParamsHandling: 'merge'
+          });
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -135,7 +148,7 @@ export class MainComponent implements OnInit {
       .subscribe(data => {
         if (data.Code === 0) {
           this.isEdit = false;
-          this.getPartner();
+          this.featchCompetiton();
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

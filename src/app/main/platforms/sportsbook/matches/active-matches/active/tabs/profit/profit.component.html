@@ -4,9 +4,19 @@
       <span>{{matchId}}</span> &nbsp; {{name}}
     </div>
 
+    @if(sportId == 1) {
+      <app-market-types-buttons 
+      [partnerId]="partnerId" 
+      [sportId]="sportId"
+      [matchId]="matchId"
+      (onSelectedMarketEmit)="onSetSelectedMarket($event)"
+      />
+    }
+
     <div class = "bulk-editor-dropdown">
       <button mat-stroked-button class="mat-bulk-btn"
               [matMenuTriggerFor]="bulkMenu"
+              [class.disabled]="!this.isRowSelected()"
               #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
         {{'Common.Edit' | translate}}
       </button>
@@ -35,12 +45,14 @@
     [headerHeight]="33"
     [rowHeight]="42"
     [suppressCopyRowsToClipboard]="true"
-    [rowData]="rowData"
+    [rowData]="mappedRowData()"
     [rowModelType]="rowModelType"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
     [sideBar]="sideBar"
     [animateRows]="true"
+    pagination="true"
+    [paginationPageSize]="5000"
     [components]="frameworkComponents"
     [enableBrowserTooltips]="enableBrowserTooltips"
     [cacheBlockSize]="cacheBlockSize"
@@ -49,11 +61,11 @@
     (cellValueChanged)="onCellValueChanged($event)"
     rowSelection="multiple">
   </ag-grid-angular>
-  </div>
 
-  <div class="buttons">
-    <button mat-raised-button color="primary" [disabled]="!pageConfig.PartnerId" (click)="addSetting()">{{'Sport.AddSetting' | translate}}</button>
-    <button mat-raised-button color="warn" [disabled]="!pageConfig.PartnerId" (click)="deleteSetting()">{{'Sport.DeleteSetting' | translate}}</button>
+  <div class="grid-action">
+    <button mat-raised-button class="mat-btn"[disabled]="!pageConfig.PartnerId" (click)="addSetting()">{{'Sport.AddSetting' | translate}}</button>
+    <button mat-raised-button class="mat-delete-btn" [disabled]="!pageConfig.PartnerId" (click)="deleteSetting()">{{'Sport.DeleteSetting' | translate}}</button>
+  </div>
   </div>
 
 </div>

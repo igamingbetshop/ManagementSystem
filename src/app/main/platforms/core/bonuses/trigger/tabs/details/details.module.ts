@@ -23,6 +23,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { BonusesService } from "../../../bonuses.service";
 import { CurrencySettingsComponent } from "../../../currency-settings/currency-settings.component";
 import { MatDialogModule } from '@angular/material/dialog';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 const routes: Routes = [
   {
@@ -55,7 +56,9 @@ const routes: Routes = [
     TranslateModule,
     MatSelectModule,
     CurrencySettingsComponent,
-    MatDialogModule
+    MatDialogModule,
+    DateTimePickerComponent
+
   ]
 })
 export class DetailsModule {

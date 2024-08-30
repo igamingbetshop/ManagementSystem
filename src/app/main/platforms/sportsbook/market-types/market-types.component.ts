@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, ChangeDetectorRef, signal } from '@angular/core';
 
 import { take } from 'rxjs/operators';
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -20,6 +20,8 @@ import { GridMenuIds, GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { ArrayEditorComponent } from 'src/app/main/components/grid-common/array-editor/array-editor.component';
+import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 
 @Component({
@@ -30,12 +32,18 @@ import { ArrayEditorComponent } from 'src/app/main/components/grid-common/array-
 export class MarketTypesComponent extends BasePaginatedGridComponent implements OnInit {
 
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
-  @ViewChild('agGridSecond') agGridSecond: AgGridAngular;
-  isSendingReqest = false;
+  isSendingRequest = false;
   partners: any[] = [];
   partnerId: number;
   sportId: number;
   sports: any[] = [];
+  statuses = [
+    { Id: 1, Name: 'Yes' },
+    { Id: 0, Name: 'No' },
+    { Id: 2, Name: 'Prematch Only'},
+    { Id: 3, Name: 'LiveOnly'}
+  ];
+  selectedRowId= signal(0);
 
   frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -45,6 +53,8 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     colorEditor: ColorEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
     textEditor: TextEditorComponent,
+    selectRenderer: SelectRendererComponent,
+    agDropdownFilter: AgDropdownFilter,
   };
 
   filter = {
@@ -61,16 +71,12 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   rowData = [];
   rowData1 = [];
   cacheBlockSize = 5000;
-  columnDefs2;
-
   path: string = 'markettypes';
   nestedPath: string = 'markettypes/settings';
   selectPath: string = 'markettypes/selectiontypes';
   updateSettingsPath: string = 'markettypes/updatesettings'
   addPartnerSettingsPath: string = 'markettypes/createsettings'
   updatePath = 'markettypes/update';
-  updateSelectionType = 'markettypes/updateselectiontype';
-
 
   detailCellRendererParams: any = {
     detailGridOptions: {
@@ -163,11 +169,12 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           resizable: true,
           sortable: true,
           editable: true,
-          filter: 'agNumberColumnFilter',
-          cellRenderer: 'checkBoxRenderer',
+          filter: false,
+          cellRenderer: 'selectRenderer',
           cellRendererParams: {
-            onchange: this.onCheckBoxChangeFilter['bind'](this),
-          }
+            onchange: this.onSelectChange['bind'](this, "IsForFilter"),
+            Selections: this.statuses,
+          },
         },
         {
           headerName: 'Common.State',
@@ -244,6 +251,33 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.MARKET_TYPES;
+
+    this.masterDetail = true;
+  }
+
+  ngOnInit() {
+    this.apiService.apiPost('sports').subscribe(data => {
+      if (data.Code === 0) {
+        this.sports = data.ResponseObject;
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+      this.getPage();
+      this.setColDefs();
+    })
+
+    this.apiService.apiPost('partners').subscribe(data => {
+      if (data.Code === 0) {
+        this.partners = data.ResponseObject;
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+    this.gridStateName = 'market-type-grid-state';
+    super.ngOnInit();
+  }
+
+  setColDefs() {
     this.columnDefs = [
       {
         headerName: 'Sport.MarketTypeId',
@@ -319,12 +353,11 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         field: 'IsForFilter',
         resizable: true,
         sortable: true,
-        filter: 'agBooleanColumnFilter',
-        cellRenderer: 'checkBoxRenderer',
+        cellRenderer: 'selectRenderer',
         cellRendererParams: {
-          onchange: this.onCheckBoxChange1['bind'](this),
-          onCellValueChanged: this.onCheckBoxChange1.bind(this)
-        }
+          onchange: this.onSelectChange['bind'](this, "IsForFilter"),
+          Selections: this.statuses,
+        },
       },
       {
         headerName: 'Sport.LineNumber',
@@ -436,99 +469,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           textColor: '#FFFFFF'
         }
       }
-    ]
-
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        minWidth: 55,
-        resizable: true,
-      },
-      {
-        headerName: 'Bonuses.TranslationId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'TranslationId',
-        resizable: true,
-      },
-      {
-        headerName: 'Common.HeaderTranslationId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'HeaderTranslationId',
-        resizable: true,
-      },
-      {
-        headerName: 'Common.Name',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Name',
-        resizable: true,
-      },
-      {
-        headerName: 'Bonuses.Priority',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Priority',
-        resizable: true,
-        editable: true,
-        cellEditor: NumericEditorComponent,
-      },
-      {
-        headerName: 'Common.CalculationFormula',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CalculationFormula',
-        resizable: true,
-        editable: true,
-        cellEditor: 'textEditor',
-      },
-      {
-        headerName: 'Clients.CalculationTime',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CalculationTime',
-        resizable: true,
-        editable: true,
-        cellEditor: 'textEditor',
-      },
-      {
-        headerName: 'Common.Save',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'save',
-        resizable: true,
-        minWidth: 130,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.saveSecondGridRow['bind'](this),
-          Label: this.translate.instant('Common.Save'),
-          isDisabled: true,
-          bgColor: '#3E4D66',
-          textColor: '#FFFFFF'
-        },
-      }
-    ]
-    this.masterDetail = true;
-  }
-
-  ngOnInit() {
-    this.apiService.apiPost('sports').subscribe(data => {
-      if (data.Code === 0) {
-        this.sports = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-      this.getPage();
-      this.getSecondGridData();
-    })
-
-    this.apiService.apiPost('partners').subscribe(data => {
-      if (data.Code === 0) {
-        this.partners = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
-    this.gridStateName = 'market-type-grid-state';
-    super.ngOnInit();
+    ];
   }
 
   ngAfterContentChecked() {
@@ -557,28 +498,10 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
   onRowSelected(params) {
     if (params.node.selected) {
-      this.getSecondGridData(params);
-    } else {
-      return;
+      this.selectedRowId.set(params.data.Id);
     }
   }
-
-  getSecondGridData(params?) {
-    let id = params ? params.data.Id : 1;
-    this.apiService.apiPost(this.selectPath, { 'MarketTypeId': id })
-      .pipe(take(1))
-      .subscribe(data => {
-
-        if (data.Code === 0) {
-          this.rowData1 = data.Selections;
-          let count = 0
-          this.rowData1.forEach(elem => count++)
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-        setTimeout(() => { this.agGridSecond.api.sizeColumnsToFit(); }, 300);
-      });
-  }
+  
 
   onCheckBoxChange1(params, val, event) {
     params.IsForFilter = val;
@@ -587,13 +510,11 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
   onCheckBoxChange2(params, val, event) {
     params.Enabled = val;
-
     if (params.hasOwnProperty("MarketTypeId")) {
       this.nestedSavePartnerSettings(event)
     } else {
       this.saveMarketTypes(event)
     }
-    // this.onCellValueChanged(event)
   }
 
   onCheckBoxChangeFilter(params, val, event) {
@@ -603,10 +524,8 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
 
   nestedSavePartnerSettings(params) {
     const row = params.data;
-
     this.apiService.apiPost(this.updateSettingsPath, row).subscribe(data => {
       if (data.Code === 0) {
-
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
@@ -627,23 +546,8 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     }
   }
 
-  onCellValueChanged1(event) {
-    if (event.oldValue !== event.value) {
-      let findedNode: IRowNode;
-      let node = event.node.rowIndex;
-      this.agGridSecond.api.forEachNode(nod => {
-        if (nod.rowIndex == node) {
-          findedNode = nod;
-        }
-      })
-      this.agGridSecond.api.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.agGridSecond.api.redrawRows({ rowNodes: [findedNode] });
-    }
-  }
-
   saveMarketTypes(params) {
     const row = params.data;
-
     this.apiService.apiPost(this.updatePath, row).subscribe(data => {
       if (data.Code === 0) {
         this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
@@ -654,24 +558,14 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     })
   }
 
-  saveSecondGridRow(params) {
-    const row = params.data;
-    this.apiService.apiPost(this.updateSelectionType, row).subscribe(data => {
-      if (data.Code === 0) {
-        this.agGridSecond.api.getColumnDef('save').cellRendererParams.isDisabled = true;
-        SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    })
-  }
+
 
   onAddPartnerSettings() {
     if (!this.partnerId) {
       SnackBarHelper.show(this._snackBar, { Description: 'Select Partner', Type: "error" });
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     let row = this.agGrid.api.getSelectedRows()[0];
     let settings = {
       MarketTypeId: row.Id,
@@ -684,12 +578,11 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       if (data.Code === 0) {
         SnackBarHelper.show(this._snackBar, { Description: 'Settings successfully added', Type: "success" });
       } else if (data.Code === 1) {
-        //TODO should be come from backend
         SnackBarHelper.show(this._snackBar, { Description: "An unknown error occurred.", Type: "error" });
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Descriptio, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     })
   }
 
@@ -702,38 +595,10 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       }
     })
   }
-
-  async addSelectionType() {
-    this.isSendingReqest = true;
-    let id = +this.agGrid.api.getSelectedRows()[0].Id;
-    const { AddSelectionTypesComponent } = await import('../market-types/add-selection-types/add-selection-types.component');
-    const dialogRef = this.dialog.open(AddSelectionTypesComponent, { width: ModalSizes.SMALL, data: { Id: id } });
-    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if (data) {
-        this.apiService.apiPost(this.selectPath, { 'MarketTypeId': id })
-          .pipe(take(1))
-          .subscribe(data => {
-            if (data.Code === 0) {
-              this.rowData1 = data.Selections;
-            } else {
-              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-            }
-            this.isSendingReqest = false;
-          });
-      }
-    })
-  }
-
-  isRowSelectedSecond() {
-    return this.agGridSecond?.api && this.agGridSecond?.api.getSelectedRows().length === 0;
-  };
-
+  
   onRowGroupOpened(params) {
-
     if (params.node.expanded) {
-
       this.agGrid.api.forEachNode(function (node) {
-
         if (
           node.expanded &&
           node.id !== params.node.id &&
@@ -777,6 +642,11 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         }
 
       });
+  }
+
+  onSelectChange(key, params, val, event) {
+    params[key] = val;
+    this.onCellValueChanged(event);
   }
 
   exportToCsv() {

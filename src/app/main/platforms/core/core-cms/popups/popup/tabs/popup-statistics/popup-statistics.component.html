@@ -1,13 +1,64 @@
 <div class="container">
 
-  <app-partner-date-filter 
-  [title]="'Clients.Clients'" 
-  [pageIdName]="pageIdName"
-  [allTimesFilter]="false"
-  [lastYearFilter]="true"
-  (toDateChange)="onDateChange($event)"
-  (titleClick)="onNavigateToClient()"
-  />
+  <div class="content-action">
+    <div class="title"><a (click)="onNavigatePopups()">{{'Cms.Popup' | translate}}</a> / <span>{{id()}}</span>
+    </div>
+  
+    </div>
+
+    <div class="content-edit">
+      <form class="grid-edit">
+        <div>
+          <div class="first-hand">{{ 'Clients.CreationTime' | translate }}</div>
+          <div class="second-hand">{{ popup()?.CreationTime | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.LastUpdateTime' | translate }}</div>
+          <div class="second-hand">{{ popup()?.LastUpdateTime | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.NickName' | translate }}</div>
+          <div class="second-hand">{{ popup()?.NickName }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Partners.Partner' | translate }}</div>
+          <div class="second-hand">{{ popup()?.PartnerId | IdToName: partners }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.DeviceType' | translate }}</div>
+          <div class="second-hand">{{ popup()?.DeviceType | IdToName: deviceTypes }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.State' | translate }}</div>
+          <div class="second-hand">{{ popup()?.State | IdToName: status }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.Type' | translate }}</div>
+          <div class="second-hand">{{ popup()?.Type | IdToName: partners }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.Closed' | translate }}</div>
+          <div class="second-hand">{{ popup()?.Closed }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.Redirected' | translate }}</div>
+          <div class="second-hand">{{ popup()?.Redirected }}</div>
+        </div>
+    
+        <div>
+          <div class="first-hand">{{ 'Common.Viewed' | translate }}</div>
+          <div class="second-hand">{{ popup()?.Viewed }}</div>
+        </div>
+      </form>
+    </div>
 
 
-</div>
+  

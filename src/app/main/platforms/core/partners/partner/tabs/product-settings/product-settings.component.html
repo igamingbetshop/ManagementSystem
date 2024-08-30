@@ -10,17 +10,25 @@
       [ngClass]="{'btn-success': PartnerProductState, 'btn-cancel': !PartnerProductState}">
       {{'Partners.PartnerProducts' | translate}} {{PartnerProductState ? "On" : "Off"}}
     </button>
+
+    <button mat-stroked-button class="mat-btn" (click)="onCopySettings()">
+    {{'Partners.CopySettings' | translate}}
+  </button>
   </div>
 
   <div class="main-content">
-    <div class="left-panel" *ngIf="AllProductsState">
-      <all-products-settings (onUpdate)="partnerProductsComponent.update()"></all-products-settings>
-    </div>
+    @if(AllProductsState) {
+      <div class="left-panel">
+        <all-products-settings (onUpdate)="partnerProductsComponent.update()"></all-products-settings>
+      </div>
+    }
 
-    <div class="right-panel" *ngIf="PartnerProductState">
-      <partner-products
-        (onRequireHistoryUpdate)="productChangeHistoryComponent.getObjectChangeHistory($event)"></partner-products>
-    </div>
+    @if(PartnerProductState) {
+      <div class="right-panel">
+        <partner-products
+          (onRequireHistoryUpdate)="productChangeHistoryComponent.getObjectChangeHistory($event)"></partner-products>
+      </div>
+    }
 
   </div>
 

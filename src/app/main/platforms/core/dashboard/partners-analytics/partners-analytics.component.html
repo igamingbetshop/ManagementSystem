@@ -1,0 +1,49 @@
+<div class="container">
+  <app-header-filter
+    [title]="'Dashboard.Analytics'"
+    (toDateChange)="onDateChange($event)" />
+  <div class="agent-analytics-content">
+    <div class="profitable-block">
+      <div class="block-header">{{'Dashboard.ProfitablePartners' | translate}}</div>
+      @if (topProfitablePartners()?.length){
+        <div class="block-content">
+          @for (item of topProfitablePartners(); track $index){
+            <div class="block-row">
+              <div class="row-number profitable-number">{{$index + 1}}</div>
+              <app-progress-bar [src]="item" [number]="'1.2-2'" class="profitable"></app-progress-bar>
+            </div>
+          }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+
+    </div>
+
+    <div class="damaged-block">
+      <div class="block-header">{{'Dashboard.DamagingPartners' | translate}}</div>
+      @if (topDamagingPartners()?.length){
+        <div class="block-content">
+          @for (item of topDamagingPartners(); track $index){
+            <div class="block-row">
+              <div class="row-number payout-number">{{$index + 1}}</div>
+              <app-progress-bar [src]="item" [number]="'1.2-2'" class="payout"></app-progress-bar>
+            </div>
+          }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+

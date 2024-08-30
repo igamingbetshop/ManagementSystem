@@ -6,14 +6,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {TranslateModule} from "@ngx-translate/core";
-import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { TranslateModule } from "@ngx-translate/core";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
 import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 
 
 @Component({
@@ -40,33 +40,34 @@ export class AddBonusComponent implements OnInit {
   partners: any[] = [];
   bonus: any;
   openForAdd;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: {partners: any[], bonusSettings: any[],   bonus: any },
+    @Inject(MAT_DIALOG_DATA) public data: { partners: any[], bonusSettings: any[], bonus: any },
     public dialogRef: MatDialogRef<AddBonusComponent>,
-    private fb:UntypedFormBuilder,
+    private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
-    private apiService:SportsbookApiService,
+    private apiService: SportsbookApiService,
 
   ) { }
 
   ngOnInit() {
     this.partners = this.data.partners;
-    this.bonusSettings = this.data.bonusSettings.filter((bon) => {
-      return bon.TypeId === 3;
-    });
+    this.bonusSettings = this.data.bonusSettings    
+    // this.data.bonusSettings.filter((bon) => {
+    //   return bon.TypeId === 3;
+    // });
     this.bonus = this.data.bonus;
     this.openForAdd = !!this.bonus.Id;
     this.createForm();
   }
 
-  public createForm(){
+  public createForm() {
 
     this.formGroup = this.fb.group({
-      PartnerId:[this.bonus.PartnerId],
-      BonusSettingId:[this.bonus.BonusSettingId,[Validators.required]],
-      State:[this.bonus.State],
+      PartnerId: [this.bonus.PartnerId],
+      BonusSettingId: [this.bonus.BonusSettingId, [Validators.required]],
+      State: [this.bonus.State],
     });
   }
 
@@ -74,20 +75,16 @@ export class AddBonusComponent implements OnInit {
     return this.formGroup.controls;
   }
 
-  close()
-  {
+  close() {
     this.dialogRef.close();
   }
 
+  onSubmit() {
 
-
-  onSubmit()
-  {
-
-    if(this.formGroup.invalid){
+    if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.bonus.PartnerId = this.formGroup.get('PartnerId').value;
     this.bonus.BonusSettingId = this.formGroup.get('BonusSettingId').value;
     this.bonus.State = this.formGroup.get('State').value;
@@ -95,12 +92,12 @@ export class AddBonusComponent implements OnInit {
     this.apiService.apiPost(this.bonus.Id ? 'bonuses/updatemultiplecashbackbonus' : 'bonuses/addmultiplecashbackbonus', this.bonus)
       .pipe(take(1))
       .subscribe(data => {
-        if(data.Code === 0){
+        if (data.Code === 0) {
           this.dialogRef.close(data.ResponseObject);
-        }else{
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
 
   }

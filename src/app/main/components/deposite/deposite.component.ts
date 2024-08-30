@@ -288,4 +288,18 @@ export class DepositeComponent implements OnInit {
     return true;
   }
 
+  async onOpenDocument() {
+
+    const { ViewImageComponent } = await import('./view-image/view-image.component');
+    const dialogRef = this.dialog.open(ViewImageComponent, {
+      width: ModalSizes.LARGE,
+      data: { image: this.payment.PaymentForm }
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data) {
+        this.getPaymentRequestById();
+      }
+    });
+  }
+
 }

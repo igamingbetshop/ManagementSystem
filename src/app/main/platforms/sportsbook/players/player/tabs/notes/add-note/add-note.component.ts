@@ -38,7 +38,7 @@ export class AddNoteComponent implements OnInit {
   public objectTypeId;
   notes = [];
   comments;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddNoteComponent>,
@@ -87,7 +87,7 @@ export class AddNoteComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('players/createnote', obj).pipe(take(1)).pipe(take(1)).subscribe((data) => {
 
@@ -96,7 +96,7 @@ export class AddNoteComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

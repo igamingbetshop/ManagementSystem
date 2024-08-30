@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {SportsbookComponent} from "./sportsbook.component";
 import {SportPartnersResolver} from './resolvers/sport-partners.resolver';
 import {SportFilterOptionsResolver} from './resolvers/sport-filter-options.resolver';
+import {DashboardModule} from "./dashboard/dashboard.module";
 
 
 const routes: Routes = [
@@ -13,6 +14,11 @@ const routes: Routes = [
         {
           path: 'sports',
           loadChildren: () => import('./sports/sports.module').then(m => m.SportsModule),
+          resolve: {partners: SportPartnersResolver, filterOptions: SportFilterOptionsResolver}
+        },
+        {
+          path: 'dashboard',
+          loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
           resolve: {partners: SportPartnersResolver, filterOptions: SportFilterOptionsResolver}
         },
         {

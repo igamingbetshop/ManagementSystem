@@ -17,7 +17,7 @@
 
   .main-content {
     width: 100%;
-    height: calc(100% - 20%);
+    height: calc(100% - 18%);
     display: flex;
     column-gap: 10px;
 
@@ -66,6 +66,7 @@
     }
 
     .grid-action {
+      margin-top: 10px;
       form {
         display: flex;
 

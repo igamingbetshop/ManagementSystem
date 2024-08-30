@@ -39,7 +39,7 @@ export class AddTemplatesComponent implements OnInit {
   formGroup: UntypedFormGroup;
   partners: any[] = [];
   types: any[] = [];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {partners: any[], types: any[]},
@@ -80,10 +80,10 @@ export class AddTemplatesComponent implements OnInit {
 
   onSubmit()
   {
-    if(this.formGroup.invalid || this.isSendingReqest){
+    if(this.formGroup.invalid || this.isSendingRequest){
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_MESSAGE_TEMPLATES)
@@ -94,7 +94,7 @@ export class AddTemplatesComponent implements OnInit {
         }else{
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
     })
   }
 }

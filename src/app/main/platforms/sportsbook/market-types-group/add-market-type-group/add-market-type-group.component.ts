@@ -25,7 +25,7 @@ export class AddMarketTypeGroupComponent implements OnInit {
   formGroup: UntypedFormGroup;
   sports: any[] = [];
   partners: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
   
   constructor(
     public dialogRef: MatDialogRef<AddMarketTypeGroupComponent>,
@@ -55,7 +55,7 @@ export class AddMarketTypeGroupComponent implements OnInit {
 
   public createForm(){
     this.formGroup = this.fb.group({
-      SportId:[null, [Validators.required]],
+      SportId:[null],
       PartnerId:[null,],
       Name:[null, [Validators.required]],
       Priority:[null, [Validators.required]],

@@ -28,7 +28,11 @@ const routes: Routes = [
         path: 'trigger',
         loadChildren: () => import('./trigger/trigger.module').then(m => m.TriggerModule)
       },
-
+      {
+        path: 'jackpots',
+        loadChildren: () => import('./core-jackpot/core-jackpot.module').then(m => m.CoreJackPotModule),
+        resolve: { filterData: FilterOptionsResolver, commonData: CommonDataResolver },
+      }
     ]
   }
 ];

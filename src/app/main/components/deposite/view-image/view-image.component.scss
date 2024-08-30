@@ -1,0 +1,53 @@
+@import "mixins";
+@import "variables";
+
+
+.container {
+
+  .zoom-action {
+    display: flex;
+    column-gap: 6px;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .zoom-number {
+      font-size: 16px;
+      color: $blue-2;
+      padding-right: 5px;
+    }
+
+    .mat-btn {
+      @include mat-btn-style;
+      padding: 3px 12px;
+      line-height: inherit;
+      font-size: 22px;
+      min-width: 40px;
+    }
+  }
+
+  .image-content {
+    overflow: hidden;
+    position: relative;
+    cursor: grab;
+
+    img {
+      transition: transform 0.1s ease;
+      cursor: grab;
+      max-width: 800px;
+      max-height: 600px;
+      min-width: 400px;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    iframe {
+      width: 100%;
+      height: 420px;
+      overflow: hidden;
+      border: none
+    }
+  }
+}

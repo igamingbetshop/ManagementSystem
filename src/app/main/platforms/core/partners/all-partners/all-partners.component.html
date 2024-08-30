@@ -9,7 +9,6 @@
 
   <div class="grid-content">
     <ag-grid-angular
-      id="clients"
       #agGrid
       [class.hide-grid]="loadingUserState"
       class="ag-theme-balham"
@@ -24,6 +23,8 @@
       [sideBar]="sideBar"
       [animateRows]="true"
       [enableBrowserTooltips]="enableBrowserTooltips"
+      [pagination]="true"
+      [paginationPageSize]="5000"
       [suppressCopyRowsToClipboard]="true"
       (gridReady)="onGridReady($event)"
       (columnResized)="onColumnResized($event)"

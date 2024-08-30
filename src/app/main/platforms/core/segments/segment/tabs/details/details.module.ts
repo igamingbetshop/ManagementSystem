@@ -16,6 +16,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ClientStatesResolver } from '../../../../resolvers/client-states.resolver';
+import { IdToNamePipe } from "../../../../../../../core/pipes/id-to-name-pipe";
+import { ConditionInputComponent } from "../../../condition-input/condition-input.component";
 
 const routes: Routes = [
   {
@@ -25,7 +27,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
+    declarations: [DetailsComponent],
+    providers: [
+        ClientStatesResolver,
+    ],
+    imports: [
     CommonModule,
     MatIconModule,
     ReactiveFormsModule,
@@ -42,10 +48,8 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     RouterModule.forChild(routes),
-  ],
-  declarations: [DetailsComponent],
-  providers: [
-    ClientStatesResolver,
-  ]
+    IdToNamePipe,
+    ConditionInputComponent
+]
 })
 export class DetailsModule { }

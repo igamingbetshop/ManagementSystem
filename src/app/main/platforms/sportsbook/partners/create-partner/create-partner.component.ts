@@ -36,7 +36,7 @@ export class CreatePartnerComponent implements OnInit {
   public formGroup: UntypedFormGroup;
   public states = ACTIVITY_STATUSES;
   public currencies: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreatePartnerComponent>,
@@ -73,7 +73,7 @@ export class CreatePartnerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('partners/add', obj).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
@@ -81,7 +81,7 @@ export class CreatePartnerComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

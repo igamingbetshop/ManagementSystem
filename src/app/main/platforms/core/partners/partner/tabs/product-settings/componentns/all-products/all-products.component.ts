@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Injector, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 
 import { mergeMap, take } from "rxjs/operators";
 import 'ag-grid-enterprise';
@@ -31,6 +30,7 @@ import { Paging } from "../../../../../../../../../core/models";
 import { syncColumnSelectPanel } from "../../../../../../../../../core/helpers/ag-grid.helper";
 import { ExportService } from "../../../../../../services/export.service";
 import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/grid-common/ag-checkbox-seected-renderer.component';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'all-products-settings',
@@ -38,7 +38,8 @@ import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/gri
   styleUrls: ['./all-products.component.scss']
 })
 export class AllProductsComponent extends BasePaginatedGridComponent implements OnInit {
-
+  @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
+  @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
   @Output("onUpdate") onUpdate: EventEmitter<any> = new EventEmitter<any>();
   public partnerId: any;
   public partnerName: any;
@@ -58,7 +59,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   public filteredDataAll;
   public statuses = [];
   public selectedRowIds: number[] = [];
-  public formGroup: UntypedFormGroup;
   public productCategories = [];
   public gameProviders = [];
   public rowSelection = 'multiple';
@@ -69,7 +69,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   constructor(
     private apiService: CoreApiService,
-    private fb: UntypedFormBuilder,
     private activateRoute: ActivatedRoute,
     public configService: ConfigService,
     protected injector: Injector,
@@ -99,7 +98,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   ngOnInit(): void {
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
-    this.formValues();
+
     this.getAllProductStates();
     this.mergeProductApi();
   }
@@ -152,6 +151,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         field: 'Id',
         sortable: true,
         resizable: true,
+        editable: false,
         filter: 'agNumberColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
@@ -294,7 +294,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         this.setFilter(params.request.filterModel, paging);
         if (paging.HasImages) {
           paging.HasImages = paging.HasImages.ApiOperationTypeList[0].BooleanValue;
-        } 
+        }
         if (paging.IsForMobiles) {
           paging.IsForMobile = paging.IsForMobiles.ApiOperationTypeList[0].BooleanValue;
           delete paging.IsForMobiles;
@@ -316,11 +316,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         if (this.filteredDataAll.SubproviderIds) {
           this.filteredDataAll.SubproviderIds.ApiOperationTypeList[0].ArrayValue = this.transformArrayToNumbers(this.filteredDataAll.SubproviderIds.ApiOperationTypeList[0].ArrayValue, this.subProvidersTypesEnum);
         }
-
-
-
-        console.log(paging, 'paging');
-
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredDataAll, true,
           Controllers.PRODUCT, Methods.GET_PARTNER_PRODUCTS).pipe(take(1)).subscribe((data) => {
             if (data.ResponseCode === 0) {
@@ -350,16 +345,15 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   onRowClicked(params) {
     this.selectedRowIds = params.api.getSelectedRows().map(field => field.Id);
-    this.formGroup.enable();
+
   }
 
   onRowSelected(params) {
     const isSelectedRow = params.api.getSelectedRows().length !== 0;
     if (isSelectedRow) {
       this.selectedRowIds = params.api.getSelectedRows().map(field => field.Id);
-      this.formGroup.enable();
     } else {
-      this.formGroup.disable();
+
     }
   }
 
@@ -369,38 +363,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   isRowSelected() {
     return this.gridApi && this.gridApi.getSelectedRows().length === 0;
-  }
-
-  addProductToPartner() {
-    const setting = this.formGroup.getRawValue();
-    setting.PartnerId = +this.partnerId;
-    setting.ProductIds = this.selectedRowIds;
-    this.apiService.apiPost(this.configService.getApiUrl, setting, true,
-      Controllers.PRODUCT, Methods.SAVE_PARTNER_PRODUCT_SETTINGS).pipe(take(1)).subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.cleanSelectedRowAll();
-          this.gridApi.refreshServerSide({ purge: true });
-          this.onUpdate.emit(true);
-          this.formGroup.reset();
-          SnackBarHelper.show(this._snackBar, { Description: 'Added successfully', Type: "success" });
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
-
-  private formValues() {
-    this.formGroup = this.fb.group({
-      Percent: [null, [Validators.required]],
-      Rating: [null],
-      OpenMode: [null],
-      CategoryIds: [[null], [Validators.required]],
-      State: [null, [Validators.required]],
-    });
-  }
-
-  get errorControl() {
-    return this.formGroup.controls;
   }
 
   changeCheckboxAll(): void {
@@ -432,7 +394,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   }
 
   exportToCsv() {
-
     this.exportService.exportToCsv(Controllers.PRODUCT, Methods.EXPORT_PARTNER_PRODUCTS, this.filteredDataAll);
   }
 
@@ -455,6 +416,28 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
       }
     }
     return result;
+  }
+
+  async onBulkEditorOpen() {
+    if (this.bulkEditorRef) {
+      this.bulkEditorRef.clear();
+    }
+    const componentInstance = await import('./add-partners-product/add-partners-product.component').then(c => c.AddPartnersProductComponent);
+    const componentRef = this.bulkEditorRef.createComponent(componentInstance);
+    componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
+    componentRef.instance.productCategories = this.productCategories;
+    componentRef.instance.statuses = this.statuses;
+    componentRef.instance.partnerId = +this.partnerId;
+    componentRef.instance.productIds = this.selectedRowIds;
+    componentRef.instance.afterClosed.subscribe((data) => {
+      if (data) {
+        this.cleanSelectedRowAll();
+        this.gridApi.refreshServerSide({ purge: true });
+        this.onUpdate.emit(true);
+        SnackBarHelper.show(this._snackBar, { Description: 'Added successfully', Type: "success" });
+      }
+    });
+
   }
 
 }

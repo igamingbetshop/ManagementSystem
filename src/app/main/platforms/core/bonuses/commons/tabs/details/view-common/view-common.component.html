@@ -9,8 +9,8 @@
     </div>
     <div [ngClass]="{'changed': newData?.LastExecutionTime  != oldData?.LastExecutionTime}">
       <div class="first-hand">{{'Bonuses.LastExecutionTime' | translate}}</div>
-      <div class="second-hand">{{oldData?.LastExecutionTime  | date:'dd/MM/yyyy HH:MM'}}</div>
-      <div class="third-hand">{{newData?.LastExecutionTime  | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="second-hand">{{oldData?.LastExecutionTime  | date:'dd/MM/yyyy HH:mm'}}</div>
+      <div class="third-hand">{{newData?.LastExecutionTime  | date:'dd/MM/yyyy HH:mm'}}</div>
     </div>
     <div>
       <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
@@ -18,8 +18,8 @@
     </div>
     <div [ngClass]="{'changed': newData?.LastUpdateTime  != oldData?.LastUpdateTime}">
       <div class="first-hand">{{'LastUpdateTime' | translate}}</div>
-      <div class="second-hand">{{oldData?.LastUpdateTime  | date:'dd/MM/yyyy HH:MM'}}</div>
-      <div class="third-hand">{{newData?.LastUpdateTime  | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="second-hand">{{oldData?.LastUpdateTime  | date:'dd/MM/yyyy HH:mm'}}</div>
+      <div class="third-hand">{{newData?.LastUpdateTime  | date:'dd/MM/yyyy HH:mm'}}</div>
     </div>
     <div [ngClass]="{'changed': newData?.AccountTypeId != oldData?.AccountTypeId}">
       <div class="first-hand">{{'Bonuses.AccountTypeId' | translate}}</div>
@@ -114,8 +114,8 @@
     </div>
     <div [ngClass]="{'changed': newData?.StartTime != oldData?.StartTime}">
       <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
-      <div class="second-hand">{{oldData?.StartTime  | date:'dd/MM/yyyy HH:MM'}}</div>
-      <div class="third-hand">{{newData?.StartTime  | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="second-hand">{{oldData?.StartTime  | date:'dd/MM/yyyy HH:mm'}}</div>
+      <div class="third-hand">{{newData?.StartTime  | date:'dd/MM/yyyy HH:mm'}}</div>
     </div>
     <div [ngClass]="{'changed': newData?.ClientGradeTo != oldData?.ClientGradeTo}">
       <div class="first-hand">{{'Bonuses.ClientGradeTo' | translate}}</div>
@@ -146,8 +146,8 @@
     </div>
     <div [ngClass]="{'changed': newData?.FinishTime != oldData?.FinishTime}">
       <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
-      <div class="second-hand">{{oldData?.FinishTime  | date:'dd/MM/yyyy HH:MM'}}</div>
-      <div class="third-hand">{{newData?.FinishTime  | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="second-hand">{{oldData?.FinishTime  | date:'dd/MM/yyyy HH:mm'}}</div>
+      <div class="third-hand">{{newData?.FinishTime  | date:'dd/MM/yyyy HH:mm'}}</div>
     </div>
     <div [ngClass]="{'changed': newData?.ValidForAwarding != oldData?.ValidForAwarding}">
       <div class="first-hand">{{'Bonuses.ValidForAwarding' | translate}}</div>

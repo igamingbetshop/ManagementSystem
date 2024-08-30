@@ -6,14 +6,22 @@
     padding-left: 10px;
     display: flex;
     height: 62px;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-    .title {
-      flex: 0 0 auto; 
-      margin-right: auto;
+  .title {
+    padding-right: 50px;
+    padding-left: 0;
+    
+    :host-context([dir="rtl"]) & {
+      padding-right: 0; 
+      padding-left: 50px; 
     }
+  }
 
     .contianer-wrap {
       display: flex;
+      flex-wrap: nowrap;
       .stream-btn {
           color: #fff;
           border: none;
@@ -21,39 +29,41 @@
           border-radius: 4px;
           cursor: pointer;
           margin-right: 8px;
-    
+
           &.live-btn-pending {
             background: $orange-3;
           }
           &.live-btn-on {
             background: $green;
           }
-    
+
           &.live-btn-off {
             color: #fff;
             background: linear-gradient(180deg, #791711 0%, #B91616 49.48%, #E42A1E 100%);
           }
-    
+
         }
-  
+
       .partner-dropdown {
           margin-left: 0px;
       }
-  
+
       .date-time-tabs {
+        display: flex;
+        flex-wrap: nowrap;
           .tab-btn {
               margin-right: 8px;
               border: 1px solid $gray-light;
               box-shadow: none;
               transition: 0.3s ease-in;
-  
+
               .mat-button-focus-overlay {
                   background-color: $white !important;
               }
-  
+
               &:hover {
                   border: 1px solid $blue-5 !important;
-  
+
                   .mat-button-wrapper {
                       color: $blue-5;
                   }
@@ -64,12 +74,12 @@
                 color: $blue-5 !important;
               }
           }
-  
+
       }
-  
+
       .calendar-picker {
           margin-right: 8px;
-          
+
           input {
               border: 1px solid $gray-light;
               border-radius: 8px;
@@ -80,40 +90,94 @@
               transition: background-color 0.3s, color 0.3s;
               font-size: 14px;
           }
+
+          [dir="rtl"] & {
+            margin-right: 0; // Reset right margin for RTL
+            margin-left: 8px; // Apply left margin for RTL
+        }
       }
-      
+
       .mat-btn {
           // margin-left: 8px;
           @include mat-btn-style;
           color: white!important;
         }
-  
+
         .tab-btn {
           @include tab-button-style;
         }
     }
+  .contianer-wrap::-webkit-scrollbar {
+    height: 0;
+  }
 }
 
 
 @media screen and (max-width: 600px) {
   .contianer-wrap {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap !important;
+    .date-time-tabs {
       display: flex;
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      flex-wrap: nowrap !important;
-      margin-top: 8px;
-      .date-time-tabs {
-          flex-wrap: nowrap !important;
-          margin-left: 0 !important;
+      margin-left: 0 !important;
+      gap: 8px;
+    }
+  }
+
+  .content-action::-webkit-scrollbar {
+    height: 0;
+  }
+}
+
+.contianer-wrap {
+  @media screen and (max-width: 1200px) {
+    margin-top: 6px;
+  }
+
+  .date-time-tabs {
+    margin-left: 8px;
+
+    .tab-btn {
+      margin-right: 8px;
+    }
+
+    @include tab-button-style;
+
+    @media screen and (max-width: 600px) {
+      .tab-btn {
+        width: calc(33.33% - 8px);
+        justify-content: center;
+        display: flex;
+        margin-right: 0px;
       }
+    }
   }
 
-  .content-action {
-      margin-bottom: 40px;
+  .calendar-picker {
+    input{background-color: transparent!important;}
+    &.start {
+      margin-right: 8px;
+
+      @media screen and (max-width: 1200px) {
+        margin-left: 8px
+      }
+    }
+
+    @include calendar-picker-style;
+
+    @media screen and (max-width: 600px) {
+      margin: 0;
+      padding: 0;
+    }
   }
 
-  .contianer-wrap::-webkit-scrollbar {
-      height: 0;
+  .mat-btn {
+    margin-left: 8px;
+    @include mat-btn-style;
+
+    @media screen and (max-width: 600px) {
+      margin-left: 8px;
+    }
   }
 }

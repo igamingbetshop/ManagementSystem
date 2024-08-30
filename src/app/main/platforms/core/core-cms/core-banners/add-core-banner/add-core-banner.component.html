@@ -114,7 +114,7 @@
       <mat-label>{{'Common.Visibility' | translate}}</mat-label>
       <mat-select [formControlName]="'Visibility'" placeholder="{{'Common.Visibility' | translate}}" multiple>
         <mat-option *ngFor="let banVisType of bannerVisibilityTypes"
-          [value]="banVisType.id">{{banVisType.name}}</mat-option>
+          [value]="banVisType.id">{{banVisType.name | translate}}</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -127,6 +127,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn"  (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid || isSendingReqest" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+  <button mat-raised-button class="modal-cancel-btn"  (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid || isSendingRequest" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
 </div>

@@ -21,7 +21,7 @@ export class AddEditTranslationsComponent implements OnInit {
   translations = [];
   formGroup: UntypedFormGroup;
   partnerId;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditTranslationsComponent>,
               private apiService: SportsbookApiService,
@@ -64,7 +64,7 @@ export class AddEditTranslationsComponent implements OnInit {
       item.TranslationId = this.currentItem.TranslationId;
       return item;
     })
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     let changed = [];
     for (let i = 0; i < translations.length; i++) {
       if (translations[i].Text != this.items.Translations[i].Text)
@@ -81,7 +81,7 @@ export class AddEditTranslationsComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
           }
-          this.isSendingReqest = false;
+          this.isSendingRequest = false;
         });
     }
 

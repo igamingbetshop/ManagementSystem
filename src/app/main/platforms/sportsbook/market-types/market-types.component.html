@@ -67,46 +67,17 @@
           rowSelection="single">
         </ag-grid-angular>
         <div class="grid-action">
-          <button mat-stroked-button class="mat-btn" [class.disabled]="!partnerId || isSendingReqest" (click)="onAddPartnerSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!partnerId || isSendingRequest" (click)="onAddPartnerSettings()">{{'Sport.AddPartnerSettings' | translate}}</button>
           <button mat-stroked-button class="mat-btn"  (click)="addMarketType()">{{'Sport.AddMarketType' | translate}}</button>
         </div>
       </div>
-
-
     </div>
+    
     <div class="right-panel">
       <div class="action-content">
         <div class="title">{{'Sport.SelectionTypes' | translate}}</div>
       </div>
-      <div class="grid-content">
-
-        <ag-grid-angular
-          id="market-types-2"
-          #agGridSecond
-          class="ag-theme-balham"
-          [headerHeight]="33"
-          [rowHeight]="42"
-          [rowData]="rowData1"
-          [rowModelType]="rowModelType"
-          [columnDefs]="columnDefs2"
-          [defaultColDef]="defaultColDef"
-          [components]="frameworkComponents"
-          [suppressCopyRowsToClipboard]="true"
-          [animateRows]="true"
-          pagination="true"
-          [cacheBlockSize]="cacheBlockSize"
-          (cellValueChanged)="onCellValueChanged1($event)"
-          [ensureDomOrder]="true"
-          [enableCellTextSelection]="true"
-          rowSelection="single">
-        </ag-grid-angular>
-
-        <div class="grid-action">
-          <button mat-stroked-button class="mat-btn" [class.disabled]="isSendingReqest" (click)="addSelectionType()">{{'Sport.AddSelectionType' | translate}}</button>
-        </div>
-      </div>
-
-
+        <app-selections-grid [selectedRowId]="selectedRowId()"></app-selections-grid>
     </div>
   </div>
 </div>

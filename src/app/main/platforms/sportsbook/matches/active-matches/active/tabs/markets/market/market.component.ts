@@ -14,14 +14,15 @@ import {SnackBarHelper} from "../../../../../../../../../core/helpers/snackbar.h
 })
 export class MarketComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public name: string = '';
-  public MatchId: number;
-  public number: number;
-  public partnerId: number;
-  public SelectionId: number;
-  public rowModelType:string = GridRowModelTypes.CLIENT_SIDE;
-  public rowData = [];
-  public path: string = 'markets/selectionchangehistory';
+  name: string = '';
+  matchId: number;
+  sportId: number;
+  number: number;
+  partnerId: number;
+  SelectionId: number;
+  rowModelType:string = GridRowModelTypes.CLIENT_SIDE;
+  rowData = [];
+  path: string = 'markets/selectionchangehistory';
 
   constructor(
     protected injector:Injector,
@@ -88,8 +89,9 @@ export class MarketComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   ngOnInit() {
-    this.MatchId = +this.activateRoute.snapshot.queryParams.MatchId;
+    this.matchId = +this.activateRoute.snapshot.queryParams.MatchId;
     this.name = this.activateRoute.snapshot.queryParams.name;
+    this.sportId = this.activateRoute.snapshot.queryParams.sportId
     this.number = +this.activateRoute.snapshot.queryParams.number;
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.SelectionId = +this.activateRoute.snapshot.queryParams.SelectionId;

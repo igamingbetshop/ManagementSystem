@@ -1,0 +1,51 @@
+@import "variables.scss";
+
+.modal-wrap {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  max-height: calc(80vh - 91px);
+  min-height: 200px;
+  padding-right: 14px;
+}
+
+.field-content {
+  mat-form-field {
+    margin-left: 2px;
+    margin-right: 6px;
+    margin-bottom: 8px;
+  }
+}
+
+
+.condition-content {
+ display: flex;
+ mat-form-field {
+  width: 98%;
+ }
+
+ .mat-btn {
+  margin-top: 8px;
+  margin-left: 4px;
+  background-color: $bg-color;
+  color: white;
+  .mat-icon {
+      margin-left: 5px!important;
+  }
+ }
+}
+
+.selections {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  .selections-container {
+    display: flex;
+    mat-form-field {
+      display: flex;
+      width: 120px;
+    }
+    button {
+      margin-top: 8px;
+    }
+  }
+}

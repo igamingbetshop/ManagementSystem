@@ -3,7 +3,7 @@
   <div class="player-categories-content action">
     <div class="title">{{'Sport.PlayersCategories' | translate}}</div>
     <button mat-stroked-button class="mat-btn" (click)="addCategory()">{{'ClientCategories.AddCategory' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled] ="isRowSelected() || isSendingReqest" (click)="deleteCategory()">{{'ClientCategories.DeleteCategory' | translate}}</button>
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled] ="isRowSelected() || isSendingRequest" (click)="deleteCategory()">{{'ClientCategories.DeleteCategory' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
   </div>
 
@@ -20,7 +20,8 @@
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
       [suppressCopyRowsToClipboard]="true"
-      [cacheBlockSize]="cacheBlockSize"
+      pagination="true"
+      [paginationPageSize]="5000"
       [components]="frameworkComponents"
       [sideBar]="sideBar"
       [animateRows]="true"

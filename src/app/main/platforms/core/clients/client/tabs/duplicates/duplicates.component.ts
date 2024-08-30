@@ -93,19 +93,6 @@ export class DuplicatesComponent extends BasePaginatedGridComponent implements O
   setColumnDefs() {
     this.columnDefs = [
       {
-        headerName: 'Clients.ClientId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ClientId',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
-      {
         headerName: 'Clients.DuplicatedClientId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'DuplicatedClientId',
@@ -148,14 +135,6 @@ export class DuplicatesComponent extends BasePaginatedGridComponent implements O
           let dat = datePipe.transform(params.data.MatchDate, 'medium');
           return `${dat}` || '';
         },
-      },
-      {
-        headerName: 'Common.PartnerName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'PartnerId',
-        sortable: true,
-        resizable: true,
-        filter: false,
       },
     ];
   }

@@ -55,7 +55,7 @@ export class AddBannerComponent implements OnInit {
     { id: 5, name: 'SportSpecificMobile' }
   ];
   bannerTypeId: number = 1;
-  isSendingReqest = false;
+  isSendingRequest = false;
   bannerVisibilityTypes = [
     { id: 'null', name: 'Always' },
     { id: 1, name: 'Logged Out' },
@@ -244,7 +244,7 @@ export class AddBannerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const requestBody = this.formGroup.getRawValue();
 
     if (this.bannerTypeId == 4 || this.bannerTypeId == 5) {
@@ -271,7 +271,7 @@ export class AddBannerComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 }

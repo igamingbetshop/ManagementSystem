@@ -3,7 +3,7 @@
 
 .container {
   @include container-style;
-  height: 92%;
+  height: 85%;
 
   .content-action {
     @include action-style;
@@ -21,7 +21,7 @@
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 92px);
+    height: 100%;
 
     ::ng-deep {
       ag-grid-angular {

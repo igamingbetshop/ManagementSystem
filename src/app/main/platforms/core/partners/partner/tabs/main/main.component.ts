@@ -30,6 +30,7 @@ export class MainComponent implements OnInit {
   public adminSiteUrl = []
   public adminSiteUrlSelected;
   public siteUrl = [];
+  public partnerVipLevels = [];
   public siteUrlSelected;
 
   isUppercaseRequired = false;
@@ -48,6 +49,7 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
+    this.getPartnerVipLevels();
     this.getStates();
     this.getPartnersVerificationTypeEnum();
     this.createForm();
@@ -118,6 +120,7 @@ export class MainComponent implements OnInit {
       VerificationType: [null, [Validators.required]],
       MobileVerificationCodeLength: [null, [Validators.required]],
       EmailVerificationCodeLength: [null, [Validators.required]],
+      VipLevel: [null, [Validators.required]],
       PasswordRegExProperty: this.fb.group({
         Uppercase: [false],
         IsUppercaseRequired: [false],
@@ -194,6 +197,15 @@ export class MainComponent implements OnInit {
     }  else {
       this[validator] = false;
     }
+  }
+
+  getPartnerVipLevels() {
+    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.PARTNER, Methods.GET_VIP_LEVELS).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        this.partnerVipLevels = data.ResponseObject;
+      }
+    });
   }
 
 

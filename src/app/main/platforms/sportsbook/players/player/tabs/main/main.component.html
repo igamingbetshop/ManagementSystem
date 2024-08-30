@@ -135,7 +135,7 @@
         <div class="actions" *ngIf = "isEdit">
           
           <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
-          <button mat-raised-button class="mat-btn" [class.disabled]="formGroup.invalid || isSendingReqest" type="submit" (click)="onSubmit()">
+          <button mat-raised-button class="mat-btn" [class.disabled]="formGroup.invalid || isSendingRequest" type="submit" (click)="onSubmit()">
             {{'Common.Save' | translate}}
           </button>
 

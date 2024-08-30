@@ -28,10 +28,10 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button 
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button 
     class="modal-primary-btn" 
-    [class.disabled]="formGroup.invalid || isSendingReqest" 
+    [class.disabled]="formGroup.invalid || isSendingRequest" 
     (click)="onSubmit()">
     {{'Sport.AddCommentType' | translate}}
   </button>

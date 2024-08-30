@@ -38,7 +38,7 @@ export class SettleBetModalComponent implements OnInit {
 
   formGroup: UntypedFormGroup;
   selectedRowId: number;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<SettleBetModalComponent>,
@@ -60,7 +60,7 @@ export class SettleBetModalComponent implements OnInit {
 
   onSubmit() {
     const winAmount = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const requestBody = {
       BetDocumentId: this.selectedRowId,
       ...winAmount
@@ -73,7 +73,7 @@ export class SettleBetModalComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false; 
+      this.isSendingRequest = false; 
     });
   }
 

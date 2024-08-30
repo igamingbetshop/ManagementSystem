@@ -11,7 +11,7 @@ import {Paging} from "../../../../../../core/models";
 import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
 import {take} from "rxjs/operators";
 import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup} from "ag-grid-community";
+import {CellClickedEvent, GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup} from "ag-grid-community";
 import {AgBooleanFilterComponent} from "../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
 import {AgDropdownFilter} from "../../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
 
@@ -61,7 +61,6 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
   getServerSideGroupKey: GetServerSideGroupKey = (dataItem: any) => {
     return dataItem.AgentId;
   };
-
 
   constructor(
     private apiService: CoreApiService,
@@ -117,7 +116,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.textOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -130,7 +129,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.textOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -143,7 +142,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.textOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -157,7 +156,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -171,7 +170,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -185,7 +184,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -199,7 +198,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -213,7 +212,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -227,7 +226,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -241,7 +240,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -255,7 +254,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -269,7 +268,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -283,7 +282,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -297,7 +296,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -311,7 +310,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
       },
       {
@@ -325,8 +324,18 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
           closeOnApply: true,
           filterOptions: this.filterService.numberOptions
         },
-        sortable: true,
+        sortable: false,
         minWidth: 80,
+      },
+      {
+        headerName: 'Common.View',
+        headerValueGetter: this.localizeHeader.bind(this),
+        cellRenderer: function (params) {
+          return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+           visibility
+           </i>`
+        },
+        onCellClicked: (event: CellClickedEvent) => this.onRedirectToProducts(event),
       },
     ];
   }
@@ -380,5 +389,12 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     setTimeout(() => { this.gridApi.setServerSideDatasource(this.createServerSideDatasource()); }, 0);
+  }
+
+  onRedirectToProducts(ev) {
+    const row = ev.data;
+    this.router.navigate(['/main/platform/reports/business-intelligence/report-by-providers'], {
+      queryParams: { "agentId": row.AgentId }
+    });
   }
 }

@@ -21,7 +21,7 @@ const routes: Routes = [
         resolve: { filterData: SportFilterOptionsResolver },
       },
       {
-        path: 'by-limits',
+        path: 'market-limits',
         loadChildren: () => import('./by-limits/by-limits.module').then(m => m.ByLimitsModule),
         resolve: { filterData: SportFilterOptionsResolver },
       },

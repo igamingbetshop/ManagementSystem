@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AgGridModule } from 'ag-grid-angular';
 import {TranslateModule} from "@ngx-translate/core";
 import {MatDialogModule} from "@angular/material/dialog";
+import { MarketTypesButtonsComponent } from "../../../../../../sb-components/market-types-buttons/market-types-buttons.component";
 
 const routes: Routes = [
   {
@@ -21,21 +22,22 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    AgGridModule,
-    RouterModule.forChild(routes),
-    TranslateModule,
-    MatDialogModule
-  ],
-  declarations: [MarketComponent]
+    declarations: [MarketComponent],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        AgGridModule,
+        RouterModule.forChild(routes),
+        TranslateModule,
+        MatDialogModule,
+        MarketTypesButtonsComponent
+    ]
 })
 export class MarketModule { }

@@ -15,6 +15,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { TranslateModule } from "@ngx-translate/core";
 import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe";
+import { MarketTypesButtonsComponent } from "../../../../../sb-components/market-types-buttons/market-types-buttons.component";
 
 const routes: Routes = [
   {
@@ -24,23 +25,24 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatSnackBarModule,
-    FormsModule,
-    MatGridListModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    TranslateModule,
-  ],
-  declarations: [MarketsComponent, AddMarketComponent],
-  providers: [OddsTypePipe],
+    declarations: [MarketsComponent, AddMarketComponent],
+    providers: [OddsTypePipe],
+    imports: [
+        CommonModule,
+        MatSnackBarModule,
+        FormsModule,
+        MatGridListModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        TranslateModule,
+        MarketTypesButtonsComponent
+    ]
 })
 export class MarketsModule { }

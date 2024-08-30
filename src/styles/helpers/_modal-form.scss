@@ -1,6 +1,5 @@
 @import "variables";
 
-
 .mat-mdc-dialog-container {
   padding: 0 !important;
 }
@@ -20,71 +19,114 @@
   mat-icon {
     margin-left: auto;
     cursor: pointer;
-    color: $bg-color;
+    color: $bg-color !important;
     font-size: 29px;
   }
 }
 
+mat-form-field {
+  height: 40px !important;
+
+  .mat-mdc-text-field-wrapper {
+    height: 40px !important;
+  }
+}
+
+.mdc-floating-label {
+  top: 20px !important;
+}
+
+.mdc-floating-label--float-above {
+  top: 28px !important;
+}
+
+.mat-mdc-form-field-infix {
+  padding-top: 8px !important;
+}
+
+.mat-pseudo-checkbox {
+  position: absolute !important;
+  right: 0 !important;
+}
+
+.mat-mdc-icon-button {
+  padding: 0 0 6px 0 !important;
+}
+
+.client-statuses {
+  .mdc-list-item__primary-text {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: rgba(228, 230, 242, 1);
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
+    .mat-primary {
+      width: 100%;
+
+      .mdc-form-field {
+        width: 100%;
+
+        .mdc-checkbox {
+          margin-left: auto
+        }
+
+        .mdc-label {
+          margin-left: 10px
+        }
+      }
+    }
+  }
+}
+
 .modal-wrap {
-  color: $blue-8;
+  color: $text-color;
   padding-bottom: 20px;
   padding-right: 20px;
   padding-left: 20px;
 
   .calendar-content {
     display: grid;
-    margin-left: 20px;
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
     position: relative;
+
     mat-form-field {
       margin: 0;
-      width: 100%;
-    }
-
-    .field-content-seccond-child {
-      margin-left: auto;
+      width: 95%;
     }
 
     .calendar-picker {
-      margin-right: 8px;
       input {
-          border: 1px solid $gray-light;
-          border-radius: 8px;
-          background-color: $blue-light-22;
-          border-radius: 8px;
-          color: $gray-light-15;
-          height: 34px;
-          transition: background-color 0.3s, color 0.3s;
-          font-size: 14px;
+        width: 93%;
+        padding: 0 10px;
+        background-color: $gray-light-17;
+        border: 1px solid $gray-light-18;
+        border-radius: 4px;
+        color: $text-color;
+        transition: background-color 0.3s, color 0.3s;
+        font-size: 16px;
+        position: relative;
       }
     }
-    
+
   }
 
   .field-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 10px;
     position: relative;
+
     mat-form-field {
       margin: 0;
       width: 100%;
     }
 
-    .calendar-picker {
-      // position: absolute;
-      margin-right: 8px;
-      width: 100%;
-      input {
-          border: 1px solid $gray-light;
-          border-radius: 8px;
-          background-color: $blue-light-22;
-          border-radius: 8px;
-          color: $gray-light-15;
-          height: 34px;
-          transition: background-color 0.3s, color 0.3s;
-          font-size: 14px;
-      }
-    }
   }
 
   .input-content {
@@ -100,11 +142,9 @@
     padding: 0;
     width: 100%;
     height: 55px;
-    background-color: $blue-light-22;
+    background-color: $gray-light-17;
     margin-top: 7px;
-    // border: 1px solid #5BA3D3;
     border-radius: 6px;
-    color: $blue-2 !important;
     outline: none;
 
     &.ng-invalid {
@@ -113,12 +153,8 @@
       }
     }
 
-    mat-select {
-      color: $blue-8 !important;
-    }
-
     &::placeholder {
-      color: $blue-8 !important;
+      color: $gray-light-18 !important;
 
       &.ng-invalid {
         &.ng-touched {
@@ -127,10 +163,10 @@
       }
     }
 
-    color: $blue-8 !important;
+    color: $gray-light-18 !important;
 
     .mat-mdc-select-placeholder {
-      color: $blue-8 !important;
+      color: $gray-light-18 !important;
 
       &.ng-invalid {
         &.ng-touched {
@@ -140,7 +176,7 @@
     }
 
     .mat-mdc-select-value-text {
-      color: $blue-8 !important;
+      color: $text-color !important;
 
       &.ng-invalid {
         &.ng-touched {
@@ -150,7 +186,7 @@
     }
 
     .mat-mdc-form-field-label {
-      color: $blue-8 !important;
+      color: $gray-light-18 !important;
 
       &.ng-invalid {
         &.ng-touched {
@@ -160,64 +196,87 @@
     }
 
     .mat-mdc-select-arrow {
-      color: $blue-8 !important;
+      color: $bg-color !important;
     }
 
     .mat-mdc-form-field-subscript-wrapper {
-      margin-top: -5px!important;
+      margin-top: -5px !important;
+
       mat-error {
         font-size: 11px !important;
         color: $red-6 !important;
         margin-top: -2px;
       }
-
     }
-
   }
 
   .full-height {
-    height: 78%;
+    height: auto !important;
 
     textarea {
-      background-color: $blue-light-22;
+      background-color: $gray-light-17;
+      width: 99%;
+      border: 1px solid $gray-light-18;
+      border-radius: 4px;
+      min-height: 34px;
     }
   }
 
   mat-select {
-    color: $blue-8 !important;
+    color: $text-color !important;
 
     &::placeholder {
-      color: $blue-8 !important;
+      color: $gray-light-18 !important;
+    }
+
+    &[aria-expanded="true"] {
+      .mat-mdc-select-trigger {
+        .mat-mdc-select-arrow-wrapper {
+          .mat-mdc-select-arrow {
+            border-top: 5px solid transparent;
+            margin: 0 4px 4px 4px;
+            svg {
+              top: -200%;
+              left: 0;
+              transform: rotate(180deg);
+            }
+          }
+        }
+      }
     }
   }
 
   mat-checkbox {
-    color: $blue-8 !important;
+    color: $gray-light-18 !important;
   }
 
   .mat-mdc-checkbox-indeterminate.mat-accent .mat-checkbox-background,
   .mat-mdc-checkbox-checked.mat-accent .mat-checkbox-background,
   .mat-mdc-checkbox-ripple .mat-ripple-element {
-    background-color: $blue-8 !important;
+    background-color: $gray-light-18 !important;
   }
 
   .mat-mdc-radio-outer-circle {
-    border: 2px solid $blue-8 !important;
-    background-color: $blue-light-22 !important;
+    border: 2px solid $gray-light-18 !important;
+    background-color: $text-color !important;
   }
 
   .mat-mdc-radio-inner-circle {
-    background-color: $blue-8 !important;
+    background-color: $gray-light-18 !important;
   }
 
 }
 
 .modal-wrap {
   overflow: auto;
+
+  @media screen and (max-width: 780px) {
+    height: 50vh;
+  }
 }
 
 .mat-mdc-select-panel {
-  background-color: #E7E8F0 !important;
+  background-color: $gray-light-17 !important;
   min-width: none;
 }
 
@@ -226,16 +285,16 @@
 }
 
 .condition-list {
-  color: $blue-8 !important;
+  color: $gray-light-18 !important;
   display: flex;
 
-  > div {
+  >div {
     width: 32%;
   }
 
   .mat-mdc-icon {
     cursor: pointer;
-    color: $blue-8 !important;
+    color: $bg-color !important;
   }
 }
 
@@ -248,6 +307,7 @@
     display: flex;
     column-gap: 5px;
     align-items: center;
+
     .value-field {
       width: 150px;
     }
@@ -257,6 +317,7 @@
     display: flex;
     column-gap: 5px;
     align-items: center;
+
     .mat-mdc-btn {
       width: 50%;
       @include mat-btn-style;
@@ -275,46 +336,32 @@
   column-gap: 12px;
 
   .modal-primary-btn {
-    border-radius: 6px;
-    color: $white !important;
-    padding: 0 10px;
-    // background: linear-gradient(180deg, $blue-2 0%, $blue-light-13 50%, $blue-5 100%);
-    background-color: $bg-color;
-    border: 1px solid transparent !important;
-    height: 34px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 16px;
-
     &.disabled {
-      background : linear-gradient(180deg, rgba(5, 115, 186, 0.7) 0%, rgba(37, 142, 205, 0.7) 50%, rgba(7, 97, 146, 0.7) 100%);
-      color: rgba(255, 255, 255, 0.5);
+      color: $gray-light-15;
+      background-color: $gray-light-13 !important;
       pointer-events: none;
     }
 
-    &:hover {
-      cursor: pointer;
-      opacity: 0.9;
+    &:hover:not(.disabled) {
+      border: 1px solid $blue-5;
+      background-color: lighten($bg-color, 10%);
+      color: $white;
     }
+
+    &:active:not(.disabled) {
+      color: $gray-light-15;
+      background-color: $gray-light-13 !important;
+    }
+
+    background-color: $bg-color !important;
+    color: $white !important;
+    border-radius: 8px;
   }
 
+
   .modal-cancel-btn {
+    @include mat-cancel-btn-style;
     margin-left: auto;
-    background-color: $white;
-    padding: 0 10px;
-    border: 1px solid $gray-light-2;
-    height: 34px;
-    cursor: pointer;
-    color: $gray-light-2;
-    border-radius: 6px;
-    font-size: 16px;
-    text-transform: uppercase;
-    margin-left: auto;
-    &:hover {
-      border: 1px solid $blue-5;
-      background: $white;
-      color: $blue-5;
-    }
   }
 }
 
@@ -350,5 +397,11 @@ input[type="file"]::file-selector-button {
 
 
 .mat-mdc-text-field-wrapper {
-  background-color: $blue-light-22;
+  background-color: $gray-light-17;
+}
+
+.icon-info1 {
+  color: $dark-blue;
+  margin-left: 4px;
+  font-size: 15px;
 }

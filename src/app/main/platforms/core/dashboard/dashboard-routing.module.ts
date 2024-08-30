@@ -22,6 +22,14 @@ const routes: Routes = [
       {
         path: 'client-analytics',
         loadComponent: () => import('./client-analytics/client-analytics.component').then(m => m.ClientAnalyticsComponent)
+      },
+      {
+        path: 'agent-analytics',
+        loadComponent: () => import('./agent-analytics/agent-analytics.component').then(m => m.AgentAnalyticsComponent)
+      },
+      {
+        path: 'partner-analytics',
+        loadComponent: () => import('./partners-analytics/partners-analytics.component').then(m => m.PartnersAnalyticsComponent)
       }
     ]
   }

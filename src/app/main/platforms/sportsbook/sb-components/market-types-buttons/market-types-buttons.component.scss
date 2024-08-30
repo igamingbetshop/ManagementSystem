@@ -1,0 +1,7 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.partner-dropdown {
+  @include dropdown-style;
+  margin-left: 10px;
+}

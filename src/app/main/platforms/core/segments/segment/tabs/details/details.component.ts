@@ -9,6 +9,7 @@ import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helpe
 import { DateAdapter } from "@angular/material/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { emailsWithCommasValidator, numbersAndCommas, stringAndCommaValidator } from 'src/app/core/validators';
+import { ACTIVITY_STATUSES, MODES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-details',
@@ -26,14 +27,95 @@ export class DetailsComponent implements OnInit {
   public segmentId;
   public SegmentSetting;
   public isEdit = false;
-
-  public modes = [{ Id: 1, Name: "Static" }, { Id: 2, Name: "Dynamic" }];
+  statuses = ACTIVITY_STATUSES;
+  public modes = MODES;
   public genders = [{ Id: null, Name: 'All' }, { Id: 1, Name: 'Male' }, { Id: 2, Name: 'Female' }];
-  public KYCStates = [{ Id: null, Name: 'All' }, { Id: true, Name: 'Yes' }, { Id: false, Name: 'No' }];
+  public commonStates = [{ Id: null, Name: 'All' }, { Id: true, Name: 'Yes' }, { Id: false, Name: 'No' }];
   public arrayTypeProps = ['AffiliateId', 'Bonus', 'ClientId', 'Email', 'FirstName', 'LastName', 'UserName', 'MobileCode', 'Region', 'SegmentId', 'SuccessDepositPaymentSystem', 'SuccessWithdrawalPaymentSystem'];
   public rules = [{ Id: 1, Name: "TD" }, { Id: 2, Name: "DC" }, { Id: 3, Name: "SBC" }, { Id: 4, Name: "CBC" }];
   public formGroup: UntypedFormGroup;
-  public addedConditions: any = {};
+  addedConditions = {
+    SessionPeriod: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      opened: false,
+      showNew: false
+    },
+    SignUpPeriod: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: new Date(),
+      opened: false,
+      showNew: false
+    },
+    CasinoBetsCount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    ComplimentaryPoint: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    SportBetsCount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    TotalBetsCount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    TotalBetsAmount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false,
+    },
+    TotalDepositsCount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    TotalDepositsAmount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    TotalWithdrawalsCount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    TotalWithdrawalsAmount: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    AffiliateId: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    },
+    AgentId: {
+      conditions: [],
+      selectedConditionType: null,
+      selectedConditionValue: '',
+      showNew: false
+    }
+  };
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -47,154 +129,28 @@ export class DetailsComponent implements OnInit {
     this.dateAdapter.setLocale('en-GB');
     this.formGroup = this.fb.group({
       Id: [null],
+      PartnerId: [null, [Validators.required]],
       Name: [null, [Validators.required]],
-      PartnerId: [null],
-      State: [null],
-      Mode: [null],
-      CreationTime: [null],
-      LastUpdateTime: [null],
-      SegementSetting: this.fb.group({
-        SegmentId: [null],
-        Priority: [null],
-        SocialLink: [null],
-        AlternativeDomain: [null],
-        ApiUrl: [null],
-        ApiKey: [null],
-        IsDefault: [null],
-        DepositMinAmount: [null],
-        DepositMaxAmount: [null],
-        WithdrawMinAmount: [null],
-        WithdrawMaxAmount: [null],
-        CreationTime: [null],
-        LastUpdateTime: [null],
-        DomainTextTranslationKey: [null]
-      }),
-      IsKYCVerified: [null],
+      Mode: [2],
+      State: [1],
+      Status: [null],
       Gender: [null],
-      IsTermsConditionAccepted: [null],
-      ClientStatus: [null],
-      ClientStatusSet: [null],
-      SegmentId: [null, [numbersAndCommas]],
-      SegmentIdSet: [null],
-      ClientId: [null],
-      ClientIdSet: [null],
-      Email: [null,  [emailsWithCommasValidator]],
-      EmailSet: [null],
-      FirstName: [null, [stringAndCommaValidator]],
-      FirstNameSet: [null],
-      LastName: [null, [stringAndCommaValidator]],
-      LastNameSet: [null],
-      Region: [null, [numbersAndCommas]],
-      RegionSet: [null],
-      AffiliateId: [null, [numbersAndCommas]],
-      AffiliateIdSet: [null],
-      MobileCode: [null, Validators.pattern(/^\+?\d+(\s*,\s*\+?\d+)*$/)],
-      MobileCodeSet: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      SessionPeriod: [null],
-      SessionPeriodSet: [null],
-      SignUpPeriod: [null],
-      SignUpPeriodSet: [null],
-      Profit: [null],
-      ProfitObject: [null],
-      Bonus: [null],
-      BonusSet: [null],
+      IsKYCVerified: [null],
+      IsEmailVerified: [null],
+      IsMobileNumberVerified: [null],
+      ClientId: [null, [numbersAndCommas]],
       SuccessDepositPaymentSystem: [null, [numbersAndCommas]],
-      SuccessDepositPaymentSystemObject: [null],
-      SuccessWithdrawalPaymentSystem: [null],
-      SuccessWithdrawalPaymentSystemObject: [null],
-      TotalBetsCount: [null],
-      TotalBetsCountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      SportBetsCount: [null],
-      SportBetsCountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      CasinoBetsCount: [null],
-      CasinoBetsCountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      TotalBetsAmount: [null],
-      TotalBetsAmountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      TotalDepositsCount: [null],
-      TotalDepositsCountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      TotalDepositsAmount: [null],
-      TotalDepositsAmountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      TotalWithdrawalsCount: [null],
-      TotalWithdrawalsCountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      TotalWithdrawalsAmount: [null],
-      TotalWithdrawalsAmountObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
-      ComplimentaryPoint: [null],
-      ComplimentaryPointObject: this.fb.group({
-        ConditionItems: this.fb.array([
-          this.fb.group({
-            OperationTypeId: [null],
-            StringValue: [null],
-          })
-        ])
-      }),
+      Email: [null, [emailsWithCommasValidator]],
+      FirstName: [null, [stringAndCommaValidator]],
+      LastName: [null, [stringAndCommaValidator]],
+      MobileCode: [null, Validators.pattern(/^\+?\d+(\s*,\s*\+?\d+)*$/)],
+      Region: [null, [numbersAndCommas]],
+      SegmentId: [null, [numbersAndCommas]],
+      SuccessWithdrawalPaymentSystem: [null, [numbersAndCommas]],
     });
   }
 
   ngOnInit() {
-    this.setAdditionals();
     this.clientStates = this.activateRoute.snapshot.data.clientStates.map(item => {
       item.checked = false;
       return item;
@@ -205,83 +161,9 @@ export class DetailsComponent implements OnInit {
     this.getPaymentSegmentById();
   }
 
-  setAdditionals() {
-    this.addedConditions = {
-      SessionPeriodObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        opened: false,
-        showNew: false
-      },
-      SignUpPeriodObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: new Date(),
-        opened: false,
-        showNew: false
-      },
-      CasinoBetsCountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      ComplimentaryPointObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      SportBetsCountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      TotalBetsCountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      TotalBetsAmountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      TotalDepositsCountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      TotalDepositsAmountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      TotalWithdrawalsCountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      },
-      TotalWithdrawalsAmountObject: {
-        conditions: [],
-        selectedConditionType: null,
-        selectedConditionValue: null,
-        showNew: false
-      }
-    }
-  }
-
 
   onCancle() {
     this.isEdit = false;
-    this.setAdditionals();
     this.getPaymentSegmentById();
   }
 
@@ -301,25 +183,28 @@ export class DetailsComponent implements OnInit {
       });
   }
 
-  addDateCondition(item) {
+  addDateCondition(item, resetToDate = false) {
     if (item.selectedConditionType && item.selectedConditionValue) {
-      item.conditions.push({ ConditionType: item.selectedConditionType, ConditionValue: item.selectedConditionValue });
+      item.conditions.push({
+        ConditionType: item.selectedConditionType,
+        ConditionValue: item.selectedConditionValue
+      });
       item.selectedConditionType = null;
-      item.selectedConditionValue = new Date();
+      item.selectedConditionValue = resetToDate ? new Date() : null;
       item.opened = false;
       item.showNew = false;
     }
-  };
+  }
 
   removeCondition(item, index) {
     item.conditions.splice(index, 1);
   };
 
   addCondition(item) {
-    if (item.selectedConditionType && item.selectedConditionValue) {
+    if (item.selectedConditionType) {
       item.conditions.push({ ConditionType: item.selectedConditionType, ConditionValue: item.selectedConditionValue });
       item.selectedConditionType = null;
-      item.selectedConditionValue = null;
+      item.selectedConditionValue = new Date();
       item.showNew = false;
     }
   };
@@ -328,26 +213,27 @@ export class DetailsComponent implements OnInit {
     this.apiService.apiPost(this.configService.getApiUrl, { Id: this.segmentId }, true,
       Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.PaymentSegment = data.ResponseObject.map((obj) => {
-            obj.GenderName = this.genders.find(item => item.Id === obj.Gender)?.Name;
-            obj.ModeName = this.modes.find(item => item.Id === obj.Mode)?.Name;
-            obj.IsKYCVerifiedName = this.KYCStates.find(item => item.Id === obj.IsKYCVerified)?.Name;
-            obj.PartnerName = this.partners.find((item => item.Id === obj.PartnerId))?.Name;
-            return obj;
-          })[0];
+          this.PaymentSegment = data.ResponseObject[0];
           this.clientStates?.forEach(item => {
             item.checked = this.PaymentSegment?.ClientStatus.includes(item.Id);
           });
 
           Object.keys(this.addedConditions).forEach(key => {
-            this.PaymentSegment[key]
-              ? this.PaymentSegment[key].ConditionItems.forEach(condObj => {
-                this.addedConditions[key].conditions.push({
-                  ConditionType: this.operations.find(item => item.Id === condObj.OperationTypeId),
-                  ConditionValue: condObj.StringValue
-                });
-              }) : [];
-          })
+            const conditionObjectKey = `${key}Object`;
+            const conditionObject = this.PaymentSegment[conditionObjectKey];
+  
+            if (conditionObject && conditionObject.ConditionItems) {
+              this.addedConditions[key].conditions = conditionObject.ConditionItems.map(condObj => ({
+                ConditionType: this.operations.find(item => item.Id === condObj.OperationTypeId),
+                ConditionValue: condObj.StringValue
+              })
+              );
+            } else {
+              this.addedConditions[key].conditions = [];
+            }
+          }
+          );
+              
           this.SegmentSetting = this.PaymentSegment.SegementSetting;
           this.formGroup.patchValue(this.PaymentSegment);
 
@@ -405,7 +291,6 @@ export class DetailsComponent implements OnInit {
             val['showNew'] = false;
           });
           this.isEdit = false;
-          this.setAdditionals();
           this.getPaymentSegmentById();
         } else {
           this.PaymentSegment = Object.assign({}, oldData);

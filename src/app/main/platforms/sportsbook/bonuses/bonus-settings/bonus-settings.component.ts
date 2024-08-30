@@ -10,6 +10,7 @@ import { CellClickedEvent } from 'ag-grid-community';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { CommonDataService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-bonus-settings',
@@ -29,12 +30,13 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
   };
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
     protected injector: Injector,
+    private commonDataService:CommonDataService,
     public dialog: MatDialog,
   ) {
     super(injector);
@@ -44,10 +46,10 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   }
 
   ngOnInit() {
+    this.partners = this.commonDataService.partners;
     this.gridStateName = 'bonus-settings-grid-state';
     this.getBonusesTypes();
     this.getChannels();
-    this.getPartners();
     this.setColdefs();
     this.getPage();
   }
@@ -268,11 +270,13 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   }
 
   getPage() {
-    let data = {};
+    let data = {     
+      PageIndex: 0,
+      PageSize: 5000,
+      PartnerId: null,
+    };
     if (this.partnerId) {
-      data = {
-        PartnerId: this.partnerId
-      }
+      data.PartnerId = this.partnerId;
     }
     this.apiService.apiPost(this.path, data)
       .pipe(take(1))
@@ -314,7 +318,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
   }
 
   onDeleteBounus() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const row = this.gridApi.getSelectedRows()[0];
     this.apiService.apiPost('bonuses/deletebonussetting', row).subscribe(data => {
       if (data.Code === 0) {
@@ -323,7 +327,7 @@ export class BonusSettingsComponent extends BasePaginatedGridComponent implement
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

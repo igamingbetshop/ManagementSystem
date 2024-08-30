@@ -5,9 +5,9 @@
   <div class="client-analytics-content">
     <div class="profitable-block">
       <div class="block-header">{{'Dashboard.ProfitableClients' | translate}}</div>
-      @if (topProfitableClients?.length){
+      @if (topProfitableClients()?.length){
         <div class="block-content">
-          @for (item of topProfitableClients; track $index){
+          @for (item of topProfitableClients(); track $index){
             <div class="block-row">
               <div class="row-number profitable-number">{{$index + 1}}</div>
               <app-progress-bar [src]="item" [number]="'1.2-2'" class="profitable"></app-progress-bar>
@@ -26,9 +26,9 @@
 
     <div class="damaging-block">
       <div class="block-header">{{'Dashboard.DamagingClients' | translate}}</div>
-      @if (topDamagingClients?.length){
+      @if (topDamagingClients()?.length){
         <div class="block-content">
-            @for (item of topDamagingClients; track $index){
+            @for (item of topDamagingClients(); track $index){
         <div class="block-row">
           <div class="row-number damaging-number">{{$index + 1}}</div>
           <app-progress-bar [src]="item" [number]="'1.2-2'" class="damaging"></app-progress-bar>
@@ -46,14 +46,34 @@
 
     <div class="turnover-block">
       <div class="block-header">{{'Dashboard.TurnoverClients' | translate}}</div>
-      @if (topTurnoverClients?.length){
+      @if (topTurnoverClients()?.length){
         <div class="block-content">
-         @for (item of topTurnoverClients; track $index){
+         @for (item of topTurnoverClients(); track $index){
         <div class="block-row">
           <div class="row-number turnover-number">{{$index + 1}}</div>
           <app-progress-bar [src]="item" [number]="'1.2-2'" class="turnover"></app-progress-bar>
         </div>
       }
+        </div>
+      }
+      @else {
+        <div class="empty-block">
+          <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+          <p>{{'no results found' | translate}}</p>
+        </div>
+      }
+    </div>
+
+    <div class="active-clients-block">
+      <div class="block-header">{{'Dashboard.ActiveClients' | translate}}</div>
+      @if (topActiveClients()?.length){
+        <div class="block-content">
+          @for (item of topActiveClients(); track $index){
+            <div class="block-row">
+              <div class="row-number active-clients-number">{{$index + 1}}</div>
+              <app-progress-bar [src]="item" [number]="'1.2-2'" class="active-clients"></app-progress-bar>
+            </div>
+          }
         </div>
       }
       @else {
@@ -74,7 +94,7 @@
       }
       @else {
         <div class="block-content">
-          @for (item of topBonusReceivers; track $index){
+          @for (item of topBonusReceivers(); track $index){
             @if (item.TotalBonusAmount != 0){
               <div class="block-row">
                 <div class="row-number bonuses-number">{{$index + 1}}</div>
@@ -88,9 +108,9 @@
 
     <div class="bonuses-block">
       <div class="block-header">{{'Dashboard.GrantedBonuses' | translate}}</div>
-      @if (topGrantedBonuses?.length){
+      @if (topGrantedBonuses()?.length){
         <div class="block-content">
-        @for (item of topGrantedBonuses; track $index){
+        @for (item of topGrantedBonuses(); track $index){
           @if (item.MaxAmount != 0){
           <div class="block-row">
              <div class="row-number bonuses-number">{{$index + 1}}</div>

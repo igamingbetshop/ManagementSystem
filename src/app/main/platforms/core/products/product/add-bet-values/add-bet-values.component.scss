@@ -1,0 +1,75 @@
+@import "mixins";
+@import "variables";
+
+.modal-wrap {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    max-height: calc(80vh - 91px);
+    min-height: 200px;
+    padding-right: 14px;
+}
+
+.field-content {
+    display: grid!important;
+    grid-template-columns: 1fr, 1fr, 1fr !important;
+    padding-top: 8px;
+}
+
+.mat-btn {
+    @include mat-btn-style;
+}
+
+.condition-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; 
+
+  .condition-items {
+    display: flex;
+    position: relative;
+    width: 100% !important;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 4px;
+    padding-top: 14px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .condition-item {
+      width: 100%;
+      column-gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+
+      .curreency-text {
+        font-size: 16px;
+      }
+
+      & > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    mat-icon {
+      cursor: pointer;
+      color: $red;
+      margin-left: 3px; 
+    }
+
+    .remove-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: $red;
+      font-size: 18px; 
+      // margin-left: 10px; 
+    }
+  }
+}
+
+  

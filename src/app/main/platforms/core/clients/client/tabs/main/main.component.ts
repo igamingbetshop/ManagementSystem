@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { DatePipe } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 
 import { take } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -171,7 +171,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
           this.formGroup.valueChanges.subscribe(data => {
             this.isSaveActive = true
           })
-
+          this.setQueryParams(this.client.PartnerId);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -184,6 +184,13 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
           this.getDistrict(this.countryId, false);
         }
       })
+  }
+  setQueryParams(partnerId: string | number) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { partnerId: partnerId },
+      queryParamsHandling: 'merge'
+    });
   }
 
   getUnderMonitoringTypes() {
@@ -207,7 +214,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       Email: [null],
       LanguageId: [null],
       LanguageName: [null],
-      // PromoCode: [null],
       CountryId: [null],
       DistrictId: [null],
       CityId: [null],
@@ -227,8 +233,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       UserId: [null],
       Comment: [null],
       Apartment: [null],
-      MobileNumber: [null],
-      PhoneNumber: [null],
+      MobileNumber: [null, [Validators.pattern(/^[0-9]+$/)]],
+      MobileCode: [null, [Validators.pattern(/^\+[0-9]+$/)]],
       SecondName: [null],
       SecondSurname: [null],
       GenderName: [null],
@@ -265,20 +271,20 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       const tomeZone = -1 * client.BirthDate.getTimezoneOffset() / 60;
       client.BirthDate = new Date(client.BirthDate.setHours(client.BirthDate.getHours() + tomeZone));
     }
-
+    client.MobileNumber = client.MobileCode + client.MobileNumber;
     this.apiService.apiPost(this.configService.getApiUrl, client, true,
       Controllers.CLIENT, Methods.CHANGE_CLIENT_DETAILS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           setTimeout(() => {
             this.getClient();
             this.isEdit = false;
+            this.getObjectHistory();
           }, 1000)
           SnackBarHelper.show(this._snackBar, { Description: 'The client has been updated successfully', Type: "success" });
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-    this.getObjectHistory()
   }
 
   public cancel() {
@@ -337,7 +343,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   public onCountryChange(event) {
     this.getDistrict(event.value);
     this.getCity(event.value);
-    // this.cities = this.allCities.filter(c => c.ParentId === event.value);
     this.formGroup.get('CountryId').setValue(event.value);
   }
 
@@ -351,7 +356,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   public onDistrictChange(event) {
-
     if (event.value == 0) {
       this.formGroup.get('DistrictId').setValue(null);
       this.getCity(this.formGroup.value.CountryId)

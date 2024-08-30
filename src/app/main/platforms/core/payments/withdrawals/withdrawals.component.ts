@@ -7,11 +7,11 @@ import { syncPaginationWithBtn } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-withdrawals',
-  templateUrl: './withdrawals.component.html',
-  styleUrls: ['./withdrawals.component.scss'],
+  templateUrl: '../deposits/deposits.component.html',
+  styleUrls: ['../deposits/deposits.component.scss'],
 })
 export class WithdrawalsComponent extends BasePaymentComponent implements OnInit {
-
+  
   constructor(
     protected injector:Injector,
     public dateAdapter: DateAdapter<Date>) {
@@ -22,6 +22,7 @@ export class WithdrawalsComponent extends BasePaymentComponent implements OnInit
 
   ngOnInit() {
     super.ngOnInit();
+    this.title = this.translate.instant('Payments.Withdrawals');
   }
 
   onGridReady(params: any): void {

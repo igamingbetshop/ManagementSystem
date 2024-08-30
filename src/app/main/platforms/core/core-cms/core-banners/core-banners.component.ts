@@ -22,17 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BannerService } from './core-banners.service';
 import { pagingSource } from './add-core-banner/add-core-banner.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
-
-
-export enum BannerVisibilityTypes {
-  'Empety' = -1,
-  'Logged Out' = 1,
-  'Logged In' = 2,
-  'No Deposit' = 3,
-  'One Deposit Only' = 4,
-  'Two Or More Deposits' = 5,
-}
-
+import { BannerVisibilityTypes } from './visibility-types.enum';
 
 @Component({
   selector: 'app-core-banners',
@@ -362,7 +352,7 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
 
   async addBaner() {
     const { AddCoreBannerComponent } = await import('./add-core-banner/add-core-banner.component');
-    const dialogRef = this.dialog.open(AddCoreBannerComponent, { width: ModalSizes.MIDDLE });
+    const dialogRef = this.dialog.open(AddCoreBannerComponent, { width: ModalSizes.LARGE });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.getCurrentPage();

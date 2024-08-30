@@ -15,6 +15,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CorePromotionComponent } from './core-promotion.component';
 import { MatRadioModule } from "@angular/material/radio";
 import { MatCardModule } from '@angular/material/card';
+import { IdToNamePipe } from 'src/app/core/pipes/id-to-name-pipe';
 
 const routes: Routes = [
   {
@@ -41,7 +42,8 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-    MatCardModule
+    MatCardModule,
+    IdToNamePipe
   ],
   declarations: [CorePromotionComponent]
 })

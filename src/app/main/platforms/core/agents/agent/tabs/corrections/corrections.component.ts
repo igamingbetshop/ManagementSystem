@@ -1,24 +1,22 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {AgBooleanFilterComponent} from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {ButtonRendererComponent} from "../../../../../../components/grid-common/button-renderer.component";
-import {TextEditorComponent} from "../../../../../../components/grid-common/text-editor.component";
-import {SelectRendererComponent} from "../../../../../../components/grid-common/select-renderer.component";
-import {NumericEditorComponent} from "../../../../../../components/grid-common/numeric-editor.component";
-import {ImageRendererComponent} from "../../../../../../components/grid-common/image-renderer.component";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService} from "../../../../../../../core/services";
-import {MatDialog} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {DateAdapter} from "@angular/material/core";
-import {DatePipe} from "@angular/common";
-import {take} from "rxjs/operators";
-import {Paging} from "../../../../../../../core/models";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {DateTimeHelper} from "../../../../../../../core/helpers/datetime.helper";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { AgBooleanFilterComponent } from "../../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { ButtonRendererComponent } from "../../../../../../components/grid-common/button-renderer.component";
+import { TextEditorComponent } from "../../../../../../components/grid-common/text-editor.component";
+import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
+import { ImageRendererComponent } from "../../../../../../components/grid-common/image-renderer.component";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService } from "../../../../../../../core/services";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { DateAdapter } from "@angular/material/core";
+import { DatePipe } from "@angular/common";
+import { take } from "rxjs/operators";
+import { Paging } from "../../../../../../../core/models";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 @Component({
@@ -27,31 +25,25 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
   styleUrl: './corrections.component.scss'
 })
 export class CorrectionsComponent extends BasePaginatedGridComponent implements OnInit {
-  @ViewChild('agGrid') agGrid: AgGridAngular;
-  @ViewChild('agGrid2') agGrid2: AgGridAngular;
   public userId: number;
   public agentIds;
   public rowData = [];
-  public rowData2 = [];
   public clientUnusedId;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowModelType2: string = GridRowModelTypes.SERVER_SIDE;
+  public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   public columnDefs = [];
-  public columnDefs2 = [];
   public fromDate = new Date();
   public toDate = new Date();
   public clientData = {};
   public filteredData;
   public headerName;
-  public selectedItem = 'today';
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     textEditor: TextEditorComponent,
-    selectRenderer: SelectRendererComponent,
     numericEditor: NumericEditorComponent,
     imageRenderer: ImageRendererComponent
   };
+  accountsRowData: any;
 
   constructor(
     private apiService: CoreApiService,
@@ -63,59 +55,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
+
     this.columnDefs = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Common.Balance',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Balance',
-        sortable: true,
-        resizable: true,
-        valueFormatter: params => params.data.Balance.toFixed(2),
-      },
-      {
-        headerName: 'Clients.Currency',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CurrencyId',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Payments.Debit',
-        headerValueGetter: this.localizeHeader.bind(this),
-        resizable: true,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.debitToAccount['bind'](this),
-          Label: 'Debit To Account',
-          bgColor: '#3E4D66',
-          textColor: '#FFFFFF'
-        }
-      },
-      {
-        headerName: 'Payments.Credit',
-        headerValueGetter: this.localizeHeader.bind(this),
-        resizable: true,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.creditFromAccount['bind'](this),
-          Label: 'Credit From Account',
-          bgColor: '#3E4D66',
-          textColor: '#FFFFFF'
-        }
-      }
-    ];
-    this.columnDefs2 = [
       {
         headerName: 'Common.Id',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -246,6 +187,11 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     this.toDate = toDate;
   }
 
+  getData() {
+    this.getUserAccounts();
+    this.getCurrentPage();
+  }
+
   getUserAccounts() {
     let requestObject;
     if (this.agentIds) {
@@ -257,13 +203,13 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
     }
     this.apiService.apiPost(this.configService.getApiUrl, requestObject, true,
       Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject.Accounts;
-        this.clientUnusedId = this.rowData.find((item) => item.TypeId === 1);
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.accountsRowData = data.ResponseObject.Accounts;
+          this.clientUnusedId = this.accountsRowData.find((item) => item.TypeId === 1);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   onGridReady(params) {
@@ -291,13 +237,13 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
         this.filteredData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, this.filteredData, true,
           Controllers.USER, Methods.GET_CORRECTIONS).pipe(take(1)).subscribe((data) => {
-          if (data.ResponseCode === 0) {
-            const mappedRows = data.ResponseObject.Entities;
-            params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
-          } else {
-            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-          }
-        });
+            if (data.ResponseCode === 0) {
+              const mappedRows = data.ResponseObject.Entities;
+              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
       }
     }
   }

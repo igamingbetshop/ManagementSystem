@@ -35,7 +35,7 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
   public cacheBlockSize = 500;
   public sportsNamesEntites = [];
   public partnerNamesEntites = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -283,7 +283,7 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
 
   onDeleteGroup() {
     const id = this.gridApi.getSelectedRows()[0]?.Id;
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.delPath, { Id: id })
       .pipe(take(1))
       .subscribe(data => {
@@ -293,7 +293,7 @@ export class MarketTypeGroupComponent extends BasePaginatedGridComponent impleme
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

@@ -1,0 +1,51 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container {
+  @include container-style;
+
+  .grid-content {
+    width: 100%;
+    height: 68%;
+    position: relative;
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .footer-ag-grid {
+      position: absolute;
+      left: 14%;
+      bottom: 3.2%;
+      display: flex;
+      align-items: center;
+      width: 75%;
+      z-index: 55;
+      @include grid-dropdown-style;
+
+      .selections {
+        background-color: #C7DAE5;
+        margin-left: 14px;
+        padding: 4px 12px;
+      }
+
+    }
+
+  }
+
+  .match-grid {
+    width: 100%;
+    height: 24%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  
+    ::ng-deep {
+      ag-grid-angular {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, Renderer2, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService, ConfigService, LocalStorageService } from "../../core/services";
@@ -7,6 +7,7 @@ import { AutofillMonitor } from "@angular/cdk/text-field";
 import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs';
 import { ModalSizes } from 'src/app/core/enums';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-sign-in',
@@ -25,7 +26,7 @@ export class SignInComponent implements AfterViewInit {
   imagePath: string = '';
   firstDisabled: boolean = false;
   ignoreAutofill = true;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -35,7 +36,9 @@ export class SignInComponent implements AfterViewInit {
     private configService: ConfigService,
     private localStorageService: LocalStorageService,
     private translate: TranslateService,
-    private autofill: AutofillMonitor
+    private autofill: AutofillMonitor,
+    private renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document,
   ) {
   }
 
@@ -67,7 +70,7 @@ export class SignInComponent implements AfterViewInit {
     });
     this.authService.notifyGetUserLoginError.subscribe(value => {
       this.errorMessage = value;
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
 
     this.setLogoByDomain();
@@ -110,6 +113,15 @@ export class SignInComponent implements AfterViewInit {
   changeLanguage(language: string): void {
     this.localStorageService.addLanguage('lang', language);
     this.translate.use(language);
+    this.setGlobalDirection(language);
+  }
+
+  setGlobalDirection(language: string) {
+    if (['ar', 'fa'].includes(language)) {
+      document.body.setAttribute('dir', 'rtl');
+  } else {
+      document.body.setAttribute('dir', 'ltr');
+  }
   }
 
   hasError(fieldName: string) {
@@ -135,7 +147,7 @@ export class SignInComponent implements AfterViewInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.isSendingReqest = true;
+      this.isSendingRequest = true;
       this.authService.logIn(this.loginForm.getRawValue());
     }
   }

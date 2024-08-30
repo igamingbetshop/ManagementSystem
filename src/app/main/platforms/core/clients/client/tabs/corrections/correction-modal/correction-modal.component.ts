@@ -27,7 +27,7 @@ export class CorrectionModalComponent implements OnInit {
   currencyId;
   showSelectAccountType;
   accountTypes = [];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<CorrectionModalComponent>,
@@ -95,10 +95,10 @@ export class CorrectionModalComponent implements OnInit {
   }
 
   onsubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     } else {
-      this.isSendingReqest = true; 
+      this.isSendingRequest = true; 
       const obj = this.formGroup.getRawValue();
       if (obj.OperationTypeId === null) {
           delete obj.OperationTypeId;
@@ -117,7 +117,7 @@ export class CorrectionModalComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
           }
-          this.isSendingReqest = false; 
+          this.isSendingRequest = false; 
         });
       } else {
         if(this.headerName == 'CreditFromClient') {

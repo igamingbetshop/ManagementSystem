@@ -1,10 +1,21 @@
 <div class="container">
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-competitions']">{{'Sport.Competitions' | translate}}</a> / :{{'Sport.Profit' | translate}} / {{name}}</div>
-    <div>{{partnerName}}</div>
+    <div class="title"><a [routerLink]="['../../all-competitions']">{{'Sport.Competitions' | translate}}</a> / :{{'Sport.Profit' | translate}} / {{name}} / {{partnerName}}</div>
+    <!-- <div></div> -->
+
+    @if(sportId == 1) {
+      <app-market-types-buttons 
+      [partnerId]="partnerId" 
+      [sportId]="sportId"
+      [matchId]="matchId"
+      (onSelectedMarketEmit)="onSetSelectedMarket($event)"
+      />
+    }
+
 
     <div class = "bulk-editor-dropdown">
       <button mat-stroked-button class="mat-bulk-btn"
+              [class.disabled]="!this.isRowSelected()"
               [matMenuTriggerFor]="bulkMenu"
               #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
         {{'Common.Edit' | translate}}
@@ -14,7 +25,7 @@
       </mat-menu>
     </div>
     <button mat-stroked-button class="mat-btn" (click)="addSettings()">{{'Sport.AddSettings' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="delete()">{{'Sport.DeleteSettings' | translate}}</button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="!isRowSelected()" (click)="delete()">{{'Sport.DeleteSettings' | translate}}</button>
   </div>
   <div class="grid-content">
     <ag-grid-angular
@@ -24,13 +35,15 @@
       [headerHeight]="33"
       [rowHeight]="42"
       [suppressCopyRowsToClipboard]="true"
-      [rowData]="rowData"
+      [rowData]="mappedRowData()"
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
       [enableBrowserTooltips]="enableBrowserTooltips"
       [sideBar]="sideBar"
       [animateRows]="true"
+      [pagination]="true"
+      [paginationPageSize]="5000"
       [components]="frameworkComponents"
       [enableBrowserTooltips]="enableBrowserTooltips"
       [cacheBlockSize]="cacheBlockSize"

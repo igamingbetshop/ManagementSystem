@@ -237,12 +237,17 @@
 
 
 
-      <div>
+      <div class="style-type">
         <div class="first-hand">{{'Bonuses.BetValues' | translate}}</div>
-        <div class="second-hand">{{currentProduct?.BetValues}}</div>
+        <div class="second-hand second-right">{{currentProduct?.BetValues}}</div>
         <div class="form-field form-input">
-            <input matInput [formControlName]="'BetValues'" readonly>
+          <button mat-raised-button class="mat-btn add-value-btn" (click)="onOpenAddValuePopup()">{{"Common.AddValue" | translate}}</button>
         </div>
+        
+        <!-- <div class="form-field text-area" >
+          <textarea matInput [placeholder]="'Bonuses.Description' | translate"
+          [formControlName]="'BetValues'"> </textarea>
+        </div> -->
       </div>
 
       <div>
@@ -332,5 +337,4 @@
 
 @if (this.activateRoute.snapshot.queryParams.CommentId) {
   <router-outlet></router-outlet>
-
 }

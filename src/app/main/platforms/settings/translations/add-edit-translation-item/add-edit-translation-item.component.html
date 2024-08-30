@@ -20,10 +20,10 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button 
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button
     class="modal-primary-btn" 
     (click)="onSubmit()"
-    [class.disabled]="!formGroup.valid || isSendingReqest"
+    [class.disabled]="!formGroup.valid || isSendingRequest"
     >{{'Common.Save' | translate}}</button>
 </div>

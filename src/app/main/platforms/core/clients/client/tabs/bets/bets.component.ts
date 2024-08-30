@@ -58,7 +58,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   private oddsType: number;
   accounts = [];
   accountId = null;
-  providers = [];
+  providers = [1, 5, 6, 100, 21, 31, 91, 1119 ];
   pageIdName: string;
 
   constructor(
@@ -458,7 +458,7 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     this.toDate = new Date(this.toDate.setDate(this.toDate.getDate()));
     this.getDocumenStatesEnum();
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
-    this.getProviders();
+    // this.getProviders();
   }
 
   setTime() {
@@ -473,31 +473,31 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     this.getCurrentPage();
   }
 
-  getProviders() {
-    const paging = {
-      "SkipCount": 0,
-      "TakeCount": 100,
-      "OrderBy": null,
-      "FieldNameToOrderBy": "",
-      "GameProviderIds": {
-        "IsAnd": true,
-        "ApiOperationTypeList": [
-          {
-            "OperationTypeId": 1,
-            "IntValue": 100
-          }
-        ]
-      }
-    }
-    this.apiService.apiPost(this.configService.getApiUrl, paging,
-      true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.providers = data.ResponseObject.Entities.map(provider => provider.Id);
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
+  // getProviders() {
+  //   const paging = {
+  //     "SkipCount": 0,
+  //     "TakeCount": 100,
+  //     "OrderBy": null,
+  //     "FieldNameToOrderBy": "",
+  //     "GameProviderIds": {
+  //       "IsAnd": true,
+  //       "ApiOperationTypeList": [
+  //         {
+  //           "OperationTypeId": 1,
+  //           "IntValue": 100
+  //         }
+  //       ]
+  //     }
+  //   }
+  //   this.apiService.apiPost(this.configService.getApiUrl, paging,
+  //     true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
+  //       if (data.ResponseCode === 0) {
+  //         this.providers = data.ResponseObject.Entities.map(provider => provider.Id);
+  //       } else {
+  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+  //       }
+  //     });
+  // }
 
   getClientAccounts() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
@@ -576,6 +576,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
               })
               this.totalBetAmount = data.ResponseObject.TotalBetAmount;
               this.totalWinAmount = data.ResponseObject.TotalWinAmount;
+              this.isRowMaster = (dataItem: any) => {
+                return this.providers.includes(dataItem.SubproviderId);
+              };
+
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Bets.Count });
               this.gridApi?.setPinnedBottomRowData([
                 {
@@ -583,11 +587,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
                   WinAmount: `${this.totalWinAmount.toLocaleString('en-US', { maximumFractionDigits: 2 }).replace(/,/g, ' ')} ${this.playerCurrency}`
                 }
               ]);
-
-              this.isRowMaster = (dataItem: any) => {
-                return this.providers.includes(dataItem.ProductId);
-              };
-
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
               params.success({ rowData: [], rowCount: 0 });

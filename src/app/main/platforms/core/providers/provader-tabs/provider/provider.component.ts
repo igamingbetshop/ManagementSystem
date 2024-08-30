@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CellClickedEvent } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup } from 'ag-grid-community';
 import { take } from 'rxjs/operators';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { Paging } from 'src/app/core/models';
@@ -14,10 +14,7 @@ import { syncColumnNestedSelectPanel } from 'src/app/core/helpers/ag-grid.helper
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import {ExportService} from "../../../services/export.service";
 
-const statusModel = [
-  { "Name": "active", "Id": 1 },
-  { "Name": "inactive", "Id": 2 }
-];
+
 
 @Component({
   selector: 'app-provider',
@@ -251,7 +248,6 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
       getRows: (params) => {
         const paging = new Paging();
         paging.SkipCount = this.paginationPage - 1;
-        // paging.TakeCount = this.cacheBlockSize;
         paging.TakeCount = Number(this.cacheBlockSize);
         paging.GameProviderIds = {
           IsAnd: true,
@@ -260,19 +256,24 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
             IntValue: this.providerId,
           }]
         };
+        if (params.parentNode.level == -1) {
+          paging.ProductId = 1;
+        } else {
+          paging.ParentId = params.parentNode.data.Id;
+        }
         this.changeFilerName(params.request.filterModel,
           ['SubproviderName'], ['SubproviderId']);
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
-
-        console.log(paging, 'paging');
-
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
-              const mappedRows = data.ResponseObject.Entities;
-              params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+              const enitities = (data.ResponseObject.Entities);
+              enitities.forEach(entity => {
+                entity.group = !entity.IsLeaf;
+              })
+              params.success({ rowData: enitities, rowCount: enitities.length });
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
@@ -280,6 +281,26 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
       },
     };
   }
+
+  public isServerSideGroup: IsServerSideGroup = (dataItem: any) => {
+    return dataItem.group;
+  };
+
+  public getServerSideGroupKey: GetServerSideGroupKey = (dataItem: any) => {
+    return dataItem.Id;
+  };
+
+  public autoGroupColumnDef: ColDef = {
+    headerName: 'Common.GroupId',
+    headerValueGetter: this.localizeHeader.bind(this),
+    field: 'Id',
+    checkboxSelection: true,
+    cellRendererParams: {
+      innerRenderer: (params: ICellRendererParams) => {
+        return params.data.Id;
+      },
+    },
+  };
 
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));

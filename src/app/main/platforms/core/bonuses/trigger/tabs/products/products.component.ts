@@ -166,7 +166,11 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
       product.CoinValue = settings.CoinValue;
       product.Count = settings.Count;
       product.Coins = settings.Coins;
-      product.group = !product.IsLeaf;
+      if (product.GameProviderId != null) {
+        product.group = false;
+      } else {
+        product.group = !product.IsLeaf;
+      }
     });
   }
 

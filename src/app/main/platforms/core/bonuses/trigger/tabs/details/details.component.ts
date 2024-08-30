@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, signal } from '@angular/core';
 import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { take } from "rxjs/operators";
 import { CoreApiService } from "../../../../services/core-api.service";
@@ -42,6 +42,10 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   ];
   public triggerType: number;
   public conditionTypes;
+  isNotUptoAmmount = signal<any>(false);
+  isNotMinAmount = signal<any>(false);
+  isNotAmount = signal<any>(false);
+  isNotMaxAmount = signal<any>(false);
 
   public addedConditions = {
     selectedGroupType: 1,
@@ -174,30 +178,28 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       if (trigger.DayOfWeek) {
         trigger.Day = this.days.find((item) => trigger?.DayOfWeek === item.Id).Name;
       }
-      trigger.Status
       return trigger;
     });
+  
     this.triggerSetting = this.triggerSettings[0];
     this.triggerType = this.triggerSetting.Type;
-
-    this.formGroup.patchValue(this.triggerSetting)
-
-    
-    // if (this.triggerSetting?.PaymentSystemIds) {
-    //   this.formGroup.get('PaymentSystemIds').setValue(this.triggerSetting?.PaymentSystemIds);
-    // }
-    // this.formGroup.get('BonusSettingCodes').setValue(this.triggerSetting?.BonusSettingCodes);
-    // if (this.triggerType === 7) {
-    //   this.formGroup.get('Sequence').setValue(this.triggerSetting?.Sequence);
-    // } else if (this.triggerType === 7 || this.triggerType === 8) {
-    //   this.formGroup.get('UpToAmount').setValue(this.triggerSetting?.UpToAmount);
-    // }
+  
+    this.formGroup.patchValue(this.triggerSetting);
+  
     if (this.triggerType === 1 || this.triggerType === 2 || this.triggerType === 3) {
       this.addedConditions = this.bonusesService.getResponseConditions(this.triggerSetting?.Conditions, this.conditionTypes);
     }
-
+  
+    if (this.triggerSetting.Type !== undefined) {
+      this.isNotUptoAmmount.set( !(this.triggerSetting.Type === 1 || this.triggerSetting.Type === 2 || this.triggerSetting.Type === 3 || this.triggerSetting.Type === 10 || this.triggerSetting.Type === 7 || this.triggerSetting.Type === 8));
+      this.isNotAmount.set( (this.triggerSetting.Type === 1 || this.triggerSetting.Type === 2 || this.triggerSetting.Type === 3 || this.triggerSetting.Type === 10 || this.triggerSetting.Type === 7 || this.triggerSetting.Type === 8))
+      this.isNotMinAmount.set(!(this.triggerSetting.Type === 7 || this.triggerSetting.Type === 8 || this.triggerSetting.Type === 15));
+      this.isNotMaxAmount.set( !(this.triggerSetting.Type === 7 || this.triggerSetting.Type === 8) );
+    }
+    
     this.setPaymentSystems();
   }
+  
 
   private formValues() {
     this.formGroup = this.fb.group({
@@ -315,7 +317,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
         return this.paymentSystems?.find((item) => elem === item.Id).Name
       }))
     }
-
   }
 
   onAmmountSettingsChange(event) {
@@ -327,7 +328,13 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
 
   async onOpenCurrencySettings() {
     const { AddCurrencySettingsComponent } = await import('../../../currency-settings/add-currency-settings/add-currency-settings.component');
-    const dialogRef = this.dialog.open(AddCurrencySettingsComponent, { width: ModalSizes.MEDIUM });
+    const dialogRef = this.dialog.open(AddCurrencySettingsComponent, { width: ModalSizes.MEDIUM, 
+      data: { 
+        isUpToAmmount: this.isNotUptoAmmount(),
+        isAmount: this.isNotAmount(),
+        isMinAmount: this.isNotMinAmount(),
+        isMaxAmount: this.isNotMaxAmount() }
+       });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         const payload = { ...this.triggerSetting }

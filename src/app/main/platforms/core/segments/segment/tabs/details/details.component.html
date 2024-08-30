@@ -3,669 +3,480 @@
     <div class="title"><a [routerLink]="['../../../all-segments']">{{'Segments.Segments' | translate}}</a> /
       {{segmentId}} : {{'Segments.Details' |
       translate}}</div>
-    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+    <button mat-stroked-button [class.disabled]="!PaymentSegment" class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
   </div>
 
   <div class="content-edit">
-    <form class="grid-edit" [class.can-edit]="isEdit" *ngIf="PaymentSegment" [formGroup]="formGroup">
+    @if (PaymentSegment) {
+      <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
 
-      <div>
-        <div class="first-hand">{{'Common.Id' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.Id}}</div>
-        <div class="form-field form-input">
-          <input matInput readonly formControlName="Id">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Segments.SegmentMode' | translate}}</div>
-        <div class="static-hand">{{PaymentSegment?.ModeName}}</div>
-
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-        <div class="static-hand">{{PaymentSegment?.CreationTime | date: 'medium'}}</div>
-      </div>
-
-      <div style="height: auto">
-        <div class="first-hand" style="height: auto; min-height: 100%;">{{'LastUpdateTime' | translate}}</div>
-        <div class="static-hand ">{{PaymentSegment?.LastUpdateTime | date: 'medium'}}</div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Clients.Region' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.Region}}</div>
-        <div class="form-field form-input">
-          <ng-container *ngIf="PaymentSegment">
-            <input matInput placeholder="{{'Clients.Region' | translate}}" formControlName="Region">
-          </ng-container>
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.FirstName}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput placeholder="{{'Clients.FirstName' | translate}}" formControlName="FirstName">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Clients.LastName' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.LastName}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput placeholder="{{'Clients.LastName' | translate}}" formControlName="LastName">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.PartnerName}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput readonly [placeholder]="PaymentSegment?.PartnerName" [(ngModel)]="PaymentSegment.PartnerName"
-            [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Bonuses.SegmentId' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.SegmentId}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput placeholder="{{'Bonuses.SegmentId' | translate}}" formControlName="SegmentId">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Common.Name' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.Name}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput [placeholder]="PaymentSegment?.Name" formControlName="Name">
-        </div>
-      </div>
-
-
-
-      <div>
-        <div class="first-hand">{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.SuccessWithdrawalPaymentSystem}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput placeholder="{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}"
-            [(ngModel)]="PaymentSegment.SuccessWithdrawalPaymentSystem" [ngModelOptions]="{standalone: true}">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Segments.IsKYCVerified' | translate}}</div>
-        <div class="second-hand">
-          {{PaymentSegment?.IsKYCVerifiedName}}
+        <div>
+          <div class="first-hand">{{'Common.Id' | translate}}</div>
+          <div class="static-hand">{{PaymentSegment?.Id}}</div>
         </div>
 
-        <div class="form-field form-dropdown">
-          <mat-select formControlName="IsKYCVerified">
-            @for (KYC of KYCStates; track $index) {
-            <mat-option [value]="KYC.Id">{{KYC.Name}}
-            </mat-option>
+        <div>
+          <div class="first-hand">{{'Common.Status' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.State | IdToName: statuses}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'State'">
+              @for (status of statuses; track $index) {
+                <mat-option [value]="status.Id">{{status.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Segments.SegmentMode' | translate}}</div>
+          <div class="static-hand">{{PaymentSegment?.Mode | IdToName: modes}}</div>
+
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+          <div class="static-hand">{{PaymentSegment?.CreationTime | date: 'medium'}}</div>
+        </div>
+
+        <div style="height: auto">
+          <div class="first-hand" style="height: auto; min-height: 100%;">{{'LastUpdateTime' | translate}}</div>
+          <div class="static-hand ">{{PaymentSegment?.LastUpdateTime | date: 'medium'}}</div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Clients.Region' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.Region}}</div>
+          <div class="form-field form-input">
+            @if (PaymentSegment) {
+              <input matInput placeholder="{{'Clients.Region' | translate}}" formControlName="Region">
             }
-          </mat-select>
+          </div>
         </div>
 
-        <!-- <div class="form-field form-checkbox" *ngIf="isEdit">
-          <mat-radio-group formControlName="IsKYCVerified">
-            <mat-radio-button *ngFor="let KYC of KYCStates" style="padding: 5px;"
-              checked="PaymentSegment.IsKYCVerified === KYC.Id" color="primary"
-              [value]="KYC.Id">{{KYC.Name}}</mat-radio-button>
-          </mat-radio-group>
-        </div> -->
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Common.Gender' | translate}}</div>
-        <div class="second-hand">
-          <div class="second-hand">{{PaymentSegment?.GenderName}}</div>
-
+        <div>
+          <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.FirstName}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Clients.FirstName' | translate}}" formControlName="FirstName">
+          </div>
         </div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'Gender'" [placeholder]="'All'">
-            @for (gender of genders; track $index) {
-            <mat-option [value]="gender.Id">{{gender.Name}}
-            </mat-option>
+
+        <div>
+          <div class="first-hand">{{'Clients.LastName' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.LastName}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Clients.LastName' | translate}}" formControlName="LastName">
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+          <div class="static-hand">{{PaymentSegment?.PartnerId | IdToName: partners}}</div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Common.Name' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.Name}}</div>
+          <div class="form-field form-input">
+            <input matInput [placeholder]="PaymentSegment?.Name" formControlName="Name">
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.SuccessWithdrawalPaymentSystem}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}" formControlName="SuccessWithdrawalPaymentSystem">
+          </div>
+        </div>
+
+        <div>
+          <div class="first-hand">{{'Segments.IsKYCVerified' | translate}}</div>
+          <div class="second-hand">
+            @if( PaymentSegment.IsKYCVerified ) {
+              {{PaymentSegment?.IsKYCVerified | IdToName: commonStates}}
+            } @else {
+              {{'Common.All' | translate}}
             }
-          </mat-select>
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Segments.AffiliateId' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.AffiliateId}}</div>
-        <div class="form-field form-input" *ngIf="isEdit">
-          <input matInput placeholder="{{'Segments.AffiliateIds' | translate}}" formControlName="AffiliateId">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Segments.Bonus' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.Bonus}}</div>
-        <div class="form-field form-input">
-          <input matInput placeholder="{{'Segments.Bonuses' | translate}}" formControlName="Bonuses">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.ClientId}}</div>
-        <div class="form-field form-input">
-          <input matInput placeholder="{{'Segments.ClientIds' | translate}}" formControlName="ClientId">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Segments.SuccessDepositPayment' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.SuccessDepositPaymentSystem}}</div>
-        <div class="form-field form-input">
-          <input matInput placeholder="{{'Segments.SuccessDepositPaymentSystem' | translate}}"
-            [(ngModel)]="PaymentSegment.SuccessDepositPaymentSystem" formControlName="SuccessDepositPaymentSystem">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Clients.Email' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.Email}}</div>
-        <div class="form-field form-input">
-          <input matInput placeholder="{{'Clients.Email' | translate}}" formControlName="Email">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.MobileCode}}</div>
-        <div class="form-field form-input">
-          <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}"
-            formControlName="MobileCode">
-        </div>
-      </div>
-
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.SessionPeriod' | translate}}</div>
-        <div class="second-hand">
-          {{PaymentSegment?.SessionPeriod}}
-          <!-- <ng-container>
-            <span *ngFor="let condition of addedConditions.SessionPeriodObject.conditions; let $index = index">
-              <span>
-                {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
-              </span>
-            </span>
-          </ng-container> -->
-        </div>
-
-        <div class="form-field form-input wraper  hand-group" *ngIf="isEdit">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions?.SessionPeriodObject?.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue | date: 'short'}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions?.SessionPeriodObject, $index)">close
-                </mat-icon>
-              </span>
-            </span>
-          </ng-container>
-          <button mat-icon-button (click)="addedConditions.SessionPeriodObject.showNew=true">
-            <mat-icon>add_box</mat-icon>
-          </button>
-
-          <div class="nested" *ngIf="addedConditions.SessionPeriodObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.SessionPeriodObject.selectedConditionType"
-                [ngModelOptions]="{standalone: true}">
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="mr-15 picker">
-
-            <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
-                     [(ngModel)]="addedConditions.SessionPeriodObject.selectedConditionValue"
-                     [ngModelOptions]="{standalone: true}" #valueInput="ngModel">
-              <mat-error *ngIf="valueInput.invalid">{{ 'Invalid value' | translate }}</mat-error>
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput.invalid"
-              (click)="addDateCondition(addedConditions.SessionPeriodObject)">{{ 'Common.Add' | translate }}
-            </button>
+          </div>
+          <div class="form-field form-dropdown">
+            <mat-select formControlName="IsKYCVerified" [placeholder]="'All'">
+              @for (KYC of commonStates; track $index) {
+              <mat-option [value]="KYC.Id">{{KYC.Name}}
+              </mat-option>
+              }
+            </mat-select>
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row" style="height: auto;">
-        <div class="first-hand hand-group" style="height: auto;">{{'Segments.SignUpPeriod' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.SignUpPeriod}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.SignUpPeriodObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue | date: 'short'}}
-              </span>
-              <mat-icon style="cursor: pointer"
-                (click)="removeCondition(addedConditions.SignUpPeriodObject, $index)">close</mat-icon>
+        <div>
+          <div class="first-hand">{{'Clients.IsEmailVerified' | translate}}</div>
+          <div class="second-hand">
+            @if( PaymentSegment.IsEmailVerified ) {
+              {{PaymentSegment?.IsEmailVerified | IdToName: commonStates}}
+            } @else {
+              {{'Common.All' | translate}}
+            }
+          </div>
 
-            </span>
-            <button mat-icon-button (click)="addedConditions.SignUpPeriodObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.SignUpPeriodObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.SignUpPeriodObject.selectedConditionType"
-                [ngModelOptions]="{standalone: true}">
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="mr-15 picker">
-                <input matInput type="numbrer" [matDatepicker]="picker1"
-                [(ngModel)]="addedConditions.SignUpPeriodObject.selectedConditionValue"
-                  [ngModelOptions]="{'standalone': true}">
-                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-            <button mat-raised-button color="primary"
-              (click)="addDateCondition(addedConditions.SignUpPeriodObject)">{{'Common.Add' | translate}}
-            </button>
+          <div class="form-field form-dropdown">
+            <mat-select formControlName="IsEmailVerified" [placeholder]="'All'">
+              @for (state of commonStates; track $index) {
+              <mat-option [value]="state.Id">{{state.Name}}
+              </mat-option>
+              }
+            </mat-select>
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.TotalBetsCount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.TotalBetsCount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.TotalBetsCountObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-              </span>
+        <div>
+          <div class="first-hand">{{'Clients.IsMobileNumberVerified' | translate}}</div>
+          <div class="second-hand">
+            @if( PaymentSegment.IsMobileNumberVerified ) {
+              {{PaymentSegment?.IsMobileNumberVerified | IdToName: commonStates}}
+            } @else {
+              {{'Common.All' | translate}}
+            }
+          </div>
 
-              <mat-icon style="cursor: pointer"
-                (click)="removeCondition(addedConditions.TotalBetsCountObject, $index)">close</mat-icon>
-
-            </span>
-            <button mat-icon-button (click)="addedConditions.TotalBetsCountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-          <div class="nested" *ngIf="addedConditions.TotalBetsCountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.TotalBetsCountObject.selectedConditionType"
-                [ngModelOptions]="{standalone: true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
-                #valueInput2="ngModel" [(ngModel)]="addedConditions.TotalBetsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput2.invalid"
-              (click)="addCondition(addedConditions.TotalBetsCountObject)">{{'Common.Add' | translate}}
-            </button>
+          <div class="form-field form-dropdown">
+            <mat-select formControlName="IsMobileNumberVerified" [placeholder]="'All'">
+              @for (state of commonStates; track $index) {
+              <mat-option [value]="state.Id">{{state.Name}}
+              </mat-option>
+              }
+            </mat-select>
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.SportBetsCount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.SportBetsCount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions?.SportBetsCountObject?.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.SportBetsCountObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.SportBetsCountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.SportBetsCountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.SportBetsCountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="value" type="number" pattern="^\d+$" #valueInput3="ngModel"
-                [(ngModel)]="addedConditions.SportBetsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput3.invalid"
-              (click)="addCondition(addedConditions.SportBetsCountObject)">{{'Common.Add' | translate}}
-            </button>
+        <div>
+          <div class="first-hand">{{'Common.Gender' | translate}}</div>
+          <div class="second-hand">
+            <div class="second-hand">
+              @if( PaymentSegment.Gender ) {
+                {{PaymentSegment.Gender | IdToName: genders}}
+              } @else {
+                {{'Common.All' | translate}}
+              }
+            </div>
+          </div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'Gender'" [placeholder]="'All'">
+              @for (gender of genders; track $index) {
+              <mat-option [value]="gender.Id">{{gender.Name}}
+              </mat-option>
+              }
+            </mat-select>
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.CasinoBetsCount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.CasinoBetsCount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.CasinoBetsCountObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-              </span>
-              <mat-icon style="cursor: pointer"
-                (click)="removeCondition(addedConditions.CasinoBetsCountObject, $index)">close</mat-icon>
-            </span>
-            <button mat-icon-button (click)="addedConditions.CasinoBetsCountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.CasinoBetsCountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.CasinoBetsCountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
-                #valueInput4="ngModel" [(ngModel)]="addedConditions.CasinoBetsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput4.invalid"
-              (click)="addCondition(addedConditions.CasinoBetsCountObject)">{{'Common.Add' | translate}}
-            </button>
+        <div>
+          <div class="first-hand">{{'Segments.Bonus' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.Bonus}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Segments.Bonuses' | translate}}" formControlName="Bonuses">
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.TotalBetsAmount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.TotalBetsAmount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.TotalBetsAmountObject?.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.TotalBetsAmountObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.TotalBetsAmountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.TotalBetsAmountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.TotalBetsAmountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.TotalBetsAmountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}" #valueInput5="ngModel">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput5.invalid"
-              (click)="addCondition(addedConditions.TotalBetsAmountObject)">{{'Common.Add' | translate}}
-            </button>
+        <div>
+          <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.ClientId}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Segments.ClientIds' | translate}}" formControlName="ClientId">
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.TotalDepositsCount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.TotalDepositsCount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.TotalDepositsCountObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.TotalDepositsCountObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.TotalDepositsCountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.TotalDepositsCountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.TotalDepositsCountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+$" placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.TotalDepositsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}" #valueInput6="ngModel">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput6.invalid"
-              (click)="addCondition(addedConditions.TotalDepositsCountObject)">{{'Common.Add' | translate}}
-            </button>
+        <div>
+          <div class="first-hand">{{'Segments.SuccessDepositPayment' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.SuccessDepositPaymentSystem}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Segments.SuccessDepositPaymentSystem' | translate}}"
+              [(ngModel)]="PaymentSegment.SuccessDepositPaymentSystem" formControlName="SuccessDepositPaymentSystem">
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.TotalDepositsAmount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.TotalDepositsAmount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.TotalDepositsAmountObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.TotalDepositsAmountObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.TotalDepositsAmountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.TotalDepositsAmountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.TotalDepositsAmountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.TotalDepositsAmountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}" #valueInput7="ngModel">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput7.invalid"
-              (click)="addCondition(addedConditions.TotalDepositsAmountObject)">
-              {{'Common.Add' | translate}}
-            </button>
+        <div>
+          <div class="first-hand">{{'Clients.Email' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.Email}}</div>
+          <div class="form-field form-input">
+            <input matInput placeholder="{{'Clients.Email' | translate}}" formControlName="Email">
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsCount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.TotalWithdrawalsCount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.TotalWithdrawalsCountObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.TotalWithdrawalsCountObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.TotalWithdrawalsCountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.TotalWithdrawalsCountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.TotalWithdrawalsCountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput placeholder="{{'Bonuses.Value' | translate}}" type="number" pattern="^\d+$"
-                [(ngModel)]="addedConditions.TotalWithdrawalsCountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}" #valueInput8="ngModel">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput8.invalid"
-              (click)="addCondition(addedConditions.TotalWithdrawalsCountObject)">
-              {{'Common.Add' | translate}}
-            </button>
+        <div>
+          <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.MobileCode}}</div>
+          <div class="form-field form-input">
+            <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}"
+              formControlName="MobileCode">
           </div>
         </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsAmount' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.TotalWithdrawalsAmount}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions.TotalWithdrawalsAmountObject.conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.TotalWithdrawalsAmountObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.TotalWithdrawalsAmountObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
+        <div class="add-content group-row">
+          <div class="first-hand">{{'Segments.AffiliateId' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.AffiliateId}}</div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper  hand-group">
+              <app-condition-input 
+                  [hasLabel]="false"
+                  [conditions]="addedConditions.AffiliateId.conditions" [operations]="operations"
+                  inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                  (conditionsChange)="addedConditions.AffiliateId.conditions = $event">
+                </app-condition-input>
+            </div>
+          }
+        </div>
 
-          <div class="nested" *ngIf="addedConditions.TotalWithdrawalsAmountObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.TotalWithdrawalsAmountObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.TotalWithdrawalsAmountObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}" #valueInput9="ngModel">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput9.invalid"
-              (click)="addCondition(addedConditions.TotalWithdrawalsAmountObject)">
-              {{'Common.Add' | translate}}
-            </button>
+        <div class="add-content group-row">
+          <div class="first-hand">{{'Segments.AgentIds' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.AgentId}}</div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper  hand-group">
+              <app-condition-input 
+                [hasLabel]="false"
+                [conditions]="addedConditions.AgentId.conditions" [operations]="operations"
+                inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                (conditionsChange)="addedConditions.AgentId.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.SessionPeriod' | translate}}</div>
+          <div class="second-hand">
+            {{PaymentSegment?.SessionPeriod}}
           </div>
-        </div>
-      </div>
 
-      <div class="add-content group-row">
-        <div class="first-hand hand-group">{{'Segments.ComplimentaryPoint' | translate}}</div>
-        <div class="second-hand">{{PaymentSegment?.ComplimentaryPoint}}</div>
-        <div *ngIf="isEdit" class="form-field form-input wraper hand-group">
-          <ng-container
-            style="display: flex; white-space: nowrap; margin-right: 5px; justify-content: center; flex-direction: column;">
-            <span *ngFor="let condition of addedConditions['ComplimentaryPointObject'].conditions; let $index = index">
-              <span
-                style="display: inline-block; padding:2px 5px; margin:0 5px 2px 5px; border-radius: 4px; background: #d3d3d3">
-                {{condition?.ConditionType?.Name}} {{condition?.ConditionValue}}
-                <mat-icon style="cursor: pointer"
-                  (click)="removeCondition(addedConditions.ComplimentaryPointObject, $index)">close</mat-icon>
-              </span>
-            </span>
-            <button mat-icon-button (click)="addedConditions.ComplimentaryPointObject.showNew=true">
-              <mat-icon>add_box</mat-icon>
-            </button>
-          </ng-container>
-
-          <div class="nested" *ngIf="addedConditions.ComplimentaryPointObject.showNew == true">
-            <mat-form-field class="mr-15">
-              <mat-select [(ngModel)]="addedConditions.ComplimentaryPointObject.selectedConditionType"
-                [ngModelOptions]="{'standalone': true}">
-                <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                <mat-option *ngFor="let operation of operations" [value]="operation">{{operation.Name}}</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="mr-15 picker">
-              <input matInput type="number" pattern="^\d+(\.\d+)?$" placeholder="{{'Bonuses.Value' | translate}}"
-                [(ngModel)]="addedConditions.ComplimentaryPointObject.selectedConditionValue"
-                [ngModelOptions]="{'standalone': true}" #valueInput10="ngModel">
-            </mat-form-field>
-            <button mat-raised-button color="primary" [disabled]="valueInput10.invalid"
-              (click)="addCondition(addedConditions.ComplimentaryPointObject)">{{'Common.Add' | translate}}
-            </button>
-          </div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper  hand-group">
+              <app-condition-input 
+                [hasLabel]="false"
+                [conditions]="addedConditions.SessionPeriod.conditions" [operations]="operations"
+                inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                (conditionsChange)="addedConditions.SessionPeriod.conditions = $event">
+              </app-condition-input>
+              </div>
+          }
         </div>
-      </div>
 
-      <div style="max-width: 600px!important; height: 50px">
-        <div class="first-hand">{{'Segments.ClientStatuses' | translate}}</div>
-        <div class="second-hand" style="word-break: normal; overflow: visible; height: 35px;">
-          <ul
-            style="padding: 0; display: flex; list-style-type: none;  background: white; padding: 8px; height: 35px; background-color: white;">
-            <li *ngFor="let state of  clientStates" style="margin-right: 7px ;">
-              <mat-checkbox disabled="true" labelPosition="before" [(ngModel)]="state.checked"
-                [ngModelOptions]="{standalone: true}" color="primary">{{state.Name}}</mat-checkbox>
-            </li>
-          </ul>
+        <div class="add-content group-row" style="height: auto;">
+          <div class="first-hand hand-group" style="height: auto;">{{'Segments.SignUpPeriod' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.SignUpPeriod}}</div>
+            @if(isEdit) {
+            <div class="form-field form-input wraper">
+              <div class="condition-content">
+                <div class="condition-row">
+                    <mat-form-field class="mr-15">
+                        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType"
+                            [ngModelOptions]="{'standalone': true}">
+                            <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                            @for (operation of operations; track $index) {
+                            <mat-option [value]="operation">{{operation.Name}}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="mr-15">
+                        <input matInput type="numbrer" [matDatepicker]="picker1" #valueInput1="ngModel"
+                            [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue"
+                            [ngModelOptions]="{'standalone': true}">
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <button [disabled]="valueInput1.invalid || !addedConditions.SignUpPeriod.selectedConditionType"
+                        mat-raised-button color="primary"
+                        (click)="addDateCondition(addedConditions.SignUpPeriod, true);">+</button>
+                </div>
+                <div class="condition-box">
+                    @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
+                    <span class="condition-box-item">
+                        {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
+                        <mat-icon class="close-icon"
+                            (click)="removeCondition(addedConditions.SignUpPeriod, $index)">close</mat-icon>
+                    </span>
+                    }
+                </div>
+            </div>
+
+            </div>
+          }
         </div>
-        <div class="form-field form-checkbox" *ngIf="isEdit">
-          <ng-container class="check-box">
-            <ul style="padding: 0; display: flex;list-style-type: none;">
-              <li *ngFor="let state of  clientStates" style="margin-right: 7px;  padding-left: 10px;">
-                <mat-checkbox labelPosition="before" formControlName="State"
-                  color="primary">{{state.Name}}</mat-checkbox>
-              </li>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.TotalBetsCount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.TotalBetsCount}}</div>
+          @if (isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input 
+                [hasLabel]="false"
+                [conditions]="addedConditions.TotalBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                (conditionsChange)="addedConditions.TotalBetsCount.conditions = $event">
+            </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.SportBetsCount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.SportBetsCount}}</div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input 
+                [hasLabel]="false"
+                [conditions]="addedConditions.SportBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                (conditionsChange)="addedConditions.SportBetsCount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.CasinoBetsCount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.CasinoBetsCount}}</div>
+          @if (isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input 
+                [hasLabel]="false"
+                [conditions]="addedConditions.CasinoBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                (conditionsChange)="addedConditions.CasinoBetsCount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.TotalBetsAmount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.TotalBetsAmount}}</div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input 
+                [hasLabel]="false"
+                [conditions]="addedConditions.TotalBetsAmount.conditions" [operations]="operations" inputPattern="^\d+$"
+                (conditionsChange)="addedConditions.TotalBetsAmount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.TotalDepositsCount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.TotalDepositsCount}}</div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input 
+                [conditions]="false"
+                [conditions]="addedConditions.TotalDepositsCount.conditions" [operations]="operations" inputPattern="^\d+$"
+                (conditionsChange)="addedConditions.TotalDepositsCount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+       <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.TotalDepositsAmount' | translate}}</div> 
+          <div class="second-hand">{{PaymentSegment?.TotalDepositsAmount}}</div>
+          @if(isEdit) {
+            <div  class="form-field form-input wraper hand-group">
+              <app-condition-input label="{{ 'Segments.TotalDepositsAmount' | translate }}"
+                [conditions]="addedConditions.TotalDepositsAmount.conditions" [operations]="operations"
+                inputPattern="^\d+(\.\d+)?$"
+                (conditionsChange)="addedConditions.TotalDepositsAmount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsCount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.TotalWithdrawalsCount}}</div>
+          @if (isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input label="{{ 'Segments.TotalWithdrawalsCount' | translate }}"
+                [conditions]="addedConditions.TotalWithdrawalsCount.conditions" [operations]="operations"
+                inputPattern="^\d+$"
+                (conditionsChange)="addedConditions.TotalWithdrawalsCount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+        <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsAmount' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.TotalWithdrawalsAmount}}</div>
+          @if(isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input label="{{ 'Segments.TotalWithdrawalsAmount' | translate }}"
+                [conditions]="addedConditions.TotalWithdrawalsAmount.conditions" [operations]="operations"
+                inputPattern="^\d+(\.\d+)?$"
+                (conditionsChange)="addedConditions.TotalWithdrawalsAmount.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div>
+
+         <div class="add-content group-row">
+          <div class="first-hand hand-group">{{'Segments.ComplimentaryPoint' | translate}}</div>
+          <div class="second-hand">{{PaymentSegment?.ComplimentaryPoint}}</div>
+          @if (isEdit) {
+            <div class="form-field form-input wraper hand-group">
+              <app-condition-input label="{{ 'Segments.ComplimentaryPoint' | translate }}"
+                [conditions]="addedConditions.ComplimentaryPoint.conditions" [operations]="operations"
+                inputPattern="^\d+(\.\d+)?$"
+                (conditionsChange)="addedConditions.ComplimentaryPoint.conditions = $event">
+              </app-condition-input>
+            </div>
+          }
+        </div> 
+
+        <div></div>
+
+        <div style="max-width: 600px!important; height: 50px">
+          <div class="first-hand">{{'Segments.ClientStatuses' | translate}}</div>
+          <div class="second-hand" style="word-break: normal; overflow: visible; height: 35px;">
+            <ul
+              style="padding: 0; display: flex; list-style-type: none;  background: white; padding: 8px; height: 35px; background-color: white;">
+              @for (state of  clientStates; track $index) {
+                <li style="margin-right: 7px ;">
+                  <mat-checkbox disabled="true" labelPosition="before" [(ngModel)]="state.checked"
+                    [ngModelOptions]="{standalone: true}" color="primary">{{state.Name}}</mat-checkbox>
+                </li>
+              }
             </ul>
-          </ng-container>
+          </div>
+          @if (isEdit) {
+            <div class="form-field form-checkbox">
+              <ng-container class="check-box">
+                <ul style="padding: 0; display: flex;list-style-type: none; padding-top: 18px;">
+                  @for (state of  clientStates; track $index) {
+                    <li style="margin-right: 7px;  padding-left: 10px;">
+                      <mat-checkbox labelPosition="before" formControlName="State"
+                        color="primary">{{state.Name}}</mat-checkbox>
+                    </li>
+                  }
+                </ul>
+              </ng-container>
+            </div>
+          }
         </div>
-      </div>
 
-      <div></div>
-      <div></div>
+        <div></div>
+        <div></div>
 
-      <div class="form-actions">
-        <div class="actions" *ngIf="isEdit">
-          <button mat-raised-button class="mat-cancel-btn" (click)="onCancle()">{{'Common.Cancel' |
-            translate}}</button>
-          <button mat-raised-button class="mat-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+        <div class="form-actions">
+          @if(isEdit) {
+            <div class="actions">
+              <button mat-raised-button class="mat-cancel-btn" (click)="onCancle()">{{'Common.Cancel' |
+                translate}}</button>
+              <button mat-raised-button class="mat-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+            </div>
+          }
         </div>
-      </div>
-    </form>
+      </form>
+    }
   </div>
 </div>
+
+
+
+

@@ -1,0 +1,131 @@
+@import "src/styles/helpers/variables";
+
+.container {
+  z-index: 2;
+  position: fixed;
+  top: 35%;
+  display: flex;
+  right: -250px;
+  transition: right 0.3s ease-in;
+
+  &.opened {
+    right: -1px;
+    z-index: 3;
+  }
+
+  .quick-menu-toggle {
+    cursor: pointer;
+    position: absolute;
+    left: -30px;
+    background-color: $gray-light-14;
+    margin: 0 4px;
+    width: 26px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      color: $bg-color;
+    }
+
+    .arrow-content {
+      position: absolute;
+      left: -7px;
+      width: 7px;
+      height: 30px;
+      top: 7px;
+      background-color: $gray-light-14;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid transparent;
+      border-right-width: 0;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 10px;
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-right: 5px solid $bg-color;
+        border-left: 5px solid transparent;
+      }
+
+      &.opened {
+        &::after {
+          left: 5px;
+          border-left: 5px solid $bg-color;
+          border-right: 5px solid transparent;
+          z-index: 3;
+        }
+      }
+    }
+  }
+
+  .quick-menu-content {
+    padding: 14px;
+    background-color: $gray-light-14;
+
+    .title {
+      font-size: 14px;
+      padding-top: 4px;
+      color: $bg-color;
+
+      &.document {
+        padding-top: 15px;
+      }
+      &.agents {
+        padding-top: 15px;
+      }
+    }
+
+    .field-content {
+      display: flex;
+      margin: 1px 0;
+
+      .input-content {
+        .input {
+          padding: 4px 8px;
+          border-radius: 4px;
+          border: unset;
+          font-size: 14px;
+          outline: none;
+          background-color: $white;
+          border: 1px solid $white;
+          color: $title-color;
+          width: 164px;
+
+          &::placeholder {
+            color: $gray-light-11;
+          }
+
+          &:focus {
+            border: 1px solid $bg-color;
+          }
+        }
+      }
+
+      .filter-btn {
+        margin-left: 6px;
+        padding: 5px 7px;
+        cursor: pointer;
+        border-radius: 4px;
+        background: linear-gradient($login-title-color, $title-color, $bg-color);
+        transition: background-color 0.3s ease-in;
+        color: $white;
+        border: 1px solid transparent;
+
+        &:hover {
+          border: 1px solid $bg-color;
+        }
+
+        &.disabled {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+}

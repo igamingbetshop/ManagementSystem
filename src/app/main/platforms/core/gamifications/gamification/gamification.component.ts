@@ -29,6 +29,7 @@ export class GamificationComponent implements OnInit {
   image: any;
   backgroundImage: any;
   mobileBackgroundImage: any;
+  itemBackgroundImage: any;
   isChilde = false;
   constructor(
     private _snackBar: MatSnackBar,
@@ -65,6 +66,7 @@ export class GamificationComponent implements OnInit {
           if (this.isChilde) {
             this.backgroundImage = "https://"+ this.gamification.SiteUrl + this.gamification.BackgroundImageData;
             this.mobileBackgroundImage = "https://"+ this.gamification.SiteUrl + this.gamification.MobileBackgroundImageData;
+            this.itemBackgroundImage = "https://"+ this.gamification.SiteUrl + this.gamification.ItemBackgroundImageData;            
           }
 
         } else {
@@ -88,7 +90,8 @@ export class GamificationComponent implements OnInit {
       ImageData: [null],
       CompPoints: [null, [Validators.required]],
       BackgroundImageData: [null],
-      MobileBackgroundImageData: [null]
+      MobileBackgroundImageData: [null],
+      ItemBackgroundImageData: [null],
     });
   }
 
@@ -147,6 +150,13 @@ export class GamificationComponent implements OnInit {
     const files = event.target.files.length && event.target.files[0];
     if (files) {
       this.handleFileUpload(files, 'MobileBackgroundImageData');
+    }
+  }
+
+  uploadItemBackgroundImageData(event) {
+    const files = event.target.files.length && event.target.files[0];
+    if (files) {
+      this.handleFileUpload(files, 'ItemBackgroundImageData');
     }
   }
 

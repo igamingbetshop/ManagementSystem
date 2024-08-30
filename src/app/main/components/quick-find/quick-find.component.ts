@@ -12,6 +12,8 @@ import { CoreApiService } from "../../platforms/core/services/core-api.service";
 import { ConfigService } from "../../../core/services";
 import { SnackBarHelper } from "../../../core/helpers/snackbar.helper";
 import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { MatButtonModule } from "@angular/material/button";
+
 
 @Component({
   selector: "app-quick-find",
@@ -24,6 +26,8 @@ import { TranslateModule, TranslateService } from "@ngx-translate/core";
     FormsModule,
     MatSnackBarModule,
     TranslateModule,
+    MatButtonModule,
+    MatIconModule,
   ],
 })
 export class QuickFindComponent {
@@ -42,8 +46,37 @@ export class QuickFindComponent {
     BetShopBetId: "",
     MobileNumber: "",
     AgentId: "",
-    AgentUserName: ""
+    AgentUserName: "",
   };
+
+  quickLinksFilterGroups = [
+    {
+      title: 'Clients.Client',
+      filters: [
+        { type: 'clientId', model: 'ClientId', inputType: 'number', placeholder: 'Clients.Id' },
+        { type: 'clientUserName', model: 'ClientUserName', inputType: 'text', placeholder: 'Clients.Username' },
+        { type: 'clientName', model: 'ClientName', inputType: 'text', placeholder: 'Clients.ClientName' },
+        { type: 'clientEmail', model: 'ClientEmail', inputType: 'text', placeholder: 'Clients.Email' },
+        { type: 'MobileNumber', model: 'MobileNumber', inputType: 'text', placeholder: 'Clients.MobileNumber' },
+      ],
+    },
+    {
+      title: 'Agents.Agent',
+      filters: [
+        { type: 'agentId', model: 'AgentId', inputType: 'number', placeholder: 'Agents.Id' },
+        { type: 'agentUserName', model: 'AgentUserName', inputType: 'text', placeholder: 'Agents.Username' },
+      ],
+    },
+    {
+      title: 'Payments.Document',
+      filters: [
+        { type: 'depositId', model: 'DepositId', inputType: 'number', placeholder: 'Payments.DepositId' },
+        { type: 'withdrawId', model: 'WithdrawId', inputType: 'number', placeholder: 'Payments.WithdrawId' },
+        { type: 'internetBetId', model: 'InternetBetId', inputType: 'number', placeholder: 'Bets.InternetBetId' },
+        { type: 'betShopBetId', model: 'BetShopBetId', inputType: 'number', placeholder: 'Bets.BetShopBetId' },
+      ],
+    },
+  ];
 
   constructor(
     private apiService: CoreApiService,
@@ -57,61 +90,29 @@ export class QuickFindComponent {
   }
 
   searchQuickLink(searchType: string): void {
-    switch (searchType) {
-      case "clientId":
-        this.handleClientRedirect("client-id", this.quickLinksFilter.ClientId);
-        break;
-      case "clientUserName":
-        this.handleClientRedirect(
-          "username",
-          this.quickLinksFilter.ClientUserName
-        );
-        break;
-      case "clientName":
-        this.handleClientRedirect("name", this.quickLinksFilter.ClientName);
-        break;
-      case "clientEmail":
-        this.handleClientRedirect("email", this.quickLinksFilter.ClientEmail);
-        break;
-      case "MobileNumber":
-        this.handleClientRedirect(
-          "mobileNumber",
-          this.quickLinksFilter.MobileNumber
-        );
-        break;
-      case "depositId":
-        this.handlePaymentsRedirect(
-          "Deposits",
-          this.quickLinksFilter.DepositId
-        );
-        break;
-      case "withdrawId":
-        this.handlePaymentsRedirect(
-          "Withdrawals",
-          this.quickLinksFilter.WithdrawId
-        );
-        break;
-      case "internetBetId":
-        const internetUrl = this.baseUrl + "/bets/internet";
-        const windowInternet = window.open(internetUrl, "_blank");
-        windowInternet["searchData"] = {
-          value: this.quickLinksFilter.InternetBetId,
-        };
-        break;
-      case "betShopBetId":
-        const betShopUrl = this.baseUrl + "/bets/bet-bet-shops";
-        const windowbetShop = window.open(betShopUrl, "_blank");
-        windowbetShop["searchData"] = {
-          value: this.quickLinksFilter.BetShopBetId,
-        };
-        break;
-      case "agentId":
-        this.getUserById(String(this.quickLinksFilter.AgentId));
-        break;
-      case "agentUserName":
-        this.redirectAgentUserName(this.quickLinksFilter.AgentUserName);
-        break;
+    const handlers = {
+      clientId: () => this.handleClientRedirect("client-id", this.quickLinksFilter.ClientId),
+      clientUserName: () => this.handleClientRedirect("username", this.quickLinksFilter.ClientUserName),
+      clientName: () => this.handleClientRedirect("name", this.quickLinksFilter.ClientName),
+      clientEmail: () => this.handleClientRedirect("email", this.quickLinksFilter.ClientEmail),
+      MobileNumber: () => this.handleClientRedirect("mobileNumber", this.quickLinksFilter.MobileNumber),
+      depositId: () => this.handlePaymentsRedirect("Deposits", this.quickLinksFilter.DepositId),
+      withdrawId: () => this.handlePaymentsRedirect("Withdrawals", this.quickLinksFilter.WithdrawId),
+      internetBetId: () => this.openWindowWithSearchData("/bets/internet", this.quickLinksFilter.InternetBetId),
+      betShopBetId: () => this.openWindowWithSearchData("/bets/bet-bet-shops", this.quickLinksFilter.BetShopBetId),
+      agentId: () => this.getUserById(this.quickLinksFilter.AgentId),
+      agentUserName: () => this.redirectAgentUserName(this.quickLinksFilter.AgentUserName),
+    };
+
+    if (handlers[searchType]) {
+      handlers[searchType]();
     }
+  }
+
+  private openWindowWithSearchData(path: string, value: string): void {
+    const url = this.baseUrl + path;
+    const newWindow = window.open(url, "_blank");
+    newWindow["searchData"] = { value };
   }
 
   getUserById(value) {
@@ -305,7 +306,7 @@ export class QuickFindComponent {
     } else if (type === "name") {
       paging.FirstNames = this.getOperationType(value);
     } else if (type === "email") {
-      paging.Emails = this.getOperationType(value);
+      paging.Emails = this.getOperationType(value, 7);
     } else if (type === "mobileNumber") {
       paging.MobileNumbers = this.getOperationType(value);
     }
@@ -313,12 +314,12 @@ export class QuickFindComponent {
     return paging;
   }
 
-  getOperationType(value: string) {
+  getOperationType(value: string, type:number = 7) {
     return {
       IsAnd: true,
       ApiOperationTypeList: [
         {
-          OperationTypeId: 7,
+          OperationTypeId: type,
           StringValue: value,
         },
       ],
@@ -349,3 +350,4 @@ export class QuickFindComponent {
     searchWindow["searchData"] = this.quickFindData;
   }
 }
+

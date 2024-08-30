@@ -67,8 +67,6 @@ export class BetShopsesComponent implements OnInit {
 
 
   betShopsChange(event: number) {
-    console.log(event, "event");
-    
     this.toBetShopsChange.emit(event);
   }
 

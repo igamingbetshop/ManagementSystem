@@ -10,6 +10,7 @@ import { OpenerComponent } from 'src/app/main/components/grid-common/opener/open
 import { CoreApiService } from '../../services/core-api.service';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-all-segments',
@@ -23,8 +24,9 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
   public partnerSettings: any[] = [];
   public filterOperating: any[] = [];
   public partnerId = null;
-
+  states = ACTIVITY_STATUSES;
   public rowData = [];
+  modes = [{ Id: 1, Name: "Common.Static" }, { Id: 2, Name: "Common.Dynamic" }];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public filter: any = {};
   public defaultColDef = {
@@ -34,6 +36,10 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
     resizable: true,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
+    menuTabs: [
+      'filterMenuTab',
+      'generalMenuTab',
+    ],
     minWidth: 50,
   };
 
@@ -68,7 +74,7 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
       {
         headerName: 'Segments.Mode',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Mode',
+        field: 'ModeName',
       },
       {
         headerName: 'Common.Gender',
@@ -79,6 +85,64 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         headerName: 'Segments.IsKYCVerified',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'IsKYCVerified',
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: [true, false, null],
+          valueFormatter: params => {
+            switch (params.value) {
+              case true:
+                return 'True';
+              case false:
+                return 'False';
+              case null:
+                return 'Null';
+              default:
+                return params.value;
+            }
+          }
+        }
+      },
+      {
+        headerName: 'Clients.IsEmailVerified',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'IsEmailVerified',
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: [true, false, null],
+          valueFormatter: params => {
+            switch (params.value) {
+              case true:
+                return 'True';
+              case false:
+                return 'False';
+              case null:
+                return 'Null';
+              default:
+                return params.value;
+            }
+          }
+        }
+      },
+      {
+        headerName: 'Clients.IsMobileNumberVerified',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'IsMobileNumberVerified',
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: [true, false, null],
+          valueFormatter: params => {
+            switch (params.value) {
+              case true:
+                return 'True';
+              case false:
+                return 'False';
+              case null:
+                return 'Null';
+              default:
+                return params.value;
+            }
+          }
+        }
       },
       {
         headerName: 'Clients.ClientStatus',
@@ -129,11 +193,6 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         headerName: 'Clients.Region',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Region',
-      },
-      {
-        headerName: 'Bonuses.SegmentId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'SegmentId',
       },
       {
         headerName: 'Segments.WithdrawalPaymentSystem',
@@ -194,6 +253,18 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         headerName: 'Segments.ComplimentaryPoint',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ComplimentaryPoint',
+      },
+      {
+        headerName: 'Common.Status',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Status',
+        sortable: true,
+        resizable: true,
+        filter: 'agSetColumnFilter',
+        floatingFilter: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
       },
       {
         headerName: 'Common.View',
@@ -297,6 +368,8 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
           this.rowData = data.ResponseObject.map((items) => {
 
             items.PartnerName = this.partners.find((item => item.Id === items.PartnerId))?.Name;
+            items.ModeName = this.modes.find((item => item.Id === items.Mode))?.Name;
+            items.Status = this.states.find((item => item.Id === items.State))?.Name;
             return items;
           });
 

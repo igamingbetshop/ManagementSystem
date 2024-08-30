@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, Inject, NgModule, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { take } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,7 +28,7 @@ export class AddMarketTypeComponent implements OnInit {
   partners: any[] = [];
   arr = [];
   selection = { SelectionTypeName: '', Priority: null };
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddMarketTypeComponent>,
@@ -36,6 +36,7 @@ export class AddMarketTypeComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private fb: UntypedFormBuilder,
     public commonDataService: CommonDataService,
+    @Inject(MAT_DIALOG_DATA) public data: {Id: number},
 
   ) { }
 
@@ -81,7 +82,7 @@ export class AddMarketTypeComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     obj.SelectionTypes = this.arr;
 
     this.apiService.apiPost('markettypes/addmarkettype', obj)
@@ -92,7 +93,7 @@ export class AddMarketTypeComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

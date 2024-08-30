@@ -1,20 +1,25 @@
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { CoreApiService } from "../../../../services/core-api.service";
-import { CommonDataService, ConfigService } from "../../../../../../../core/services";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
-import { take } from "rxjs/operators";
-import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
-import { AgGridAngular } from "ag-grid-angular";
 import { DatePipe } from "@angular/common";
-import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
-import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+
 import { DateAdapter } from "@angular/material/core";
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
+import { AgGridAngular } from "ag-grid-angular";
+
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { CommonDataService, ConfigService } from "../../../../../../../core/services";
+import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { BonusesService } from "../../../bonuses.service";
 import { ACTIVITY_STATUSES, DAYS, REGULARITY } from 'src/app/core/constantes/statuses';
-import { MatDialog } from '@angular/material/dialog';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { campaignTypes } from './campaing-types';
 
 @Component({
   selector: 'app-details',
@@ -22,36 +27,38 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./details.component.scss']
 })
 export class DetailsComponent extends BasePaginatedGridComponent implements OnInit {
-  public commonId;
-  public rowData = [];
+  commonId;
+  rowData = [];
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public columnDefs = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public formGroup: UntypedFormGroup;
-  public isEdit = false;
-  public enableEditIndex;
-  public commonSettings;
-  public partners;
-  public languages;
-  public countries;
-  public countriesEntites = [];
-  public languageEntites = [];
-  public segmentesEntites = [];
-  public segments;
-  public currencies;
-  public clientType: any[] = [];
-  public bonusTypes = [];
-  public validDocumentSize;
-  public validDocumentFormat;
-  public checkDocumentSize;
-  public accountTypeId;
-  public accounttypeName;
-  public regularitys = REGULARITY;
-  public days = DAYS;
-  public status = ACTIVITY_STATUSES;
-  public TypeConditions;
-
-  public addedConditions = {
+  columnDefs = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  formGroup: UntypedFormGroup;
+  isEdit = false;
+  enableEditIndex;
+  commonSettings;
+  partners;
+  languages;
+  countries;
+  countriesEntites = [];
+  languageEntites = [];
+  segmentesEntites = [];
+  segments;
+  currencies;
+  clientType: any[] = [];
+  bonusTypes = [];
+  validDocumentSize;
+  validDocumentFormat;
+  checkDocumentSize;
+  accountTypeId;
+  accounttypeName;
+  regularitys = REGULARITY;
+  days = DAYS;
+  status = ACTIVITY_STATUSES;
+  TypeConditions;
+  selectedCampaignIds: number[] = [];
+  selectedCampaignsByType: { [key: number]: number[] } = {};
+  allBounuses: any;
+  addedConditions = {
     selectedGroupType: 1,
     groupTypes: [
       { Id: 1, Name: 'All' },
@@ -64,9 +71,18 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     selectedConditionValue: null
   };
 
-  public conditionTypes;
-  public conditions = [];
-  public bonusTypeId: number;
+  campaignControl: FormControl;
+  valueControl: FormControl;
+
+  conditionTypes;
+  conditions = [];
+  bonusTypeId: number;
+  addOnBlur = true;
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+  counts: any[] = [];
+  campaigns = [];
+  selectedType: number;
+  campaignTypes = campaignTypes;
 
   constructor(
     private apiService: CoreApiService,
@@ -149,6 +165,9 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.getClientType();
     this.getObjectHistory();
     this.formValues();
+
+    this.campaignControl = new FormControl('');
+    this.valueControl = new FormControl('');
   }
 
   getBounusTypes() {
@@ -185,29 +204,75 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
 
   setCommonSettings(data) {
     this.commonSettings = data;
-    this.commonSettings.PartnerName = this.partners.find((item) => this.commonSettings.PartnerId === item.Id).Name;
+    this.commonSettings.PartnerName = this.partners.find(item => this.commonSettings.PartnerId === item.Id).Name;
     this.accountTypeId = this.commonSettings?.AccountTypeId;
     this.accounttypeName = this.clientType.find(type => type.Id == this.accountTypeId)?.Name;
     this.commonSettings['BonusTypeName'] = this.bonusTypes?.find(x => x.Id == this.commonSettings?.BonusTypeId)?.Name;
     this.bonusTypeId = this.commonSettings?.BonusTypeId;
     this.getPartnerPaymentSegments(this.commonSettings.PartnerId);
     this.formGroup.patchValue(this.commonSettings);
-
     this.TypeConditions = this.commonSettings.Conditions;
-    if ((this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) && this.commonSettings?.Conditions ) {
-      this.addedConditions = this.bonusesService?.getResponseConditions(this.commonSettings?.Conditions, this.conditionTypes);
-    }
 
-    if (this.bonusTypeId == 10) {
-      this.conditions = this.conditions.filter(element => {
-        return element.Id === 16
-      })
+    if (this.bonusTypeId === 5) {
+      this.counts = this.commonSettings.Info.split(", ").map(Number);
+      const countsFormArray = this.fb.array(
+        this.counts.map(count => this.fb.control(count, [Validators.required, Validators.pattern(/^\d+$/)])),
+        { validators: this.validateChipSum }
+      );
+      this.formGroup.addControl('counts', countsFormArray);
+      this.formGroup.get('counts').setValue(this.counts);
+    } else if ((this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) && this.commonSettings?.Conditions) {
+      this.addedConditions = this.bonusesService?.getResponseConditions(this.commonSettings?.Conditions, this.conditionTypes);
+    } else if (this.bonusTypeId == 10) {
+      this.conditions = this.conditions.filter(element => element.Id === 16);
+    } else if (this.bonusTypeId == 4) {
+      this.getBounuses();
+      this.formGroup.setControl('Info', this.fb.array([]));
+      this.formGroup.get('Info').setValidators([Validators.required, this.minSelectedItemsValidator(3)]);
+
+      const infoControl = this.formGroup.get('Info') as FormArray;
+
+      if (this.commonSettings.Info) {
+          try {
+              const parsedInfo = JSON.parse(this.commonSettings.Info);
+              parsedInfo.forEach((item: any) => {
+                  const newValue = {
+                      BonusId: item.BonusId,
+                      Periodicity: item.Periodicity
+                  };
+                  infoControl.push(this.fb.group(newValue));
+              });
+          } catch (error) {
+              console.error("Error parsing Info:", error);
+          }
+      }
+
+      this.formGroup.get('Info').updateValueAndValidity();
+    } else {
+      this.formGroup.get('Info').clearValidators();
+      this.formGroup.get('Info').updateValueAndValidity();
     }
 
     this.countriesEntites.push(this.commonSettings?.Countries.Ids.map(elem => {
-      return this.countries.find((item) => elem === item.Id).Name
-    }))
+      return this.countries.find(item => elem === item.Id).Name;
+    }));
+  }
 
+  minSelectedItemsValidator(min: number) {
+    return (formArray: FormArray) => {
+      return formArray.controls.length >= min ? null : { minSelectedItems: true };
+    };
+  }
+
+  getBounuses() {
+    this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.BONUS, Methods.GET_BONUSES)
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.allBounuses = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   getBonusInfo() {
@@ -217,6 +282,10 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
           this.setCommonSettings(data.ResponseObject);
         }
       });
+  }
+
+  get infoArray() {
+    return this.formGroup.get('Info') as FormArray;
   }
 
   formValues() {
@@ -246,7 +315,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       MaxAmount: [null],
       StartTime: [null],
       FinishTime: [null],
-      // Products: [null],
       ValidForAwarding: [null],
       BonusTypeName: [{ value: null, disabled: true }],
       BonusTypeId: [{ value: null, disabled: true }],
@@ -263,6 +331,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       Description: [null],
       Regularity: [null],
       DayOfWeek: [null],
+      FinalAccountTypeId: [null],
       ReusingMaxCountInPeriod: [null],
       Countries: this.fb.group({
         Ids: [null],
@@ -412,10 +481,29 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     delete requestBody.PartnerName;
     requestBody.AccountTypeId = this.accountTypeId;
     requestBody.AmountSettings = this.commonSettings.AmountSettings;
-
     if (this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) {
       requestBody.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
+    } else if (this.bonusTypeId == 5) {
+      requestBody.Info = requestBody.counts.join(', ');
+      delete requestBody.counts;
+    } else if(this.bonusTypeId == 4) {
+      requestBody.Info = JSON.stringify(requestBody.Info);
     }
+
+  //   const requestBodyStartTime = this.normalizeDateTime(requestBody.StartTime);
+  //   const requestBodyFinishTime = this.normalizeDateTime(requestBody.FinishTime);
+  //   const commonStartTime = this.normalizeDateTime(this.commonSettings.StartTime);
+  //   const commonFinishTime = this.normalizeDateTime(this.commonSettings.FinishTime);
+  
+  //   // Compare the normalized times
+  //   if (requestBodyStartTime === commonStartTime) {
+  //     requestBody.StartTime = this.convertToUtc(requestBody.StartTime);
+  // }
+  
+  //   if (requestBodyFinishTime === commonFinishTime) {
+  //     requestBody.FinishTime = this.convertToUtc(requestBody.FinishTime);
+  // }    
+
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true,
       Controllers.BONUS, Methods.UPDATE_BONUS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
@@ -429,6 +517,25 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
+  }
+
+  private normalizeDateTime(dateTime: string | null): string {
+    if (!dateTime) return '';
+  
+    const date = new Date(dateTime);
+    return date.toISOString().slice(0, 16); // Returns in 'YYYY-MM-DDTHH:MM' format
+  }
+  
+  // Helper method to convert date-time to UTC hours
+  private convertToUtc(dateTime: string | null): string {
+    if (!dateTime) return '';
+  
+    const date = new Date(dateTime);
+    const utcHours = date.getUTCHours().toString().padStart(2, '0');
+    const utcMinutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const utcDate = date.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+  
+    return `${utcDate}T${utcHours}:${utcMinutes}`;
   }
 
   async onOpenCurrencySettings() {
@@ -460,6 +567,101 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     const payload = { ...this.commonSettings, AmountSettings: event };
     delete payload.Products;
     this.updateBounus(payload);
+  }
+
+
+  get countsArray() {
+    return this.formGroup.get('counts') as FormArray;
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.chipInput!.inputElement;
+    const value = (event.value || '').trim();
+    if (value && !isNaN(Number(value))) {
+      this.countsArray.push(this.fb.control(Number(value), [Validators.required, Validators.pattern(/^\d+$/)]));
+    }
+
+    if (input) {
+      input.value = '';
+    }
+
+    this.countsArray.updateValueAndValidity();
+  }
+
+  remove(count: number): void {
+    const index = this.countsArray.controls.findIndex(control => control.value == count);
+    if (index >= 0) {
+      this.countsArray.removeAt(index);
+    }
+    this.countsArray.updateValueAndValidity();
+  }
+
+  validateChipSum(formArray: FormArray) {
+    const sum = formArray.controls.reduce((acc, control) => acc + Number(control.value), 0);
+    return sum === 100 ? null : { sumNotEqual100: true };
+  }
+
+
+  onTypeChange(type?: number) {
+    this.selectedType = type;
+    let obj = {
+      PartnerId: this.formGroup.get('PartnerId').value,
+      Status: 1,
+      Type: type || null
+    }
+    this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.BONUS,
+      Methods.GET_BONUSES).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        const newCampaigns = data.ResponseObject;
+        this.campaigns = newCampaigns;        
+        if( this.selectedCampaignIds.length > 0) {
+          this.formGroup.get('Info').setValue(this.selectedCampaignIds);
+        }
+      } else {
+        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+      }
+    });
+  }
+
+  onCampaignChange(selectedCampaignIds: number[]): void {
+    this.selectedCampaignsByType[this.selectedType] = selectedCampaignIds;
+    const allSelectedCampaignIds = Object.values(this.selectedCampaignsByType).flat();
+  }
+
+  addValue() {
+    const campaign = this.campaignControl.value;
+    const value = this.valueControl.value;
+    if (campaign && value !== null && value !== undefined) {
+      if (value > 10) {
+        SnackBarHelper.show(this._snackBar, { Description: "Value must be between 1 and 10.", Type: "error" });
+        return;
+      }
+  
+      const newValue = {
+        BonusId: campaign,
+        Periodicity: value
+      };
+  
+      if (this.infoArray.length < 15) {
+        this.infoArray.push(this.fb.group(newValue));
+      } else {
+        // Remove the first element (oldest value) to maintain a maximum of 15 elements
+        this.infoArray.removeAt(0);
+        this.infoArray.push(this.fb.group(newValue));
+      }
+  
+      this.campaignControl.reset();
+      this.valueControl.reset();
+  
+      this.infoArray.updateValueAndValidity();
+    } else {
+      SnackBarHelper.show(this._snackBar, { Description: "Please select a campaign and enter a valid value.", Type: "error" });
+    }
+  }
+
+  removeValue(index: number) {
+    this.infoArray.removeAt(index);
+    this.infoArray.updateValueAndValidity();
   }
 
 }

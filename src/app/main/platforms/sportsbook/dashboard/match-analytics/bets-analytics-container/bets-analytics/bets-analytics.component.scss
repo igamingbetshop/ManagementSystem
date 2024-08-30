@@ -1,0 +1,96 @@
+.match-block-content{
+  display: flex;
+  width: 100%;
+  gap: 16px;
+  height: 100%;
+  justify-content: center;
+  .block-content
+  {
+    width: 100%;
+    .block-row
+    {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4vh;
+      height: 8.5vh;
+      cursor: pointer;
+      padding: 8px 16px;
+      border: 2px solid rgba(231, 232, 240, 1);
+      border-radius: 8px;
+      .row-number
+      {
+        width: 24px;
+        height: 100%;
+        border-right: 2px solid rgba(211, 211, 221, 1);
+        font-size: 3.2vh;
+        font-weight: 500;
+        text-align: left;
+        line-height: 8.5vh;
+
+        @media (max-width: 1200px) {
+          font-size: 26px;
+        }
+      }
+
+      @media (max-width: 1200px) {
+        margin-bottom: 6px;
+      }
+      &.topprofitablematches
+      {
+        .row-number{
+          color: rgba(75, 204, 111, 1);
+
+        }
+        &.selected{
+          border: 2px solid rgba(75, 204, 111, 1)
+        }
+      }
+      &.topdamagedmatches
+      {
+        .row-number{
+          color: rgba(218, 80, 88, 1);
+        }
+        &.selected{
+          border: 2px solid rgba(218, 80, 88, 1)
+        }
+      }
+      &.topturnovermatches
+      {
+        .row-number{
+          color: rgba(80, 152, 218, 1);
+
+        }
+        &.selected{
+          border: 2px solid rgba(80, 152, 218, 1);
+        }
+      }
+    }
+
+  }
+  .empty-block
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    .empty-block-icon
+    {
+      width: 11.2vh;
+    }
+    p
+    {
+      color: rgba(91, 99, 114, 1);
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 1200px) {
+    mat-icon{display: block; margin-bottom: 20px}
+  }
+
+}
+app-progress-bar{
+  width: calc(100% - 24px);
+  margin-left: 16px;
+}
+

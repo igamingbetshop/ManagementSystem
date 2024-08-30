@@ -42,7 +42,7 @@ export class MigrateCompetitionComponent {
   competitionId: number;
   competition: any;
   agreement: boolean = false;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -58,7 +58,7 @@ export class MigrateCompetitionComponent {
   }
 
   onSubmit() {
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const requestBody = {
       FromCompetitionId: this.data.Id,
       ToCompetitionId: this.competition.Id,
@@ -70,7 +70,7 @@ export class MigrateCompetitionComponent {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

@@ -11,7 +11,11 @@ import {CoreApiService} from "../../../../services/core-api.service";
 import {DatePipe} from "@angular/common";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-
+import { Paging } from 'src/app/core/models';
+import { take } from 'rxjs';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 @Component({
   selector: 'client-sessions',
@@ -21,15 +25,21 @@ import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 export class SessionsComponent extends BasePaginatedGridComponent implements OnInit {
 
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public rowCount: number = 0;
-  public clientId;
-  public loginsFilter = {};
-  public sessionStates = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public logOutType = [];
-  public selectedRowId: number = 0;
-
+  rowData = [];
+  rowCount: number = 0;
+  clientId;
+  clientData = {};
+  sessionStates = [];
+  rowModelType: string = GridRowModelTypes.SERVER_SIDE;
+  logOutType = [];
+  selectedRowId: number = 0;
+  fromDate = new Date();
+  toDate = new Date();
+  pageIdName =  '';
+  frameworkComponents = {
+    agDropdownFilter: AgDropdownFilter,
+    agDateTimeFilter: AgDateTimeFilter
+  };
 
   constructor(
     protected injector: Injector,
@@ -41,6 +51,28 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.CLIENTS_SESSIONS;
+
+  }
+
+  onOpenSessionDetails(data) {
+    const dialogRef = this.dialog.open(SessionModalComponent, {
+      width: ModalSizes.XXXL, data: {
+        clientId: data.value.clientId, id: data.value.sessionId, sessionStates: data.value.sessionStates,
+        logOutType: data.value.logOutType,
+      }
+    });
+  }
+
+
+  ngOnInit() {
+    this.fetchSestionStates();
+    this.fetchLogOutTypes();
+    this.setTime();
+    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
+    this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Sessions')}`;
+  }
+
+  setColdefs() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -48,8 +80,14 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'Id',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true
+        filter: 'agNumberColumnFilter',
+        minWidth: 90,
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+        suppressToolPanel: false,
       },
       {
         headerName: 'Clients.ClientId',
@@ -57,8 +95,14 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'ClientId',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true
+        filter: 'agNumberColumnFilter',
+        minWidth: 90,
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+        suppressToolPanel: false,      
       },
       {
         headerName: 'Common.Ip',
@@ -66,8 +110,12 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'Ip',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.textOptions,
+        }
       },
       {
         headerName: 'Clients.Language',
@@ -75,8 +123,12 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'LanguageId',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.textOptions,
+        }
       },
       {
         headerName: 'Bonuses.Source',
@@ -85,16 +137,18 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         sortable: true,
         resizable: true,
         filter: false,
-        suppressMenu: true
       },
       {
         headerName: 'Clients.LogoutDescription',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'LogoutName',
+        field: 'LogoutType',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.logOutType,
+        },
       },
       {
         headerName: 'Common.State',
@@ -102,8 +156,11 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'State',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.sessionStates,
+        },
       },
       {
         headerName: 'Common.LoginDate',
@@ -111,8 +168,12 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'StartTime',
         sortable: true,
         resizable: true,
-        filter: false,
-        suppressMenu: true,
+        filter: 'agDateTimeFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
         cellRenderer: function (params) {
           let datePipe = new DatePipe("en-US");
           let dat = datePipe.transform(params.data.StartTime, 'medium');
@@ -129,6 +190,12 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         field: 'EndTime',
         sortable: true,
         resizable: true,
+        filter: 'agDateTimeFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
         cellRenderer: function (params) {
           let datePipe = new DatePipe("en-US");
           let dat = datePipe.transform(params.data.EndTime, 'medium');
@@ -143,13 +210,8 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
         headerName: 'Common.View',
         headerValueGetter: this.localizeHeader.bind(this),
         cellRenderer: function (params) {
-          // const iconName = params.data.Id === 300969 ? 'visibility' : 'lock';
-          // const materialIcons = 'material-icons';
-
           return `<i class="material-icons">visibility</i>`
-
         },
-
         valueGetter: params => {
           let data = {};
           data['sessionId'] = params.data.Id;
@@ -159,33 +221,15 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
           return data;
         },
         sortable: false,
-        filter: false,
         onCellClicked: this.onOpenSessionDetails['bind'](this)
       },
     ]
   }
 
-  onOpenSessionDetails(data) {
-    const dialogRef = this.dialog.open(SessionModalComponent, {
-      width: ModalSizes.EXTRA_LARGE, data: {
-        clientId: data.value.clientId, id: data.value.sessionId, sessionStates: data.value.sessionStates,
-        logOutType: data.value.logOutType,
-      }
-    });
-  }
-
-
-  ngOnInit() {
-    this.fetchSestionStates();
-    this.fetchLogOutTypes();
-    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
-    this.loginsFilter = {
-      ClientId: this.clientId,
-      TakeCount: 100,
-      SkipCount: 0
-    };
-    this.getRows();
-
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   fetchLogOutTypes() {
@@ -193,10 +237,10 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
       true, Controllers.ENUMERATION, Methods.GET_LOGOUT_TYPES_ENUM).subscribe(data => {
       if (data.ResponseCode === 0) {
         this.logOutType = data.ResponseObject;
-
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
+      this.setColdefs();
 
     })
   }
@@ -212,48 +256,66 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
     })
   }
 
-
-  getRows() {
-    this.apiService
-    .apiPost(
-      this.configService.getApiUrl,
-      this.loginsFilter,
-      true,
-      Controllers.CLIENT,
-      Methods.GET_CLIENT_LOGINS_PAGED_MODEL
-    )
-    .subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowCount = data.ResponseObject.Count;
-        this.rowData = data.ResponseObject.Entities;
-        this.rowData.forEach((session) => {
-          let State = this.sessionStates.find((st) => {
-            return st.Id == session.State;
-          });
-          if (State) {
-            session["State"] = State.Name;
-          }
-
-          let logOut = this.logOutType.find((type) => {
-            return type.Id == session.LogoutType;
-          });
-          if (logOut) {
-            session["LogoutName"] = logOut.Name;
-          }
-        });
-
-
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+  onGridReady(params) {
+    super.onGridReady(params);
+    syncNestedColumnReset();
+    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
-  onGridReady(params) {
-    syncNestedColumnReset();
-    this.selectedRowId = 0;
-    super.onGridReady(params);
+  onDateChange(event: any) {
+    this.fromDate = event.fromDate;
+    this.toDate = event.toDate;
+    this.getCurrentPage();
+  }
 
+  createServerSideDatasource() {
+    return {
+      getRows: (params) => {
+        const paging = new Paging();
+        paging.SkipCount = this.paginationPage - 1;
+        paging.TakeCount = this.cacheBlockSize;
+        paging.FromDate = this.fromDate;
+        paging.ToDate = this.toDate;
 
+        paging.ClientId = this.clientId;
+        this.setSort(params.request.sortModel, paging);
+        this.setFilter(params.request.filterModel, paging);
+
+        this.apiService.apiPost(this.configService.getApiUrl, paging, true,
+          Controllers.CLIENT, Methods.GET_CLIENT_LOGINS_PAGED_MODEL).pipe(take(1)).subscribe((data) => {
+            if (data.ResponseCode === 0) {
+              this.rowData = data.ResponseObject.Entities;
+              this.rowData?.forEach((session) => {
+                let State = this.sessionStates.find((st) => {
+                  return st.Id == session.State;
+                });
+                if (State) {
+                  session["State"] = State.Name;
+                }
+
+                let logOut = this.logOutType.find((type) => {
+                  return type.Id == session.LogoutType;
+                });
+                if (logOut) {
+                  session["LogoutType"] = logOut.Name;
+                }
+              });
+              params.success({ rowData: this.rowData || [], rowCount: data.ResponseObject.Count });
+
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+            }
+          });
+      }
+    }
+  }
+     
+  onPageSizeChanged() {
+    this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
+    this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+  
+  onNavigateToClient() {
+    this.router.navigate(["/main/platform/clients/all-clients"])
   }
 }

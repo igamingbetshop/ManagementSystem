@@ -52,7 +52,7 @@ export class AddSecurityQuestionsComponent implements OnInit {
     { isActive: true, Name: 'Active' },
     { isActive: false, Name: 'Inactive ' },
   ];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddSecurityQuestionsComponent>,
@@ -90,7 +90,7 @@ export class AddSecurityQuestionsComponent implements OnInit {
 
   onSubmit() {
     if (this.formGroup.valid) {
-      this.isSendingReqest = true;
+      this.isSendingRequest = true;
       const requestBody = this.formGroup.getRawValue();
       this.apiService.apiPost(this.configService.getApiUrl, requestBody, true, Controllers.PARTNER,
         Methods.SAVE_SECURITY_QUESTION).pipe(take(1)).subscribe((data) => {
@@ -99,7 +99,7 @@ export class AddSecurityQuestionsComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
-          this.isSendingReqest = false;
+          this.isSendingRequest = false;
         });
     }
   }

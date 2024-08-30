@@ -42,7 +42,7 @@ import { CoreApiService } from '../../services/core-api.service';
 export class CreatePartnerComponent implements OnInit {
   formGroup: UntypedFormGroup;
   partnerStates: ServerCommonModel[] = [];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   currencies: any[] = [];
 
@@ -75,14 +75,14 @@ export class CreatePartnerComponent implements OnInit {
 
   onSubmit() {
     const partner = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     if (this.formGroup.valid) {
       this.apiService.apiPost(this.configService.getApiUrl, partner, true,
         Controllers.PARTNER, Methods.ADD_PARTNER).pipe(take(1)).subscribe(data => {
           if (data.ResponseCode === 0) {
             this.dialogRef.close(data.ResponseObject);
           }
-          this.isSendingReqest = false; 
+          this.isSendingRequest = false; 
         });
     }
   }

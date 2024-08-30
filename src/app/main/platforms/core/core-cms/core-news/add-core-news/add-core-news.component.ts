@@ -50,7 +50,7 @@ export class AddCoreNewsComponent implements OnInit {
   types = NEWS_TYPES;
   environments: any[] = [];
   isParent: boolean;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddCoreNewsComponent>,
@@ -223,7 +223,7 @@ export class AddCoreNewsComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_NEWS)
       .pipe(take(1))
@@ -233,7 +233,7 @@ export class AddCoreNewsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
 
 

@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Injector, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
-import { Controllers, GridMenuIds, Methods, ModalSizes } from 'src/app/core/enums';
+import { Controllers, GridMenuIds, Methods, ModalSizes, NotificationsObjectType } from 'src/app/core/enums';
 import { Paging } from 'src/app/core/models';
 import { CommonDataService } from 'src/app/core/services';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
@@ -11,7 +11,6 @@ import 'ag-grid-enterprise';
 import { SnackBarHelper } from '../../../../../core/helpers/snackbar.helper';
 import { CellDoubleClickedEvent } from "ag-grid-community";
 import { MatDialog } from "@angular/material/dialog";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
@@ -24,13 +23,15 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 })
 export class SmsesComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public rowData = [];
-  public partnerId;
-  public partners: any[] = [];
-  public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
-  public states = [
+  rowData = [];
+  partnerId;
+  title = "Notifications.ClientSmses";
+  partners: any[] = [];
+  selectedItem = 'today';
+  fromDate = new Date();
+  toDate = new Date();
+  objectTypeId = NotificationsObjectType.Client;
+  states = [
     {
       Id: 1,
       Name: this.translate.instant('Bonuses.Active')
@@ -56,7 +57,7 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
     this.adminMenuId = GridMenuIds.CORE_SMSES;
     this.columnDefs = [
       {
-        headerName: 'Common.Id',
+        headerName: 'Clients.ClientId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Id',
         sortable: true,
@@ -76,19 +77,6 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
         field: 'PartnerName',
         resizable: true,
         filter: false,
-      },
-      {
-        headerName: 'Clients.ClientId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ClientId',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Clients.UserName',
@@ -206,12 +194,13 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
         }
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = this.cacheBlockSize;
-        paging.CreatedFrom = this.fromDate;
-        paging.CreatedBefore = this.toDate;
+        paging.FromDate = this.fromDate;
+        paging.ToDate = this.toDate;
+        paging.ObjectTypeId = this.objectTypeId;
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
 
-        this.apiService.apiPost(this.configService.getApiUrl, paging, true, Controllers.CLIENT, Methods.GET_SMSES)
+        this.apiService.apiPost(this.configService.getApiUrl, paging, true, Controllers.REPORT, Methods.GET_SMSES)
           .pipe(take(1))
           .subscribe(data => {
             if (data.ResponseCode === 0) {

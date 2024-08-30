@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -16,7 +16,6 @@ import { TextEditorComponent } from 'src/app/main/components/grid-common/text-ed
 import { SportsbookApiService } from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
 import { MatDialog } from "@angular/material/dialog";
 import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
-import { OddsTypePipe } from "../../../../../../../../core/pipes/odds-type.pipe";
 import { LocalStorageService } from "../../../../../../../../core/services";
 import { GridRowModelTypes, OddsTypes, ModalSizes } from 'src/app/core/enums';
 import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
@@ -33,7 +32,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   @ViewChild('agGrid1') agGrid1: AgGridAngular;
 
   name: string = '';
-  MatchId: number;
+  matchId: number;
   number: number;
   partnerId: number;
   sportId: number;
@@ -41,6 +40,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   partners: any[] = [];
   selectedMarketId: any[] = [];
   checked = false;
+  selectedMarket = signal<any>({});
 
   frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -57,7 +57,8 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
   statusModel = BET_SELECTION_STATUSES;
 
-  rowData = [];
+  rowData = signal<any>([]);
+  mappedRowData = signal<any>([]);
   rowData1 = [];
   columnDefs2;
 
@@ -247,7 +248,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   ngOnInit() {
-    this.MatchId = +this.activateRoute.snapshot.queryParams.MatchId;
+    this.matchId = +this.activateRoute.snapshot.queryParams.MatchId;
     this.name = this.activateRoute.snapshot.queryParams.name;
     this.number = +this.activateRoute.snapshot.queryParams.number;
     this.partnerId = +this.activateRoute.snapshot.queryParams.partnerId || null;
@@ -256,7 +257,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
 
     this.getPartners();
     this.pageConfig = {
-      MatchId: this.MatchId,
+      MatchId: this.matchId,
       PartnerId: this.partnerId ? this.partnerId : null,
       WithMarkets: true
     };
@@ -335,7 +336,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
     let data = {
       MarketId: row.Id,
       PartnerId: this.partnerId,
-      MatchId: this.MatchId,
+      MatchId: this.matchId,
       IsBlocked: row.IsBlocked,
       Status: row.Status,
       AutoSettlement: row.AutoSettlement,
@@ -362,7 +363,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       ResettleStatus: params.data.ResettleStatus,
       Coefficient: null,
       BaseCoefficient: null,
-      MatchId: this.MatchId,
+      MatchId: this.matchId,
     };
 
     if (params.colDef.field === 'LimitLeft') {
@@ -370,6 +371,12 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
     } else {
       data.Coefficient = params.data.Coefficient;
       data.BaseCoefficient = params.data.BaseCoefficient;
+    }
+
+    if(this.partnerId) {
+      delete data.BaseCoefficient;
+    } else {
+      delete data.Coefficient;
     }
 
     this.apiService.apiPost('markets/updateselection', data)
@@ -501,11 +508,11 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
             suppressFilterButton: true,
           },
           onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-          cellRenderer: (params) => {
-            const oddsTypePipe = new OddsTypePipe();
-            let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-            return `${data}`;
-          }
+          // cellRenderer: (params) => {
+          //   const oddsTypePipe = new OddsTypePipe();
+          //   let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
+          //   return `${data}`;
+          // }
         },
         {
           headerName: 'Sport.CoefficientDiff',
@@ -634,6 +641,15 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
           },
         },
         {
+          headerName: 'Common.Info',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'Info',
+          sortable: true,
+          resizable: true,
+          floatingFilter: true,
+
+        },
+        {
           headerName: 'Common.View',
           headerValueGetter: this.localizeHeader.bind(this),
           cellRenderer: OpenerComponent,
@@ -709,10 +725,15 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       .subscribe(data => {
         if (data.Code === 0) {
           this.compatitionName = data.CompetitionName;
-          this.rowData = data.ResponseObject.Markets;
+          this.rowData.set(data.ResponseObject.Markets);
+          this.mappedRowData.set(data.ResponseObject.Markets);
+          const selectedMarket = this.selectedMarket();
+          if (selectedMarket.Id) {
+            this.filterRowData();
+          }
           setTimeout(() => {
             this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
-          }, 0)
+          }, 0);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -763,4 +784,26 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
     });
   }
 
+  onSetSelectedMarket(event) {
+    this.selectedMarket.set(event);
+    this.filterRowData();
+  }
+
+  filterRowData() {
+    const selectedMarket = this.selectedMarket();
+    if (selectedMarket.Id) {
+      const data = this.rowData().filter(element => 
+        element.GroupIds.includes(selectedMarket.Id)
+      );
+      
+      this.mappedRowData.set(data);
+
+      setTimeout(() => {
+        this.agGrid.api.getRenderedNodes()[0]?.setSelected(true);
+      }, 0);
+    } else {
+      this.mappedRowData.set(this.rowData())
+    }
+  }
+  
 }

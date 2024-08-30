@@ -15,6 +15,7 @@ import {PlayerCategories} from "../models/spotsbook.model";
 import {SnackBarHelper} from "../../../../core/helpers/snackbar.helper";
 import {IRowNode} from "ag-grid-community";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
 
 @Component({
   selector: 'app-teams',
@@ -24,14 +25,15 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 export class PlayerCategoriesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
 
-  public rowData: PlayerCategories[] = [];
-  public categories = [];
-  public path: string = 'players/categories';
-  public updatePath: string = 'players/updatecategory';
-  public removePath: string = 'players/removecategory';
-  public frameworkComponents;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  isSendingReqest = false;
+  rowData: PlayerCategories[] = [];
+  categories = [];
+  path: string = 'players/categories';
+  updatePath: string = 'players/updatecategory';
+  removePath: string = 'players/removecategory';
+  frameworkComponents;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  isSendingRequest = false;
+  partners: any[] = [];
 
   constructor(
     private apiService: SportsbookApiService,
@@ -42,6 +44,22 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.SP_PLAYER_CATEGORIES;
+
+    this.frameworkComponents = {
+      colorEditor: ColorEditorComponent,
+      buttonRenderer: ButtonRendererComponent,
+      checkBoxRenderer: CheckboxRendererComponent,
+    }
+  }
+
+  ngOnInit() {
+    this.partners = this.commonDataService.partners;
+    this.setColDefs();
+    super.ngOnInit();
+    this.getPage();
+  }
+
+  setColDefs() {
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -52,16 +70,24 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         checkboxSelection: true,
         tooltipField: 'Id',
         filter: 'agNumberColumnFilter',
-
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {
-              color: 'black',
-              'font-size': '14px',
-              'font-weight': '500',
-              backgroundColor: params.data.Color,
-              height: '52px'
-            };
+            return { color: '#076192', backgroundColor: params.data.Color };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
+        headerName: 'Partners.PartnerName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'PartnerName',
+        resizable: true,
+        sortable: false,
+        filter: 'agTextColumnFilter',
+        cellStyle: function (params) {
+          if (params.data.Color !== '#FFFFFF') {
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -74,10 +100,9 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         resizable: true,
         sortable: true,
         filter: 'agTextColumnFilter',
-
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -101,10 +126,9 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         },
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px',justifyContent: 'center'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
-            // return null;
-            return {justifyContent: 'center',backgroundColor: params.data.Color,height: '52px'}
+            return null;
           }
         },
         cellEditor: 'colorEditor',
@@ -117,7 +141,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         cellEditor: NumericEditorComponent,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -131,7 +155,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         cellEditor: NumericEditorComponent,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -145,7 +169,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         cellEditor: NumericEditorComponent,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -162,7 +186,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         cellEditor: NumericEditorComponent,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -179,7 +203,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         editable: true,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -196,7 +220,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         filter: 'agNumberColumnFilter',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -215,7 +239,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         cellEditor: NumericEditorComponent,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -232,7 +256,26 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         cellEditor: NumericEditorComponent,
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color,height: '52px'};
+            return { color: '#076192', backgroundColor: params.data.Color };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
+        headerName: 'Segments.IsDefault',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'IsDefault',
+        resizable: true,
+        sortable: true,
+        filter: 'agBooleanColumnFilter',
+        cellRenderer: 'checkBoxRenderer',
+        cellRendererParams: {
+          onchange: this.onCheckBoxChange2['bind'](this),
+        },
+        cellStyle: function (params) {
+          if (params.data.Color !== '#FFFFFF') {
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -255,24 +298,13 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         },
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return {color: 'black', backgroundColor: params.data.Color};
+            return { color: '#076192', backgroundColor: params.data.Color };
           } else {
             return null;
           }
         }
       }
     ]
-
-    this.frameworkComponents = {
-      colorEditor: ColorEditorComponent,
-      buttonRenderer: ButtonRendererComponent,
-    }
-  }
-
-  ngOnInit() {
-    this.gridStateName = 'player-categories-grid-state';
-    super.ngOnInit();
-    this.getPage()
   }
 
   async addCategory() {
@@ -289,7 +321,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
 
   deleteCategory() {
     const row = this.gridApi.getSelectedRows()[0];
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.removePath, {Id: row.Id})
       .pipe(take(1))
       .subscribe(data => {
@@ -302,7 +334,7 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 
@@ -337,6 +369,11 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
     return this.gridApi && this.gridApi.getSelectedRows().length === 0;
   };
 
+  onCheckBoxChange2(params, val, event) {
+    params.IsDefault = val;
+    this.onCellValueChanged(event);
+  }
+
   onGridReady(params) {
     super.onGridReady(params);
     syncColumnReset();
@@ -348,6 +385,9 @@ export class PlayerCategoriesComponent extends BasePaginatedGridComponent implem
       .subscribe(data => {
         if (data.Code === 0) {
           this.rowData = data.Categories;
+          this.rowData.forEach((item) => {
+            item['PartnerName'] = this.partners.find((el => el.Id === item['PartnerId']))?.Name;
+          });
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }

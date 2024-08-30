@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {CommonModule, DatePipe} from "@angular/common";
 import {HeaderFilterComponent} from "../../../../components/header-filter/header-filter.component";
 import {Controllers, Methods} from "../../../../../core/enums";
@@ -24,28 +24,22 @@ import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
   providers: [DatePipe]
 })
 export class PaymentAnalyticsComponent implements OnInit{
-  public topDeposits;
-  public topWithdraws;
+  topDeposits  = signal([]);
+  topWithdraws  = signal([]);
   public filteredData;
   public fromDate = new Date();
   public toDate = new Date();
   public partnerId;
   public percent;
 
-  constructor(
-    private apiService: CoreApiService,
-    public configService: ConfigService,
-    public localStorage: LocalStorageService
-  ) {
 
-  }
-
+  #apiService = inject(CoreApiService);
+  #configService = inject(ConfigService);
+  #localStorage = inject(LocalStorageService);
+  currencyId:string = this.#localStorage.get('user')?.CurrencyId;
 
   ngOnInit() {
     this.startDate();
-    this.getTopDepositMethods();
-    this.getTopWithdrawMethods();
-
   }
 
   onDateChange(event: any) {
@@ -88,43 +82,43 @@ export class PaymentAnalyticsComponent implements OnInit{
 
   getTopDepositMethods() {
     this.filteredData = this.getFilteredDate();
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData,true,
+    this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
       Controllers.DASHBOARD, Methods.GET_TOP_DEPOSIT_METHODS, null, false).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         let total = 0;
-        this.topDeposits = data.ResponseObject.slice(0, 5);
-        this.topDeposits.forEach((item) => {
-          item.CurrencyId = this.localStorage.get('user')?.CurrencyId;
+        this.topDeposits.set(data.ResponseObject.slice(0,5));
+        this.topDeposits().forEach((item) => {
+          item.CurrencyId = this.currencyId;
           item.Name = item.PaymentSystemName;
           item.Amount = item.TotalAmount;
           item.Icon = item.PaymentSystemId;
           item.ImageUrl = '../../../../../../assets/images/payments/' + item.Icon + '.png';
           total = total + item.Amount;
         });
-        this.topDeposits.forEach((item) => {
+        this.topDeposits().forEach((item) => {
           item.Amount = item.TotalAmount;
           item.Percent = item.Amount * 100 / total;
         });
-        return this.topDeposits;
+        return this.topDeposits();
       }
     });
   }
 
   getTopWithdrawMethods() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData,true,
+    this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
       Controllers.DASHBOARD, Methods.GET_TOP_WITHDRAW_METHODS, null, false).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         let total = 0;
-        this.topWithdraws = data.ResponseObject.slice(0, 5);
-        this.topWithdraws.forEach((item) => {
-          item.CurrencyId = this.localStorage.get('user')?.CurrencyId;
+        this.topWithdraws.set(data.ResponseObject.slice(0,5));
+        this.topWithdraws().forEach((item) => {
+          item.CurrencyId = this.currencyId;
           item.Name = item.PaymentSystemName;
           item.Amount = item.TotalAmount;
           item.Icon = item.PaymentSystemId;
           item.ImageUrl = '../../../../../../assets/images/payments/' + item.Icon + '.png';
           total = total + item.Amount;
         });
-        this.topWithdraws.forEach((item) => {
+        this.topWithdraws().forEach((item) => {
           item.Percent = item.Amount * 100 / total;
         });
       }

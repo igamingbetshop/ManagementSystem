@@ -1,3 +1,12 @@
+.modal-wrap {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  max-height: calc(80vh - 91px);
+  min-height: 200px;
+  padding-right: 14px;
+}
+
 .chackbox {
   margin-top: 8px;
   margin-left: 5px;
@@ -6,4 +15,8 @@
 .textarea {
   height: auto; 
   padding-right: 10px;
+}
+
+textarea { 
+  max-width: 342px!important;
 }

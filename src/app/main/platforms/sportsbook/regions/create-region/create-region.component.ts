@@ -32,7 +32,7 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 })
 export class CreateRegionComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateRegionComponent>,
@@ -67,7 +67,7 @@ export class CreateRegionComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('regions/add', obj).pipe(take(1)).subscribe(data => {
       if (data.Code === 0) {
@@ -75,7 +75,7 @@ export class CreateRegionComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

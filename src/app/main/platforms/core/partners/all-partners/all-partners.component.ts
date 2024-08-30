@@ -98,6 +98,11 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
         },
       },
       {
+        headerName: 'Common.VipLevel',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'VipLevel',
+      },
+      {
         headerName: 'Clients.CreationTime',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CreationTime',
@@ -133,7 +138,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
         sortable: false
       },
     ];
-    
+
     this.frameworkComponents = {
       agBooleanColumnFilter: AgBooleanFilterComponent
     }

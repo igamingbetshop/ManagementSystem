@@ -17,14 +17,14 @@
     <button 
       mat-stroked-button 
       class="mat-btn" 
-      [class.disabled]="isRowSelected() || isSendingReqest" 
+      [class.disabled]="isRowSelected() || isSendingRequest" 
       (click)="clone()">
       {{'Sport.Clone' | translate}}
     </button>
     <button 
       mat-stroked-button 
       class="mat-btn" 
-      [class.disabled]="isRowSelected() || isSendingReqest" 
+      [class.disabled]="isRowSelected() || isSendingRequest" 
       (click)="delete()">
       {{'Common.Delete' | translate}}
     </button>
@@ -47,11 +47,13 @@
       [animateRows]="true"
       [components]="frameworkComponents"
       [enableBrowserTooltips]="enableBrowserTooltips"
-      [cacheBlockSize]="cacheBlockSize"
+      [cacheBlockSize]="5000"
       (gridReady)="onGridReady($event)"
       (cellValueChanged)="onCellValueChanged($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
+      [pagination]="true"
+      [paginationPageSize]="5000"
       (columnPinned)="onColumnPinned($event)"
       (columnMoved)="onColumnMoved($event)"
       (columnResized)="onColumnResized($event)"

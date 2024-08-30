@@ -114,11 +114,6 @@ export class AllAffiliatesComponent extends BasePaginatedGridComponent implement
         field: 'PartnerId',
       },
       {
-        headerName: 'Clients.Currency',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CurrencyId',
-      },
-      {
         headerName: 'Clients.CreationTime',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CreationTime',

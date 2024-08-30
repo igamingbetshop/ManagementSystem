@@ -13,25 +13,32 @@
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Common.Id' | translate" readonly [formControlName]="'Id'">
         </div>
-      </div> 
+      </div>
 
       <div>
-        <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
-        <div class="second-hand">{{competition?.AbsoluteLimit}}</div>
+        <div class="first-hand">{{'Sport.MarketLimit' | translate}}</div>
+        <div class="second-hand">{{competition?.MarketLimit}}</div>
         <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.Absolute Limit' | translate" [formControlName]="'AbsoluteLimit'">
+            <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate" [formControlName]="'MarketLimit'">
         </div>
-      </div> 
+      </div>
+      <div>
+        <div class="first-hand">{{'Sport.PlayerLimit' | translate}}</div>
+        <div class="second-hand">{{competition?.PlayerLimit}}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate" [formControlName]="'PlayerLimit'">
+        </div>
+      </div>
 
       <div>
         <div class="first-hand">{{'Clients.Region' | translate}}</div>
-        <div class="second-hand">{{competition?.RegionName}}</div>
+        <div class="second-hand">{{competition?.RegionId | IdToName: regions}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'RegionId'">
             <mat-option *ngFor="let region of regions" [value]="region.Id">{{region.Name}}</mat-option>
           </mat-select>
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Sport.Delay' | translate}}</div>
@@ -39,16 +46,16 @@
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Sport.Delay' | translate" [formControlName]="'Delay'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Sport.MaxWinPrematchSingle' | translate}}</div>
         <div class="second-hand">{{competition?.MaxWinPrematchSingle}}</div>
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchSingle' | translate"
-            [formControlName]="'MaxWinPrematchSingle'"> 
+            [formControlName]="'MaxWinPrematchSingle'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Sport.MaxWinPrematchMultiple' | translate}}</div>
@@ -57,15 +64,15 @@
             <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchMultiple' | translate"
             [formControlName]="'MaxWinPrematchMultiple'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Sport.MaxWinLiveSingle' | translate}}</div>
         <div class="second-hand">{{competition?.MaxWinLiveSingle}}</div>
         <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveSingle' | translate" [formControlName]="'MaxWinLiveSingle'">      
+            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveSingle' | translate" [formControlName]="'MaxWinLiveSingle'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
@@ -73,17 +80,17 @@
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Sport.MaxWinLiveMultiple' | translate" [formControlName]="'MaxWinLiveMultiple'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Dashboard.Provider' | translate}}</div>
-        <div class="second-hand">{{competition?.ProviderName}}</div>
+        <div class="second-hand">{{competition?.ProviderId | IdToName: providers}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'ProviderId'">
             <mat-option *ngFor="let provider of providers" [value]="provider.Id">{{provider.Name}}</mat-option>
           </mat-select>
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
@@ -91,15 +98,15 @@
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Bonuses.Priority' | translate" [formControlName]="'Priority'">
         </div>
-      </div> 
+      </div>
 
       <div>
-        <div class="first-hand">{{'Products.CategoryId' | translate}}</div>
-        <div class="second-hand">{{competition?.CategoryId}}</div>
+        <div class="first-hand">{{'Products.TemplateId' | translate}}</div>
+        <div class="second-hand">{{competition?.TemplateId}}</div>
         <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Products.CategoryId' | translate" [formControlName]="'CategoryId'">
+            <input matInput type="number" [placeholder]="'Products.TemplateId' | translate" [formControlName]="'TemplateId'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Partners.Rating' | translate}}</div>
@@ -107,7 +114,7 @@
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Partners.Rating' | translate" [formControlName]="'Rating'">
         </div>
-      </div> 
+      </div>
 
       <div>
         <div class="first-hand">{{'Common.State' | translate}}</div>

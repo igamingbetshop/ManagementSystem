@@ -19,10 +19,13 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { ViewCommonComponent } from './view-common/view-common.component';
 import { TranslateModule } from "@ngx-translate/core";
 import { MatSelectModule } from "@angular/material/select";
+import { MatChipsModule } from '@angular/material/chips';
 
 import { BonusesService } from "../../../bonuses.service";
 import { CurrencySettingsComponent } from "../../../currency-settings/currency-settings.component";
 import { MatDialogModule } from '@angular/material/dialog';
+import { IdToNamePipe } from "../../../../../../../core/pipes/id-to-name-pipe";
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 const routes: Routes = [
   {
@@ -36,27 +39,30 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [DetailsComponent, ViewCommonComponent],
-  providers: [DatePipe, BonusesService],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    MatSnackBarModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatButtonModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    TranslateModule,
-    MatSelectModule,
-    CurrencySettingsComponent,
-    MatDialogModule
-  ]
+    declarations: [DetailsComponent, ViewCommonComponent],
+    providers: [DatePipe, BonusesService],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatButtonModule,
+        MatInputModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        TranslateModule,
+        MatSelectModule,
+        CurrencySettingsComponent,
+        MatDialogModule,
+        MatChipsModule,
+        IdToNamePipe,
+        DateTimePickerComponent
+    ]
 })
 export class DetailsModule {
 }

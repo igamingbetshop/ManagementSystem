@@ -19,7 +19,7 @@ export class BannerComponent implements OnInit {
   public partnerId: number;
   public formGroup: UntypedFormGroup;
   public banner;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(private _snackBar: MatSnackBar,
     private activateRoute: ActivatedRoute,
@@ -89,7 +89,7 @@ export class BannerComponent implements OnInit {
 
   onSubmit() {
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     obj.PartnerId = this.partnerId;
     this.apiService.apiPost('cms/editbanner', obj).subscribe(data => {
       if (data.ResponseCode === 0) {
@@ -97,7 +97,7 @@ export class BannerComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
 
 

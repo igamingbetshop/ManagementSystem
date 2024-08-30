@@ -24,7 +24,6 @@
         [columnDefs]="columnDefs"
         [defaultColDef]="defaultColDef"
         [cacheBlockSize]="cacheBlockSize"
-        [components]="frameworkComponents"
         (gridReady)="onGridReady($event)"
         [suppressCopyRowsToClipboard]="true"
         (rowClicked)="onRowClicked($event)"
@@ -63,26 +62,11 @@
         <div class="title">{{'Partners.PartnerCurrencies' | translate}}</div>
       </div>
       <div class="grid-content">
-        <ag-grid-angular
-        id="currency-settings2"
-        #agGrid1
-        class="ag-theme-balham"
-        [headerHeight]="33"
-        [rowHeight]="42"
-        [rowData]="rowData1"
-        [rowModelType]="rowModelType"
-        [columnDefs]="columnDefs1"
-        [defaultColDef]="defaultColDef"
-        [cacheBlockSize]="cacheBlockSize"
-        [components]="frameworkComponents"
-        [suppressCopyRowsToClipboard]="true"
-        (gridReady)="onGridReady($event)"
-        (cellValueChanged)="onCellValueChanged($event)"
-        [ensureDomOrder]="true"
-        [enableCellTextSelection]="true"
-        [getContextMenuItems]="getContextMenuItems"
-        rowSelection="single">
-      </ag-grid-angular>
+        <app-partner-currency-settings
+        [rowData]="currencySettingsRowData"
+         >
+
+        </app-partner-currency-settings>
       </div>
     </div>
   </div>

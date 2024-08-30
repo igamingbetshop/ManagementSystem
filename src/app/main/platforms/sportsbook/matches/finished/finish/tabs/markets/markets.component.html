@@ -4,7 +4,7 @@
     <div class="left-panel">
       <div class="action-content">
         <div class="title"><a [routerLink]="['../../all-finished']">{{'Sport.Finished' | translate}}</a>  / : {{'Sport.Markets' | translate}}
-          <span>{{finishId}}</span> &nbsp; {{name}}
+          <span>{{finishId()}}</span> &nbsp; {{name()}}
         </div>
       </div>
 
@@ -15,7 +15,7 @@
           [headerHeight]="33"
           [suppressCopyRowsToClipboard]="true"
           [rowHeight]="42"
-          [rowData]="rowData"
+          [rowData]="rowData()"
           [rowModelType]="rowModelType"
           [columnDefs]="columnDefs"
           [defaultColDef]="defaultColDef"
@@ -29,6 +29,7 @@
           (rowSelected)="onRowSelected($event)"
           (cellValueChanged)="onCellValueChanged1($event)"
           [ensureDomOrder]="true"
+          [pagination]="true"
           [enableCellTextSelection]="true"
           rowSelection="single">
         </ag-grid-angular>
@@ -39,21 +40,21 @@
     <div class="right-panel">
       <div class="action-content">
         <div class="title">
-          &nbsp; {{name}}
+          &nbsp; {{name()}}
         </div>
         <div>
           <button mat-stroked-button  class="mat-btn" (click)="resetMarket()">{{'Sport.ResettleMarket' | translate}}</button>
-
         </div>
 
       </div>
-      <div class="grid-content">
+      <app-selections-grid [rowData]="selectionsRowData()"></app-selections-grid>
+      <!-- <div class="grid-content">
         <ag-grid-angular
           #agGrid1
           class="ag-theme-balham"
           [headerHeight]="33"
           [rowHeight]="42"
-          [rowData]="rowData1"
+          [rowData]="rowData1()"
           [rowModelType]="rowModelType"
           [columnDefs]="columnDefs2"
           [defaultColDef]="defaultColDef"
@@ -65,10 +66,10 @@
           (gridReady)="onGridReady1($event)"
           [ensureDomOrder]="true"
           [enableCellTextSelection]="true"
+          [pagination]="true"
           rowSelection="single">
         </ag-grid-angular>
-
-      </div>
+      </div> -->
     </div>
 
   </div>

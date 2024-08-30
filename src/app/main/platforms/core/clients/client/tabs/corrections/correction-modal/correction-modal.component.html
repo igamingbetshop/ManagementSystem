@@ -42,9 +42,9 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="onClose()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" 
-    [class.disabled]="formGroup.invalid || isSendingReqest" 
+  <button mat-raised-button class="modal-cancel-btn" (click)="onClose()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingRequest" 
     (click)="onsubmit()">
     {{'Common.Save' | translate}}
   </button>

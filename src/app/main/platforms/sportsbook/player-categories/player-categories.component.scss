@@ -19,6 +19,11 @@
         opacity: 0.5;
       }
     }
+
+    .mat-delete-btn {
+      margin-left: 8px;
+      @include delete-btn;
+    }
   }
 
   .grid-content {

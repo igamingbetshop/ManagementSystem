@@ -319,7 +319,8 @@
     "CheckStatus": "Check Status",
     "BonusWinAmount": "Bonus Win Amount",
     "OriginalBonusWinAmount": "Original Bonus Win Amount",
-    "ConvertedAmount": "Converted Amount"
+    "ConvertedAmount": "Converted Amount",
+    "Duplicates": "Duplicates"
   },
   "Partners": {
     "AddPartner": "Add Partner",
@@ -415,6 +416,7 @@
     "Title": "Title",
     "Orientation": "Orientation",
     "OpenInRouting": "Open In Routing",
+    "Routing": "Routing",
     "Icon": "Icon",
     "Href": "Href",
     "Count": "Count",
@@ -440,7 +442,8 @@
     "PlatformId": "Platform Id",
     "CountrySettings": "Country Settings",
     "ApplyPercentAmount": "Apply Percent Amount",
-    "Countries": "Countries"
+    "Countries": "Countries",
+    "CopySettings": "CopySettings"
   },
   "Currencies": {
     "Currencies": "Currencies",
@@ -783,7 +786,10 @@
     "BetValueLevel": "BetValueLevel",
     "Regularity": "Regularity",
     "ReusingMaxCountInPeriod": "Reusing MaxCount In Period",
-    "DaysCount": "Days Count"
+    "DaysCount": "Days Count",
+    "SelectBonuses": "Select Bonuses",
+    "SetBetValue": "Set Bet Value",
+    "Jackpots": "Jackpots"
   },
   "Segments": {
     "Segments": "Segments",
@@ -1092,7 +1098,10 @@
     "PositiveNumbers": "Please enter only positive numbers",
     "NaturalNumbers": "Please enter only natural numbers",
     "EnglishLetters": "Please enter only English letters and natural numbers",
-    "InvalidImageExtension": "Invalid file extension"
+    "InvalidImageExtension": "Invalid file extension",
+    "TheSumOfCountsMustBeEqualTo100": "The Sum Of Counts Must Be Equal To 100.",
+    "OnlyNumbersAreAllowed": "Only Numbers Are Allowed",
+    "SelectionIdIsRequired": "Selection Id is required"
   },
   "Sport": {
     "AddSettings": "Add Settings",
@@ -1116,6 +1125,8 @@
     "RegionId": "Region Id",
     "SelectProvider": "Select Provider",
     "AbsoluteLimit": "Absolute Limit",
+    "PlayerLimit": "Player Limit",
+    "MarketLimit": "Market Limit",
     "Delay": "Delay",
     "AllowMultipleBets": "Allow Multiple Bets",
     "None": "None",
@@ -1363,7 +1374,22 @@
     "AreYouSureToMgarate": "Are you sure to migrate",
     "With": "With",
     "AcceptToMgarate": "Accept to migrate",
-    "LogoImageUrl": "Logo Image Url"
+    "LogoImageUrl": "Logo Image Url",
+    "HotBets": "Hot Bets",
+    "EditHotBet": "Edit Hot Bet",
+    "AddHotBet": "Add Hot Bet",
+    "SystemOutCount": "System Out Count",
+    "SystemOutCountIsRequired": "System Out Count is required",
+    "Jackpot": "Jackpot",
+    "AddJakpot": "Add Jakpot",
+    "AbsoluteProfitLiveRange1": "0-60 Minutes (AP)",
+    "AbsoluteProfitLiveRange2": "61-75 Minutes (AP)",
+    "AbsoluteProfitLiveRange3": "76-85 Minutes (AP)",
+    "AbsoluteProfitLiveRange4": "86-95 Minutes (AP)",
+    "AbsoluteProfitLiveRange5": "96-105 Minutes (AP)",
+    "AbsoluteProfitLiveRange6": "106+ Minutes (AP)",
+    "BetPercent": "Bet Percent",
+    "WinnerBetId": "Winner Bet Id"
   },
   "PoolBetting": {
     "PoolBetting": "Pool Betting",
@@ -1656,7 +1682,13 @@
     "ImageExtension": "Image Extension",
     "UploadDescription": "Upload Description",
     "LastThirtyDays": "Last Thirty Days",
-    "LastSevenDays": "Last Seven Days"
+    "LastSevenDays": "Last Seven Days",
+    "AddCount": "Add Count",
+    "SelectValue": "Select Value",
+    "VipLevel": "Vip Level",
+    "ViewAll": "View All",
+    "AddValue": "Add Value",
+    "OpenDocument": "Open Document"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",

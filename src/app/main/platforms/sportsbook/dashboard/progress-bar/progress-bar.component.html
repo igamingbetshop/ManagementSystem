@@ -1,0 +1,23 @@
+<div class="block-content">
+  <div class="date">{{src.StartTime}}</div>
+
+  <div class="content-row">
+    <span class="name">
+      <span>{{src.MatchName}}</span>
+       <span class="sport-name">- {{src.SportName}}</span>
+      @if (src.MatchId){
+        <span class="match-id">- {{src.MatchId}}</span>
+      }
+    </span>
+    <span class="amount">{{src.Amount  | number:number()}}<span class="currency-id">{{src.CurrencyId}}</span></span>
+  </div>
+  <div class="progress-bar-thumb">
+    <div class="progress-track" [style.width.%]="src.Percent">
+
+    </div>
+  </div>
+</div>
+
+
+
+

@@ -18,17 +18,17 @@ import { MatSelectModule } from "@angular/material/select";
 
 import { TranslateModule } from "@ngx-translate/core";
 import { PartnerDateFilterComponent } from "../../../../../components/partner-date-filter/partner-date-filter.component";
+import { SessionInfoComponent } from "./session-info/session-info.component";
 
 const routes: Routes = [
   {
     path: '',
     component: ReportBySessionsComponent,
-
   }
 ];
 
 @NgModule({
-  declarations: [ReportBySessionsComponent],
+  declarations: [ReportBySessionsComponent, SessionInfoComponent],
   providers: [DatePipe],
   imports: [
     CommonModule,

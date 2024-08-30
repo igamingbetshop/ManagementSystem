@@ -23,24 +23,24 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
   styleUrls: ['./all-active.component.scss']
 })
 export class AllActiveComponent extends BasePaginatedGridComponent implements OnInit {
-  public rowData = [];
-  public frameworkComponents;
-  public partners: any[] = [];
-  public partnerId: number;
-  public allProviders: any[] = [];
-  public sportProviders: any[] = [];
-  public availableProviders: any[] = [];
-  public sports: any[] = [];
-  public sportsId: number;
-  public statusId: number = -1;
-  public sportLocalFilter: any[] = [];
-  public providerId: number;
-  public searchMatch: any = {};
-  public view: string = 'tree'
-  public path = 'matches/activematchestree';
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowData = [];
+  frameworkComponents;
+  partners: any[] = [];
+  partnerId: number;
+  allProviders: any[] = [];
+  sportProviders: any[] = [];
+  availableProviders: any[] = [];
+  sports: any[] = [];
+  sportsId: number;
+  statusId: number = -1;
+  sportLocalFilter: any[] = [];
+  providerId: number;
+  searchMatch: any = {};
+  view: string = 'tree'
+  path = 'matches/activematchestree';
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   fromDate: Date;
-  public defaultColDef = {
+  defaultColDef = {
     flex: 1,
     editable: false,
     sortable: true,
@@ -57,7 +57,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     }
   };
 
-  public availableStatuses = {
+  availableStatuses = {
     statuses: [
       // { id: '1', status: -1, name: 'All' },
       { id: '2', status: 0, name: this.translate.instant('Sport.Prematch') },
@@ -66,15 +66,17 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     selectedStatus: { id: '1', status: -1, name: 'All' }
   };
 
-  public sportTree;
-  public sportTreeReference;
-  public matches;
-  public competitionSearchText: string;
-  public teamSearchText: string;
-  public searchMatchId: number | string;
-  public searchExternalId: number | string;
-  public searchByTimeField: string | Date;
+  sportTree;
+  sportTreeReference;
+  matches;
+  competitionSearchText: string;
+  competitionSearchId: string;
+  teamSearchText: string;
+  searchMatchId: number | string;
+  searchExternalId: number | string;
+  searchByTimeField: string | Date;
   private searchCompetition$: Subject<string> = new Subject();
+  private searchCompetitionId$: Subject<string> = new Subject();
   private searchTeam$: Subject<string> = new Subject();
   private searchByTime$: Subject<string | Date> = new Subject();
   private searchMatchId$: Subject<string> = new Subject();
@@ -287,6 +289,11 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
       this.onTeamsFind();
     });
 
+    this.searchCompetitionId$.pipe(debounceTime(this.timeInterval)).subscribe(value => {
+      this.competitionSearchId = value;
+      this.onTeamsFind();
+    });
+
     this.searchTeam$.pipe(debounceTime(this.timeInterval)).subscribe(value => {
       this.teamSearchText = value;
       this.onTeamsFind();
@@ -390,6 +397,23 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     });
   }
 
+  filterCompetitionId(): void {
+    if (!this.competitionSearchId) {
+      return;
+    }
+    const searchedPattern = (this.competitionSearchId);    
+    this.sportTree = this.sportTree.filter(sport => {
+      sport.Regions = sport.Regions.filter(region => {
+        region.Competitions = region.Competitions.filter(
+          competition => 
+            competition.CompetitionId == (searchedPattern)
+          )
+        return region.Competitions.length > 0;
+      });
+      return sport.Regions.length > 0;
+    });
+  }
+
   onTeamsFind(): void {
     this.findSport();
     this.filterSportStatus();
@@ -398,6 +422,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
     this.filterByMatch();
     this.filterByExternal();
     this.filterByTime();
+    this.filterCompetitionId();
   }
 
   filterTeam(): void {
@@ -485,6 +510,10 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
 
   searchCompetition(value: string) {
     this.searchCompetition$.next(value);
+  }
+
+  searchCompetitionId(value: string) {
+    this.searchCompetitionId$.next(value);
   }
 
   searchTeam(value: string) {

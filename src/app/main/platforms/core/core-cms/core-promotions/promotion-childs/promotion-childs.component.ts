@@ -104,6 +104,11 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
       filter: false
     },
     {
+      headerName: 'Common.Visibility',
+      headerValueGetter: this.localizeHeader.bind(this),
+      field: 'Visibility',
+    },
+    {
       headerName: 'Common.View',
       headerValueGetter: this.localizeHeader.bind(this),
       cellRenderer: OpenerComponent,

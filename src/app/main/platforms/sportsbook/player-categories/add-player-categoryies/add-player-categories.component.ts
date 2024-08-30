@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { TranslateModule } from "@ngx-translate/core";
+import { CommonDataService } from 'src/app/core/services';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-add-comment-type',
@@ -29,36 +31,41 @@ import { TranslateModule } from "@ngx-translate/core";
     MatSnackBarModule,
     MatButtonModule,
     TranslateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCheckboxModule,
   ],
 })
 export class AddPlayerCategoriesComponent implements OnInit {
 
   public formGroup: UntypedFormGroup;
   public sports: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
+  partners: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<AddPlayerCategoriesComponent>,
     private apiService: SportsbookApiService,
+    public commonDataService: CommonDataService,
     private _snackBar: MatSnackBar,
     private fb: UntypedFormBuilder,
   ) { }
 
   ngOnInit() {
-
+    this.partners = this.commonDataService.partners;
     this.createForm();
   }
 
   public createForm() {
     this.formGroup = this.fb.group({
       Id: [null, [Validators.required]],
+      PartnerId: [null],
       Name: [null, [Validators.required]],
       LimitPercent: [null, [Validators.required]],
       DelayPercentPrematch: [null, [Validators.required]],
       DelayPercentLive: [null, [Validators.required]],
       DelayBetweenBetsPrematch: [null, [Validators.required]],
       DelayBetweenBetsLive: [null, [Validators.required]],
+      IsDefault:[false],
     });
   }
 
@@ -70,7 +77,7 @@ export class AddPlayerCategoriesComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('players/addcategory', obj)
       .pipe(take(1))
@@ -80,7 +87,7 @@ export class AddPlayerCategoriesComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

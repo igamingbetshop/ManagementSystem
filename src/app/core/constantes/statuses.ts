@@ -127,4 +127,17 @@ export const DEVICE_TYPES = [
   { Id: -1, Name: "All" }
 ]
 
+export const MODES = [
+  { Id: 1, Name: "Static" }, 
+  { Id: 2, Name: "Dynamic" }
+]
+
+export const VISIBILITY_TYPES = [
+  { id: 1, name: 'Clients.LoggedOut' },
+  { id: 2, name: 'Clients.LoggedIn' },
+  { id: 3, name: 'Clients.NoDeposit'},
+  { id: 4, name: 'Clients.OneDepositOnly' },
+  { id: 5, name: 'Clients.TwoOrMoreDeposits' }
+]
+
 

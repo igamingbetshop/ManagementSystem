@@ -44,7 +44,12 @@ export class ViewProfitInfoComponent implements OnInit {
               row.push(!resp[key]['AbsoluteProfitRange1'] && resp[key]['AbsoluteProfitRange1'] !== 0 ? '-' : resp[key]['AbsoluteProfitRange1']);
               row.push(!resp[key]['AbsoluteProfitRange2'] && resp[key]['AbsoluteProfitRange2'] !== 0 ? '-' : resp[key]['AbsoluteProfitRange2']);
               row.push(!resp[key]['AbsoluteProfitRange3'] && resp[key]['AbsoluteProfitRange3'] !== 0 ? '-' : resp[key]['AbsoluteProfitRange3']);
-              row.push(!resp[key]['AbsoluteProfitLive'] && resp[key]['AbsoluteProfitLive'] !== 0 ? '-' : resp[key]['AbsoluteProfitLive']);
+              row.push(!resp[key]['AbsoluteProfitLiveRange1'] && resp[key]['AbsoluteProfitLiveRange1'] !== 0 ? '-' : resp[key]['AbsoluteProfitLiveRange1']);
+              row.push(!resp[key]['AbsoluteProfitLiveRange2'] && resp[key]['AbsoluteProfitLiveRange2'] !== 0 ? '-' : resp[key]['AbsoluteProfitLiveRange2']);
+              row.push(!resp[key]['AbsoluteProfitLiveRange3'] && resp[key]['AbsoluteProfitLiveRange3'] !== 0 ? '-' : resp[key]['AbsoluteProfitLiveRange3']);
+              row.push(!resp[key]['AbsoluteProfitLiveRange4'] && resp[key]['AbsoluteProfitLiveRange4'] !== 0 ? '-' : resp[key]['AbsoluteProfitLiveRange4']);
+              row.push(!resp[key]['AbsoluteProfitLiveRange5'] && resp[key]['AbsoluteProfitLiveRange5'] !== 0 ? '-' : resp[key]['AbsoluteProfitLiveRange5']);
+              row.push(!resp[key]['AbsoluteProfitLiveRange6'] && resp[key]['AbsoluteProfitLiveRange6'] !== 0 ? '-' : resp[key]['AbsoluteProfitLiveRange6']);
               row.push(!resp[key]['RelativeLimitRange1'] && resp[key]['RelativeLimitRange1'] !== 0 ? '-' : resp[key]['RelativeLimitRange1']);
               row.push(!resp[key]['RelativeLimitRange2'] && resp[key]['RelativeLimitRange2'] !== 0 ? '-' : resp[key]['RelativeLimitRange2']);
               row.push(!resp[key]['RelativeLimitRange3'] && resp[key]['RelativeLimitRange3'] !== 0 ? '-' : resp[key]['RelativeLimitRange3']);

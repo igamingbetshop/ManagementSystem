@@ -12,6 +12,9 @@ import { FocusMonitor } from '@angular/cdk/a11y';
     <input matInput type="datetime-local" [value]="dateTime" (input)="onDateTimeChange($event)" #inputElement>
   `,
   styles: [`
+  :host {
+    width: 100%;
+  }
     .date-time-picker {
       width: 100%;
     }
@@ -64,7 +67,15 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
     if (!this.dateTime) {
       this.setCurrentDateTime();
     } else {
-      this.dateTime = this.formatDateTime(this.dateTime);
+      // setTimeout(() => {
+      //   const event = new Event('input', {
+      //     bubbles: true,
+      //     cancelable: true
+      //   });
+      //   Object.defineProperty(event, 'target', { writable: false, value: { value: this.dateTime } });
+      //   this.onDateTimeChange(event);
+        
+      // }, 1000);
     }
   }
 
@@ -101,12 +112,26 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
   onDateTimeChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     const value = inputElement.value;
+    const localDate = new Date(value);
+    const localOffset = localDate.getTimezoneOffset();
+    const utcDate = new Date(localDate.getTime() + localOffset * 60000);
+    const formattedUtcDate = this.formatDate(utcDate);
     this.dateTime = value;
-    this.dateTimeChange.emit(value);
-    this.onChange(value);
+    this.dateTimeChange.emit(formattedUtcDate);
+    this.onChange(formattedUtcDate);
     this.onTouched();
     this.stateChanges.next();
   }
+  
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+  
 
   writeValue(value: string): void {
     if (value) {
@@ -142,11 +167,23 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
 
   private getCurrentDateTime(): string {
     const now = new Date();
-    return now.toISOString().slice(0, 16);
+    return this.formatLocalDateTime(now);
   }
-
+  
   private formatDateTime(dateTime: string): string {
     const date = new Date(dateTime);
-    return date.toISOString().slice(0, 16);
+    return this.formatLocalDateTime(date);
   }
+  
+  private formatLocalDateTime(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  
 }

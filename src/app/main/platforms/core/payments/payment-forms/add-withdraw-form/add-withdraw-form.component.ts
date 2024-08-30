@@ -19,7 +19,7 @@ export class AddWithdrawFormComponent implements OnInit {
   clientBanks = [];
   accounts = [];
   partnerId;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddWithdrawFormComponent>,
               private apiService: CoreApiService,
@@ -57,10 +57,10 @@ export class AddWithdrawFormComponent implements OnInit {
   }
 
   submit() {
-    if (!this.formGroup.valid || this.isSendingReqest) {
+    if (!this.formGroup.valid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const setting = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.CREATE_PAYMENT_FORM_REQUEST).pipe(take(1)).subscribe((data) => {
@@ -69,7 +69,7 @@ export class AddWithdrawFormComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

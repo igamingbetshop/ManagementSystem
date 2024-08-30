@@ -13,7 +13,7 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { Subject } from 'rxjs';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
-import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { DateHelperGTM0 } from 'src/app/main/components/partner-date-filter/data-helper-gtm0.class';
 
 @Component({
   selector: 'app-report-by-logs',
@@ -38,7 +38,6 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   frameworkComponents = {
     agDateTimeFilter: AgDateTimeFilter
   };
-  
 
   idFilterChange: boolean = false;
   typeModel: any;
@@ -119,7 +118,7 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   }
 
   setTime() {
-    const [fromDate, toDate] = DateHelper.startDate();
+    const [fromDate, toDate] = DateHelperGTM0.startDate();
     this.fromDate = fromDate;
     this.toDate = toDate;
   }

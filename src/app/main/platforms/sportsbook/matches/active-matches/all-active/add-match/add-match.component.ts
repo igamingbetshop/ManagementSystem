@@ -45,7 +45,7 @@ export class AddMatchComponent implements OnInit {
   providers: any[] = [];
   competition: any;
   private index = 1;
-  isSendingReqest = false;
+  isSendingRequest = false;
   TeamIds: TeamInput[] = [{ Id: 1, Value: '' }];
 
   matchTypes = [
@@ -125,7 +125,7 @@ export class AddMatchComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const value = this.TeamIds.map((v) => {
       return v.Value;
     }).filter(el => el != '');

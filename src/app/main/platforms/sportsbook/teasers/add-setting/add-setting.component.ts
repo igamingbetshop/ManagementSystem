@@ -50,7 +50,7 @@ export class AddSettingComponent implements OnInit {
     "pagesize": 100,
     SportIds: {},
   };
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { TeaserId: number },

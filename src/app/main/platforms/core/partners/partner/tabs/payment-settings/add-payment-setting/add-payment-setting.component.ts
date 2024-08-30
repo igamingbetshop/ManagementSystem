@@ -30,7 +30,7 @@ export class AddPaymentSettingComponent implements OnInit {
   ];
   extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
   partner;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddPaymentSettingComponent>,
     private apiService: CoreApiService,
@@ -67,7 +67,7 @@ export class AddPaymentSettingComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
@@ -77,7 +77,7 @@ export class AddPaymentSettingComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

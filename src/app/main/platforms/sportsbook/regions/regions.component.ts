@@ -221,13 +221,7 @@ export class RegionsComponent extends BasePaginatedGridComponent implements OnIn
 
   ngOnInit() {
     this.gridStateName = 'regions-grid-state';
-    this.apiService.apiPost('partners').subscribe(data => {
-      if (data.Code === 0) {
-        this.partners = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
+    this.partners = this.commonDataService.partners;
     this.getRows();
   }
 
@@ -274,8 +268,6 @@ export class RegionsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   onCheckBoxChange(params, val, param) {
-    console.log(params, val, param);
-    
     params.Enabled = val;
     this.onCellValueChanged(param)
   }

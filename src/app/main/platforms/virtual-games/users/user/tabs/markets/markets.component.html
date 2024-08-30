@@ -26,6 +26,8 @@
       (gridReady)="onGridReady($event)"
       (rowSelected)="onRowSelected($event)"
       [ensureDomOrder]="true"
+      pagination="true"
+      [paginationPageSize]="5000"
       [enableCellTextSelection]="true"
       rowSelection="single">
     </ag-grid-angular>
@@ -33,7 +35,13 @@
 
   </div>
   <div class="right-panel">
-    <div class="grid-content">
+    <app-market-types-categores-grid 
+      [rowData]="this.rowData1"
+      [marketTypeId]="this.marketTypeId"
+      [userId]="this.userId"
+      (emitSecondGridData)="getSecondGridData()"
+      ></app-market-types-categores-grid>
+    <!-- <div class="grid-content">
       <ag-grid-angular
       id="finished-markets-2"
       #agGrid1
@@ -55,7 +63,7 @@
       [enableCellTextSelection]="true"
       rowSelection="single">
     </ag-grid-angular>
-    </div>
+    </div> -->
   </div>
 </div>
 

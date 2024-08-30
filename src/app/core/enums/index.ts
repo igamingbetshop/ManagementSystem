@@ -9,3 +9,4 @@ export * from './controllers';
 export * from './affiliatesStates';
 export * from './betStatuses';
 export * from './gridMenuIds';
+export * from './notifications-object-types.enum';

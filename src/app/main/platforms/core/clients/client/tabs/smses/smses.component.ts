@@ -1,7 +1,7 @@
 import {Component, Injector, OnInit, ViewChild} from '@angular/core';
 import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
 import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
+import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes, NotificationsObjectType} from "../../../../../../../core/enums";
 import {CoreApiService} from "../../../../services/core-api.service";
 import {ActivatedRoute} from "@angular/router";
 import {ConfigService} from "../../../../../../../core/services";
@@ -18,10 +18,11 @@ import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 })
 export class SmsesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowData = [];
-  public filteredClientId = {};
+  clientId: number;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowData = [];
+  filteredClientId = {};
+  objectTypeId = NotificationsObjectType.Client
 
   constructor(
     private apiService: CoreApiService,
@@ -80,7 +81,7 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
+    this.clientId = +this.activateRoute.snapshot.queryParams.clientId;
     this.filteredClientId = {
       IsAnd: true,
       ApiOperationTypeList: [{
@@ -88,8 +89,8 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
         IntValue: this.clientId
       }]
     }
-    this.apiService.apiPost(this.configService.getApiUrl, {ClientIds: this.filteredClientId}, true,
-      Controllers.CLIENT, Methods.GET_SMSES).pipe(take(1)).subscribe((data) => {
+    this.apiService.apiPost(this.configService.getApiUrl, { Ids: this.filteredClientId, ObjectTypeId: this.objectTypeId }, true,
+      Controllers.REPORT, Methods.GET_SMSES).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.rowData = data.ResponseObject.Entities;
       }

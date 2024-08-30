@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, ViewContainerRef, signal } from '@angular/core';
 import { SportsbookApiService } from "../../../../../services/sportsbook-api.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
@@ -17,6 +17,7 @@ import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.he
 import { IRowNode } from "ag-grid-community";
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SelectStateRendererComponent } from 'src/app/main/components/grid-common/select-state-renderer.component';
+import { CommonDataService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-profit',
@@ -27,35 +28,38 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
   @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
   @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public path: string = 'matches/markettypeprofits';
-  public name: string = '';
-  public partnerId: number;
-  public sportId: number;
-  public matchId;
-  public pageConfig;
-  public filteredData;
-  public rowData;
-  public frameworkComponents = {
+  path: string = 'matches/markettypeprofits';
+  name: string = '';
+  partnerId: number;
+  sportId: number;
+  matchId;
+  pageConfig;
+  filteredData;
+  frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
     selectStateRenderer: SelectStateRendererComponent,
   };
-  public selectedData;
-  public selected = false;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public partners: any[] = [];
+  selectedData;
+  selected = false;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  partners: any[] = [];
   private multipleBetsStates = [
     { Id: null, Name: this.translate.instant('Sport.None') },
     { Id: true, Name: this.translate.instant('Common.Yes') },
     { Id: false, Name: this.translate.instant('Common.No') },
   ];
+  selectedMarket = signal<any>({});
+  rowData = signal<any>([]);
+  mappedRowData = signal<any>([]);
 
   constructor(protected injector: Injector,
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
+    public commonDataService: CommonDataService,
     private activateRoute: ActivatedRoute) {
     super(injector);
     this.columnDefs = [
@@ -126,9 +130,74 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
         },
       },
       {
-        headerName: 'Sport.LiveAP',
+        headerName: 'Sport.AbsoluteProfitLiveRange1',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AbsoluteProfitLive',
+        field: 'AbsoluteProfitLiveRange1',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange2',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange2',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange3',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange3',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange4',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange4',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange5',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange5',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange6',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange6',
         sortable: true,
         resizable: true,
         editable: true,
@@ -291,7 +360,7 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
       MatchId: this.matchId,
       PartnerId: this.partnerId ? this.partnerId : null,
     };
-    this.getPartners();
+    this.partners = this.commonDataService.partners;
     this.getProfits();
   }
 
@@ -328,7 +397,7 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
 
   viewProfit(data) {
     const dialogRef = this.dialog.open(ViewProfitInfoComponent, {
-      width: ModalSizes.XXL, data: {
+      width: ModalSizes.XXXL, data: {
         MatchId: data.value.MatchId, PartnerId: this.partnerId, MarketTypeId: data.value.MarketTypeId
       }
     });
@@ -341,11 +410,17 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   isRowSelected() {
-    return this.gridApi?.getSelectedRows().length;
+    const selectedRows = this.gridApi?.getSelectedRows();
+    return selectedRows && selectedRows.length > 0;
   }
 
   deleteSetting() {
     let row = this.gridApi?.getSelectedRows()[0];
+
+    if(!row) {
+      SnackBarHelper.show(this._snackBar, { Description: "Select the row", Type: "info" });
+      return;
+    }
     this.apiService.apiPost('matches/deletemarkettypeprofit', row)
       .pipe(take(1))
       .subscribe(data => {
@@ -361,7 +436,11 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
     const { AddSettingComponent } = await import('../profit/add-setting/add-setting.component');
     const dialogRef = this.dialog.open(AddSettingComponent, {
       width: ModalSizes.MEDIUM,
-      data: { PartnerId: this.pageConfig.PartnerId, MatchId: this.pageConfig.MatchId }
+      data: { 
+        PartnerId: this.pageConfig.PartnerId, 
+        MatchId: this.pageConfig.MatchId,
+        Method: 'matches/createmarkettypeprofit'
+       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -375,7 +454,8 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.rowData = data.ResponseObject;
+          this.rowData.set(data.ResponseObject);
+          this.mappedRowData.set(data.ResponseObject);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -399,16 +479,6 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
     this.onCellValueChanged(event);
   }
 
-  getPartners() {
-    this.apiService.apiPost('partners').subscribe(data => {
-      if (data.Code === 0) {
-        this.partners = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
-  }
-
   async onBulkEditorOpen() {
     if (this.bulkEditorRef) {
       this.bulkEditorRef.clear();
@@ -430,6 +500,24 @@ export class ProfitComponent extends BasePaginatedGridComponent implements OnIni
       this.bulkEditorRef.clear();
       this.gridApi.deselectAll();
     });
+  }
+
+  onSetSelectedMarket(event) {
+    this.selectedMarket.set(event);
+    this.filterRowData();
+  }
+
+  filterRowData() {
+    const selectedMarket = this.selectedMarket();
+    if (selectedMarket.Id) {
+      const data = this.rowData().filter(element => 
+        element.GroupIds?.includes(selectedMarket.Id)
+      );
+      this.mappedRowData.set(data);
+
+    } else {
+      this.mappedRowData.set(this.rowData())
+    }
   }
 
 }

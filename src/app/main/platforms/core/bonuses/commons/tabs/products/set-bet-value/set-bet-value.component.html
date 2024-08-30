@@ -1,0 +1,51 @@
+<div mat-dialog-title>
+  <span class="title">{{ 'Bonuses.SetBetValue' | translate }}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap" >
+  <div class="field-content">
+    <mat-form-field>
+      <mat-label>{{"Clients.SelectCurrency" | translate}}</mat-label>
+      <mat-select (selectionChange)="onCurrencyChange($event.value)">
+        @for (currency of currencies; track $index) {
+          <mat-option [value]="currency">
+            {{ currency }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field >
+      <mat-label>{{"SelectValue" | translate}}</mat-label>
+      <mat-select [class.disabled]="selectedCurrency" [(value)]="selectedValues[selectedCurrency]" (selectionChange)="onSelectValue(selectedCurrency, $event.value)">
+        @for (value of betValues[selectedCurrency]; track $index) {
+          <mat-option [value]="value">
+            {{ value }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+    <div class="selected-items-area">
+      @for (currency of selectedCurrencies; track $index) {
+        <div class="selected-currency">
+          <span>{{ currency }}: {{ selectedValues[currency] }}</span>
+          <button mat-icon-button color="warn" (click)="removeCurrency(currency)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{ 'Common.Cancel' | translate }}</button>
+  <button mat-raised-button class="modal-primary-btn" (click)="onSubmit()" 
+    [class.disabled]="isSendingRequest" 
+    type="submit">
+    {{ 'Common.Submit' | translate }}
+  </button>
+</div>

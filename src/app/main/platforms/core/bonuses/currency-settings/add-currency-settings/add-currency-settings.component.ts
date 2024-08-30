@@ -7,7 +7,6 @@ import {
   UntypedFormGroup,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
 
 import { take } from "rxjs";
 import {
@@ -50,6 +49,9 @@ export class AddCurrencySettingsComponent implements OnInit {
   formGroup: UntypedFormGroup;
   currencies = [];
   isUpToAmount?: boolean;
+  isAmount?: boolean;
+  isMinAmount?: boolean;
+  isMaxAmount?: boolean;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -59,13 +61,16 @@ export class AddCurrencySettingsComponent implements OnInit {
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) private data,
-    private activateRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.getCurrencies();
     this.formValues();
     this.isUpToAmount = this.data?.isUpToAmmount;
+    this.isAmount = this.data?.isAmount;
+    this.isMinAmount = this.data?.isMinAmount;
+    this.isMaxAmount = this.data?.isMaxAmount;
+
   }
 
   getCurrencies() {
@@ -93,7 +98,8 @@ export class AddCurrencySettingsComponent implements OnInit {
   formValues() {
     this.formGroup = this.fb.group({
       CurrencyId: [null, [Validators.required]],
-      MinAmount: [null, [Validators.required]],
+      Amount: [null],
+      MinAmount: [null],
       MaxAmount: [null],
       UpToAmount: [null],
     });

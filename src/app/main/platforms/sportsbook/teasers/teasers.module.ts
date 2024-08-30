@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TeasersComponent } from './teasers.component';
 import { TeasersRoutingModule } from "./teasers-routing.module";
 import { MatButtonModule } from '@angular/material/button';
+import { SelectedTeaserGridComponent } from './selected-teaser/selected-teaser-grid.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     MatDialogModule,
     TranslateModule,
-    MatButtonModule
+    MatButtonModule,
+    SelectedTeaserGridComponent
   ]
 })
 export class TeasersModule { }

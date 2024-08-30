@@ -22,7 +22,6 @@ import {IRowNode} from "ag-grid-community";
 })
 export class MarketsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
-  @ViewChild('agGrid1', {static: false}) agGrid1: AgGridAngular;
   public rowData = [];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public userId:any;
@@ -41,8 +40,11 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   };
   public marketTypeId;
 
-  constructor(protected injector: Injector, private _snackBar: MatSnackBar,
-              private apiService: VirtualGamesApiService, private activateRoute: ActivatedRoute,) {
+  constructor(
+    protected injector: Injector, 
+    private _snackBar: MatSnackBar,
+    private apiService: VirtualGamesApiService, 
+    private activateRoute: ActivatedRoute,) {
     super(injector);
     this.columnDefs = [
       {
@@ -126,48 +128,48 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         },
       },
     ]
-    this.columnDefs2 = [
-      {
-        headerName: 'Products.CategoryId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CategoryId',
-        sortable: true,
-        resizable: true,
-        minWidth: 100,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
-      },
-      {
-        headerName: 'Clients.CategoryName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CategoryName',
-        resizable: true,
-        sortable: true,
-      },
-      {
-        headerName: 'Sport.Profit',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ProfitValue',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        cellEditor: 'numericEditor',
-      },
-      {
-        headerName: 'Common.Save',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'save',
-        resizable: true,
-        minWidth: 150,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.saveFinishes['bind'](this),
-          Label: 'Save',
-          isDisabled: true
-        }
-      }
-    ]
+    // this.columnDefs2 = [
+    //   {
+    //     headerName: 'Products.CategoryId',
+    //     headerValueGetter: this.localizeHeader.bind(this),
+    //     field: 'CategoryId',
+    //     sortable: true,
+    //     resizable: true,
+    //     minWidth: 100,
+    //     cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+    //   },
+    //   {
+    //     headerName: 'Clients.CategoryName',
+    //     headerValueGetter: this.localizeHeader.bind(this),
+    //     field: 'CategoryName',
+    //     resizable: true,
+    //     sortable: true,
+    //   },
+    //   {
+    //     headerName: 'Sport.Profit',
+    //     headerValueGetter: this.localizeHeader.bind(this),
+    //     field: 'ProfitValue',
+    //     resizable: true,
+    //     sortable: true,
+    //     editable: true,
+    //     cellEditor: 'numericEditor',
+    //   },
+    //   {
+    //     headerName: 'Common.Save',
+    //     headerValueGetter: this.localizeHeader.bind(this),
+    //     field: 'save',
+    //     resizable: true,
+    //     minWidth: 150,
+    //     sortable: false,
+    //     filter: false,
+    //     cellRenderer: 'buttonRenderer',
+    //     cellRendererParams: {
+    //       onClick: this.saveFinishes['bind'](this),
+    //       Label: 'Save',
+    //       isDisabled: true
+    //     }
+    //   }
+    // ]
   }
 
   ngOnInit(): void {
@@ -227,37 +229,37 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   onCellValueChanged(event){
-    if(event.oldValue !== event.value){
-      let findedNode: IRowNode;
-      let node = event.node.rowIndex;
-      this.agGrid1.api.forEachNode(nod => {
-        if(nod.rowIndex == node){
-          findedNode = nod;
-        }
-      })
-      this.agGrid1.api.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.agGrid1.api.redrawRows({rowNodes: [findedNode]});
-    }
+    // if(event.oldValue !== event.value){
+    //   let findedNode: IRowNode;
+    //   let node = event.node.rowIndex;
+    //   this.agGrid1.api.forEachNode(nod => {
+    //     if(nod.rowIndex == node){
+    //       findedNode = nod;
+    //     }
+    //   })
+    //   this.agGrid1.api.getColumnDef('save').cellRendererParams.isDisabled = false;
+    //   this.agGrid1.api.redrawRows({rowNodes: [findedNode]});
+    // }
   }
 
-  saveFinishes(params) {
-    const row = params.data;
-    let data = {
-      ProfitValue: row.ProfitValue,
-      MarketTypeId: this.marketTypeId,
-      CategoryId: row.CategoryId,
-      Id: this.userId
-    };
-    this.apiService.apiPost(this.path3, data)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.agGrid1.api.getColumnDef('save').cellRendererParams.isDisabled = true;
-          this.getSecondGridData()
-        } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-        }
-      });
-  }
+  // saveFinishes(params) {
+  //   const row = params.data;
+  //   let data = {
+  //     ProfitValue: row.ProfitValue,
+  //     MarketTypeId: this.marketTypeId,
+  //     CategoryId: row.CategoryId,
+  //     Id: this.userId
+  //   };
+  //   this.apiService.apiPost(this.path3, data)
+  //     .pipe(take(1))
+  //     .subscribe(data => {
+  //       if (data.ResponseCode === 0) {
+  //         this.agGrid1.api.getColumnDef('save').cellRendererParams.isDisabled = true;
+  //         this.getSecondGridData()
+  //       } else {
+  //         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+  //       }
+  //     });
+  // }
 
 }

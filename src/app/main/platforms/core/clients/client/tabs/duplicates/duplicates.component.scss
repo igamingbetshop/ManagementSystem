@@ -1,15 +1,13 @@
 @import "mixins.scss";
 @import "variables.scss";
 
-
-
 .container {
   @include container-style;
-  height: auto;
+  height: 66%;
 
   .grid-content {
     width: 100%;
-    height: calc(100vh - 354px);
+    height: 100%;
 
     ::ng-deep {
       ag-grid-angular {

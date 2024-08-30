@@ -23,7 +23,7 @@ export class AddDepositFormComponent implements OnInit {
   };
   fromDate = new Date();
   formGroup: UntypedFormGroup;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddDepositFormComponent>,
               private apiService: CoreApiService,
@@ -68,7 +68,7 @@ export class AddDepositFormComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const setting = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.CREATE_PAYMENT_FORM_REQUEST).pipe(take(1)).subscribe((data) => {
@@ -77,7 +77,7 @@ export class AddDepositFormComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

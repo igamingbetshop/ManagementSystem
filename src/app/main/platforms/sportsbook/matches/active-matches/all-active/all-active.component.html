@@ -110,6 +110,13 @@
 
         <div class="input-content">
           <input type="text"
+                 [placeholder]="'Partners.SearchCompetitionId' | translate"
+                 [ngModel]="competitionSearchId"
+                 (ngModelChange)="searchCompetitionId($event)">
+        </div>
+
+        <div class="input-content">
+          <input type="text"
                  [ngModel]="teamSearchText"
                  (ngModelChange)="searchTeam($event)"
                  [placeholder]="'Partners.SearchTeam' | translate">

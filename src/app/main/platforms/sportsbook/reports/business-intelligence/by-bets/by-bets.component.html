@@ -1,8 +1,8 @@
 
 <div class="container">
 
-  <app-partner-date-filter 
-  [title]="'Reports.ReportByBets'" 
+  <app-partner-date-filter
+  [title]="'Reports.ReportByBets'"
   [betCategory]="true"
   [betStatuses]="true"
   [allTimesFilter]="false"
@@ -55,12 +55,25 @@
 
     <div class="additional-bet-info">
       <span>{{'Reports.SelectionCount' | translate}}: {{betInfo.SelectionCount}}</span>
-      <span *ngIf = "betInfo.Multiway">, {{'Common.Multiway' | translate}}</span>
-      <span *ngIf = "betInfo.SystemOutComeValue">, {{betsCount}}B {{'Reports.SystemOutComeValue' | translate}}: {{betInfo.SystemOutComeValue}}</span>
-      <span *ngIf = "betInfo.TeaserId">, {{'Reports.TeaserId' | translate}}: {{betInfo.TeaserId}}</span>
-      <span *ngIf = "betInfo.Point">, {{'Reports.Point' | translate}}: {{betInfo.Point}}</span>
-      <span *ngIf = "betInfo.Info">, {{'Common.Info' | translate}}: {{betInfo.Info}}</span>
+      @if(betInfo.Multiway) {
+        <span>, {{'Common.Multiway' | translate}}</span>
+      }
+      @if(betInfo.SystemOutComeValue) {
+        <span>, {{betsCount}}B {{'Reports.SystemOutComeValue' | translate}}: {{betInfo.SystemOutComeValue}}</span>
+      }
+      @if (betInfo.TeaserId) {
+        <span>, {{'Reports.TeaserId' | translate}}: {{betInfo.TeaserId}}</span>
+      }
+      @if (betInfo.Point) {
+        <span>, {{'Reports.Point' | translate}}: {{betInfo.Point}}</span>
+      }
     </div>
+
+    @if(betInfo.Info) {
+    <div class="additional-bet-info info-bet">
+        <span> {{'Common.Info' | translate}}: {{betInfo.Info}}</span>
+      </div>
+    }
 
     <div class="footer-ag-grid">
       <mat-select
@@ -69,7 +82,9 @@
         [(value)]="defaultPageSize"
         panelClass="overlay-dropdown small"
         disableOptionCentering>
-        <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
+        @for ( sizes of pageSizes; track $index) {
+          <mat-option [value]="sizes">{{sizes}}</mat-option>
+        }
       </mat-select>
       <div class="match-action">
         <button mat-stroked-button class="mat-btn" [class.disabled]="(!isRowSelected() || !isUncalculated() ||  isWaiting())" (click)="calculateBet()">{{"Reports.SettleBet" | translate}}</button>
@@ -93,38 +108,15 @@
 <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 <button mat-stroked-button class="mat-export-btns" (click)="exportMatchGrid()">{{'Sport.ExportToCSVSelections' | translate}}</button>
 
-<div *ngIf="show" class="match-grid">
-
-  <!-- <ag-grid-angular
-    id="report-bets1"
-    #agGrid1
-    class="ag-theme-balham"
-    [headerHeight]="33"
-    [rowHeight]="42"
-    [rowData]="rowData1"
-    [rowModelType]="rowModelType1"
-    [columnDefs]="columnDefs1"
-    [suppressCopyRowsToClipboard]="true"
-    [defaultColDef]="defaultColDef1"
-    [enableBrowserTooltips]="enableBrowserTooltips"
-    [components]="frameworkComponents"
-    [animateRows]="true"
-    [enableBrowserTooltips]="enableBrowserTooltips"
-    [cacheBlockSize]="cacheBlockSize"
-    (gridReady)="onGridReady1($event)"
-    [ensureDomOrder]="true"
-    [enableCellTextSelection]="true"
-    [getContextMenuItems]="getContextMenuItemsForBets"
-    rowSelection="single">
-  </ag-grid-angular> -->
-
-  <app-match-grid
-    [oddsType]="oddsType"
-    [rowData]="rowData1"
-    (selectStatus)="this.onSelectStatus($event)"
-    (blockMatch)="this.onBlockMatch($event)"
-    (finishedMatchesMarket)="this.goToFinishedMatchesMarket($event)"
-    ></app-match-grid>
-
-</div>
+@if(show) {
+  <div class="match-grid">
+    <app-match-grid
+      [oddsType]="oddsType"
+      [rowData]="matchRowData"
+      (selectStatus)="this.onSelectStatus($event)"
+      (blockMatch)="this.onBlockMatch($event)"
+      (finishedMatchesMarket)="this.goToFinishedMatchesMarket($event)"
+      ></app-match-grid>
+  </div>
+}
 

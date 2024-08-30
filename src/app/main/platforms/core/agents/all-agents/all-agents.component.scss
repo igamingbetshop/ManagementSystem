@@ -52,3 +52,26 @@
     }
   }
 }
+
+
+@media screen and (max-width: 1200px) {
+  .container {
+    .content-action {
+      // height: 92px;
+      .title {
+        display: block;
+      }
+
+      .partner-dropdown {
+        display: flex;
+        margin-left: auto;
+      }
+
+    }
+  }
+  .grid-content {
+    ag-grid-angular {
+      height: calc(100vh - 150px) !important;
+    }
+  }
+}

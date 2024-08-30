@@ -19,7 +19,7 @@ export class AddBlockedPaymentsComponent implements OnInit {
   blockedPayments = [];
   clientId: number;
   states: any;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
               @Inject(MAT_DIALOG_DATA) public data: { clientId: number, partnerId: number, currencyId: string},
@@ -59,11 +59,11 @@ export class AddBlockedPaymentsComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.CLIENT,
       Methods.SAVE_CLIENT_PAYMENT_SETTING).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
@@ -71,7 +71,7 @@ export class AddBlockedPaymentsComponent implements OnInit {
         } else{
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
     })
   }
 

@@ -43,7 +43,7 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   public paymentInfo;
   public partnerName;
   columnDefs = [];
-
+  title: string;
   protected commonDataService: CommonDataService;
   protected localStorageService: LocalStorageService;
   protected activateRoute: ActivatedRoute;

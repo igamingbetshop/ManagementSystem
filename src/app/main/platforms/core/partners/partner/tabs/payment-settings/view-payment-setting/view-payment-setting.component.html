@@ -62,7 +62,7 @@
 
       <div>
         <div class="first-hand">{{'Partners.LastUpdate' | translate}}</div>
-        <div class="static-hand">{{paymentSystem?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="static-hand">{{paymentSystem?.LastUpdateTime | date:'dd/MM/yyyy HH:mm'}}</div>
       </div>
 
       <div>
@@ -184,6 +184,43 @@
         </div>
       </div>
 
+      <div>
+        <div class="first-hand">{{'Bonuses.ChooseSegment' | translate}}</div>
+        <div class="second-hand" >
+          <span class="second-left"> 
+            @if (paymentSystem?.Segments?.Type==1) {
+              {{'Bonuses.InSet' | translate}}
+            } @else if (paymentSystem?.Segments?.Type==2) {
+              {{'Bonuses.OutOfSet' | translate}}
+            }
+          </span>
+
+          <span class="second-right">
+            @for (item of segmentesEntites; track $index) {
+              {{item}}
+            }
+          </span>
+        </div>
+
+
+        <div class="form-field group-field" [formGroupName]="'Segments'">
+          <div class="group-left-item">
+          <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
+          <input [value]="2" style="margin-left: 5px;" [formControlName]="'Type'" type="radio">{{'Bonuses.OutOfSet' |
+          translate}}
+          </div>
+          
+          <div class="group-right-item">
+            <mat-select [formControlName]="'Ids'" multiple>
+              @for (segment of segments; track $index) {
+                <mat-option [value]="segment.Id">{{segment.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
+
+        </div>
+      </div>
+
 
       <div>
         <div class="first-hand">{{'Common.ImageExtension' | translate}}</div>
@@ -194,11 +231,10 @@
           </mat-select>
          </div>
       </div>
-      <div></div>
 
-      <div>
-
-      </div>
+      <button mat-stroked-button class="mat-btn form-btn"  type="button" (click)="onAddDescription()">{{'Clients.UploadForm'
+        |translate}}
+      </button>
 
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
@@ -242,8 +278,6 @@
             <tr class="buttons" *ngIf="isEditCurrency === true">
               <td></td>
               <td>
-
-
                 <div class="actions">
                   <ng-container *ngIf="isEditCurrency && enableEditIndex == i">
                     <button mat-raised-button class="mat-cancel-btn"
@@ -252,7 +286,6 @@
                     <button mat-raised-button class="mat-btn" (click)="submitCurrency(currencyItem)">{{'Common.Save' |
                       translate}}</button>
                   </ng-container>
-
                 </div>
               </td>
             </tr>

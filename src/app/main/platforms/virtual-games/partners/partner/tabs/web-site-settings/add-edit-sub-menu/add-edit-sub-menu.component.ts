@@ -13,10 +13,16 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
   styleUrls: ['./add-edit-sub-menu.component.scss']
 })
 export class AddEditSubMenuComponent implements OnInit {
-  public action;
-  public partnerId;
-  public menuItem;
-  public formGroup: UntypedFormGroup;
+  action;
+  partnerId;
+  menuItem;
+  formGroup: UntypedFormGroup;
+  iconChanging;
+  showFile = false;
+  selectedImage;
+  validDocumentSize;
+  validDocumentFormat;
+  checkDocumentSize;
 
   constructor(public dialogRef: MatDialogRef<AddEditSubMenuComponent>,
               public apiService: VirtualGamesApiService,
@@ -80,6 +86,41 @@ export class AddEditSubMenuComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
         }
       });
+  }
+
+  changeIcon(event) {
+    this.iconChanging = event.target.value;
+    if (this.iconChanging || this.formGroup.get('Icon').value) {
+      this.showFile = true
+    } else {
+      this.showFile = false;
+    }
+  }
+
+  uploadFile(event) {
+    let files = event.target.files.length && event.target.files[0];
+    if (files) {
+      this.validDocumentSize = files.size < 900000;
+      this.validDocumentFormat = files.type === 'image/png' ||
+        files.type === 'image/jpg' || files.type === 'image/jpeg' || files.type === 'image/gif' || files.type === 'image/svg+xml';
+      if ((files.size < 900000) &&
+        (files.type === 'image/png' || files.type === 'image/jpg' || files.type === 'image/jpeg' || files.type === 'image/gif' || files.type === 'image/svg+xml')) {
+        this.checkDocumentSize = true;
+        const reader = new FileReader();
+        reader.onload = () => {
+          const binaryString = reader.result as string;
+          this.formGroup.get('Image').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
+          this.formGroup.get('Icon').setValue(files.name);
+          this.selectedImage = files.name;
+
+        };
+        reader.readAsDataURL(files);
+      } else {
+        this.checkDocumentSize = false;
+        files = null;
+        SnackBarHelper.show(this._snackBar, { Description: 'failed', Type: "error" });
+      }
+    }
   }
 
 }

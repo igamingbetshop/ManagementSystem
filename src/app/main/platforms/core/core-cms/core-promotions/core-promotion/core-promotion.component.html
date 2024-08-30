@@ -124,7 +124,6 @@
               {{'Bonuses.OutOfSet' | translate}}
             }
           </span>
-
           <span class="second-right">
             @for (segment of segmentesEntites; track $index) {
               {{segment}}, 
@@ -187,6 +186,22 @@
         </div>
       </div>
 
+      @if(childe) {
+        <div>
+          <div class="first-hand">{{'Common.Visibility' | translate}}</div>
+          <div class="second-hand">
+            {{promotion?.Visibility | IdToName: visibilityTypes}}
+          </div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'Visibility'" multiple>
+              @for (type of visibilityTypes; track $index) {
+                <mat-option [value]="type.Id">{{type.Name}}</mat-option>
+              }
+            </mat-select>
+          </div>
+        </div>
+      }
+
 
       @if (isEdit) {
         <div>
@@ -225,6 +240,8 @@
               <input type="file" (change)="uploadFile1($event)" [formControlName]="'ImageDataSmall'">
             </div>
           </div>
+
+
         }
       }
 

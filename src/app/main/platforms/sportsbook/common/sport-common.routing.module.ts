@@ -27,6 +27,11 @@ const routes: Routes = [
         resolve:{commonData: CommonDataResolver, filterData:SportFilterOptionsResolver},
       },
       {
+        path: 'hot-bets',
+        loadChildren: () => import('./hot-bets/hot-bets.module').then(m => m.HotBetsModule),
+        resolve:{commonData: CommonDataResolver, filterData:SportFilterOptionsResolver},
+      },
+      {
         path: '',
         redirectTo: 'currencies',
         pathMatch: 'full'

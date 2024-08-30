@@ -50,6 +50,9 @@
         <mat-option [value]="sizes" *ngFor="let sizes of pageSizes">{{sizes}}</mat-option>
       </mat-select>
     </div>
+
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
   </div>
 
 </div>

@@ -8,67 +8,77 @@
   <form class="modal-form" [formGroup]="formGroup">
     <mat-form-field>
       <mat-label>{{ "Clients.SelectCurrency" | translate }}</mat-label>
-      <mat-select
-        placeholder="{{ 'Clients.SelectCurrency' | translate }}"
-        [formControlName]="'CurrencyId'"
-        required
-      >
-        <mat-option
-          *ngFor="let currencie of currencies"
-          [value]="currencie.Id"
-          >{{ currencie.Id }}</mat-option
-        >
+      <mat-select placeholder="{{ 'Clients.SelectCurrency' | translate }}" [formControlName]="'CurrencyId'" required>
+        @for (currencie of currencies; track $index) {
+          <mat-option [value]="currencie.Id">{{ currencie.Id }}</mat-option>
+        } 
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>{{ "Bonuses.MinAmount" | translate }}</mat-label>
-      <input type="number" matInput [formControlName]="'MinAmount'" required />
-      <mat-error
-        *ngIf="
-          errorControl['MinAmount'].touched &&
-          errorControl['MinAmount'].hasError('required')
-        "
-      >
-        {{ "Bonuses.MinAmount" | translate }}
-        {{ "Errors.Required" | translate }}
-      </mat-error>
-    </mat-form-field>
+    @if(!isAmount) {
+      <mat-form-field>
+        <mat-label>{{ "Clients.Amount" | translate }}</mat-label>
+        <input type="number" matInput [formControlName]="'Amount'" />
+        @if(errorControl['Amount'].touched &&
+        errorControl['Amount'].hasError('required')) {
+  
+          <mat-error>
+            {{ "Clients.Amount" | translate }}
+            {{ "Errors.Required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    }
 
-    <mat-form-field>
-      <mat-label>{{ "Bonuses.MaxAmount" | translate }}</mat-label>
-      <input type="number" matInput [formControlName]="'MaxAmount'" />
-      <mat-error
-        *ngIf="
-          errorControl['MaxAmount'].touched &&
-          errorControl['MaxAmount'].hasError('required')
-        "
-      >
-        {{ "Bonuses.MaxAmount" | translate }}
-        {{ "Errors.Required" | translate }}
-      </mat-error>
-    </mat-form-field>
+    @if (!isMinAmount) {
+      <mat-form-field>
+        <mat-label>{{ "Bonuses.MinAmount" | translate }}</mat-label>
+        <input type="number" matInput [formControlName]="'MinAmount'" />
+        @if(errorControl['MinAmount'].touched &&
+        errorControl['MinAmount'].hasError('required')) {
+          <mat-error>
+            {{ "Bonuses.MinAmount" | translate }}
+            {{ "Errors.Required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    }
 
-    <mat-form-field *ngIf="!isUpToAmount">
-      <mat-label>{{ "Bonuses.UpToAmount" | translate }}</mat-label>
-      <input type="number" matInput [formControlName]="'UpToAmount'" required />
-      <mat-error
-        *ngIf="
-          errorControl['UpToAmount'].touched &&
-          errorControl['UpToAmount'].hasError('required')
-        "
-      >
-        {{ "Bonuses.UpToAmount" | translate }}
-        {{ "Errors.Required" | translate }}
-      </mat-error>
-    </mat-form-field>
+    @if(!isMaxAmount) {
+      <mat-form-field>
+        <mat-label>{{ "Bonuses.MaxAmount" | translate }}</mat-label>
+        <input type="number" matInput [formControlName]="'MaxAmount'" />
+        @if(errorControl['MaxAmount'].touched &&
+        errorControl['MaxAmount'].hasError('required')) {
+          <mat-error>
+            {{ "Bonuses.MaxAmount" | translate }}
+            {{ "Errors.Required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    }
+
+    @if(!isUpToAmount) {
+      <mat-form-field>
+        <mat-label>{{ "Bonuses.UpToAmount" | translate }}</mat-label>
+        <input type="number" matInput [formControlName]="'UpToAmount'" required />
+        @if(errorControl['UpToAmount'].touched &&
+        errorControl['UpToAmount'].hasError('required')) {
+          <mat-error>
+            {{ "Bonuses.UpToAmount" | translate }}
+            {{ "Errors.Required" | translate }}
+          </mat-error>
+        }
+      </mat-form-field>
+    }
+
   </form>
 </div>
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">
     {{ "Common.Cancel" | translate }}
   </button>
-  <button class="modal-primary-btn" (click)="submit()">
+  <button mat-raised-button class="modal-primary-btn" (click)="submit()">
     {{ "Common.Save" | translate }}
   </button>
 </div>

@@ -11,9 +11,7 @@
         <div class="first-hand">{{'Common.Id' | translate}}</div>
         <div class="second-hand">{{user?.Id}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Id'" readonly>
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -36,9 +34,7 @@
         <div class="first-hand">{{'Clients.UserName' | translate}}</div>
         <div class="second-hand">{{user?.UserName}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'UserName'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -56,9 +52,7 @@
         <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
         <div class="second-hand">{{user?.FirstName}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'FirstName'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -66,9 +60,7 @@
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
         <div class="second-hand">{{user?.LastName}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'LastName'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -96,9 +88,7 @@
         <div class="first-hand">{{'Clients.Email' | translate}}</div>
         <div class="second-hand">{{user?.Email}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput [formControlName]="'Email'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -126,10 +116,8 @@
         <div class="first-hand">{{'Users.UserPassword' | translate}}</div>
         <div class="second-hand">{{'********'}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="password" [placeholder]="'********'" [formControlName]="'Password'">
 
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -137,9 +125,7 @@
         <div class="first-hand">{{'Common.CorrectionMaxAmount' | translate}}</div>
         <div class="second-hand">{{user?.CorrectionMaxAmount}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
             <input matInput type="number" [formControlName]="'CorrectionMaxAmount'">
-          <!-- </mat-form-field> -->
         </div>
       </div>
 
@@ -185,55 +171,68 @@
   <div class="main-content" *ngIf="editUserRoles">
 
     <div class="left-panel">
-
       <div class="grid-content">
-        <ag-grid-angular id="currency-settings" #agGrid class="ag-theme-balham" [suppressCopyRowsToClipboard]="true"
-        [headerHeight]="33" [rowHeight]="42" [rowData]="rowData" [rowModelType]="rowModelType" [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef" [rowSelection]="rowSelection"
-        [cacheBlockSize]="cacheBlockSize" [components]="frameworkComponents" (gridReady)="onGridReady($event)"
-        [ensureDomOrder]="true" [enableCellTextSelection]="true" [getContextMenuItems]="getContextMenuItems"
-        rowSelection="single">
+        <ag-grid-angular 
+          id="currency-settings" 
+          #agGrid 
+          class="ag-theme-balham" 
+          [suppressCopyRowsToClipboard]="true"
+          [headerHeight]="33" 
+          [rowHeight]="42" 
+          [rowData]="rowData" 
+          [rowModelType]="rowModelType" 
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef" 
+          [rowSelection]="rowSelection"
+          [cacheBlockSize]="cacheBlockSize" 
+          [components]="frameworkComponents" 
+          (gridReady)="onGridReady($event)"
+          [ensureDomOrder]="true" 
+          [enableCellTextSelection]="true" 
+          [getContextMenuItems]="getContextMenuItems"
+          rowSelection="single">
       </ag-grid-angular>
       </div>
 
-        <button mat-raised-button class="mat-btn" [disabled]="!enableEditRole"
-          (click)="saveUserRoles()">{{'Users.SaveRoleChange' | translate}}</button>
+        <button 
+          mat-raised-button 
+          class="mat-btn" 
+          [disabled]="!enableEditRole"
+          (click)="saveUserRoles()">
+          {{'Users.SaveRoleChange' | translate}}
+        </button>
 
     </div>
 
     <div class="right-panel">
-      <div class="grid-content">
-        <ag-grid-angular id="currency-settings2" #agGrid1 class="ag-theme-balham" [headerHeight]="33" [rowHeight]="42"
-        [suppressCopyRowsToClipboard]="true" [rowData]="rowData1" [rowModelType]="rowModelType" [columnDefs]="columnDefs1"
-        [defaultColDef]="defaultColDef" [cacheBlockSize]="cacheBlockSize"
-        (rowClicked)="onRowClicked($event)" [components]="frameworkComponents" (gridReady)="onGridReady($event)"
-        [ensureDomOrder]="true" [enableCellTextSelection]="true" [getContextMenuItems]="getContextMenuItems"
-        rowSelection="single">
-      </ag-grid-angular>
-      </div>
+       <div class="grid-content"> 
+      <app-rols-grid 
+        [rowData]="rowData1" 
+        [userId]="this.user?.Id" 
+        ></app-rols-grid>
+       <!--  <ag-grid-angular 
+          id="currency-settings2" 
+          #agGrid1 
+          class="ag-theme-balham" 
+          [headerHeight]="33" 
+          [rowHeight]="42"
+          [suppressCopyRowsToClipboard]="true" 
+          [rowData]="rowData1" 
+          [rowModelType]="rowModelType" 
+          [columnDefs]="columnDefs1"
+          [defaultColDef]="defaultColDef" 
+          [cacheBlockSize]="cacheBlockSize"
+          (rowClicked)="onRowClicked($event)" 
+          [components]="frameworkComponents" 
+          (gridReady)="onGridReady($event)"
+          [ensureDomOrder]="true" 
+          [enableCellTextSelection]="true" 
+          [getContextMenuItems]="getContextMenuItems"
+          rowSelection="single">
+      </ag-grid-angular>-->
+      </div> 
     </div>
     </div>
-
-
-
-
-  <!-- <div class="grid-content" *ngIf="editUserRoles">
-    <ag-grid-angular id="currency-settings" #agGrid class="ag-theme-balham" [suppressCopyRowsToClipboard]="true"
-      [headerHeight]="33" [rowHeight]="42" [rowData]="rowData" [rowModelType]="rowModelType" [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef" [rowSelection]="rowSelection"
-      [cacheBlockSize]="cacheBlockSize" [components]="frameworkComponents" (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true" [enableCellTextSelection]="true" [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
-    <ag-grid-angular id="currency-settings2" #agGrid1 class="ag-theme-balham" [headerHeight]="33" [rowHeight]="42"
-      [suppressCopyRowsToClipboard]="true" [rowData]="rowData1" [rowModelType]="rowModelType" [columnDefs]="columnDefs1"
-      [defaultColDef]="defaultColDef" [cacheBlockSize]="cacheBlockSize"
-      (rowClicked)="onRowClicked($event)" [components]="frameworkComponents" (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true" [enableCellTextSelection]="true" [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
-  </div> -->
-
 
 
 </div>

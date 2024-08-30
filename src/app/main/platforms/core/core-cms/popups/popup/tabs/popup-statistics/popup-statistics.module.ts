@@ -16,6 +16,7 @@ import { TranslateModule } from "@ngx-translate/core";
 import { MatSelectModule } from "@angular/material/select";
 import { PartnerDateFilterComponent } from "src/app/main/components/partner-date-filter/partner-date-filter.component";
 import { PopupStatisticsComponent } from "./popup-statistics.component";
+import { IdToNamePipe } from "../../../../../../../../core/pipes/id-to-name-pipe";
 
 const routes: Routes = [
   {
@@ -25,24 +26,25 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PopupStatisticsComponent],
-  providers: [DatePipe],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    FormsModule,
-    MatSelectModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    TranslateModule,
-    PartnerDateFilterComponent
-  ]
+    declarations: [PopupStatisticsComponent],
+    providers: [DatePipe],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatInputModule,
+        FormsModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        TranslateModule,
+        PartnerDateFilterComponent,
+        IdToNamePipe
+    ]
 })
 
 export class PopupStatisticsModule {

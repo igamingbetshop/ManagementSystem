@@ -38,6 +38,9 @@ export class ViewPaymentSettingComponent implements OnInit {
   extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
   countriesList: [] = [];
   countriesEntites = [];
+  segments;
+  segmentesEntites = [];
+
 
   constructor(private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
@@ -54,9 +57,26 @@ export class ViewPaymentSettingComponent implements OnInit {
     this.id = this.activateRoute.snapshot.queryParams.id;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.parentId = this.activateRoute.snapshot.queryParams.partnerId;
-
+    this.getPartnerPaymentSegments(this.parentId)
     this.getPartnerPaymentCurrency();
     this.getForm();
+  }
+
+  getPartnerPaymentSegments(partnerId) {
+    this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: partnerId }, true,
+      Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.segments = data.ResponseObject;
+          this.segmentesEntites.length = 0;
+          this.setSegmentsEntytes();
+        }
+      });
+  }
+
+  setSegmentsEntytes() {
+    this.segmentesEntites.push(this.formGroup.value.Segments?.Ids?.map(elem => {
+      return this.segments.find((item) => elem === item.Id).Name
+    }))
   }
 
   getPartnerPaymentCurrency() {
@@ -97,7 +117,8 @@ export class ViewPaymentSettingComponent implements OnInit {
             this.paymentSystem.PartnerName = this.commonDataService.partners.find((item => item.Id === this.paymentSystem.PartnerId))?.Name;
             this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
             this.isEdit = false;
-            this.getPartnerPaymentSystemId()
+            this.getPartnerPaymentSystemId();
+            SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
@@ -118,8 +139,9 @@ export class ViewPaymentSettingComponent implements OnInit {
           this.countriesEntites.push(this.paymentSystem?.Countries.Ids.map(elem => {
             return this.countries.find((item) => elem === item.Id).Name
           }))
-
-          this.countriesList = this.paymentSystem.Countries.map((item) => {
+          this.segmentesEntites.length = 0;
+          this.setSegmentsEntytes();
+          this.countriesList = this.paymentSystem?.Countries?.map((item) => {
               return this.countries.find((country) => country.Id === item)?.Name + ','; 
             });
         } else {
@@ -147,6 +169,11 @@ export class ViewPaymentSettingComponent implements OnInit {
         Names: [null],
         Type: [null],
       }),
+      Segments: this.fb.group({
+        Ids: [null],
+        Names: [null],
+        Type: [null],
+      }),
       PartnerName: [null],
       PartnerId: [null],
       CurrencyId: [null],
@@ -158,6 +185,8 @@ export class ViewPaymentSettingComponent implements OnInit {
       OpenMode: [null],
       ApplyPercentAmount: [null],
       ImageExtension: [null],
+      LanguageId: [null],
+      ContendData: [null]
     });
   }
 
@@ -214,6 +243,23 @@ export class ViewPaymentSettingComponent implements OnInit {
     this.router.navigate(['/main/platform/partners/partner/payment-settings'], {
       queryParams: { "partnerId": this.parentId, "partnerName": this.partnerName }
     });
+  }
+
+  async onAddDescription() {
+    const { UploadHtmlComponent } = await import('../../../../../../../components/upload-html/upload-html.component');
+    const dialogRef = this.dialog.open(UploadHtmlComponent, {
+      width: ModalSizes.MEDIUM, data: {
+        ObjectId: this.id,
+        ObjectTypeId: 99,
+      }
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+      if (data) {
+        this.formGroup.get('LanguageId').setValue(data.languageId);
+        this.formGroup.get('ContendData').setValue(data.contendData);
+        this.submit();
+      }
+    })
   }
 
 }

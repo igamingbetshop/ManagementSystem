@@ -32,6 +32,8 @@
       (gridReady)="onGridReady($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
+      [pagination]="true"
+      [paginationPageSize]="5000"
       [getContextMenuItems]="getContextMenuItems"
       (columnPinned)="onColumnPinned($event)"
       (columnMoved)="onColumnMoved($event)"

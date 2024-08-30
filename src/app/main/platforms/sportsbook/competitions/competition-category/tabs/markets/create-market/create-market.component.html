@@ -37,10 +37,52 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field >
-            <input matInput type="number" [placeholder]="'Sport.AbsoluteProfitLive' | translate" [formControlName]="'AbsoluteProfitLive'">
-            <mat-error *ngIf="errorControl['AbsoluteProfitLive']?.touched && errorControl['AbsoluteProfitLive'].errors?.required">
-              {{'Sport.AbsoluteProfitLive' | translate}} {{'Errors.Required' | translate}}
+          <mat-form-field>
+            <mat-label>{{'Sport.AbsoluteProfitLiveRange1' | translate}}</mat-label>
+            <input type="number" matInput [formControlName]="'AbsoluteProfitLiveRange1'" required>
+            <mat-error
+              *ngIf="errorControl['AbsoluteProfitLiveRange1'].touched && errorControl['AbsoluteProfitLiveRange1'].hasError('required')">
+              {{'Sport.AbsoluteProfitLiveRange1' | translate}} {{'errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{'Sport.AbsoluteProfitLiveRange2' | translate}}</mat-label>
+            <input type="number" matInput [formControlName]="'AbsoluteProfitLiveRange2'" required>
+            <mat-error
+              *ngIf="errorControl['AbsoluteProfitLiveRange2'].touched && errorControl['AbsoluteProfitLiveRange2'].hasError('required')">
+              {{'Sport.AbsoluteProfitLiveRange2' | translate}} {{'errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{'Sport.AbsoluteProfitLiveRange3' | translate}}</mat-label>
+            <input type="number" matInput [formControlName]="'AbsoluteProfitLiveRange3'" required>
+            <mat-error
+              *ngIf="errorControl['AbsoluteProfitLiveRange3'].touched && errorControl['AbsoluteProfitLiveRange3'].hasError('required')">
+              {{'Sport.AbsoluteProfitLiveRange3' | translate}} {{'errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{'Sport.AbsoluteProfitLiveRange4' | translate}}</mat-label>
+            <input type="number" matInput [formControlName]="'AbsoluteProfitLiveRange4'" required>
+            <mat-error
+              *ngIf="errorControl['AbsoluteProfitLiveRange4'].touched && errorControl['AbsoluteProfitLiveRange4'].hasError('required')">
+              {{'Sport.AbsoluteProfitLiveRange4' | translate}} {{'errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{'Sport.AbsoluteProfitLiveRange5' | translate}}</mat-label>
+            <input type="number" matInput [formControlName]="'AbsoluteProfitLiveRange5'" required>
+            <mat-error
+              *ngIf="errorControl['AbsoluteProfitLiveRange5'].touched && errorControl['AbsoluteProfitLiveRange5'].hasError('required')">
+              {{'Sport.AbsoluteProfitLiveRange5' | translate}} {{'errors.Required' | translate}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>{{'Sport.AbsoluteProfitLiveRange6' | translate}}</mat-label>
+            <input type="number" matInput [formControlName]="'AbsoluteProfitLiveRange6'" required>
+            <mat-error
+              *ngIf="errorControl['AbsoluteProfitLiveRange6'].touched && errorControl['AbsoluteProfitLiveRange6'].hasError('required')">
+              {{'Sport.AbsoluteProfitLiveRange6' | translate}} {{'errors.Required' | translate}}
             </mat-error>
           </mat-form-field>
 
@@ -82,6 +124,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Create'| translate}}</button>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Create'| translate}}</button>
 </div>

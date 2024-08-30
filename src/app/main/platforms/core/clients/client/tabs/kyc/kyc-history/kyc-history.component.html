@@ -1,0 +1,24 @@
+
+
+<div class="main-content">
+
+  <div class="grid-content">
+
+    <ag-grid-angular
+      id="kyc-history"
+      class="ag-theme-balham"
+      [headerHeight]="33"
+      [rowHeight]="42"
+      [rowData]="rowData()"
+      [rowModelType]="rowModelType"
+      [columnDefs]="columnDefs"
+      [suppressCopyRowsToClipboard]="true"
+      [defaultColDef]="defaultColDef"
+      [ensureDomOrder]="true"
+      [enableCellTextSelection]="true"
+      [getContextMenuItems]="getContextMenuItems"
+      rowSelection="single">
+    </ag-grid-angular>
+
+  </div>
+</div>

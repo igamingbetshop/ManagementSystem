@@ -2,10 +2,11 @@ import {Component} from "@angular/core";
 
 @Component({
   selector: 'app-sportsbook',
-  template: `<router-outlet></router-outlet>
-  <app-quick-find></app-quick-find>`,
+  template: `
+    <router-outlet/>
+    <app-quick-find/>
+    <app-sb-quick-find/>
+  `,
 })
-export class SportsbookComponent
-{
-
+export class SportsbookComponent{
 }

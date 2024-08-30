@@ -36,15 +36,16 @@
   </mat-form-field>
 
   <!-- <textarea [(ngModel)]="noteText"></textarea> -->
+  <mat-label>{{'Clients.Message' | translate}}<i class="icon-info1"></i></mat-label>
 
-  <mat-form-field class="full-height">
+  <div class="full-height">
     <mat-label>{{'Clients.Message' | translate}}</mat-label>
     <textarea matInput
     [(ngModel)]="noteText"> </textarea>
-  </mat-form-field>
+  </div>
 </div>
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="submitNote()">{{'Common.Save' | translate}}</button>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" (click)="submitNote()">{{'Common.Save' | translate}}</button>
 </div>
 

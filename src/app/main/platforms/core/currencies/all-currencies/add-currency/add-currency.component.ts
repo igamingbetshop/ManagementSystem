@@ -14,6 +14,7 @@ import { CoreApiService } from '../../../services/core-api.service';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { CURRENCY_TYPES } from '../all-currencies.component';
 
 
 @Component({
@@ -30,13 +31,13 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
   ],
 })
 export class AddCurrencyComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingReqest = false; 
-
+  isSendingRequest = false; 
+  currencyTypes = CURRENCY_TYPES;
   constructor(
     public dialogRef: MatDialogRef<AddCurrencyComponent>,
     private fb: UntypedFormBuilder,
@@ -53,6 +54,7 @@ export class AddCurrencyComponent implements OnInit {
   public createForm() {
     this.formGroup = this.fb.group({
       Id: [null, [Validators.required]],
+      Type: [1],
       CurrentRate: [null, [Validators.required]],
       Symbol: [null, [Validators.required]],
     });
@@ -70,7 +72,7 @@ export class AddCurrencyComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CURRENCY, Methods.SAVE_CURRENCY)
@@ -81,7 +83,7 @@ export class AddCurrencyComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 }

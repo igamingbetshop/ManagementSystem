@@ -22,17 +22,17 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.BuildingNumber' | translate}}</div>
-        <div class="second-hand">{{client?.BuildingNumber}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'BuildingNumber'">
-        </div>
-      </div>
-      <div>
         <div class="first-hand">{{'Clients.UserName' | translate}}</div>
         <div class="second-hand">{{client?.UserName}}</div>
         <div class="form-field form-input">
           <input matInput [formControlName]="'UserName'" readonly>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
+        <div class="second-hand">{{client?.CurrencyId}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'CurrencyId'" readonly>
         </div>
       </div>
       <div>
@@ -43,12 +43,13 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.MobileNumber' | translate}}</div>
-        <div class="second-hand">{{client?.MobileNumber}}</div>
+        <div class="first-hand">{{'Clients.SecondName' | translate}}</div>
+        <div class="second-hand">{{client?.SecondName}}</div>
         <div class="form-field form-input">
-          <input matInput [formControlName]="'MobileNumber'">
+          <input matInput [formControlName]="'SecondName'">
         </div>
       </div>
+
       <div>
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
         <div class="second-hand">{{client?.LastName}}</div>
@@ -57,10 +58,10 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.PhoneNumber' | translate}}</div>
-        <div class="second-hand">{{client?.PhoneNumber}}</div>
+        <div class="first-hand">{{'Clients.SecondSurname' | translate}}</div>
+        <div class="second-hand">{{client?.SecondSurname}}</div>
         <div class="form-field form-input">
-          <input matInput [formControlName]="'PhoneNumber'">
+          <input matInput [formControlName]="'SecondSurname'">
         </div>
       </div>
       <div>
@@ -71,10 +72,10 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.SecondName' | translate}}</div>
-        <div class="second-hand">{{client?.SecondName}}</div>
+        <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
+        <div class="second-hand">{{client?.MobileCode}}</div>
         <div class="form-field form-input">
-          <input matInput [formControlName]="'SecondName'">
+          <input matInput [formControlName]="'MobileCode'">
         </div>
       </div>
       <div>
@@ -91,21 +92,12 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.SecondSurname' | translate}}</div>
-        <div class="second-hand">{{client?.SecondSurname}}</div>
+        <div class="first-hand">{{'Clients.MobileNumber' | translate}}</div>
+        <div class="second-hand">{{client?.MobileNumber}}</div>
         <div class="form-field form-input">
-          <input matInput [formControlName]="'SecondSurname'">
+          <input matInput [formControlName]="'MobileNumber'">
         </div>
       </div>
-      <!-- <div>
-        <div class="first-hand">{{'Clients.PromoCode' | translate}}</div>
-        <div class="second-hand">{{client?.PromoCode}}</div>
-        <div class="form-field form-input">
-          <mat-form-field>
-            <input matInput [formControlName]="'PromoCode'" readonly>
-           </mat-form-field> 
-        </div>
-      </div> -->
       <div>
         <div class="first-hand">{{'Common.Gender' | translate}}</div>
         <div class="second-hand">{{client?.GenderName}}</div>
@@ -120,17 +112,17 @@
         </div>
       </div>
       <div>
+        <div class="first-hand">{{'Common.Age' | translate}}</div>
+        <div class="second-hand">{{client?.Age}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'Age'" readonly>
+        </div>
+      </div>
+      <div>
         <div class="first-hand">{{'Clients.ZipCode' | translate}}</div>
         <div class="second-hand">{{client?.ZipCode}}</div>
         <div class="form-field form-input">
           <input matInput [formControlName]="'ZipCode'">
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Clients.Currency' | translate}}</div>
-        <div class="second-hand">{{client?.CurrencyId}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'CurrencyId'" readonly>
         </div>
       </div>
       <div>
@@ -167,20 +159,6 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.Address' | translate}}</div>
-        <div class="second-hand">{{client?.Address}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'Address'">
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Clients.Apartment' | translate}}</div>
-        <div class="second-hand">{{client?.Apartment}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'Apartment'">
-        </div>
-      </div>
-      <div>
         <div class="first-hand">{{'Clients.CityText' | translate}}</div>
         <div class="second-hand">{{client?.City}}</div>
         <div class="form-field form-input">
@@ -188,10 +166,24 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.IssuedBy' | translate}}</div>
-        <div class="second-hand">{{client?.DocumentIssuedBy}}</div>
+        <div class="first-hand">{{'Clients.Address' | translate}}</div>
+        <div class="second-hand">{{client?.Address}}</div>
         <div class="form-field form-input">
-          <input matInput [formControlName]="'DocumentIssuedBy'">
+          <input matInput [formControlName]="'Address'">
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.BuildingNumber' | translate}}</div>
+        <div class="second-hand">{{client?.BuildingNumber}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'BuildingNumber'">
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.Apartment' | translate}}</div>
+        <div class="second-hand">{{client?.Apartment}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'Apartment'">
         </div>
       </div>
       <div>
@@ -206,6 +198,28 @@
         </div>
       </div>
       <div>
+        <div class="first-hand">{{'Clients.JobArea' | translate}}</div>
+        <div class="second-hand">{{client?.JobArea}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'JobArea'">
+            @for (jobArea of jobAreas; track $index) {
+              <mat-option [value]="jobArea.Id">{{jobArea.NickName}}</mat-option>
+            }
+          </mat-select>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.Citizenship' | translate}}</div>
+        <div class="second-hand">{{client?.CitizenshipName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Citizenship'">
+            @for (country of countries; track $index) {
+              <mat-option [value]="country.Id">{{country.Name}}</mat-option>
+            }
+          </mat-select>
+        </div>
+      </div>
+      <div>
         <div class="first-hand">{{'Clients.DocumentNumber' | translate}}</div>
         <div class="second-hand">{{client?.DocumentNumber}}</div>
         <div class="form-field form-input">
@@ -214,9 +228,16 @@
       </div>
       <div>
         <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-        <div class="second-hand">{{client?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="second-hand">{{client?.CreationTime | date:'dd/MM/yyyy HH:mm'}}</div>
         <div class="form-field form-input">
           <input matInput [formControlName]="'CreationTime'">
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Payments.LastDepositDate' | translate}}</div>
+        <div class="second-hand">{{client?.LastDepositDate | date:'dd/MM/yyyy HH:mm'}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'LastDepositDate'" readonly>
         </div>
       </div>
       <div>
@@ -228,10 +249,14 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.EmailVerified' | translate}}</div>
-        <div class="second-hand">{{client?.IsEmailVerified}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'IsEmailVerified'">{{'Clients.IsEmailVerified' | translate}}</mat-checkbox>
+        <div class="first-hand">{{'Common.State' | translate}}</div>
+        <div class="second-hand">{{client?.StateName}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            @for (state of clientStates; track $index) {
+              <mat-option  [value]="state.Id">{{state.Name}}</mat-option>
+            }
+          </mat-select>
         </div>
       </div>
       <div>
@@ -248,31 +273,6 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.SendMail' | translate}}</div>
-        <div class="second-hand">{{client?.SendMail}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'SendMail'">{{'Clients.SendMail' | translate}}</mat-checkbox>
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Common.State' | translate}}</div>
-        <div class="second-hand">{{client?.StateName}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'State'">
-            @for (state of clientStates; track $index) {
-              <mat-option  [value]="state.Id">{{state.Name}}</mat-option>
-            }
-          </mat-select>
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Clients.SendSms' | translate}}</div>
-        <div class="second-hand">{{client?.SendSms}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'SendSms'">{{'Clients.SendSms' | translate}}</mat-checkbox>
-        </div>
-      </div>
-      <div>
         <div class="first-hand">{{'Common.Info' | translate}}</div>
         <div class="second-hand">{{client?.Info}}</div>
         <div class="form-field form-input">
@@ -280,10 +280,17 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.SendPromotions' | translate}}</div>
-        <div class="second-hand">{{client?.SendPromotions}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'SendPromotions'">{{'Clients.SendPromotions' | translate}}</mat-checkbox>
+        <div class="first-hand">{{'Clients.IssuedBy' | translate}}</div>
+        <div class="second-hand">{{client?.DocumentIssuedBy}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'DocumentIssuedBy'">
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.AgentId' | translate}}</div>
+        <div class="second-hand">{{client?.UserId}}</div>
+        <div class="form-field form-input">
+          <input matInput [formControlName]="'UserId'">
         </div>
       </div>
       <div>
@@ -308,6 +315,42 @@
         </div>
       </div>
       <div>
+        <div class="first-hand">{{'Clients.EmailVerified' | translate}}</div>
+        <div class="second-hand">{{client?.IsEmailVerified}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsEmailVerified'">{{'Clients.IsEmailVerified' | translate}}</mat-checkbox>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.SendMail' | translate}}</div>
+        <div class="second-hand">{{client?.SendMail}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'SendMail'">{{'Clients.SendMail' | translate}}</mat-checkbox>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.MobileNumberVerified' | translate}}</div>
+        <div class="second-hand">{{client?.IsMobileNumberVerified}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'IsMobileNumberVerified'">{{'Clients.IsMobileNumberVerified' |
+            translate}}</mat-checkbox>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.SendSms' | translate}}</div>
+        <div class="second-hand">{{client?.SendSms}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'SendSms'">{{'Clients.SendSms' | translate}}</mat-checkbox>
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Clients.SendPromotions' | translate}}</div>
+        <div class="second-hand">{{client?.SendPromotions}}</div>
+        <div class="form-field form-checkbox">
+          <mat-checkbox [formControlName]="'SendPromotions'">{{'Clients.SendPromotions' | translate}}</mat-checkbox>
+        </div>
+      </div>
+      <div>
         <div class="first-hand">{{'Clients.ReceivePhoneCalls' | translate}}</div>
         <div class="second-hand">{{client?.CallToPhone}}</div>
         <div class="form-field form-checkbox">
@@ -322,42 +365,12 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.MobileNumberVerified' | translate}}</div>
-        <div class="second-hand">{{client?.IsMobileNumberVerified}}</div>
-        <div class="form-field form-checkbox">
-          <mat-checkbox [formControlName]="'IsMobileNumberVerified'">{{'Clients.IsMobileNumberVerified' |
-            translate}}</mat-checkbox>
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Clients.JobArea' | translate}}</div>
-        <div class="second-hand">{{client?.JobArea}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'JobArea'">
-            @for (jobArea of jobAreas; track $index) {
-              <mat-option [value]="jobArea.Id">{{jobArea.NickName}}</mat-option>
-            }
-          </mat-select>
-        </div>
-      </div>
-      <div>
         <div class="first-hand">{{'Clients.CategoryName' | translate}}</div>
         <div class="second-hand">{{client?.CategoryName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'CategoryId'">
             @for (category of clientCategories; track $index) {
               <mat-option [value]="category.Id">{{category.Name}}</mat-option>
-            }
-          </mat-select>
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Clients.Citizenship' | translate}}</div>
-        <div class="second-hand">{{client?.CitizenshipName}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'Citizenship'">
-            @for (country of countries; track $index) {
-              <mat-option [value]="country.Id">{{country.Name}}</mat-option>
             }
           </mat-select>
         </div>
@@ -370,33 +383,16 @@
         </div>
       </div>
       <div>
-        <div class="first-hand">{{'Clients.AgentId' | translate}}</div>
-        <div class="second-hand">{{client?.UserId}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'UserId'">
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Payments.LastDepositDate' | translate}}</div>
-        <div class="second-hand">{{client?.LastDepositDate}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'LastDepositDate'" readonly>
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Common.Age' | translate}}</div>
-        <div class="second-hand">{{client?.Age}}</div>
-        <div class="form-field form-input">
-          <input matInput [formControlName]="'Age'" readonly>
-        </div>
-      </div>
-
-      <div>
         <div class="first-hand">{{'Clients.UnderMonitoringTypes' | translate}}</div>
         <div class="second-hand">{{client?.UnderMonitoringTypesNames}}</div>
         <div class="form-field form-input">
           <input matInput [value]="client?.UnderMonitoringTypesNames" readonly>
         </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Duplicated' | translate}}</div>
+        <div class="static-hand">{{client?.Duplicated}}</div>
       </div>
 
       <div>
@@ -439,7 +435,13 @@
       </div>
       <div>
         <div class="first-hand">{{'Clients.USSDPin' | translate}}</div>
-        <div class="second-hand" *ngIf="client?.USSDPin; else ''">********</div>
+        <div class="second-hand">
+          @if(client?.USSDPin) {
+            ********
+          }  @else {
+            ''
+          }
+        </div>
         <div class="form-field form-input">
           <input [formControlName]="'USSDPin'" matInput [value]="client?.USSDPin ? client.USSDPin : ''">
         </div>
@@ -456,7 +458,6 @@
 
 
       <div></div>
-      <div></div>
       <div class="form-actions">
         <div class="actions">
           <button mat-stroked-button class="mat-btn" (click)="changePassword()">{{'Clients.ChangePassword' |
@@ -468,7 +469,7 @@
         @if(isEdit) {
           <div class="actions">
             <button mat-stroked-button class="mat-cancel-btn" (click)="cancel()">{{'Common.Cancel' | translate}}</button>
-            <button mat-stroked-button class="mat-btn" [class.disabled]="!isSaveActive" type="submit"
+            <button mat-stroked-button class="mat-btn" [class.disabled]="!isSaveActive && formGroup.invalid" type="submit"
               (click)="onSubmit()">{{'Common.Save' | translate}}</button>
           </div>
         }

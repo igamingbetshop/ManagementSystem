@@ -1,9 +1,9 @@
 @import "mixins";
 
 .container {
+  background-color: $content-bg-color!important;
   @include container-style;
-  height: auto;
-  background-color: $content-bg-color;
+  height: 100%;
 
   .content-action {
     @include action-style;
@@ -13,13 +13,11 @@
       @include mat-edit-btn-style;
     }
   }
-
-
-
 }
 
 .form-actions {
   justify-content: flex-end;
+  background-color: $content-bg-color!important;
 
   .actions {
     display: flex;
@@ -36,11 +34,9 @@
   }
 }
 
-
-
 .main-content {
+  background-color: $content-bg-color;
   width: 100%!important;
-  height: 135px;
   display: flex!important;
   column-gap: 10px!important;
   .left-panel,
@@ -53,46 +49,29 @@
     @include mat-btn-style;
   }
 
-
   .grid-content {
     width: 100%!important;
     height: 400px;
     position: relative!important;
+    background-color: $content-bg-color!important;
     ::ng-deep {
       ag-grid-angular {
         width: 100%;
         height: 100%;
       }
-    }
-    
+    }    
   }
-
 }
-
 
 .grid-content {
   width: 100%;
   height: 135px;
   padding-top: 12px;
-
+  background-color: $content-bg-color!important;
   ::ng-deep {
     ag-grid-angular {
       width: 100%;
       height: 100%;
     }
   }
-}
-
-
-
-
-.role-change-btn {
-  width: 54%;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px 15px 0 0;
-  height: 28px;
-  margin-top: 15%;
-
-
 }

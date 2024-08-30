@@ -64,8 +64,6 @@ export class NewsComponent implements OnInit {
     this.id = +this.activateRoute.snapshot.queryParams.Id;
     this.isChilde = this.activateRoute.snapshot.queryParams.Childe;
     this.languages = this.commonDataService.languages;
-    console.log(this.languages, 'languages');
-    
     this.getNewsById();
     this.getDate();
   }

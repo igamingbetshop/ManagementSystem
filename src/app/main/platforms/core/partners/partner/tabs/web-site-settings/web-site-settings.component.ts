@@ -1,4 +1,4 @@
-import { Component, HostListener, Injector, OnInit } from '@angular/core';
+import {Component, HostListener, Injector, OnInit, signal} from '@angular/core';
 import { CoreApiService } from "../../../../services/core-api.service";
 import { ActivatedRoute } from "@angular/router";
 import { ConfigService } from "../../../../../../../core/services";
@@ -8,6 +8,18 @@ import { Controllers, Methods, ModalSizes } from "../../../../../../../core/enum
 import { debounceTime, take } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
+import {DEVICE_TYPES} from "../../../../../../../core/constantes/types";
+
+export interface SubMenuFilters {
+  id: string;
+  title: string;
+  type: string;
+  styleType: string;
+  href: string;
+  icon: string;
+  openInRouting: string;
+  order: string;
+}
 
 @Component({
   selector: 'app-web-site-settings',
@@ -30,11 +42,51 @@ export class WebSiteSettingsComponent implements OnInit {
   modelChanged: Subject<string> = new Subject<string>();
   searchTitle = '';
   icon = 'Icon';
-  deviceType = 1
   partnerEnvironments = [];
   selected = { Id: 3, Name: 'environmentId' };
   searchedResultTitle: string;
   showSearchedResult: boolean = false;
+
+  deviceTypes = signal(DEVICE_TYPES);
+  deviceType = this.deviceTypes()[0].Id;
+  filteredMenus = [];
+  filteredWebsiteMenuItems = [];
+  filteredSubMenus = [];
+
+  filters = {
+    id: '',
+    type: '',
+    styleType: ''
+  };
+
+  filtersKeys = ['id', 'type', 'styleType'];
+
+  websiteMenuFilters = {
+    id: '',
+    title: '',
+    type: '',
+    styleType: '',
+    href: '',
+    icon: '',
+    openInRouting: '',
+    orientation: '',
+    order: '',
+  };
+
+  websiteMenuFilterKeys = ['id', 'title', 'type', 'styleType', 'href', 'icon', 'openInRouting', 'orientation', 'order'];
+
+  subMenuFilters = {
+    id: '',
+    title: '',
+    type: '',
+    styleType: '',
+    href: '',
+    icon: '',
+    openInRouting: '',
+    order: '',
+  };
+
+  subMenuFilterKeys = ['id', 'title', 'type', 'styleType', 'href', 'icon', 'openInRouting', 'order'];
 
   constructor(
     private apiService: CoreApiService,
@@ -56,6 +108,41 @@ export class WebSiteSettingsComponent implements OnInit {
     })
   }
 
+  applyFilter(): void {
+    this.filteredMenus = this.menus.filter(menu => {
+      return (!this.filters.id || menu.Id.toString().includes(this.filters.id)) &&
+             (!this.filters.type || menu.Type.toLowerCase().includes(this.filters.type.toLowerCase())) &&
+             (!this.filters.styleType || menu.StyleType.toLowerCase().includes(this.filters.styleType.toLowerCase()));
+    });
+  }
+
+  applyWebsiteMenuFilter(): void {
+    this.filteredWebsiteMenuItems = this.websiteMenuItems.filter(menu => {
+      return (!this.websiteMenuFilters.id || menu.Id.toString().includes(this.websiteMenuFilters.id)) &&
+             (!this.websiteMenuFilters.title || menu.Title.toLowerCase().includes(this.websiteMenuFilters.title.toLowerCase())) &&
+             (!this.websiteMenuFilters.type || menu.Type.toLowerCase().includes(this.websiteMenuFilters.type.toLowerCase())) &&
+             (!this.websiteMenuFilters.styleType || menu.StyleType.toLowerCase().includes(this.websiteMenuFilters.styleType.toLowerCase())) &&
+             (!this.websiteMenuFilters.href || menu.Href.toLowerCase().includes(this.websiteMenuFilters.href.toLowerCase())) &&
+             (!this.websiteMenuFilters.icon || menu.Icon.toLowerCase().includes(this.websiteMenuFilters.icon.toLowerCase())) &&
+             (!this.websiteMenuFilters.openInRouting || menu.OpenInRouting.toString().includes(this.websiteMenuFilters.openInRouting)) &&
+             (!this.websiteMenuFilters.orientation || menu.Orientation.toString().includes(this.websiteMenuFilters.orientation)) &&
+             (!this.websiteMenuFilters.order || menu.Order.toString().includes(this.websiteMenuFilters.order));
+    });
+  }
+
+  applySubMenuFilter(): void {
+    this.filteredSubMenus = this.subMenuItems.filter(menu => {
+      return (!this.subMenuFilters.id || menu.Id.toString().includes(this.subMenuFilters.id)) &&
+             (!this.subMenuFilters.title || menu.Title.toLowerCase().includes(this.subMenuFilters.title.toLowerCase())) &&
+             (!this.subMenuFilters.type || menu.Type.toLowerCase().includes(this.subMenuFilters.type.toLowerCase())) &&
+             (!this.subMenuFilters.styleType || menu.StyleType.toLowerCase().includes(this.subMenuFilters.styleType.toLowerCase())) &&
+             (!this.subMenuFilters.href || menu.Href.toLowerCase().includes(this.subMenuFilters.href.toLowerCase())) &&
+             (!this.subMenuFilters.icon || menu.Icon.toLowerCase().includes(this.subMenuFilters.icon.toLowerCase())) &&
+             (!this.subMenuFilters.openInRouting || menu.OpenInRouting.toString().includes(this.subMenuFilters.openInRouting)) &&
+             (!this.subMenuFilters.order || menu.Order.toString().includes(this.subMenuFilters.order));
+    });
+  }
+
   @HostListener('click', ['$event.target'])
   onClick(targetElement: HTMLElement) {
     if (this.showSearchedResult) {
@@ -74,8 +161,8 @@ export class WebSiteSettingsComponent implements OnInit {
       });
   }
 
-  changeDeviceType(number) {
-    this.deviceType = number;
+  changeDeviceType(deviceType:number) {
+    this.deviceType = deviceType;
     this.getWebsiteMenus();
   }
 
@@ -88,13 +175,17 @@ export class WebSiteSettingsComponent implements OnInit {
       Controllers.CONTENT, Methods.GET_WEBSITE_MENU).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
           this.menus = data.ResponseObject;
+          this.filteredMenus = [...this.menus];
           if (!!this.menus.length) {
             this.selectedMenu = data.ResponseObject[0];
-            this.getWebsiteMenuItems(this.selectedMenu.Id)
+            this.getWebsiteMenuItems(this.selectedMenu.Id);
           } else {
             this.websiteMenuItems = [];
+            this.filteredWebsiteMenuItems = [];
             this.subMenuItems = [];
+            this.filteredSubMenus = [];
           }
+          this.applyFilter();
         }
       });
   }
@@ -105,9 +196,13 @@ export class WebSiteSettingsComponent implements OnInit {
         if (data.ResponseCode === 0) {
           if (searchedMenuId === null) {
             this.websiteMenuItems = data.ResponseObject;
+            this.filteredWebsiteMenuItems = [...this.websiteMenuItems];
+            this.selectedMenuItem = this.websiteMenuItems[0];
+            this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
           } else {
             this.searchedResultTitle = data.ResponseObject.find(field => field.Id === searchedMenuId)?.Title;
           }
+          this.applyWebsiteMenuFilter();
         }
       });
   }
@@ -117,18 +212,46 @@ export class WebSiteSettingsComponent implements OnInit {
       Controllers.CONTENT, Methods.GET_WEBSITE_SUB_MENU_ITEMS).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
           this.subMenuItems = data.ResponseObject;
+          this.filteredSubMenus = [...this.subMenuItems];
           if (this.selectedMenuItem.Title === 'FullRegister') {
             this.icon = 'Step'
           } else {
             this.icon = 'Icon'
           }
+          this.applySubMenuFilter();
         }
       });
   }
 
   changeSelectedItem(type, item) {
+
+
     switch (type) {
       case 0:
+        this.filteredWebsiteMenuItems = [];
+        this.filteredSubMenus = [];
+      this.subMenuFilters = {
+        id: '',
+        title: '',
+        type: '',
+        styleType: '',
+        href: '',
+        icon: '',
+        openInRouting: '',
+        order: '',
+      };
+  
+      this.websiteMenuFilters = {
+        id: '',
+        title: '',
+        type: '',
+        styleType: '',
+        href: '',
+        icon: '',
+        openInRouting: '',
+        orientation: '',
+        order: '',
+      };
         this.selectedMenu = item;
         this.getWebsiteMenuItems(item.Id);
         this.websiteMenuItem = item.Id;
@@ -137,6 +260,18 @@ export class WebSiteSettingsComponent implements OnInit {
         this.selectedSubMenuItem = {};
         break;
       case 1:
+
+      this.subMenuFilters = {
+        id: '',
+        title: '',
+        type: '',
+        styleType: '',
+        href: '',
+        icon: '',
+        openInRouting: '',
+        order: '',
+      };
+        // this.filteredSubMenus = [];
         this.selectedMenuItem = item;
         this.selectedSubMenuItem = {};
         this.getWebSiteSubMenuItems(item.Id);
@@ -168,7 +303,10 @@ export class WebSiteSettingsComponent implements OnInit {
     const { AddEditMenuComponent } = await import('./add-edit-menu/add-edit-menu.component');
     const dialogRef = this.dialog.open(AddEditMenuComponent, { width: ModalSizes.MEDIUM, data: obj });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      this.getWebsiteMenus();
+      if (result) {
+        this.getWebsiteMenus();
+      }
+      
     });
   }
 
@@ -178,7 +316,10 @@ export class WebSiteSettingsComponent implements OnInit {
     const { AddEditMenuItemComponent } = await import('./add-edit-menu-item/add-edit-menu-item.component');
     const dialogRef = this.dialog.open(AddEditMenuItemComponent, { width: ModalSizes.MEDIUM, data: obj });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      this.getWebsiteMenuItems(this.selectedMenu.Id);
+      if (result) {
+        this.getWebsiteMenuItems(this.selectedMenu.Id);
+        this.applyWebsiteMenuFilter();
+      }
     });
   }
 
@@ -189,7 +330,9 @@ export class WebSiteSettingsComponent implements OnInit {
     const { AddEditSubMenuComponent } = await import('./add-edit-sub-menu/add-edit-sub-menu.component');
     const dialogRef = this.dialog.open(AddEditSubMenuComponent, { width: ModalSizes.MEDIUM, data: data });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if(result) {
       this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
+      }
     });
   }
 
@@ -340,5 +483,15 @@ export class WebSiteSettingsComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
+  }
+
+  getInputWidth(key: string): string {
+    const widths = {
+      id: '35px',
+      // openInRouting: '55px',
+      order: '55px',
+      // orientation: '55px',
+    };
+    return widths[key] || '100%';
   }
 }

@@ -4,7 +4,9 @@ import {UserModel} from "../../../../core/models/user-model";
 import {getTimeZone} from "../../../../core/utils";
 
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class SportsbookApiService
 {
   constructor(private apiService:ApiService,

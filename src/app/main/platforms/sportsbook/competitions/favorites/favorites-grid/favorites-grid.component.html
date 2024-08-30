@@ -1,0 +1,31 @@
+
+
+<div class="grid-content">
+  <ag-grid-angular
+    id="map-competitions"
+    #agGrid
+    class="ag-theme-balham"
+    [suppressCopyRowsToClipboard]="true"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData()"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [paginationAutoPageSize]="5000"
+    [pagination]="true"
+    [sideBar]="sideBar"
+    [animateRows]="true"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    (rowSelected)="onRowSelected()"
+    [components]="frameworkComponents"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+  </ag-grid-angular>
+
+</div>
+
+  

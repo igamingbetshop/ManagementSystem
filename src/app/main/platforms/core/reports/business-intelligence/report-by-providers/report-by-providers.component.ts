@@ -19,17 +19,27 @@ import {ExportService} from "../../../services/export.service";
 })
 export class ReportByProvidersComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public partnerId;
-  public providers = [];
-  public playerCurrency;
-  public selectedItem = 'today';
-  public partners = [];
-
+  rowData = [];
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  partnerId;
+  providers = [];
+  playerCurrency;
+  selectedItem = 'today';
+  partners = [];
+  agentId: any;
+  title: string;
+  defaultColDef = {
+    flex: 1,
+    editable: false,
+    sortable: true,
+    resizable: true,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    minWidth: 50,
+  };
   constructor(private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
     public configService: ConfigService,
@@ -44,175 +54,87 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
         headerName: 'Partners.PartnerId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'PartnerId',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
       },
       {
         headerName: 'Clients.ProviderName',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'ProviderName',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
       },
       {
         headerName: 'Clients.Currency',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Currency',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
       },
       {
         headerName: 'Segments.TotalBetsCount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalBetsCount',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.TotalBetsCount?.toFixed(2),
+        // valueFormatter: params => params.data.TotalBetsCount?.toFixed(2),
       },
       {
         headerName: 'Segments.TotalBetsAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalBetsAmount',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.TotalBetsAmount?.toFixed(2),
+        // valueFormatter: params => params.data.TotalBetsAmount?.toFixed(2),
       },
       {
         headerName: 'Dashboard.TotalWinsAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalWinsAmount',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.TotalWinsAmount?.toFixed(2),
+        // valueFormatter: params => params.data.TotalWinsAmount?.toFixed(2),
       },
       {
         headerName: 'Dashboard.TotalUncalculatedBetsCount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalUncalculatedBetsCount',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.TotalWinsAmount?.toFixed(2),
+        // valueFormatter: params => params.data.TotalWinsAmount?.toFixed(2),
       },
       {
         headerName: 'Dashboard.TotalUncalculatedBetsAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'TotalUncalculatedBetsAmount',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.TotalWinsAmount?.toFixed(2),
+        // valueFormatter: params => params.data.TotalWinsAmount?.toFixed(2),
       },
       {
         headerName: 'Dashboard.GGR',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'GGR',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.GGR?.toFixed(2),
+        // valueFormatter: params => params.data.GGR?.toFixed(2),
       },
       {
         headerName: 'Dashboard.BetsCountPercent',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'BetsCountPercent',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.BetsCountPercent?.toFixed(2),
+        // valueFormatter: params => params.data.BetsCountPercent?.toFixed(2),
       },
       {
         headerName: 'Dashboard.BetsAmountPercent',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'BetsAmountPercent',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.BetsAmountPercent?.toFixed(2),
+        // valueFormatter: params => params.data.BetsAmountPercent?.toFixed(2),
       },
       {
         headerName: 'Dashboard.GGRPercent',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'GGRPercent',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        valueFormatter: params => params.data.GGRPercent?.toFixed(2),
+        // valueFormatter: params => params.data.GGRPercent?.toFixed(2),
       },
     ]
   }
 
   ngOnInit(): void {
     this.setTime();
+    this.agentId = +this.activateRoute.snapshot.queryParams.agentId;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.partners = this.commonDataService.partners;
     this.getData();
+    this.setTitle();
+  }
+
+  setTitle() {
+    const title = this.translate.instant('Reports.ReportByProviders');
+    const agent = this.translate.instant('Agents.Agents');
+    !!this.agentId ? this.title = agent + ' / '  + title  + ' : ' + this.agentId :  this.title = 'Reports.ReportByProviders';
   }
 
   setTime() {
@@ -241,7 +163,9 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
   getData() {
     this.clientData = {
       FromDate: this.fromDate,
-      ToDate: this.toDate
+      ToDate: this.toDate,
+      AgentId: this.agentId
+
     }
 
     if (this.partnerId) {
@@ -252,15 +176,32 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
       Controllers.REPORT, Methods.GET_REPORT_BY_PROVIDERS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.rowData = data.ResponseObject;
+          this.rowData.forEach((items) => {
+            items.TotalBetsAmount = items.TotalBetsAmount?.toFixed(2);
+            items.TotalWinsAmount = items.TotalWinsAmount?.toFixed(2);
+            items.TotalUncalculatedBetsAmount = items.TotalUncalculatedBetsAmount?.toFixed(2);
+            items.GGR = items.GGR?.toFixed(2);
+            items.BetsCountPercent = items.BetsCountPercent?.toFixed(2);
+            items.BetsAmountPercent = items.BetsAmountPercent?.toFixed(2);
+            items.GGRPercent = items.GGRPercent?.toFixed(2);
+          });
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 200);
       });
   }
 
   exportToCsv() {
     this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_PROVIDERS, { ...this.clientData, adminMenuId: this.adminMenuId });
+  }
+
+  onTitleClick(ev) {
+    if(!!this.agentId) {
+    this.router.navigate(['/main/platform/reports/agents/report-by-agents'], );
+    }
+    else {
+      return;
+    }
   }
 
 }

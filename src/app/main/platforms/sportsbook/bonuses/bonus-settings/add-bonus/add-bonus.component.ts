@@ -30,6 +30,7 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
     MatInputModule,
     MatButtonModule,
     MatDialogModule
+    
   ],
 })
 export class AddBonusComponent implements OnInit {
@@ -113,9 +114,6 @@ export class AddBonusComponent implements OnInit {
 
   changedType(event) {
     this.selectedType = event;
-
-    console.log(this.selectedType, );
-    
     if(this.selectedType === 3) {
       this.formGroup.controls['MinCoeff'].setValidators([Validators.required]);
     } else {

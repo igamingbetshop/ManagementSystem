@@ -19,7 +19,7 @@ export class AddEditLanguagesComponent implements OnInit {
   originTranslations;
   translations = [];
   partnerId;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditLanguagesComponent>,
@@ -56,7 +56,7 @@ export class AddEditLanguagesComponent implements OnInit {
     if (changed.length === 0) {
       return;
     } else {
-      this.isSendingReqest = true;
+      this.isSendingRequest = true;
       this.apiService.apiPost(this.configService.getApiUrl, changed, true, Controllers.BASE,
         Methods.SAVE_TRANSLATION_ENTRIES).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
@@ -64,7 +64,7 @@ export class AddEditLanguagesComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
     }
   }

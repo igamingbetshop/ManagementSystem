@@ -45,7 +45,7 @@ export class AddComponent implements OnInit {
   isParentGroup;
   partners: any[] = [];
   message: string = '';
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddComponent>,
@@ -93,10 +93,10 @@ export class AddComponent implements OnInit {
 
 
   submit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     obj.PartnerId = obj.Id || this.data.parentGroup.PartnerId;
     obj.ParentId = this.isParentGroup ? null : this.data.parentGroup.Id;
@@ -111,7 +111,7 @@ export class AddComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
 
   }

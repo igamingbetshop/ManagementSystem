@@ -10,7 +10,7 @@
   </div>-->
   <div class="partner-levels-header" [routerLink]="['/main/partner-levels']">
     <mat-icon>query_builder</mat-icon>
-    <div>VIP 0</div>
+    <div>VIP {{vipLevel}}</div>
   </div>
   <div class="clock-cont">{{ currentDateTime  | date:'HH:mm:ss a MMMM d, y z'}}</div>
   <div class="user-content" routerLink='/main/profile'>{{userName }}</div>
@@ -21,10 +21,12 @@
                 panelClass="overlay-dropdown language"
                 [(value)]="defaultLanguage"
                 disableOptionCentering>
-      <mat-option *ngFor="let langauge of languages" [value]="langauge.Id">{{langauge.Name}}</mat-option>
+                @for (langauge of languages; track $index) {
+                  <mat-option [value]="langauge.Id">{{langauge.Name}}</mat-option>
+                }
     </mat-select>
   </div>
 
-  <i (click)="authService.logOut()" class="icon-logout" aria-hidden="true"></i>
+  <i (click)="onLogOut()" class="icon-logout" aria-hidden="true"></i>
 
 </header>

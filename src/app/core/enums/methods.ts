@@ -39,6 +39,8 @@ export enum Methods {
     GET_BONUSES = 'GetBonuses',
     GET_BONUS_BY_ID = 'GetBonusById',
     CREATE_BONUS = 'CreateBonus',
+    GET_JACKPOTS = "GetJackpots",
+    SAVE_JACKPOTS = "SaveJackpot",
     GET_CLIENT_ACCOUNT_TYPES_ENUM = 'GetClientAccountTypesEnum',
     CLONE_BONUS = 'CloneBonus',
     GET_TRIGGER_SETTINGS = 'GetTriggerSettings',
@@ -270,8 +272,13 @@ export enum Methods {
     GET_TOP_PROFITABLE_CLIENTS = 'GetTopProfitableClients',
     GET_TOP_DAMAGING_CLIENTS = 'GetTopDamagingClients',
     GET_TOP_TURNOVER_CLIENTS = 'GetTopTurnoverClients',
+    GET_TOP_ACTIVE_CLIENTS = 'GetTopActiveClients',
     GET_TOP_BONUS_RECEIVERS = 'GetTopBonusReceivers',
     GET_TOP_GRANTED_BONUSES = 'GetTopGrantedBonuses',
+    GET_TOP_PROFITABLE_AGENTS = 'GetTopProfitableAgents',
+    GET_TOP_DAMAGING_AGENTS = 'GetTopDamagingAgents',
+    GET_TOP_DAMAGING_PARTNERS = 'GetTopDamagingPartners',
+    GET_TOP_PROFITABLE_PARTNERS = 'GetTopProfitablePartners',
     GET_WITHDRAWALS = 'GetWithdrawals',
     GET_PLAYERS_INFO = 'GetPlayersInfo',
     SAVE_API_KEY = 'SaveApiKey',
@@ -340,6 +347,7 @@ export enum Methods {
     GET_AFFILIATES = 'GetAffiliates',
     GET_AFFILIATE_BY_ID = 'GetAffiliateById',
     UPDATE_AFFILIATE = 'UpdateAffiliate',
+    GET_AFFILIATE_CORRECTIONS = "GetAffiliateCorrections",
     GET_NOTIFICATION_SERVICES = 'GetNotificationServices',
     GET_REFERRAL_TYPE_ENUM  = 'GetReferralTypesEnum',
     RESEND_BET  = 'ResendBet',
@@ -400,7 +408,11 @@ export enum Methods {
     CHECK_CLIENT_EXTERNAL_STATUS = 'CheckClientExternalStatus',
     RESET_CLIENT_PIN_CODE = 'ResetClientPinCode',
     GET_DUPLICATE_CLIENTS = 'GetDuplicateClients',
-    GET_REPORT_BY_POPUP_STATISTICS  = "GetReportByPopupStatistics"
+    GET_REPORT_BY_POPUP_STATISTICS  = "GetReportByPopupStatistics",
+    GET_AFFILIATE_ACCOUNTS = 'GetAffiliateAccounts',
+    GET_VIP_LEVELS = 'GetVipLevels',
+    GET_CLIENT_SEGMENTS = 'GetClientSegments',
+    APPROVE_CLIENT_CASHBACK_BOUNUS =  "ApproveClientCashbackBonus"
   }
 
 

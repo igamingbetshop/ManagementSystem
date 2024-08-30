@@ -15,6 +15,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRadioModule } from "@angular/material/radio";
 import { MatCardModule } from '@angular/material/card';
+import { IdToNamePipe } from "../../../../../../core/pipes/id-to-name-pipe";
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 const routes: Routes = [
   {
@@ -24,24 +26,26 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    MatIconModule,
-    TranslateModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatSnackBarModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatCardModule
-  ],
-  declarations: [CoreBannerComponent]
+    declarations: [CoreBannerComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        MatIconModule,
+        TranslateModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatSnackBarModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatRadioModule,
+        MatCardModule,
+        IdToNamePipe,
+        DateTimePickerComponent
+    ]
 })
 export class CoreBannerModule { }

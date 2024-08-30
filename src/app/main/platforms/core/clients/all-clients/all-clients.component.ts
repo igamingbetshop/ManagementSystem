@@ -2,7 +2,7 @@ import { Component, Injector, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MatDialog } from '@angular/material/dialog';
 import 'ag-grid-enterprise';
@@ -22,6 +22,7 @@ import { ServerCommonModel } from 'src/app/core/models/server-common-model';
 import { GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-enterprise';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { ExportService } from "../../services/export.service";
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'all-clients',
@@ -58,7 +59,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     private exportService: ExportService,
     private commonDataService: CommonDataService) {
     super(injector);
-    this.getCountry();
+
     this.adminMenuId = GridMenuIds.ALL_CLIENTS;
     this.frameworkComponents = {
       agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -74,9 +75,21 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
     this.partners = this.commonDataService.partners;
     this.genders = this.commonDataService.genders;
     this.languages = this.commonDataService.languages;
-    this.getUnderMonitoringTypes();
-    this.getClientStates();
-    this.getCategories();
+    forkJoin({
+      country: this.getCountry(),
+      underMonitoringTypes: this.getUnderMonitoringTypes(),
+      clientStates: this.getClientStates(),
+      categories: this.getCategories()
+    }).subscribe(
+      () => {
+        // All API calls succeeded, call setColumnDefs()
+        this.setColumnDefs();
+      },
+      error => {
+        // Handle error if any API call fails
+        console.error('An error occurred:', error);
+      }
+    );
   }
 
   setTime() {
@@ -86,42 +99,57 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
   }
 
   getCountry() {
-    this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
-      Controllers.REGION, Methods.GET_REGIONS).pipe(take(1)).subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.countries = data.ResponseObject;
-          this.countriesEnum = this.setEnum(data.ResponseObject);
-        }
-      });
+    return this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
+      Controllers.REGION, Methods.GET_REGIONS).pipe(
+        take(1),
+        map(data => {
+          if (data.ResponseCode === 0) {
+            this.countries = data.ResponseObject;
+            this.countriesEnum = this.setEnum(data.ResponseObject);
+          }
+          // Return a value to satisfy forkJoin, even if it's void
+          return data;
+        })
+      );
   }
-
+  
   getCategories() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
-      Controllers.ENUMERATION, Methods.GET_CLIENT_CATEGORIES_ENUM).pipe(take(1)).subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.categories = data.ResponseObject;
-        }
-      });
+    return this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.ENUMERATION, Methods.GET_CLIENT_CATEGORIES_ENUM).pipe(
+        take(1),
+        map(data => {
+          if (data.ResponseCode === 0) {
+            this.categories = data.ResponseObject;
+          }
+          return data;
+        })
+      );
   }
-
+  
   getUnderMonitoringTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
-      Controllers.ENUMERATION, Methods.GET_UNDER_MONITORING_TYPES_ENUM).pipe(take(1)).subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.underMonitoringTypes = data.ResponseObject;
-        }
-      });
+    return this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.ENUMERATION, Methods.GET_UNDER_MONITORING_TYPES_ENUM).pipe(
+        take(1),
+        map(data => {
+          if (data.ResponseCode === 0) {
+            this.underMonitoringTypes = data.ResponseObject;
+          }
+          return data;
+        })
+      );
   }
-
+  
   getClientStates() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION, Methods.GET_CLIENT_STATES)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.clientStates = data.ResponseObject;
-        }
-        this.setColumnDefs();
-      });
+    return this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.ENUMERATION, Methods.GET_CLIENT_STATES).pipe(
+        take(1),
+        map(data => {
+          if (data.ResponseCode === 0) {
+            this.clientStates = data.ResponseObject;
+          }
+          return data;
+        })
+      );
   }
 
   setColumnDefs() {
@@ -179,9 +207,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
           closeOnApply: true,
           filterOptions: this.filterService.textOptions
         },
-
         cellRenderer: (params) => {
-
           const note = `<mat-icon data-action-type="view-note" class="mat-icon material-icons" style="font-size: 18px; width: 18px; height: 20px; vertical-align: middle"> ${params.data.HasNote ? 'folder' : 'folder_open'}</mat-icon>`;
           const names = `<span data-action-type="view-name">${params.data.UserName}</span>`;
           return `${note} ${names}`;
@@ -367,6 +393,19 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
         suppressMenu: true,
       },
       {
+        headerName: 'Segments.MobileCode',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MobileCode',
+        resizable: true,
+        sortable: true,
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.stateOptions
+        },
+      },
+      {
         headerName: 'Clients.MobileNumber',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MobileNumber',
@@ -377,19 +416,6 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
           filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Clients.PhoneNumber',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'PhoneNumber',
-        resizable: true,
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.stateOptions
         },
       },
       {
@@ -410,6 +436,15 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
         headerName: 'Clients.DocumentVerified',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'IsDocumentVerified',
+        resizable: true,
+        sortable: true,
+        hide: true,
+        filter: 'agBooleanColumnFilter',
+      },
+      {
+        headerName: 'Clients.Duplicated',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Duplicated',
         resizable: true,
         sortable: true,
         hide: true,

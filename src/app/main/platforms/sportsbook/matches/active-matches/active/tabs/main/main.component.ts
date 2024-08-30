@@ -38,9 +38,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     checkBoxRenderer: CheckboxRendererComponent,
     buttonRenderer: ButtonRendererComponent,
     };
-
-    settlementStatuses = SETTELMENT_STATUSES;
-
+  settlementStatuses = SETTELMENT_STATUSES;
   public Statuses = MATCH_STATUSES;
   matchName: string;
 
@@ -166,7 +164,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       Number: [null],
       ExternalId: [null],
       StartTime: [null],
-      AbsoluteLimit: [null, [Validators.required]],
+      MarketLimit: [null],
+      PlayerLimit: [null],
       ResultInfo: [null],
       Type: [null],
       ProviderId: [null],
@@ -235,7 +234,24 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
           this.activeMatch.AutoSettlementName = this.settlementStatuses?.find(p =>p.Id == this.activeMatch?.AutoSettlement).Name || 'None'
           this.activeMatch.ProviderName = this.Providers?.find(p =>p.Id == this.activeMatch?.ProviderId).Name
           this.rowData = this.activeMatch.Competitors;
-          this.matchName = this.rowData[0].TeamName + ' vs ' +this.rowData[1].TeamName
+          if(this.rowData[1]?.TeamName) {
+            this.matchName = this.rowData[0]?.TeamName + ' vs ' +this.rowData[1]?.TeamName;
+          } else {
+            this.matchName = this.rowData[0]?.TeamName;
+          }
+
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {
+              MatchId: this.MatchId,
+              name: this.matchName,
+              partnerId: this.partnerId,
+              number: this.activeMatch.Number,
+              sportId: this.activeMatch.SportId,
+             },
+            queryParamsHandling: 'merge'
+          });
+
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

@@ -1,0 +1,24 @@
+<div class="container">
+
+  <div class="content-action">
+    <div class="title">{{'Common.Document' | translate}}</div>
+  </div>
+
+  <div class="zoom-action" *ngIf="isImage">
+    <div class="zoom-number">{{zoomNumber}}x</div>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="zoomNumber === 1" (click)="decreaseZoomNumber()">-
+    </button>
+    <button mat-stroked-button class="mat-btn" [class.disabled]="zoomNumber === 5" (click)="increaseZoomNumber()">+
+    </button>
+  </div>
+  <div #imageArea class="image-content" (mousedown)="startPanning($event)" (mousemove)="panImage($event)"
+    (mouseup)="stopPanning()" (mouseleave)="stopPanning()">
+    <ng-container *ngIf="isImage; else resourceRef">
+      <img #image [src]="fileUrl" alt="">
+    </ng-container>
+    <ng-template #resourceRef>
+      <iframe [src]="fileUrl"></iframe>
+    </ng-template>
+  </div>
+
+</div>

@@ -6,8 +6,8 @@
     <button mat-stroked-button class="mat-btn" (click)="getKYCData()">{{'Clients.Refresh' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="create()">{{'Clients.CreateNewDocument' | translate}}</button>
     <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="delete()">{{'Common.Delete' | translate}}</button>
-    <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+    <button mat-stroked-button class="mat-export-btns" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 
   </div>
 
@@ -43,26 +43,16 @@
     </ag-grid-angular>
   </div>
 
+  <div class="content-action">
+    <div class="title">{{'Common.History' | translate}}</div>
+  </div>
+
+
   <div class="grid-content">
-    <ag-grid-angular
-      #agGrid2
-      [class.hide-grid]="loadingUserState"
-      id="kyc-history"
-      class="ag-theme-balham"
-      [headerHeight]="33"
-      [rowHeight]="42"
-      [rowData]="rowData2"
-      [rowModelType]="rowModelType2"
-      [columnDefs]="columnDefs2"
-      [suppressCopyRowsToClipboard]="true"
-      [defaultColDef]="defaultColDef"
-      [cacheBlockSize]="cacheBlockSize"
-      [components]="frameworkComponents"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
+  <app-kyc-history
+  [rowData]="hystoryRowData"
+  ></app-kyc-history>
+
   </div>
 
 </div>

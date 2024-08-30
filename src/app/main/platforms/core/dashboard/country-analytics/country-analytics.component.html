@@ -9,9 +9,9 @@
         <span>{{'Dashboard.Country' | translate}}</span>
         <span>{{'Dashboard.Count' | translate}}</span>
       </div>
-      @if (topVisitors?.length){
+      @if (topVisitors()?.length){
         <div class="block-content">
-          @for (item of topVisitors; track $index){
+          @for (item of topVisitors(); track $index){
             <app-progress-bar [src]="item" [number]="''" class="country"></app-progress-bar>
           }
         </div>
@@ -31,9 +31,9 @@
         <span>{{'Dashboard.Country' | translate}}</span>
         <span>{{'Dashboard.Count' | translate}}</span>
       </div>
-      @if (topRegistrations?.length){
+      @if (topRegistrations()?.length){
         <div class="block-content">
-          @for(item of topRegistrations; track $index){
+          @for(item of topRegistrations(); track $index){
             <app-progress-bar [src]="item"   [number]="''" class="country"></app-progress-bar>
           }
         </div>

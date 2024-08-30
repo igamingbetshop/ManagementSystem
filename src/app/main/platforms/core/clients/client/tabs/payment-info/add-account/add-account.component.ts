@@ -20,7 +20,7 @@ export class AddAccountComponent implements OnInit {
   bankNames = [];
   status;
   action;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(public dialogRef: MatDialogRef<AddAccountComponent>,
               private apiService: CoreApiService,
@@ -57,10 +57,10 @@ export class AddAccountComponent implements OnInit {
 
 
   submit() {
-    if (!this.formGroup.valid || this.isSendingReqest) {
+    if (!this.formGroup.valid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const accountValue = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, accountValue, true, Controllers.CLIENT,
       Methods.UPDATE_CLIENT_PAYMENT_ACCOUNT).pipe(take(1)).subscribe((data) => {
@@ -69,7 +69,7 @@ export class AddAccountComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

@@ -18,7 +18,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Partners.Icon' | translate}}</mat-label>
-      <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'">
+      <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'" (input)="changeIcon($event)">
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Partners.Href' | translate}}</mat-label>
@@ -32,10 +32,18 @@
       </mat-error>
     </mat-form-field>
 
+    @if(showFile) {
+      <div class="img-div">
+        <label for="imageFiles" class="btn">{{'Clients.SelectImage' | translate}}</label>
+        <input id="imageFiles" type="file" (change)="uploadFile($event)">
+        <span class="img-text"> {{selectedImage}} </span>
+      </div>
+    }
+
     <mat-checkbox [formControlName]="'OpenInRouting'">{{'Partners.OpenInRouting' | translate}}</mat-checkbox>
   </form>
 </div>
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Common.Save' | translate}}</button>
 </div>

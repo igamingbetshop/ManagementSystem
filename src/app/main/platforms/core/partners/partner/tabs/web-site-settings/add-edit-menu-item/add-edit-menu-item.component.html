@@ -15,19 +15,25 @@
       <mat-label>{{'Common.Type' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
     </mat-form-field>
-    <mat-form-field class="full-height">
-      <mat-label>{{'Partners.StyleType' | translate}}</mat-label>
+
+    <mat-label>{{'Partners.StyleType' | translate}}<i class="icon-info1"></i></mat-label>
+
+    <div class="full-height" style="width: 100%;">
+      <!-- <mat-label>{{'Partners.StyleType' | translate}}</mat-label> -->
       <textarea matInput [placeholder]="'Partners.StyleType' | translate" [formControlName]="'StyleType'"> </textarea>
-    </mat-form-field>
+    </div>
     <mat-form-field>
       <mat-label>{{'Partners.Icon' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Partners.Icon' | translate" [formControlName]="'Icon'"
         (input)="changeIcon($event)">
     </mat-form-field>
-    <mat-form-field>
-      <mat-label>{{'Partners.Href' | translate}}</mat-label>
-      <input matInput type="text" [placeholder]="'Partners.Href' | translate" [formControlName]="'Href'">
-    </mat-form-field>
+
+    <mat-label>{{'Partners.Href' | translate}}<i class="icon-info1"></i></mat-label>
+
+    <div class="full-height">
+      <!-- <mat-label>{{'Partners.Href' | translate}}</mat-label> -->
+      <textarea matInput type="text" [placeholder]="'Partners.Href' | translate" [formControlName]="'Href'"> </textarea>
+    </div>
     <mat-form-field>
       <mat-label>{{'Common.Order' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'" required>
@@ -58,7 +64,7 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingReqest" (click)="submit()">{{'Common.Save' |
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingRequest" (click)="submit()">{{'Common.Save' |
     translate}}</button>
 </div>

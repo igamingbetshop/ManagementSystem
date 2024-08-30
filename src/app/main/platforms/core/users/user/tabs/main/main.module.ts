@@ -13,6 +13,7 @@ import { MatGridListModule } from "@angular/material/grid-list";
 import { AgGridModule } from "ag-grid-angular";
 import { TranslateModule } from "@ngx-translate/core";
 import { InputMultiSelectComponent } from "./input-multi-select.component";
+import { RolsGridComponent } from './rols-grid/rols-grid.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,6 @@ const routes: Routes = [
     TranslateModule,
     FormsModule
   ],
-  declarations: [MainComponent, InputMultiSelectComponent]
+  declarations: [MainComponent, InputMultiSelectComponent, RolsGridComponent]
 })
 export class MainModule { }

@@ -24,6 +24,8 @@ import {AgDropdownFilter} from "../../../../../../components/grid-common/ag-drop
 import {AllProductsComponent} from "./componentns/all-products/all-products.component";
 import {ProductChangeHistoryComponent} from "./componentns/change-history/product-change-history.component";
 import {PartnerProductsComponent} from "./componentns/partner-products/partner-products.component";
+import { DropdownDirective } from "src/app/core/directives/dropdown.directive";
+import { MatMenuModule } from "@angular/material/menu";
 
 const routes: Routes = [
   {
@@ -59,7 +61,9 @@ const routes: Routes = [
     MatIconModule,
     MatCheckboxModule,
     TranslateModule,
-    AgDropdownFilter
+    AgDropdownFilter,
+    DropdownDirective, 
+    MatMenuModule
   ],
   providers: [DatePipe]
 })

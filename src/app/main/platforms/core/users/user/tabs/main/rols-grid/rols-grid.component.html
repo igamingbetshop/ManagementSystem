@@ -1,0 +1,21 @@
+<ag-grid-angular 
+          id="currency-settings2" 
+          #agGrid1 
+          class="ag-theme-balham" 
+          [headerHeight]="33" 
+          [rowHeight]="42"
+          [suppressCopyRowsToClipboard]="true" 
+          [rowData]="rowData" 
+          [rowModelType]="rowModelType" 
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef" 
+          [cacheBlockSize]="cacheBlockSize"
+          (rowClicked)="onRowClicked($event)" 
+          [components]="frameworkComponents" 
+          (gridReady)="onGridReady($event)"
+          [ensureDomOrder]="true" 
+          [enableCellTextSelection]="true" 
+          [getContextMenuItems]="getContextMenuItems"
+          rowSelection="single">
+        </ag-grid-angular>
+

@@ -1,7 +1,7 @@
 <div class="container">
   <div class="content-action">
     <div class="title"><a [routerLink]="['../../all-finished']">{{'Sport.Finished' | translate}}</a> / :
-      {{'Partners.Main' | translate}} {{finishId}} &nbsp; {{name}}</div> 
+      {{'Partners.Main' | translate}} {{finishId}} &nbsp; {{name}}</div>
     <div>
     </div>
     <div class="button-wraper">
@@ -55,8 +55,12 @@
       </div>
 
       <div>
-        <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
-        <div class="second-hand">{{finishMatch['AbsoluteLimit']}}</div>
+        <div class="first-hand">{{'Sport.MarketLimit' | translate}}</div>
+        <div class="second-hand">{{finishMatch['MarketLimit']}}</div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Sport.PlayerLimit' | translate}}</div>
+        <div class="second-hand">{{finishMatch['PlayerLimit']}}</div>
       </div>
 
       <div>
@@ -82,7 +86,7 @@
       <div>
         <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
         <div class="second-hand">{{finishMatch['MaxWinLiveMultiple']}}</div>
-      </div>  
+      </div>
 
       <div>
         <div class="first-hand">{{'Sport.ResultInfo' | translate}}</div>
@@ -93,10 +97,15 @@
         <div class="first-hand">{{'Sport.CurrentPhase' | translate}}</div>
         <div class="second-hand">{{finishMatch['currentPhase']}}</div>
       </div>
-      
+
       <div>
         <div class="first-hand">{{'Sport.LinkedMatches' | translate}}</div>
         <div class="second-hand">{{finishMatch['LinkedMatches']}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+        <div class="static-hand">{{finishMatch?.CreationTime | date:'dd/MM/yyyy HH:mm'}}</div>
       </div>
 
       <div>

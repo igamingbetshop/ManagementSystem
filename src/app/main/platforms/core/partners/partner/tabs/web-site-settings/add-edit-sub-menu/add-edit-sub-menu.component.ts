@@ -25,7 +25,7 @@ export class AddEditSubMenuComponent implements OnInit {
   color = '';
   styleMenuId = 43;
   selectedImage;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditSubMenuComponent>,
@@ -82,7 +82,7 @@ export class AddEditSubMenuComponent implements OnInit {
 
   onSubmit() {
     const requestBody = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true, Controllers.CONTENT,
       Methods.SAVE_WEBSITE_SUB_MENU_ITEM).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
@@ -90,7 +90,7 @@ export class AddEditSubMenuComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

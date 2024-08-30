@@ -2,7 +2,6 @@ import { Component, OnInit, Injector, ViewChild, ChangeDetectorRef } from '@angu
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import { take } from 'rxjs/operators';
-import { GridRowModelTypes } from 'src/app/core/enums';
 import { Paging } from 'src/app/core/models';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
@@ -10,7 +9,6 @@ import { NumericEditorComponent } from 'src/app/main/components/grid-common/nume
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
 import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import 'ag-grid-enterprise';
-import { CellValueChangedEvent } from 'ag-grid-community';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 
 @Component({
@@ -21,27 +19,24 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 export class FavoritesComponent extends BasePaginatedGridComponent implements OnInit {
 
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
-  @ViewChild('agGrid1') agGrid1: AgGridAngular;
 
   public path: string = 'competitions';
   public path1: string = 'competitions/favorites';
 
 
   public rowData = [];
-  public rowData1 = [];
+  public favoritesRowData = [];
   public frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
     numericEditor: NumericEditorComponent,
     textEditor: TextEditorComponent,
   };
-  public rowModelType1: string = GridRowModelTypes.CLIENT_SIDE;
-  public columnDefs2;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   public partners: any[] = [];
   public partnerId: number = null;
   public priority: number = null;
-
+  selectedRowId = null;
 
   constructor(
     protected injector: Injector,
@@ -106,81 +101,6 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
         },
       },
     ];
-
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
-      {
-        headerName: 'Sport.CompetitionName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CompetitionName',
-        resizable: true,
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Bonuses.Priority',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Priority',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        filter: false,
-        onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-        cellEditor: 'numericEditor',
-      },
-      {
-        headerName: 'Sport.SportName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'SportName',
-        resizable: true,
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Sport.RegionName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'RegionName',
-        resizable: true,
-        sortable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Partners.PartnerName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'PartnerName',
-        resizable: true,
-        sortable: true,
-        filter: false,
-      },
-    ];
   }
 
   ngOnInit() {
@@ -210,7 +130,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
   }
 
   onAddCompetition() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     if (this.partnerId == null) {
       SnackBarHelper.show(this._snackBar, { Description: 'Select partner', Type: "error" });
       return;
@@ -225,12 +145,12 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.rowData1.unshift(data);
-          this.agGrid1.api.setRowData(this.rowData1);
+          this.favoritesRowData.unshift(data);
+          this.favoritesRowData = [...this.favoritesRowData]
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
     this.partnerId = null;
     this.priority = null;
@@ -238,23 +158,23 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
   }
 
   onRemoveCompetition() {
-    this.isSendingReqest = true;
-    let row = this.agGrid1.api.getSelectedRows()[0];
-    this.apiService.apiPost('competitions/removefavorite', { CompetitionId: row.Id })
+    this.isSendingRequest = true;
+    this.apiService.apiPost('competitions/removefavorite', { CompetitionId: this.selectedRowId })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          let index = this.rowData1.findIndex(links => {
-            return links.Id = row.Id
+          let index = this.favoritesRowData.findIndex(links => {
+            return links.Id = this.selectedRowId;
           })
           if (index >= 0) {
-            this.rowData1.splice(index, 1);
+            this.favoritesRowData.splice(index, 1);
+            this.selectedRowId = null;
           }
-          this.agGrid1.api.setRowData(this.rowData1);
+          this.favoritesRowData = [...this.favoritesRowData]
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 
@@ -262,17 +182,13 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
     return this.agGrid?.api && this.agGrid?.api.getSelectedRows().length === 0;
   };
 
-  isRowSelected1() {
-    return this.agGrid1?.api && this.agGrid1?.api.getSelectedRows().length === 0;
+  onRowSelected(id: number) {
+    this.selectedRowId = id;
   };
 
   onGridReady(params) {
     super.onGridReady(params);
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  onGridReady1(params) {
-    super.onGridReady(params);
   }
 
 
@@ -294,7 +210,7 @@ export class FavoritesComponent extends BasePaginatedGridComponent implements On
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.rowData1 = data.Competitions;
+          this.favoritesRowData = data.Competitions;
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

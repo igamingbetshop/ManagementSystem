@@ -43,7 +43,7 @@ export class DateHelper {
           toDate = new Date(currentDate);
           break;
     }
-
+    
     return [fromDate, toDate];
   }
 

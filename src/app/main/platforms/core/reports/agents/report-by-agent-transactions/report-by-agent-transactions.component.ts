@@ -64,35 +64,36 @@ export class ReportByAgentTransactionsComponent extends BasePaginatedGridCompone
         resizable: true,
         filter: 'agSetColumnFilter',
         filterParams: {
-          values: this.operationTypesArray,
+          // values: this.operationTypesArray,
+          values: this.operationTypesEnum,
         }
       },
-      {
-        headerName: 'Common.Type',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Type',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Partners.PartnerName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'PartnerName',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
+      // {
+      //   headerName: 'Common.Type',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'Type',
+      //   sortable: true,
+      //   resizable: true,
+      //   filter: 'agTextColumnFilter',
+      //   filterParams: {
+      //     buttons: ['apply', 'reset'],
+      //     closeOnApply: true,
+      //     filterOptions: this.filterService.textOptions
+      //   },
+      // },
+      // {
+      //   headerName: 'Partners.PartnerName',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'PartnerName',
+      //   sortable: true,
+      //   resizable: true,
+      //   filter: 'agTextColumnFilter',
+      //   filterParams: {
+      //     buttons: ['apply', 'reset'],
+      //     closeOnApply: true,
+      //     filterOptions: this.filterService.textOptions
+      //   },
+      // },
       {
         headerName: 'Clients.UserId',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -237,11 +238,12 @@ export class ReportByAgentTransactionsComponent extends BasePaginatedGridCompone
     this.apiService.apiPost(this.configService.getApiUrl, {}, true,
       Controllers.ENUMERATION, Methods.GET_OPERATION_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
-        let { ResponseObject } = data;
-        ResponseObject.forEach(element => {
-          this.operationTypesArray.push(String(element.NickName));
-        });
-        this.operationTypesEnum = this.setEnum(data.ResponseObject);
+        // let { ResponseObject } = data;
+        // ResponseObject.forEach(element => {
+        //   this.operationTypesArray.push(String(element.NickName));
+        // });
+        // this.operationTypesEnum = this.setEnum(data.ResponseObject);
+        this.operationTypesEnum = data.ResponseObject;
       }
     });
   }

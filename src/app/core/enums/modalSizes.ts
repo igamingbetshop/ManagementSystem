@@ -5,5 +5,6 @@ export enum ModalSizes {
   BIG = '700px',
   EXTRA_LARGE = '800px',
   XXL = '1000px',
+  XXXL = '1550px',
   MEDIUM = '550px'
 }

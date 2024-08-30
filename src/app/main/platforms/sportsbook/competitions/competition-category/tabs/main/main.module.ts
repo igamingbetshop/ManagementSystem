@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {TranslateModule} from "@ngx-translate/core";
+import { IdToNamePipe } from "../../../../../../../core/pipes/id-to-name-pipe";
 const routes: Routes = [
   {
     path: '',
@@ -19,19 +20,20 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    TranslateModule,
-    RouterModule.forChild(routes),
-  ],
-  declarations: [MainComponent]
+    declarations: [MainComponent],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        TranslateModule,
+        RouterModule.forChild(routes),
+        IdToNamePipe
+    ]
 })
 export class MainModule { }

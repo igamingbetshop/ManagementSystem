@@ -1,0 +1,111 @@
+<div mat-dialog-title>
+  <span class="title"> {{('Sport.AddBonus' | translate)}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      @if (errorControl['Name']?.touched && errorControl['Name'].errors?.required) {
+        <mat-error>
+          {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Bonuses.SelectStatus' | translate}}</mat-label>
+      <mat-select [formControlName]="'Status'">
+        <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'" #spo (selectionChange)="changedType(spo.value)">
+        <mat-option *ngFor="let type of bonusTypes" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      @if (errorControl['Type']?.touched && errorControl['Type'].errors?.required) {
+        <mat-error >
+          {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field> -->
+
+    <mat-form-field>
+      <mat-label>{{'Clients.Amount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Clients.Amount' | translate" [formControlName]="'Amount'">
+      @if (errorControl['Amount']?.touched && errorControl['Amount'].errors?.required) {
+        <mat-error>
+           {{'Clients.Amount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.WinAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Common.WinAmount' | translate" [formControlName]="'WinAmount'">
+      @if (errorControl['WinAmount']?.touched && errorControl['WinAmount'].errors?.required) {
+        <mat-error>
+           {{'Common.WinAmount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+    
+    <mat-form-field>
+      <mat-label>{{'Sport.BetPercent' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Sport.BetPercent' | translate" [formControlName]="'BetPercent'">
+      @if (errorControl['BetPercent']?.touched && errorControl['BetPercent'].errors?.required) {
+        <mat-error>
+           {{'Sport.BetPercent' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Sport.WinnerBetId' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Sport.WinnerBetId' | translate" [formControlName]="'WinnerBetId'">
+      @if (errorControl['WinnerBetId']?.touched && errorControl['WinnerBetId'].errors?.required) {
+        <mat-error>
+           {{'Sport.WinnerBetId' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Bonuses.MinAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MinAmount' | translate" [formControlName]="'MinAmount'">
+      @if (errorControl['MinAmount']?.touched && errorControl['MinAmount'].errors?.required) {
+        <mat-error>
+           {{'Bonuses.MinAmount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Bonuses.MaxAmount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.MaxAmount' | translate" [formControlName]="'MaxAmount'">
+      @if (errorControl['MaxAmount']?.touched && errorControl['MaxAmount'].errors?.required) {
+        <mat-error>
+           {{'Bonuses.MaxAmount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingRequest" (click)="onSubmit()">{{('Common.Add' | translate)}}</button>
+</div>

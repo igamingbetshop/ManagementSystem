@@ -1,0 +1,33 @@
+<div class="bets-analytics-content">
+  <div class="matches-block" [class.hide-block]="selectedMatch().Id">
+    @if (type() === 'topprofitablematches'){
+      <div class="block-header">{{'Dashboard.MatchesProfits' | translate}}</div>
+
+    }
+    @if (type() === 'topturnovermatches'){
+      <div class="block-header">{{'Dashboard.MatchesTurnover' | translate}}</div>
+    }
+    @if (type() === 'topdamagedmatches'){
+      <div class="block-header">{{'Dashboard.MatchesDamages' | translate}}</div>
+    }
+    <app-bets-analytics [type]="type()" [dateFilter]="dateFilter()" (onSelectMatch)="selectedMatch.set($event)"></app-bets-analytics>
+  </div>
+  @if (selectedMatch().Id)
+  {
+  <div class="matches-block">
+    <mat-icon (click)="goBack()">arrow_back</mat-icon>
+    @if (type() === 'topprofitablematches'){
+      <div class="block-header">{{'Dashboard.MarketsProfits' | translate}}</div>
+
+    }
+    @if (type() === 'topturnovermatches'){
+      <div class="block-header">{{'Dashboard.MarketsTurnover' | translate}}</div>
+    }
+    @if (type() === 'topdamagedmatches'){
+      <div class="block-header">{{'Dashboard.MarketsDamages' | translate}}</div>
+    }
+
+    <app-market-bets [type]="type()" [dateFilter]="dateFilter()"  [match]="selectedMatch()"></app-market-bets>
+  </div>
+  }
+</div>

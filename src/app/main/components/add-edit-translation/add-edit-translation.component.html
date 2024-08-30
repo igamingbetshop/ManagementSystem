@@ -5,30 +5,32 @@
 
 <div class="container-popup">
 
-  <div class="language-content"
-       *ngFor="let item of translationData.Translations; let i = index">
-    <div class="language-dropdown" (click)="openedIndex = i">
-      <div>{{item.Language}}</div>
-      <div class="arrow" [class.opened] = "openedIndex == i"></div>
+  @for (item of translationData.Translations; track $index) {
+    <div class="language-content">
+      <div class="language-dropdown" (click)="openedIndex = $index">
+        <div>{{item.Language}}</div>
+        <div class="arrow" [class.opened] = "openedIndex == $index"></div>
+      </div>
+  
+      @if(openedIndex == $index) {
+        <app-html-editor
+          [text] = "item.Text"
+          [styles] = "{height: '250px', marginBottom: '6px'}"
+          (htmlCode)="item.newText = $event">
+        </app-html-editor>
+      }
+  
     </div>
-
-    <app-html-editor
-      *ngIf = "openedIndex == i"
-      [text] = "item.Text"
-      [styles] = "{height: '250px', marginBottom: '6px'}"
-      (htmlCode)="item.newText = $event">
-    </app-html-editor>
-
-  </div>
+  }
 
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button 
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button 
     class="modal-primary-btn" 
     (click)="onSubmit()"
-    [class.disabled]="isSendingReqest"
+    [class.disabled]="isSendingRequest"
     >
     {{'Common.Save' |translate}}
   </button>

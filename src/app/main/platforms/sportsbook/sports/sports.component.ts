@@ -300,13 +300,7 @@ export class SportsComponent extends BaseGridComponent implements OnInit {
 
   ngOnInit() {
     this.gridStateName = 'sports-grid-state';
-    this.apiService.apiPost('partners').subscribe(data => {
-      if (data.Code === 0) {
-        this.partners = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
+    this.partners = this.commonDataService.partners;
     this.getPage();
   }
 

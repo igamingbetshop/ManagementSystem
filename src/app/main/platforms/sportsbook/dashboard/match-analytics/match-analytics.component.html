@@ -1,0 +1,11 @@
+
+<div class="container">
+  <app-header-filter
+    [title]="'Sportsbook.MatchAnalytics'"
+    (toDateChange)="onDateChange($event)" />
+</div>
+
+<app-bets-analytics-container type="topprofitablematches" [dateFilter]="filteredData"></app-bets-analytics-container>
+<app-bets-analytics-container type="topturnovermatches" [dateFilter]="filteredData"></app-bets-analytics-container>
+<app-bets-analytics-container type="topdamagedmatches" [dateFilter]="filteredData"></app-bets-analytics-container>
+

@@ -4,7 +4,7 @@ import { AgGridAngular } from "ag-grid-angular";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatDialog } from "@angular/material/dialog";
 import { take } from "rxjs/operators";
-import {IRowNode} from "ag-grid-community";
+import { IRowNode } from "ag-grid-community";
 
 import { BasePaginatedGridComponent } from "../../../components/classes/base-paginated-grid-component";
 import { SportsbookApiService } from "../services/sportsbook-api.service";
@@ -27,8 +27,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild('agGridSecond') agGridSecond: AgGridAngular;
   rowData = [];
-  rowData1 = [];
-  columnDefs2;
+  selectedTeaserData = [];
   selectedItem;
   path: string = 'bets/teasers';
   updatePath: string = 'bets/updateteaser';
@@ -45,8 +44,8 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
   ];
   matchStatus = MATCH_STATUSES_OPTIONS
   selectedRow;
-  selectedRow1;
-  isSendingReqest = false;
+  selectedSecondRow = null;
+  isSendingRequest = false;
 
   constructor(
     private apiService: SportsbookApiService,
@@ -215,12 +214,6 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
         field: 'StatusName',
         resizable: true,
         sortable: true,
-        // editable: true,
-        // cellRenderer: 'selectRenderer',
-        // cellRendererParams: {
-        //   onchange: this.onSelectChange['bind'](this),
-        //   Selections: this.status,
-        // }
       },
       {
         headerName: 'Clients.CreationTime',
@@ -256,129 +249,11 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
           }
         }
       },
-      // {
-      //   headerNaCommon.me: 'Save',
-      //   field: 'save',
-      //   resizable: true,
-      //   sortable: false,
-      //   filter: false,
-      //   cellRenderer: 'buttonRenderer',
-      //   cellRendererParams: {
-      //     onClick: this.updateTeaser['bind'](this),
-      //     Label: 'Save',
-      //     isDisabled: true,
-      //     bgColor: '#3E4D66',
-      //     textColor: '#FFFFFF'
-      //   }
-      // }
     ];
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
-      {
-        headerName: 'Sport.CompetitionId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CompetitionId',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        filter: 'agNumberColumnFilter',
-        cellEditor: 'numericEditor',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
-      {
-        headerName: 'Sport.CompetitionName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'CompetitionName',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Sport.MarketTypeId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'MarketTypeId',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        filter: 'agNumberColumnFilter',
-        cellEditor: 'numericEditor',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
-      {
-        headerName: 'Sport.MarketTypeName',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'MarketTypeName',
-        sortable: true,
-        resizable: true,
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
-      },
-      {
-        headerName: 'Sport.BasePoint',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'BasePoint',
-        resizable: true,
-        sortable: true,
-        editable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
-      {
-        headerName: 'Common.Save',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'save',
-        resizable: true,
-        sortable: false,
-        filter: false,
-        cellRenderer: 'buttonRenderer',
-        cellRendererParams: {
-          onClick: this.updateSetting['bind'](this),
-          Label: this.translate.instant('Common.Save'),
-          isDisabled: true,
-          bgColor: '#3E4D66',
-          textColor: '#FFFFFF'
-        }
-      }
-    ]
     this.frameworkComponents = {
       agBooleanColumnFilter: AgBooleanFilterComponent,
-      buttonRenderer: ButtonRendererComponent,
       numericEditor: NumericEditorComponent,
       checkBoxRenderer: CheckboxRendererComponent,
-      selectRenderer: SelectRendererComponent
     }
   }
 
@@ -471,7 +346,6 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
           SnackBarHelper.show(this._snackBar, { Description: 'Teaser Added', Type: "success" });
           this.getTeasers();
           this.getSecondGridData();
-          // this.rowData.push(data.ResponseObject)
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -523,28 +397,21 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
 
   onRowSelected(params?) {
     if (params.node.selected) {
-      this.selectedRow = params
+      this.selectedRow = params;
       this.getSecondGridData(params);
     } else {
       return;
     }
   }
 
-  onRowSelected1(params) {
-    if (params.node.selected) {
-      this.selectedRow1 = params.data;
-    } else {
-      return;
-    }
+  onSecondGridRowSelected(params) {
+      this.selectedSecondRow = params;
   }
 
   getSecondGridData(params?) {
     this.selectedItem = params?.data;
     let settings = params?.data.Settings;
-    this.rowData1 = settings;
-    setTimeout(() => {
-      this.agGridSecond.api.getRenderedNodes()[0]?.setSelected(true);
-    }, 0)
+    this.selectedTeaserData = settings;
   }
 
   onGridReady1(params) {
@@ -566,34 +433,57 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   async addSetting() {
-    this.isSendingReqest = true;
-    let teaserId = +this.agGrid.api.getSelectedRows()[0].Id;
+    this.isSendingRequest = true;
+    const teaserId = +this.selectedRow.data.Id; 
+  
     const { AddSettingComponent } = await import('../teasers/add-setting/add-setting.component');
     const dialogRef = this.dialog.open(AddSettingComponent, { width: ModalSizes.LARGE, data: { TeaserId: teaserId } });
-    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+  
+    dialogRef.afterClosed().pipe(take(1)).subscribe(async data => { 
       if (data) {
-        this.selectedItem.Settings.push(data)
+        this.selectedItem.Settings.push(data);
         this.apiService.apiPost(this.updatePath, this.selectedItem)
           .pipe(take(1))
-          .subscribe(data => {
+          .subscribe(async data => { 
             if (data.Code === 0) {
-              this.getTeasers();
-              this.getSecondGridData();
+              try {
+                await this.getTeasers();
+                await this.getSecondGridData();
+                setTimeout(() => {
+                  this.selectRowByTeaserId(teaserId);
+                  this.isSendingRequest = false;
+                }, 500);
+              } catch (error) {
+                console.error('Error refreshing data:', error);
+                this.isSendingRequest = false;
+              }
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+              this.isSendingRequest = false;
             }
-            this.isSendingReqest = false;
           });
+      } else {
+        this.isSendingRequest = false;
       }
-    })
+    });
   }
+  
+  selectRowByTeaserId(teaserId: number) {
+    const allNodes = [];
+    this.agGrid.api.forEachNode(node => allNodes.push(node));
+    const selectedNode = allNodes.find(node => node.data.Id === teaserId);
+    if (selectedNode) {
+      this.agGrid.api.ensureIndexVisible(selectedNode.rowIndex, 'middle');
+      selectedNode.setSelected(true);
+    }
+  }
+  
 
   deleteSetting() {
-    this.isSendingReqest = true;
-    let teaserId = +this.agGrid.api.getSelectedRows()[0].Id;
-    if (this.selectedItem.Id === this.selectedRow1.TeaserId) {
+    this.isSendingRequest = true;
+    if (this.selectedItem.Id === this.selectedSecondRow.TeaserId) {
       let index = this.selectedItem.Settings.findIndex((item) => {
-        return item.Id === this.selectedRow1.Id
+        return item.Id === this.selectedSecondRow.Id
       });
       this.selectedItem.Settings.splice(index, 1)
       this.apiService.apiPost(this.updatePath, this.selectedItem)
@@ -605,28 +495,28 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
             const selectedIds = selectedRowNodes.map(function (rowNode) {
               return rowNode.id;
             });
-            this.rowData1 = this.rowData1.filter((dataItem) => {
+            this.selectedTeaserData = this.selectedTeaserData.filter((dataItem) => {
               return selectedIds.indexOf(dataItem.symbol) < 0;
             });
-            this.gridApi.setRowData(this.rowData1);
+            this.selectedTeaserData = [...this.selectedTeaserData];
+            this.selectedSecondRow = null;
             SnackBarHelper.show(this._snackBar, { Description: 'Setting Deleted', Type: "success" });
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
-          this.isSendingReqest = false;
+          this.isSendingRequest = false;
         });
     }
   }
 
   updateSetting(params) {
-    const row = params.data;
+    const row = params;
 
     if (this.selectedItem.Id === row.TeaserId) {
       this.apiService.apiPost(this.updatePath, this.selectedItem)
         .pipe(take(1))
         .subscribe(data => {
           if (data.Code === 0) {
-            this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
             SnackBarHelper.show(this._snackBar, { Description: 'Teaser updated', Type: "success" });
             this.getTeasers();
           } else {
@@ -638,7 +528,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
 
   onClone() {
     const row = this.agGrid.api.getSelectedRows()[0];
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost("bets/cloneteaser", { "Id": row.Id })
       .pipe(take(1))
       .subscribe(data => {
@@ -648,7 +538,7 @@ export class TeasersComponent extends BasePaginatedGridComponent implements OnIn
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 }

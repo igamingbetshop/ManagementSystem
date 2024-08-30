@@ -20,7 +20,6 @@ export class MapCompetitionsTabComponent implements OnInit {
   @ViewChild(MappedCompetitionsGridComponent) mappedCompetitionsGridComponent: MappedCompetitionsGridComponent;
 
   public rowData = [];
-  public rowData1 = [];
   public columnDefs1;
   public isCanNotSelect = true;
 

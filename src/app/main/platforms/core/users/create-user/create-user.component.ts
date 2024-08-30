@@ -46,7 +46,7 @@ export class CreateUserComponent implements OnInit {
   passRegEx;
   partnerId;
   typeId;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<CreateUserComponent>,
@@ -152,10 +152,10 @@ export class CreateUserComponent implements OnInit {
 
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.USER, Methods.SAVE_USER).pipe(take(1)).subscribe(data => {
@@ -164,7 +164,7 @@ export class CreateUserComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 }

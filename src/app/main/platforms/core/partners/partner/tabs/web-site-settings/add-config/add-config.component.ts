@@ -48,7 +48,7 @@ export class AddConfigComponent implements OnInit {
     "DNSKEY", "DS", "HTTPS", "LOC", "MX", "NAPTR", "NS", "PTR", "SMIMEA", "SPF", "SRV",
     "SSHFP", "SVCB", "TLSA", "TXT", "URI"
   ];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddConfigComponent>,
@@ -87,7 +87,7 @@ export class AddConfigComponent implements OnInit {
 
   onSubmit() {
     const value = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, value, true, Controllers.PARTNER,
       Methods.ADD_DNS_RECORD).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
@@ -95,7 +95,7 @@ export class AddConfigComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
   }
 

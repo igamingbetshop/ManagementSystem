@@ -8,19 +8,21 @@ import { VirtualGamesPartnersResolver } from "./resolvers/virtual-games-partners
 import { VirtualGamesFilterOptionsResolver } from "./resolvers/virtual-games-filter-options.resolver";
 import { QuickFindComponent } from "../../components/quick-find/quick-find.component";
 import { CoreApiService } from "../core/services/core-api.service";
+import { SBQuickFindComponent } from "../../components/sb-quick-find/sb-quick-find.component";
 
 @NgModule({
-  declarations: [VirtualGamesComponent],
-  imports: [
-    CommonModule,
-    VirtualGamesRoutingModule,
-    QuickFindComponent
-  ],
-  providers: [
-    VirtualGamesApiService,
-    VirtualGamesPartnersResolver,
-    VirtualGamesFilterOptionsResolver,
-    CoreApiService
-  ]
+    declarations: [VirtualGamesComponent],
+    providers: [
+        VirtualGamesApiService,
+        VirtualGamesPartnersResolver,
+        VirtualGamesFilterOptionsResolver,
+        CoreApiService
+    ],
+    imports: [
+        CommonModule,
+        VirtualGamesRoutingModule,
+        QuickFindComponent,
+        SBQuickFindComponent
+    ]
 })
 export class VirtualGamesModule { }

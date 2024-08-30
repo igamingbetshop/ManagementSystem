@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
 
@@ -19,7 +19,7 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { ACTIVITY_STATUSES, DEVICE_TYPES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, DEVICE_TYPES, VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
 import { compressImage } from 'src/app/core/utils';
 
 @Component({
@@ -53,6 +53,7 @@ export class AddCorePromotionsComponent implements OnInit {
   deviceTypes = DEVICE_TYPES;
   isParent: boolean;
   submitting = false;
+  visibilityTypes = VISIBILITY_TYPES;
 
   constructor(
     public dialogRef: MatDialogRef<AddCorePromotionsComponent>,
@@ -64,6 +65,7 @@ export class AddCorePromotionsComponent implements OnInit {
     public commonDataService: CommonDataService,
     private localStorageService: LocalStorageService,
     public configService: ConfigService,
+    private translate: TranslateService,
     public dateAdapter: DateAdapter<Date>
   ) {
     this.dateAdapter.setLocale('en-GB');
@@ -80,6 +82,7 @@ export class AddCorePromotionsComponent implements OnInit {
   getPromotionTypes(val) {
     if (!this.isParent) {
       this.partnerId = +val;
+
     }
     this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
       true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
@@ -212,6 +215,7 @@ export class AddCorePromotionsComponent implements OnInit {
       ImageDataMedium: [null],
       DeviceType: [null],
       Order: [null, [Validators.required]],
+      Visibility: [],
     });
     if (this.isParent && this.data && this.data.Type) {
       this.formGroup.get('Type').setValue(this.data.Type);
@@ -236,8 +240,12 @@ export class AddCorePromotionsComponent implements OnInit {
     }
     this.submitting = true;
     const obj = this.formGroup.getRawValue();
-    if(obj.DeviceType == -1) {
+    if (obj.DeviceType == -1) {
       obj.DeviceType = null;
+    }
+
+    if (obj.Visibility === "null") {
+      obj.Visibility = null;
     }
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_PROMOTION)
@@ -250,7 +258,6 @@ export class AddCorePromotionsComponent implements OnInit {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
-
 
   }
 

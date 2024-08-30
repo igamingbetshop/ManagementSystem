@@ -22,12 +22,10 @@
 
   <div class="website-content-action">
     <div class="title">{{'Partners.WebSiteSettings' | translate}}</div>
-    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(1)" [class.active]="deviceType === 1">{{'Common.Desktop' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(2)" [class.active]="deviceType === 2">{{'Common.Mobile' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(3)" [class.active]="deviceType === 3">{{'Common.Tablet' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(4)" [class.active]="deviceType === 4">{{'Clients.BetShop' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(5)" [class.active]="deviceType === 5">{{'Common.Terminal' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(6)" [class.active]="deviceType === 6">{{'Common.Application' | translate}}</button>
+    @for (deviceType of deviceTypes(); track deviceType.Id)
+    {
+      <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(deviceType.Id)" [class.active]="deviceType.Id === $index">{{'Common.' + deviceType.Name | translate}}</button>
+    }
     <div class="input-container">
       <div class="input-content">
         <input matInput type="text" [placeholder]="'Partners.EnterStylesKey' | translate" [(ngModel)]="searchTitle"
@@ -66,7 +64,7 @@
             <th>{{'Common.Id' | translate}}</th>
             <th>{{'Partners.Title' | translate}}</th>
             <th>{{'Common.Type' | translate}}</th>
-            <th>{{'Partners.StyleType' | translate}}</th>
+            <!-- <th>{{'Partners.StyleType' | translate}}</th> -->
             <th>{{'Partners.Href' | translate}}</th>
             <th>{{'Partners.Icon' | translate}}</th>
             <th>{{'Partners.OpenInRouting' | translate}}</th>
@@ -79,7 +77,7 @@
               <td>{{menuItem.Id}}</td>
               <td>{{menuItem.Title}}</td>
               <td>{{menuItem.Type}}</td>
-              <td>{{menuItem.StyleType}}</td>
+              <!-- <td>{{menuItem.StyleType}}</td> -->
               <td>{{menuItem.Href}}</td>
               <td>{{menuItem.Icon}}</td>
               <td>{{menuItem.OpenInRouting}}</td>

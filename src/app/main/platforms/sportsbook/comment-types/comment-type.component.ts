@@ -35,7 +35,7 @@ export class CommentTypeComponent extends BasePaginatedGridComponent implements 
 
   frameworkComponents;
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     private apiService: SportsbookApiService,

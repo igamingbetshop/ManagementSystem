@@ -18,7 +18,7 @@ export class AddCurrencyRateComponent implements OnInit {
   formGroup: UntypedFormGroup;
   currencies = [];
   paymentSetting;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
   constructor(public dialogRef: MatDialogRef<AddCurrencyRateComponent>,
               private apiService: CoreApiService,
               private _snackBar: MatSnackBar,
@@ -52,7 +52,7 @@ export class AddCurrencyRateComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const setting = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
       Controllers.PAYMENT, Methods.SAVE_PARTNER_PAYMENT_CURRENCY_RATE).pipe(take(1)).subscribe((data) => {
@@ -61,7 +61,7 @@ export class AddCurrencyRateComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false; 
+      this.isSendingRequest = false; 
     });
   }
 

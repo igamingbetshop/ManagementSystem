@@ -3,32 +3,30 @@
 .container {
   z-index: 2;
   position: fixed;
-  top: 400px;
+  top: 30%;
   display: flex;
   right: -250px;
   transition: right 0.3s ease-in;
 
   &.opened {
-    right: 1px;
+    right: -1px;
+    z-index: 4;
   }
 
   .quick-menu-toggle {
     cursor: pointer;
     position: absolute;
     left: -30px;
-    background-color: $blue-light-3;
-    border-radius: 4px 0 0 4px;
+    background-color: $gray-light-14;
     margin: 0 4px;
     width: 26px;
     height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid $blue-light-4;
-    border-right-width: 0;
 
     .icon {
-      color: $blue-5;
+      color: $bg-color;
     }
 
     .arrow-content {
@@ -37,9 +35,9 @@
       width: 7px;
       height: 30px;
       top: 7px;
-      background-color: $blue-light-3;
+      background-color: $gray-light-14;
       border-radius: 4px 0 0 4px;
-      border: 1px solid $blue-light-4;
+      border: 1px solid transparent;
       border-right-width: 0;
 
       &::after {
@@ -51,30 +49,29 @@
         height: 0;
         border-top: 5px solid transparent;
         border-bottom: 5px solid transparent;
-        border-right: 5px solid $blue-5;
+        border-right: 5px solid $bg-color;
         border-left: 5px solid transparent;
       }
 
       &.opened {
         &::after {
           left: 5px;
-          border-left: 5px solid $blue-5;
+          border-left: 5px solid $bg-color;
           border-right: 5px solid transparent;
+          z-index: 4;
         }
       }
     }
   }
 
   .quick-menu-content {
-    border: 1px solid $blue-light-4;
     padding: 14px;
-    background-color: $blue-light-3;
-    border-radius: 0 0 0 4px;
+    background-color: $gray-light-14;
 
     .title {
       font-size: 14px;
-      padding-bottom: 11px;
-      color: $blue-5;
+      padding-top: 4px;
+      color: $bg-color;
 
       &.document {
         padding-top: 15px;
@@ -97,15 +94,15 @@
           outline: none;
           background-color: $white;
           border: 1px solid $white;
-          color: $blue-2;
+          color: $title-color;
           width: 164px;
 
           &::placeholder {
-            color: $blue-light-12;
+            color: $gray-light-11;
           }
 
           &:focus {
-            border: 1px solid $blue-5;
+            border: 1px solid $bg-color;
           }
         }
       }
@@ -115,13 +112,13 @@
         padding: 5px 7px;
         cursor: pointer;
         border-radius: 4px;
-        background: linear-gradient($blue-2, $blue-light-13, $blue-5);
+        background: linear-gradient($login-title-color, $title-color, $bg-color);
         transition: background-color 0.3s ease-in;
         color: $white;
         border: 1px solid transparent;
 
         &:hover {
-          border: 1px solid $blue-5;
+          border: 1px solid $bg-color;
         }
 
         &.disabled {

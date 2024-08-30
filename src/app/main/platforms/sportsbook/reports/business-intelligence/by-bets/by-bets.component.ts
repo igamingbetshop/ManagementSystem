@@ -30,6 +30,8 @@ import { syncColumnNestedSelectPanel, syncColumnReset, syncColumnSelectPanel } f
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { Subscription } from "rxjs";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
 
 declare var window: any;
 @Component({
@@ -41,18 +43,14 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   public subscription: Subscription = new Subscription();
-
   public availableStatuses = BETAVAILABLESTATUSES;
-
   public availableBetCategories = AVAILABLEBETCATEGORIES;
-
   public selectedItem = 'today';
   public partners = [];
   public partnersFilters = [];
   public betStatuses = BETSTATUSES;
   public selectionStatuses = BET_SELECTION_STATUSES
   private isPopupOpen = false;
-
   public genders = [
     { "Name": "Male", "Id": 1 },
     { "Name": "Female", "Id": 2 }
@@ -73,7 +71,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   public show = false;
   public path = "report/bets";
   public rowData = [];
-  public rowData1 = [];
+  public matchRowData = [];
   public rowModelType1: string = GridRowModelTypes.CLIENT_SIDE;
   public isLiveUpdateOn: boolean;
   public isReconnected: boolean;
@@ -82,6 +80,8 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     selectRenderer: SelectRendererComponent,
     customTooltip: CustomTooltip,
     agDropdownFilter: AgDropdownFilter,
+    agDateTimeFilter: AgDateTimeFilter,
+    agBooleanColumnFilter: AgBooleanFilterComponent,
   };
   public oddsType: number;
   public fromDate = new Date();
@@ -106,6 +106,8 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   public filteredData: any;
   getRowId: GetRowIdFunc = (params: GetRowIdParams) => params.data.Id;
+  partnersArray = [];
+  partnersEnum: {};
 
   constructor(
     protected injector: Injector,
@@ -122,6 +124,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
     super(injector);
     this.dateAdapter.setLocale('en-GB');
+    this.getPartners();
     this.defaultColDef = {
       width: 110,
       tooltipComponent: 'customTooltip',
@@ -236,12 +239,16 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         headerName: 'Partners.PartnerName',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'PartnerName',
-        filter: 'agTextColumnFilter',
+        filter: 'agSetColumnFilter',
         filterParams: {
-          buttons: ['apply', 'reset',],
-          closeOnApply: true,
-          filterOptions: this.partnersFilters,
-        },
+          values: this.partnersArray,
+        }
+        // filter: 'agTextColumnFilter',
+        // filterParams: {
+        //   buttons: ['apply', 'reset',],
+        //   closeOnApply: true,
+        //   filterOptions: this.partnersFilters,
+        // },
       },
       {
         headerName: 'Common.TypeName',
@@ -321,12 +328,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         headerName: 'Sport.IsFreeBet',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'IsFreeBet',
-        filter: 'agTextColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
-        },
+        filter: 'agBooleanColumnFilter',
       },
       {
         headerName: 'Sport.Coefficient',
@@ -515,7 +517,12 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         headerName: 'Dashboard.CalculationDate',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CalculationDate',
-        filter: 'agDateColumnFilter',
+        filter: 'agDateTimeFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
         cellRenderer: (params) => {
           if (params.node.rowPinned || params.data.CalculationDate === null) {
             return '';
@@ -524,11 +531,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
           let time = datePipe.transform(params.data.CalculationDate, 'HH:mm:ss');
           let date = datePipe.transform(params.data.CalculationDate, 'mediumDate');
           return time && date ? `${time} ${date}` : '';
-        },
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
         },
       },
       {
@@ -695,7 +697,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   ngOnInit() {
-    this.getPartners();
+
     this.gridStateName = 'report-by-bet-grid-state';
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
     this.betCurrency = this.localStorageService.get('user')?.CurrencyId;
@@ -737,6 +739,10 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   getPartners() {
     this.partners = this.commonDataService.partners.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
+    this.partners.forEach(element => {
+      this.partnersArray.push(String(element.Name));
+    });
+    this.partnersEnum = this.setEnum(this.partners)
   }
 
   onSelectStatus(params) {
@@ -915,8 +921,8 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
             data.Selections[i].Competitors = data.Selections[i].Competitors.join('-');
             data.Selections[i].ResettleStatus = data.Selections[i].SelectionStatus;
           }
-          this.rowData1 = data.Selections;
-          this.rowData1.forEach(match => {
+          this.matchRowData = data.Selections;
+          this.matchRowData.forEach(match => {
             if (match.ForcedChosen) {
               this.betsCount++;
             }
@@ -940,6 +946,10 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
           this.betInfo.Multiway = data.Selections.some((selection, index, arr) => {
             return arr.slice(index + 1).some(nextSelection => nextSelection.MatchId === selection.MatchId);
           });
+
+          if(this.betInfo.Info) {
+            this.betInfo.Info = this.cleanDataInfo(this.betInfo.Info);
+          }
           this.betInfo.SelectionCount = data.Selections.length;
           this.betInfo.TeaserId = row.TeaserId;
           this.betInfo.Point = row.Point;
@@ -961,6 +971,22 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     }
   }
 
+
+  cleanDataInfo(data: string): string {
+    // Step 1: Parse JSON string into an object
+    const dataObject = JSON.parse(data);
+  
+    // Step 2: Remove keys with null values
+    for (const key in dataObject) {
+      if (dataObject[key] === null) {
+        delete dataObject[key];
+      }
+    }
+  
+    // Step 3: Convert object back to JSON string (if needed)
+    return JSON.stringify(dataObject);
+  }
+
   showHide() {
     this.show = !this.show;
   }
@@ -979,7 +1005,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   recalculateBet() {
-    let rows = this.rowData1;
+    let rows = this.matchRowData;
     this.apiService.apiPost('report/recalculatebet', { "Selections": rows })
       .pipe(take(1))
       .subscribe(data => {
@@ -1038,7 +1064,7 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   resendBet() {
-    let rows = this.rowData1;
+    let rows = this.matchRowData;
     this.apiService.apiPost('report/resendbet', { Selections: rows })
       .pipe(take(1))
       .subscribe(data => {
@@ -1097,11 +1123,8 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   toggleLiveUpdate(event) {
     this.isLiveUpdateOn = !event;
-
-    console.log(this.isLiveUpdateOn, "isLiveUpdateOn");
     
-    if (!this.isLiveUpdateOn) {
-      
+    if (!this.isLiveUpdateOn) {      
       this.subscribeToUpdates();
       console.log("subscribing to bets");
     } else {
@@ -1137,17 +1160,26 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         paging.BetCategory = this.availableBetCategoriesStatus;
         paging.FromDate = this.fromDate;
         paging.ToDate = this.toDate;
-        this.changeFilerName(params.request.filterModel, ['ExternalBetId'], ['PlatformId']);
+        this.changeFilerName(params.request.filterModel,
+          ['ExternalBetId', 'PartnerName'], ['PlatformId', 'PartnerId']);
+        // this.changeFilerName(params.request.filterModel, ['ExternalBetId', 'PartnetName'], ['PlatformId', 'PartnerId']);
         this.setSort(params.request.sortModel, paging, "OrderByDescending");
-        this.setFilterDropdown(params, ['State', 'PartnerName']);
+        this.setFilterDropdown(params, ['State',]);
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
+
+        if(this.filteredData['PartnerIds']?.ApiOperationTypeList[0].ArrayValue.length === 0) {
+          delete this.filteredData['PartnerIds'];
+        }
+        if(this.filteredData['PartnerIds']) {
+          this.filteredData['PartnerIds'].ApiOperationTypeList[0].ArrayValue = this.transformArrayToNumbers(this.filteredData['PartnerIds'].ApiOperationTypeList[0].ArrayValue, this.partnersEnum);
+        }
 
         this.apiService.apiPost('report/bets', paging)
           .pipe(take(1))
           .subscribe(ResponseObject => {
             if (ResponseObject.Code === 0) {
-
+              this.matchRowData = [];  
               const mappedRows = ResponseObject.Objects;
               mappedRows.map((bet) => {
                 this.mapResponseData(bet);
@@ -1176,6 +1208,23 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   onPageSizeChanged() {
     this.gridApi.paginationSetPageSize(Number(this.cacheBlockSize));
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
+  }
+
+  transformArrayToNumbers(array, obj) {
+    if (array.every(function (element) {
+      return typeof element === 'number';
+    })) {
+      return array
+    }
+    const result = [];
+    for (let i = 0; i < array.length; i++) {
+      const item = array[i];
+      const key = Object.keys(obj).find((key) => obj[key] === item);
+      if (key) {
+        result.push(Number(key));
+      }
+    }
+    return result;
   }
 
   private subscribeToUpdates() {
@@ -1275,15 +1324,16 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     const data = {
       MarketId: row.MarketId,
       MatchId: row.MatchId,
-      IsBlocked: true
+      IsBlocked: true,
+      AutoSettlement: null,
+      Status: 1,
     };
 
     this.apiService.apiPost('markets/updatemarket', data)
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.agGrid.api.getColumnDef('save').cellRendererParams.isDisabled = true;
-          SnackBarHelper.show(this._snackBar, { Description: "Blocked", Type: "succses" });
+          SnackBarHelper.show(this._snackBar, { Description: "Blocked", Type: "success" });
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

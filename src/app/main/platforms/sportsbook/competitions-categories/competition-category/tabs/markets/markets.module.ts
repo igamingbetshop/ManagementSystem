@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TranslateModule } from "@ngx-translate/core";
 import { DropdownDirective } from 'src/app/core/directives/dropdown.directive';
 import { MatMenuModule } from '@angular/material/menu';
+import { MarketTypesButtonsComponent } from "../../../../sb-components/market-types-buttons/market-types-buttons.component";
 
 const routes: Routes = [
   {
@@ -23,23 +24,23 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatSnackBarModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    RouterModule.forChild(routes),
-    AgGridModule,
-    TranslateModule,
-    DropdownDirective,
-    MatMenuModule
-
-  ],
-  declarations: [MarketsComponent]
+    declarations: [MarketsComponent],
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        RouterModule.forChild(routes),
+        AgGridModule,
+        TranslateModule,
+        DropdownDirective,
+        MatMenuModule,
+        MarketTypesButtonsComponent
+    ]
 })
 export class MarketsModule { }

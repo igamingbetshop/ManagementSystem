@@ -40,12 +40,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   public rowData1 = [];
   public columnDefs1 = [];
   public frameworkComponents = {
-    agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
-    numericEditor: NumericEditorComponent,
-    colorEditor: ColorEditorComponent,
     checkBoxRenderer: CheckboxRendererComponent,
-    textEditor: TextEditorComponent,
     inputMultiSelect: InputMultiSelectComponent
   };
   public blockedData;
@@ -151,8 +147,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         resizable: true,
         cellRenderer: 'inputMultiSelect',
         cellRendererParams: {
-          onInputChange: this.onInputChange['bind'](this),
-          onMultipleSelect: this.onMultipleSelect['bind'](this),
+          onInputChange: this.onInputChange.bind(this),
+          onMultipleSelect: this.onMultipleSelect.bind(this),
           Selections: this.partners,
         }
       },
@@ -251,7 +247,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   public getPsswordRegex(PartnerId, Type) {
-
     this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: PartnerId, Type: Type },
       true, Controllers.PARTNER, Methods.GET_USER_PASSWORD_REGEX).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
@@ -268,7 +263,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   get errorControl() {
     return this.formGroup.controls;
   }
-
 
   onSubmit() {
     if (this.formGroup.invalid) {

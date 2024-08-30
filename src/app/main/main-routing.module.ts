@@ -45,7 +45,7 @@ const routes: Routes = [
       },
       {
         path: 'partner-levels',
-        loadChildren: () => import('./components/partner-levels/partner-levels.module').then(m => m.PartnerLevelsModule)
+        loadComponent: () => import('./components/partner-levels/partner-levels.component').then(m => m.PartnerLevelsComponent)
       },
       {
         path:'',

@@ -41,7 +41,7 @@ import { RECEIVER_TYPES } from 'src/app/core/constantes/statuses';
 export class AddAnnouncementsComponent implements OnInit {
   formGroup: UntypedFormGroup;
   announcementTypes: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
   partners: any[] = [];
   partnerId;
   announcement: any;
@@ -133,7 +133,7 @@ export class AddAnnouncementsComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     let announcement = this.formGroup.getRawValue();
     announcement.State == 1 ? announcement.State = 1 : announcement.State = 2;
 
@@ -154,7 +154,7 @@ export class AddAnnouncementsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 }

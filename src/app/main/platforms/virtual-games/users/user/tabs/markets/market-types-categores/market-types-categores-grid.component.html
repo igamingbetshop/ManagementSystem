@@ -1,0 +1,24 @@
+
+<div class="grid-content">
+
+  <ag-grid-angular
+    #agGridSecond
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData()"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [suppressCopyRowsToClipboard]="true"
+    [animateRows]="true"
+    pagination="true"
+    [components]="frameworkComponents"
+    (cellValueChanged)="onCellValueChanged($event)"
+    pagination="true"
+    [paginationPageSize]="5000"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+  </ag-grid-angular>
+</div>

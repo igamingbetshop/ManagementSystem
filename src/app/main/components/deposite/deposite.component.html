@@ -49,7 +49,7 @@
     </div>
     <div>
       <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-      <div *ngIf="payment?.CreationTime" class="second-hand">{{payment?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div *ngIf="payment?.CreationTime" class="second-hand">{{payment?.CreationTime | date:'dd/MM/yyyy HH:mm'}}</div>
     </div>
     <div>
       <div class="first-hand">{{'Clients.DocumentVerified' | translate }}</div>
@@ -87,6 +87,17 @@
       <div class="first-hand">{{'Products.ExternalId' | translate }}</div>
       <div *ngIf="payment?.ExternalId" class="second-hand">{{payment?.ExternalId}}</div>
     </div>
+
+     @if (payment?.PaymentForm) {
+       <div>
+        <div class="first-hand">{{'Products.PaymentForm' | translate }}</div>
+        <div class="static-hand">
+          <button mat-stroked-button class="mat-btn"
+            (click)="onOpenDocument()">{{'Common.OpenDocument' | translate}}</button>
+        </div>
+      </div> 
+    } 
+
   </div>
 
   <div class="deposit-history-second">

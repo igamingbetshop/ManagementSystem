@@ -22,7 +22,7 @@ export class CreateNewDocumentComponent implements OnInit {
   validDocumentSize;
   validDocumentFormat;
   checkDocumentSize;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(public dialogRef: MatDialogRef<CreateNewDocumentComponent>,
               private apiService: CoreApiService,
@@ -74,7 +74,7 @@ export class CreateNewDocumentComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.CLIENT,
       Methods.UPLOAD_IMAGE).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
@@ -82,7 +82,7 @@ export class CreateNewDocumentComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

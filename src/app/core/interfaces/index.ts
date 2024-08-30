@@ -40,7 +40,7 @@ export interface Client {
     MobileNumber: string;
     NickName: string;
     PartnerId: number;
-    PhoneNumber: string;
+    MobileCode: string;
     RegionId: number;
     RegistrationIp: string;
     SecondName: string;
@@ -79,6 +79,7 @@ export interface Client {
     CharacterId: string | number;
     CharacterLevel: string | number;
     PinCode: string | number | null;
+    Duplicated: boolean;
 }
 
 

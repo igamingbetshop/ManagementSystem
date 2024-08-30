@@ -63,7 +63,7 @@ export class AddBannerComponent implements OnInit {
     { id: 4, name: 'One Deposit Only' },
     { id: 5, name: 'Two Or More Deposits' }
   ];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddBannerComponent>,
     private fb: UntypedFormBuilder,
@@ -126,36 +126,6 @@ export class AddBannerComponent implements OnInit {
     })
   }
 
-  // onPartnerChange(val){
-  //   this.fragments = [];
-  //   this.widgets = [];
-  //   console.log(val);
-  //   if(val){
-  //     this.apiService.apiPost('cms/bannerfragments',{PartnerId:val}).subscribe(data => {
-  //       if(data.ResponseCode === 0){
-  //
-  //         data.ResponseObject.forEach(item => {
-  //           if(item.Type == 1)
-  //             this.fragments.push(item);
-  //           else
-  //             this.widgets.push(item);
-  //         });
-  //
-  //       }else{
-  //         this._snackBar.open(data.Description, null, { duration: 3000 });
-  //       }
-  //     });
-  //     this.formGroup.get('FragmentName').enable();
-  //     this.formGroup.get('Type').enable();
-  //   }else if(val == null){
-  //     console.log("val");
-  //     this.formGroup.get('FragmentName').disable();
-  //     this.formGroup.get('Type').disable();
-  //   }
-  //   this.partnerId = val;
-  //
-  // }
-
   uploadFile(evt) {
     let files = evt.target.files;
     let file = files[0];
@@ -200,7 +170,7 @@ export class AddBannerComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
       this.apiService.apiPost('cms/addbanner', obj).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {

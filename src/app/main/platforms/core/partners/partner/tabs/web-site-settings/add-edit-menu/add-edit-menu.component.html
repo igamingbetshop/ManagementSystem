@@ -15,6 +15,6 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" (click)="submit()" [class.disabled]='isSendingReqest'>{{'Common.Save' | translate}}</button>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" (click)="submit()" [class.disabled]='isSendingRequest'>{{'Common.Save' | translate}}</button>
 </div>

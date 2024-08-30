@@ -59,12 +59,12 @@
 
       <div>
         <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-        <div class="static-hand">{{partner?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="static-hand">{{partner?.CreationTime | date:'dd/MM/yyyy HH:mm'}}</div>
       </div>
-      
+
       <div>
         <div class="first-hand">{{'Common.LastUpdateTime' | translate}}</div>
-        <div class="static-hand">{{partner?.LastUpdateTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="static-hand">{{partner?.LastUpdateTime | date:'dd/MM/yyyy HH:mm'}}</div>
       </div>
 
       <div>
@@ -178,8 +178,18 @@
           <input type="number" matInput [formControlName]="'MobileVerificationCodeLength'">
         </div>
       </div>
+      <div>
+        <div class="first-hand">{{'Partners.VipLevel' | translate}}</div>
+        <div class="second-hand">VIP {{partner?.VipLevel}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'VipLevel'">
+            <mat-option *ngFor="let partnerVipLevel of partnerVipLevels"
+                        [value]="partnerVipLevel?.Number">VIP {{partnerVipLevel?.Number}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
 
-      <div></div>
+<!--      <div></div>-->
 
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
@@ -191,77 +201,77 @@
       <div class="content-action">
         <div class="title"> {{partnerName}} : {{'Partners.SaveRegExp' | translate}}
         </div>
-    
+
       </div>
 
       <div></div>
 
 
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.Uppercase' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.Uppercase}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.Uppercase}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'Uppercase'" [disabled]="isUppercaseRequired"></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.IsUppercaseRequired' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.IsUppercaseRequired}} </div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.IsUppercaseRequired}} </div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'IsUppercaseRequired'" (change)="setCheckbox('Uppercase', 'IsUppercaseRequired', 'isUppercaseRequired')" ></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.Lowercase' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.Lowercase}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.Lowercase}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'Lowercase'" [disabled]="isLowercaseRequired"></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.IsLowercaseRequired' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.IsLowercaseRequired}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.IsLowercaseRequired}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'IsLowercaseRequired'" (change)="setCheckbox('Lowercase', 'IsLowercaseRequired', 'isLowercaseRequired')"></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.Numeric' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.Numeric}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.Numeric}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'Numeric'" [disabled]="isDigitRequired"></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.IsDigitRequired' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.IsDigitRequired}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.IsDigitRequired}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'IsDigitRequired'" (change)="setCheckbox('Numeric', 'IsDigitRequired', 'isDigitRequired')"></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.Symbol' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.Symbol}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.Symbol}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'Symbol'" [disabled]="isSymbolRequired"></mat-checkbox>
         </div>
       </div>
 
-      <div [formGroupName]="'PasswordRegExProperty'">  
+      <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.IsSymbolRequired' | translate}}</div>
-        <div class="second-hand">{{partner.PasswordRegExProperty.IsSymbolRequired}}</div>
+        <div class="second-hand">{{partner?.PasswordRegExProperty.IsSymbolRequired}}</div>
         <div class="form-field form-checkbox">
           <mat-checkbox [formControlName]="'IsSymbolRequired'" (change)="setCheckbox('Symbol', 'IsSymbolRequired', 'isSymbolRequired')"></mat-checkbox>
         </div>
       </div>
-      
+
       <div [formGroupName]="'PasswordRegExProperty'">
         <div class="first-hand">{{'Partners.MinLength' | translate}}</div>
         <div class="second-hand">{{partner?.PasswordRegExProperty?.MinLength}}</div>

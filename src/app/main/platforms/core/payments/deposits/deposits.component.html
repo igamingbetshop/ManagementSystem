@@ -1,7 +1,7 @@
 <div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.paymentId }">
 
   <app-partner-date-filter 
-    [title]="'Payments.Deposits'" 
+    [title]="title" 
     [partners]="'CorePlatform'"
     [checkBoxText]="'Payments.HasNote'" 
     (checkBoxClick)="noteChange($event)"

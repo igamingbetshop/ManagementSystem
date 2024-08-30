@@ -1,0 +1,51 @@
+<div class="container">
+
+<div class="content-action">
+  <div class="title"><a [routerLink]="['../../all-affiliates']">{{'Providers.Affiliates' | translate}} {{affiliateId}} / {{'Users.Corrections' | translate}} </a></div>
+  <button class="mat-btn" mat-stroked-button (click)="onDebitToAccount()">{{'Payments.DebitToAccount' | translate}}</button>
+  <button class="mat-btn" mat-stroked-button (click)="onCreditFromAccount()">{{'Payments.CreditFromAccount' | translate}}</button>
+</div>
+
+<div class="grid-content">
+  <app-corrections-grid 
+    [rowData]="accountsRowData" 
+    [clientId]="affiliateId" 
+    (getClientCorrections)="getData()"/>
+</div>
+
+<app-partner-date-filter 
+  [lastYearFilter]="true"
+  (toDateChange)="onDateChange($event)"/>
+
+<div class="grid-content">
+  <ag-grid-angular
+    id="all-finished"
+    #agGrid2
+    class="ag-theme-balham second-ag-grid"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [sideBar]="sideBar"
+    [suppressRowClickSelection]="true"
+    [columnDefs]="columnDefs"
+    [cacheBlockSize]="cacheBlockSize"
+    [suppressCopyRowsToClipboard]="true"
+    [paginationAutoPageSize]="paginationAutoPageSize"
+    [paginationPageSize]="cacheBlockSize"
+    [pagination]="pagination"
+    [components]="frameworkComponents"
+    [animateRows]="true"
+    (paginationChanged)="onPaginationChanged($event)"
+    [enableBrowserTooltips]="enableBrowserTooltips"
+    [groupIncludeFooter]="true"
+    [groupIncludeTotalFooter]="true"
+    [defaultColDef]="defaultColDef"
+    (gridReady)="onGridReady($event)"
+    (rowClicked)="onRowClicked($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="multiple">
+  </ag-grid-angular>
+</div>

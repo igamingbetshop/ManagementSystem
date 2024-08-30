@@ -32,7 +32,7 @@ export class AddEditTranslationComponent implements OnInit {
     TranslationEntries: []
   };
   public unModifiedData;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any },
@@ -77,7 +77,7 @@ export class AddEditTranslationComponent implements OnInit {
       TranslationId: this.TranslationId,
       TranslationEntries: []
     };
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     for (let i = 0; i < this.translationData.TranslationEntries.length; i++) {
       if (this.translationData.TranslationEntries[i].Text != this.unModifiedData.TranslationEntries[i].Text) {
         requestBody.TranslationEntries.push(this.translationData.TranslationEntries[i]);
@@ -96,7 +96,7 @@ export class AddEditTranslationComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 }

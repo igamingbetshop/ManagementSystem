@@ -332,6 +332,24 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         },
       },
       {
+        headerName: 'Sport.CLVValue',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Value',
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+        cellStyle: function (params) {
+          if (params.data.CommentTypeColor !== '#FFFFFF') {
+            return { color: 'black', backgroundColor: params.data.CommentTypeColor, borderRadius: '4px' };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
         headerName: 'Sport.MatchId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'MatchId',
@@ -764,9 +782,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
             this.totalBetAmount = data.TotalBetAmount;
             this.totalWinAmount = data.TotalWinAmount;
             this.totalProfit = data.TotalProfit;
-
-            console.log('mappedRows', mappedRows);
-            
             params.success({ rowData: mappedRows, rowCount: data.TotalCount });
             this.gridApi?.setPinnedBottomRowData([
               {

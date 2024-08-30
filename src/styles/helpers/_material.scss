@@ -71,6 +71,10 @@
   }
 }
 
+.mat-pseudo-checkbox-minimal {
+  margin-right: 10px;
+}
+
 .cdk-overlay-pane {
   min-width: 200px;
   ::-webkit-scrollbar {
@@ -116,6 +120,12 @@
   position: absolute;
   top: -6px;
   right: 0;
+
+  [dir="rtl"] & {
+    right: auto;
+    top: -12px;
+    left: 0; 
+  }
 }
 
 
@@ -185,9 +195,4 @@
 .mdc-snackbar__surface {
   background-color: transparent!important;
   box-shadow: none!important;
-}
-
-
-.mdc-snackbar__label {
-  padding: 0!important;
 }

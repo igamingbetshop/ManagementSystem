@@ -52,4 +52,15 @@
   }
 }
 
+.second-right {
+  max-height: 150px;
+}
 
+.style-type {
+  height: auto!important;
+  margin-bottom: 4px!important;
+}
+
+.mat-btn {
+  @include mat-btn-style;
+}

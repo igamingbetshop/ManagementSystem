@@ -1,9 +1,36 @@
 @import "mixins";
+@import "variables";
+
 
 .accounts-container {
     width: 100%;
 
   .accounts-content {
+    td,
+    th {
+      box-sizing: border-box; /* Include padding and border in width */
+      input {
+        @include input-style;
+
+        width: 90px!important;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
+        padding: 8px 14px;
+        border: 1px solid $gray-light-18;
+        border-radius: 4px;
+        box-sizing: border-box;
+        width: 100%;
+        font-size: 16px;
+        outline: none;
+        color:  $text-color;
+        background-color: $gray-light-17;;
+      }
+    }
     width: 100%;
     tr {
       height: 38px !important;
@@ -11,15 +38,15 @@
 
     th {
       background-color: $bg-color;
-      padding: 0;
       margin: 0;
-
-      color: white;
       text-align: left;
       padding-left: 4px;
       color: white;
       font-size: 14px;
       font-weight: 500;
+      box-sizing: border-box;
+      padding: 4px 20px;
+      text-overflow: ellipsis;
     }
 
     td {
@@ -28,12 +55,7 @@
       background-color: $white;
       text-align: left;
       height: 42px;
-      .mat-form-field {
-        position: absolute;
-        top: -2px;
-        left: 6px;
-        height: 38px;
-      }
+
     }
 
     .selected-row {

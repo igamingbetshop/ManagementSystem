@@ -28,16 +28,8 @@
       </div>
 
       <div>
-        <div class="first-hand">{{'Common.WinAccountTypeId' | translate}}</div>
-        <div class="second-hand">{{ clientType[commonSettings?.WinAccountTypeId - 1]?.Name}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select
-          [formControlName]="'WinAccountTypeId'">
-          @for (type of clientType; track $index) {
-            <mat-option [value]="type.Id">{{type.Name}}</mat-option>
-          }
-        </mat-select>
-        </div>
+        <div class="first-hand">{{'Common.FinalAccountTypeId' | translate}}</div>
+        <div class="static-hand">{{ commonSettings?.FinalAccountTypeId  | IdToName: clientType}}</div>
       </div>
 
       <div>
@@ -66,13 +58,25 @@
         </div>
       </div>
 
-      <div>
-        <div class="first-hand">{{'Bonuses.BonusWinMinAmount' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.MinAmount}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'MinAmount'" readonly>
+      @if(commonSettings?.BonusTypeId == 5) {
+        <div>
+          <div class="first-hand">{{'Clients.Amount' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.MinAmount}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'MinAmount'">
+          </div>
         </div>
-      </div>
+      }
+
+      @if(commonSettings?.BonusTypeId != 14 && commonSettings?.BonusTypeId != 5) {
+        <div>
+          <div class="first-hand">{{'Bonuses.BonusWinMinAmount' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.MinAmount}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'MinAmount'">
+          </div>
+        </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.AccountType' | translate}}</div>
@@ -82,13 +86,15 @@
         </div>
       </div>
 
-      <div>
-        <div class="first-hand">{{'Bonuses.BonusWinMaxAmount' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.MaxAmount}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'MaxAmount'">
+      @if(commonSettings?.BonusTypeId != 14 && commonSettings?.BonusTypeId != 5) {
+        <div>
+          <div class="first-hand">{{'Bonuses.BonusWinMaxAmount' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.MaxAmount}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'MaxAmount'">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.Priority' | translate}}</div>
@@ -118,7 +124,7 @@
         </div>
       }
 
-      @if (commonSettings?.BonusTypeId == 1 || commonSettings?.BonusTypeId == 3) {
+      @if (commonSettings?.BonusTypeId == 6 || commonSettings?.BonusTypeId == 3 || commonSettings?.BonusTypeId == 5) {
         <div >
           <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
           <div class="second-hand">{{commonSettings?.Percent}}</div>
@@ -131,22 +137,20 @@
       <div>
         <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
         <div class="second-hand">{{commonSettings?.StartTime | date:'dd/MM/yyyy HH:mm' }}</div>
-        <div class="form-field form-calendar calendar-picker">
-            <input matInput type="datetime-local" #dropdownEndContent class="data-time-picker" [formControlName]="'StartTime'"
-              name="meeting-time" >
+        <div class="form-field form-calendar">
+            <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
         <div class="second-hand">{{commonSettings?.FinishTime | date:'dd/MM/yyyy HH:mm'}}</div>
-        <div class="form-field form-calendar calendar-picker">
-              <input matInput type="datetime-local" #dropdownContent class="data-time-picker" [formControlName]="'FinishTime'"
-                name="meeting-time" >
+        <div class="form-field form-calendar">
+           <app-date-time-picker formControlName="FinishTime"></app-date-time-picker>
         </div>
       </div>
 
-      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14) {
+      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14 || commonSettings?.BonusTypeId == 4 || commonSettings?.BonusTypeId == 1) {
         <div >
           <div class="first-hand">{{'Bonuses.ValidForAwardingInHours' | translate}}</div>
           <div class="second-hand">{{commonSettings?.ValidForAwarding}}</div>
@@ -164,7 +168,7 @@
         </div>
       </div>
 
-      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14) {
+      @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14 || commonSettings?.BonusTypeId == 4 || commonSettings?.BonusTypeId == 1) {
         <div >
           <div class="first-hand">{{'Bonuses.ValidForSpendingInHours' | translate}}</div>
           <div class="second-hand">{{commonSettings?.ValidForSpending}}</div>
@@ -174,13 +178,15 @@
         </div>
       }
 
-      <div>
-        <div class="first-hand">{{'Bonuses.Sequence' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.Sequence}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'Sequence'" readonly>
+      @if(commonSettings?.BonusTypeId == 6 ||  commonSettings?.BonusTypeId == 9) {
+        <div>
+          <div class="first-hand">{{'Bonuses.Sequence' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.Sequence}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'Sequence'" readonly>
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.ReusingMaxCount' | translate}}</div>
@@ -198,13 +204,15 @@
         </div>
       </div>
 
-      <div>
-        <div class="first-hand">{{'Bonuses.TurnoverCount' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.TurnoverCount}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [formControlName]="'TurnoverCount'" [readonly]="this.commonSettings?.BonusTypeId != 13 && this.commonSettings?.BonusTypeId != 10  ">
+      @if(commonSettings?.BonusTypeId == 6 || commonSettings?.BonusTypeId == 7 || commonSettings?.BonusTypeId == 9 || commonSettings?.BonusTypeId == 10 || commonSettings?.BonusTypeId == 13) {
+        <div>
+          <div class="first-hand">{{'Bonuses.TurnoverCount' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.TurnoverCount}}</div>
+          <div class="form-field form-input">
+              <input matInput type="number" [formControlName]="'TurnoverCount'" [readonly]="this.commonSettings?.BonusTypeId != 13 && this.commonSettings?.BonusTypeId != 10  ">
+          </div>
         </div>
-      </div>
+      }
 
       <div>
         <div class="first-hand">{{'Bonuses.MaxReceiversCount' | translate}}</div>
@@ -259,7 +267,7 @@
         </div>
       }
       
-      @if (bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14) {
+      @if (bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14 ||  bonusTypeId == 4) {
         <div >
           <div class="first-hand">{{'Bonuses.Regularity' | translate}}</div>
           <div class="second-hand" >{{regularitys[commonSettings?.Regularity]?.Name}}</div>
@@ -271,9 +279,7 @@
             </mat-select>
           </div>
         </div>
-      }
 
-      @if(bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14) {
         <div>
           <div class="first-hand">{{'Bonuses.DayOfWeek' | translate}}</div>
           <div class="second-hand">{{days[commonSettings?.DayOfWeek]?.Name}}</div>
@@ -285,9 +291,7 @@
             </mat-select>
           </div>
         </div>
-      }
 
-      @if (bonusTypeId == 10 ||  bonusTypeId == 13 ||  bonusTypeId == 11 ||  bonusTypeId == 12 ||  bonusTypeId == 14) {
         <div>
           <div class="first-hand">{{'Bonuses.ReusingMaxCountInPeriod' | translate}}</div>
           <div class="second-hand">{{commonSettings?.ReusingMaxCountInPeriod}}</div>
@@ -317,12 +321,112 @@
         </div>
       }
 
-      @if (bonusTypeId != 1 && bonusTypeId != 14 && bonusTypeId != 12) {
-        <div></div>
+      @if(bonusTypeId == 4) {
+        @if(isEdit) {
+          <div>
+            <div class="first-hand">{{'Clients.SelectType' | translate}}</div>
+            <div class="second-hand"></div>
+            <div class="form-field form-dropdown">
+              <mat-select required (selectionChange)="onTypeChange($event.value)">
+                @for (campaign of campaignTypes; track $index) {
+                  <mat-option [value]="campaign.Id">{{campaign.Name}}</mat-option>
+                }
+              </mat-select>
+            </div>
+          </div>
+        }
+        <div style="height: auto;">
+          <div class="first-hand">{{'Bonuses.Info' | translate}}</div>
+          <div class="second-hand" style="height: auto;">
+            @if(allBounuses) {
+              @for ( info of infoArray.controls; track $index) {
+                  <span>{{ info.value.BonusId | IdToName: allBounuses }} - {{ info.value.Periodicity }}</span>
+              }
+            }
+          </div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControl]="campaignControl" (selectionChange)="onCampaignChange($event.value)">
+              @for (campaign of campaigns; track $index)  {
+                <mat-option [value]="campaign.Id">
+                  {{ campaign.Name }}
+                </mat-option>
+              }
+            </mat-select>
+          </div>
+        </div>
+
+        @if(isEdit) {
+          <div>
+            <div class="first-hand">{{'Clients.SelectValue' | translate}}</div>
+            <div class="second-hand"></div>
+            <div class="form-field form-input">
+              <input matInput [formControl]="valueControl" type="number">
+              <button mat-raised-button class="mat-btn add-value-btn" (click)="addValue()">Add Value</button>
+          </div>
+        </div>
+
+        <div class="selected-items-area">
+          @for ( info of infoArray.controls; track $index) {
+            <div class="selected-currency">
+              @if(allBounuses) {
+                <span>{{ info?.value?.BonusId | IdToName: allBounuses }} - {{ info.value.Periodicity }}</span>
+                <button mat-icon-button color="warn" (click)="removeValue($index)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        }
+
+      } @else if( commonSettings?.BonusTypeId != 5 ) {
+        <div> 
+          <div class="first-hand">{{'Bonuses.Info' | translate}}</div>
+          <div class="static-hand">{{commonSettings?.Info}}</div>
+        </div>
+      } @else {
+        <div style="height: auto;">  
+          <div class="first-hand" style="height: auto;">{{'Bonuses.Info' | translate}}</div>
+          <div class="second-hand">{{commonSettings?.Info}}</div>
+          <div class="form-field form-input" style="height: auto;">
+            <mat-form-field class="example-chip-list">
+              <mat-label>{{"Common.AddCount" | translate}}</mat-label>
+              <mat-chip-grid #chipGrid aria-label="Enter count">
+                @for (countCtrl of countsArray.controls; track countCtrl; let index = $index) {
+                  <mat-chip-row  (removed)="remove(countCtrl.value)"
+                    [editable]="true" [aria-description]="'press enter to edit ' + countCtrl.value">
+                    {{countCtrl.value}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + countCtrl.value">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                }
+                <input placeholder="the sum of counts must be equal to 100" [matChipInputFor]="chipGrid"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add($event)">
+              </mat-chip-grid>
+              @if(countsArray.errors?.sumNotEqual100) {
+                <div class="error-span">
+                  <span>
+                    {{"Errors.TheSumOfCountsMustBeEqualTo100" | translate}}
+                  </span>
+                </div>
+              }
+              @if (countsArray.errors?.pattern) {
+                <div class="error-span">
+                  <span>
+                    {{"Errors.OnlyNumbersAreAllowed" | translate}}
+                  </span>
+                </div>
+              }
+            </mat-form-field>
+          </div>
+        </div>
       }
       
 
-      <div>
+      <div style="height: auto;">
         <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
         <div class="second-hand">
           <span class="second-left"> 
@@ -375,8 +479,6 @@
               }
             </span>
         </div>
-
-
         <div class="form-field group-field" [formGroupName]="'Languages'">
           <div class="group-left-item">
           <input [value]="1" [formControlName]="'Type'" type="radio">{{'Bonuses.InSet' | translate}}
@@ -431,7 +533,6 @@
         </div>
       </div>
 
-
       <div>
         <div class="first-hand">{{'Bonuses.ChooseCurrency' | translate}}</div>
         <div class="second-hand">
@@ -462,9 +563,6 @@
         </div>
       </div>
 
-
-      <div></div>
-
       <div>
         <label
           style="padding: 10px; display: inline-flex; align-items: center; border-radius: 5px;border: 1px solid  blue; width: 110px; cursor: pointer"
@@ -474,8 +572,8 @@
         </div>
       </div>
 
+      @if(bonusTypeId === 12 || bonusTypeId === 13 ||bonusTypeId === 10) {
       <div class="types">
-        @if(bonusTypeId === 12 || bonusTypeId === 13 ||bonusTypeId === 10) {
           <div class="additionally" >
             <mat-form-field>
               <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
@@ -665,15 +763,23 @@
               </div>
             }
           </div>
-        }
-      </div>
+        </div>
+
+        <div></div>
+      }
 
       <div class="form-actions">
         @if (isEdit) {
           <div class="actions">
             <button mat-raised-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Cancel' |
               translate}}</button>
-            <button mat-raised-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Save' | translate}}</button>
+            <button 
+              mat-raised-button 
+              class="mat-btn" 
+              type="submit" 
+              (click)="onSubmit()"
+              [class.disabled]="formGroup.invalid"
+              >{{'Save' | translate}}</button>
           </div>
         }
       </div>

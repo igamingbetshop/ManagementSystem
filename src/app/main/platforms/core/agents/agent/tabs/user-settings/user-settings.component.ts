@@ -21,7 +21,7 @@ export class UserSettingsComponent implements OnInit {
   formGroup: UntypedFormGroup;
   agentsEnum: any;
   levelTypes: any;
-  // agentLevelId;
+  agentLevelId;
   agentsLevelsEnums: any;
 
   constructor(
@@ -37,10 +37,11 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit() {
     this.userId = this.activateRoute.snapshot.queryParams.userId;
     this.agentIds = this.activateRoute.snapshot.queryParams.agentIds;
-    // this.agentLevelId = +this.activateRoute.snapshot.queryParams.levelId;
+    this.agentLevelId = +this.activateRoute.snapshot.queryParams.agentLevelId;
     this.createForm();
     this.mergeUserSettingsApi();
   }
+
   private mergeUserSettingsApi() {
     let requestObject;
     if (this.agentIds) {

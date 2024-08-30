@@ -310,7 +310,7 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
   async onAddPopup() {
     const { AddPopupComponent } = await import('./add-popup/add-popup.component');
     const dialogRef = this.dialog.open(AddPopupComponent, {
-      width: ModalSizes.MIDDLE, data: {
+      width: ModalSizes.LARGE, data: {
         deviceTypes: this.deviceTypes,
       }
     });

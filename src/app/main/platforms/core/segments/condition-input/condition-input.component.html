@@ -1,0 +1,31 @@
+<div class="condition-content">
+  @if(hasLabel){
+  <div class="label-condition">{{ label }}</div>
+  }
+  <div class="condition-row">
+    <mat-form-field class="mr-15">
+      <mat-label>{{ 'Bonuses.SelectOperation' | translate }}</mat-label>
+      <mat-select [(ngModel)]="selectedConditionType" [ngModelOptions]="{ 'standalone': true }">
+        <mat-option [value]="">{{ 'Bonuses.SelectOperation' | translate }}</mat-option>
+        <mat-option *ngFor="let operation of operations" [value]="operation">
+          {{ operation.Name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="mr-15">
+      <input matInput type="number" [pattern]="inputPattern" placeholder="{{ placeholder | translate }}"
+        [(ngModel)]="selectedConditionValue">
+    </mat-form-field>
+    <button mat-raised-button color="primary" [disabled]="!selectedConditionType || !selectedConditionValue"
+      (click)="addCondition()">+</button>
+  </div>
+
+  <div class="condition-box">
+    @for (condition of conditions; track $index) {
+    <span class="condition-box-item">
+      {{ condition.ConditionType.Name }} {{ condition.ConditionValue }}
+      <mat-icon class="close-icon" (click)="removeCondition($index)">close</mat-icon>
+    </span>
+    }
+  </div>
+</div>

@@ -34,7 +34,7 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 })
 export class CreateProductCategoryComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateProductCategoryComponent>,
@@ -70,7 +70,7 @@ export class CreateProductCategoryComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.PRODUCT, Methods.SAVE_PRODUCT_CATEGORY)
@@ -81,7 +81,7 @@ export class CreateProductCategoryComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
   }
 

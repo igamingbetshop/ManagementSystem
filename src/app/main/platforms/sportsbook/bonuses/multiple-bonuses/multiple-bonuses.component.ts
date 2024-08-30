@@ -1,13 +1,14 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {CellClickedEvent} from 'ag-grid-community';
-import {take} from 'rxjs/operators';
-import {GridMenuIds, GridRowModelTypes, ModalSizes} from 'src/app/core/enums';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
-import {SportsbookApiService} from '../../services/sportsbook-api.service';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
+import { Component, Injector, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CellClickedEvent } from 'ag-grid-community';
+import { take } from 'rxjs/operators';
+import { GridMenuIds, GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
+import { SportsbookApiService } from '../../services/sportsbook-api.service';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { CommonDataService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-multiple-bonuses',
@@ -23,10 +24,10 @@ export class MultipleBonusesComponent extends BasePaginatedGridComponent impleme
   public bonusSettings: any[] = [];
   public partnerId;
 
-
   constructor(
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
+    private commonDataService: CommonDataService,
     protected injector: Injector,
     public dialog: MatDialog,
   ) {
@@ -41,7 +42,7 @@ export class MultipleBonusesComponent extends BasePaginatedGridComponent impleme
         resizable: true,
         minWidth: 100,
         tooltipField: 'Id',
-        cellStyle: {color: '#076192', 'font-size': '12px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '12px', 'font-weight': '500' },
         filter: 'agNumberColumnFilter',
       },
       {
@@ -81,39 +82,32 @@ export class MultipleBonusesComponent extends BasePaginatedGridComponent impleme
   }
 
   ngOnInit() {
-    this.gridStateName = 'bonus-multiple-grid-state';
-    this.getPartners();
+    this.partners = this.commonDataService.partners;
     this.getbonusSettings();
     setTimeout(() => {
       this.getPage()
     });
   }
 
-  getPartners() {
-    this.apiService.apiPost('partners').subscribe(data => {
-      if (data.Code === 0) {
-        this.partners = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
-  }
-
   getbonusSettings() {
-    this.apiService.apiPost('bonuses/bonussettings').subscribe(data => {
+    let data = {
+      PageIndex: 0,
+      PageSize: 5000,
+    };
+    this.apiService.apiPost('bonuses/bonussettings', data).subscribe(data => {
       if (data.Code === 0) {
         this.bonusSettings = data.ResponseObject.map((obj) => {
-          return {Id: obj.Id, TypeId: obj.TypeId, Name: obj.Id + '-' + obj.Name}
-        });
+          return { Id: obj.Id, TypeId: obj.TypeId, Name: obj.Id + '-' + obj.Name }
+        });        
       } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
   }
 
   async editBonus(params) {
     const row = params.data;
-    const {AddBonusComponent} = await import('./add-bonus/add-bonus.component');
+    const { AddBonusComponent } = await import('./add-bonus/add-bonus.component');
     const dialogRef = this.dialog.open(AddBonusComponent, {
       width: ModalSizes.SMALL, data: {
         partners: this.partners,
@@ -130,7 +124,7 @@ export class MultipleBonusesComponent extends BasePaginatedGridComponent impleme
 
   async addBonus() {
 
-    const {AddBonusComponent} = await import('./add-bonus/add-bonus.component');
+    const { AddBonusComponent } = await import('./add-bonus/add-bonus.component');
     const dialogRef = this.dialog.open(AddBonusComponent, {
       width: ModalSizes.SMALL, data: {
         partners: this.partners,
@@ -151,12 +145,14 @@ export class MultipleBonusesComponent extends BasePaginatedGridComponent impleme
   }
 
   getPage() {
-    let data = {};
+    let data = {
+      PageIndex: 0,
+      PageSize: 5000,
+      PartnerId: null,
+    };
     if (this.partnerId) {
-      data = {
-        PartnerId: this.partnerId
+      data.PartnerId = this.partnerId
       }
-    }
     this.apiService.apiPost(this.path, data)
       .pipe(take(1))
       .subscribe(data => {
@@ -180,7 +176,7 @@ export class MultipleBonusesComponent extends BasePaginatedGridComponent impleme
             }
           });
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }

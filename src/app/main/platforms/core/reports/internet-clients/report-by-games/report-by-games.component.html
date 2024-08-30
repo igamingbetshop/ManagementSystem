@@ -1,7 +1,7 @@
 <div class="container">
 
   <app-partner-date-filter 
-    [title]="'Reports.ReportByGames'" 
+    [title]="title" 
     [partners]="'CorePlatform'" 
     (toDateChange)="onDateChange($event)" 
   />
@@ -11,7 +11,6 @@
   
   <div class="grid-content">
     <ag-grid-angular
-      id="report-bets"
       #agGrid
       [class.hide-grid]="loadingUserState"
       class="ag-theme-balham"

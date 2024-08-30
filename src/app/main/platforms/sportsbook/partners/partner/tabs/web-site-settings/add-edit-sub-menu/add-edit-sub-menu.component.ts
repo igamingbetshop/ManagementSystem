@@ -23,7 +23,7 @@ export class AddEditSubMenuComponent implements OnInit {
   checkDocumentSize;
   iconChanging;
   showFile = false;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditSubMenuComponent>,
               private apiService: SportsbookApiService,
@@ -115,7 +115,7 @@ export class AddEditSubMenuComponent implements OnInit {
   }
 
   submit() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const value = this.formGroup.getRawValue();
     this.apiService.apiPost('cms/savewebsitesubmenuitem', value)
       .pipe(take(1))
@@ -125,7 +125,7 @@ export class AddEditSubMenuComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

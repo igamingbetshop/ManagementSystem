@@ -29,7 +29,11 @@ const routes: Routes = [
           path: 'notes',
           loadChildren:() => import('./tabs/notes/notes.module').then(m => m.NotesModule),
         },
-
+        {
+          path: 'not-accepted-bets',
+          loadChildren:() => import('./tabs/not-accepted-bets/not-accepted-bets.module').then(m => m.NotAcceptedBetsModule),
+        
+        },
         {
           path: '',
           redirectTo: 'main',

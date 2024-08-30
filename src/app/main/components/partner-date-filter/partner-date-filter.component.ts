@@ -18,6 +18,7 @@ import { SportPartnersSelectComponent } from './sport-partners-select.component'
 import { SportSelectComponent } from './sport-select.component';
 import { DateTimePickerComponent } from "../data-time-picker/data-time-picker.component";
 import { BetShopsesComponent } from "./bet-shops-select.component";
+import { DateHelperGTM0 } from './data-helper-gtm0.class';
 
 @Component({
     selector: 'app-partner-date-filter',
@@ -35,7 +36,6 @@ import { BetShopsesComponent } from "./bet-shops-select.component";
         MatCheckboxModule,
         MatNativeDateModule,
         TranslateModule,
-        PartnerDateFilterComponent,
         CorePartnersSelectComponent,
         CoreAccountsSelectComponent,
         CorePaymentsSelectComponent,
@@ -64,6 +64,7 @@ export class PartnerDateFilterComponent implements OnInit {
   isReconnected = input<boolean>(false);
   lastYearFilter = input(false);
   betShopGroups = input();
+  dataTimeHelperInput = input(false);
   @Output() toDateChange = new EventEmitter<any>();
   @Output() startDateChange = new EventEmitter<any>();
   @Output() titleClick = new EventEmitter<any>();
@@ -86,17 +87,14 @@ export class PartnerDateFilterComponent implements OnInit {
   private translate = inject(TranslateService);
 
   ngOnInit(): void {
-    console.log(this.betShopGroups(), "this.betShopGroups");
-    
     this.startDate();
     if (this.title) {
       this.titleName = this.title();
         this.translate.get(this.titleName).subscribe((translatedTitle: string) => {
           this.titleName = translatedTitle;
-        });  
+        });
     }
     if (this.checkBoxText()) {
-
       this.checkBoxTextTranslated = this.checkBoxText();
       this.translate.get(this.checkBoxTextTranslated).subscribe((translatedTitle: string) => {
         this.checkBoxTextTranslated = translatedTitle;
@@ -117,17 +115,32 @@ export class PartnerDateFilterComponent implements OnInit {
   }
 
   startDate() {
-    const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+
+    if(this.dataTimeHelperInput() != false) {
+      const [fromDate, toDate] = DateHelper.startDate();
+      this.fromDate = fromDate;
+      this.toDate = toDate;
+    } else {
+      const [fromDate, toDate] = DateHelperGTM0.startDate();
+      this.fromDate = fromDate;
+      this.toDate = toDate;
+    }
   }
 
   selectTime(time: string): void {
-    const [fromDate, toDate] = DateHelper.selectTime(time);
-    this.fromDate = fromDate;
-    this.toDate = toDate;
-    this.selectedItem = time;
-    this.getCurrentPage();
+    if(this.dataTimeHelperInput() !== true) {
+      const [fromDate, toDate] = DateHelper.selectTime(time);
+      this.fromDate = fromDate;
+      this.toDate = toDate;
+      this.selectedItem = time;
+      this.getCurrentPage();
+    } else {
+      const [fromDate, toDate] = DateHelperGTM0.selectTime(time);
+      this.fromDate = fromDate;
+      this.toDate = toDate;
+      this.selectedItem = time;
+      this.getCurrentPage();
+    }
   }
 
   onStartDateChange(event: any) {
@@ -154,10 +167,12 @@ export class PartnerDateFilterComponent implements OnInit {
       const [datePart, timePart] = dateTimeParts;
       const [year, month, day] = datePart.split('-').map(Number);
       const [hours, minutes] = timePart.split(':').map(Number);
-      return new Date(year, month - 1, day, hours, minutes);
+  
+      return new Date(Date.UTC(year, month - 1, day, hours, minutes));
     }
     return new Date();
   }
+  
 
   getByPartnerData(event: any) {
     this.partnerId = event;
@@ -168,7 +183,8 @@ export class PartnerDateFilterComponent implements OnInit {
     this.toSportChange.emit(event);
   }
 
-  getCurrentPage() {
+  getCurrentPage()
+  {
     this.toDateChange.emit({ fromDate: this.fromDate, toDate: this.toDate, partnerId: this.partnerId });
   }
 

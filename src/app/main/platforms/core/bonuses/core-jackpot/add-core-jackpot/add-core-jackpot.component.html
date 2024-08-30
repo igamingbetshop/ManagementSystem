@@ -1,0 +1,79 @@
+<div mat-dialog-title>
+  <span class="title"> {{('Sport.AddBonus' | translate)}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup">
+
+    <mat-form-field>
+      <mat-label>{{'Common.Name' | translate}}</mat-label>
+      <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+      @if (errorControl['Name']?.touched && errorControl['Name'].errors?.required) {
+        <mat-error>
+          {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select [formControlName]="'PartnerId'">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'" (selectionChange)="onTypeChange($event)">
+        <mat-option *ngFor="let type of typeStatuses" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      @if (errorControl['Type']?.touched && errorControl['Type'].errors?.required) {
+        <mat-error >
+          {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.Amount' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Clients.Amount' | translate" [formControlName]="'Amount'">
+      @if (errorControl['Amount']?.touched && errorControl['Amount'].errors?.required) {
+        <mat-error>
+           {{'Clients.Amount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
+    </mat-form-field>
+
+    @if(selectedType === 1) {
+      <mat-form-field>
+        <mat-label>{{'Clients.RightBorder' | translate}}</mat-label>
+        <input matInput type="number" [placeholder]="'Clients.RightBorder' | translate" [formControlName]="'RightBorder'">
+        @if (errorControl['RightBorder']?.touched && errorControl['RightBorder'].errors?.required) {
+          <mat-error>
+             {{'Clients.RightBorder' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        }
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>{{'Clients.LeftBorder' | translate}}</mat-label>
+        <input matInput type="number" [placeholder]="'Clients.LeftBorder' | translate" [formControlName]="'LeftBorder'">
+        @if (errorControl['LeftBorder']?.touched && errorControl['LeftBorder'].errors?.required) {
+          <mat-error>
+             {{'Clients.LeftBorder' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+        }
+      </mat-form-field>
+    }
+
+
+    <mat-label>{{'Bonuses.FinishTime' | translate}}</mat-label>
+      <app-date-time-picker formControlName="FinishTime"></app-date-time-picker>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingRequest" (click)="onSubmit()">{{('Common.Add' | translate)}}</button>
+</div>

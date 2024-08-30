@@ -8,12 +8,13 @@ import { DateAdapter } from "@angular/material/core";
 
 import { Controllers, Methods, ModalSizes } from 'src/app/core/enums';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, DEVICE_TYPES } from 'src/app/core/constantes/statuses';
 import { compressImage } from 'src/app/core/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { CoreApiService } from '../../../../../services/core-api.service';
 import { PopupService } from '../../../popup.service';
+import { imageValidator } from 'src/app/core/validators';
 
 @Component({
   selector: 'app-popup-main-info',
@@ -39,7 +40,7 @@ export class PopupMainInfoComponent implements OnInit {
   image: any;
   types: any;
   states = ACTIVITY_STATUSES;
-  deviceTypes = [];
+  deviceTypes = DEVICE_TYPES;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -58,7 +59,6 @@ export class PopupMainInfoComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    this.getDeviceTypes();
     this.getPopupTypes();
     this.partners = this.commonDataService.partners;
     this.id = +this.activateRoute.snapshot.queryParams.id;
@@ -70,19 +70,6 @@ export class PopupMainInfoComponent implements OnInit {
     this.segmentesEntites.push(this.popup.SegmentIds?.map(elem => {
       return this.segments.find((item) => elem === item.Id).Name
     }))
-  }
-
-  getDeviceTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_DEVICE_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.deviceTypes = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
   }
 
   getPopupTypes() {
@@ -160,7 +147,7 @@ export class PopupMainInfoComponent implements OnInit {
       EnvironmentTypeId: [null, [Validators.required]],
       FinishDate: [null, [Validators.required]],
       Id: [null],
-      ImageData: [null],
+      ImageData: [null, imageValidator()],
       ImageName: [null],
       LastUpdateTime: [null, [Validators.required]],
       NickName: [null, [Validators.required, Validators.pattern(/^[a-z][a-z0-9]*$/i)]],
@@ -205,19 +192,19 @@ export class PopupMainInfoComponent implements OnInit {
     const files = event.target.files;
     if (files.length > 0) {
       const file = files[0];
-
+  
       const validDocumentSize = file.size < 5000000;
       const validDocumentFormat = /\.(jpg|jpeg|png|gif)$/i.test(file.name);
-
+  
       if (validDocumentFormat && validDocumentSize) {
         const reader = new FileReader();
-
+  
         reader.onload = () => {
           const binaryString = reader.result as string;
-
+  
           if (file.size < 900000) {
             this.formGroup.get('ImageData').setValue(binaryString.substring(binaryString.indexOf(',') + 1));
-            this.formGroup.get('ImageName').setValue(file.name.substring(file.name.lastIndexOf(".") + 1));
+            this.formGroup.get('ImageName').setValue(file.name);
           } else {
             const img = new Image();
             img.src = binaryString;
@@ -229,24 +216,26 @@ export class PopupMainInfoComponent implements OnInit {
                   reader.onloadend = () => {
                     const base64data = reader.result as string;
                     this.formGroup.get('ImageData').setValue(base64data.substring(base64data.indexOf(',') + 1));
-                    this.formGroup.get('ImageName').setValue(file.name.substring(file.name.lastIndexOf(".") + 1));
+                    this.formGroup.get('ImageName').setValue(file.name);
+                    this.formGroup.get('ImageData').updateValueAndValidity();
                   };
                 }
               }, file.type, 0.7);
             };
           }
+          this.formGroup.get('ImageData').updateValueAndValidity();
         };
-
         reader.readAsDataURL(file);
       } else {
-        this.formGroup.get('ImageData').setValue(null);
+        this.formGroup.get('ImageData').setErrors({ invalidImage: true });
+        this.formGroup.get('ImageData').markAsTouched(); 
         this.formGroup.get('ImageName').setValue(null);
-
+        this.formGroup.updateValueAndValidity(); 
         SnackBarHelper.show(this._snackBar, { Description: 'Invalid format or size. Please use jpg, jpeg, png, or gif files under 5MB.', Type: "error" });
       }
     }
   }
-
+  
   convertToArray(controlName: string): void {
     const values = this.formGroup.get(controlName).value
       .split(',')
@@ -260,7 +249,12 @@ export class PopupMainInfoComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
+
     const obj = this.formGroup.getRawValue();
+
+    if(obj.DeviceType == -1) {
+      obj.DeviceType = null;
+    }
     obj.PartnerId = this.partnerId;
     obj.Id = String(this.id);
 

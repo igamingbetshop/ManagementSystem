@@ -1,3 +1,5 @@
+@import "variables";
+@import "mixins";
 .modal-wrap {
     position: relative;
     overflow: auto;
@@ -10,7 +12,37 @@
 .mat-datepicker-input {
   background-color: transparent!important;
 }
+
+.selection-area, .selected-items-area {
+  padding-top: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 10px;
   
-.calendar-picker {
-  margin-left: 30px!important;
+  // .selected-currency {
+  //   max-width: 150px;
+  // }
+}
+
+.selected-currency {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  span {
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  button {
+    flex-shrink: 0;
+  }
+}
+
+.mat-btn {
+  @include mat-btn-style;
 }

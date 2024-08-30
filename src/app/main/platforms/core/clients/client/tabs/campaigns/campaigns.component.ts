@@ -13,9 +13,7 @@ import { ButtonRendererComponent } from "../../../../../../components/grid-commo
 import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
 import { CheckboxRendererComponent } from "../../../../../../components/grid-common/checkbox-renderer.component";
 import { TextEditorComponent } from "../../../../../../components/grid-common/text-editor.component";
-import { AddCampaignComponent } from "./add-campaign/add-campaign.component";
 import { MatDialog } from "@angular/material/dialog";
-import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
 import { DatePipe } from "@angular/common";
 import { SelectRendererComponent } from "../../../../../../components/grid-common/select-renderer.component";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
@@ -28,14 +26,11 @@ import { CLIENT_BOUNUS_STATUSES } from 'src/app/core/constantes/statuses';
   styleUrls: ['./campaigns.component.scss']
 })
 export class CampaignsComponent extends BasePaginatedGridComponent implements OnInit {
-  @ViewChild('agGrid') agGrid: AgGridAngular;
-  @ViewChild('agGrid2') agGrid2: AgGridAngular;
   public clientId: number;
   public rowModelType: GridRowModelTypes = GridRowModelTypes.CLIENT_SIDE;
   public rowData = [];
-  public rowData2 = [];
+  public hystoryRowData = [];
   public columnDefs = [];
-  public columnDefs2 = [];
   public clientBonusStatuses = CLIENT_BOUNUS_STATUSES;
   public campaignTypes = [
     { Id: 1, Name: "CashBack" },
@@ -426,70 +421,7 @@ export class CampaignsComponent extends BasePaginatedGridComponent implements On
         suppressMenu: true
       }
     ]
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        resizable: true,
-        sortable: false,
-        filter: false,
-        suppressMenu: true
-      },
-      {
-        headerName: 'Payments.Comment',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Comment',
-        resizable: true,
-        sortable: false,
-        filter: false,
-        suppressMenu: true
-      },
-      {
-        headerName: 'Change Date',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ChangeDate',
-        resizable: true,
-        sortable: false,
-        filter: false,
-        suppressMenu: true,
-        cellRenderer: function (params) {
-          let datePipe = new DatePipe("en-US");
-          let dat = datePipe.transform(params.data.ChangeDate, 'medium');
-          return `${dat}`;
-        },
-      },
-      {
-        headerName: 'Payments.CreatedBy',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'BonusPrize',
-        resizable: true,
-        sortable: false,
-        filter: false,
-        suppressMenu: true,
-        cellRenderer: params => {
-          var a = document.createElement('div');
-          if (params.data.FirstName !== null || params.data.LastName !== null) {
-            a.innerHTML = params.data.FirstName + ' ' + params.data.LastName;
-          }
-          return a;
-        },
-      },
-      {
-        headerName: 'Common.View',
-        headerValueGetter: this.localizeHeader.bind(this),
-        cellRenderer: OpenerComponent,
-        resizable: true,
-        sortable: false,
-        filter: false,
-        suppressMenu: true,
-        valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          data.path = this.router.url.split('?')[0] + '/' + params.data.Id;
-          return data;
-        },
-      }
-    ];
+
     this.masterDetail = true;
     this.frameworkComponents = {
       agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -558,7 +490,7 @@ export class CampaignsComponent extends BasePaginatedGridComponent implements On
       if (data) {
         this.rowData.push(data);
         this.gridApi.setRowData(this.rowData);
-        this.rowData2 = [];
+        this.hystoryRowData = [];
       }
       this.getCampaigns();
     });
@@ -581,7 +513,7 @@ export class CampaignsComponent extends BasePaginatedGridComponent implements On
           this.rowData.splice(this.blockedData.rowIndex, 1);
           this.gridApi.setRowData(this.rowData);
           this.selected = false;
-          this.rowData2 = [];
+          this.hystoryRowData = [];
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -613,16 +545,15 @@ export class CampaignsComponent extends BasePaginatedGridComponent implements On
   }
 
   onRowSelected(params) {
-
     if (params.node.selected) {
       this.selected = true;
       this.blockedData = params;
       this.apiService.apiPost(this.configService.getApiUrl, { ObjectId: params.data.Id, ObjectTypeId: 80 }, true,
         Controllers.REPORT, Methods.GET_OBJECT_CHANGE_HISTORY).pipe(take(1)).subscribe((data) => {
           if (data.ResponseCode === 0) {
-            this.rowData2 = data.ResponseObject;
+            this.hystoryRowData = data.ResponseObject;
           } else {
-            this.rowData2 = [];
+            this.hystoryRowData = [];
           }
         });
     }

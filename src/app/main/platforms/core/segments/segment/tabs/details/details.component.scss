@@ -328,5 +328,68 @@ mat-icon {
 }
 
 
+.condition-row {
+  display: flex;
+  align-items: center;
+  margin: 7px 0 4px 0;
+  gap: 8px;
+
+  button {
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    font-size: 24px;
+  }
+
+  .mat-mdc-form-field {
+    margin: 0;
+  }
+}
+
+.condition-box {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  .condition-box-item {
+    height: 28px;
+    padding: 0 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(148, 149, 152, 1);
+    background: rgba(239, 240, 246, 1);
+    font-size: 14px;
+    font-weight: bold;
+    color: rgba(65, 77, 100, 1);
+    display: flex;
+    align-items: center;
+
+    .close-icon {
+      color: rgb(96, 96, 98);
+      margin-left: 8px;
+      font-size: 20px;
+      width: unset;
+      height: unset;
+      padding-top: 15px;
+      cursor: pointer;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-datepicker-toggle {
+    position: absolute !important;
+    right: -8px !important;
+    top: -25px !important;
+  }
+
+  .mat-mdc-input-element {
+    position: absolute !important;
+    top: -3px !important;
+    background: rgba(239, 240, 246, 1) !important;
+  }
+}
+
+
 
 

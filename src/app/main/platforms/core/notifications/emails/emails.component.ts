@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Injector, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
-import { Controllers, GridMenuIds, Methods, ModalSizes } from 'src/app/core/enums';
+import { Controllers, GridMenuIds, Methods, ModalSizes, NotificationsObjectType } from 'src/app/core/enums';
 import { Paging } from 'src/app/core/models';
 import { CommonDataService } from 'src/app/core/services';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
@@ -16,7 +16,6 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
 
-
 @Component({
   selector: 'app-emails',
   templateUrl: './emails.component.html',
@@ -24,14 +23,15 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 })
 export class EmailsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public rowData = [];
-  public partners: any[] = [];
-  public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
-  public partnerId;
-
-  public states:any[] = [];
+  rowData = [];
+  partners: any[] = [];
+  selectedItem = 'today';
+  fromDate = new Date();
+  toDate = new Date();
+  partnerId;
+  title = "Notifications.ClientEmails";
+  states:any[] = [];
+  objectTypeId = NotificationsObjectType.Client;
 
   constructor(
     protected injector: Injector,
@@ -42,10 +42,10 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
     public translate: TranslateService,
   ) {
     super(injector);
-    this.adminMenuId = GridMenuIds.CORE_EMAILES;
+    this.adminMenuId = GridMenuIds.CORE_EMAIL_CLIENTS;
     this.columnDefs = [
       {
-        headerName: 'Common.Id',
+        headerName: 'Clients.ClientId',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Id',
         sortable: true,
@@ -66,19 +66,19 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
         resizable: true,
         filter: false,
       },
-      {
-        headerName: 'Clients.ClientId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ClientId',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-      },
+      // {
+      //   headerName: 'Clients.ClientId',
+      //   headerValueGetter: this.localizeHeader.bind(this),
+      //   field: 'ClientId',
+      //   sortable: true,
+      //   resizable: true,
+      //   filter: 'agNumberColumnFilter',
+      //   filterParams: {
+      //     buttons: ['apply', 'reset'],
+      //     closeOnApply: true,
+      //     filterOptions: this.filterService.numberOptions
+      //   },
+      // },
       {
         headerName: 'Clients.UserName',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -225,13 +225,14 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
         }
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = this.cacheBlockSize;
-        paging.CreatedFrom = this.fromDate;
-        paging.CreatedBefore = this.toDate;
+        paging.FromDate = this.fromDate;
+        paging.ToDate = this.toDate;
+        paging.ObjectTypeId = this.objectTypeId;
         this.setSort(params.request.sortModel, paging);
         this.setFilter(params.request.filterModel, paging);
 
         this.apiService.apiPost(this.configService.getApiUrl, paging,
-          true, Controllers.CLIENT, Methods.GET_EMAILS)
+          true, Controllers.REPORT, Methods.GET_EMAILS)
           .pipe(take(1))
           .subscribe(data => {
             if (data.ResponseCode === 0) {

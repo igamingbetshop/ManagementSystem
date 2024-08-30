@@ -20,21 +20,6 @@
 
   }
 
-  // .content-edit gets from helpers/_form-edit.scss
-
-  .mat-table {
-    width: 50%;
-    background-color: $content-bg-color;
-
-    .content-action {
-      @include action-style;
-      height: 68px;
-
-      .mat-btn {
-        @include mat-btn-style;
-      }
-    }
-  }
 
 }
 
@@ -132,4 +117,18 @@
 .types {
   height: 80%!important;
   margin-top: 30px;
+}
+
+.mat-table {
+  width: 50% !important;
+  background-color: $content-bg-color;
+
+  .content-action {
+    @include action-style;
+    height: 68px;
+
+    .mat-btn {
+      @include mat-btn-style;
+    }
+  }
 }

@@ -4,7 +4,7 @@
 .container {
   overflow: hidden;
   @include container-style;
-
+  height: 91%;
   .content-action {
     @include action-style;
     height: 68px;

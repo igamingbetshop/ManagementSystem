@@ -37,7 +37,7 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 })
 export class CreateDepositComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
   paymentSystems = [];
   currencyId;
 
@@ -92,10 +92,10 @@ export class CreateDepositComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.PAYMENT, Methods.CREATE_MANUAL_DEPOSIT).pipe(take(1)).subscribe(data => {
@@ -104,7 +104,7 @@ export class CreateDepositComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
   }
 

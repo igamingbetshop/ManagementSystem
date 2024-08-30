@@ -11,8 +11,28 @@
       @if (src.ClientId){
         <span class="client-id">- {{src.ClientId}}</span>
       }
+      @if (src.PartnerName && src.Name != src.PartnerName){
+        <span class="client-id">- {{src.PartnerName}}</span>
+      }
     </span>
-    <span class="amount">{{src.Amount  | number:number()}}<span class="currency-id">{{src.CurrencyId}}</span></span>
+
+    @if (src.TotalSessionTime){
+      <span class="session-time">
+        @if (src.Hours > 0){
+          <span>{{src.Hours}}h</span>
+        }
+        @if (src.Minutes > 0){
+          <span>{{src.Minutes}}m</span>
+        }
+        @if (src.Seconds > 0){
+          <span>{{src.Seconds}}s</span>
+
+        }
+      </span>
+    } @else {
+      <span class="amount">{{src.Amount  | number:number()}}<span class="currency-id">{{src.CurrencyId}}</span></span>
+    }
+
   </div>
   <div class="progress-bar-thumb">
     <div class="progress-track" [style.width.%]="src.Percent">

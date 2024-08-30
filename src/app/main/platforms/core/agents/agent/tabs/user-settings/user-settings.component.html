@@ -1,18 +1,15 @@
 <div class="container">
-<!--  <div class="content-action">-->
-<!--    <div class="title"><a [routerLink]="['../../all-agents']">{{'Agents.Agents' | translate}}</a> {{userId}} ({{agentLevelName}})  /-->
-<!--      {{'Home.Settings' | translate}}</div>-->
-<!--    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>-->
-<!--  </div>-->
+ <div class="content-action">
+  <div class="title">
+    {{'Users.LevelCountTypes' | translate}}
+  </div>
+  @if(agentLevelId == 1) {
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  }
+ </div>
 
   <div class="content-edit">
     <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
-
-      <div class="title">
-        {{'Users.LevelCountTypes' | translate}}
-      </div>
-
-      <div></div>
 
       <ng-container [formGroupName]="'CountLimits'">
 
@@ -29,13 +26,15 @@
       <div></div>
 
       <div class="form-actions">
-        <div class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-cancel-btn"
-                  (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
-          <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid || formGroup.pristine" type="submit"
-                  (click)="onSubmit()">{{'Common.Save' | translate}}
-          </button>
-        </div>
+        @if(isEdit) {
+          <div class="actions">
+            <button mat-stroked-button class="mat-cancel-btn"
+                    (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+            <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid || formGroup.pristine" type="submit"
+                    (click)="onSubmit()">{{'Common.Save' | translate}}
+            </button>
+          </div>
+        }
       </div>
 
     </form>

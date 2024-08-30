@@ -26,7 +26,7 @@ export class TeamComponent extends BasePaginatedGridComponent implements OnInit 
   public formGroup: UntypedFormGroup;
   public rowData = [];
   public isEdit = false;
-  isSendingReqest = false;
+  isSendingRequest = false;
   image: any;
 
   constructor(
@@ -185,9 +185,9 @@ export class TeamComponent extends BasePaginatedGridComponent implements OnInit 
         this.formGroup.get('LogoImage').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
       };
       reader.readAsDataURL(file);
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     } else {
-      this.isSendingReqest = true;
+      this.isSendingRequest = true;
       let errorMessage = 'Invalid file format or size. ';
       if (!validDocumentFormat) {
         errorMessage += 'Please upload an SVG format file. ';

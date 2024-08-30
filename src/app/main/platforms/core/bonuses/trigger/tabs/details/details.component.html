@@ -31,7 +31,7 @@
         </div>
       </div>
 
-      @if (triggerSetting?.Type != 15) {
+      @if (triggerSetting?.Type != 5 && triggerSetting?.Type != 9 && triggerSetting?.Type != 12 && triggerSetting?.Type != 15) {
       <div>
         <div class="first-hand">{{'Bonuses.Percent' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Percent}}</div>
@@ -70,8 +70,7 @@
         </div>
       </div>
 
-      @if ( triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type
-      == 10 ) {
+      @if (triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type == 10 ) {
       <div>
         <div class="first-hand">{{'Bonuses.TotalWagerAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MinAmount}}</div>
@@ -89,18 +88,6 @@
         </div>
       </div>
 
-      @if (triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type
-      == 10) {
-      <div>
-        <div class="first-hand">{{'Bonuses.UpToAmount' | translate}}</div>
-        <div class="second-hand">{{triggerSetting?.MaxAmount}}</div>
-        <div class="form-field form-input">
-          <input type="number" matInput [formControlName]="'MaxAmount'">
-        </div>
-      </div>
-
-      }
-
       @if (triggerSetting?.Type == 7) {
       <div>
         <div class="first-hand">{{'Bonuses.Sequence' | translate}}</div>
@@ -115,18 +102,27 @@
         <div class="first-hand">{{'Bonuses.StartTime' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.StartTime | date:'dd/MM/yyyy HH:mm' }}</div>
         <div class="form-field form-calendar calendar-picker">
+          <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
+      </div>
+        
+        <!-- <div class="form-field form-calendar calendar-picker">
           <input matInput type="datetime-local" #dropdownEndContent class="data-time-picker"
             [formControlName]="'StartTime'" name="meeting-time">
-        </div>
+        </div> -->
       </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.FinishTime | date:'dd/MM/yyyy HH:mm'}}</div>
+
         <div class="form-field form-calendar calendar-picker">
+          <app-date-time-picker formControlName="FinishTime"></app-date-time-picker>
+      </div>
+
+        <!-- <div class="form-field form-calendar calendar-picker">
           <input matInput type="datetime-local" #dropdownContent class="data-time-picker"
             [formControlName]="'FinishTime'" name="meeting-time">
-        </div>
+        </div> -->
       </div>
 
       <div>
@@ -157,22 +153,9 @@
           <input type="number" matInput [formControlName]="'MinBetCount'">
         </div>
       </div>
-
       }
 
-      <!-- @if (triggerSetting?.Type == 5 || triggerSetting?.Type == 9 || triggerSetting?.Type == 11 || triggerSetting?.Type
-      == 12) {
-      <div>
-        <div class="first-hand">{{'Payments.Amount' | translate}}</div>
-        <div class="second-hand">{{triggerSetting?.MinAmount}}</div>
-        <div class="form-field form-input">
-          <input type="number" matInput [formControlName]="'MinAmount'">
-        </div>
-      </div>
-      } -->
-
-      @if (triggerSetting?.Type == 4 || triggerSetting?.Type == 6 || triggerSetting?.Type == 7 || triggerSetting?.Type
-      == 8 || triggerSetting?.Type == 15) {
+      @if (triggerSetting?.Type == 7 || triggerSetting?.Type == 8 || triggerSetting?.Type == 15) {
       <div>
         <div class="first-hand">{{'Bonuses.MinAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MinAmount}}</div>
@@ -180,11 +163,9 @@
           <input type="number" matInput [formControlName]="'MinAmount'">
         </div>
       </div>
-
       }
 
-      @if (triggerSetting?.Type == 4 || triggerSetting?.Type == 6 || triggerSetting?.Type == 7 || triggerSetting?.Type
-      == 8) {
+      @if (triggerSetting?.Type == 7 || triggerSetting?.Type == 8) {
       <div>
         <div class="first-hand">{{'Bonuses.MaxAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.MaxAmount}}</div>
@@ -195,7 +176,7 @@
 
       }
 
-      @if(triggerSetting?.Type == 7 || triggerSetting?.Type == 8) {
+      @if(triggerSetting?.Type == 7 || triggerSetting?.Type == 8 || triggerSetting?.Type == 1 || triggerSetting?.Type == 2 || triggerSetting?.Type == 3 || triggerSetting?.Type == 10) {
       <div>
         <div class="first-hand">{{'Bonuses.UpToAmount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.UpToAmount}}</div>
@@ -205,7 +186,7 @@
       </div>
       }
 
-      @if (triggerSetting?.type != 7 && triggerSetting?.type != 11 && triggerSetting?.type != 15) {
+      @if (triggerSetting?.Type != 7 && triggerSetting?.Type != 1 && triggerSetting?.Type != 2 && triggerSetting?.Type != 3 && triggerSetting?.Type != 16 && triggerSetting?.Type != 10 && triggerSetting?.Type != 8) {
       <div>
         <div class="first-hand">{{'Clients.Amount' | translate}}</div>
         <div class="second-hand">{{triggerSetting?.Amount}}</div>
@@ -492,7 +473,6 @@
 
 
 
-        <div></div>
 
 
         <div class="form-actions">
@@ -528,17 +508,25 @@
   </div>
   <br>
 
-  <div class="mat-table">
-    <div class="content-action">
-      <div class="title">{{'Bonuses.TriggerCurrencySettings' | translate}}</div>
-      <button mat-stroked-button class="mat-btn" (click)="onOpenCurrencySettings()">{{'Partners.AddCurrencySettings' |
-        translate}}</button>
+  @if(triggerSetting?.Type != 16) {
+    <div class="mat-table">
+      <div class="content-action">
+        <div class="title">{{'Bonuses.TriggerCurrencySettings' | translate}}</div>
+        <button mat-stroked-button class="mat-btn" (click)="onOpenCurrencySettings()">{{'Partners.AddCurrencySettings' |
+          translate}}</button>
+      </div>
+
+      <app-currency-settings-component
+        [isNotAmount]="isNotAmount()"
+        [isNotUptoAmmount]="isNotUptoAmmount()"
+        [isNotMinAmount]="isNotMinAmount()"
+        [isNotMaxAmount]="isNotMaxAmount()"
+        [dataSource]="triggerSetting?.AmountSettings"
+        (dataSourceChange)="onAmmountSettingsChange($event)">
+    </app-currency-settings-component>
+
     </div>
-
-    <app-currency-settings-component [dataSource]="this.triggerSetting?.AmountSettings"
-      (dataSourceChange)="onAmmountSettingsChange($event)"></app-currency-settings-component>
-  </div>
-
+  }
   <div class="content-action">
     <div class="title">{{'Common.History' | translate}}</div>
   </div>

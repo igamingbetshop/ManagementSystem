@@ -42,7 +42,7 @@ export class AddComponent implements OnInit {
   formGroup: UntypedFormGroup;
   parentGroup;
   languages: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
 
   message: string = '';
@@ -78,10 +78,10 @@ export class AddComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const obj = this.formGroup.getRawValue();
     obj.ParentId = this.data?.Id ? this.data.Id : 1;
     obj.ProductId = 0;
@@ -94,7 +94,7 @@ export class AddComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
 
 

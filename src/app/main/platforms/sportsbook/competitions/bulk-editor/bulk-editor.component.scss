@@ -14,14 +14,18 @@
     row-gap: 8px;
     column-gap: 16px;
 
+    .mat-form-field {
+      grid-column: span 2!important; 
+      width: 100%;
+      margin-bottom: 8px;
+    }
+
     .bulk-checkbox {
       ::ng-deep {
-
         .mat-checkbox-checkmark-path {
           stroke: $blue-5 !important;
           stroke-width: 3px;
         }
-
         .mat-checkbox-inner-container {
           width: 18px;
           height: 18px;
@@ -32,7 +36,6 @@
             border: 3px solid $blue-5;
           }
         }
-
         .mat-checkbox-label {
           font-size: 14px;
           color: $white;
@@ -46,7 +49,6 @@
 
     .bulk-switch {
       margin-left: auto;
-
       ::ng-deep {
         .mat-slide-toggle-bar {
           background-color: $white;
@@ -71,7 +73,6 @@
       &.mat-checked {
         ::ng-deep {
           .mat-slide-toggle-bar {
-
             .mat-slide-toggle-thumb-container {
               top: 1px;
               left: 0;
@@ -102,7 +103,12 @@
       border-radius: 4px;
       color: rgba(255, 255, 255, 0.7);
       padding: 0 10px;
-      background: linear-gradient(180deg, rgba(5, 115, 186, 0.7) 0%, rgba(37, 142, 205, 0.7) 50%, rgba(7, 97, 146, 0.7) 100%);;
+      background: linear-gradient(
+        180deg,
+        rgba(5, 115, 186, 0.7) 0%,
+        rgba(37, 142, 205, 0.7) 50%,
+        rgba(7, 97, 146, 0.7) 100%
+      );
       border: 1px solid transparent !important;
       height: 24px;
       cursor: pointer;
@@ -141,8 +147,5 @@
         color: $blue-5;
       }
     }
-
   }
 }
-
-

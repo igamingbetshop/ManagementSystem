@@ -1,0 +1,90 @@
+
+<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+  <form class="bulk-editor-content" [formGroup]="formGroup"  (keydown.tab)="$event.stopPropagation()">
+
+    <mat-form-field>
+      <mat-label>{{'Bonuses.Percent' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Bonuses.Percent' | translate"
+        formControlName="Percent" tabindex="1">
+      @if(errorControl['Percent']?.touched && errorControl['Percent'].errors?.required)
+      {
+      <mat-error>
+        {{'Bonuses.Percent' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.Rating' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Partners.Rating' | translate"
+        formControlName="Rating" tabindex="2">
+      @if(errorControl['Rating']?.touched && errorControl['Rating'].errors?.required)
+      {
+      <mat-error>
+        {{'Partners.Rating' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Partners.OpenMode' | translate}}</mat-label>
+      <input matInput type="number" [placeholder]="'Partners.OpenMode' | translate"
+        formControlName="OpenMode" tabindex="3">
+      @if(errorControl['OpenMode']?.touched && errorControl['OpenMode'].errors?.required)
+      {
+      <mat-error>
+        {{'Partners.OpenMode' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+    @if (isRTPVisible) {
+      <mat-form-field>
+        <mat-label>{{'Partners.RTP' | translate}}</mat-label>
+        <input matInput type="number" [placeholder]="'Partners.RTP' | translate"
+        [formControlName]="'RTP'" tabindex="4">
+        @if(errorControl['OpenMode']?.touched && errorControl['OpenMode'].errors?.required)
+        {
+        <mat-error>
+          {{'Partners.RTP' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <mat-form-field>
+      <mat-label>{{'Clients.Category' | translate}}</mat-label>
+      <mat-select [formControlName]="'CategoryIds'" placeholder="{{'Partners.SelectCategory' | translate}}" multiple tabindex="4">
+        @for (state of productCategories; track $index) {
+          <mat-option [value]="state.Id">{{state.Name}}</mat-option>
+        }
+      </mat-select>
+      @if(errorControl['CategoryIds']?.touched && errorControl['CategoryIds'].errors?.required) {
+      <mat-error>
+        {{'Clients.Category' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Common.State' | translate}}</mat-label> 
+      <mat-select [formControlName]="'State'" placeholder="{{'Partners.SelectCategory' | translate}}" tabindex="5">
+        @for (state of statuses; track $index) {
+          <mat-option [value]="state.Id">{{state.Name}}</mat-option>
+        }
+
+      </mat-select>
+      @if(errorControl['State']?.touched && errorControl['State'].errors?.required) {
+      <mat-error>
+        {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+
+  <div class="bulk-editor-actions">
+    <button mat-button class="bulk-cancel-btn" (click)="onCancelBtn($event)" tabindex="6">{{ 'Common.Cancel' | translate }}</button>
+    <button mat-button class="bulk-primary-btn" (click)="openConfirmDialog()" tabindex="7">{{ 'Common.Save' | translate }}</button>
+  </div>
+</div>

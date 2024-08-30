@@ -17,6 +17,7 @@ import {ViewImageComponent} from './view-image/view-image.component';
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
 import {TranslateModule} from "@ngx-translate/core";
+import { KycHistoryGridComponent } from "./kyc-history/kyc-history.component";
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [KycComponent, CreateNewDocumentComponent, ViewImageComponent],
+  declarations: [KycComponent, CreateNewDocumentComponent, ViewImageComponent, KycHistoryGridComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

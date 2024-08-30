@@ -1,12 +1,15 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
   selector: 'app-core',
   template: `
-    <router-outlet></router-outlet>
-    <app-quick-find></app-quick-find>
+    <router-outlet/>
+    <app-quick-find/>
+    @if(isSportsbook) {
+      <app-sb-quick-find/>
+    }
   `,
 })
-export class CoreComponent
-{
+export class CoreComponent {
+  isSportsbook = JSON.parse(localStorage.getItem('adminMenu')).findIndex((item) => item.Name === 'Sportsbook') !== -1;
 }

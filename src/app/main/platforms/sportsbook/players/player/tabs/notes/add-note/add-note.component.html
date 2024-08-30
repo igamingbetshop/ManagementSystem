@@ -28,6 +28,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">Cancel</button>
-  <button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingReqest" (click)="submit()">Add Note</button>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">Cancel</button>
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid || isSendingRequest" (click)="submit()">Add Note</button>
 </div>

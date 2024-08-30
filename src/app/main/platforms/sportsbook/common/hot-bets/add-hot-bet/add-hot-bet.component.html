@@ -1,0 +1,69 @@
+<div mat-dialog-title>
+  <span class="title">{{action}} {{'Sport.HotBet' | translate}}</span>
+  <mat-icon (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
+    <mat-form-field>
+      <mat-label>{{"Partners.SelectPartner" | translate}}</mat-label>
+      <mat-select formControlName="PartnerId">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{ partner.Name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{"Bonuses.SelectStatus" | translate}}</mat-label>
+      <mat-select formControlName="Status">
+        <mat-option *ngFor="let state of status" [value]="state.Id">{{ state.Name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{"Bonuses.SelectType" | translate}}</mat-label>
+      <mat-select formControlName="Type">
+        <mat-option *ngFor="let type of types" [value]="type.Id">{{ type.Name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{"Sport.BoostPercent" | translate}}</mat-label>
+      <input type="number" matInput [placeholder]="('Sport.BoostPercent' | translate)" formControlName="BoostPercent">
+    </mat-form-field>
+
+
+    <div class="condition-content">
+      <mat-form-field>
+        <mat-label>{{"Segments.SelectionId" | translate}}</mat-label>
+        <input matInput [placeholder]="('Segments.SelectionId' | translate)" [formControl]="newSelectionControl">
+        <mat-error *ngIf="newSelectionControl.hasError('required')">
+          {{"Errors.SelectionIdIsRequired" | translate}}
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button class="mat-btn" type="button" (click)="addSelection()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="selections" formArrayName="Selections">
+      <div class="selections-container" *ngFor="let selection of apiHotBetSelection.controls; let i = index" [formGroupName]="i">
+        <mat-form-field>
+          <input matInput placeholder="Selection Id" formControlName="SelectionId" readonly>
+        </mat-form-field>
+        <button mat-icon-button color="warn" (click)="removeSelection(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button *ngIf="action === 'Add'" class="modal-primary-btn" (click)="submit()">{{action | translate}}
+    {{'Sport.HotBet' | translate}}</button>
+  <button mat-raised-button *ngIf="action === 'Edit'" class="modal-primary-btn" (click)="submit()">{{'Common.Save' |
+    translate}}</button>
+</div>

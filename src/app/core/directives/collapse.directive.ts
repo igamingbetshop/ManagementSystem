@@ -11,7 +11,7 @@ export class CollapseDirective {
     {
         this.opened = value;
     }
-    @HostBinding('class.opened') opened: boolean = false;
+    @HostBinding('class.opened') opened: boolean = true;
 
     constructor(private el: ElementRef) {}
 

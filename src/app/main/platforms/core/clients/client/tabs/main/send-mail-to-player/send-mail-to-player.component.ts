@@ -47,7 +47,7 @@ export class SendMailToPlayerComponent implements OnInit {
   clientId;
   method;
   filterClient;
-  isSendingReqest = false;
+  isSendingRequest = false;
   translationData = {
     Message: [
       {
@@ -74,7 +74,7 @@ export class SendMailToPlayerComponent implements OnInit {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
     this.formValues();
     this.method = this.data.method;
-    this.filterClient = this.data.filterClient;
+    this.filterClient = this.data.filterClient;    
   }
 
   formValues() {
@@ -90,10 +90,10 @@ export class SendMailToPlayerComponent implements OnInit {
   }
 
   submit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     } else {
-      this.isSendingReqest = true; 
+      this.isSendingRequest = true; 
       let obj = this.formGroup.getRawValue();
       obj = { ...obj, Message: this.translationData.Message[0]['newText'] }
 
@@ -108,7 +108,7 @@ export class SendMailToPlayerComponent implements OnInit {
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
-          this.isSendingReqest = false; 
+          this.isSendingRequest = false; 
         });
     }
   }

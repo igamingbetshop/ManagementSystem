@@ -5,6 +5,7 @@
   <div class="chart-grid">
     <div class="cart">
       <div class="chart-header" collapse="true">
+        <span class="icon-arrow" collapse></span>
         <span>{{'Dashboard.ActivitiesByCharts' | translate}}</span>
         <span class="icon-arrow"></span>
       </div>
@@ -30,22 +31,15 @@
           </div>
         }
 
-        <!-- <div class="custom-dropdown" *ngIf="selectedGrid === 1 || selectedGrid === 2 || selectedGrid === 5 || selectedGrid === 6">
-          <mat-select #matSelect (selectionChange)="onStateChange($event.value)"
-            placeholder="{{'Common.SelectState' | translate}}" panelClass="overlay-dropdown multiple"
-            disableOptionCentering multiple>
-            <div class="select-all">
-              <mat-checkbox [(ngModel)]="allSelected" [ngModelOptions]="{standalone: true}"
-                (change)="toggleAllSelection()">{{"Common.SelectAll" | translate}}</mat-checkbox>
-            </div>
+        @if(chart) {
+          <mat-slide-toggle [color]="'#ADC9FF'" class="toggle-btn" [checked]="toggleState" labelPosition="before" (change)="onDeselect($event)">
+          {{ "Common.ViewAll" | translate }}
+          </mat-slide-toggle>
+      }
 
-            <mat-option *ngFor="let state of paymentStates" [value]="state.Id">
-              {{state.Name}}
-            </mat-option>
-          </mat-select>
-        </div> -->
       </div>
       <div class="chart-content" [chart]="chart"></div>
+
     </div>
 
     <div class="players-info">
@@ -102,7 +96,16 @@
               <i class="icon-maxwin"></i>
               <span>{{'Dashboard.MaxWin' | translate}}</span>
               <span>{{playersInfo?.MaxWin | number:'1.2-2'}}</span>
-              <!-- <span class="max-win-bet">{{playersInfo?.MaxWinBet | number:'1.2-2'}}</span> -->
+            </div>
+            <div class="panel-row">
+              <i class="icon-first-deposit"></i>
+              <span>{{'Dashboard.FTDCount' | translate}}</span>
+              <span>{{playersInfo?.FTDCount}}</span>
+            </div>
+            <div class="panel-row">
+              <i class="icon-total-count"></i>
+              <span>{{'Dashboard.DepositsCount' | translate}}</span>
+              <span>{{playersInfo?.DepositsCount}}</span>
             </div>
           </div>
         </div>

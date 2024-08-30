@@ -46,7 +46,7 @@ export class AddEditTranslationComponent implements OnInit {
   unModifiedData;
   openedIndex = 0;
   deviceTypeId: null | number;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { ObjectId: any, ObjectTypeId: any, DeviceTypeId: number | null },
@@ -95,23 +95,25 @@ export class AddEditTranslationComponent implements OnInit {
     this.translationData.Translations.forEach(translation => {
       translation.ObjectTypeId = this.objectTypeId;
       translation.TranslationId = this.translationData.TranslationId;
-      if (translation.newText) {
-        translation.Text = translation.newText;
+      if (translation.newText !== undefined) {
+        // Preserve line breaks and formatting
+        translation.Text = translation.newText.replace(/\n/g, '<br>');
       }
     });
-
+  
     let changedItems = [];
-
+  
     for (let i = 0; i < this.translationData.Translations.length; i++) {
-      if (this.translationData.Translations[i].Text != this.unModifiedData.Translations[i].Text) {
+      if (this.translationData.Translations[i].Text !== this.unModifiedData.Translations[i].Text) {
         changedItems.push(this.translationData.Translations[i]);
       }
     }
     this.saveTranslation(changedItems);
   }
+   
 
   saveTranslation(requestBody) {
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     if(this.data.DeviceTypeId && requestBody.length > 0) {
       requestBody.forEach(item => {
         item.Type = this.deviceTypeId;
@@ -126,7 +128,7 @@ export class AddEditTranslationComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       })
   }
 }

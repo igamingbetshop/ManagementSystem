@@ -1,0 +1,21 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.container
+{
+  padding: 0 16px;
+  @media (max-width: 1200px) {
+    margin-bottom: 64px;
+  }
+  .matches-content
+  {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    @media (max-width: 1200px) {
+      margin-top: 62px;
+    }
+  }
+}
+
+

@@ -1,6 +1,20 @@
 <div class="action-content">
   <div class="title">{{'Partners.AllProducts' | translate}}</div>
   <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+
+  <div class="bulk-editor-dropdown">
+    <button mat-stroked-button class="mat-bulk-btn"
+            [matMenuTriggerFor]="bulkMenu"
+            [class.disabled]="isRowSelected()"
+            matMenuTriggerRestoreFocus="false"
+            #bulkMenuTrigger="matMenuTrigger" (click)="onBulkEditorOpen()">
+      {{'Partners.AddSelectedProductToPartner' | translate}}
+    </button>
+    <mat-menu class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before" [overlapTrigger]="false">
+      <ng-container #bulkEditorRef></ng-container>
+    </mat-menu>
+  </div>
+
 </div>
 <div class="grid-content">
   <div class="checkbox">
@@ -47,49 +61,4 @@
     </mat-select>
   </div>
   <span class="selected">{{'Common.Selected' | translate}} {{selectedRowIds.length}} </span>
-</div>
-
-<div class="grid-action">
-  <form [formGroup]="formGroup">
-    <div class="input-content">
-      <div class="input-title">{{'Bonuses.Percent' | translate}}</div>
-      <input matInput type="number" [placeholder]="'Bonuses.Percent' | translate" [formControlName]="'Percent'">
-      <mat-error *ngIf="errorControl['Percent'].touched && errorControl['Percent'].hasError('required')">
-        {{'Bonuses.Percent' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
-    </div>
-
-    <div class="input-content">
-      <div class="input-title">{{'Partners.Rating' | translate}}</div>
-      <input matInput type="number" [placeholder]="'Partners.Rating' | translate" [formControlName]="'Rating'">
-    </div>
-
-    <div class="input-content">
-      <div class="input-title">{{'Partners.OpenMode' | translate}}</div>
-      <input matInput type="number" [placeholder]="'Partners.OpenMode' | translate"
-             [formControlName]="'OpenMode'">
-    </div>
-
-
-    <div class="select-content">
-      <div class="dropdown-title">{{'Clients.Category' | translate}}</div>
-      <mat-select [formControlName]="'CategoryIds'" placeholder="{{'Partners.SelectCategory' | translate}}" multiple>
-        <mat-option *ngFor="let state of productCategories" [value]="state.Id">{{state.Name}}</mat-option>
-      </mat-select>
-    </div>
-
-    <div class="select-content">
-      <div class="dropdown-title">{{'Common.State' | translate}}</div>
-      <mat-select [formControlName]="'State'" placeholder="{{'Common.SelectState' | translate}}">
-        <mat-option *ngFor="let state of statuses" [value]="state.Id">{{state.Name}}</mat-option>
-      </mat-select>
-    </div>
-
-    <div class="btn-action">
-      <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected() || this.formGroup.invalid " (click)="addProductToPartner()">
-        {{'Partners.AddSelectedProductToPartner' | translate}}
-      </button>
-    </div>
-
-  </form>
 </div>

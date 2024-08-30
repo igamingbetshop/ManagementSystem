@@ -60,7 +60,7 @@ export class CreateTriggerSettingComponent implements OnInit {
   toDate = new Date();
   type;
   conditionTypes;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateTriggerSettingComponent>,
@@ -87,7 +87,6 @@ export class CreateTriggerSettingComponent implements OnInit {
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.triggerTypes = this.getTriggerValidators(data.ResponseObject);
-
         }
       })
   }
@@ -169,11 +168,11 @@ export class CreateTriggerSettingComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
     const triggerSetting = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     if (triggerSetting.Type == 1 || triggerSetting.Type == 2 || triggerSetting.Type == 3) {
       triggerSetting.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     }
@@ -189,7 +188,7 @@ export class CreateTriggerSettingComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: trigger.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 

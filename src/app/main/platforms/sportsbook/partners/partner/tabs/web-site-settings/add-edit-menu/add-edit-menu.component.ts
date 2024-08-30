@@ -23,7 +23,7 @@ export class AddEditMenuComponent implements OnInit {
   public checkDocumentSize;
   public iconChanging;
   public showFile = false;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddEditMenuComponent>,
@@ -84,7 +84,7 @@ export class AddEditMenuComponent implements OnInit {
   }
 
   submit() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const value = this.formGroup.getRawValue();
     this.apiService.apiPost('cms/savewebsitemenuitem', value)
       .pipe(take(1))
@@ -94,7 +94,7 @@ export class AddEditMenuComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

@@ -195,7 +195,8 @@
         line-height: 26px;
         .title {
           display: flex;
-          justify-content: space-between;
+          //justify-content: space-between;
+          justify-content: flex-end;
           align-items: center;
           position: relative;
           .title-text {
@@ -274,6 +275,9 @@
     }
   }
 
+}
+.cdk-overlay-pane {
+  width: 300px !important;
 }
 
 

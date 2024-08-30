@@ -42,7 +42,7 @@ import { DateTimePickerComponent } from 'src/app/main/components/data-time-picke
 })
 export class AddRoundComponent implements OnInit {
   public formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddRoundComponent>,
@@ -81,14 +81,14 @@ export class AddRoundComponent implements OnInit {
 
   onSubmit() {
     const requestData = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(PBControllers.ROUND, PBMethods.ADD_ROUND, requestData).pipe(take(1)).subscribe(data => {
       if (data.Code === 0) {
         this.dialogRef.close(data);
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

@@ -26,9 +26,11 @@ const routes: Routes = [
         loadChildren: () => import('./multiple-cashback-bonuses/multiple-cashback-bonuses.module').then(m => m.MultipleCashbackBonusesModule),
         resolve:{filterData:SportFilterOptionsResolver},
       },
-
-
-
+      {
+        path: 'jackpot',
+        loadChildren: () => import('./sb-jackpot/sb-jackpot.module').then(m => m.SBJackPotModule),
+        resolve:{filterData:SportFilterOptionsResolver},
+      }
     ]
   }
 ];

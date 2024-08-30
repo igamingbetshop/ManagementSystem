@@ -21,15 +21,16 @@ import {ExportService} from "../../../services/export.service";
 })
 export class ReportByClientGamesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public filteredData;
-  public partners = [];
-  public status = [];
-  public partnerId;
-  public selectedItem = 'today';
+  rowData = [];
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  filteredData;
+  partners = [];
+  status = [];
+  partnerId;
+  selectedItem = 'today';
+  title: string;
 
   constructor(private activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
@@ -179,6 +180,7 @@ export class ReportByClientGamesComponent extends BasePaginatedGridComponent imp
   ngOnInit(): void {
     this.setTime();
     this.partners = this.commonDataService.partners;
+    this.title = this.translate.instant('Reports.ReportByClientGames');
   }
 
   setTime() {

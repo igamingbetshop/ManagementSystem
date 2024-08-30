@@ -1,0 +1,75 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.block-content
+{
+  display: flex;
+  flex-direction: column;
+  .date{
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    color: rgba(128, 139, 158, 1);
+    margin-bottom: 6px;
+    @media (max-width: 1200px) {
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+  }
+  .content-row
+  {
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 1);
+    margin-bottom: 0.5vh;
+    .name
+    {
+      font-size: 1.9vh;
+      font-weight: bold;
+      .sport-name, match-id{margin-left: 4px}
+      @media (max-width: 1200px) {
+        font-size: 14px;
+      }
+    }
+    .amount
+    {
+      margin-left: auto;
+      font-size: 1.9vh;
+      font-weight: 600;
+      .currency-id{margin-left: 6px}
+      @media (max-width: 1200px) {
+        font-size: 14px;
+      }
+    }
+  }
+  .progress-bar-thumb
+  {
+    width: 100%;
+    height: 2.1vh;
+    background: rgba(231, 232, 240, 1);
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    .progress-track
+    {
+      width: 50%;
+      height: 100%;
+      border-radius: 15px;
+      position: relative;
+      .range
+      {
+        font-size: 1.9vh;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 1);
+        text-align: right;
+        height: 100%;
+        margin-left: 10px;
+      }
+    }
+    @media (max-width: 1200px) {
+      height: 12px;
+    }
+  }
+}
+
+

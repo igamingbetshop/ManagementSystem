@@ -1,7 +1,8 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, signal } from '@angular/core';
 import 'ag-grid-enterprise';
-import { Controllers, GridRowModelTypes, Methods } from "../../../../../../../core/enums";
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import {
+  CellDoubleClickedEvent,
   CellValueChangedEvent,
   ColDef, GetServerSideGroupKey, GridApi,
   GridReadyEvent, ICellRendererParams,
@@ -14,6 +15,8 @@ import { CoreApiService } from "../../../../services/core-api.service";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-products',
@@ -26,10 +29,12 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
   private bonusItem: any;
   public modelChanged = new Subject<string>();
   public searchName = '';
-
+  commonId = signal<number>(null);
   constructor(
     protected injector: Injector,
     private apiService: CoreApiService,
+    private activateRoute: ActivatedRoute,
+    public dialog: MatDialog,
     private _snackBar: MatSnackBar,) {
     super(injector);
   }
@@ -53,13 +58,7 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
       field: 'Percent',
       editable: true,
       onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-      filter: 'agNumberColumnFilter',
-      minWidth: 90,
-      filterParams: {
-        buttons: ['apply', 'reset'],
-        closeOnApply: true,
-        filterOptions: this.filterService.numberOptions
-      },
+      filter: false,
     },
 
   ];
@@ -77,6 +76,8 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
   public rowModelType: GridRowModelTypes = GridRowModelTypes.SERVER_SIDE;
 
   ngOnInit() {
+    this.commonId.set(this.activateRoute.snapshot.queryParams.commonId);
+
     this.getBonusById();
     this.modelChanged.pipe(debounceTime(300)).subscribe(() => {
       this.gridApi.refreshServerSide({ purge: true });
@@ -113,7 +114,7 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
     product.CoinValue = params.data.CoinValue ? Number(params.data.CoinValue) : null;
     product.Coins = params.data.Coins ? Number(params.data.Coins) : null;
     product.Count = params.data.Count ? Number(params.data.Count) : null;
-    product.BetValueLevel = params.data.BetValueLevel ? Number(params.data.BetValueLevel) : null;
+    product.BetValues = params.data.BetValues ? (params.data.BetValues) : null;
 
     const requestBody = {
       Id: this.bonusItem.Id,
@@ -158,7 +159,20 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
         } else {
           filter.ParentId = params.parentNode.data.Id;
         }
-        this.setFilter(params.request.filterModel, filter);
+        const modifiedFilterModel = { ...params.request.filterModel };
+        if (params.request.filterModel.Coins) {
+          modifiedFilterModel.Coin = params.request.filterModel.Coins;
+          delete modifiedFilterModel.Coins;
+        }
+        if (params.request.filterModel.BetValues) {
+          modifiedFilterModel.BetValue = params.request.filterModel.BetValues;
+          delete modifiedFilterModel.BetValues;
+        }
+        if (params.request.filterModel.Lines) {
+          modifiedFilterModel.Line = params.request.filterModel.Lines;
+          delete modifiedFilterModel.Lines;
+        }
+        this.setFilter(modifiedFilterModel, filter);
         this.apiService.apiPost(this.configService.getApiUrl, filter,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
@@ -182,8 +196,12 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
       product.CoinValue = settings.CoinValue;
       product.Count = settings.Count;
       product.Coins = settings.Coins;
-      product.BetValueLevel = settings.BetValueLevel;
-      product.group = !product.IsLeaf;
+      product.BetValues = settings.BetValues;
+      if (product.GameProviderId != null) {
+        product.group = false;
+      } else {
+        product.group = !product.IsLeaf;
+      }
     });
 
     return entities;
@@ -267,17 +285,20 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
         },
       },
       {
-        headerName: 'Bonuses.BetValueLevel',
+        headerName: 'Bonuses.BetValue',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'BetValueLevel',
-        editable: true,
-        onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event),
-        filter: 'agNumberColumnFilter',
+        field: 'BetValues',
+        editable: false,
+        onCellDoubleClicked: (event: CellDoubleClickedEvent) => {
+          // this.onBetValueChange(event);
+          this.getProductById(event.data.Id, event);
+        },
+        filter: 'agTextColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
+          filterOptions: this.filterService.textOptions,
+        }
       }
     );
   }
@@ -286,5 +307,44 @@ export class ProductsComponent extends BaseGridComponent implements OnInit {
     let headerIdentifier = parameters.colDef.headerName;
     return this.translate.instant(headerIdentifier);
   }
+
+  getProductById(productId: number, event: CellDoubleClickedEvent) {
+    this.apiService.apiPost(this.configService.getApiUrl, productId,
+      true, Controllers.PRODUCT, Methods.GET_PRODUCT_BY_ID)
+      .pipe(take(1))
+      .subscribe(data => {
+        if (data.ResponseCode === 0) {
+          const product = data.ResponseObject;
+          if(!!product.BetValues) {
+            this.onBetValueChange(event, product);
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: "This product does not support bet value changes.", Type: "info" });
+          }
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  async onBetValueChange(event: CellDoubleClickedEvent, productData) {
+
+
+    const { SetBetValueComponent } = await import('./set-bet-value/set-bet-value.component');
+    const dialogRef = this.dialog.open(SetBetValueComponent, {
+      width: ModalSizes.LARGE,
+      data: { product: event['data'], bonusId: this.commonId(), productData: productData }
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
+        let updatedData = { ...event.data, BetValues: data };
+        const rowNode = this.gridApi.getRowNode(event.node.id);
+        if (rowNode) {
+          rowNode.setData(updatedData);
+        } else {
+          console.error("Row node not found");
+        }
+    });
+  }
+
 
 }

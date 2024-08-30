@@ -17,7 +17,7 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
 
   public partners: any[] = [];
   public partnerId: number = 1;
-  public path = "report/limits";
+  public path = "report/marketlimits";
   public rowData = [];
   public filter: any = {};
   public sports: any;

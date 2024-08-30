@@ -1,0 +1,67 @@
+<div class="container">
+  <div class="main-content">
+    <div class="left-panel">
+      <div class="action-content">
+        <div class="title">{{'Sport.HotBets' | translate}}</div>
+      </div>
+
+      <div class="grid-content">
+        <ag-grid-angular
+          #agGrid
+          class="ag-theme-balham"
+          [headerHeight]="33"
+          [rowHeight]="42"
+          [rowData]="rowData"
+          [rowModelType]="rowModelType"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [suppressCopyRowsToClipboard]="true"
+          [cacheBlockSize]="cacheBlockSize"
+          [components]="frameworkComponents"
+          [sideBar]="sideBar"
+          [animateRows]="true"
+          (filterModified)="onFilterModified($event)"
+          [enableBrowserTooltips]="enableBrowserTooltips"
+          (gridReady)="onGridReady($event)"
+          (cellValueChanged)="onCellValueChanged($event)"
+          (rowSelected)="onRowSelected($event)"
+          [ensureDomOrder]="true"
+          pagination="true"
+          paginationPageSize="5000"
+          [enableCellTextSelection]="true"
+          rowSelection="single">
+        </ag-grid-angular>
+        <div class="grid-action">
+          <button mat-stroked-button class="mat-btn" (click)="addEditHotBet('Add', $event)">{{'Sport.AddHotBet' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="addEditHotBet('Edit', selectedRow)">
+            {{'Sport.EditHotBet' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="action-content">
+        <div class="title">{{'Settings.Settings' | translate}}</div>
+      </div>
+      <div class="grid-content">
+
+        <app-selected-hot-bet-grid
+         [rowData]="selectedData"
+          (isRowSelected)="onSecondGridRowSelected($event)"
+          (updateRow)="updateSetting($event)"
+        ></app-selected-hot-bet-grid>
+
+      </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+

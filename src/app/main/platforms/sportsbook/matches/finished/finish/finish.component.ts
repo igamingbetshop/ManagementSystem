@@ -22,13 +22,14 @@ export class FinishComponent implements OnInit {
       route:'calculation'
     },
     {
-      label:'Bets',
-      route:'bets'
-    },
-    {
       label:'Events',
       route:'events'
     },
+    {
+      label:'Bets',
+      route:'bets'
+    },
+
     {
       label:'Bets Summary',
       route:'bets-summary'

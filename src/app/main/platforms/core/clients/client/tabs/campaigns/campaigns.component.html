@@ -40,27 +40,18 @@
     </ag-grid-angular>
   </div>
 
-  <div class="grid-content">
-    <ag-grid-angular
-      #agGrid2
-      class="ag-theme-balham"
-      [class.hide-grid]="loadingUserState"
-      [headerHeight]="33"
-      [rowHeight]="42"
-      [rowData]="rowData2"
-      [rowModelType]="rowModelType"
-      [suppressCopyRowsToClipboard]="true"
-      [columnDefs]="columnDefs2"
-      [defaultColDef]="defaultColDef"
-      [cacheBlockSize]="cacheBlockSize"
-      [components]="frameworkComponents"
-      (gridReady)="onNestedGridReady($event)"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
+  <div class="content-action">
+    <div class="title">{{'Common.History' | translate}}</div>
   </div>
+
+
+  <div class="grid-content">
+  <app-campaigns-history
+  [rowData]="hystoryRowData"
+  ></app-campaigns-history>
+
+  </div>
+
 </div>
 
 

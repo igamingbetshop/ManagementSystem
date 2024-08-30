@@ -62,3 +62,10 @@ table {
 }
 
 
+.mat-btn {
+  @include mat-btn-style;
+}
+
+.form-btn {
+  width: 200px;
+}

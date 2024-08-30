@@ -26,7 +26,7 @@ export class AddEditMenuItemComponent implements OnInit {
   showFile = false;
   selectedImage;
   selectedHoverImage;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditMenuItemComponent>,
     private apiService: CoreApiService,
@@ -82,7 +82,7 @@ export class AddEditMenuItemComponent implements OnInit {
   }
 
   submit() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const value = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, value, true, Controllers.CONTENT,
       Methods.SAVE_WEBSITE_MENU_ITEM).pipe(take(1)).subscribe((data) => {
@@ -91,7 +91,7 @@ export class AddEditMenuItemComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

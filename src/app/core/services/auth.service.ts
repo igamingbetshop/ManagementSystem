@@ -57,6 +57,7 @@ export class AuthService {
     if (forceLogout) {
       this.localStorageService.removeAll();
       this.router.navigate(['/login']);
+      document.body.setAttribute('dir', 'ltr');
     }
     else {
       const url = this.configService.getApiUrl + '/ApiRequest';
@@ -65,6 +66,7 @@ export class AuthService {
         if (resp.ResponseCode === 0) {
           this.localStorageService.removeAll();
           this.translate.use('en');
+          document.body.setAttribute('dir', 'ltr');
           this.router.navigate(['/login']);
         }
         else {

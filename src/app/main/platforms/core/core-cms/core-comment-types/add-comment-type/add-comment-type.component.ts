@@ -40,7 +40,7 @@ export class AddCoreCommentTypeComponent implements OnInit {
   formGroup: UntypedFormGroup;
   commentTypes: any[] = [];
   partners: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { commentTypes: any[], partners: any[] },
@@ -79,7 +79,7 @@ export class AddCoreCommentTypeComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_COMMENT_TEMPLATE)
       .pipe(take(1))
@@ -89,7 +89,7 @@ export class AddCoreCommentTypeComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
 
   }

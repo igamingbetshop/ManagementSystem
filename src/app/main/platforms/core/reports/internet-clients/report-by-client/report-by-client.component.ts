@@ -68,6 +68,19 @@ export class ReportByClientComponent extends BasePaginatedGridComponent implemen
         },
       },
       {
+        headerName: 'Clients.AffiliateId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AffiliateId',
+        sortable: true,
+        resizable: true,
+        filter: 'agTextColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.textOptions
+        },
+      },
+      {
         headerName: 'Clients.UserName',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'UserName',

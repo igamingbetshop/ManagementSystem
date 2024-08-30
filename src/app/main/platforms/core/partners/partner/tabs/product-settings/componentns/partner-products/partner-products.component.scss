@@ -3,41 +3,33 @@
 .action-content {
   @include action-style;
   height: auto;
-
+  margin-bottom: 5px;
   .title {
     font-size: 18px;
     color: $blue-5;
-    padding-bottom: 5px;
   }
 
-  .mat-export-btn {
-    margin-left: 8px;
-    @include mat-export-btn-style;
-    line-height: 20px;
-    margin-bottom: 5px;
-
-    ::ng-deep {
-      .mat-button-wrapper {
-        padding: 0 6px;
-        height: 20px;
-        font-size: 13px;
-
-        &:after {
-          height: 22px;
-        }
-
-        &:before {
-          margin-right: 8px;
-          font-size: 13px;
-        }
-      }
+  .bulk-editor-dropdown {
+    position: relative;
+    .mat-bulk-btn {
+      @include mat-bulke-edit-btn-style;
+      margin-right: 8px;
     }
+  }
+
+  .mat-btn {
+    @include mat-btn-style;
+    margin-right: 8px;
+  }
+
+  .mat-delete {
+    @include mat-delete-style;
   }
 }
 
 .grid-content {
   width: 100%;
-  height: calc(100% - 275px);
+  height: 80%;
   position: relative;
 
   ::ng-deep {
@@ -92,7 +84,7 @@
   .pages-sizes {
     position: absolute;
     left: 262px;
-    bottom: 3%;
+    bottom: 2.6%;
     @include grid-dropdown-style;
 
     ::ng-deep {

@@ -17,7 +17,7 @@ export class AddEditMenuComponent implements OnInit {
   public partnerId;
   public menu;
   public formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditMenuComponent>,
               private apiService: CoreApiService,
@@ -45,7 +45,7 @@ export class AddEditMenuComponent implements OnInit {
 
   submit() {
     const value = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     value.PartnerId = this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, value, true, Controllers.CONTENT,
       Methods.SAVE_WEBSITE_MENU).pipe(take(1)).subscribe((data) => {
@@ -54,7 +54,7 @@ export class AddEditMenuComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

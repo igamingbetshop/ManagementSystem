@@ -139,8 +139,8 @@ export class AgentComponent implements OnInit {
       this.showDatas = true;
     } else {
       this.agentIds = queryParams.agentIds;
-      this.userId = this.agentIds.split(',')[0];
-      let agent = this.agentIds.split(',');
+      this.userId = this.agentIds?.split(',')[0];
+      let agent = this.agentIds?.split(',');
       if (agent.length > 1) {
         const indexToRemove = this.tabs.findIndex(tab => tab.label === 'Agents.Corrections');
         if (indexToRemove !== -1) {
@@ -189,6 +189,12 @@ export class AgentComponent implements OnInit {
         const agent = data.ResponseObject;
         this.level = agent?.['Level'];
         this.agentLevelId = agent?.['Level'];
+        this.router.navigate([], {
+          relativeTo: this.activateRoute,
+          queryParams: { agentLevelId: this.agentLevelId },
+          queryParamsHandling: 'merge',
+        });
+        
         this.agentUserName = agent?.['UserName'];
         this.agentLevelName = this.getLevelNameById(this.agentLevelId);
       } else {

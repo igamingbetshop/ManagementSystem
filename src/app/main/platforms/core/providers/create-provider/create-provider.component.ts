@@ -34,7 +34,7 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 })
 export class CreateProviderComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateProviderComponent>,
@@ -69,10 +69,10 @@ export class CreateProviderComponent implements OnInit {
 
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.PRODUCT, Methods.SAVE_GAME_PROVIDER).pipe(take(1)).subscribe(data => {
@@ -81,7 +81,7 @@ export class CreateProviderComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
 
 

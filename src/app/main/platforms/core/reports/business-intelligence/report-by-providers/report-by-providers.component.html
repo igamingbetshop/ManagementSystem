@@ -1,9 +1,10 @@
 <div class="container">
 
   <app-partner-date-filter 
-    [title]="'Reports.ReportByProviders'" 
+    [title]="title" 
     [partners]="'CorePlatform'"
     (toDateChange)="onDateChange($event)" 
+    (titleClick)="onTitleClick($event)"
   />
 
   <div class="grid-content">

@@ -46,7 +46,7 @@ export class AddSettingsComponent implements OnInit {
   formGroup: UntypedFormGroup;
   partners: any[] = [];
   settingTypes: any[] = [];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddSettingsComponent>,
@@ -100,10 +100,10 @@ export class AddSettingsComponent implements OnInit {
 
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     if (obj.State === false) {
       obj.State = 0;
@@ -119,7 +119,7 @@ export class AddSettingsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 }

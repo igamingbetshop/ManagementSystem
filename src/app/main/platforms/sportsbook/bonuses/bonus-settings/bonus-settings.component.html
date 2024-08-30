@@ -17,7 +17,7 @@
     <button 
       mat-stroked-button 
       class="mat-delete" 
-      [class.disabled]="isRowSelected() || isSendingReqest"
+      [class.disabled]="isRowSelected() || isSendingRequest"
       (click)="onDeleteBounus()"
       >{{'Sport.DeleteBonus' | translate}}
     </button>
@@ -31,7 +31,6 @@
     #agGrid
     [class.hide-grid]="loadingUserState"
     class="ag-theme-balham"
-    class="ag-theme-balham"
     [headerHeight]="33"
     [rowHeight]="42"
     [rowData]="rowData"
@@ -39,7 +38,8 @@
     [rowModelType]="rowModelType"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
-    [cacheBlockSize]="cacheBlockSize"
+    [cacheBlockSize]="5000"
+    [paginationPageSize]="5000"
     [pagination]="pagination"
     [sideBar]="sideBar"
     [animateRows]="true"

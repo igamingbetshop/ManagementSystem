@@ -11,10 +11,9 @@ import { OpenerComponent } from 'src/app/main/components/grid-common/opener/open
 import { CellDoubleClickedEvent } from 'ag-grid-community';
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { ACTIVITY_STATUSES, VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
 import { ActivatedRoute } from '@angular/router';
 import { PromotionsService } from './core-promotions.service';
-
 
 @Component({
   selector: 'app-core-promotions',
@@ -38,7 +37,7 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
     floatingFilter: true,
     minWidth: 50,
   };
-
+  visibilityTypes = VISIBILITY_TYPES;
   states = ACTIVITY_STATUSES;
   tableData = [];
   promotionId: any;
@@ -57,7 +56,6 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
     public dialog: MatDialog,
   ) {
     super(injector);
-    // this.adminMenuId = GridMenuIds.CORE_PROMOTIONS;
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -122,8 +120,6 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false
       },
-
-
     ];
   }
 
@@ -271,6 +267,11 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
             _data.forEach((element) => {
               element['TypeName'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
+              element.Visibility = element.Visibility.map((visibilityId) => {
+                const visibilityType = this.visibilityTypes[visibilityId];
+                console.log(visibilityId, visibilityType);
+                return visibilityType ?this.translate.instant(visibilityType.name) : null;
+              });
             });
             this.tableData = _data;
           } else {

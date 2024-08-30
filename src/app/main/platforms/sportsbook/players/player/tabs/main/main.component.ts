@@ -1,14 +1,14 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {take} from 'rxjs/operators';
-import {SportsbookApiService} from '../../../../services/sportsbook-api.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {GridRowModelTypes} from "../../../../../../../core/enums";
-import {AgGridAngular} from "ag-grid-angular";
-import {DatePipe} from "@angular/common";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { SportsbookApiService } from '../../../../services/sportsbook-api.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { GridRowModelTypes } from "../../../../../../../core/enums";
+import { AgGridAngular } from "ag-grid-angular";
+import { DatePipe } from "@angular/common";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 
 
 @Component({
@@ -25,7 +25,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   rowData = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   isEdit = false;
-  isSendingReqest = false;
+  isSendingRequest = false;
   statuses = [
     { Name: `Yes`, Id: true },
     { Name: `No`, Id: false },
@@ -155,7 +155,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         if (data.Code == 0) {
           this.Categories = data.Categories;
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
     this.playerId = +this.activateRoute.snapshot.queryParams.playerId;
@@ -171,11 +171,11 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   public createForm() {
 
     this.formGroup = this.fb.group({
-      Id: [{value: null, disabled: true}],
+      Id: [{ value: null, disabled: true }],
       CategoryId: [null, [Validators.required]],
-      ExternalId: [{value: null, disabled: true}],
-      NickName: [{value: null, disabled: true}],
-      PlayerCurrencyId: [{value: null, disabled: true}],
+      ExternalId: [{ value: null, disabled: true }],
+      NickName: [{ value: null, disabled: true }],
+      PlayerCurrencyId: [{ value: null, disabled: true }],
       Description: [null],
       LimitPercent: [null],
       DelayPercentPrematch: [null],
@@ -189,61 +189,66 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   }
 
   getPlayer() {
-    this.apiService.apiPost('players/player', {"Id": this.playerId,})
+    this.apiService.apiPost('players/player', { "Id": this.playerId, })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
           this.player = data;
-          this.formGroup.patchValue(this.player)
+          this.formGroup.patchValue(this.player);
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { externalId: this.player.ExternalId },
+            queryParamsHandling: 'merge'  // This will keep the existing query params and add/replace the ExternalId
+          });
           this.player.CategoryName = this.Categories.find(item => item.Id === this.player.CategoryId)?.Name
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }
 
   getObjectChangeHistory() {
-    this.apiService.apiPost('common/objectchangehistory', {ObjectId: String(this.playerId), ObjectTypeId: 22})
+    this.apiService.apiPost('common/objectchangehistory', { ObjectId: String(this.playerId), ObjectTypeId: 22 })
       .pipe(take(1)).subscribe((data) => {
-      if (data.Code === 0) {
-        this.rowData = data.ResponseObject.map((items) => {
-          items.Object = JSON.parse(items.Object);
-          items.CategoryName = this.Categories.find((item) => {
-            return item.Id === items.Object.CategoryId;
-          }).Name;
-          items.LimitPercent = items.Object.LimitPercent;
-          items.DelayPercentPrematch = items.Object.DelayPercentPrematch;
-          items.DelayPercentLive = items.Object.DelayPercentLive;
-          items.DelayBetweenBetsPrematch = items.Object.DelayBetweenBetsPrematch;
-          items.DelayBetweenBetsLive = items.Object.DelayBetweenBetsLive;
-          items.RepeatBetMaxCount = items.Object.RepeatBetMaxCount;
-          items.RestrictMaxBet = items.Object.RestrictMaxBet;
-          items.AllowCashout = items.Object.AllowCashout;
-          return items
-        });
-      }
-    })
+        if (data.Code === 0) {
+          this.rowData = data.ResponseObject.map((items) => {
+            items.Object = JSON.parse(items.Object);
+            items.CategoryName = this.Categories.find((item) => {
+              return item.Id === items.Object.CategoryId;
+            }).Name;
+            items.LimitPercent = items.Object.LimitPercent;
+            items.DelayPercentPrematch = items.Object.DelayPercentPrematch;
+            items.DelayPercentLive = items.Object.DelayPercentLive;
+            items.DelayBetweenBetsPrematch = items.Object.DelayBetweenBetsPrematch;
+            items.DelayBetweenBetsLive = items.Object.DelayBetweenBetsLive;
+            items.RepeatBetMaxCount = items.Object.RepeatBetMaxCount;
+            items.RestrictMaxBet = items.Object.RestrictMaxBet;
+            items.AllowCashout = items.Object.AllowCashout;
+            return items
+          });
+        }
+      })
   }
 
   onSubmit() {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('players/update', obj)
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          SnackBarHelper.show(this._snackBar, {Description : 'Player successfully updated', Type : "success"});
+          SnackBarHelper.show(this._snackBar, { Description: 'Player successfully updated', Type: "success" });
           this.isEdit = false;
           this.getPlayer();
           this.getObjectChangeHistory();
           //this.getPartner();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 

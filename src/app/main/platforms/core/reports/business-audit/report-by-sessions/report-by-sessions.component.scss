@@ -17,14 +17,14 @@
 
   .grid-content {
     width: 100%;
-    height: calc(100% - 292px);
+    height: calc(100% - 372px);
 
     &.hide-second-grid {
-      height: calc(100% - 92px);
+      height: calc(100% - 120px);
     }
 
     &.second {
-      height: calc(100% - 392px);
+      height: 30%;
     }
 
     ::ng-deep {

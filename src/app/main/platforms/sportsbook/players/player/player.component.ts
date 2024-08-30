@@ -23,9 +23,14 @@ export class PlayerComponent implements OnInit {
       route:'bets'
     },
     {
+      label:'Not Accepted Bets',
+      route:'not-accepted-bets'
+    },
+    {
       label:'Clients.Notes',
       route:'notes'
     },
+
   ];
 
   playerId:number;

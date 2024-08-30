@@ -23,6 +23,7 @@
 
 <div mat-dialog-actions>
   <button 
+    mat-button
     class="modal-primary-btn ml-a" 
     [class.disabled]="!competitionId" 
     (click)="getCompetition()"
@@ -42,10 +43,10 @@
 }
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button 
+  <button mat-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-button 
     class="modal-primary-btn" 
-    [class.disabled]="!agreement || isSendingReqest" 
+    [class.disabled]="!agreement || isSendingRequest" 
     (click)="onSubmit()"
     >
     {{'Sport.Migrate'| translate}}</button>

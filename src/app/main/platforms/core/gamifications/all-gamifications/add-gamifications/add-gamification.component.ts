@@ -84,7 +84,8 @@ export class AddGamificationComponent implements OnInit {
       ImageExtension: [null, [Validators.required]],
       ImageData: [null, [Validators.required]],
       BackgroundImageData: [null],
-      MobileBackgroundImageData: [null]
+      MobileBackgroundImageData: [null],
+      ItemBackgroundImageData: [null],
     });
   }
 
@@ -143,6 +144,13 @@ export class AddGamificationComponent implements OnInit {
     const files = event.target.files.length && event.target.files[0];
     if (files) {
       this.handleFileUpload(files, 'MobileBackgroundImageData');
+    }
+  }
+
+  uploadItemBackgroundImageData(event) {
+    const files = event.target.files.length && event.target.files[0];
+    if (files) {
+      this.handleFileUpload(files, 'ItemBackgroundImageData');
     }
   }
 

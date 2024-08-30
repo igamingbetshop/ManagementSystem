@@ -47,25 +47,13 @@
     <button mat-stroked-button color="primary" class="mat-btn" (click)="showHideGrid()">{{show ? "Hide" : "Show"}}</button>
   </div>
 
-  <div *ngIf="show" class="grid-content second">
-    <ag-grid-angular
-      #agGrid2
-      class="ag-theme-balham"
-      [headerHeight]="33"
-      [rowHeight]="42"
-      [rowData]="rowData2"
-      [suppressCopyRowsToClipboard]="true"
-      [rowModelType]="rowModelType2"
-      [columnDefs]="columnDefs2"
-      [defaultColDef]="defaultColDef"
-      [cacheBlockSize]="cacheBlockSize"
-      (gridReady)="onGridReady($event)"
-      [ensureDomOrder]="true"
-      [enableCellTextSelection]="true"
-      [getContextMenuItems]="getContextMenuItems"
-      rowSelection="single">
-    </ag-grid-angular>
-
-  </div>
+  @if(show) {
+    <div class="grid-content second">
+      <app-session-info
+        [rowData]="sessionInfoRowData"
+      ></app-session-info>
+  
+    </div>
+  }
 
 </div>

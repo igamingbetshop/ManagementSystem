@@ -14,10 +14,9 @@
     </div>
 
     <button mat-stroked-button class="mat-btn" (click)="addSegment()">{{'Segments.AddSegment' | translate}}</button>
-    <button mat-stroked-button class="mat-btn" [class.disabled]="isRowSelected()" (click)="deleteSegment()">{{'Segments.DeleteSegment' | translate}}</button>
+    <button mat-stroked-button class="mat-delete-btn" [class.disabled]="isRowSelected()" (click)="deleteSegment()">{{'Segments.DeleteSegment' | translate}}</button>
     <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="getPage()">{{'Common.Go' | translate}}</button>
-
 
   </div>
 

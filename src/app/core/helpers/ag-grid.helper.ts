@@ -34,6 +34,7 @@ export function syncPaginationWithoutBtn() {
 export function syncColumnSelectPanel() {
   const agColumnSelect = document.querySelector('.ag-tool-panel-wrapper .ag-column-select');
   const matExportBtn = document.querySelector('.mat-export-btn');
+  if(!matExportBtn) return;
   agColumnSelect.prepend(matExportBtn);
 }
 
@@ -64,7 +65,7 @@ export function syncColumnNestedSelectPanel() {
 export function syncColumnReset() {
   const agColumnSelect = document.querySelector('.ag-tool-panel-wrapper .ag-column-select');
   const matExportBtn = document.querySelector('.mat-reset-btn');
-
+  if(!matExportBtn) return;
   agColumnSelect.prepend(matExportBtn);
 }
 

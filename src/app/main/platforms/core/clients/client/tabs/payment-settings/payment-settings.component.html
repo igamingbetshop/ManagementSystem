@@ -144,7 +144,7 @@
 
       <div>
         <div class="first-hand">{{'Clients.StartTime' | translate}}</div>
-        <div class="second-hand">{{paymentLimits?.StartTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="second-hand">{{paymentLimits?.StartTime | date:'dd/MM/yyyy HH:mm'}}</div>
         <div class="form-field form-calendar form-calendar-edit">
           <input matInput [matDatepicker]="picker" [formControlName]="'StartTime'">
           <mat-datepicker-toggle matSuffix [for]="picker">
@@ -156,7 +156,7 @@
 
       <div>
         <div class="first-hand">{{'Bonuses.FinishTime' | translate}}</div>
-        <div class="second-hand">{{paymentLimits?.FinishTime | date:'dd/MM/yyyy HH:MM'}}</div>
+        <div class="second-hand">{{paymentLimits?.FinishTime | date:'dd/MM/yyyy HH:mm'}}</div>
         <div class="form-field form-calendar form-calendar-edit">
           <input matInput [matDatepicker]="picker1" [formControlName]="'EndTime'">
           <mat-datepicker-toggle matSuffix [for]="picker1">

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {CommonModule, DatePipe} from "@angular/common";
 import {HeaderFilterComponent} from "../../../../components/header-filter/header-filter.component";
 import {Controllers, Methods} from "../../../../../core/enums";
@@ -24,26 +24,19 @@ import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
   providers: [DatePipe]
 })
 export class CountryAnalyticsComponent implements OnInit{
-  public topVisitors;
-  public topRegistrations;
+  topVisitors  = signal([]);
+  topRegistrations  = signal([]);
   public filteredData;
   public fromDate = new Date();
   public toDate = new Date();
   public partnerId;
 
-  constructor(
-    private apiService: CoreApiService,
-    public configService: ConfigService,
-  ) {
-
-  }
+  #apiService = inject(CoreApiService);
+  #configService = inject(ConfigService);
 
 
   ngOnInit() {
     this.startDate();
-    this.getTopVisitors();
-    this.getTopRegistrations();
-
   }
 
   onDateChange(event: any) {
@@ -86,10 +79,11 @@ export class CountryAnalyticsComponent implements OnInit{
 
   getTopVisitors() {
     this.filteredData = this.getFilteredDate();
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData,true,
+    this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
       Controllers.DASHBOARD, Methods.GET_TOP_VISITORS, null, false).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
-        this.topVisitors = data.ResponseObject.slice(0, 5).map(item => {
+        this.topVisitors.set(data.ResponseObject.slice(0,5));
+        this.topVisitors().map(item => {
           item.Name = item.CountryName;
           item.Icon =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";
           item.ImageUrl = '../../../../../../assets/images/flags/' + item.Icon + '.png';
@@ -101,10 +95,11 @@ export class CountryAnalyticsComponent implements OnInit{
   }
 
   getTopRegistrations() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filteredData,true,
+    this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
       Controllers.DASHBOARD, Methods.GET_TOP_REGISTRATIONS, null, false).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
-        this.topRegistrations = data.ResponseObject.slice(0, 5).map(item => {
+        this.topRegistrations.set(data.ResponseObject.slice(0,5));
+        this.topRegistrations().map(item => {
           item.Name = item.CountryName;
           item.Amount = item.TotalCount;
           item.Icon =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";

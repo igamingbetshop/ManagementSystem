@@ -42,7 +42,7 @@ export class AddKeyComponent implements OnInit {
   public formGroup: UntypedFormGroup;
   public partnerId;
   public fromDate = new Date();
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddKeyComponent>,
@@ -64,10 +64,15 @@ export class AddKeyComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
-    this.isSendingReqest = true;
+    const nameControl = this.formGroup.get('Name');
+    if (nameControl) {
+      nameControl.setValue(nameControl.value?.trim());
+    }
+  
+    this.isSendingRequest = true;
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
-    setting.Type = this.data.type;
+    setting.Type = this.data.type;  
     this.apiService.apiPost('partners/savepartnerkey', setting)
       .pipe(take(1))
       .subscribe(data => {
@@ -76,8 +81,8 @@ export class AddKeyComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
-      })
+        this.isSendingRequest = false;
+      });
   }
 
   close() {

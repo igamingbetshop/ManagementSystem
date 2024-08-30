@@ -54,9 +54,10 @@ const routes: Routes = [
         path: 'report-by-documents',
         loadChildren: () => import('./report-by-documents/report-by-documents.module').then(m => m.ReportByDocumentsModule),
       },
-      {
-        path: 'report-by-client-duplicates',
-        loadChildren: () => import('./report-by-client-duplicates/report-by-client-duplicates.module').then(m => m.ReportByDuplicates),      },
+      // {
+      //   path: 'report-by-client-duplicates',
+      //   loadChildren: () => import('./report-by-client-duplicates/report-by-client-duplicates.module').then(m => m.ReportByDuplicates),      
+      // },
       {
         path: 'report-by-client-games',
         loadChildren: () => import('./report-by-client-games/report-by-client-games.module').then(m => m.ReportByClientGamesModule),

@@ -32,7 +32,7 @@ const bannerVisibilityTypes = [
 export class BannersComponent extends BasePaginatedGridComponent implements OnInit {
 
   public rowData = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
   public partners: any[] = [];
   public partnerId = null;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
@@ -182,7 +182,7 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
     const row = this.gridApi.getSelectedRows()[0];
     delete row.UserId;
     delete row.CurrencyId;
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(PBControllers.CMS, PBMethods.DELETE_BANNER,row).subscribe(data => {
 
       if (data.Code === 0) {
@@ -190,7 +190,7 @@ export class BannersComponent extends BasePaginatedGridComponent implements OnIn
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

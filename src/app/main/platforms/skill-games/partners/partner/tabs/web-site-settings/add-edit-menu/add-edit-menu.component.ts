@@ -21,7 +21,7 @@ export class AddEditMenuComponent implements OnInit {
   public validDocumentFormat;
   public checkDocumentSize;
   public iconChanging;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<AddEditMenuComponent>,
               public apiService: SkillGamesApiService,
@@ -68,7 +68,7 @@ export class AddEditMenuComponent implements OnInit {
   }
 
   submit() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const value = this.formGroup.getRawValue();
     this.apiService.apiPost('cms/savewebsitemenuitem', value)
       .pipe(take(1))
@@ -78,7 +78,7 @@ export class AddEditMenuComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

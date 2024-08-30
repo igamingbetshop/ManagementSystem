@@ -1,0 +1,26 @@
+
+<div class="grid-content">
+
+  <ag-grid-angular
+    #agGridSecond
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [components]="frameworkComponents"
+    [suppressCopyRowsToClipboard]="true"
+    [animateRows]="true"
+    pagination="true"
+    [cacheBlockSize]="5000"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+  </ag-grid-angular>
+
+  <div class="grid-action">
+    <button mat-stroked-button class="mat-btn" [class.disabled]="isSendingRequest" (click)="addSelectionType()">{{'Sport.AddSelectionType' | translate}}</button>
+  </div>
+</div>

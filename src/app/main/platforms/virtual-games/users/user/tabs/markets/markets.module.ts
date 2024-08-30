@@ -7,6 +7,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { AgGridModule } from "ag-grid-angular";
 import { TranslateModule } from "@ngx-translate/core";
+import { MarketTypesCategoresGridComponent } from "./market-types-categores/market-types-categores-grid.component";
 
 const routes: Routes = [
   {
@@ -25,7 +26,7 @@ const routes: Routes = [
     AgGridModule,
     TranslateModule
   ],
-  declarations: [MarketsComponent]
+  declarations: [MarketsComponent, MarketTypesCategoresGridComponent]
 })
 
 export class MarketsModule {

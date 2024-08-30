@@ -14,6 +14,7 @@ export class LeftMenuComponent {
   public linkText = false;
   public homeSections =  JSON.parse(localStorage.getItem('adminMenu'));
 
+
   constructor(
     private _sidenavService: SidenavService,
     public commonDataService: CommonDataService,

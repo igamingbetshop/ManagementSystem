@@ -3,7 +3,7 @@
   <div class="content-action">
     <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> /
       {{MatchId}} : {{'Sport.Match' | translate}} {{this.matchName}} </div>
-      
+
       <div class="partner-dropdown">
         <mat-select
         (selectionChange)="onPartnerChange($event.value)"
@@ -14,10 +14,10 @@
         <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
       </mat-select>
     </div>
-    
+
     <button mat-stroked-button class="mat-btn" (click)="onResetMatch()">{{'Sport.ResetMatch' | translate}}</button>
     <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
-    
+
   </div>
 
   <div class="content-edit">
@@ -73,12 +73,17 @@
 
       <div>
         <div class="first-hand">{{'Clients.StartTime' | translate}}</div>
-        <div class="second-hand">{{activeMatch.StartTime}}</div>
+        <div class="second-hand">{{activeMatch.StartTime  | date:'dd/MM/yyyy HH:mm'}}</div>
         <div class="form-field form-calendar">
           <div class="calendar-picker start">
             <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
           </div>
         </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+        <div class="static-hand">{{activeMatch?.CreationTime | date:'dd/MM/yyyy HH:mm'}}</div>
       </div>
 
       <div>
@@ -93,14 +98,19 @@
       </div>
 
       <div>
-        <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
-        <div class="second-hand">{{activeMatch.AbsoluteLimit}}</div>
+        <div class="first-hand">{{'Sport.MarketLimit' | translate}}</div>
+        <div class="second-hand">{{activeMatch.MarketLimit}}</div>
         <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.AbsoluteLimit' | translate"
-            [formControlName]="'AbsoluteLimit'">
-            <mat-error *ngIf="errorControl['AbsoluteLimit']?.touched && errorControl['AbsoluteLimit'].errors?.required">
-              {{'Sport.AbsoluteLimit' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
+            <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate"
+            [formControlName]="'MarketLimit'">
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Sport.PlayerLimit' | translate}}</div>
+        <div class="second-hand">{{activeMatch.PlayerLimit}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate"
+            [formControlName]="'PlayerLimit'">
         </div>
       </div>
 
@@ -238,8 +248,8 @@
         <div class="second-hand">{{activeMatch.AutoSettlementName}}</div>
         <div class="form-field form-dropdown">
             <mat-select [formControlName]="'AutoSettlement'" placeholder="{{'None'}}">
-              <mat-option 
-                *ngFor="let status of settlementStatuses" 
+              <mat-option
+                *ngFor="let status of settlementStatuses"
                   [value]="status.Id">
                   {{status.Name}}
               </mat-option>
@@ -259,6 +269,7 @@
       </div>
     </form>
 
+    <br>
     <div class="title">{{'Sport.Competitors' | translate}}</div>
 
     <div class="grid-content">

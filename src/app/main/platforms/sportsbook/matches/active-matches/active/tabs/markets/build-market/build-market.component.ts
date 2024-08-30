@@ -27,6 +27,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     CommonModule,
     FormsModule,
     MatDialogModule,
+    MatButtonModule,
     MatSnackBarModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -92,7 +93,6 @@ export class BuildMarketComponent implements OnInit {
   }
 
   getMarketTypeSelections(market, index) {
-    console.log(market, "market", index);
     const data = {
       MatchId: this.data.MatchId,
       MarketTypeId: market.I,

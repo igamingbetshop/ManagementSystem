@@ -115,12 +115,17 @@
 
       <div style="height: auto;">
         <div class="first-hand">{{'Common.DeviceType' | translate}}</div>
-        <div class="second-hand">{{popup?.DeviceName}}</div>
+        <div class="second-hand">
+          @if(popup?.DeviceName) {
+            {{popup?.DeviceName}}
+          } @else {
+            All
+          }
+        </div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'DeviceType'" 
-          placeholder="{{'Common.SelectDeviceType' | translate}}"
+          placeholder="{{'Common.All' | translate}}"
           >
-            <mat-option [value]="null">{{'Common.SelectDeviceType' | translate}}</mat-option>
             <mat-option *ngFor="let type of deviceTypes" [value]="type.Id">{{type.Name}}</mat-option>
           </mat-select>
         </div>
@@ -162,9 +167,11 @@
           <div class="second-hand"></div>
           <div class="form-field form-checkbox">
             <input type="file" (change)="uploadFile($event)">
+            <div *ngIf="formGroup.get('ImageData').invalid && formGroup.get('ImageData').touched">
+              <span class="error">Invalid image format or size. Please use jpg, jpeg, png, or gif files under 5MB.</span>
+            </div>
           </div>
         </div>
-
       }
 
       <div>
@@ -179,7 +186,7 @@
       <div class="form-actions">
         <div class="actions" *ngIf="isEdit">
           <button mat-stroked-button class="mat-cancel-btn" (click)="onCancel()">{{'Common.Cancel' | translate}}</button>
-          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
+          <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid"  type="submit" (click)="onSubmit()">{{'Common.Save' |translate}}</button>
         </div>
       </div>
 
@@ -188,12 +195,14 @@
 
 
   <div class="card-content">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
-      </mat-card-header>
-      <img mat-card-image class="img" [src]="image" alt="Image">
-    </mat-card>
+    @if(!!image) {
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image class="img" [src]="image" alt="Image">
+      </mat-card>
+    }
 
   </div>
 

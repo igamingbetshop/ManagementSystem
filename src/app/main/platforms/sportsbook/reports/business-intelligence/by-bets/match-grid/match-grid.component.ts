@@ -126,11 +126,6 @@ export class MatchGridComponent extends BasePaginatedGridComponent {
         headerName: 'Sport.Coefficient',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Coefficient',
-        cellRenderer: (params) => {
-          const oddsTypePipe = new OddsTypePipe();
-          let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-          return `${data}`;
-        }
       },
       {
         headerName: 'Common.Status',

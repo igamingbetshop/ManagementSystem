@@ -1,6 +1,10 @@
+@use '@angular/material' as mat;
 @use "ag-grid-community/styles" as ag;
-@include ag.grid-styles((theme: balham,
-    --ag-header-background-color:#3E4D66));
+
+@include mat.core();
+
+@include ag.grid-styles((theme: balham, --ag-header-background-color:#3E4D66));
+
 @import "helpers/mixins";
 @import "general/general_dir";
 @import "helpers/fonts";
@@ -11,6 +15,8 @@
 @import "helpers/form-edit";
 @import "helpers/detail-nav-tabs";
 @import "helpers/modal-form";
+
+// @include mat.form-field-density(-4);
 
 .mat-mdc-menu-content {
   a.active {
@@ -90,7 +96,7 @@ app-progress-bar
     }
 
   }
-  &.payin, &.profitable
+  &.payin, &.profitable,&.topprofitablematches
   {
     .block-content
     {
@@ -105,7 +111,7 @@ app-progress-bar
     }
   }
 
-  &.payout, &.damaging
+  &.payout, &.damaging, &.topdamagedmatches
   {
     .block-content
     {
@@ -119,7 +125,7 @@ app-progress-bar
       }
     }
   }
-  &.turnover
+  &.turnover, &.topturnovermatches
   {
     .block-content
     {
@@ -133,7 +139,7 @@ app-progress-bar
       }
     }
   }
-  &.bonuses
+  &.bonuses, &.active-clients
   {
     .block-content
     {
@@ -203,3 +209,89 @@ input[type=number] {
   background-color: $gray-light-4;
   border-radius: 5px;
 }
+
+
+input[type="datetime-local" i]::-webkit-calendar-picker-indicator {
+  background: url('/assets/images/calendar.svg') no-repeat center center!important;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+  .container {
+    .content-action {
+      // height: 92px;
+      .title {
+        display: block;
+      }
+
+      .partner-dropdown {
+        display: flex;
+        margin-left: auto;
+      }
+
+    }
+  }
+  .grid-content {
+    ag-grid-angular {
+      height: calc(100vh - 150px) !important;
+    }
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .ag-body-vertical-scroll {
+   display: none;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .pages-sizes
+  {
+    width: auto!important;
+    bottom: 0!important;
+    right: 2%;
+    top: unset;
+    left: unset!important;
+  }
+}
+
+
+  mat-form-field{height: 40px;
+    .mat-mdc-text-field-wrapper{height: 40px;}
+  }
+  .mdc-floating-label{top: 20px!important;}
+  .mdc-floating-label--float-above{top: 28px!important;}
+  .mat-mdc-form-field-infix{padding-top: 8px!important;}
+  .mat-pseudo-checkbox {
+    position: absolute!important;
+    right: 0!important;
+  }
+  .mat-mdc-icon-button
+  {
+    padding: 0 0 6px 0!important;
+  }
+  .client-statuses
+  {
+    .mdc-list-item__primary-text
+    {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      i
+      {
+        color: rgba(228, 230, 242, 1);
+        font-size: 18px;
+        margin-right: 10px;
+      }
+      .mat-primary
+      {
+        width: 100%;
+        .mdc-form-field
+        {
+          width: 100%;
+          .mdc-checkbox{margin-left: auto}
+          .mdc-label{margin-left: 10px}
+        }
+      }
+    }
+  }

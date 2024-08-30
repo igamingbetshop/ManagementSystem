@@ -80,12 +80,17 @@
       </div>
 
       <div>
-        <div class="first-hand">{{'Sport.AbsoluteLimit' | translate}}</div>
-        <div class="second-hand">{{category?.AbsoluteLimit}}</div>
+        <div class="first-hand">{{'Sport.MarketLimit' | translate}}</div>
+        <div class="second-hand">{{category?.MarketLimit}}</div>
         <div class="form-field form-input">
-          <!-- <mat-form-field> -->
-            <input matInput type="number" [placeholder]="'Sport.AbsoluteLimit' | translate" [formControlName]="'AbsoluteLimit'">
-          <!-- </mat-form-field> -->
+          <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate" [formControlName]="'MarketLimit'">
+        </div>
+      </div>
+      <div>
+        <div class="first-hand">{{'Sport.PlayerLimit' | translate}}</div>
+        <div class="second-hand">{{category?.PlayerLimit}}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate" [formControlName]="'PlayerLimit'">
         </div>
       </div>
 
@@ -106,7 +111,7 @@
           <!-- </mat-form-field> -->
         </div>
       </div>
-      
+
       <div>
         <div class="first-hand">{{'Sport.SportId' | translate}}</div>
         <div class="second-hand">{{category?.SportId}}</div>

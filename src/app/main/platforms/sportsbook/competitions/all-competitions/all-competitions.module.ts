@@ -5,8 +5,8 @@ import { AllCompetitionsRoutingModule } from './all-competitions-categories-rout
 import { AgGridModule } from 'ag-grid-angular';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import {DropdownDirective} from "../../../../../core/directives/dropdown.directive";
-import {MatMenuModule} from "@angular/material/menu";
+import { DropdownDirective } from "../../../../../core/directives/dropdown.directive";
+import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';

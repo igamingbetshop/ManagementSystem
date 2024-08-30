@@ -16,7 +16,6 @@ import 'ag-grid-enterprise';
 import { DatePipe } from "@angular/common";
 import { TextEditorComponent } from "../../../../../components/grid-common/text-editor.component";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from "../../../../../../core/helpers/datetime.helper";
 import { formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
@@ -24,6 +23,7 @@ import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-ti
 import { CLIENT_BOUNUS_STATUSES } from 'src/app/core/constantes/statuses';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import {ExportService} from "../../../services/export.service";
+import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 
 @Component({
   selector: 'app-report-by-bonus-details',
@@ -42,12 +42,6 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
   public filteredData;
   public masterDetail;
   public detailsInline;
-  public nestedFrameworkComponents = {
-    agBooleanColumnFilter: AgBooleanFilterComponent,
-    buttonRenderer: ButtonRendererComponent,
-    numericEditor: NumericEditorComponent,
-    checkBoxRenderer: CheckboxRendererComponent,
-  };
   public playerCurrency;
   public selectedItem = 'today';
   public status = [];
@@ -62,7 +56,16 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
     { Name: "Campaign FreeSpin", Id: 14 },
   ];
   public clientBonusStatuses = CLIENT_BOUNUS_STATUSES;
-  public frameworkComponents;
+  public frameworkComponents =  {
+    agBooleanColumnFilter: AgBooleanFilterComponent,
+    buttonRenderer: ButtonRendererComponent,
+    numericEditor: NumericEditorComponent,
+    checkBoxRenderer: CheckboxRendererComponent,
+    textEditor: TextEditorComponent,
+    agDropdownFilter: AgDropdownFilter,
+    agDateTimeFilter: AgDateTimeFilter,
+    selectRenderer: SelectRendererComponent,
+  };
   public detailCellRendererParams: any = {
     detailGridOptions: {
       rowHeight: 47,
@@ -71,7 +74,7 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
         filter: true,
         flex: 1,
       },
-      components: this.nestedFrameworkComponents,
+      components: this.frameworkComponents,
       columnDefs: [
         {
           headerName: 'Clients.TriggerId',
@@ -583,23 +586,20 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
         field: 'Status',
         sortable: true,
         resizable: true,
+        cellRenderer: 'selectRenderer',
+        cellRendererParams: {
+          onchange: this.onSelectChange.bind(this, "Status"),
+          Selections: this.clientBonusStatuses,
+          disabled: (params) => params.data.isDisabled,       
+        },
         filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,
           filterData: this.clientBonusStatuses,
         },
-      },
+      }
     ]
     this.masterDetail = true;
-    this.frameworkComponents = {
-      agBooleanColumnFilter: AgBooleanFilterComponent,
-      buttonRenderer: ButtonRendererComponent,
-      numericEditor: NumericEditorComponent,
-      checkBoxRenderer: CheckboxRendererComponent,
-      textEditor: TextEditorComponent,
-      agDropdownFilter: AgDropdownFilter,
-      agDateTimeFilter: AgDateTimeFilter
-    }
   }
 
   ngOnInit(): void {
@@ -624,6 +624,50 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
     }
     this.getCurrentPage();
   }
+
+rowStatusUpdate(params) { 
+  this.apiService.apiPost(this.configService.getApiUrl, params, true, Controllers.CLIENT, Methods.APPROVE_CLIENT_CASHBACK_BOUNUS).pipe(take(1)).subscribe(data => {
+    if (data.ResponseCode === 0) {
+      SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "success" });
+      const rowIdToUpdate = params.Id;
+      const displayedRows = this.gridApi.getDisplayedRowCount();
+      for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+        const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+        if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+          rowNode.data.Status = 1;
+          this.gridApi.redrawRows({ rowNodes: [rowNode] });
+          break;
+        }
+      }
+
+    } else {
+      SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+    }
+  });
+}
+
+  onSelectChange(key, params, val, event) {
+    if (params[key] === 7 && val === 1) {
+      params[key] = val;
+      this.rowStatusUpdate(params);
+    } else {
+      params[key] = 7;
+      const rowIdToUpdate = params.Id;
+      const displayedRows = this.gridApi.getDisplayedRowCount();
+
+      for (let rowIndex = 0; rowIndex < displayedRows; rowIndex++) {
+        const rowNode = this.gridApi.getDisplayedRowAtIndex(rowIndex);
+
+        if (rowNode && rowNode.data && rowNode.data.Id === rowIdToUpdate) {
+          rowNode.data.Status = 7;
+          this.gridApi.redrawRows({ rowNodes: [rowNode] });
+          break;
+        }
+      }
+    }
+
+  }
+  
 
   onGridReady(params) {
     super.onGridReady(params);
@@ -657,7 +701,7 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
           paging.PartnerId = this.partnerId;
         }
         this.changeFilerName(params.request.filterModel,
-          ['Status'], ['Statuse'])
+          ['Status', 'BonusTypeName'], ['Statuse', 'BonusType'])
         this.setSort(params.request.sortModel, paging);
         this.setFilterDropdown(params, ['PartnerId']);
         this.setFilter(params.request.filterModel, paging);
@@ -666,10 +710,11 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
           Controllers.REPORT, Methods.GET_REPORT_BY_BONUS).pipe(take(1)).subscribe(data => {
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Entities
-              mappedRows.forEach((items) => {
-                items['Status'] = this.clientBonusStatuses.find((state) => state.Id == items.Status)?.Name;
-                items['PartnerId'] = this.partners.find((state) => state.Id == items.PartnerId)?.Name
-                items['BonusType'] = this.campaignTypes.find((state) => state.Id == items.BonusType)?.Name
+              mappedRows.forEach((item) => {
+                
+                item['isDisabled'] = item.Status !== 7 || item.BonusType !== 1;
+                item['PartnerId'] = this.partners.find((state) => state.Id == item.PartnerId)?.Name
+                item['BonusTypeName'] = this.campaignTypes.find((state) => state.Id == item.BonusType)?.Name
               })
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
               this.gridApi?.setPinnedBottomRowData([{

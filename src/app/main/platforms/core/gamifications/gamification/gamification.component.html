@@ -15,8 +15,7 @@
         <div class="first-hand">{{'Clients.Id' | translate}}</div>
         <div class="second-hand">{{gamification?.Id}}</div>
         <div class="form-field form-input">
-            <input matInput [maxLength]="100" [placeholder]="'Clients.Id' | translate" [formControlName]="'Id'"
-              readonly>
+          <input matInput [maxLength]="100" [placeholder]="'Clients.Id' | translate" [formControlName]="'Id'" readonly>
         </div>
       </div>
 
@@ -24,7 +23,8 @@
         <div class="first-hand">{{'Clients.Title' | translate}}</div>
         <div class="second-hand">{{gamification?.Title}}</div>
         <div class="form-field form-input">
-            <input matInput readonly="true" [maxLength]="100" [placeholder]="'Clients.Title' | translate" [formControlName]="'Title'">
+          <input matInput readonly="true" [maxLength]="100" [placeholder]="'Clients.Title' | translate"
+            [formControlName]="'Title'">
         </div>
       </div>
 
@@ -32,16 +32,16 @@
         <div class="first-hand">{{'Bonuses.Description' | translate}}</div>
         <div class="second-hand">{{gamification?.Description}}</div>
         <div class="form-field form-input">
-            <input matInput [maxLength]="100" readonly="true" [placeholder]="'Bonuses.Description' | translate"
-              [formControlName]="'Description'">
+          <input matInput [maxLength]="100" readonly="true" [placeholder]="'Bonuses.Description' | translate"
+            [formControlName]="'Description'">
         </div>
       </div>
       <div>
         <div class="first-hand">{{'Clients.NickName' | translate}}</div>
         <div class="second-hand">{{gamification?.NickName}}</div>
         <div class="form-field form-input">
-            <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
-              [formControlName]="'NickName'">
+          <input matInput [maxLength]="100" [placeholder]="'Clients.NickName' | translate"
+            [formControlName]="'NickName'">
         </div>
       </div>
 
@@ -49,41 +49,39 @@
         <div class="first-hand">{{'Common.Order' | translate}}</div>
         <div class="second-hand">{{gamification?.Order}}</div>
         <div class="form-field form-input">
-            <input matInput type="number" [maxlength]="2" [placeholder]="'Common.Order' | translate"
-              [formControlName]="'Order'">
+          <input matInput type="number" [maxlength]="2" [placeholder]="'Common.Order' | translate"
+            [formControlName]="'Order'">
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Partners.Partner' | translate}}</div>
         <div class="static-hand">{{gamification?.PartnerName}}</div>
-        <!-- <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'PartnerId'" [disabled]="true" placeholder="{{'Partners.Partner' | translate}}">
-            <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
-          </mat-select>
-        </div> -->
       </div>
 
       <div>
         <div class="first-hand">{{'Bonuses.SelectStatus' | translate}}</div>
-        <div class="second-hand">{{gamification?.Status === 1 ? "Active" : (gamification?.Status === 2 ? "Inactive" : "")}}</div>
+        <div class="second-hand">{{gamification?.Status === 1 ? "Active" : (gamification?.Status === 2 ? "Inactive" :
+          "")}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Status'" placeholder="{{'Bonuses.SelectStatus' | translate}}">
             <mat-option *ngFor="let status of statuses" [value]="status.Id">{{status.Name}}</mat-option>
           </mat-select>
         </div>
       </div>
-      
-      <div *ngIf="gamification?.Order !== 1 && isChilde"  >
-        <div class="first-hand">{{'Segments.ComplimentaryPoint' | translate}}</div>
-        <div class="second-hand">{{gamification?.CompPoints}}</div>
-        <div class="form-field form-input">
+
+      @if(gamification?.Order !== 1 && isChilde) {
+        <div>
+          <div class="first-hand">{{'Segments.ComplimentaryPoint' | translate}}</div>
+          <div class="second-hand">{{gamification?.CompPoints}}</div>
+          <div class="form-field form-input">
             <input matInput type="number" [maxlength]="2" [placeholder]="'Common.CompPoints' | translate"
               [formControlName]="'CompPoints'">
+          </div>
         </div>
-      </div>
+      }
 
-      <div >
+      <div>
         <div class="first-hand">{{'Cms.Image' | translate}}</div>
         <div class="second-hand">{{gamification?.ImageData}}</div>
         <div class="form-field form-checkbox">
@@ -91,52 +89,60 @@
         </div>
       </div>
 
-      <ng-container *ngIf="isChilde">
-        <div >
-          <div class="first-hand">{{'Products.BackgroundImage' | translate}}</div>
-          <div class="second-hand">{{gamification?.BackgroundImageData}}</div>
-          <div class="form-field form-checkbox">
-            <input class="file-input" type="file" (change)="uploadBackgroundImage($event)">
-          </div>
-        </div>
-  
-        <div>
-          <div class="first-hand">{{'Common.MobileBackgroundImage' | translate}}</div>
-          <div class="second-hand">{{gamification?.MobileBackgroundImageData}}</div>
-          <div class="form-field form-checkbox">
-            <input class="file-input" type="file" (change)="uploadMobileImage($event)">
-          </div>
-        </div>
-
-      </ng-container>
-      
-      
-
-      <div *ngIf="isEdit">
-        <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
-        <div class="second-hand">{{gamification?.EnvironmentTypeId === 1 ? "Production" : (gamification?.EnvironmentTypeId === 2 ? "Staging" : "")}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'EnvironmentTypeId'">
-            <mat-option *ngFor="let environment of environments"
-              [value]="environment.Id">{{environment.Name}}</mat-option>
-          </mat-select>
+      @if(isChilde) {
+      <div>
+        <div class="first-hand">{{'Products.BackgroundImage' | translate}}</div>
+        <div class="second-hand">{{gamification?.BackgroundImageData}}</div>
+        <div class="form-field form-checkbox">
+          <input class="file-input" type="file" (change)="uploadBackgroundImage($event)">
         </div>
       </div>
 
-      <!-- <div *ngIf="!isChilde"></div> -->
-      <div></div>
-      <div></div>
+      <div>
+        <div class="first-hand">{{'Common.MobileBackgroundImage' | translate}}</div>
+        <div class="second-hand">{{gamification?.MobileBackgroundImageData}}</div>
+        <div class="form-field form-checkbox">
+          <input class="file-input" type="file" (change)="uploadMobileImage($event)">
+        </div>
+      </div>
 
-      <!-- <div *ngIf="gamification?.Order !== 1 && !isChilde"  >
-        </div> -->
+      <div>
+        <div class="first-hand">{{'Common.ItemBackgroundImage' | translate}}</div>
+        <div class="second-hand">{{gamification?.ItemBackgroundImageData}}</div>
+        <div class="form-field form-checkbox">
+          <input class="file-input" type="file" (change)="uploadItemBackgroundImageData($event)">
+        </div>
+      </div>
+      }
+
+
+
+      @if(isEdit) {
+        <div>
+          <div class="first-hand">{{'Cms.SelectEnvironment' | translate}}</div>
+          <div class="second-hand">{{gamification?.EnvironmentTypeId === 1 ? "Production" :
+            (gamification?.EnvironmentTypeId === 2 ? "Staging" : "")}}</div>
+          <div class="form-field form-dropdown">
+            <mat-select [formControlName]="'EnvironmentTypeId'">
+              <mat-option *ngFor="let environment of environments"
+                [value]="environment.Id">{{environment.Name}}</mat-option>
+            </mat-select>
+          </div>
+        </div>
+      }
+
+      <div></div>
+      <div></div>
 
       <div class="form-actions">
-        <div class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-cancel-btn" (click)="isEdit = false">{{'Common.Cancel' |
-            translate}}</button>
+        @if(isEdit) {
+          <div class="actions">
+            <button mat-stroked-button class="mat-cancel-btn" (click)="isEdit = false">{{'Common.Cancel' |
+              translate}}</button>
             <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save'
               |translate}}</button>
-        </div>
+          </div>
+        }
       </div>
 
     </form>
@@ -151,24 +157,31 @@
       </mat-card-header>
       <img mat-card-image class="img" [src]="image" alt="Image">
     </mat-card>
-  
-    <ng-container *ngIf="isChilde">
-      <mat-card >
-        <mat-card-header>
-          <mat-card-title>{{"Products.BackgroundImage" | translate}}</mat-card-title>
-        </mat-card-header>
-        <img mat-card-image class="img" [src]="backgroundImage" alt="Background Image">
-      </mat-card>
 
-      <mat-card >
-        <mat-card-header>
-          <mat-card-title>{{"Common.MobileBackgroundImage" | translate}}</mat-card-title>
-        </mat-card-header>
-        <img mat-card-image class="img" [src]="mobileBackgroundImage" alt="Mobile Background Image">
-      </mat-card>
-    </ng-container>
+    @if(isChilde) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{"Products.BackgroundImage" | translate}}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image class="img" [src]="backgroundImage" alt="Background Image">
+    </mat-card>
 
-  
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{"Common.MobileBackgroundImage" | translate}}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image class="img" [src]="mobileBackgroundImage" alt="Mobile Background Image">
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{"Common.ItemBackgroundImage" | translate}}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image class="img" [src]="itemBackgroundImage" alt="Mobile Background Image">
+    </mat-card>
+    }
+
+
   </div>
 
 

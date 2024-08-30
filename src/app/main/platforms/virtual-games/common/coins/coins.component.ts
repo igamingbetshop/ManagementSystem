@@ -34,7 +34,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
   games = [];
   path: string = 'common/coins';
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  isSendingReqest = false;
+  isSendingRequest = false;
   cacheBlockSize = 5000;
 
   public defaultColDef = {
@@ -71,7 +71,6 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
       map(data => {
         if (data.ResponseCode === 0) {
           this.partners = data.ResponseObject.Entities;
-          console.log(this.partners, 'partners');
           return data.ResponseObject.Entities;
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -205,7 +204,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
       return;
     }
   
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const coin = selectedRows[0];
     const coinId = coin.Id;
     const currency = coin.CurrencyId;
@@ -227,7 +226,7 @@ export class CoinsComponent extends BasePaginatedGridComponent implements OnInit
           this.getRows();
         },
         complete: () => {
-          this.isSendingReqest = false;
+          this.isSendingRequest = false;
         }
       });
   }  

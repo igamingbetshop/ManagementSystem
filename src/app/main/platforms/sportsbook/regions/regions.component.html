@@ -55,6 +55,8 @@
             (cellValueChanged)="onCellValueChanged($event)"
             [ensureDomOrder]="true"
             [enableCellTextSelection]="true"
+            pagination="true"
+            [paginationPageSize]="5000"
             (rowSelected)="onRowSelected()"
             (columnPinned)="onColumnPinned($event)"
             (columnMoved)="onColumnMoved($event)"

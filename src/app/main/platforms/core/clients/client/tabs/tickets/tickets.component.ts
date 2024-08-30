@@ -14,6 +14,7 @@ import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { CoreSignalRService } from "../../../../services/core-signal-r.service";
 import { ExportService } from "../../../../services/export.service";
+import { syncColumnNestedSelectPanel, syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 
 @Component({
@@ -23,12 +24,13 @@ import { ExportService } from "../../../../services/export.service";
 })
 export class TicketsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public clientId: number;
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public rowData;
-  public signalRSubscription: any;
-  public partners: any[] = [];
+  clientId: number;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowData;
+  signalRSubscription: any;
+  partners: any[] = [];
   private filteredClientId: { [key: string]: any };
+  partnerId;
 
   constructor(
     private apiService: CoreApiService,
@@ -153,6 +155,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
   ngOnInit(): void {
     this.clientId = this.activateRoute.snapshot.queryParams.clientId;
+    this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partners = this.commonDataService.partners;
 
     this._signalR.init();
@@ -187,7 +190,8 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
     const { CreateNewTicketComponent } = await import('./create-new-ticket/create-new-ticket.component');
     const dialogRef = this.dialog.open(CreateNewTicketComponent, {
       width: ModalSizes.MEDIUM,
-      // data: {partnetId: this.,}
+      data: {partnetId: this.partnerId,}
+      
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -196,6 +200,10 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
     })
   }
 
+  onGridReady(params) {
+    syncColumnNestedSelectPanel();
+    super.onGridReady(params);
+  }
 
   exportToCsv() {
     this.exportService.exportToCsv(Controllers.CLIENT, Methods.EXPORT_CLIENT_MESSAGES, { TakeCount: 100, SkipCount: 0, ClientIds: this.filteredClientId });

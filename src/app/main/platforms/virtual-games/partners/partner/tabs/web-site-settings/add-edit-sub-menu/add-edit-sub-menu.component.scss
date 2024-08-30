@@ -1,0 +1,28 @@
+@import "variables";
+@import "mixins";
+
+.img-div {
+    display: flex;
+  
+    label {
+      margin: 3px 0;
+      padding: 10px;
+      background-color: $dark-blue;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: $bg-color;
+      }
+    }
+  
+    input {
+      visibility: hidden;
+      width: 10px;
+    }
+  
+    .img-text {
+      margin-left: auto;
+    }
+  }

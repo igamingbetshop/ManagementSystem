@@ -1,27 +1,25 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
-import {take} from "rxjs/operators";
-import {MatButtonModule} from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { take } from "rxjs/operators";
+import { MatButtonModule } from '@angular/material/button';
 
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-import {MatIconModule} from '@angular/material/icon';
-import {MatSelectModule} from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
-import {MatInputModule} from "@angular/material/input";
-
+import { MatInputModule } from "@angular/material/input";
 
 
 import { CoreApiService } from '../../../../services/core-api.service';
 import { CommonDataService, ConfigService } from 'src/app/core/services';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
-import { CommModule } from '../../../../bonuses/commons/comm.module';
 import { CommonModule } from '@angular/common';
 
 
@@ -51,6 +49,7 @@ export class CopySettingsComponent implements OnInit {
   selectedValue = '';
   myLable: string;
   method: string;
+  controler: string = Controllers.PARTNER;
 
   constructor(
     public dialogRef: MatDialogRef<CopySettingsComponent>,
@@ -64,22 +63,18 @@ export class CopySettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.formValues();
-      this.partners = this.commonDataService.partners;
+    this.partners = this.commonDataService.partners;
 
-      this.myLable = this.data.lable;
-      this.method = this.data.method;
-      this.formGroup.get('ToPartnerId').setValue(this.data.partnerId);
-
+    this.myLable = this.data.lable;
+    this.method = this.data.method;
+    if (!!this.data.controler) {
+      this.controler = Controllers[this.data.controler];      
+    }
+    this.formGroup.get('ToPartnerId').setValue(this.data.partnerId);
   }
 
   close() {
     this.dialogRef.close();
-  }
-
-  onChange(event) {
-    if (event) {
-      this.selectedPartner = event;
-    }
   }
 
   private formValues() {
@@ -92,12 +87,12 @@ export class CopySettingsComponent implements OnInit {
   onSubmit() {
     const requestBody = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true,
-      Controllers.PARTNER, Methods[this.method] ).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.dialogRef.close(data.ResponseObject);
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+     this.controler, Methods[this.method]).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          this.dialogRef.close(data.ResponseObject);
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 }

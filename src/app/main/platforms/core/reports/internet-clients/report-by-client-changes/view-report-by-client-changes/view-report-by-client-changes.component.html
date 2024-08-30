@@ -92,7 +92,7 @@
     </div>
     <div>
       <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-      <div class="third-hand">{{newData?.CreationTime | date:'dd/MM/yyyy HH:MM'}}</div>
+      <div class="third-hand">{{newData?.CreationTime | date:'dd/MM/yyyy HH:mm'}}</div>
     </div>
     <div [ngClass]="{'changed': newData?.DocumentNumber != oldData?.DocumentNumber}">
       <div class="first-hand">{{'Clients.DocumentNumber' | translate}}</div>

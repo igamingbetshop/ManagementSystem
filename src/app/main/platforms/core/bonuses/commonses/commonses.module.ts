@@ -22,33 +22,37 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { BonusesService } from "../bonuses.service";
 import { DialogModule } from "@angular/cdk/dialog";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { IdToNamePipe } from "../../../../../core/pipes/id-to-name-pipe";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    CommonsesRoutingModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatSnackBarModule,
-    TranslateModule,
-    AgBooleanFilterModule,
-    AgGridModule,
-    MatIconModule,
-    MatInputModule,
-    MatDatepickerModule,
-    FormsModule,
-    MatNativeDateModule,
-    MatCheckboxModule,
-    DialogModule,
-    DateTimePickerComponent
-  ],
-  declarations: [CommonsesComponent, GeneralSetupComponent],
-  providers: [
-    DatePipe,
-    BonusesService
-  ],
+    declarations: [CommonsesComponent, GeneralSetupComponent],
+    providers: [
+        DatePipe,
+        BonusesService
+    ],
+    imports: [
+        CommonModule,
+        CommonsesRoutingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatSnackBarModule,
+        TranslateModule,
+        AgBooleanFilterModule,
+        AgGridModule,
+        MatIconModule,
+        MatInputModule,
+        MatDatepickerModule,
+        FormsModule,
+        MatNativeDateModule,
+        MatCheckboxModule,
+        DialogModule,
+        DateTimePickerComponent,
+        MatChipsModule,
+        IdToNamePipe
+    ]
 })
 export class CommonsesModule { }

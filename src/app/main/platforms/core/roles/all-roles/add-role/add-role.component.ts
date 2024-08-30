@@ -36,7 +36,7 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 export class AddRoleComponent implements OnInit {
   formGroup: UntypedFormGroup;
   partners: any[] = [];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddRoleComponent>,
@@ -69,10 +69,10 @@ export class AddRoleComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.formGroup.invalid || this.isSendingReqest) {
+    if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     obj.RolePermissions = [];
     this.apiService.apiPost(this.configService.getApiUrl, obj,
@@ -84,7 +84,7 @@ export class AddRoleComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 }

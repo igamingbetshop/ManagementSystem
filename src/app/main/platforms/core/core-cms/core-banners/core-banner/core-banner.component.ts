@@ -31,16 +31,13 @@ export class CoreBannerComponent implements OnInit {
   LanguageType;
   languages: any = [];
   isEdit = false;
-  segmentesEntites = [];
-  languageEntites = [];
-  visibilityEntites = []
   image: any;
   bannerVisibilityTypes = [
-    { id: 1, name: 'Logged Out' },
-    { id: 2, name: 'Logged In' },
-    { id: 3, name: 'No Deposit' },
-    { id: 4, name: 'One Deposit Only' },
-    { id: 5, name: 'Two Or More Deposits' }
+    { Id: 1, Name: 'Logged Out' },
+    { Id: 2, Name: 'Logged In' },
+    { Id: 3, Name: 'No Deposit' },
+    { Id: 4, Name: 'One Deposit Only' },
+    { Id: 5, Name: 'Two Or More Deposits' }
   ];
   // bannerTypes: any = {};
   selectedMainType = 1 as number;
@@ -97,12 +94,6 @@ export class CoreBannerComponent implements OnInit {
     }, 500);
   }
 
-  setSegmentsEntytes() {
-    this.segmentesEntites.push(this.formGroup.value.Segments.Ids.map(elem => {
-      return this.segments.find((item) => elem === item.Id).Name
-    }))
-  }
-
   initCategorySource(): void {
     const types = []
     for (let i = 1; i < 100; i++) {
@@ -111,20 +102,6 @@ export class CoreBannerComponent implements OnInit {
       types.push({ Id: `${+webId}`, Name: `Category ${i} Web` }, { Id: `${+mobileId}`, Name: `Category ${i} Mobile` });
     }
     this.bannerTypes[2] = types;
-  }
-
-  setLanguageEntytes() {
-    this.languageEntites.push(this.formGroup.value.Languages.Names.map(elem => {
-      return this.languages.find((item) => elem === item.Id).Name
-    }))
-
-  }
-
-  setVisibilityEntytes() {
-    this.visibilityEntites.push(this.formGroup.value.Visibility.map(elem => {
-      return this.bannerVisibilityTypes.find((item) => elem === item.id).name
-    }))
-
   }
 
 
@@ -164,9 +141,6 @@ export class CoreBannerComponent implements OnInit {
   }
 
   getSegments() {
-    this.languageEntites = [];
-    this.segmentesEntites = [];
-    this.visibilityEntites = [];
     if (this.segments.length === 0) {
       this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: this.partnerId },
         true, Controllers.CONTENT, Methods.GET_SEGMENTS)
@@ -174,17 +148,11 @@ export class CoreBannerComponent implements OnInit {
         .subscribe(data => {
           if (data.ResponseCode === 0) {
             this.segments = data.ResponseObject;
-            this.setSegmentsEntytes();
-            this.setLanguageEntytes();
-            this.setVisibilityEntytes();
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
           }
         })
     } else {
-      this.setSegmentsEntytes();
-      this.setLanguageEntytes();
-      this.setVisibilityEntytes();
     }
   }
 

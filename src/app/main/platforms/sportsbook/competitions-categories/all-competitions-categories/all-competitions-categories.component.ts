@@ -31,7 +31,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
   updatePath: string = 'competitions/updatecategory';
   clonePath: string = 'competitions/clonecategory';
   deletePath: string = 'competitions/deletecategory';
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   public frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
@@ -42,12 +42,6 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
     selectStateRenderer: SelectStateRendererComponent,
   };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-
-  private multipleBetsStates = [
-    { Id: null, Name: this.translate.instant('Sport.None') },
-    { Id: true, Name: this.translate.instant('Common.Yes') },
-    { Id: false, Name: this.translate.instant('Common.No') },
-  ]
 
   constructor(
     private apiService: SportsbookApiService,
@@ -114,13 +108,6 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         editable: true,
         minWidth: 130,
         filter: 'agTextColumnFilter',
-        cellStyle: function (params) {
-          if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
-          } else {
-            return null;
-          }
-        },
         cellRenderer: function (params) {
           let color = params.data.Color;
           return `
@@ -129,12 +116,19 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
           <input type="color" disabled name="head"  value = ${color}>
           </div>`;
         },
+        cellStyle: function (params) {
+          if (params.data.Color !== '#FFFFFF') {
+            return { color: 'black', backgroundColor: params.data.Color };
+          } else {
+            return null;
+          }
+        },
         cellEditor: 'colorEditor',
       },
       {
-        headerName: 'Sport.AbsoluteLimit',
+        headerName: 'Sport.MarketLimit',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AbsoluteLimit',
+        field: 'MarketLimit',
         resizable: true,
         sortable: true,
         editable: true,
@@ -142,7 +136,24 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
+            return { color: 'black', backgroundColor: params.data.Color };
+          } else {
+            return null;
+          }
+        }
+      },
+      {
+        headerName: 'Sport.PlayerLimit',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'PlayerLimit',
+        resizable: true,
+        sortable: true,
+        editable: true,
+        filter: 'agNumberColumnFilter',
+        cellEditor: 'numericEditor',
+        cellStyle: function (params) {
+          if (params.data.Color !== '#FFFFFF') {
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -174,7 +185,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -191,7 +202,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -208,7 +219,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -225,7 +236,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -242,7 +253,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         cellEditor: 'numericEditor',
         cellStyle: function (params) {
           if (params.data.Color !== '#FFFFFF') {
-            return { color: 'black', backgroundColor: params.data.Color, height: '52px' };
+            return { color: 'black', backgroundColor: params.data.Color };
           } else {
             return null;
           }
@@ -262,7 +273,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
       //   },
       //   cellStyle: function (params) {
       //     if (params.data.Color !== '#FFFFFF') {
-      //       return {color: 'black', backgroundColor: params.data.Color, height: '52px'};
+      //       return {color: 'black', backgroundColor: params.data.Color};
       //     } else {
       //       return null;
       //     }
@@ -368,7 +379,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
 
   clone() {
     const row = this.gridApi.getSelectedRows()[0];
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.clonePath, { "Id": row.Id })
       .pipe(take(1))
       .subscribe(data => {
@@ -378,12 +389,12 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 
   delete() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const row = this.gridApi.getSelectedRows()[0];
     this.apiService.apiPost(this.deletePath, { "Id": row.Id })
       .pipe(take(1))
@@ -397,7 +408,7 @@ export class AllCompetitionsCategoriesComponent extends BasePaginatedGridCompone
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
   }
 

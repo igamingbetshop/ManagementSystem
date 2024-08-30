@@ -4,7 +4,6 @@ import 'ag-grid-enterprise';
 import { take } from 'rxjs/operators';
 import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
 import { GridMenuIds, GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
 import { MatDialog } from "@angular/material/dialog";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";

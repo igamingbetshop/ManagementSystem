@@ -38,7 +38,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
   partners = [];
   menus = [];
   selectedPartner;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(public dialogRef: MatDialogRef<CopyWebsiteSettingsComponent>,
     private activateRoute: ActivatedRoute,
@@ -92,7 +92,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     if (!this.formGroup.valid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const setting = this.formGroup.getRawValue();
     setting.ToPartnerId = +this.partnerId;
     this.apiService.apiPost('cms/clonewebsitemenubypartnerId', setting)
@@ -103,7 +103,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

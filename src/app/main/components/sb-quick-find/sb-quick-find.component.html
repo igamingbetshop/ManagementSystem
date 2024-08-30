@@ -1,0 +1,23 @@
+<div class="container" (click)="$event.stopPropagation()" [class.opened]="isQuickLinksOpened">
+  <div class="quick-menu-toggle">
+    <button mat-icon-button (click)="toggleQuickMenu()">
+      <mat-icon>sports_soccer</mat-icon>
+    </button>
+  </div>
+
+  <div class="quick-menu-content">
+    <div *ngFor="let filterGroup of quickLinksFilterGroups; let i = index" class="client-filter">
+      <div class="title">{{ filterGroup.title | translate }}</div>
+      <div *ngFor="let filter of filterGroup.filters; let j = index" class="field-content">
+        <div class="input-content">
+          <input (keyup.enter)="searchQuickLink(filter.type)" [(ngModel)]="quickLinksFilter[filter.model]"
+            class="input" [type]="filter.inputType" [placeholder]="filter.placeholder | translate" />
+        </div>
+        <button class="filter-btn" [class.disabled]="!quickLinksFilter[filter.model].trim()"
+          (click)="searchQuickLink(filter.type)">
+          {{ 'Common.Go' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

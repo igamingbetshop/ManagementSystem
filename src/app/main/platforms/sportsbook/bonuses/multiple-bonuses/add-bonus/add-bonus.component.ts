@@ -40,7 +40,7 @@ export class AddBonusComponent implements OnInit {
   partners: any[] = [];
   bonus: any;
   openForAdd;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { partners: any[], bonusSettings: any[], bonus: any },
@@ -83,7 +83,7 @@ export class AddBonusComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.bonus.PartnerId = this.formGroup.get('PartnerId').value;
     this.bonus.BonusSettingId = this.formGroup.get('BonusSettingId').value;
     this.bonus.State = this.formGroup.get('State').value;
@@ -99,7 +99,7 @@ export class AddBonusComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       })
 
   }

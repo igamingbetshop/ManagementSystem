@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   CellValueChangedEvent,
   ColDef, GetServerSideGroupKey,
@@ -7,14 +7,14 @@ import {
   IsServerSideGroup,
   ServerSideStoreType
 } from "ag-grid-community";
-import {Controllers, GridRowModelTypes, Methods} from "../../../../../../../core/enums";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService} from "../../../../../../../core/services";
-import {TranslateService} from "@ngx-translate/core";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { Controllers, GridRowModelTypes, Methods } from "../../../../../../../core/enums";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService } from "../../../../../../../core/services";
+import { TranslateService } from "@ngx-translate/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 
 @Component({
   selector: 'app-commission-plan',
@@ -23,18 +23,18 @@ import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper"
 })
 export class CommissionPlanComponent implements OnInit {
   public userId;
+  public mappedData;
   public agentIds;
-  // agentLevelId;
   public gridApi: GridApi;
   public rowData: any[];
-  public rowData1;
   public columnDefs: ColDef[] = [
     {
 
       field: 'Id',
-      hide: true},
-    {field: 'Name',},
-    {field: 'ParentId'},
+      hide: true
+    },
+    { field: 'Name', },
+    { field: 'ParentId' },
     {
       field: 'Percent',
       editable: true,
@@ -86,7 +86,6 @@ export class CommissionPlanComponent implements OnInit {
   ngOnInit() {
     this.userId = this.activateRoute.snapshot.queryParams.userId;
     this.agentIds = this.activateRoute.snapshot.queryParams.agentIds;
-    // this.agentLevelId = +this.activateRoute.snapshot.queryParams.levelId;
     this.getCommissionPlan();
   }
 
@@ -111,20 +110,54 @@ export class CommissionPlanComponent implements OnInit {
     }
     this.apiService.apiPost(this.configService.getApiUrl, req,
       true, Controllers.USER, Methods.UPDATE_COMMISSION_PLAN).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        const products = data.ResponseObject;
+        if (data.ResponseCode === 0) {
+          const products = data.ResponseObject;
 
-        for (let i = 0; i < products.length; i++) {
-          if (products[i].ProductId == params.data.Id) {
-            params.data.Percent = products[i];
-            params.data.TurnoverPercent = products[i];
-            break;
+          for (let i = 0; i < products.length; i++) {
+            if (products[i].ProductId == params.data.Id) {
+              params.data.Percent = products[i];
+              params.data.TurnoverPercent = products[i];
+              break;
+            }
           }
-        }
 
+        } else {
+          params.data.Percent = params.oldValue;
+          params.data.PercentTurnoverPercent = params.oldValue;
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
+  }
+
+  mapProducts = (products) => {
+    products.forEach(product => {
+      let settings = this.rowData.find(p => p.ProductId == product.Id);
+      if (!settings) {
+        settings = {Id: 0, ProductId: product.Id, Percent: null};
+      }
+
+      product.Settings = settings;
+      product.Percent = settings.Percent;
+      product.TurnoverPercent = settings.TurnoverPercent;
+      product.group = !product.IsLeaf;
+    });
+  }
+
+  getCommissionPlan() {
+    let requestObject;
+    if (this.agentIds) {
+      let agentIdArray = this.agentIds.split(',');
+      let lastAgentId = agentIdArray[agentIdArray.length - 1];
+      requestObject = lastAgentId;
+    } else {
+      requestObject = this.userId;
+    }
+    this.apiService.apiPost(this.configService.getApiUrl, {AgentId: requestObject}, true,
+      Controllers.USER, Methods.GET_COMMISSION_PLAN).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        this.rowData = data.ResponseObject
       } else {
-        params.data.Percent = params.oldValue;
-        params.data.PercentTurnoverPercent = params.oldValue;
+        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
     });
   }
@@ -143,7 +176,6 @@ export class CommissionPlanComponent implements OnInit {
           filter.ParentId = params.parentNode.data.Id;
         }
 
-
         this.apiService.apiPost(this.configService.getApiUrl, filter,
           true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
           if (data.ResponseCode === 0) {
@@ -155,42 +187,10 @@ export class CommissionPlanComponent implements OnInit {
     };
   }
 
-  mapProducts = (products) => {
-    products.forEach(product => {
-      let settings = this.rowData1.find(p => p.ProductId == product.Id);
-      if (!settings) {
-        settings = {Id: 0, ProductId: product.Id, Percent: null};
-      }
-
-      product.Settings = settings;
-      product.Percent = settings.Percent;
-      product.TurnoverPercent = settings.TurnoverPercent;
-      product.group = !product.IsLeaf;
-    });
-  }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
-  }
-
-  getCommissionPlan() {
-    let requestObject;
-    if (this.agentIds) {
-      let agentIdArray = this.agentIds.split(',');
-      let lastAgentId = agentIdArray[agentIdArray.length - 1];
-      requestObject = lastAgentId;
-    } else {
-      requestObject = this.userId;
-    }
-    this.apiService.apiPost(this.configService.getApiUrl, {AgentId: requestObject}, true,
-      Controllers.USER, Methods.GET_COMMISSION_PLAN).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowData1 = data.ResponseObject
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
   }
 
 

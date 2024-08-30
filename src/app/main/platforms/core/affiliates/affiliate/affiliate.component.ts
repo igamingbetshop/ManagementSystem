@@ -10,13 +10,21 @@ export class AffiliateComponent implements OnInit {
 
   tabs:RouteTabItem[] = [
     {
-      label:'Main Info',
+      label:'Sport.MainInfo',
       route:'main'
     },
     {
-      label:'Commission Plan',
+      label:'Agents.CommissionPlan',
       route:'commission-plan'
     },
+    {
+      label: 'Partners.Accounts',
+      route: 'accounts'
+    },
+    {
+      label: 'Common.Transactions',
+      route: 'transactions'
+    }
   ];
 
   affiliateId:number;

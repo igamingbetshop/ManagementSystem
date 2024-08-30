@@ -40,7 +40,7 @@ export class AddEditCoinComponent implements OnInit {
   public path = 'utils/addcoin'
   public partners: any[] = [];
   public currencies: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -101,7 +101,7 @@ export class AddEditCoinComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     let obj = this.formGroup.getRawValue();
     if (this.isEdit) {
       obj = {Id: this.data.Id, ...obj }
@@ -115,7 +115,7 @@ export class AddEditCoinComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

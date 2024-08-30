@@ -43,7 +43,7 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
   public status = [];
   public show = false;
   public filteredData;
-  public detailCellRendererParams: any;
+
   public masterDetail;
   public detailsInline;
   public nestedFrameworkComponents = {
@@ -60,6 +60,130 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
   TotalProfit;
   Currency;
   private oddsType: number;
+  private detailGridParams: any;
+  nestedColumnDefs = [];
+  DetailRowData = [];
+  detailCellRendererParams: any = {
+    detailGridOptions: {
+      rowHeight: 47,
+      defaultColDef: {
+        sortable: true,
+        filter: true,
+        flex: 1,
+      },
+      components: this.nestedFrameworkComponents,
+      columnDefs: this.nestedColumnDefs,
+    },
+
+    getDetailRowData: params => {
+      if (params && params.data.ProductName == 'Sportsbook') {
+        this.setSportsbookColumnDefs();
+      }
+
+      if (params && params.data.ProviderName == "Evolution") {
+        this.setEvalutionColumnDefs();
+      }
+
+      if (params &&  params?.data.ProductName == "pregame") {
+        this.setBGGamesColdefs();
+      }
+
+      if ((params?.data?.ProductName == 'Sportsbook') || (params?.data?.ProviderName == "Evolution") || (params?.data.ProductName == "pregame")) {
+        const row = params.data;
+        this.apiService.apiPost(this.configService.getApiUrl, row.BetDocumentId,
+          true, Controllers.REPORT, Methods.GET_BET_INFO)
+          .pipe(take(1))
+          .subscribe(data => {
+            if (data.ResponseCode === 0) {
+              this.DetailRowData = data.ResponseObject;
+              params.data.HelpData = this.DetailRowData ? data.ResponseObject : null;
+              params.data.DealerId = data.ResponseObject?.DealerId;
+              params.data.DealerName = data.ResponseObject?.DealerName;
+              params.data.TableID = data.ResponseObject?.TableID;
+              params.data.TableName = data.ResponseObject?.TableName;
+              params.data.RoundId = data.ResponseObject?.RoundId;
+              params.data.RoundDuration = data.ResponseObject?.RoundDuration;
+              params.data.RoundDateTime = data.ResponseObject?.RoundDateTime;
+              params.data._Result = data.ResponseObject?.Result;
+              if (params.data._isUpdated != true) {
+                this.gridApi.redrawRows({ rowNodes: [params.node] });
+              }
+              params.data._isUpdated = true;
+              if (params && params.data.ProductName == 'Sportsbook') {
+                params.successCallback(data.ResponseObject?.BetSelections);
+              } else if (params && params.data.ProviderName == "Evolution") {
+                let result: any = [];
+                if (data.ResponseObject) {
+                  result = data.ResponseObject?.Results?.Participants[0][0]?.bets;
+                }
+                params.successCallback(result);
+              } else if (params?.data.ProductName == "pregame") {
+                params.successCallback(data.ResponseObject?.events);
+              }
+
+            } else {
+              SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+              params.successCallback(undefined);
+            }
+          });
+      }
+    },
+    refreshStrategy: 'everything',
+    template: params => {
+      if (!this.detailGridParams || this.detailGridParams.data.BetDocumentId != params.data.BetDocumentId) {
+        this.detailGridParams = params;
+      }
+
+      const isEmpty = !params.data.HelpData ? "flex" : "none";
+      const hasData = !!params.data.HelpData ? "block" : "none";
+      const isSportsbook = params.data.ProductName == 'Sportsbook' ? "block" : "none";
+      const isEvolution = params.data.ProviderName == 'Evolution' ? "block" : "none";
+
+      const amount = params.data.HelpData?.BetAmount ? params.data.HelpData.BetAmount.toFixed(2) : '';
+      const betDate = params.data.HelpData?.BetDate ? params.data.HelpData?.BetDate : '';
+      const coefficient = params.data.HelpData?.Coefficient ? params.data.HelpData?.Coefficient : '';
+
+      const dealerId = params.data.DealerId ? params.data.DealerId : '';
+      const dealerName = params.data.DealerName ? params.data.DealerName : '';
+      const TableID = params.data.TableID ? params.data.TableID : '';
+      const TableName = params.data.TableName ? params.data.TableName : '';
+      const roundId = params.data.RoundId ? params.data.RoundId : '';
+      const roundDuration = params.data.RoundDuration ? params.data.RoundDuration : '';
+      const roundDateTime = params.data.RoundDateTime ? params.data.RoundDateTime : '';
+      const _Info = params.data?.HelpData?.Results?.Info ? JSON.stringify(params.data?.HelpData?.Results?.Info, null, 4) : '';
+      let info = '';
+      if (_Info) {
+        info = _Info.replace(/{|}/g, '')
+      }
+
+      return `
+        <div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box; overflow-y: auto">
+          <div style="display: ${isEmpty}; height: 10%; color: #000; margin-bottom: 15px; justify-content: center; font-weight: 700; font-size: 24px">No information</div>
+          <div style="height: 100%; display: ${hasData}">
+            <div style="font-weight: 700; font-size: 24px; margin-bottom: 8px">Information</div>
+            <div style="height: 10%; display: ${isSportsbook}; font-size: 16px; color: #076192">Amount: ${amount}</div>
+            <div style="height: 10%; display: ${isSportsbook}; font-size: 16px; color: #076192">Bet Date: ${betDate}</div>
+            <div style="height: 10%; display: ${isSportsbook}; font-size: 16px; color: #076192">Coefficient: ${coefficient}</div>
+
+            <div style="display: ${isEvolution}">
+              <div style="height: 10%; font-size: 16px; color: #076192">Dealer Id: ${dealerId}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Dealer Name: ${dealerName}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Table Id: ${TableID}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Table Name: ${TableName}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Round Id: ${roundId}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Round Duration: ${roundDuration}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Round Date Time: ${roundDateTime}</div>
+              <div style="height: 10%; font-size: 16px; color: #076192">Info: ${info}</div>
+            </div>
+
+            <div style="height: 100%;">
+              <div style="height: 10%; color: #000; margin-bottom: 15px; display: flex; justify-content: center; font-weight: 700; font-size: 24px">Selections</div>
+              <div ref="eDetailGrid" style="height: 85%; "></div>
+            </div
+          </div>
+        </div>`
+    }
+  };
 
   constructor(
     private apiService: CoreApiService,
@@ -615,174 +739,6 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
       },
     ]
     this.masterDetail = true;
-    this.detailCellRendererParams = {
-      detailGridOptions: {
-        rowHeight: 47,
-        defaultColDef: {
-          sortable: true,
-          filter: true,
-          flex: 1,
-        },
-        components: this.nestedFrameworkComponents,
-        columnDefs: [
-          {
-            headerName: 'Common.EventDate',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'EventDate',
-            sortable: true,
-            resizable: true,
-            cellRenderer: function (params) {
-              let datePipe = new DatePipe("en-US");
-              let dat = datePipe.transform(params.data.EventDate, 'medium');
-              if (params.node.rowPinned) {
-                return ''
-              } else {
-                return `${dat}`;
-              }
-            },
-          },
-          {
-            headerName: 'Sport.SportName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'SportName',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Sport.CompetitionName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'CompetitionName',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Sport.RegionName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'RegionName',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Sport.MarketName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'MarketName',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Common.Status',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'Status',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Sport.MarketTypeId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'MarketTypeId',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Sport.MatchId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'MatchId',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Common.Round',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'RoundId',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Segments.SelectionId',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'SelectionId',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Common.SelectionName',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'SelectionName',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Common.Unit',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'UnitName',
-            sortable: true,
-            resizable: true,
-          },
-          {
-            headerName: 'Sport.Coefficient',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'Coefficient',
-            sortable: true,
-            resizable: true,
-            cellRenderer: (params) => {
-              const oddsTypePipe = new OddsTypePipe();
-              let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-              return `${data}`;
-            }
-          },
-          {
-            headerName: 'Sport.MatchState',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'IsLive',
-            sortable: true,
-            resizable: true,
-            cellRenderer: params => {
-              var a = document.createElement('div');
-              if (params.data.IsLive === true) {
-                a.innerHTML = 'Live'
-              } else {
-                a.innerHTML = 'Prematch'
-              }
-              return a;
-            },
-          },
-          {
-            headerName: 'Common.State',
-            headerValueGetter: this.localizeHeader.bind(this),
-            field: 'State',
-            sortable: true,
-            resizable: true,
-          },
-        ],
-        onGridReady: params => {
-        },
-      },
-      getDetailRowData: params => {
-        if (params) {
-          this.apiService.apiPost(this.configService.getApiUrl, params.data.BetDocumentId, true,
-            Controllers.REPORT, Methods.GET_BET_INFO).pipe(take(1)).subscribe(data => {
-              const nestedRowData = data.ResponseObject.BetSelections
-              this.detailsInline = data.ResponseObject
-              params.successCallback(nestedRowData);
-            })
-        }
-      },
-      template: params => {
-        const information = this.translate.instant('Common.Information') as String;
-        const amount = this.translate.instant('Clients.Amount') as String;
-        const barcode = this.translate.instant('Payments.Barcode') as String;
-        const betDate = this.translate.instant('Common.BetDate') as String;
-        const coefficient = this.translate.instant('Sport.Coefficient') as String;
-        return `<div style="height: 100%; background-color: #EDF6FF; padding: 20px; box-sizing: border-box; overflow-y: auto">
-                   <div style="font-weight: 700; font-size: 24px">${information}</div>
-                  <div style="height: 10%; font-size: 16px; color: #076192">${amount}: ${this.detailsInline?.Amount.toFixed(2)}</div>
-                  <div style="height: 10%; font-size: 16px; color: #076192">${barcode}: ${this.detailsInline?.Barcode}</div>
-                  <div style="height: 10%; font-size: 16px; color: #076192">${betDate}: ${this.detailsInline?.BetDate}</div>
-                  <div style="height: 10%; font-size: 16px; color: #076192">${coefficient}: ${this.detailsInline?.Coefficient}</div>
-                  <div ref="eDetailGrid" style="height: 90%;"></div>
-               </div>`
-      }
-    }
     this.rowClassRules = {
       'bets-status-2': function (params) {
         let numSickDays = params.data?.State;
@@ -1061,6 +1017,233 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
     delete this.filteredData.StartDate;
     delete this.filteredData.EndDate;
     this.exportService.exportToCsv(Controllers.REPORT, Methods.EXPORT_INTERNET_BET, { ...this.filteredData, adminMenuId: this.adminMenuId });
+  }
+
+  setEvalutionColumnDefs() {
+    this.nestedColumnDefs.length = 0;
+    this.nestedColumnDefs.push({
+      headerName: 'Payments.TransactionId',
+      headerValueGetter: this.localizeHeader.bind(this),
+      field: 'transactionId',
+      resizable: true,
+      filter: false,
+    },
+      {
+        headerName: 'Common.Code',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'code',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.Stake',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'stake',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.Payout',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'payout',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.PlacedOn',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'placedOn',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Bonuses.Description',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'description',
+        resizable: true,
+        filter: false,
+      },);
+  }
+
+  setSportsbookColumnDefs() {
+    this.nestedColumnDefs.length = 0;
+    this.nestedColumnDefs.push({
+      headerName: 'Common.EventDate',
+      field: 'EventDate',
+      filter: 'agDateColumnFilter',
+      resizable: true,
+      cellRenderer: function (params) {
+        if (params.node.rowPinned) {
+          return '';
+        }
+        let datePipe = new DatePipe("en-US");
+        let dat = datePipe.transform(params.data.EventDate, 'medium');
+        return `${dat}`;
+      },
+    },
+      {
+        headerName: 'Sport.SportName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SportName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.CompetitionName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'CompetitionName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.RegionName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'RegionName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.MarketName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MarketName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.Status',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Status',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.MarketTypeId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MarketTypeId',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.MatchId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'MatchId',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'VirtualGames.RoundId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'RoundId',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Segments.SelectionId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SelectionId',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.SelectionName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'SelectionName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.UnitName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'UnitName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.Coefficient',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Coefficient',
+        resizable: true,
+        filter: false,
+        cellRenderer: (params) => {
+          const oddsTypePipe = new OddsTypePipe();
+          let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
+          return `${data}`;
+        }
+      },
+      {
+        headerName: 'Sport.MatchState',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'IsLive',
+        resizable: true,
+        filter: false,
+        cellRenderer: params => {
+          let isLiv = params.data.IsLive;
+          let show = isLiv ? 'Live' : 'Prematch';
+          return `${show}`;
+        }
+      },
+      {
+        headerName: 'Common.State',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'State',
+        resizable: true,
+        filter: false,
+      },
+    )
+  }
+
+  setBGGamesColdefs() {
+    this.nestedColumnDefs.length = 0;
+    this.nestedColumnDefs.push({
+      headerName: 'Common.Name',
+      headerValueGetter: this.localizeHeader.bind(this),
+      field: 'name',
+      resizable: true,
+      filter: false,
+    },
+      {
+        headerName: 'Common.SelName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'selName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.OddName',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'oddName',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Sport.OddValue',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'oddValue',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.EventTime',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'extra.eventTime',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Common.EventScore',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'extra.eventScore',
+        resizable: true,
+        filter: false,
+      },
+      {
+        headerName: 'Bonuses.TimeAddedToBetslip',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'extra.timeAddedToBetslip',
+        resizable: true,
+        filter: false,
+      }
+    );
   }
 
 

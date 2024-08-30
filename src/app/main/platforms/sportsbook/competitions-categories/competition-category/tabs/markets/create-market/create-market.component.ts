@@ -80,6 +80,7 @@ export class CreateMarketComponent implements OnInit {
           this.marketTypes = filteredResponse.map(el => {
             return { Id: el.Id, Name: `${el.Name} - ${el.Id}` };
           });
+          
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -92,8 +93,12 @@ export class CreateMarketComponent implements OnInit {
       AbsoluteProfitRange1: [null, [Validators.required]],
       AbsoluteProfitRange2: [null, [Validators.required]],
       AbsoluteProfitRange3: [null, [Validators.required]],
-      AbsoluteProfitLive: [null, [Validators.required]],
-      RelativeLimitRange1: [null, [Validators.required]],
+      AbsoluteProfitLiveRange1: [null, [Validators.required]],
+      AbsoluteProfitLiveRange2: [null, [Validators.required]],
+      AbsoluteProfitLiveRange3: [null, [Validators.required]],
+      AbsoluteProfitLiveRange4: [null, [Validators.required]],
+      AbsoluteProfitLiveRange5: [null, [Validators.required]],
+      AbsoluteProfitLiveRange6: [null, [Validators.required]], RelativeLimitRange1: [null, [Validators.required]],
       RelativeLimitRange2: [null, [Validators.required]],
       RelativeLimitRange3: [null, [Validators.required]],
       RelativeLimitLive: [null, [Validators.required]],

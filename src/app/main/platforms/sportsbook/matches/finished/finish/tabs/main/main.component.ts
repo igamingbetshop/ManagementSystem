@@ -71,7 +71,7 @@ export class MainComponent extends BaseGridComponent implements OnInit {
     this.finishId = +this.activateRoute.snapshot.queryParams.finishId;
     // this.name = this.activateRoute.snapshot.queryParams.name;
     this.getProviders();
-    this.getPartner();
+    this.featchMatch();
   }
 
   getProviders() {
@@ -117,7 +117,7 @@ export class MainComponent extends BaseGridComponent implements OnInit {
       });
   }
 
-  getPartner() {
+  featchMatch() {
     this.apiService.apiPost('matches/match', { MatchId: this.finishId })
       .pipe(take(1))
       .subscribe(data => {

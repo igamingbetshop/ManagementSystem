@@ -42,7 +42,7 @@ export class AddCoreRegionsComponent implements OnInit {
   languages: any[] = [];
   regions: any[] = [];
   parentId: number | undefined;
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {Languages: any[],Regions: any[], parentId: number | undefined},
@@ -84,7 +84,7 @@ export class AddCoreRegionsComponent implements OnInit {
       return;
     }
     const request = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.configService.getApiUrl, request,
       true, Controllers.REGION, Methods.SAVE_REGION)
       .pipe(take(1))
@@ -94,7 +94,7 @@ export class AddCoreRegionsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 }

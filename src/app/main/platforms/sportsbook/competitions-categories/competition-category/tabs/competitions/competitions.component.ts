@@ -81,9 +81,17 @@ export class CompetitionsComponent extends BasePaginatedGridComponent implements
           editable: false,
         },
         {
-          headerName: 'Sport.AbsoluteLimit',
+          headerName: 'Sport.MarketLimit',
           headerValueGetter: this.localizeHeader.bind(this),
-          field: 'AbsoluteLimit',
+          field: 'MarketLimit',
+          resizable: true,
+          sortable: true,
+          editable: false,
+        },
+        {
+          headerName: 'Sport.PlayerLimit',
+          headerValueGetter: this.localizeHeader.bind(this),
+          field: 'PlayerLimit',
           resizable: true,
           sortable: true,
           editable: false,
@@ -289,9 +297,23 @@ export class CompetitionsComponent extends BasePaginatedGridComponent implements
         },
       },
       {
-        headerName: 'Sport.AbsoluteLimit',
+        headerName: 'Sport.MarketLimit',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AbsoluteLimit',
+        field: 'MarketLimit',
+        resizable: true,
+        sortable: true,
+        editable: false,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Sport.PlayerLimit',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'PlayerLimit',
         resizable: true,
         sortable: true,
         editable: false,
@@ -477,7 +499,7 @@ export class CompetitionsComponent extends BasePaginatedGridComponent implements
         paging.PageIndex = this.paginationPage - 1;
         paging.PageSize = Number(this.cacheBlockSize);
         paging.PartnerId = this.partnerId;
-        paging.CategoryId = this.categoryId;
+        paging.TemplateId = this.categoryId;
         this.setSort(params.request.sortModel, paging, "OrderByDescending");
         this.setFilter(params.request.filterModel, paging);
         this.apiService.apiPost(this.path, paging)

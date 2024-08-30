@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewContainerRef, ViewChild } from "@angular/core";
+import { Component, OnInit, Injector, ViewContainerRef, ViewChild, signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
 import { take } from "rxjs/operators";
@@ -29,8 +29,11 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
   @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
   @ViewChild('bulkEditorRef', {read: ViewContainerRef}) bulkEditorRef!: ViewContainerRef;
   categoryId: number;
-  rowData = [];
+  selectedMarket = signal<any>({});
+  rowData = signal<any>([]);
+  mappedRowData = signal<any>([]);
   cacheBlockSize = 5000;
+  sportId: number;
   name: string = "";
   path: string = "competitions/markettypeprofits";
   updatePath: string = "competitions/updatemarkettypeprofit";
@@ -115,14 +118,82 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
         cellEditor: "numericEditor",
       },
       {
-        headerName: "Sport.LiveAP",
+        headerName: 'Sport.AbsoluteProfitLiveRange1',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: "AbsoluteProfitLive",
-        resizable: true,
+        field: 'AbsoluteProfitLiveRange1',
         sortable: true,
+        resizable: true,
         editable: true,
         floatingFilter: true,
-        cellEditor: "numericEditor",
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange2',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange2',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange3',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange3',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange4',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange4',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange5',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange5',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange6',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange6',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
       },
       {
         headerName: "Sport.Till48HoursRL",
@@ -232,6 +303,7 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.sportId = +this.activateRoute.snapshot.queryParams.sportId;
     this.name = this.activateRoute.snapshot.queryParams.name;
     this.categoryId = +this.activateRoute.snapshot.queryParams.categoryId;
     this.gridStateName = "competition-catagories-markets-grid-state";
@@ -258,19 +330,32 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
   }
 
   async addSettings() {
-    const { CreateMarketComponent } = await import(
-      "../../tabs/markets/create-market/create-market.component"
+    const { AddSettingComponent } = await import(
+      "../../../../matches/active-matches/active/tabs/profit/add-setting/add-setting.component"
     );
-    const dialogRef = this.dialog.open(CreateMarketComponent, {
+    const dialogRef = this.dialog.open(AddSettingComponent, {
       width: ModalSizes.LARGE,
-      data: { marketTypeIds: this.marketTypeIds },
+      data: { 
+        PartnerId: null, 
+        MatchId: null,
+        Method: "competitions/createmarkettypeprofit",
+        marketTypeIds: this.marketTypeIds },
     });
     dialogRef
       .afterClosed()
       .pipe(take(1))
       .subscribe((data) => {
-        if (data) this.rowData.unshift(data);
-        this.gridApi.setRowData(this.rowData);
+        if (data) {
+          const currentData = this.rowData();
+          this.rowData.set([data, ...currentData]);
+          this.mappedRowData.set([...currentData]);
+          this.gridApi.setRowData(this.mappedRowData());
+
+          const selectedMarket = this.selectedMarket();
+          if (selectedMarket.Id) {
+            this.filterRowData();
+          }
+        } 
       });
   }
 
@@ -326,8 +411,14 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
       .pipe(take(1))
       .subscribe((data) => {
         if (data.Code === 0) {
-          this.rowData = data.ResponseObject;
-          this.marketTypeIds = this.rowData.map((data) => data.MarketTypeId);
+          this.rowData.set(data.ResponseObject);
+          this.mappedRowData.set(data.ResponseObject);
+
+          const selectedMarket = this.selectedMarket();
+          if (selectedMarket.Id) {
+            this.filterRowData();
+          }
+          this.marketTypeIds = this.rowData().map((data) => data.MarketTypeId);
         } else {
           SnackBarHelper.show(this._snackBar, {
             Description: data.Description,
@@ -381,5 +472,23 @@ export class MarketsComponent extends BaseGridComponent implements OnInit {
       this.bulkEditorRef.clear();
       this.gridApi.deselectAll();
     });
+  }
+
+  filterRowData() {
+    const selectedMarket = this.selectedMarket();
+    if (selectedMarket.Id) {
+      const data = this.rowData().filter(element => 
+        element.GroupIds?.includes(selectedMarket.Id)
+      );
+      this.mappedRowData.set(data);
+
+    } else {
+      this.mappedRowData.set(this.rowData())
+    }
+  }
+
+  onSetSelectedMarket(event) {
+    this.selectedMarket.set(event);
+    this.filterRowData();
   }
 }

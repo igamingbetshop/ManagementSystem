@@ -100,7 +100,11 @@ export class MultipleCashbackBonusesComponent extends BasePaginatedGridComponent
   }
 
   getbonusSettings() {
-    this.apiService.apiPost('bonuses/bonussettings').subscribe(data => {
+    let data = {
+      PageIndex: 0,
+      PageSize: 5000,
+    };
+    this.apiService.apiPost('bonuses/bonussettings', data).subscribe(data => {
       if (data.Code === 0) {
         this.bonusSettings = data.ResponseObject.map((obj) => {
           return {Id: obj.Id, TypeId: obj.TypeId, Name: obj.Id + '-' + obj.Name}
@@ -153,6 +157,8 @@ export class MultipleCashbackBonusesComponent extends BasePaginatedGridComponent
     let data = {};
     if (this.partnerId) {
       data = {
+        PageIndex: 0,
+        PageSize: 5000,
         PartnerId: this.partnerId
       }
     }

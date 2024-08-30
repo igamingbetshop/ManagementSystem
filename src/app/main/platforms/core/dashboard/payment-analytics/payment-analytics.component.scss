@@ -4,10 +4,18 @@
 .container
 {
   padding: 0 16px;
+  @media screen and (max-width: 600px) {
+    padding: 0 8px;
+  }
   .payment-analytics-content
   {
     display: flex;
     gap: 16px;
+    @media screen and (max-width: 600px) {
+      width: 100%;
+      margin-top: 34px;
+      display: block;
+    }
     .payin-block,.payout-block
     {
       flex: 1;
@@ -73,6 +81,11 @@
           color: rgba(91, 99, 114, 1);
           font-size: 14px;
         }
+      }
+      @media screen and (max-width: 600px) {
+        min-height: 70vh;
+        height: 70vh;
+        margin-top: 16px;
       }
     }
   }

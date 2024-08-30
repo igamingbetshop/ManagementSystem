@@ -1,15 +1,12 @@
-<div class="header"  fxHeight="50px">
-  <div>
-    <h4><span>{{'Sport.Finished' | translate}}</span>  / :{{'Sport.Markets' | translate}} / {{SelectionId}}</h4>
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a (click)="onNavigateToMarket()">{{'Sport.Finished' | translate}}</a>  /  {{SelectionId}} : {{'Sport.Markets' | translate}}
+      <span>{{finishId}}</span> &nbsp; {{name}}
+    </div>
   </div>
-  <div><h2><span>{{finishId}}</span> &nbsp; {{name}}</h2></div>
-  <div class="button-wraper">
 
-  </div>
-</div>
-
-      <ag-grid-angular
-      id="finished-markets"
+  <div class="grid-content">
+    <ag-grid-angular
       #agGrid
       class="ag-theme-balham"
       [headerHeight]="33"
@@ -29,6 +26,12 @@
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
       rowSelection="single">
-  </ag-grid-angular>
+    </ag-grid-angular>
+
+  </div>
+
+</div>
+
+
 
 

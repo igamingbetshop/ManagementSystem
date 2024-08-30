@@ -14,13 +14,12 @@ import { SelectRendererComponent } from "../../../../../../components/grid-commo
 import { NumericEditorComponent } from "../../../../../../components/grid-common/numeric-editor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { IRowNode } from "ag-grid-community";
-import { OpenerComponent } from "../../../../../../components/grid-common/opener/opener.component";
 import { ImageRendererComponent } from "../../../../../../components/grid-common/image-renderer.component";
 import { DatePipe } from "@angular/common";
 import { DatePickerRendererComponent } from "../../../../../../components/grid-common/date-picker-renderer.component";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { StateService } from "../../../../services/state.service";
-import { syncColumnSelectPanel, syncNestedColumnReset } from "../../../../../../../core/helpers/ag-grid.helper";
+import { syncColumnNestedSelectPanel, syncNestedColumnReset } from "../../../../../../../core/helpers/ag-grid.helper";
 import {ExportService} from "../../../../services/export.service";
 
 @Component({
@@ -33,11 +32,9 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
   clientId: number;
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  rowModelType2: string = GridRowModelTypes.CLIENT_SIDE;
   rowData = [];
-  rowData2 = [];
+  hystoryRowData = [];
   columnDefs = [];
-  columnDefs2 = [];
   blockedData;
   selected = false;
   frameworkComponents = {
@@ -64,71 +61,6 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     private exportService:ExportService,
     private stateService: StateService) {
     super(injector);
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-        filter: false,
-        suppressMenu: true
-      },
-      {
-        headerName: 'Payments.Comment',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Comment',
-        sortable: true,
-        resizable: true,
-        filter: false,
-        suppressMenu: true
-      },
-      {
-        headerName: 'Common.ChangeDate',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ChangeDate',
-        sortable: true,
-        resizable: true,
-        filter: false,
-        suppressMenu: true,
-        cellRenderer: function (params) {
-          let datePipe = new DatePipe("en-US");
-          let dat = datePipe.transform(params.data.ChangeDate, 'medium');
-          return `${dat}`;
-        },
-      },
-      {
-        headerName: 'Payments.CreatedBy',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'BonusPrize',
-        sortable: true,
-        resizable: true,
-        filter: false,
-        suppressMenu: true,
-        cellRenderer: params => {
-          let a = document.createElement('div');
-          if (params.data.FirstName !== null || params.data.LastName !== null) {
-            a.innerHTML = params.data.FirstName + ' ' + params.data.LastName;
-          }
-          return a;
-        },
-      },
-      {
-        headerName: 'Common.View',
-        headerValueGetter: this.localizeHeader.bind(this),
-        cellRenderer: OpenerComponent,
-        filter: false,
-        suppressMenu: true,
-        valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'object-history').split('?')[0];
-          data.queryParams = { ObjectHistory: params.data.Id };
-          return data;
-        },
-        sortable: false
-      }
-    ];
   }
 
   ngOnInit(): void {
@@ -136,7 +68,6 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
     this.getKYCDocumentTypes();
     this.orderingAsyncCalls().then();
     this.adminMenuId = GridMenuIds.CLIENTS_KYC;
-
   }
 
   private async orderingAsyncCalls() {
@@ -152,8 +83,6 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
         Controllers.ENUMERATION, Methods.GET_KYC_DOCUMENT_TYPES_ENUM).pipe(take(1)).subscribe((data) => {
           if (data.ResponseCode === 0) {
             this.documentTypeName = data.ResponseObject;
-            console.log(this.documentTypeName, "this.documentTypeName");
-            
             return resolve('success');
           } else {
             return resolve('for continuing');
@@ -478,10 +407,10 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
       this.apiService.apiPost(this.configService.getApiUrl, { ObjectId: params.data.Id, ObjectTypeId: 57 }, true,
         Controllers.REPORT, Methods.GET_OBJECT_CHANGE_HISTORY).pipe(take(1)).subscribe((data) => {
           if (data.ResponseCode === 0) {
-            this.rowData2 = data.ResponseObject;
+            this.hystoryRowData = data.ResponseObject;
             setTimeout(() => { this.gridApi.sizeColumnsToFit(); }, 0);
           } else {
-            this.rowData2 = [];
+            this.hystoryRowData = [];
           }
         });
     }
@@ -492,10 +421,10 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   onGridReady(params) {
+    syncColumnNestedSelectPanel();
     syncNestedColumnReset();
     this.gridApi = params.api;
     super.onGridReady(params);
-    syncColumnSelectPanel();
   }
 
   async create() {
@@ -505,7 +434,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
       if (data) {
         this.rowData.push(data);
         this.gridApi.setRowData(this.rowData);
-        this.rowData2 = [];
+        this.hystoryRowData = [];
       }
       this.getKYCData();
     });
@@ -521,7 +450,7 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
             this.rowData.splice(this.blockedData.rowIndex, 1);
             this.gridApi.setRowData(this.rowData);
             this.selected = false;
-            this.rowData2 = [];
+            this.hystoryRowData = [];
             this.getKYCData();
           } else {
             SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -555,12 +484,9 @@ export class KycComponent extends BasePaginatedGridComponent implements OnInit {
   }
 
   public onRowClicked(e) {
-    console.log(this.gridApi.getSelectedRows().length === 0, "this.gridApi.getSelectedRows().length === 0");
-    
     if (e.event.target !== undefined) {
       let data = e.data;
       let actionType = e.event.target.getAttribute("data-action-type");
-
       switch (actionType) {
         case "add":
           return this.addNotes(data);

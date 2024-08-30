@@ -19,6 +19,11 @@
       margin-left: 8px;
       @include mat-btn-style;
     }
+
+    .mat-delete-btn {
+      margin-left: 8px;
+      @include mat-delete-style;
+    }
   }
 
   .grid-content {

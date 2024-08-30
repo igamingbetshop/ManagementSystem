@@ -63,7 +63,7 @@ export class CreateClientComponent implements OnInit {
   jobAreas: ServerCommonModel[] = [];
   partnerCurrencies = [];
   titles = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<CreateClientComponent>,
@@ -263,13 +263,15 @@ export class CreateClientComponent implements OnInit {
 
   onSubmit() {
     const requestData = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     requestData['Gender'] = requestData['Gender'] == '' ? 0 : requestData['Gender'];
     requestData['PartnerId'] = this.partnerId;
     if(requestData['MobileNumber']) {
       requestData['MobileNumber'] = `${requestData['MobileCode']}${requestData['MobileNumber']}`
     }
-
+    if(requestData["MobileCode"]) {
+      requestData['MobileCode'] = `+${requestData['MobileCode']}`
+    }
     this.apiService.apiPost(this.configService.getApiUrl, requestData,
       true, Controllers.CLIENT, Methods.REGISTER_CLIENT).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
@@ -277,7 +279,7 @@ export class CreateClientComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false; 
+        this.isSendingRequest = false; 
       });
   }
 }

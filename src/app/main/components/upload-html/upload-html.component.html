@@ -1,0 +1,33 @@
+<div mat-dialog-title>
+  <span class="title">{{ 'Common.TemplateTranslation' | translate }}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+
+<div class="container-popup">
+  <div class="language-content">
+    <mat-form-field class="language">
+      <mat-label>{{ 'Select Language' | translate }}</mat-label>
+      <mat-select (selectionChange)="onLanguageChange($event.value)">
+        <mat-option *ngFor="let language of availableLanguages" [value]="language.LanguageId">
+          {{ language.LanguageId }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <app-html-editor
+      [text]="translationData.Text"
+      [styles]="{ height: '250px', marginBottom: '6px' }"
+      (htmlCode)="translationData.newText = $event">
+    </app-html-editor>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{ 'Common.Cancel' | translate }}</button>
+  <button mat-raised-button 
+    class="modal-primary-btn" 
+    (click)="onSubmit()"
+    [class.disabled]="!isSelectedLanguage">
+    {{ 'Common.Save' | translate }}
+  </button>
+</div>

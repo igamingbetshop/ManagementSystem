@@ -39,7 +39,7 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 })
 export class AddCoreJobAreasComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
   constructor(
     public dialogRef: MatDialogRef<AddCoreJobAreasComponent>,
     private fb: UntypedFormBuilder,

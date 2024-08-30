@@ -10,7 +10,6 @@
           <mat-form-field>
             <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
             <mat-select   [formControlName]="'TypeId'">
-              <mat-option>{{'Clients.SelectType' | translate}}</mat-option>
               <mat-option *ngFor="let type of allCommentTypes"  [value]="type.Id">{{type.Name}}</mat-option>
             </mat-select>
             <mat-error *ngIf="errorControl['TypeId']?.touched && errorControl['TypeId'].errors?.required">
@@ -23,7 +22,7 @@
             <textarea matInput [formControlName]="'Comment'"
                       cdkTextareaAutosize
                       cdkAutosizeMinRows="1"
-                      cdkAutosizeMaxRows="5" required></textarea>
+                      cdkAutosizeMaxRows="5"></textarea>
             <mat-error *ngIf="errorControl['Comment'].touched && errorControl['Comment'].hasError('required')">
               {{'Clients.NoteRequired' | translate}}
             </mat-error>
@@ -33,5 +32,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-stroked-button class="mat-cancel-btn"  (click)="close()">Cancel</button>
-  <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid" (click)="submit()">{{'Clients.AddNote' | translate}}</button>
+  <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Clients.AddNote' | translate}}</button>
 </div>

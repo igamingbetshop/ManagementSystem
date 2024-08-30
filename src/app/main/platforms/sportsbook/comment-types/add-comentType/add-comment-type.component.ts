@@ -40,7 +40,7 @@ export class AddCommentTypeComponent implements OnInit {
     { Id: 2, Name: 'Delete Reason' },
     { Id: 3, Name: 'Reject Reason' }
   ];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddCommentTypeComponent>,

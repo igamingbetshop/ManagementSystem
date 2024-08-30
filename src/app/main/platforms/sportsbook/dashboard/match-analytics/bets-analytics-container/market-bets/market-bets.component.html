@@ -1,0 +1,22 @@
+@if (emptyBlock){
+  <div class="market-bets-block">
+    @if (markets()?.length){
+      <div class="block-content">
+        @for (item of markets(); track $index){
+          <div class="block-row {{type()}}">
+            <div class="row-number profitable-number">{{$index + 1}}</div>
+            <app-progress-bar [src]="item" [number]="'1.2-2'" class="{{type()}}"></app-progress-bar>
+          </div>
+        }
+      </div>
+    }
+    @else {
+      <div class="empty-block">
+        <img class="empty-block-icon" src="../../../../../../assets/images/payments/empty-icon.png">
+        <p>{{'no results found' | translate}}</p>
+      </div>
+    }
+
+  </div>
+}
+

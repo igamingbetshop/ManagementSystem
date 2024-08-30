@@ -182,9 +182,22 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
         }
       },
       {
-        headerName: 'Sport.AbsoluteLimit',
+        headerName: 'Sport.MarketLimit',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AbsoluteLimit',
+        field: 'MarketLimit',
+        resizable: true,
+        sortable: false,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Sport.PlayerLimit',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'PlayerLimit',
         resizable: true,
         sortable: false,
         filter: 'agNumberColumnFilter',

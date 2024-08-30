@@ -18,7 +18,7 @@ export class AddKeyComponent implements OnInit {
   formGroup: UntypedFormGroup;
   partnerId;
   paymentSystems = [];
-  isSendingReqest = false; 
+  isSendingRequest = false; 
 
   constructor(
     public dialogRef: MatDialogRef<AddKeyComponent>,
@@ -47,10 +47,10 @@ export class AddKeyComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.formGroup.valid || this.isSendingReqest) {
+    if (!this.formGroup.valid || this.isSendingRequest) {
       return;
     }
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true; 
     const setting = this.formGroup.getRawValue();
     setting.PartnerId = +this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, setting, true,
@@ -60,7 +60,7 @@ export class AddKeyComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
-      this.isSendingReqest = false; 
+      this.isSendingRequest = false; 
     });
   }
 

@@ -21,6 +21,16 @@
       </mat-error>
     </mat-form-field>
 
+    <mat-form-field >
+      <mat-label>{{'Bonuses.SelectType' | translate}}</mat-label>
+      <mat-select [formControlName]="'Type'">
+        <mat-option *ngFor="let currency of currencyTypes"  [value]="currency.Id">{{currency.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['Type']?.touched && errorControl['Type'].errors?.required">
+        {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
     <mat-form-field>
       <input matInput [placeholder]="'Partners.Symbol' | translate" [formControlName]="'Symbol'">
       <mat-error *ngIf="errorControl['Symbol']?.touched && errorControl['Symbol'].errors?.required">
@@ -31,9 +41,9 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" 
-    [class.disabled]="formGroup.invalid || isSendingReqest" 
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" 
+    [class.disabled]="formGroup.invalid || isSendingRequest" 
     (click)="onSubmit()" type="submit">
     {{'Common.Save' | translate}}</button>
 </div>

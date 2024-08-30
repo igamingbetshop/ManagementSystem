@@ -10,6 +10,7 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { CellClickedEvent } from 'ag-grid-community';
+import { CommonDataService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-all-players',
@@ -26,6 +27,7 @@ export class AllPlayersComponent extends BasePaginatedGridComponent implements O
     protected injector: Injector,
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
+    private commonDataService: CommonDataService,
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.SP_PLAYERS;
@@ -196,13 +198,7 @@ export class AllPlayersComponent extends BasePaginatedGridComponent implements O
   }
 
   ngOnInit() {
-    this.apiService.apiPost('partners').subscribe(data => {
-      if (data.Code === 0) {
-        this.partners = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
+    this.partners = this.commonDataService.partners;
   }
 
   onGridReady(params) {

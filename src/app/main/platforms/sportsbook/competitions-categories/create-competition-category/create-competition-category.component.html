@@ -16,8 +16,19 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input matInput type="number" [placeholder]="'Partners.PartnerId' | translate" [formControlName]="'PartnerId'">
+    </mat-form-field> -->
+
+    <mat-form-field>
+      <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
+      <mat-select #part [formControlName]="'PartnerId'"
+        placeholder="{{'Partners.SelectPartner' | translate}}">
+        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
+        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -28,10 +39,14 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'Sport.AbsoluteLimit' | translate" [formControlName]="'AbsoluteLimit'">
-      <mat-error *ngIf="errorControl['AbsoluteLimit']?.touched && errorControl['AbsoluteLimit'].errors?.required">
-        {{'Sport.AbsoluteLimit' | translate}} {{'Errors.Required' | translate}}
+      <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate" [formControlName]="'MarketLimit'">
+      <mat-error *ngIf="errorControl['MarketLimit']?.touched && errorControl['MarketLimit'].errors?.required">
+        {{'Sport.MarketLimit' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate"
+             [formControlName]="'PlayerLimit'">
     </mat-form-field>
 
     <mat-form-field>
@@ -66,9 +81,9 @@
 
 <div mat-dialog-actions>
   <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button 
-    class="modal-primary-btn" 
-    [class.disabled]="formGroup.invalid || isSendingReqest"
+  <button
+    class="modal-primary-btn"
+    [class.disabled]="formGroup.invalid || isSendingRequest"
     (click)="onSubmit()">{{'Common.Create'| translate}}
   </button>
 </div>

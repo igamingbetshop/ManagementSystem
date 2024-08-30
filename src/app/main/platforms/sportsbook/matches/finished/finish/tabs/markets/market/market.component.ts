@@ -106,13 +106,15 @@ export class MarketComponent extends BasePaginatedGridComponent implements OnIni
     .pipe(take(1))
     .subscribe(data => {
       if(data.Code === 0){
-
         this.rowData = data.ResponseObject;
-
       }else{
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
     });
+  }
+
+  onNavigateToMarket() {
+    this.router.navigate(['../'], {   relativeTo: this.activateRoute, queryParamsHandling: 'merge'  });
   }
 
 }

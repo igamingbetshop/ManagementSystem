@@ -21,7 +21,7 @@ import { take } from 'rxjs';
 })
 export class PermissibleOddsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  isSendingReqest = false;
+  isSendingRequest = false;
   rowData = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   frameworkComponents = {
@@ -137,7 +137,7 @@ export class PermissibleOddsComponent extends BasePaginatedGridComponent impleme
   }
 
   deleteOdd() {
-    this.isSendingReqest = true
+    this.isSendingRequest = true
     const row = this.gridApi.getSelectedRows()[0];
     delete row.UserId;
     this.apiService.apiPost('utils/deletepermissibleodd', row).subscribe(data => {
@@ -146,7 +146,7 @@ export class PermissibleOddsComponent extends BasePaginatedGridComponent impleme
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

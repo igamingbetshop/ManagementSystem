@@ -26,7 +26,7 @@ export class AddTeamComponent implements OnInit {
 
   formGroup: UntypedFormGroup;
   sports: any[] = [];
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddTeamComponent>,
@@ -41,8 +41,6 @@ export class AddTeamComponent implements OnInit {
       if (data.Code === 0) {
         this.sports = data.ResponseObject.sort((a, b) => a.Priority - b.Priority);
         this.sports.forEach(el => {
-          // console.log(el.Name);
-          // console.log(el.Priority);
         })
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
@@ -69,7 +67,7 @@ export class AddTeamComponent implements OnInit {
     if (this.formGroup.invalid) {
       return;
     }
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost('teams/add', obj)
       .pipe(take(1))
@@ -79,7 +77,7 @@ export class AddTeamComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
   }
 

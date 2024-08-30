@@ -1,20 +1,25 @@
-import {Component, OnInit, Injector} from '@angular/core';
-import {BasePaginatedGridComponent} from 'src/app/main/components/classes/base-paginated-grid-component';
+import { Component, OnInit, Injector } from '@angular/core';
+import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import 'ag-grid-enterprise';
-import {AgBooleanFilterComponent} from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
-import {CoreApiService} from '../../services/core-api.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatDialog} from "@angular/material/dialog";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from 'src/app/core/enums';
-import {take} from 'rxjs/operators';
-import {OpenerComponent} from 'src/app/main/components/grid-common/opener/opener.component';
-import {ButtonRendererComponent} from 'src/app/main/components/grid-common/button-renderer.component';
-import {NumericEditorComponent} from 'src/app/main/components/grid-common/numeric-editor.component';
-import {TextEditorComponent} from 'src/app/main/components/grid-common/text-editor.component';
-import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
-import {IRowNode} from "ag-grid-community";
+import { AgBooleanFilterComponent } from 'src/app/main/components/grid-common/ag-boolean-filter/ag-boolean-filter.component';
+import { CoreApiService } from '../../services/core-api.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog } from "@angular/material/dialog";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
+import { take } from 'rxjs/operators';
+import { OpenerComponent } from 'src/app/main/components/grid-common/opener/opener.component';
+import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
+import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
+import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
+import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
+import { IRowNode } from "ag-grid-community";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 
+export const CURRENCY_TYPES = [
+  { Id: 1, Name: 'Fiat' },
+  { Id: 2, Name: 'Crypto' },
+]
 
 @Component({
   selector: 'app-all-currencies',
@@ -24,7 +29,12 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 export class AllCurrenciesComponent extends BasePaginatedGridComponent implements OnInit {
 
   public rowData = [];
-  public frameworkComponents;
+  public frameworkComponents = {
+    selectRenderer: SelectRendererComponent,
+    buttonRenderer: ButtonRendererComponent,
+    numericEditor: NumericEditorComponent,
+    textEditor: TextEditorComponent,
+  };
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
@@ -42,7 +52,7 @@ export class AllCurrenciesComponent extends BasePaginatedGridComponent implement
         field: 'Id',
         resizable: true,
         editable: true,
-        cellStyle: {color: '#076192', 'font-size': '14px', 'font-weight': '500'},
+        cellStyle: { color: '#076192', 'font-size': '14px', 'font-weight': '500' },
         cellEditor: 'textEditor',
       },
       {
@@ -60,6 +70,18 @@ export class AllCurrenciesComponent extends BasePaginatedGridComponent implement
         resizable: true,
         editable: true,
         cellEditor: 'textEditor',
+      },
+      {
+        headerName: 'Common.Type',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Type',
+        resizable: true,
+        editable: false,
+        cellRenderer: 'selectRenderer',
+        cellRendererParams: {
+          onchange: this.onSelectChange['bind'](this, "Type"),
+          Selections: CURRENCY_TYPES,
+        },
       },
       {
         headerName: 'Partners.Symbol',
@@ -89,21 +111,15 @@ export class AllCurrenciesComponent extends BasePaginatedGridComponent implement
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = {path: '', queryParams: null};
+          let data = { path: '', queryParams: null };
           let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
           data.path = this.router.url.replace(replacedPart, 'currency');
-          data.queryParams = {currencyId: params.data.Id};
+          data.queryParams = { currencyId: params.data.Id };
           return data;
         },
         sortable: false
       },
     ]
-    this.frameworkComponents = {
-      agBooleanColumnFilter: AgBooleanFilterComponent,
-      buttonRenderer: ButtonRendererComponent,
-      numericEditor: NumericEditorComponent,
-      textEditor: TextEditorComponent,
-    }
   }
 
   ngOnInit() {
@@ -124,12 +140,17 @@ export class AllCurrenciesComponent extends BasePaginatedGridComponent implement
       .subscribe(data => {
         if (data.ResponseCode === 0) {
           this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = true;
-          SnackBarHelper.show(this._snackBar, {Description: 'Success', Type: "success"});
+          SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
         } else {
-          SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
 
+  }
+
+  onSelectChange(key, params, val, event) {
+    params[key] = val;
+    this.onCellValueChanged(event)
   }
 
   onCellValueChanged(event) {
@@ -142,13 +163,13 @@ export class AllCurrenciesComponent extends BasePaginatedGridComponent implement
         }
       })
       this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
-      this.gridApi.redrawRows({rowNodes: [findedNode]});
+      this.gridApi.redrawRows({ rowNodes: [findedNode] });
     }
   }
 
   async AddCurrency() {
-    const {AddCurrencyComponent} = await import('./add-currency/add-currency.component');
-    const dialogRef = this.dialog.open(AddCurrencyComponent, {width: ModalSizes.SMALL});
+    const { AddCurrencyComponent } = await import('./add-currency/add-currency.component');
+    const dialogRef = this.dialog.open(AddCurrencyComponent, { width: ModalSizes.SMALL });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.rowData.unshift(data);
@@ -165,12 +186,12 @@ export class AllCurrenciesComponent extends BasePaginatedGridComponent implement
   getPage() {
     this.apiService.apiPost(this.configService.getApiUrl, {},
       true, Controllers.CURRENCY, Methods.GET_CURRENCIES).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject;
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
-      }
-    });
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
 }

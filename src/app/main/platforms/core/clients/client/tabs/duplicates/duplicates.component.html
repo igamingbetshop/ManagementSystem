@@ -1,10 +1,8 @@
 <div class="container">
-  <app-partner-date-filter 
-    [title]="'Clients.Clients'" 
-    [pageIdName]="pageIdName"  
-    (toDateChange)="onDateChange($event)"
-    (titleClick)="onNavigateToClient()"
-    />
+    
+    <div class="content-action">
+      <div class="title"><a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> / {{clientId}} :{{'Clients.Duplicates' | translate}}</div>  
+    </div>
 
   <div class="grid-content">
     <ag-grid-angular

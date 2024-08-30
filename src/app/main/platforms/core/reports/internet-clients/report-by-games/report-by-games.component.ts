@@ -25,17 +25,18 @@ import {ExportService} from "../../../services/export.service";
 })
 export class ReportByGamesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-  public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
-  public clientData = {};
-  public partners = [];
-  public partnerId;
-  public providers = [];
-  public rowClassRules;
-  public filteredData;
-  public playerCurrency;
-  public selectedItem = 'today';
+  rowData = [];
+  fromDate = new Date();
+  toDate = new Date();
+  clientData = {};
+  partners = [];
+  partnerId;
+  providers = [];
+  rowClassRules;
+  filteredData;
+  playerCurrency;
+  selectedItem = 'today';
+  title: string;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -303,6 +304,7 @@ export class ReportByGamesComponent extends BasePaginatedGridComponent implement
     this.partners = this.commonDataService.partners;
     this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
     this.getProviders();
+    this.title = this.translate.instant('Reports.ReportByGames');
   }
 
   setTime() {

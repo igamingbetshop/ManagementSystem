@@ -1,0 +1,30 @@
+@import "variables";
+.modal-wrap {
+    padding-top: 5px;
+}
+
+.selection-area, .selected-items-area {
+    padding-top: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+  }
+  
+  .selected-currency {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  
+    span {
+      flex: 1;
+      margin-right: 10px;
+    }
+  
+    button {
+      flex-shrink: 0;
+    }
+  }

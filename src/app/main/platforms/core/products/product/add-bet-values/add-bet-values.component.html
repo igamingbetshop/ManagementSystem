@@ -1,0 +1,53 @@
+<div mat-dialog-title>
+  <span class="title">{{ 'Common.AddValue' | translate }}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="modal-wrap">
+  <form [formGroup]="form" class="modal-form">
+    <div class="field-content">
+      <mat-form-field>
+        <mat-label>{{ 'Clients.SelectCurrency' | translate }}</mat-label>
+        <mat-select formControlName="currencyId" (selectionChange)="onCurrencyChange($event.value)" required>
+          @for (currency of currencies; track $index) {
+            <mat-option [value]="currency.Id">{{ currency.Name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>{{ 'Common.SelectValue' | translate }}</mat-label>
+        <input matInput formControlName="value" type="number" required>
+      </mat-form-field>
+      <button mat-raised-button class="mat-btn" (click)="addCondition(form.value.currencyId, form.value.value)" [disabled]="form.invalid">
+        {{ 'Common.AddValue' | translate }}
+      </button>
+    </div>
+  </form>
+
+  @if (getCurrencyKeys().length > 0) {
+    <div  class="condition-list">
+      @for (currency of getCurrencyKeys(); track $index) {
+        <div class="condition-items">
+          <div class="condition-item">
+            <span class="curreency-text">{{ currency }} -</span> 
+            @for (value of betValues[currency]; track $index) {
+              <div>
+                {{ value }} 
+                <mat-icon (click)="removeValue(currency, value)">close</mat-icon>
+                @if ($index < betValues[currency].length - 1) {
+                  <span>, </span>
+                }
+              </div>
+            }
+          </div>
+          <mat-icon class="remove-icon" (click)="removeCurrency(currency)">delete</mat-icon>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<div mat-dialog-actions class="button-group">
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{ 'Common.Cancel' | translate }}</button>
+  <button mat-raised-button class="modal-primary-btn" (click)="submit()">{{ 'Common.Submit' | translate }}</button>
+</div>

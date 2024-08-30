@@ -34,7 +34,7 @@ export class AddOddComponent implements OnInit {
   partners: any[] = [];
   partnerId = null;
   formGroup: UntypedFormGroup;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddOddComponent>,
@@ -76,14 +76,14 @@ export class AddOddComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost('utils/addpermissibleodd', this.formGroup.value).subscribe(data => {
       if (data.Code === 0) {
         this.dialogRef.close(true);
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

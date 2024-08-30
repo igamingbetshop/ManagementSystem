@@ -21,12 +21,11 @@
       (ngModelChange)="findData($event)"
       [matAutocomplete]="auto"
       [disabled]="!selectedSport" 
-      style="width: 350px;"
-      >
+      style="width: 350px;">
 
       <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getName.bind(this)">
         <mat-option *ngFor="let competition of competitions" [value]="competition.Id">
-          {{competition.Name}}  {{competition.RegionName}}
+          {{competition.Name}} / {{competition.RegionName}} / {{competition.Id}}
         </mat-option>
       </mat-autocomplete>
     </div>

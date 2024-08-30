@@ -1,14 +1,14 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../../components/classes/base-paginated-grid-component";
-import {CoreApiService} from "../../../../services/core-api.service";
-import {ActivatedRoute} from "@angular/router";
-import {ConfigService} from "../../../../../../../core/services";
-import {AgGridAngular} from "ag-grid-angular";
-import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {DatePipe} from "@angular/common";
-import {CellDoubleClickedEvent} from "ag-grid-community";
-import {MatDialog} from "@angular/material/dialog";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
+import { CoreApiService } from "../../../../services/core-api.service";
+import { ActivatedRoute } from "@angular/router";
+import { ConfigService } from "../../../../../../../core/services";
+import { AgGridAngular } from "ag-grid-angular";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes, NotificationsObjectType } from "../../../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { DatePipe } from "@angular/common";
+import { CellDoubleClickedEvent } from "ag-grid-community";
+import { MatDialog } from "@angular/material/dialog";
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
@@ -22,6 +22,7 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public rowData = [];
   public filteredClientId = {};
+  objectTypeId = NotificationsObjectType.Client;
 
   constructor(
     private apiService: CoreApiService,
@@ -80,7 +81,7 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   ngOnInit(): void {
-    this.clientId = this.activateRoute.snapshot.queryParams.clientId;
+    this.clientId = +this.activateRoute.snapshot.queryParams.clientId;
     this.filteredClientId = {
       IsAnd: true,
       ApiOperationTypeList: [{
@@ -93,23 +94,23 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   getEmails(): void {
-    this.apiService.apiPost(this.configService.getApiUrl, {ClientIds: this.filteredClientId}, true,
-      Controllers.CLIENT, Methods.GET_EMAILS).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        this.rowData = data.ResponseObject.Entities;
-      }
-    });
+    this.apiService.apiPost(this.configService.getApiUrl, { Ids: this.filteredClientId, ObjectTypeId: this.objectTypeId }, true,
+      Controllers.REPORT, Methods.GET_EMAILS).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          this.rowData = data.ResponseObject.Entities;
+        }
+      });
   }
 
   async cellDoubleClicked(event: CellDoubleClickedEvent) {
     const message = event.value;
-    const {ViewHtmlComponent} = await import('../../../../../../components/view-html/view-html.component');
+    const { ViewHtmlComponent } = await import('../../../../../../components/view-html/view-html.component');
     const dialogRef = this.dialog.open(ViewHtmlComponent, {
       width: ModalSizes.MEDIUM, data: {
         message
       }
     });
-    dialogRef.afterClosed().subscribe(data => {});
+    dialogRef.afterClosed().subscribe(data => { });
   }
 
   onGridReady(params: any): void {

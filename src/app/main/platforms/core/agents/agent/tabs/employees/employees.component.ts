@@ -8,10 +8,8 @@ import {AgBooleanFilterComponent} from "../../../../../../components/grid-common
 import {AgDropdownFilter} from "../../../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
 import {take} from "rxjs/operators";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
-import {syncColumnReset, syncColumnSelectPanel} from "../../../../../../../core/helpers/ag-grid.helper";
 import {ActivatedRoute} from "@angular/router";
 import {Paging} from "../../../../../../../core/models";
-import {OpenerComponent} from "../../../../../../components/grid-common/opener/opener.component";
 
 @Component({
   selector: 'app-employees',

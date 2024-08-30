@@ -2,5 +2,3 @@
   <a mat-tab-link *ngFor="let tab of tabs" [routerLink]="tab.route" routerLinkActive [queryParamsHandling]="'merge'" #rla="routerLinkActive" [active]="rla.isActive">{{tab.label | translate}}</a>
 </nav>
 <router-outlet></router-outlet>
-
-

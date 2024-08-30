@@ -191,8 +191,8 @@ export class AddPopupComponent implements OnInit {
       NickName: [null, [Validators.required, Validators.pattern(/^[a-z][a-z0-9]*$/i)]],
       Type: [null, [Validators.required]],
       State: [null, [Validators.required]],
-      ImageName: [null, [Validators.required]],
-      ImageData: [null, [Validators.required]],
+      ImageName: [null],
+      ImageData: [null],
       Order: [null, [Validators.required, Validators.pattern(/^[0-9]*[1-9]+$|^[1-9]+[0-9]*$/)]],
       Page: [null],
       StartDate: [null, [Validators.required]],
@@ -242,6 +242,10 @@ export class AddPopupComponent implements OnInit {
     
     if (request.ClientIds != null) {
       request.ClientIds = request.ClientIds.split(',').map(Number);
+    }
+
+    if( request.DeviceType == -1) {
+      request.DeviceType = null;
     }
   
     this.apiService.apiPost(

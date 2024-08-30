@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector, ViewContainerRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, ViewContainerRef, ViewChild, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -28,11 +28,15 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
   competitionId: number;
   partnerId: number | null;
-  rowData = [];
+  selectedMarket = signal<any>({});
+  rowData = signal<any>([]);
+  mappedRowData = signal<any>([]);
   name: string = '';
   path: string = 'competitions/markettypeprofits';
   updatePath: string = 'competitions/updatemarkettypeprofit';
   deletePath: string = 'competitions/deletemarkettypeprofit';
+  sportId: number;
+  matchId;
 
   private multipleBetsStates = [
     { Id: null, Name: this.translate.instant('Sport.None') },
@@ -101,11 +105,82 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
         cellEditor: 'numericEditor',
       },
       {
-        headerName: 'Sport.LiveAP',
+        headerName: 'Sport.AbsoluteProfitLiveRange1',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'AbsoluteProfitLive',
+        field: 'AbsoluteProfitLiveRange1',
+        sortable: true,
+        resizable: true,
         editable: true,
-        cellEditor: 'numericEditor',
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange2',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange2',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange3',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange3',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange4',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange4',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange5',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange5',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
+      },
+      {
+        headerName: 'Sport.AbsoluteProfitLiveRange6',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AbsoluteProfitLiveRange6',
+        sortable: true,
+        resizable: true,
+        editable: true,
+        floatingFilter: true,
+        suppressMenu: true,
+        floatingFilterComponentParams: {
+          suppressFilterButton: true,
+        },
       },
       {
         headerName: 'Sport.Till48HoursRL',
@@ -182,6 +257,8 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   ngOnInit() {
+    this.sportId = +this.activateRoute.snapshot.queryParams.sportId;
+    this.matchId = this.activateRoute.snapshot.queryParams.MatchId;
     this.competitionId = +this.activateRoute.snapshot.queryParams.competitionId;
     this.name = this.activateRoute.snapshot.queryParams.name;
     this.gridStateName = 'competitions-markets-grid-state';
@@ -200,13 +277,26 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   async addSettings() {
-    const { CreateMarketComponent } = await import('../../tabs/markets/create-market/create-market.component');
-    const dialogRef = this.dialog.open(CreateMarketComponent, { width: ModalSizes.LARGE });
+    const { AddSettingComponent } = await import('../../../../matches/active-matches/active/tabs/profit/add-setting/add-setting.component');
+    const dialogRef = this.dialog.open(AddSettingComponent, { width: ModalSizes.LARGE, 
+      data: {
+        PartnerId: this.partnerId,
+        Method: "competitions/createmarkettypeprofit",
+      }
+     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
-      if (data)
-        this.rowData.unshift(data);
-      this.gridApi.setRowData(this.rowData);
-    })
+      if (data) {
+        const currentData = this.rowData();
+        this.rowData.set([data, ...currentData]);
+        this.mappedRowData.set([...currentData]);
+        this.gridApi.setRowData(this.mappedRowData());
+
+        const selectedMarket = this.selectedMarket();
+        if (selectedMarket.Id) {
+          this.filterRowData();
+        }
+      }
+    });
   }
 
   onCellValueChanged(event) {
@@ -218,8 +308,6 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
           findedNode = nod;
         }
       })
-      // this.gridApi.getColumnDef('save').cellRendererParams.isDisabled = false;
-      // this.gridApi.redrawRows({ rowNodes: [findedNode] });
       this.saveProfitSettings(event);
     }
   }
@@ -249,15 +337,23 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          const index = this.rowData.findIndex(row => {
-            return row.Id == data.Id;
-          })
-          this.rowData.splice(index, 1);
-          this.gridApi.setRowData(this.rowData);
+          const currentData = this.rowData();
+          const index = currentData.findIndex(row => row.Id == data.Id);
+          if (index > -1) {
+            currentData.splice(index, 1);
+            this.rowData.set([...currentData]);
+            this.mappedRowData.set([...currentData]);
+            this.gridApi.setRowData(this.mappedRowData());
+
+            const selectedMarket = this.selectedMarket();
+            if (selectedMarket.Id) {
+              this.filterRowData();
+            }
+          }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-      })
+      });
   }
 
   onGridReady(params) {
@@ -275,7 +371,13 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.rowData = data.ResponseObject;
+          this.rowData.set(data.ResponseObject);
+          this.mappedRowData.set(data.ResponseObject);
+
+          const selectedMarket = this.selectedMarket();
+          if (selectedMarket.Id) {
+            this.filterRowData();
+          }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -308,6 +410,24 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
       this.bulkEditorRef.clear();
       this.gridApi.deselectAll();
     });
+  }
+
+  filterRowData() {
+    const selectedMarket = this.selectedMarket();
+    if (selectedMarket.Id) {
+      const data = this.rowData().filter(element => 
+        element.GroupIds?.includes(selectedMarket.Id)
+      );
+      this.mappedRowData.set(data);
+
+    } else {
+      this.mappedRowData.set(this.rowData())
+    }
+  }
+
+  onSetSelectedMarket(event) {
+    this.selectedMarket.set(event);
+    this.filterRowData();
   }
 
 }

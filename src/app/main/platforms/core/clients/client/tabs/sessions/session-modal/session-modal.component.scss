@@ -1,27 +1,40 @@
-@import "variables.scss";
+@import "variables.scss"; // Import variables file
 
-table {
-  width: 98%;
-  max-height: 200px;
+.modal-wrap {
   overflow-y: auto;
-  margin: 8px;
-}
 
-.modal-wrap{
-  overflow-y: auto;
-  background-color: white;
-  // height: auto;
-  max-height: 600px;
   padding: 0;
+  width: 100%;
 }
 
-th {
-  background-color: $header-background-color;
-  color: white;
-  height: 40px;
-}
 
-tr.mat-header-row{
-  position: sticky;
-  top: 0;
+.modal-wrap {
+
+  td,
+  th {
+    box-sizing: border-box; 
+  }
+
+
+  th {
+    background-color: $bg-color; 
+    margin: 0;
+    text-align: left;
+    padding-left: 4px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    box-sizing: border-box;
+    padding: 4px 20px;
+    text-overflow: ellipsis;
+  }
+
+  td {
+    position: relative;
+    color: $black-3; 
+    background-color: $white;
+    text-align: left;
+    height: 42px;
+  }
+
 }

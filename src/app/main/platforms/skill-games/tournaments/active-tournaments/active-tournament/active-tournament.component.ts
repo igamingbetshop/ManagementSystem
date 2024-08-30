@@ -26,7 +26,7 @@ export class ActiveTournamentComponent implements OnInit {
     { Id: 2, Name: 'VIP Tournament' },
     { Id: 3, Name: 'Sit&Go' }
   ]
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -83,7 +83,7 @@ export class ActiveTournamentComponent implements OnInit {
 
   onSubmit() {
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true;
+    this.isSendingRequest = true;
     this.apiService.apiPost(this.path2, obj).subscribe(data => {
       if (data.ResponseCode === 0) {
         SnackBarHelper.show(this._snackBar, {Description: 'Success', Type: "success"});
@@ -91,7 +91,7 @@ export class ActiveTournamentComponent implements OnInit {
       } else {
         SnackBarHelper.show(this._snackBar, {Description: data.Description, Type: "error"});
       }
-      this.isSendingReqest = false;
+      this.isSendingRequest = false;
     });
   }
 

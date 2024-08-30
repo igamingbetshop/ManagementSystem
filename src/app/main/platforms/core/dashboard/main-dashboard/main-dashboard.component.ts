@@ -1,32 +1,35 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { CommonDataService, ConfigService } from "../../../../../core/services";
 import { CoreApiService } from "../../services/core-api.service";
 import { Controllers, Methods } from "../../../../../core/enums";
 import { take } from "rxjs/operators";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import {Chart, ChartModule} from "angular-highcharts";
+import { Chart, ChartModule } from "angular-highcharts";
 import { DateTimeHelper } from "../../../../../core/helpers/datetime.helper";
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {CommonModule, DatePipe} from "@angular/common";
-import {MatFormFieldModule} from "@angular/material/form-field";
-import {MatInputModule} from "@angular/material/input";
-import {MatButtonModule} from "@angular/material/button";
-import {FormsModule} from "@angular/forms";
-import {MatSelectModule} from "@angular/material/select";
-import {MatIconModule} from "@angular/material/icon";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {CollapseDirective} from "../../../../../core/directives/collapse.directive";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {HeaderFilterComponent} from "../../../../components/header-filter/header-filter.component";
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { CommonModule, DatePipe } from "@angular/common";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
+import { FormsModule } from "@angular/forms";
+import { MatSelectModule } from "@angular/material/select";
+import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { CollapseDirective } from "../../../../../core/directives/collapse.directive";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { HeaderFilterComponent } from "../../../../components/header-filter/header-filter.component";
 import * as Highcharts from "highcharts";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
+
 
 @Component({
   selector: 'app-main-dashboard',
   templateUrl: './main-dashboard.component.html',
   styleUrls: ['./main-dashboard.component.scss'],
-  standalone:true,
+  standalone: true,
   imports: [
     CommonModule,
     MatFormFieldModule,
@@ -41,26 +44,28 @@ import * as Highcharts from "highcharts";
     MatProgressSpinnerModule,
     CollapseDirective,
     MatCheckboxModule,
-    HeaderFilterComponent
+    HeaderFilterComponent,
+    MatSlideToggleModule
   ],
   providers: [DatePipe]
 })
-export class MainDashboardComponent {
+export class MainDashboardComponent implements OnInit, AfterViewInit {
+  
   allSelected = false;
-  public selectedItem = 'week';
-  public selectedGrid = 0;
-  public fromDate = new Date();
-  public toDate = new Date();
-  public filteredData;
-  public options:any;
-  public partners = [];
-  public partnerId;
-  public betsInfo;
-  public deposits = [];
-  public depositsGroupedData = [];
-  public withdrawals;
-  public playersInfo;
-  public playersInfoChart = {
+  selectedItem = 'week';
+  selectedGrid = 0;
+  fromDate = new Date();
+  toDate = new Date();
+  filteredData;
+  options: any;
+  partners = [];
+  partnerId;
+  betsInfo;
+  deposits = [];
+  depositsGroupedData = [];
+  withdrawals;
+  playersInfo;
+  playersInfoChart = {
     visitors: [],
     signups: [],
     returns: [],
@@ -69,10 +74,12 @@ export class MainDashboardComponent {
     averageBets: [],
     maxBet: [],
     maxWin: [],
-    dates: []
+    dates: [],
+    depositsCount: [],
+    FTDCount: [],
   }
-
-  public placedBetsChart = {
+  toggleState: boolean = true;
+  placedBetsChart = {
     totalBetsAmount: [],
     totalBetsCount: [],
     totalBetsCountFromMobile: [],
@@ -96,7 +103,7 @@ export class MainDashboardComponent {
     dates: []
   }
 
-  public providerBetsChart = {
+  providerBetsChart = {
     gameProviderId: [],
     gameProviderName: [],
     subProviderId: [],
@@ -114,28 +121,28 @@ export class MainDashboardComponent {
     dates: [],
   }
 
-  public providerBets;
-  public providers;
-  public pbt;
-  public depositsItemChart = [];
-  public withdrawalsItemChart = [];
-  public depositsChart = [];
-  public withdrawalsChart = [];
-  public values = [[], [], [], [], []];
-  public selectedGridName = '';
-  public gridNames = ['Dashboard.PlacedBets', 'Dashboard.Deposits', 'Dashboard.Withdrawals', 'Dashboard.Players', 'Dashboard.BetsByProviders'];
-  public paymentStates = [];
-  public haveNotPermissionBets = '';
-  public haveNotPermissionDeposits = '';
-  public haveNotPermissionWithdarwals = '';
-  public chart: Chart;
-  public filteredStates = [];
+  providerBets;
+  providers;
+  pbt;
+  depositsItemChart = [];
+  withdrawalsItemChart = [];
+  depositsChart = [];
+  withdrawalsChart = [];
+  values = [[], [], [], [], []];
+  selectedGridName = '';
+  gridNames = ['Dashboard.PlacedBets', 'Dashboard.Deposits', 'Dashboard.Withdrawals', 'Dashboard.Players', 'Dashboard.BetsByProviders'];
+  paymentStates = [];
+  haveNotPermissionBets = '';
+  haveNotPermissionDeposits = '';
+  haveNotPermissionWithdarwals = '';
+  chart: Chart | null = null;
+  filteredStates = [];
   playersLoading = false;
   placedBetsLoading = false;
   depositsLoading = false;
   withdrawalsLoading = false;
   providersLoading = false;
-  public cartTypes = [
+  cartTypes = [
     { id: 'Common.Line', value: 'line' },
     { id: 'Common.Spline', value: 'spline' },
     { id: 'Common.Area', value: 'area' },
@@ -149,7 +156,7 @@ export class MainDashboardComponent {
   withdrawalsChartTitle: any;
   chartItemName: any;
   selectedKey: any;
-  chartHref:Highcharts.Chart;
+  chartHref: Highcharts.Chart;
 
   constructor(
     public commonDataService: CommonDataService,
@@ -158,8 +165,13 @@ export class MainDashboardComponent {
     private _snackBar: MatSnackBar,
     private translate: TranslateService,
     public dateAdapter: DateAdapter<Date>,
+    private renderer: Renderer2, 
+    private elementRef: ElementRef,
     private datePipe: DatePipe) {
     this.dateAdapter.setLocale('en-GB');
+  }
+  ngAfterViewInit(): void {
+    
   }
 
   ngOnInit() {
@@ -171,30 +183,30 @@ export class MainDashboardComponent {
     this.getDashboardApiCalls();
     this.selectedGridName = 'Dashboard.PlacedBets';
     this.setCart();
-    if(window.matchMedia("(max-width: 1200px)").matches){
+    if (window.matchMedia("(max-width: 1200px)").matches) {
       this.options = {
         chart: { type: 'line', height: 600 },
         title: { text: '', style: { display: "none" } },
         xAxis: { categories: [] },
         yAxis: { labels: { enabled: true }, title: { text: null } },
-        credits: { enabled: false, href: '', text:'', style: { display: "none" } },
+        credits: { enabled: false, href: '', text: '', style: { display: "none" } },
         legend: {
           itemStyle: { fontSize: "13px" },
           itemMarginBottom: 10,
           navigation: { enabled: true },
           itemWidth: 170,
-          x:-10
+          x: -10
         },
         series: [],
       };
-    }else {
+    } else {
       this.options = {
-        chart: { type: 'line'},
+        chart: { type: 'line' },
         title: { text: '', style: { display: "none" } },
         xAxis: { categories: [] },
         yAxis: { labels: { enabled: true }, title: { text: null } },
-        accessibility: {linkedDescription: ''},
-        credits: { enabled: false, href: '', text:'', style: { display: "none" }},
+        accessibility: { linkedDescription: '' },
+        credits: { enabled: false, href: '', text: '', style: { display: "none" } },
         legend: {
           itemStyle: { fontSize: "14px" },
         },
@@ -486,7 +498,9 @@ export class MainDashboardComponent {
             averageBets: [],
             maxBet: [],
             maxWin: [],
-            dates: []
+            dates: [],
+            depositsCount: [],
+            FTDCount: [],
           };
           this.playersInfo = data.ResponseObject;
           this.playersInfo.DailyInfo.forEach(data => {
@@ -499,6 +513,8 @@ export class MainDashboardComponent {
             this.playersInfoChart.maxBet.push([this.datePipe.transform(data.Date, "shortDate"), data.MaxBet]);
             this.playersInfoChart.maxWin.push([this.datePipe.transform(data.Date, "shortDate"), data.MaxWin]);
             this.playersInfoChart.averageBets.push([this.datePipe.transform(data.Date, "shortDate"), data.AverageBet]);
+            this.playersInfoChart.depositsCount.push([this.datePipe.transform(data.Date, "shortDate"), data.DepositsCount]);
+            this.playersInfoChart.FTDCount.push([this.datePipe.transform(data.Date, "shortDate"), data.FTDCount]);
           });
           if (this.selectedGridName === 'Dashboard.Players') {
             this.selectCart();
@@ -528,7 +544,9 @@ export class MainDashboardComponent {
       { type: undefined, name: this.translate.instant('Sport.Cashout'), data: this.playersInfoChart.cashouts },
       { type: undefined, name: this.translate.instant('Dashboard.AverageBet'), data: this.playersInfoChart.averageBets },
       { type: undefined, name: this.translate.instant('Dashboard.MaxBet'), data: this.playersInfoChart.maxBet },
-      { type: undefined, name: this.translate.instant('Dashboard.MaxWin'), data: this.playersInfoChart.maxWin }
+      { type: undefined, name: this.translate.instant('Dashboard.MaxWin'), data: this.playersInfoChart.maxWin },
+      { type: undefined, name: this.translate.instant('Dashboard.DepositsCount'), data: this.playersInfoChart.depositsCount},
+      { type: undefined, name: this.translate.instant('Dashboard.FTDCount'), data: this.playersInfoChart.FTDCount }
     ];
 
     this.subscribeCart();
@@ -655,18 +673,19 @@ export class MainDashboardComponent {
   }
 
   selectGrid(index, item?, i?) {
+    this.chart = null;
     let data = this.values[index];
     this.selectedGridName = this.gridNames[index];
     if (index === 1 || index === 5) {
       this.depositsChatTitle = item;
-      if(i) {
+      if (i) {
         this.selectedKey = i.key;
       }
       this.selectedGridName = 'Dashboard.Deposits';
     } else if (index === 2 || index === 6) {
       this.withdrawalsChartTitle = item;
       this.selectedGridName = 'Dashboard.Withdrawals';
-      if(i) {
+      if (i) {
         this.selectedKey = i.key;
       }
     } else {
@@ -689,12 +708,12 @@ export class MainDashboardComponent {
     if (this.selectedGrid < 0) {
       this.selectedGrid = this.values.length - 1;
     }
-    if(this.selectedGrid === 4) {
-      this.selectGrid(this.selectedGrid, 'Internal', 0 );
-    } else if( this.selectedGrid === 1) {
+    if (this.selectedGrid === 4) {
+      this.selectGrid(this.selectedGrid, 'Internal', 0);
+    } else if (this.selectedGrid === 1) {
       this.depositsChatTitle = 'Pending';
       this.selectGrid(this.selectedGrid, 'Pending');
-    } else if( this.selectedGrid === 2) {
+    } else if (this.selectedGrid === 2) {
       this.withdrawalsChartTitle = 'Pending';
       this.selectGrid(this.selectedGrid, 'Pending');
     } else {
@@ -839,45 +858,67 @@ export class MainDashboardComponent {
   }
 
   subscribeCart(): void {
-    if(!this.chart)
-    {
-      if(this.options)
-      {
+    if (!this.chart) {
+      
+      if (this.options) {
         let chart = new Chart(this.options);
         this.chart = chart;
         chart.ref$.subscribe(data => {
           this.chartHref = data;
         });
+        
       }
     }
-    else
-    {
-      if(this.chartHref)
-      {
+    else {
+      if (this.chartHref) {
         this.chartHref.update(this.options, true);
+
       }
+    }
+    // const element = this.elementRef.nativeElement.querySelector('.highcharts-legend');
+    // if (element) {
+    //   this.renderer.setAttribute(element, 'transform', 'translate(65,325)');
+    // } 
+    // const container = this.elementRef.nativeElement.querySelector('.highcharts-legend');
+    this.createToggleButton();
+
+  }
+
+  onDeselect(event) {
+    this.chartHref.series.forEach(series => {
+      series.setVisible(event.checked, event.checked);
+    });
+    this.chartHref.redraw();
+  }
+
+  createToggleButton() {
+    const legendElement = this.elementRef.nativeElement.querySelector('.highcharts-legend');
+    if (legendElement) {
+      
+      const toggleContainer = this.renderer.createElement('div');
+      this.renderer.addClass(toggleContainer, 'toggle-container');
+      
+      const toggleButton = this.renderer.createElement('mat-slide-toggle');
+      this.renderer.addClass(toggleButton, 'toggle-btn');
+      this.renderer.setProperty(toggleButton, 'checked', this.toggleState);
+      this.renderer.setAttribute(toggleButton, 'color', 'primary'); // Use predefined colors like 'primary', 'accent', or 'warn'
+      this.renderer.setAttribute(toggleButton, 'labelPosition', 'before');
+      const text = this.renderer.createText('Common.ViewAll');
+      
+      this.renderer.appendChild(toggleButton, text);
+      
+      this.renderer.appendChild(toggleContainer, toggleButton);
+      
+      this.renderer.insertBefore(legendElement.parentNode, toggleContainer, legendElement);
+
+      this.renderer.listen(toggleButton, 'change', (event) => this.onDeselect(event));
     }
   }
 
-  // private getXAxisByDate(type: string = 'day') {
-  //   const result = [];
-  //   const date1 = new Date(this.filteredData.FromDate);
-  //   const date2 = new Date(this.filteredData.ToDate);
-  //   const diff = date2.getTime() - date1.getTime();
-
-  //   if (type === "day") {
-  //     const days = Math.round(diff / 86400000);
-  //     result.push(this.datePipe.transform(date1, "shortDate"));
-  //     for (let i = 1; i < days; i++) {
-  //       let d = new Date();
-  //       d.setDate(date1.getDate() + i);
-  //       result.push(this.datePipe.transform(d, "shortDate"));
-  //     }
-  //     result.push(this.datePipe.transform(date2, "shortDate"));
-  //   }
-
-  //   return result;
-
-  // }
-
+  adjustLegendPosition() {
+    const element = this.elementRef.nativeElement.querySelector('.highcharts-legend');
+    if (element) {
+      this.renderer.setAttribute(element, 'transform', 'translate(65, 325)');
+    }
+  }
 }

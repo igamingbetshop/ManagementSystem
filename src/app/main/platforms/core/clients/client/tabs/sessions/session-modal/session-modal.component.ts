@@ -1,11 +1,22 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, } from "@angular/material/dialog";
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTableDataSource } from '@angular/material/table';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { ConfigService } from 'src/app/core/services';
-import { MatSnackBar, } from "@angular/material/snack-bar";
 import { CoreApiService } from 'src/app/main/platforms/core/services/core-api.service';
 import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
+
+interface SessionData {
+  Id: number;
+  ProductName: string;
+  ProductId: number;
+  State: string;
+  LogoutDescription: string;
+  Ip: string;
+  StartTime: string;
+  EndTime: string;
+}
 
 @Component({
   selector: 'app-session-modal',
@@ -13,27 +24,34 @@ import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.he
   styleUrls: ['./session-modal.component.scss']
 })
 export class SessionModalComponent implements OnInit {
-
+  public displayedColumns: string[] = ['Id', 'ProductName', 'ProductId', 'State', 'LogoutDescription', 'Ip', 'StartTime', 'EndTime'];
+  public dataSource = new MatTableDataSource<SessionData>();
+  
   private sessionStates;
   private logOutType;
-  public displayedColumns: string[] = ['Id', 'ProductId', 'State', 'LogoutDescription', 'StartTime', 'EndTime'];
-  public dataSource = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { id: number, clientId: number, sessionStates, logOutType },
     public dialogRef: MatDialogRef<SessionModalComponent>,
-    public apiService: CoreApiService,
-    public configService: ConfigService,
+    private apiService: CoreApiService,
+    private configService: ConfigService,
     private _snackBar: MatSnackBar,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit() {
-
-
     this.sessionStates = this.data.sessionStates;
     this.logOutType = this.data.logOutType;
+
+
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+      month: 'short',  
+      day: 'numeric', 
+      year: 'numeric', 
+      hour: 'numeric', 
+      minute: 'numeric',
+      second: 'numeric',
+      hour12: true 
+    });
 
     this.apiService
       .apiPost(
@@ -45,45 +63,31 @@ export class SessionModalComponent implements OnInit {
       )
       .subscribe((data) => {
         if (data.ResponseCode === 0) {
-
-          if(data.ResponseObject.length === 0 ) {
+          if (data.ResponseObject.length === 0) {
             SnackBarHelper.show(this._snackBar, { Description: "No Data", Type: "info" });
             this.dialogRef.close();
-
+            return;
           }
 
-          data.ResponseObject.forEach((info) => {
-            let obj = {};
+          const formattedData = data.ResponseObject.map((info) => ({
+            Id: info.Id,
+            ProductId: info.ProductId,
+            ProductName: info.ProductName,
+            State: this.sessionStates.find((st) => st.Id === info.State)?.Name || 'Unknown',
+            LogoutDescription: this.logOutType.find((type) => type.Id === info.LogoutType)?.Name || 'Unknown',
+            Ip: info.Ip,
+            StartTime: dateFormatter.format(new Date(info.StartTime)),
+            EndTime: dateFormatter.format(new Date(info.EndTime))  
+          }));
 
-            let State = this.sessionStates.find((st) => {
-              return st.Id == info.State;
-            });
-            if (State) {
-              obj["State"] = State.Name;
-            }
-
-            let logOut = this.logOutType.find((type) => {
-              return type.Id == info.LogoutType;
-            });
-            if (logOut) {
-              obj["LogoutDescription"] = logOut.Name;
-            }
-
-            obj["Id"] = info.Id;
-            obj["ProductId"] = info.ProductId;
-            obj["StartTime"] = info.StartTime;
-            obj["EndTime"] = info.EndTime;
-            this.dataSource.push(obj);
-          });
+          this.dataSource.data = formattedData;
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-
   }
 
   close() {
     this.dialogRef.close();
   }
-
 }

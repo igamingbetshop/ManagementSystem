@@ -43,7 +43,7 @@ export class AddTicketComponent implements OnInit  {
   partnerId = null;
   formGroup: UntypedFormGroup;
   segments;
-  isSendingReqest = false;
+  isSendingRequest = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddTicketComponent>,
@@ -97,8 +97,8 @@ export class AddTicketComponent implements OnInit  {
   }
 
   onSubmit() {
-    if (this.formGroup.valid || this.isSendingReqest) {
-      this.isSendingReqest = true;
+    if (this.formGroup.valid || this.isSendingRequest) {
+      this.isSendingRequest = true;
       const requestBody = this.formGroup.getRawValue();
       requestBody.Token = this.localStorage.get('token');
       if ((requestBody.SegmentIds == null && requestBody.ClientIds == null)) {
@@ -114,7 +114,7 @@ export class AddTicketComponent implements OnInit  {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingReqest = false;
+        this.isSendingRequest = false;
       });
     }
   }

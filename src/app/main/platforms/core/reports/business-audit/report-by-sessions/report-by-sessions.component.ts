@@ -12,11 +12,10 @@ import { CommonDataService, ConfigService } from "../../../../../../core/service
 import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from "../../../../../../core/enums";
 import { Paging } from "../../../../../../core/models";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnSelectPanel, syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
-import {ExportService} from "../../../services/export.service";
+import { ExportService } from "../../../services/export.service";
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
@@ -28,9 +27,7 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
   public rowData = [];
-  public rowData2 = [];
-  public rowModelType2: string = GridRowModelTypes.CLIENT_SIDE;
-  public columnDefs2 = [];
+  public sessionInfoRowData = [];
   public fromDate = new Date();
   public toDate = new Date();
   public clientData = {};
@@ -56,7 +53,7 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
     public configService: ConfigService,
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
-    private exportService:ExportService,
+    private exportService: ExportService,
     protected injector: Injector) {
     super(injector);
     this.adminMenuId = GridMenuIds.CORE_REPORT_BY_SESSIONS;
@@ -264,105 +261,6 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
         },
       },
     ]
-    this.columnDefs2 = [
-      {
-        headerName: 'Common.Id',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Id',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Clients.ClientId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ClientId',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Common.Language',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Language',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Bonuses.Source',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Source',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Clients.LogoutDescription',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'LogoutDescription',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Common.Ip',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Ip',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Clients.ProductId',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ProductId',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Common.Device',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Device',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Common.State',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'State',
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: 'Clients.StartTime',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'StartTime',
-        sortable: true,
-        resizable: true,
-        tooltipField: 'StartTime',
-        cellRenderer: function (params) {
-          let datePipe = new DatePipe("en-US");
-          let dat = datePipe.transform(params.data.StartTime, 'medium');
-          if (params.node.rowPinned) {
-            return ''
-          } else {
-            return `${dat}`;
-          }
-        },
-      },
-      {
-        headerName: 'Clients.EndTime',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'EndTime',
-        sortable: true,
-        resizable: true,
-        tooltipField: 'EndTime',
-        cellRenderer: function (params) {
-          let datePipe = new DatePipe("en-US");
-          let dat = datePipe.transform(params.data.EndTime, 'medium');
-          if (params.node.rowPinned) {
-            return ''
-          } else {
-            return `${dat}`;
-          }
-        },
-      },
-    ]
   }
 
   ngOnInit(): void {
@@ -452,9 +350,9 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
       this.apiService.apiPost(this.configService.getApiUrl, params.data.Id, true,
         Controllers.REPORT, Methods.GET_CLIENT_SESSION_INFO).pipe(take(1)).subscribe((data) => {
           if (data.ResponseCode === 0) {
-            this.rowData2 = data.ResponseObject;
+            this.sessionInfoRowData = data.ResponseObject;
           } else {
-            this.rowData2 = [];
+            this.sessionInfoRowData = [];
           }
         });
     }
@@ -465,7 +363,7 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.REPORT, Methods.EXPORT_CLIENT_SESSIONS, {...this.filteredData, adminMenuId: this.adminMenuId});
+    this.exportService.exportToCsv(Controllers.REPORT, Methods.EXPORT_CLIENT_SESSIONS, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

@@ -13,6 +13,7 @@ import { SportsbookApiService } from '../../services/sportsbook-api.service';
 import { take } from 'rxjs/operators';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
+import { CommonDataService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-create-competition-category',
@@ -36,16 +37,19 @@ export class CreateCompetitionCategoryComponent implements OnInit {
 
   sports: any[] = [];
   formGroup: UntypedFormGroup;
-  isSendingReqest = false; 
+  isSendingRequest = false;
+  partners: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<CreateCompetitionCategoryComponent>,
     private fb:UntypedFormBuilder,
     private _snackBar: MatSnackBar,
+    private commonDataService: CommonDataService,
     private apiService:SportsbookApiService,
   ) { }
 
   ngOnInit() {
+    this.partners = this.commonDataService.partners;
     this.apiService.apiPost('sports').subscribe(data => {
       if(data.Code === 0){
         this.sports = data.ResponseObject;
@@ -61,7 +65,8 @@ export class CreateCompetitionCategoryComponent implements OnInit {
       PartnerId:[null],
       Name:[null, [Validators.required]],
       SportId:[null, [Validators.required]],
-      AbsoluteLimit:[null, [Validators.required]],
+      MarketLimit:[null, [Validators.required]],
+      PlayerLimit:[null],
       LiveDelay:[null, [Validators.required]],
       MaxWinPrematchSingle:[null],
       MaxWinPrematchMultiple:[null],
@@ -86,7 +91,7 @@ export class CreateCompetitionCategoryComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.isSendingReqest = true; 
+    this.isSendingRequest = true;
     this.apiService.apiPost('competitions/addcategory', obj).pipe(take(1)).subscribe(data => {
       if(data.Code === 0)
       {
@@ -94,7 +99,7 @@ export class CreateCompetitionCategoryComponent implements OnInit {
       }else{
         SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
       }
-      this.isSendingReqest = false; 
+      this.isSendingRequest = false;
     });
   }
 

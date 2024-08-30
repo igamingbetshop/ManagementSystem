@@ -108,14 +108,22 @@
           {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
         </mat-error>
       </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>{{'Common.Visibility' | translate}}</mat-label>
+        <mat-select [formControlName]="'Visibility'" placeholder="{{'Common.Visibility' | translate}}" multiple>
+          <mat-option *ngFor="let banVisType of visibilityTypes"
+            [value]="banVisType.id">{{banVisType.name | translate}}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </ng-container>
   </form>
 
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button class="modal-primary-btn" 
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button class="modal-primary-btn" 
     [class.disabled]="this.formGroup.invalid" 
     (click)="onSubmit()">{{'Common.Create'| translate}}</button>
 </div>

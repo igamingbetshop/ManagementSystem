@@ -14,6 +14,13 @@
       </mat-menu>
     </div>
 
+    @if(sportId == 1) {
+      <app-market-types-buttons 
+      [sportId]="sportId"
+      (onSelectedMarketEmit)="onSetSelectedMarket($event)"
+      />
+    }
+
     <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
     <button mat-stroked-button class="mat-btn" (click)="addSettings()">{{'Sport.AddSettings' | translate}}
@@ -33,7 +40,7 @@
     class="ag-theme-balham"
     [headerHeight]="33"
     [rowHeight]="42"
-    [rowData]="rowData"
+    [rowData]="mappedRowData()"
     [rowModelType]="rowModelType"
     [columnDefs]="columnDefs"
     [suppressCopyRowsToClipboard]="true"
@@ -41,6 +48,8 @@
     [enableBrowserTooltips]="enableBrowserTooltips"
     [sideBar]="sideBar"
     [animateRows]="true"
+    [pagination]="true"
+    [paginationPageSize]="5000"
     [components]="frameworkComponents"
     [enableBrowserTooltips]="enableBrowserTooltips"
     [cacheBlockSize]="cacheBlockSize"

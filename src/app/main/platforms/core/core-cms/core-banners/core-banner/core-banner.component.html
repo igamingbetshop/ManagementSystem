@@ -12,26 +12,20 @@
     <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
       <div>
         <div class="first-hand">{{'Common.StartDate' | translate}}</div>
-        <div class="second-hand">{{banner?.StartDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar-edit">
-            <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </div>
+        <div class="second-hand">{{banner?.StartDate | date:'dd/MM/yyyy hh:mm a'}}</div>
+        <div class="form-field form-calendar calendar-picker">
+          <app-date-time-picker formControlName="StartDate"></app-date-time-picker>
+      </div>
+
       </div>
 
       <div>
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
-        <div class="second-hand">{{banner?.EndDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar-edit">
-            <input matInput [matDatepicker]="picker1" [formControlName]="'EndDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker1">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
-        </div>
+        <div class="second-hand">{{banner?.EndDate | date:'dd/MM/yyyy hh:mm a'}}</div>
+
+        <div class="form-field form-calendar calendar-picker">
+          <app-date-time-picker formControlName="EndDate"></app-date-time-picker>
+      </div>
       </div>
 
       <div>
@@ -71,14 +65,12 @@
       <div>
         <div class="first-hand">{{'Common.Visibility' | translate}}</div>
         <div class="second-hand">
-          @for (entity of visibilityEntites; track $index) {
-            {{entity}}
-          }
+          {{banner?.Visibility | IdToName: bannerVisibilityTypes}}
         </div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Visibility'" multiple>
             @for (banVisType of bannerVisibilityTypes; track $index) {
-              <mat-option [value]="banVisType.id">{{banVisType.name}}</mat-option>
+              <mat-option [value]="banVisType.Id">{{banVisType.Name}}</mat-option>
             }
           </mat-select>
         </div>
@@ -103,9 +95,8 @@
             }
             </span>
             <span class="second-right">
-              @for (segment of segmentesEntites; track $index) {
-                {{segment}}
-              }
+
+              {{banner.Segments.Ids | IdToName: segments}}
             </span>
         </div>
 
@@ -139,9 +130,7 @@
           </span>
           
           <span class="second-right">
-            @for (language of languageEntites; track $index) {
-              {{language}}
-            }
+            {{banner?.Languages?.Names | IdToName: languages }}
             </span>
 
         </div>
@@ -154,7 +143,7 @@
           </div>
 
           <div class="group-right-item">
-            <mat-select [formControlName]="'Ids'" multiple>
+            <mat-select [formControlName]="'Names'" multiple>
               @for (language of languages; track $index) {
                 <mat-option [value]="language.Id">{{language.Name}}</mat-option>
               }

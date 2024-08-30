@@ -3,10 +3,11 @@
 
 .container {
   @include container-style;
+  // height: 62px;
   
   .grid-content {
     width: 100%;
-    height: calc(100% - 62px);
+    height: calc(100% - 78px);
 
     ::ng-deep {
       ag-grid-angular {

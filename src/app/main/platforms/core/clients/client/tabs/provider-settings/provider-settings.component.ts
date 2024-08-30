@@ -13,6 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { IRowNode, } from "ag-grid-community";
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 
 @Component({
   selector: 'app-provider-settings',
@@ -22,10 +23,7 @@ import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 export class ProviderSettingsComponent extends BasePaginatedGridComponent implements OnInit {
   public rowData = [];
   public clientId: number;
-  public status = [
-    { Name: 'Active', Id: 1 },
-    { Name: 'Inactive', Id: 2 }
-  ];
+  public status = ACTIVITY_STATUSES;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
