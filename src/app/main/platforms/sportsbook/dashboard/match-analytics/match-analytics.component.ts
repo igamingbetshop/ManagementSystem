@@ -27,8 +27,8 @@ import {BetsAnalyticsContainerComponent} from "./bets-analytics-container/bets-a
 })
 export class MatchAnalyticsComponent implements OnInit{
 
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public partnerId;
   public filteredData;
   public percent;

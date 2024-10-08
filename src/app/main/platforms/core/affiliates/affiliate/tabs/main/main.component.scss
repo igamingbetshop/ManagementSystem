@@ -11,13 +11,6 @@
     .edit-btn {
       @include mat-edit-btn-style;
     }
-
-    .title, .title>a {
-      font-size: 18px;
-      color: $blue-5;
-      padding-bottom: 5px;
-
-    }
   }
 }
 

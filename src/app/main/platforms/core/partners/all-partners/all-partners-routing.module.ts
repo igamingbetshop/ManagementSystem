@@ -1,11 +1,19 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
-import {AllPartnersComponent} from "./all-partners.component";
+import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { AllPartnersComponent } from "./all-partners.component";
+import { FilterOptionsResolver } from '../../resolvers/filter-options.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component:AllPartnersComponent
+    component: AllPartnersComponent,
+    children: [
+      {
+        path: 'partner',
+        loadChildren: () => import('../partner/partner.module').then(m => m.PartnerModule),
+        resolve: { filterData: FilterOptionsResolver },
+      },
+    ]
   }
 ];
 
@@ -13,7 +21,6 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AllPartnersRoutingModule
-{
+export class AllPartnersRoutingModule {
 
 }

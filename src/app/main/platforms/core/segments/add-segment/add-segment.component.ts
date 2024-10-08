@@ -187,12 +187,6 @@ export class AddSegmentComponent implements OnInit {
       selectedConditionValue: '',
       showNew: false
     },
-    AffiliateId: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: '',
-      showNew: false
-    },
     AgentId: {
       conditions: [],
       selectedConditionType: null,
@@ -312,6 +306,7 @@ export class AddSegmentComponent implements OnInit {
       IsEmailVerified: [null],
       IsMobileNumberVerified: [null],
       ClientId: [null, [numbersAndCommas]],
+      AffiliateId: [null, [numbersAndCommas]],
       SuccessDepositPaymentSystem: [null, [numbersAndCommas]],
       Email: [null, [emailsWithCommasValidator]],
       FirstName: [null, [stringAndCommaValidator]],
@@ -334,15 +329,24 @@ export class AddSegmentComponent implements OnInit {
 
   addDateCondition(item, resetToDate = false) {
     if (item.selectedConditionType && item.selectedConditionValue) {
+      const formattedDate = this.formatDateToYYYYMMDD(item.selectedConditionValue);
       item.conditions.push({
         ConditionType: item.selectedConditionType,
-        ConditionValue: item.selectedConditionValue
+        ConditionValue: formattedDate
       });
       item.selectedConditionType = null;
-      item.selectedConditionValue = resetToDate ? new Date() : null;
+      item.selectedConditionValue = resetToDate ? this.formatDateToYYYYMMDD(new Date()) : null;
       item.opened = false;
       item.showNew = false;
     }
+  }
+  
+  formatDateToYYYYMMDD(date: Date | string): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
   }
 
   removeCondition(item, index) {

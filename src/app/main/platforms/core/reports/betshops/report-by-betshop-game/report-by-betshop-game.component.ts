@@ -10,7 +10,7 @@ import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums"
 import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { formattedNumber } from "../../../../../../core/utils";
+import { formatDateTime, formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
@@ -22,8 +22,8 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 export class ReportByBetshopGameComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public partners = [];
@@ -162,8 +162,8 @@ export class ReportByBetshopGameComponent extends BasePaginatedGridComponent imp
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

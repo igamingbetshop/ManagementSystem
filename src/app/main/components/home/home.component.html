@@ -1,12 +1,12 @@
 <div class="home-container">
 
   <div class="categories">
-    <ng-container *ngFor="let section of homeSections">
+    @for (section of homeSections; track section) {
       <app-category
         class="category"
         [categoryData] = section>
-      </app-category>      
-    </ng-container>
+      </app-category>  
+    }
   </div>
 
 </div>

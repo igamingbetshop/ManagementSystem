@@ -16,6 +16,7 @@ import { take } from 'rxjs';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'client-sessions',
@@ -33,8 +34,8 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
   rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   logOutType = [];
   selectedRowId: number = 0;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   pageIdName =  '';
   frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
@@ -228,8 +229,8 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   fetchLogOutTypes() {

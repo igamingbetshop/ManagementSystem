@@ -3,7 +3,7 @@ import { CoreApiService } from "../../../../services/core-api.service";
 import { ConfigService } from "../../../../../../../core/services";
 import { ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
@@ -13,6 +13,7 @@ import { NumericEditorComponent } from "../../../../../../components/grid-common
 import { IRowNode } from "ag-grid-community";
 import { MatDialog } from '@angular/material/dialog';
 import { COUNTRY_STATUSES } from 'src/app/core/constantes/statuses';
+import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-country-settings',
@@ -44,7 +45,9 @@ export class CountrySettingsComponent extends BasePaginatedGridComponent impleme
     protected injector: Injector,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog) {
-    super(injector); this.columnDefs = [
+    super(injector); 
+    this.adminMenuId = GridMenuIds.PARTNERS_COUNTRY_SETTINGS;
+    this.columnDefs = [
       {
         headerName: 'Common.Id',
         headerValueGetter: this.localizeHeader.bind(this),
@@ -97,6 +100,11 @@ export class CountrySettingsComponent extends BasePaginatedGridComponent impleme
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.getPartnerCountrySettings();
+  }
+
+  onGridReady(params) {
+    syncNestedColumnReset();
+    super.onGridReady(params);
   }
 
   getPartnerCountrySettings(value?) {

@@ -33,8 +33,8 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public partners: any[] = [];
   public partnerId: number = null;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public rowData = [];
   public filter: any = {};
   public frameworkComponents = {

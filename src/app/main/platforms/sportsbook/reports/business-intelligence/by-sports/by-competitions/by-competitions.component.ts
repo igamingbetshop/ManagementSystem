@@ -30,8 +30,8 @@ export class ByCompetitionsComponent extends BasePaginatedGridComponent implemen
   sportId: number;
   regionId: number;
   filter: any = {};
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   selectedItem = 'today';
   private totals = {
     totalBetAmount: 0,

@@ -12,6 +12,7 @@ import { CommonDataService, ConfigService } from "../../../../../../core/service
 import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from "../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-payment-system',
@@ -23,8 +24,8 @@ export class ReportByPaymentSystemComponent extends BasePaginatedGridComponent i
   public rowData = [];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public paymentRequestType = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public partners = [];
@@ -168,8 +169,8 @@ export class ReportByPaymentSystemComponent extends BasePaginatedGridComponent i
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

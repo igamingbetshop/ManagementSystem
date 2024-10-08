@@ -1,11 +1,14 @@
 <div class="container">
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a>
+    <div class="title"><a [routerLink]="[routerLink]">{{title | translate}}</a>
       / :{{'Clients.Bets' | translate}}
       <span>{{matchId}}</span> &nbsp; {{name}}
     </div>
 
     <div class="header2" fxHeight="50px">
+
+      <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+
       <button  mat-raised-button class="mat-btn" (click)="getBets()">{{'Common.Go' | translate}}</button>
     </div>
   </div>
@@ -36,10 +39,14 @@
     [suppressRowClickSelection]="false"
     [defaultColDef]="defaultColDef"
     (gridReady)="onGridReady($event)"
+    [components]="nestedFrameworkComponents"
     (rowGroupOpened)="onRowGroupOpened($event)"
     (rowClicked)="onRowClicked($event)"
     (rowSelected)="onRowSelected($event)"
     [getRowStyle]="getRowStyle"
+    [getContextMenuItems]="getContextMenuItems"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
     rowSelection="single">
   </ag-grid-angular>
   <div class="buttons">

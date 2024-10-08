@@ -15,7 +15,7 @@ import { DateAdapter } from "@angular/material/core";
 import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
 import { LocalStorageService } from "../../../../../core/services";
 import { GridMenuIds, GridRowModelTypes, OddsTypes } from 'src/app/core/enums';
-import { formattedNumber } from "../../../../../core/utils";
+import { formatDateTime, formattedNumber } from "../../../../../core/utils";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 
@@ -28,8 +28,8 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
   public path: string = 'bet';
   public rowData;
   public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public selectedData;
   public filteredData;
   public selected = false;
@@ -537,8 +537,8 @@ export class ReportByBetComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

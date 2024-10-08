@@ -150,7 +150,12 @@ export class AllSegmentsComponent extends BasePaginatedGridComponent implements 
         field: 'ClientStatus',
       },
       {
-        headerName: 'Segments.AffiliateId',
+        headerName: 'Segments.AgentIds',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'AgentId',
+      },
+      {
+        headerName: 'Segments.AffiliateIds',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'AffiliateId',
       },

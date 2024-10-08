@@ -16,6 +16,7 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { GridMenuIds } from 'src/app/core/enums';
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 
 @Component({
@@ -30,8 +31,8 @@ export class ByChangeHistoryComponent extends BasePaginatedGridComponent impleme
   public rowData = [];
   public selectedItem = 'today';
 
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
 
   constructor(
@@ -221,8 +222,8 @@ export class ByChangeHistoryComponent extends BasePaginatedGridComponent impleme
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

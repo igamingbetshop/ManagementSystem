@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import 'ag-grid-enterprise';
 import { take } from 'rxjs/operators';
@@ -15,13 +15,14 @@ import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-
 })
 export class ByLimitsComponent extends BasePaginatedGridComponent implements OnInit {
 
-  public partners: any[] = [];
-  public partnerId: number = 1;
-  public path = "report/marketlimits";
-  public rowData = [];
-  public filter: any = {};
-  public sports: any;
-  public defaultColDef = {
+  partners: WritableSignal<any> = signal([]);
+  partnerId: number = 1;
+  titleName = "Reports.ReportByLimits";
+  path = "report/marketlimits";
+  rowData: WritableSignal<[]> = signal([]);
+  filter: any = {};
+  sports: any;
+  defaultColDef = {
     flex: 1,
     filter: 'agTextColumnFilter',
     floatingFilter: true,
@@ -30,7 +31,7 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
     minWidth: 50,
   };
 
-  public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
   constructor(
     protected injector: Injector,
@@ -114,7 +115,7 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
   getPartners() {
     this.apiService.apiPost('partners').subscribe(data => {
       if (data.Code === 0) {
-        this.partners = data.ResponseObject;
+        this.partners.set(data.ResponseObject);
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
@@ -141,7 +142,7 @@ export class ByLimitsComponent extends BasePaginatedGridComponent implements OnI
           _rowData.forEach(elem => {
             return elem.SportName = this.sports[elem.SportId]
           })
-          this.rowData = _rowData;
+          this.rowData.set(_rowData);
 
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });

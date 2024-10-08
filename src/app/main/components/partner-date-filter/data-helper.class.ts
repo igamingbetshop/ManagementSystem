@@ -1,7 +1,8 @@
+
 export class DateHelper {
   static startDate(): [Date, Date] {
     let toDate = DateHelper.getDateNow();
-    toDate.setDate(toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 2);
 
     const fromDate = DateHelper.getDateNow();
     return [fromDate, toDate];
@@ -10,7 +11,7 @@ export class DateHelper {
   static selectTime(time: string): [Date, Date] {
     let fromDate = DateHelper.getDateNow();
     let toDate = DateHelper.getDateNow();
-    toDate.setDate(toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 2);
 
     switch (time) {
       case 'today':
@@ -23,9 +24,10 @@ export class DateHelper {
         const todayWeek = DateHelper.getDateNow();
         const startOfWeek = new Date(todayWeek);
         startOfWeek.setDate(todayWeek.getDate() - todayWeek.getDay() + (todayWeek.getDay() === 0 ? -6 : 1));
-        const endOfWeek = new Date(todayWeek);
+        const endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         fromDate = startOfWeek;
+        toDate = endOfWeek;
         break;
       case 'month':
         const todayMonth = DateHelper.getDateNow();
@@ -33,17 +35,17 @@ export class DateHelper {
         fromDate = startOfMonth;
         break;
       case 'All Times':
-        fromDate.setFullYear(1989, 11, 31);
+        fromDate = new Date(1989, 11, 31);
         break;
-        case 'LastYear':
-          const currentDate = DateHelper.getDateNow();
-          const lastYear = currentDate.getFullYear();
-          const startOfYear = new Date(lastYear, 0, 1);
-          fromDate = startOfYear;
-          toDate = new Date(currentDate);
-          break;
+      case 'LastYear':
+        const currentDate = DateHelper.getDateNow();
+        const lastYear = currentDate.getFullYear() - 1;
+        const startOfYear = new Date(lastYear, 0, 1);
+        fromDate = startOfYear;
+        toDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        break;
     }
-    
+
     return [fromDate, toDate];
   }
 

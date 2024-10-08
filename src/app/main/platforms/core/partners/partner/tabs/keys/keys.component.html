@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} : {{'Partners.Keys' | translate}}</div>
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} : {{'Partners.Keys' | translate}}</div>
     <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="addKey()">{{'Partners.AddKey' | translate}}</button>
   </div>

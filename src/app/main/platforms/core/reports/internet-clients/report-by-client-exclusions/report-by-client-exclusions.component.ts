@@ -21,8 +21,8 @@ import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-
 export class ReportByClientExclusionsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public partners = [];

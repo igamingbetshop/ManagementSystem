@@ -1,6 +1,6 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, signal, ViewChild } from '@angular/core';
 import { DatePipe } from "@angular/common";
-import { FormArray, FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
@@ -58,6 +58,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   selectedCampaignIds: number[] = [];
   selectedCampaignsByType: { [key: number]: number[] } = {};
   allBounuses: any;
+  tournamentData = signal([]);
   addedConditions = {
     selectedGroupType: 1,
     groupTypes: [
@@ -70,9 +71,10 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     selectedConditionType: null,
     selectedConditionValue: null
   };
-
-  campaignControl: FormControl;
-  valueControl: FormControl;
+  color = '';
+  // campaignControl: FormControl;
+  // valueControl: FormControl;
+  displayedColumns: string[] = [ 'Name', 'Order', 'Points'];
 
   conditionTypes;
   conditions = [];
@@ -165,9 +167,8 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.getClientType();
     this.getObjectHistory();
     this.formValues();
-
-    this.campaignControl = new FormControl('');
-    this.valueControl = new FormControl('');
+    // this.campaignControl = new FormControl('');
+    // this.valueControl = new FormControl('');
   }
 
   getBounusTypes() {
@@ -209,10 +210,10 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.accounttypeName = this.clientType.find(type => type.Id == this.accountTypeId)?.Name;
     this.commonSettings['BonusTypeName'] = this.bonusTypes?.find(x => x.Id == this.commonSettings?.BonusTypeId)?.Name;
     this.bonusTypeId = this.commonSettings?.BonusTypeId;
+    this.color = this.commonSettings?.Color;
     this.getPartnerPaymentSegments(this.commonSettings.PartnerId);
     this.formGroup.patchValue(this.commonSettings);
-    this.TypeConditions = this.commonSettings.Conditions;
-
+    this.TypeConditions = this.commonSettings.Conditions;    
     if (this.bonusTypeId === 5) {
       this.counts = this.commonSettings.Info.split(", ").map(Number);
       const countsFormArray = this.fb.array(
@@ -221,6 +222,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       );
       this.formGroup.addControl('counts', countsFormArray);
       this.formGroup.get('counts').setValue(this.counts);
+      this.fetchTournamentLeaderboard();
     } else if ((this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) && this.commonSettings?.Conditions) {
       this.addedConditions = this.bonusesService?.getResponseConditions(this.commonSettings?.Conditions, this.conditionTypes);
     } else if (this.bonusTypeId == 10) {
@@ -229,7 +231,10 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       this.getBounuses();
       this.formGroup.setControl('Info', this.fb.array([]));
       this.formGroup.get('Info').setValidators([Validators.required, this.minSelectedItemsValidator(3)]);
-
+      this.campaignTypes = [
+        ...this.campaignTypes,
+        { Name: "Sport.Wheel", Id: 4 },
+      ]
       const infoControl = this.formGroup.get('Info') as FormArray;
 
       if (this.commonSettings.Info) {
@@ -275,6 +280,17 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       });
   }
 
+  fetchTournamentLeaderboard() {
+    this.apiService.apiPost(this.configService.getApiUrl, 
+      { BonusId: this.commonSettings.Id, LanguageId: "en"}, true,
+      Controllers.BONUS, Methods.GET_TOURNAMENT_LEADERBOUARD).pipe(take(1)).subscribe(data => {
+        if (data.ResponseCode === 0) {
+          this.tournamentData.set(data.ResponseObject);
+        }
+      }
+    );
+  }
+
   getBonusInfo() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.commonId, true,
       Controllers.BONUS, Methods.GET_BONUS_INFO).pipe(take(1)).subscribe((data) => {
@@ -304,6 +320,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       PromoCode: [null],
       UpdateTime: [null],
       Status: [false],
+      Color: [null],
       Name: [{ value: null, disabled: true }],
       ResetOnWithdraw: [false],
       AllowSplit: [false],
@@ -489,20 +506,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     } else if(this.bonusTypeId == 4) {
       requestBody.Info = JSON.stringify(requestBody.Info);
     }
-
-  //   const requestBodyStartTime = this.normalizeDateTime(requestBody.StartTime);
-  //   const requestBodyFinishTime = this.normalizeDateTime(requestBody.FinishTime);
-  //   const commonStartTime = this.normalizeDateTime(this.commonSettings.StartTime);
-  //   const commonFinishTime = this.normalizeDateTime(this.commonSettings.FinishTime);
-  
-  //   // Compare the normalized times
-  //   if (requestBodyStartTime === commonStartTime) {
-  //     requestBody.StartTime = this.convertToUtc(requestBody.StartTime);
-  // }
-  
-  //   if (requestBodyFinishTime === commonFinishTime) {
-  //     requestBody.FinishTime = this.convertToUtc(requestBody.FinishTime);
-  // }    
+ 
 
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true,
       Controllers.BONUS, Methods.UPDATE_BONUS).pipe(take(1)).subscribe(data => {
@@ -523,10 +527,9 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     if (!dateTime) return '';
   
     const date = new Date(dateTime);
-    return date.toISOString().slice(0, 16); // Returns in 'YYYY-MM-DDTHH:MM' format
+    return date.toISOString().slice(0, 16); 
   }
   
-  // Helper method to convert date-time to UTC hours
   private convertToUtc(dateTime: string | null): string {
     if (!dateTime) return '';
   
@@ -602,35 +605,29 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
 
-  onTypeChange(type?: number) {
-    this.selectedType = type;
+  fetchCampaigns(type: number) {
     let obj = {
-      PartnerId: this.formGroup.get('PartnerId').value,
-      Status: 1,
-      Type: type || null
-    }
-    this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.BONUS,
-      Methods.GET_BONUSES).pipe(take(1)).subscribe((data) => {
-      if (data.ResponseCode === 0) {
-        const newCampaigns = data.ResponseObject;
-        this.campaigns = newCampaigns;        
-        if( this.selectedCampaignIds.length > 0) {
-          this.formGroup.get('Info').setValue(this.selectedCampaignIds);
+          PartnerId: this.formGroup.get('PartnerId').value,
+          Status: 1,
+          Type: type || null
         }
-      } else {
-        SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
-      }
-    });
+        this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.BONUS,
+          Methods.GET_BONUSES).pipe(take(1)).subscribe((data) => {
+          if (data.ResponseCode === 0) {
+            const newCampaigns = data.ResponseObject;
+            this.campaigns = newCampaigns;        
+            if( this.selectedCampaignIds.length > 0) {
+              this.formGroup.get('Info').setValue(this.selectedCampaignIds);
+            }
+          } else {
+            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          }
+        });
   }
 
-  onCampaignChange(selectedCampaignIds: number[]): void {
-    this.selectedCampaignsByType[this.selectedType] = selectedCampaignIds;
-    const allSelectedCampaignIds = Object.values(this.selectedCampaignsByType).flat();
-  }
 
-  addValue() {
-    const campaign = this.campaignControl.value;
-    const value = this.valueControl.value;
+  addValue(campaign, value) {
+
     if (campaign && value !== null && value !== undefined) {
       if (value > 10) {
         SnackBarHelper.show(this._snackBar, { Description: "Value must be between 1 and 10.", Type: "error" });
@@ -650,13 +647,28 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
         this.infoArray.push(this.fb.group(newValue));
       }
   
-      this.campaignControl.reset();
-      this.valueControl.reset();
+      // this.campaignControl.reset();
+      // this.valueControl.reset();
   
       this.infoArray.updateValueAndValidity();
     } else {
       SnackBarHelper.show(this._snackBar, { Description: "Please select a campaign and enter a valid value.", Type: "error" });
     }
+  }
+
+
+  onTypeChange(type: number) {
+    this.selectedType = type;
+    this.fetchCampaigns(type);
+  }
+  
+  onCampaignChange(selectedCampaignIds: number[]) {
+    this.selectedCampaignsByType[this.selectedType] = selectedCampaignIds;
+    const allSelectedCampaignIds = Object.values(this.selectedCampaignsByType).flat();
+  }
+  
+  handleValueAdded(newValue: any) {
+    this.addValue(newValue.BonusId, newValue.Periodicity);
   }
 
   removeValue(index: number) {

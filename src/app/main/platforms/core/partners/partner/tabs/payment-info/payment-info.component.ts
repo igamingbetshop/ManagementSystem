@@ -6,9 +6,10 @@ import {ActivatedRoute} from "@angular/router";
 import {ConfigService} from "../../../../../../../core/services";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {Controllers, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
+import {Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes} from "../../../../../../../core/enums";
 import {take} from "rxjs/operators";
 import {DatePipe} from "@angular/common";
+import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-payment-info',
@@ -31,6 +32,7 @@ export class PaymentInfoComponent extends BasePaginatedGridComponent implements 
               private ref: ChangeDetectorRef,
               private _snackBar: MatSnackBar) {
     super(injector);
+    this.adminMenuId = GridMenuIds.PARTNERS_PAYMENT_INFO;
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -128,6 +130,11 @@ export class PaymentInfoComponent extends BasePaginatedGridComponent implements 
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.getPartnerBanks();
+  }
+
+  onGridReady(params) {
+    syncNestedColumnReset();
+    super.onGridReady(params);
   }
 
   getPartnerBanks() {

@@ -14,6 +14,7 @@ import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helpe
 import { DateAdapter } from "@angular/material/core";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-corrections',
@@ -27,8 +28,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   public columnDefs = [];
   public columnDefs2 = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public headerName;
@@ -230,7 +231,6 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   ngOnInit() {
     this.setTime();
     this.affiliateId = this.activateRoute.snapshot.queryParams.affiliateId;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.getUserAccounts();
   }
 
@@ -278,8 +278,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

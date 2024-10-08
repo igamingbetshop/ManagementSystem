@@ -10,7 +10,7 @@ import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums"
 import { take } from "rxjs/operators";
 import 'ag-grid-enterprise';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { formattedNumber } from "../../../../../../core/utils";
+import { formatDateTime, formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import {ExportService} from "../../../services/export.service";
@@ -23,8 +23,8 @@ import {ExportService} from "../../../services/export.service";
 export class ReportByBetsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public partners = [];
@@ -219,8 +219,8 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onGridReady(params) {

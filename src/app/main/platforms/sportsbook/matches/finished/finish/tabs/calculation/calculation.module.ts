@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CalculationComponent } from './calculation.component';
+import { FinishedCalculationComponent } from './calculation.component';
 import { RouterModule, Routes } from '@angular/router';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
@@ -21,12 +21,12 @@ import { ResultsComponent } from '../../../../active-matches/active/tabs/calcula
 const routes: Routes = [
   {
     path: '',
-    component: CalculationComponent
+    component: FinishedCalculationComponent
   }
 ];
 
 @NgModule({
-    declarations: [CalculationComponent],
+    declarations: [FinishedCalculationComponent],
     imports: [
         CommonModule,
         MatSnackBarModule,

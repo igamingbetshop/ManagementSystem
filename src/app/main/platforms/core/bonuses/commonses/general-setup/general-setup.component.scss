@@ -46,3 +46,47 @@
 .mat-btn {
   @include mat-btn-style;
 }
+
+.color-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+
+  border-radius: 5px;
+  .color-input {
+    flex: 1;
+    margin: 10px;
+
+  }
+
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px; 
+  align-items: center;
+}
+
+.field-row .campaign-select {
+  min-width: 203px; 
+}
+
+.field-row .campaign-value {
+  width: 80px!important;
+}
+
+.field-row .mat-btn {
+  width: 30px;
+  height: 30px;
+}
+
+.campaign-button {
+  position: relative;
+  .campaign-icon {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+  }
+}

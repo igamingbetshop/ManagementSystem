@@ -18,6 +18,7 @@ import { take } from "rxjs/operators";
 import { Paging } from "../../../../../../../core/models";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-corrections',
@@ -31,8 +32,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   public clientUnusedId;
   public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   public columnDefs = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public headerName;
@@ -183,8 +184,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getData() {

@@ -12,6 +12,7 @@ import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-results',
@@ -21,8 +22,8 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 export class ResultsComponent extends BasePaginatedGridComponent implements OnInit {
   public rowData;
   public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public filteredData;
   public selectedItem;
   public clientData;
@@ -169,8 +170,8 @@ export class ResultsComponent extends BasePaginatedGridComponent implements OnIn
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

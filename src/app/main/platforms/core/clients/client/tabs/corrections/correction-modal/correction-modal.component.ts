@@ -24,10 +24,11 @@ export class CorrectionModalComponent implements OnInit {
   selectedLanguage;
   formGroup: UntypedFormGroup;
   headerName;
-  currencyId;
+
   showSelectAccountType;
   accountTypes = [];
   isSendingRequest = false; 
+  currences = [];
 
   constructor(
     public dialogRef: MatDialogRef<CorrectionModalComponent>,
@@ -47,10 +48,23 @@ export class CorrectionModalComponent implements OnInit {
     this.modalHeaderName = "Common." + this.headerName;
     this.showSelectAccountType = this.data.showSelectAccountType;
     this.formValues();
-    this.currencyId = this.account?.CurrencyId;
+
+    
     this.getProducts();
     this.getClientAccountTypes();
+    this.getCurrencies();
+    
   }
+
+  getCurrencies() {
+    this.apiService.apiPost(this.configService.getApiUrl, {}, true,
+      Controllers.CURRENCY, Methods.GET_CURRENCIES).pipe(take(1)).subscribe((data) => {
+      if (data.ResponseCode === 0) {
+        this.currences = data.ResponseObject.filter((currency: any) => currency.Type === 2);
+      }
+    });
+  }
+  
 
   formValues() {
     this.formGroup = this.fb.group({
@@ -58,7 +72,7 @@ export class CorrectionModalComponent implements OnInit {
       AccountTypeId: [null],
       ClientId: [this.clientId],
       Amount: [null],
-      CurrencyId: [this.currencyId],
+      CurrencyId: [null],
       HideCurrency: [true],
       Info: [null],
       OperationTypeId: [null],

@@ -1,7 +1,7 @@
 <div class="container">
 
 <div class="content-action">
-  <div class="title"><a [routerLink]="['../../all-affiliates']">{{'Providers.Affiliates' | translate}} {{affiliateId}} / {{'Users.Corrections' | translate}} </a></div>
+  <div class="title"><a [routerLink]="['../../all-affiliates']">{{'Providers.Affiliates' | translate}} / {{affiliateId}} : {{'Users.Corrections' | translate}} </a></div>
   <button class="mat-btn" mat-stroked-button (click)="onDebitToAccount()">{{'Payments.DebitToAccount' | translate}}</button>
   <button class="mat-btn" mat-stroked-button (click)="onCreditFromAccount()">{{'Payments.CreditFromAccount' | translate}}</button>
 </div>

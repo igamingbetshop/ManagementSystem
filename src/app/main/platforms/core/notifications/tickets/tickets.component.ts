@@ -15,6 +15,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Paging } from 'src/app/core/models';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-tickets',
@@ -25,15 +26,15 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
   public rowData = [];
   public partners: any[] = [];
-  private partnerId = 1;
+  private partnerId;
   public frameworkComponents;
   public unreadsOnly = false;
   public ticketsTypesEnum: any[] = [];
   public signalRSubscription: any;
   public partnersPlaceholder: string;
   public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
 
   constructor(
     protected injector: Injector,
@@ -234,8 +235,8 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {
@@ -300,6 +301,7 @@ export class TicketsComponent extends BasePaginatedGridComponent implements OnIn
         paging.TakeCount = Number(this.cacheBlockSize);
         paging.SkipCount = params.request.startRow / this.cacheBlockSize;
         paging.CreatedFrom = this.fromDate;
+        paging.CreatedBefore = this.toDate;
         paging.LanguageId = localStorage.getItem('lang') == null ? 'en' : localStorage.getItem('lang');
         paging.Token = this.localStorage.get('token');
         paging.UnreadsOnly = this.unreadsOnly;

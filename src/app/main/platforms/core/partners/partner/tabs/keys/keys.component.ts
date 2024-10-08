@@ -148,6 +148,8 @@ export class KeysComponent extends BasePaginatedGridComponent implements OnInit 
       Controllers.PARTNER, Methods.GET_PARTNER_KEYS).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
           this.rowData = data.ResponseObject;
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
   }

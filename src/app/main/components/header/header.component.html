@@ -13,6 +13,20 @@
     <div>VIP {{vipLevel}}</div>
   </div>
   <div class="clock-cont">{{ currentDateTime  | date:'HH:mm:ss a MMMM d, y z'}}</div>
+  
+
+  <button mat-button class="mat-bulk-btn"
+  [matMenuTriggerFor]="bulkMenu"
+  matMenuTriggerRestoreFocus="false"
+  #bulkMenuTrigger="matMenuTrigger" (click)="onOpenNotifications()">
+  @if (notificationsCount() > 0) {
+    <span class="notification-count" >{{ notificationsCount() }}</span>
+  }
+</button>
+    <mat-menu  class="bulk-editor-menu" #bulkMenu="matMenu" xPosition="before" [overlapTrigger]="false">
+      <ng-container #bulkEditorRef></ng-container>
+    </mat-menu>
+
   <div class="user-content" routerLink='/main/profile'>{{userName }}</div>
   <div class="partner-dropdown">
     <mat-select #matSelect

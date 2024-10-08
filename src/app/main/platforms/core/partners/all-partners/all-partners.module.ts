@@ -13,6 +13,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatNativeDateModule } from "@angular/material/core";
 import { AgBooleanFilterModule } from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { RouterModule, Routes } from '@angular/router';
+
+
 
 
 @NgModule({
@@ -29,7 +32,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     MatDatepickerModule,
     TranslateModule,
     AgBooleanFilterModule,
-    AgGridModule
+    AgGridModule,
   ],
 })
 export class AllPartnersModule {

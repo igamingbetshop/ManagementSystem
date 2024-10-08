@@ -29,15 +29,17 @@ export class ConditionInputComponent {
   @Input() label: string;
   @Input() conditions: any[] = [];
   @Input() operations: any[] = [];
-  @Input() inputPattern: string = '^\d+$'
+  @Input() inputPattern: string = '^\d+$';
   @Input() placeholder: string = 'Bonuses.Value';
+  @Input() affiliateId: string; // New input property
   @Output() conditionsChange = new EventEmitter<any[]>();
 
   selectedConditionType: any = null;
   selectedConditionValue: any = '';
 
   addCondition() {
-    if (this.selectedConditionType && this.selectedConditionValue) {
+    if (this.selectedConditionType !== null && this.selectedConditionType !== undefined && 
+        this.selectedConditionValue !== null && this.selectedConditionValue !== undefined) {
       this.conditions.push({
         ConditionType: this.selectedConditionType,
         ConditionValue: this.selectedConditionValue
@@ -51,5 +53,14 @@ export class ConditionInputComponent {
   removeCondition(index: number) {
     this.conditions.splice(index, 1);
     this.conditionsChange.emit(this.conditions);
+  }
+
+  isButtonDisabled(): boolean {
+    return !this.selectedConditionType || !this.isPatternValid();
+  }
+
+  isPatternValid(): boolean {
+    const pattern = new RegExp(this.inputPattern);
+    return pattern.test(this.selectedConditionValue);
   }
 }

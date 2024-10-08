@@ -1,6 +1,6 @@
 <div class="container">
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a>/ {{partnerName}}
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a>/ {{partnerName}}
       :{{'Partners.ProductSettings' | translate}}</div>
     <button class="all" mat-stroked-button (click)="allProductsOn()"
       [ngClass]="{'btn-success': AllProductsState, 'btn-cancel': !AllProductsState}">

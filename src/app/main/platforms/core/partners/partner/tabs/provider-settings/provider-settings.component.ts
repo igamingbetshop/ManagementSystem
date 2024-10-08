@@ -3,7 +3,7 @@ import { CoreApiService } from "../../../../services/core-api.service";
 import { ConfigService } from "../../../../../../../core/services";
 import { ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
@@ -43,6 +43,7 @@ export class ProviderSettingsComponent extends BasePaginatedGridComponent implem
     private _snackBar: MatSnackBar,
     public dialog: MatDialog) {
     super(injector);
+    this.adminMenuId = GridMenuIds.PARTNERS_PROVIDER_SETTINGS;
   }
 
   ngOnInit(): void {

@@ -5,7 +5,7 @@ export class DateTimeHelper {
 
   static startDate() {
     let toDate = this.getDateNow();
-    toDate.setDate(toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 2);
 
     this.fromDate = this.getDateNow();
     this.toDate = toDate;
@@ -14,7 +14,7 @@ export class DateTimeHelper {
   static selectTime(time) {
     let fromDate = this.getDateNow();
     let toDate = this.getDateNow();
-    toDate.setDate(toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 2);
 
     switch (time) {
       case 'today':

@@ -33,8 +33,8 @@ export class PopupsComponent extends BasePaginatedGridComponent implements OnIni
   @ViewChild('agGrid') agGrid: AgGridAngular;
   partners: any[] = [];
   partnerId = null;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   rowData = [];
   types: any[] = [];
   filter: any = {};

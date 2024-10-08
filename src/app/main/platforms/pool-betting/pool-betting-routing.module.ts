@@ -25,6 +25,11 @@ const routes: Routes = [
         // resolve:{commonData: CommonDataResolver, filterData: PBPartnersResolver},
       },
       {
+        path: 'common',
+        loadChildren: () => import('./common/pb-common.module').then(m => m.PBCommonModule),
+        resolve:{commonData: CommonDataResolver, filterData: PBPartnersResolver},
+      },
+      {
         path: '',
         redirectTo: 'pools',
         pathMatch: 'full'

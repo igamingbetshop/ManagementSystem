@@ -16,6 +16,7 @@ import { DateAdapter } from "@angular/material/core";
 import { CellClickedEvent } from 'ag-grid-community';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { DatePipe } from '@angular/common';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'client-main',
@@ -33,8 +34,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   public rowModelType2: string = GridRowModelTypes.CLIENT_SIDE;
   public columnDefs = [];
   public columnDefs2 = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public headerName;
   public showSelectAccountType;
@@ -278,8 +279,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getClientAccounts() {

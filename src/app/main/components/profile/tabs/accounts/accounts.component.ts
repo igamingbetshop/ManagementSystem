@@ -7,6 +7,7 @@ import {take} from 'rxjs/operators';
 import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import { BaseGridComponent } from '../../../classes/base-grid-component';
 import { DateHelper } from '../../../partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-accounts',
@@ -18,8 +19,8 @@ export class AccountsComponent extends BaseGridComponent implements OnInit {
   public rowData = [];
   public filter: any = {};
   public id;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public selectedItem = 'today';
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
@@ -137,8 +138,8 @@ export class AccountsComponent extends BaseGridComponent implements OnInit {
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   go() {

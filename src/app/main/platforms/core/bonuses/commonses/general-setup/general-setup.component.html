@@ -340,42 +340,17 @@
       }
     </mat-form-field>
     } @else if (bonusTypeId == 4) {
+      <!-- <div class="field-row"> -->
 
-    <div class="field-content">
-      <mat-form-field>
-        <mat-label>{{ 'Clients.SelectType' | translate }}</mat-label>
-        <mat-select required (selectionChange)="onTypeChange($event.value)">
-          @for (campaign of campaignTypes; track $index) {
-          <mat-option [value]="campaign.Id">{{campaign.Name}}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
+        <app-campaign-selector
+          [campaignTypes]="campaignTypes"
+          [campaigns]="campaigns"
+          [selectedCampaignIds]="selectedCampaignIds"
+          (typeChange)="onTypeChange($event)"
+          (campaignChange)="onCampaignChange($event)"
+          (valueAdded)="handleValueAdded($event)"
+      ></app-campaign-selector>
 
-      <mat-form-field>
-        <mat-label>{{ 'Clients.SelectCampaign' | translate }}</mat-label>
-        <mat-select [formControl]="campaignControl" (selectionChange)="onCampaignChange($event.value)">
-          @for (campaign of campaigns; track $index) {
-          <mat-option [value]="campaign.Id">
-            {{ campaign.Name }}
-          </mat-option>
-          }
-        </mat-select>
-        <mat-error *ngIf="campaignControl.touched && campaignControl.hasError('required')">
-          {{ 'Common.Campaign' | translate }} {{ 'Errors.Required' | translate }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="field-content">
-      <mat-form-field>
-        <mat-label>{{ 'Clients.SelectValue' | translate }}</mat-label>
-        <input matInput [formControl]="valueControl" type="number">
-        <mat-error *ngIf="valueControl.touched && valueControl.hasError('required')">
-          {{ 'Common.Value' | translate }} {{ 'Errors.Required' | translate }}
-        </mat-error>
-      </mat-form-field>
-      <button mat-raised-button class="mat-btn" (click)="addValue()">Add Value</button>
-    </div>
 
     <div class="selected-items-area">
       @for ( info of infoArray.controls; track $index) {
@@ -387,10 +362,11 @@
       </div>
       }
     </div>
-
-    <mat-error *ngIf="infoArray.errors?.minSelectedItems">
-      {{ 'Common.Info' | translate }} {{"Errors.MustHaveAtLeast" | translate}} 3 {{"Common.Items" | translate}}.
-    </mat-error>
+    @if (infoArray.errors?.minSelectedItems) {
+      <mat-error>
+        {{ 'Common.Info' | translate }} {{"Errors.MustHaveAtLeast" | translate}} 3 {{"Common.Items" | translate}}.
+      </mat-error>
+    }
 
     } @else if ( bonusTypeId == 5 || bonusTypeId == 9) {
     <mat-form-field>
@@ -461,6 +437,15 @@
           [formControlName]="'ReusingMaxCount'">
       </mat-form-field>
       }
+
+      <div class="color-row">
+        <mat-label>{{ 'Sport.Color' | translate }}</mat-label>
+        
+        <input type="color" class="color-input" [(ngModel)]="color" [formControlName]="'Color'"/>
+        
+        <div [style.background]="color" class="color-preview"></div>
+      </div>
+
   </form>
 
   @if(bonusTypeId == 12 || bonusTypeId == 13 || bonusTypeId == 10) {

@@ -4,7 +4,7 @@ import { CommonDataService, ConfigService } from "../../../../../../../core/serv
 import { UntypedFormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { take } from "rxjs/operators";
 import { BasePaginatedGridComponent } from "../../../../../../components/classes/base-paginated-grid-component";
 import { AgGridAngular } from "ag-grid-angular";
@@ -17,6 +17,7 @@ import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helpe
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 import { IRowNode } from 'ag-grid-enterprise';
 import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
+import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 
 @Component({
   selector: 'app-payment-settings',
@@ -27,8 +28,6 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public partnerId;
   public partnerName;
-  public fromDate = new Date();
-  public toDate = new Date();
   public rowData = [];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public columnDefs = [];
@@ -56,15 +55,17 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
     protected injector: Injector,
     public dialog: MatDialog) {
     super(injector);
+    this.adminMenuId = GridMenuIds.PARTNERS_SETTINGS;
   }
 
   ngOnInit(): void {
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.getPartnerPayments();
     this.setColumnDefs();    
   }
+
+
 
   setColumnDefs() {
     this.columnDefs = [
@@ -276,13 +277,12 @@ export class PaymentSettingsComponent extends BasePaginatedGridComponent impleme
   }
 
   onGridReady(params) {
+    syncNestedColumnReset();
     super.onGridReady(params);
   }
 
   getPartnerPayments() {
     const paging = new Paging();
-    paging.BetDateFrom = this.fromDate;
-    paging.BetDateBefore = this.toDate;
     paging.PartnerId = +this.partnerId;
     this.apiService.apiPost(this.configService.getApiUrl, paging, true,
       Controllers.PAYMENT, Methods.GET_PARTNER_PAYMENT_SETTINGS).pipe(take(1)).subscribe((data) => {

@@ -21,6 +21,9 @@ import { GridRowModelTypes, Controllers, Methods, OddsTypes, ModalSizes, GridMen
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
+import { BETSTATUSES } from 'src/app/core/constantes/statuses';
+import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 
 @Component({
   selector: 'app-bets',
@@ -33,9 +36,10 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   rowData = [];
   statusNames = [];
   statusFilterEntities = [];
+  betStatuses = BETSTATUSES;
   rowModelType: string = GridRowModelTypes.SERVER_SIDE;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   detailsInline;
   masterDetail;
@@ -60,6 +64,9 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   accountId = null;
   providers = [1, 5, 6, 100, 21, 31, 91, 1119 ];
   pageIdName: string;
+  frameworkComponents = {
+    agDropdownFilter: AgDropdownFilter,
+  }
 
   constructor(
     private apiService: CoreApiService,
@@ -138,11 +145,18 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         field: 'State',
         sortable: true,
         resizable: true,
-        filter: 'agNumberColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.statusFilterEntities
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.betStatuses,
+        },
+        cellRenderer: (params: { value: any; }) => {
+          const betId = params.value;
+          const betObject = this.betStatuses?.find((bet) => bet.Id === betId);
+          if (betObject) {
+            return betObject.Name;
+          }
+          
         },
 
       },
@@ -463,8 +477,8 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

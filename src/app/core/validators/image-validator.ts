@@ -6,7 +6,7 @@ export function imageValidator(): ValidatorFn {
       const imageName = control.parent?.get('ImageName')?.value;
       if (imageData && imageName) {
         const isValidFormat = /\.(jpg|jpeg|png|gif)$/i.test(imageName);
-        const isValidSize = imageData.length * 0.75 < 5000000; // Approximate size check for base64 data
+        const isValidSize = imageData.length * 0.75 < 5000000;
   
         return isValidFormat && isValidSize ? null : { invalidImage: true };
       }

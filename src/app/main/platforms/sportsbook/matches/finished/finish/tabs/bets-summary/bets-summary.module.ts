@@ -14,14 +14,14 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 
 import {AgGridModule} from "ag-grid-angular";
-import {BetsSummaryComponent} from "./bets-summary.component";
+import {FinishedBetsSummaryComponent} from "./bets-summary.component";
 import {TranslateModule} from "@ngx-translate/core";
 import {AgCustomFilterModule} from "../../../../../../../components/ag-cutsom-filter/ag-custom-filter.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: BetsSummaryComponent
+    component: FinishedBetsSummaryComponent
   }
 ];
 
@@ -41,7 +41,7 @@ const routes: Routes = [
     TranslateModule,
     AgCustomFilterModule
   ],
-  declarations: [BetsSummaryComponent]
+  declarations: [FinishedBetsSummaryComponent]
 })
 export class BetsSummaryModule {
 }

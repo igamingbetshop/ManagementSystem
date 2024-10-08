@@ -16,6 +16,8 @@ import {BETAVAILABLESTATUSES, BETSTATUSES} from "../../../../../../../../core/co
 })
 export class BetsSummaryComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
+  public title: string = "Sport.ActiveMatches";
+  routerLink: string = '../../../all-active';
   public name: string = '';
   public partnerId;
   public sportId;
@@ -48,9 +50,9 @@ export class BetsSummaryComponent extends BasePaginatedGridComponent implements 
 
   constructor(
     protected injector: Injector,
-    private apiService: SportsbookApiService,
-    private _snackBar: MatSnackBar,
-    private activateRoute: ActivatedRoute) {
+    protected apiService: SportsbookApiService,
+    protected _snackBar: MatSnackBar,
+    protected activateRoute: ActivatedRoute) {
     super(injector);
     this.columnDefs = [
       {

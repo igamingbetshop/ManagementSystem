@@ -20,7 +20,7 @@ import { PartnerDateFilterComponent } from "../../../../components/partner-date-
 
 @NgModule({
     declarations: [TicketsComponent],
-    providers: [DatePipe, CoreSignalRService],
+    providers: [DatePipe],
     imports: [
         CommonModule,
         TicketsRoutingModule,

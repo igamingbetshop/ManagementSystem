@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EventsComponent } from './events.component';
+import { FinishedEventsComponent } from './events.component';
 import { RouterModule, Routes } from '@angular/router';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
@@ -20,7 +20,7 @@ import {TranslateModule} from "@ngx-translate/core";
 const routes: Routes = [
   {
     path: '',
-    component: EventsComponent
+    component: FinishedEventsComponent
   }
 ];
 
@@ -39,6 +39,6 @@ const routes: Routes = [
     AgGridModule,
     TranslateModule
   ],
-  declarations: [EventsComponent]
+  declarations: [FinishedEventsComponent]
 })
 export class EventsModule { }

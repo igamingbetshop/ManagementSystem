@@ -84,7 +84,6 @@ export class UploadHtmlComponent implements OnInit {
     this.selectedLanguage ? this.isSelectedLanguage = true : this.isSelectedLanguage = false;
   }
 
-
   close() {
     this.dialogRef.close();
   }
@@ -95,20 +94,24 @@ export class UploadHtmlComponent implements OnInit {
 
   onSubmit() {
     if (this.translationData.newText) {
-      this.translationData.Text = this.translationData.newText;
+      this.translationData.Text = this.translationData.newText
+        .replace(/\n/g, '') 
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\>\s+\</g, '><') 
+        .trim();
+    }  
+    if (this.translationData.Text !== this.unModifiedData.Text.trim()) {
+      const trimmedText = this.translationData.Text.trim();
+      const data = {
+        languageId: this.selectedLanguage,
+        contendData: trimmedText
+      };
+  
+     
+      this.dialogRef.close(data); 
     }
-
-    let changedItems = [];
-
-    if (this.translationData.Text !== this.unModifiedData.Text) {
-      changedItems.push(this.translationData);
-    }
-    const data = {
-      languageId: this.selectedLanguage,
-      contendData: changedItems[0].Text
-    }
-    
-    this.dialogRef.close(data);
-
   }
+  
+  
+  
 }

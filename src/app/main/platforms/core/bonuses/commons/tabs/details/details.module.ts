@@ -26,6 +26,8 @@ import { CurrencySettingsComponent } from "../../../currency-settings/currency-s
 import { MatDialogModule } from '@angular/material/dialog';
 import { IdToNamePipe } from "../../../../../../../core/pipes/id-to-name-pipe";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
+import { MatTableModule } from '@angular/material/table';
+import { CampaignSelectorComponent } from "./campaign-selector/campaign-selector.component";
 
 const routes: Routes = [
   {
@@ -42,27 +44,29 @@ const routes: Routes = [
     declarations: [DetailsComponent, ViewCommonComponent],
     providers: [DatePipe, BonusesService],
     imports: [
-        CommonModule,
-        RouterModule.forChild(routes),
-        AgGridModule,
-        MatSnackBarModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatButtonModule,
-        MatInputModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        TranslateModule,
-        MatSelectModule,
-        CurrencySettingsComponent,
-        MatDialogModule,
-        MatChipsModule,
-        IdToNamePipe,
-        DateTimePickerComponent
-    ]
+    CommonModule,
+    RouterModule.forChild(routes),
+    AgGridModule,
+    MatSnackBarModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    TranslateModule,
+    MatSelectModule,
+    CurrencySettingsComponent,
+    MatDialogModule,
+    MatChipsModule,
+    IdToNamePipe,
+    DateTimePickerComponent,
+    MatTableModule,
+    CampaignSelectorComponent
+]
 })
 export class DetailsModule {
 }

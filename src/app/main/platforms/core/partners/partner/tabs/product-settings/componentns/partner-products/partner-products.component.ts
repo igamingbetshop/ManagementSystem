@@ -25,7 +25,7 @@ import {
 } from "../../../../../../../../components/grid-common/array-selectable-editor/array-selectable-editor.component";
 import { CoreApiService } from "../../../../../../services/core-api.service";
 import { ConfigService } from "../../../../../../../../../core/services";
-import { Controllers, Methods, ModalSizes } from "../../../../../../../../../core/enums";
+import { Controllers, GridMenuIds, Methods, ModalSizes } from "../../../../../../../../../core/enums";
 import { Paging } from "../../../../../../../../../core/models";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { forkJoin } from 'rxjs';
@@ -82,6 +82,8 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     private exportService: ExportService,
     private _snackBar: MatSnackBar) {
     super(injector);
+    this.adminMenuId = GridMenuIds.PARTNERS_PRODUCTS_SETTINGS;
+    this.gridIndex = 1;
   }
 
   ngOnInit(): void {
@@ -109,7 +111,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     const getGameProviders$ = this.apiService.apiPost(this.configService.getApiUrl, { SettingPartnerId: this.partnerId }, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS);
 
     forkJoin([getProductCategories$, getGameProviders$])
-      .pipe(take(1)) // Take the first emitted value and complete the observable
+      .pipe(take(1))
       .subscribe(([productCategoriesData, gameProvidersData]) => {
         if (productCategoriesData.ResponseCode === 0) {
           this.productCategories = productCategoriesData.ResponseObject;
@@ -403,6 +405,13 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     const agColumnSelect = document.querySelector('#partner-products .ag-tool-panel-wrapper .ag-column-select');
     const matExportBtn = document.querySelector('.mat-export-btn-partner');
     agColumnSelect.prepend(matExportBtn);
+    
+    const agColumnSelectList = document.querySelectorAll('.ag-tool-panel-wrapper .ag-column-select');
+    const btn = document.querySelector('.mat-resets-btns');
+    if (agColumnSelectList.length >= 2) {
+      const secondAgColumnSelect = agColumnSelectList[2];
+      secondAgColumnSelect.prepend(btn);
+    }
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
@@ -630,7 +639,7 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     if (this.bulkEditorRef) {
       this.bulkEditorRef.clear();
     }
-    const componentInstance = await import('../all-products/add-partners-product/add-partners-product.component').then(c => c.AddPartnersProductComponent);
+    const componentInstance = await import('../../../../../../../../components/dynamic-bulk-edit/dynamic-bulk-edit.component').then(c => c.DynamicBulkEditComponent);
     const componentRef = this.bulkEditorRef.createComponent(componentInstance);
     componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
     componentRef.instance.productCategories = this.productCategories;
@@ -638,6 +647,10 @@ export class PartnerProductsComponent extends BasePaginatedGridComponent impleme
     componentRef.instance.partnerId = +this.partnerId;
     componentRef.instance.productIds = this.getSelectedProductIds();
     componentRef.instance.isRTPVisible = true;
+    componentRef.instance.adminMenuId = GridMenuIds.PARTNERS_PRODUCTS_SETTINGS;
+    componentRef.instance.gridIndex = 1;
+    componentRef.instance.controler = Controllers.PRODUCT;
+    componentRef.instance.method = Methods.SAVE_PARTNER_PRODUCT_SETTINGS;
     componentRef.instance.afterClosed.subscribe((data) => {
       if (data) {
         this.gridApi.refreshServerSide({ purge: true });

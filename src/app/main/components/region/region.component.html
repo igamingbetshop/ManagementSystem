@@ -1,0 +1,42 @@
+<div>
+  <mat-form-field class="mat-form-field">
+    <mat-label>{{ "Common.SelectCountry" | translate }}</mat-label>
+    <mat-select formControlName="Country"
+      (selectionChange)="field().Type === 'Region2' ? fetchRegions('City') : field().Type === 'Region3' ? fetchRegions('District') : null">
+      @for (country of countries(); track $index) {
+      <mat-option [value]="country.Id">
+        {{ country.Name }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if(parentFormGroup.get('District')) {
+  <mat-form-field class="mat-form-field">
+    <mat-label>{{ "Clients.SelectDistrict" | translate }}</mat-label>
+    <mat-select formControlName="District">
+      @for (district of districts();; track $index) {
+      <mat-option [value]="district.Id">
+        {{ district.Name }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  }
+
+  @if(parentFormGroup.get('City')) {
+
+  <mat-form-field class="mat-form-field">
+    <mat-label>{{ "Clients.SelectCity" | translate }}</mat-label>
+    <mat-select formControlName="City">
+      @for (city of cities(); track $index) {
+      <mat-option [value]="city.Id">
+        {{ city.Name }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  }
+
+
+</div>

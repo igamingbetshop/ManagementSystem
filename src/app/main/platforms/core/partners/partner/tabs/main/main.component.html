@@ -1,11 +1,9 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Main' | translate}}
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Main' | translate}}
     </div>
-
     <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
-
   </div>
 
   <div class="content-edit">

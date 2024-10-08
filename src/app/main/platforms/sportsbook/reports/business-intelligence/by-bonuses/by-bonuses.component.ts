@@ -14,6 +14,7 @@ import { Paging } from 'src/app/core/models';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-by-bonuses',
@@ -27,8 +28,8 @@ export class ByBounusesComponent extends BasePaginatedGridComponent implements O
   path = "report/bonuses";
   rowData = [];
   filter: any = {};
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   selectedItem = 'today';
   frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
@@ -51,8 +52,8 @@ export class ByBounusesComponent extends BasePaginatedGridComponent implements O
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

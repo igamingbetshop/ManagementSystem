@@ -1,6 +1,5 @@
 <div class="action-content">
   <div class="title">{{'Partners.AllProducts' | translate}}</div>
-  <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
 
   <div class="bulk-editor-dropdown">
     <button mat-stroked-button class="mat-bulk-btn"
@@ -24,7 +23,6 @@
     </mat-checkbox>
   </div>
   <ag-grid-angular
-    id="all-products"
     class="ag-theme-balham"
     [headerHeight]="33"
     [rowHeight]="42"
@@ -35,7 +33,6 @@
     [columnDefs]="columnDefs"
     [cacheBlockSize]="cacheBlockSize"
     [paginationPageSize]="cacheBlockSize"
-    [autoGroupColumnDef]="autoGroupColumnDef"
     [pagination]="pagination"
     [suppressRowClickSelection]="true"
     [animateRows]="true"
@@ -48,8 +45,16 @@
     [ensureDomOrder]="true"
     [enableCellTextSelection]="true"
     [getContextMenuItems]="getContextMenuItems"
+    (columnPinned)="onColumnPinned($event)"
+    (columnMoved)="onColumnMoved($event)"
+    (columnResized)="onColumnResized($event)"
+    (columnVisible)="onColumnVisible($event)"
     rowSelection="multiple">
   </ag-grid-angular>
+
+  <button mat-stroked-button class="mat-export-btns" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+  <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
   <div class="pages-sizes">
     <mat-select
       (selectionChange)="onPageSizeChanged()"

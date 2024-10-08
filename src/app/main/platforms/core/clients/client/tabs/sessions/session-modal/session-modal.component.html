@@ -1,19 +1,21 @@
-<ng-container *ngIf="dataSource.data.length">
-  <div mat-dialog-title>
-    <span class="title">{{ 'Common.View' | translate }}</span>
-    <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
-  </div>
+@if(dataSource.data.length) {
+<div mat-dialog-title>
+  <span class="title">{{ 'Common.View' | translate }}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
 
-  <div class="modal-wrap">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<div class="modal-wrap">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-        <th mat-header-cell *matHeaderCellDef> {{ 'Common.' + column | translate }} </th>
-        <td mat-cell *matCellDef="let element"> {{ element[column] }} </td>
-      </ng-container>
+    @for (column of displayedColumns; track $index) {
+    <ng-container [matColumnDef]="column">
+      <th mat-header-cell *matHeaderCellDef> {{ 'Common.' + column | translate }} </th>
+      <td mat-cell *matCellDef="let element"> {{ element[column] }} </td>
+    </ng-container>
+    }
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </div>
-</ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+}

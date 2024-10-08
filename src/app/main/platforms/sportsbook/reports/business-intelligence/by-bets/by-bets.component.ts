@@ -25,7 +25,7 @@ import { SportsbookSignalRService } from "../../../services/signal-r/sportsbook-
 import { CustomTooltip } from 'src/app/main/components/grid-common/tooltip.component';
 import { AVAILABLEBETCATEGORIES, BETAVAILABLESTATUSES, BETSTATUSES, BET_SELECTION_STATUSES } from "../../../../../../core/constantes/statuses";
 import { GridRowModelTypes, OddsTypes, ModalSizes, GridMenuIds } from 'src/app/core/enums';
-import { formattedNumber } from "../../../../../../core/utils";
+import { formatDateTime, formattedNumber } from "../../../../../../core/utils";
 import { syncColumnNestedSelectPanel, syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { Subscription } from "rxjs";
@@ -62,7 +62,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     { "Name": this.translate.instant('Sport.System'), "Id": 3 },
     { "Name": this.translate.instant('Sport.Chain'), "Id": 4 },
     { "Name": this.translate.instant('Sport.Teaser'), "Id": 5 }
-
   ];
 
   public commentTypes: any[] = [];
@@ -84,8 +83,8 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     agBooleanColumnFilter: AgBooleanFilterComponent,
   };
   public oddsType: number;
-  public fromDate = new Date();
-  public toDate = new Date();
+  public fromDate: any;
+  public toDate: any;
   private betCurrency: string = '';
   public tooltipShowDelay = 1500;
   public betsCount = 0;
@@ -499,11 +498,9 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
           if (params.node.rowPinned || params.data.BetDate === null) {
             return '';
           }
-
           let datePipe = new DatePipe("en-US");
           let time = datePipe.transform(params.data.BetDate, 'HH:mm:ss');
           let date = datePipe.transform(params.data.BetDate, 'mediumDate');
-
           return time && date ? `${time} ${date}` : '';
         },
 
@@ -697,13 +694,12 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
 
   ngOnInit() {
-
     this.gridStateName = 'report-by-bet-grid-state';
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
     this.betCurrency = this.localStorageService.get('user')?.CurrencyId;
     this.getCommentTypes();
     this.setTime();
-    this._signalR.init();
+    this._signalR.init('reporthub');
     this.mapPartnersFilters();
     this.adminMenuId = GridMenuIds.REPORT_BY_BETS;
 
@@ -716,8 +712,8 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   }
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);
   }
 
   onDateChange(event: any) {
@@ -735,7 +731,6 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
     this.availableStatusesStatus = event;
     this.getCurrentPage();
   }
-  
 
   getPartners() {
     this.partners = this.commonDataService.partners.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
@@ -975,14 +970,14 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
   cleanDataInfo(data: string): string {
     // Step 1: Parse JSON string into an object
     const dataObject = JSON.parse(data);
-  
+
     // Step 2: Remove keys with null values
     for (const key in dataObject) {
       if (dataObject[key] === null) {
         delete dataObject[key];
       }
     }
-  
+
     // Step 3: Convert object back to JSON string (if needed)
     return JSON.stringify(dataObject);
   }
@@ -1123,12 +1118,12 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
 
   toggleLiveUpdate(event) {
     this.isLiveUpdateOn = !event;
-    
-    if (!this.isLiveUpdateOn) {      
+
+    if (!this.isLiveUpdateOn) {
       this.subscribeToUpdates();
       console.log("subscribing to bets");
     } else {
-      
+
       this.unSubscribeFromUpdates();
       console.log("unsubscribing from bets");
     }
@@ -1168,18 +1163,27 @@ export class ByBetsComponent extends BasePaginatedGridComponent implements OnIni
         this.setFilter(params.request.filterModel, paging);
         this.filteredData = paging;
 
-        if(this.filteredData['PartnerIds']?.ApiOperationTypeList[0].ArrayValue.length === 0) {
+        if (this.filteredData['PartnerIds']?.ApiOperationTypeList[0].ArrayValue.length === 0) {
           delete this.filteredData['PartnerIds'];
-        }
-        if(this.filteredData['PartnerIds']) {
-          this.filteredData['PartnerIds'].ApiOperationTypeList[0].ArrayValue = this.transformArrayToNumbers(this.filteredData['PartnerIds'].ApiOperationTypeList[0].ArrayValue, this.partnersEnum);
+        } else if (this.filteredData['PartnerIds']) {
+          const transformedArray = this.transformArrayToNumbers(
+            this.filteredData['PartnerIds'].ApiOperationTypeList[0].ArrayValue,
+            this.partnersEnum
+          );
+
+          this.filteredData['PartnerIds'].ApiOperationTypeList = transformedArray.map(value => ({
+            OperationTypeId: 1,
+            DecimalValue: value,
+            IntValue: value
+          }));
+          this.filteredData['PartnerIds'].IsAnd = false;
         }
 
         this.apiService.apiPost('report/bets', paging)
           .pipe(take(1))
           .subscribe(ResponseObject => {
             if (ResponseObject.Code === 0) {
-              this.matchRowData = [];  
+              this.matchRowData = [];
               const mappedRows = ResponseObject.Objects;
               mappedRows.map((bet) => {
                 this.mapResponseData(bet);

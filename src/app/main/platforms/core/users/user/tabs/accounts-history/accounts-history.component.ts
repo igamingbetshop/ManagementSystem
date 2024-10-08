@@ -13,6 +13,7 @@ import {DateAdapter} from "@angular/material/core";
 import { ICellRendererParams } from 'ag-grid-community';
 import { TranslateService } from '@ngx-translate/core';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-accounts-history',
@@ -24,8 +25,8 @@ export class AccountsHistoryComponent extends BasePaginatedGridComponent impleme
   userId: number;
   rowData = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   selectedItem = 'today';
   pageIdName: string;
@@ -138,7 +139,6 @@ export class AccountsHistoryComponent extends BasePaginatedGridComponent impleme
 
   ngOnInit() {
     this.userId = this.activateRoute.snapshot.queryParams.userId;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.setTime();
     this.pageIdName = `/ ${this.userId} : ${this.translate.instant('Users.AccountsHistory')}`;
     this.getData();
@@ -152,8 +152,8 @@ export class AccountsHistoryComponent extends BasePaginatedGridComponent impleme
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getData() {

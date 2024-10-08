@@ -16,6 +16,7 @@ import { CorePromotionComponent } from './core-promotion.component';
 import { MatRadioModule } from "@angular/material/radio";
 import { MatCardModule } from '@angular/material/card';
 import { IdToNamePipe } from 'src/app/core/pipes/id-to-name-pipe';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 const routes: Routes = [
   {
@@ -43,7 +44,8 @@ const routes: Routes = [
     MatNativeDateModule,
     MatRadioModule,
     MatCardModule,
-    IdToNamePipe
+    IdToNamePipe,
+    DateTimePickerComponent
   ],
   declarations: [CorePromotionComponent]
 })

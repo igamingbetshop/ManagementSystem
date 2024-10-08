@@ -168,11 +168,13 @@
     .category-items {
       overflow: auto;
       margin: 10px 24px 0 24px;
-      padding: 0;
+      padding: 7px 0 0 0;
       display: grid;
       grid-template-columns: auto auto;
       color: $black;
       list-style: none;
+      column-gap: 10px;
+      row-gap: 7px;
       max-height: calc(100% - 20px);
 
       &.nested {
@@ -182,7 +184,10 @@
       .item {
         cursor: pointer;
         line-height: 19px;
-        margin: 7px 0;
+        position: relative;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         position: relative;
 
         &.Sportsbook {
@@ -226,7 +231,11 @@
         }
 
         .item-name {
-          padding-right: 5px;
+          padding-right: 10px;
+
+          @media screen and (max-width: 1700px) {
+            font-size: 14px;
+          }
 
           &:hover {
             text-decoration: underline;
@@ -243,7 +252,10 @@
               border-left: 4.5px solid transparent;
               margin-left: 12px;
               vertical-align: middle;
-              right: -20px;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              right: 0px;
+              position: absolute;
             }
 
             &.opened-menu {

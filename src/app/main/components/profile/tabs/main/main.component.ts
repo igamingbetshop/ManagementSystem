@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { take } from "rxjs/operators";
 import { Controllers, Methods, ModalSizes } from 'src/app/core/enums';
@@ -16,19 +16,19 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class MainComponent implements OnInit {
 
-  public id;
-  public user;
-  public genders: any[] = [];
-  public currencies: any[] = [];
-  public languages: any[] = [];
-  public States: any[] = [];
-  public types: any[] = [];
-  public formGroup: UntypedFormGroup;
-  public apiKeyString: string = '';
-  public isEdit = false;
-  public isSaveActive = false;
-  public isTwoFactorEnabled: boolean;
-  public oddsType:any = [];
+  id;
+  user = signal([]);
+  genders: any[] = [];
+  currencies: any[] = [];
+  languages: any[] = [];
+  States: any[] = [];
+  types: any[] = [];
+  formGroup: UntypedFormGroup;
+  apiKeyString: string = '';
+  isEdit = false;
+  isSaveActive = false;
+  isTwoFactorEnabled: boolean;
+  oddsType:any = [];
 
   constructor(
     private configService: ConfigService,
@@ -73,6 +73,7 @@ export class MainComponent implements OnInit {
       }
     });
     this.isTwoFactorEnabled = this.localStorage.get('isTwoFactorEnabled');
+    
     this.getProfileData();
     this.createForm();
   }
@@ -81,8 +82,8 @@ export class MainComponent implements OnInit {
     this.id = this.localStorage.get('user')?.UserId;
     this.api(this.id).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
-        this.user = data.ResponseObject;
-        this.formGroup.patchValue(this.user);
+        this.user.set(data.ResponseObject);
+        this.formGroup.patchValue(this.user());
         this.formValueChanged();
       }
     });
@@ -156,7 +157,7 @@ export class MainComponent implements OnInit {
       return;
     }
     let formData = this.formGroup.getRawValue();
-    const additionalData = { PartnerId: this.user.PartnerId, Email: this.user.Email, MobileNumber: this.user.MobileNumber, Phone: this.user.Phone };
+    const additionalData = { PartnerId: this.user()['PartnerId'], Email: this.user()['Email'], MobileNumber: this.user()['MobileNumber'], Phone: this.user()['Phone'] };
     const requestBody = { ...additionalData, ...formData };
 
     this.saveUserData(requestBody).pipe(take(1)).subscribe(data => {
@@ -200,7 +201,7 @@ export class MainComponent implements OnInit {
 
   onRedirectToTwoFactor() {
     this.router.navigate(['main/profile/two-factor-authenticator/',
-      { user: this.user.UserName }
+      { user: this.user()['UserName'] }
     ])
   }
 
@@ -224,30 +225,43 @@ export class MainComponent implements OnInit {
     let request: any = {};
     request.Method = Methods.SAVE_API_KEY;
     request.Controller = Controllers.USER;
-    let filter = { ApiKey: this.apiKeyString, UserId: this.user.Id };
+    let filter = { ApiKey: this.apiKeyString, UserId: this.user()['Id'] };
     request.RequestObject = { ...request, ...filter };
     this.apiKeyString = '';
     return this.apiService.apiPost(url, request);
   }
 
   getLanguageNameById(): string {
-    return this.languages.find(el => el.Id === this.user?.LanguageId)?.Name;
+    return this.languages.find(el => el.Id === this.user()['LanguageId'])?.Name;
   }
 
   getStateNameById(): string {
-    return this.States.find(el => el.Id === this.user?.State)?.Name;
+    return this.States.find(el => el.Id === this.user()['State'])?.Name;
   }
 
   getTypeNameById(): string {
-    return this.types.find(el => el.Id === this.user?.Type)?.Name;
+    return this.types.find(el => el.Id === this.user()['Type'])?.Name;
   }
 
   getGenderNameById(): string {
-    return this.genders.find(el => el.Id === this.user?.Gender)?.Name;
+    return this.genders.find(el => el.Id === this.user()['Gender'])?.Name;
   }
 
   getOddTypeNameById(): string {
-    return this.oddsType.find(el => el.Id === this.user?.OddsType)?.Name;
+    return this.oddsType.find(el => el.Id === this.user()['OddsType'])?.Name;
+  }
+
+  onChangeConfig(event) {    
+    const user = this.user();
+    user['Configurations'] = event;
+    this.saveUserData(user).pipe(take(1)).subscribe(data => {
+      if (data.ResponseCode === 0) {
+        SnackBarHelper.show(this._snackBar, { Description: 'Profile successfully updated', Type: "success" });
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        this.user()['Configurations'] = [...this.user()['Configurations']];
+      }
+    });
   }
 
 }

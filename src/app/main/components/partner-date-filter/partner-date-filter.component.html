@@ -7,7 +7,7 @@
   <div class="contianer-wrap">
     @if ( !!liveUpdateBTN() ) {
     <button mat-stroked-button class="stream-btn"
-      [ngClass]="{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected}"
+      [ngClass]="{'live-btn-off' : !isLiveUpdateOn, 'live-btn-on' : isLiveUpdateOn, 'live-btn-pending': isReconnected()}"
       (click)="toggleLiveUpdate()">
       {{ isLiveUpdateOn ? ('Reports.LiveUpdatesOff' | translate) : ('Reports.LiveUpdatesOn' | translate) }}
     </button>
@@ -70,9 +70,9 @@
         (click)="selectTime('LastYear')">{{'Common.LastYear' | translate }}</button>
       }
       <button class="tab-btn" [class.selected-time]="selectedItem ==='month'" mat-stroked-button
-        (click)="selectTime('month')">{{'Common.Month' | translate }}</button>
+        (click)="selectTime('month')">{{'Common.ThisMonth' | translate }}</button>
       <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button
-        (click)="selectTime('week')">{{'Common.Week' | translate}}</button>
+        (click)="selectTime('week')">{{'Common.ThisWeek' | translate}}</button>
       <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button
         (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
       <button class="tab-btn" [class.selected-time]="selectedItem ==='today'" mat-stroked-button
@@ -80,14 +80,14 @@
     </div>
 
     <div class="calendar-picker">
-      <app-date-time-picker 
+      <app-date-time-picker
        [dateTime]="formatDateTime(fromDate)"
        (dateTimeChange)="onStartDateChange($event)">
     </app-date-time-picker>
     </div>
 
     <div class="calendar-picker">
-      <app-date-time-picker 
+      <app-date-time-picker
         [dateTime]="formatDateTime(toDate)"
         (dateTimeChange)="onEndDateChange($event)">
       </app-date-time-picker>

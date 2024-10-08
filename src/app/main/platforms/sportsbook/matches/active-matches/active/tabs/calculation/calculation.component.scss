@@ -87,20 +87,6 @@
 
     }
 
-    /* Rest of the code remains the same */
-
-    // .grid-content {
-    //   width: 100%;
-    //   height: 100%;
-    //   position: relative;
-
-    //   ::ng-deep {
-    //     ag-grid-angular {
-    //       width: 100%;
-    //       height: 100%;
-    //     }
-    //   }
-    // }
   }
 }
 
@@ -111,80 +97,3 @@ ag-grid-angular {
 }
 
 
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 15px;
-  padding-right: 15px;
-
-  h2,
-  h4 {
-    white-space: nowrap;
-
-    a,
-    span {
-      color: red;
-      text-decoration: none;
-    }
-  }
-}
-
-::ng-deep .ui-grid-cell-contents {
-  border-right: none;
-  border-left: none;
-  padding: 0 5px !important;
-  line-height: 30px;
-  vertical-align: middle;
-}
-
-
-.button-wraper {
-
-  button {
-
-    margin-right: 15px;
-  }
-}
-
-::ng-deep .mat-grid-tile-content {
-  display: block !important;
-  background: #EFEFEF;
-}
-
-.finished-calculation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .title {
-    align-self: start;
-    padding-left: 5px;
-    font-weight: bold;
-  }
-
-  .aut-calc-template {
-    width: 100%;
-
-    th,
-    td {
-      padding: 5px;
-      text-align: center;
-
-      input {
-        width: 70%;
-        border-radius: 10px;
-        outline: none;
-        border: 1px solid #cccccc;
-        padding: 0 10px 0 15px;
-        margin-right: 5px;
-        height: 30px;
-      }
-    }
-
-    .table-left {
-      text-align: left;
-    }
-  }
-}

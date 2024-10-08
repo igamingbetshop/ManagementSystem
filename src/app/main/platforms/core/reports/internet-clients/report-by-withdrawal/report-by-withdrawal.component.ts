@@ -17,6 +17,7 @@ import { ExportService } from "../../../services/export.service";
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { AgSelectableFilter } from 'src/app/main/components/grid-common/ag-selectable-filter/ag-selectable-filter.component';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-withdrawal',
@@ -26,8 +27,8 @@ import { AgSelectableFilter } from 'src/app/main/components/grid-common/ag-selec
 export class ReportByWithdrawalComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   rowData = [];
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   filteredData;
   partners = [];
@@ -297,8 +298,8 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getState() {

@@ -19,8 +19,8 @@ import 'ag-grid-enterprise';
 import { DatePipe } from "@angular/common";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
-import { DateTimeHelper } from "../../../../../../../core/helpers/datetime.helper";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-corrections',
@@ -34,8 +34,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   public rowModelType: string = GridRowModelTypes.SERVER_SIDE;
   public columnDefs = [];
   public columnDefs2 = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public headerName;
@@ -182,14 +182,16 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   ngOnInit() {
     this.setTime();
     this.userId = this.activateRoute.snapshot.queryParams.userId;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.getUserAccounts();
   }
 
   getUserAccounts() {
     this.apiService.apiPost(this.configService.getApiUrl, this.userId, true,
       Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe((data) => {
+        console.log(data, 'data');
         if (data.ResponseCode === 0) {
+
+          
           this.accountsRowData = data.ResponseObject.Accounts;
           this.clientUnusedId = this.accountsRowData.find((item) => item.TypeId === 1);
         } else {
@@ -230,8 +232,8 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

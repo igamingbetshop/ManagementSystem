@@ -265,8 +265,18 @@
                     </mat-error>
                 </mat-form-field>
 
+                <mat-label>{{'Segments.AffiliateIds' | translate}}<i class="icon-info1"></i></mat-label>
+                <mat-form-field>
+                    <mat-label>{{'Segments.EnterHere' | translate}}</mat-label>
+                    <input matInput [formControlName]="'AffiliateId'" placeholder="{{'Segments.AffiliateIds' | translate}}">
+                    <mat-hint> {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-hint>
+                    <mat-error>
+                        {{'Errors.NumbersAndCommas' | translate}}
+                    </mat-error>
+                </mat-form-field>
+
             </div>
-            <!-- } -->
 
         </div>
 
@@ -278,15 +288,10 @@
             </div>
 
             <div>
-                <app-condition-input label="{{ 'Segments.AffiliateIds' | translate }}"
-                    [conditions]="addedConditions.AffiliateId.conditions" [operations]="operations"
-                    inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
-                    (conditionsChange)="addedConditions.AffiliateId.conditions = $event">
-                </app-condition-input>
 
                 <app-condition-input label="{{ 'Segments.AgentIds' | translate }}"
                     [conditions]="addedConditions.AgentId.conditions" [operations]="operations"
-                    inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+                    inputPattern="^\d+$"
                     (conditionsChange)="addedConditions.AgentId.conditions = $event">
                 </app-condition-input>
 
@@ -323,7 +328,7 @@
                     <div class="condition-box">
                         @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
                         <span class="condition-box-item">
-                            {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
+                            {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'yyyy-MM-dd'}}
                             <mat-icon class="close-icon"
                                 (click)="removeCondition(addedConditions.SignUpPeriod, $index)">close</mat-icon>
                         </span>
@@ -665,29 +670,6 @@
         </div>
         }
 
-        @if (AffiliateId || isInputFocused === 'affiliateId'){
-        <div class="review-block-row" [ngClass]="isInputFocused === 'affiliateId'? 'focused' : ''">
-            <div>
-                <div class="first-hand">{{'Segments.AffiliateIds' | translate}}</div>
-                @if (isInputFocused === 'affiliateId' || !AffiliateId){
-                <mat-form-field>
-                    <input matInput (blur)="toggleInput('affiliateId', false)" [formControlName]="'AffiliateId'"
-                        placeholder="{{'Segments.AffiliateIds' | translate}}">
-                    <mat-error>
-                        {{'Errors.NumbersAndCommas' | translate}}
-                    </mat-error>
-                </mat-form-field>
-                }
-                @if (isInputFocused !== 'affiliateId' && AffiliateId){
-                <div class="second-hand">{{AffiliateId}}</div>
-                }
-            </div>
-            <div class="edit" (click)="toggleInput('affiliateId', true)"><i class="icon-edit1"></i>{{'Edit' |
-                translate}}
-            </div>
-        </div>
-        }
-
         @if (ClientId || isInputFocused === 'clientId'){
         <div class="review-block-row" [ngClass]="isInputFocused === 'clientId'? 'focused' : ''">
             <div>
@@ -709,6 +691,7 @@
             </div>
         </div>
         }
+
 
         @if (Email || isInputFocused === 'email'){
         <div class="review-block-row" [ngClass]="isInputFocused === 'email'? 'focused' : ''">
@@ -892,25 +875,49 @@
         </div>
         }
 
-
-        @if (addedConditions.AffiliateId.conditions.length){
-            <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'AffiliateId'? 'focused' : ''">
+        @if (AffiliateId || isInputFocused === 'affiliateId'){
+            <div class="review-block-row" [ngClass]="isInputFocused === 'affiliateId'? 'focused' : ''">
                 <div>
-                    @if (isInputFocused !== 'AffiliateId'){
                     <div class="first-hand">{{'Segments.AffiliateIds' | translate}}</div>
-                    @for (condition of addedConditions.AffiliateId.conditions; track $index) {
+                    @if (isInputFocused === 'affiliateId' || !AffiliateId){
+                    <mat-form-field>
+                        <input matInput (blur)="toggleInput('affiliateId', false)" [formControlName]="'AffiliateId'"
+                            placeholder="{{'Segments.AffiliateIds' | translate}}">
+                        <mat-error>
+                            {{'Errors.NumbersAndCommas' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                    }
+                    @if (isInputFocused !== 'affiliateId' && AffiliateId){
+                    <div class="second-hand">{{AffiliateId}}</div>
+                    }
+                </div>
+                <div class="edit" (click)="toggleInput('affiliateId', true)"><i class="icon-edit1"></i>{{'Edit' |
+                    translate}}
+                </div>
+            </div>
+            }
+
+
+
+        @if (addedConditions.AgentId.conditions.length){
+            <div class="review-block-row review-conditions" [ngClass]="isInputFocused === 'AgentId'? 'focused' : ''">
+                <div>
+                    @if (isInputFocused !== 'AgentId'){
+                    <div class="first-hand">{{'Segments.AgentIds' | translate}}</div>
+                    @for (condition of addedConditions.AgentId.conditions; track $index) {
                     <div class="second-hand"> {{condition.ConditionType.Name}} {{condition.ConditionValue }}</div>
                     }
                     }
-                    @if (isInputFocused === 'AffiliateId'){
+                    @if (isInputFocused === 'AgentId'){
     
-                    <app-condition-input label="{{ 'Segments.AffiliateIds' | translate }}"
-                        [conditions]="addedConditions.AffiliateId.conditions" [operations]="operations"
-                        inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
-                        (conditionsChange)="addedConditions.AffiliateId.conditions = $event"></app-condition-input>
+                    <app-condition-input label="{{ 'Segments.AgentIds' | translate }}"
+                        [conditions]="addedConditions.AgentId.conditions" [operations]="operations"
+                        inputPattern="^\d+$" 
+                        (conditionsChange)="addedConditions.AgentId.conditions = $event"></app-condition-input>
     
                     <div mat-dialog-actions>
-                        <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('AffiliateId', false)">
+                        <button mat-raised-button class="modal-primary-btn" (click)="toggleInput('AgentId', false)">
                             {{'Common.Save' | translate}}
                         </button>
                     </div>
@@ -921,7 +928,7 @@
                     translate}}
                 </div>
             </div>
-            }
+        }
 
 
         @if (addedConditions.SessionPeriod.conditions.length){

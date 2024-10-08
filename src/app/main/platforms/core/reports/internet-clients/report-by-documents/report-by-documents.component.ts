@@ -20,8 +20,6 @@ export class ReportByDocumentsComponent extends TransactionsComponent implements
 
   public rowData = [];
   public statusNames = [];
-  public fromDate = new Date();
-  public toDate = new Date();
   public pageFilter = {};
   public selectedItem = 'today';
   public partners = [];

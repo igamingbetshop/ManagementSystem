@@ -94,7 +94,6 @@ export class BaseGridComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   onGridReady(params) {
-
     if (!!this.adminMenuId) {
       this.saveStateSbj$.pipe(debounceTime(1000)).subscribe(() => {
         if (!isFirstInvocation) {
@@ -127,7 +126,7 @@ export class BaseGridComponent implements OnInit, OnDestroy {
     )
       .pipe(
         take(1),
-        delay(300)
+        delay(800)
       )
       .subscribe(
         (data) => {
@@ -135,21 +134,18 @@ export class BaseGridComponent implements OnInit, OnDestroy {
             const columnState = JSON.parse(data.ResponseObject);
             if (columnState) {
               try {
-                this.columnApi.applyColumnState({
+                this.columnApi.applyColumnState({                  
                   state: columnState,
                   applyOrder: true,
                 });
               } catch (error) {
                 console.error("Error applying column state:", error);
-                // If applying column state fails, you may want to handle it appropriately
               } finally {
-                // Set the loading flag to false after processing
                 setTimeout(() => {
                   this.loadingUserState = false;
-                }, 300);
+                }, 450);
               }
             } else {
-              // Handle the case where there is no column state data
               console.warn("No column state data found.");
               setTimeout(() => {
                 this.columnApi.resetColumnState();
@@ -159,17 +155,11 @@ export class BaseGridComponent implements OnInit, OnDestroy {
             }
           } else {
             console.error("Error fetching user state:", data.ResponseMessage);
-            // If there's an error, you might want to handle it appropriately
-            // For example, display an error message, log the error, etc.
-            // Additionally, set the loading flag to false here if necessary
             this.loadingUserState = false;
           }
         },
         (error) => {
           console.error("HTTP request failed:", error);
-          // Handle the HTTP request error here if necessary
-          // For example, display an error message, log the error, etc.
-          // Additionally, set the loading flag to false here if necessary
           this.loadingUserState = false;
         }
       );

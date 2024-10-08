@@ -1,7 +1,7 @@
 <div class="partner-dropdown">
 
-  <mat-select class="partner-dropdown" [(value)]="activeIndex" (selectionChange)="onSelectMarket($event.value, activeIndex)">
-    <mat-option *ngFor="let item of labelForMarketTypes; let index = index" [value]="index">
+  <mat-select class="partner-dropdown" placeholder="All" [(value)]="activeIndex" (selectionChange)="onSelectMarket($event.value, activeIndex)">
+    <mat-option *ngFor="let item of marketTypeGroups; let index = index" [value]="index">
       {{ item.Name }}
     </mat-option>
   </mat-select>

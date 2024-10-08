@@ -1,4 +1,4 @@
-import {Component, HostListener, Injector, OnInit, signal} from '@angular/core';
+import { Component, HostListener, Injector, OnInit, signal } from '@angular/core';
 import { Subject } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { ConfigService } from "../../../../../../../core/services";
@@ -6,22 +6,20 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { SportsbookApiService } from "../../../../services/sportsbook-api.service";
 import { debounceTime, take } from "rxjs/operators";
-import { Controllers, Methods, ModalSizes } from "../../../../../../../core/enums";
+import { Controllers, GridRowModelTypes, Methods, ModalSizes } from "../../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { CoreApiService } from "../../../../../core/services/core-api.service";
-import {DEVICE_TYPES} from "../../../../../../../core/constantes/types";
+import { DEVICE_TYPES } from "../../../../../../../core/constantes/types";
+import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 
 @Component({
   selector: 'app-web-site-settings',
   templateUrl: './web-site-settings.component.html',
   styleUrls: ['./web-site-settings.component.scss']
 })
-export class WebSiteSettingsComponent implements OnInit {
+export class WebSiteSettingsComponent extends BaseGridComponent implements OnInit {
   partnerId;
   partnerName;
-  menus = [];
-  websiteMenuItems = [];
-  subMenuItems = [];
   selectedMenu;
   selectedMenuItem;
   selectedSubMenuItem;
@@ -34,7 +32,23 @@ export class WebSiteSettingsComponent implements OnInit {
   showSearchedResult: boolean = false;
   deviceTypes = signal(DEVICE_TYPES);
   deviceType = this.deviceTypes()[0].Id;
+  icon = signal('Icon');
+  rowData = signal([]);
+  webSiteMenusRowData = signal([]);
+  subMenusRowData = signal([]);
+  rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
 
+  public defaultColDef = {
+    flex: 1,
+    editable: false,
+    sortable: true,
+    resizable: true,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    minWidth: 50,
+  };
+  changeMenuData: any;
+  changeSubMenuData: any;
 
   constructor(private activateRoute: ActivatedRoute,
     protected injector: Injector,
@@ -43,6 +57,28 @@ export class WebSiteSettingsComponent implements OnInit {
     public dialog: MatDialog,
     private apiServiceCore: CoreApiService,
     private _snackBar: MatSnackBar) {
+
+    super(injector);
+
+    this.columnDefs = [
+      {
+        headerName: 'Common.Id',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Id',
+        maxWidth: 60
+      },
+      {
+        headerName: 'Clients.Type',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Type',
+      },
+      {
+        headerName: 'Clients.StyleType',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'StyleType',
+      },
+    ];
+
   }
 
   ngOnInit() {
@@ -63,7 +99,7 @@ export class WebSiteSettingsComponent implements OnInit {
     }
   }
 
-  changeDeviceType(deviceType:number) {
+  changeDeviceType(deviceType: number) {
     this.deviceType = deviceType;
     this.getWebsiteMenus();
   }
@@ -73,13 +109,10 @@ export class WebSiteSettingsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.menus = data.ResponseObject;
-          if (!!this.menus.length) {
+          this.rowData.set(data.ResponseObject);
+          if (!!this.rowData().length) {
             this.selectedMenu = data.ResponseObject[0];
-            this.getWebsiteMenuItems(this.selectedMenu.Id)
-          } else {
-            this.websiteMenuItems = [];
-            this.subMenuItems = [];
+            this.getWebsiteMenuItems(this.selectedMenu.Id);
           }
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -93,7 +126,11 @@ export class WebSiteSettingsComponent implements OnInit {
       .subscribe(data => {
         if (data.Code === 0) {
           if (searchedMenuId === null) {
-            this.websiteMenuItems = data.ResponseObject;
+            this.webSiteMenusRowData.set(data.ResponseObject);
+            this.selectedMenuItem = this.webSiteMenusRowData()[0];
+            if (this.selectedMenuItem) {
+              this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
+            }
           } else {
             this.searchedResultTitle = data.ResponseObject.find(field => field.Id === searchedMenuId)?.Title;
           }
@@ -108,38 +145,22 @@ export class WebSiteSettingsComponent implements OnInit {
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-
-          this.subMenuItems = data.ResponseObject;
+          this.subMenusRowData.set(data.ResponseObject);
+          // this.selectedSubMenuItem = this.subMenusRowData[0];          
+          if (this.selectedMenuItem.Title === 'FullRegister') {
+            this.icon.set('Step');
+          } else {
+            this.icon.set('Icon');
+          }
         } else { }
       });
-  }
-
-  changeSelectedItem(type, item) {
-    switch (type) {
-      case 0:
-        this.selectedMenu = item;
-        this.getWebsiteMenuItems(item.Id);
-        this.websiteMenuItem = item.Id;
-        this.selectedMenuItem = {};
-        this.selectedSubMenuItem = {};
-        break;
-      case 1:
-        this.selectedMenuItem = item;
-        this.selectedSubMenuItem = {};
-        this.getWebSiteSubMenuItems(item.Id);
-        this.websiteSubMenuItem = item.Id;
-        break;
-      case 2:
-        this.selectedSubMenuItem = item;
-        break;
-    }
   }
 
   async copyPartnerWebSiteSettings() {
     const { CopyWebsiteSettingsComponent } = await import('./copy-website-settings/copy-website-settings.component');
     const dialogRef = this.dialog.open(CopyWebsiteSettingsComponent, {
       width: ModalSizes.MEDIUM,
-      data: {deviceType: this.deviceType,}
+      data: { deviceType: this.deviceType, }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
@@ -164,19 +185,35 @@ export class WebSiteSettingsComponent implements OnInit {
     this.selectedMenu = row_obj;
   }
 
+  onMenuClicked(event) {
+    this.subMenusRowData.set([]);
+    this.selectedMenuItem = event.data;
+    this.getWebSiteSubMenuItems(event.data.Id);
+  }
+
   async openDialog(action, obj) {
     obj.action = action;
     obj.MenuId = this.selectedMenu.Id;
     const { AddEditMenuComponent } = await import('./add-edit-menu/add-edit-menu.component');
     const dialogRef = this.dialog.open(AddEditMenuComponent, { width: ModalSizes.MEDIUM, data: obj });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if (result.event == 'Add') {
-        this.addWebsiteMenuItem(result.data);
-      } else if (result.event == 'Edit') {
-        this.editWebsiteMenuItem(result.data);
+      if (result) {
+        if (action === 'Edit') {
+          this.changeMenuData = result;
+          setTimeout(() => {
+            this.changeMenuData = null;
+          }, 1000);
+        } else {
+          this.getWebsiteMenuItems(this.selectedMenu.Id);
+        }
+        SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
       }
-      this.getWebsiteMenuItems(this.selectedMenu.Id);
     });
+  }
+
+  async addEditMenu(event) {
+    console.log(event);
+
   }
 
   async addEditSubMenuItem(action: string, data) {
@@ -186,8 +223,30 @@ export class WebSiteSettingsComponent implements OnInit {
     const { AddEditSubMenuComponent } = await import('./add-edit-sub-menu/add-edit-sub-menu.component');
     const dialogRef = this.dialog.open(AddEditSubMenuComponent, { width: ModalSizes.MEDIUM, data: data });
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
+      if (result) {
+        if (action === 'Edit') {
+          this.changeSubMenuData = result;
+          setTimeout(() => {
+            this.changeSubMenuData = null;
+          }, 1000);
+        } else {
+          this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
+        }
+        SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
+      }
     });
+  }
+
+  onRowClicked(event) {
+    this.webSiteMenusRowData.set([]);
+    this.subMenusRowData.set([]);
+    this.selectedMenu = event.data;
+
+    this.getWebsiteMenuItems(event.data.Id);
+  }
+
+  onSubmenuRowClicked(event) {
+    this.selectedSubMenuItem = event.data
   }
 
   deleteWebsiteMenuItem() {
@@ -214,15 +273,15 @@ export class WebSiteSettingsComponent implements OnInit {
       });
   }
 
-  async addEditTranslation(item, event) {
+  async addEditTranslation(item) {
     item.PartnerId = this.partnerId;
-    event.stopPropagation();
+    // event.stopPropagation();
     if (this.selectedMenu.Type == 'Translations') {
       const { AddEditTranslationsComponent } = await import('./add-edit-translations/add-edit-translations.component');
       const dialogRef = this.dialog.open(AddEditTranslationsComponent, { width: ModalSizes.MEDIUM, data: item });
       dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
         if (data) {
-          this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
+          // this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
         }
       });
     }
@@ -230,10 +289,10 @@ export class WebSiteSettingsComponent implements OnInit {
 
   searchFindWebSiteMenuItemBySubMenuTitle() {
     this.apiService.apiPost('cms/findsubmenuitembytitle',
-    {
-      Title: this.searchTitle.trim(),
-      MenuId: this.selectedMenu.Id
-    }
+      {
+        Title: this.searchTitle.trim(),
+        MenuId: this.selectedMenu.Id
+      }
     ).pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         this.showSearchedResult = true;
@@ -304,6 +363,19 @@ export class WebSiteSettingsComponent implements OnInit {
         if (data.ResponseCode === 0) {
         }
       });
+  }
+
+  handleSubMenuItem(event) {
+    console.log(this.selectedMenu, "this.selectedMenu");
+    
+    if ((this.selectedMenu.Type == "Translations" && event.data.colId == 'Title')) {
+      this.addEditTranslation(event.data);
+    // } else if (this.selectedMenu.Type == 'Config' && this.selectedMenuItem.Title == "CloudflareZoneId") {
+    //   this.addEditConfig(event);
+    } else {
+      this.addEditSubMenuItem('Edit', event.data);
+    }
+
   }
 
 }

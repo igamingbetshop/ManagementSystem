@@ -1,7 +1,7 @@
 export const  campaignTypes = [
-    { Name: "Campaign Wager Casino", Id: 10 },
-    { Name: "Campaign Cash", Id: 11 },
-    { Name: "Campaign FreeBet", Id: 12 },
-    { Name: "Campaign Wager Sport", Id: 13 },
-    { Name: "Campaign FreeSpin", Id: 14 },
+    { Name: "Sport.CampaignWagerCasino", Id: 10 },
+    { Name: "Sport.CampaignCash", Id: 11 },
+    { Name: "Sport.CampaignFreeBet", Id: 12 },
+    { Name: "Sport.CampaignWagerSport", Id: 13 },
+    { Name: "Sport.CampaignFreeSpin", Id: 14 },
 ];

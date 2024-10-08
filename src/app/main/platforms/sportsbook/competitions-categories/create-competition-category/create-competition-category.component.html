@@ -9,11 +9,15 @@
     <mat-form-field>
       <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
       <mat-select [formControlName]="'SportId'">
-        <mat-option *ngFor="let sport of sports" [value]="sport.Id">{{sport.Name}}</mat-option>
+        @for (sport of sports; track $index) {
+          <mat-option [value]="sport.Id">{{sport.Name}}</mat-option>
+        }
       </mat-select>
-      <mat-error *ngIf="errorControl['SportId']?.touched && errorControl['SportId'].errors?.required">
-        {{'Sport.Sport' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if (errorControl['SportId']?.touched && errorControl['SportId'].errors?.required) {
+        <mat-error>
+          {{'Sport.Sport' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <!-- <mat-form-field>
@@ -24,25 +28,33 @@
       <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
       <mat-select #part [formControlName]="'PartnerId'"
         placeholder="{{'Partners.SelectPartner' | translate}}">
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+        @for (partner of partners; track $index) {
+          <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
+        }
       </mat-select>
-      <mat-error *ngIf="errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required">
-        {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if (errorControl['PartnerId']?.touched && errorControl['PartnerId'].errors?.required) {
+        <mat-error>
+          {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <input matInput [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
-      <mat-error *ngIf="errorControl['Name']?.touched && errorControl['Name'].errors?.required">
-        {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if(errorControl['Name']?.touched && errorControl['Name'].errors?.required) {
+        <mat-error>
+          {{'Common.Name' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate" [formControlName]="'MarketLimit'">
-      <mat-error *ngIf="errorControl['MarketLimit']?.touched && errorControl['MarketLimit'].errors?.required">
-        {{'Sport.MarketLimit' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if (errorControl['MarketLimit']?.touched && errorControl['MarketLimit'].errors?.required) {
+        <mat-error>
+          {{'Sport.MarketLimit' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
     <mat-form-field>
       <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate"
@@ -51,9 +63,11 @@
 
     <mat-form-field>
       <input matInput type="number" [placeholder]="'Sport.LiveDelay' | translate" [formControlName]="'LiveDelay'">
-      <mat-error *ngIf="errorControl['LiveDelay']?.touched && errorControl['LiveDelay'].errors?.required">
-        {{'Sport.LiveDelay' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if(errorControl['LiveDelay']?.touched && errorControl['LiveDelay'].errors?.required) {
+        <mat-error>
+          {{'Sport.LiveDelay' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -80,8 +94,8 @@
 </div>
 
 <div mat-dialog-actions>
-  <button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button
+  <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
+  <button mat-raised-button
     class="modal-primary-btn"
     [class.disabled]="formGroup.invalid || isSendingRequest"
     (click)="onSubmit()">{{'Common.Create'| translate}}

@@ -9,209 +9,244 @@
     <mat-form-field>
       <mat-label>{{'Partners.SelectPartner' | translate}}</mat-label>
       <mat-select #partner [formControlName]="'PartnerId'" (selectionChange)="onPartnerChange(partner.value)">
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+        @for (partner of partners(); track $index) {
+        <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
-    <ng-container *ngIf="partnerId !== 0">
+    @if(partnerId !== 0) {
+    @for (item of items(); track $index) {
 
-      <ng-container *ngFor=" let item of items" [ngSwitch]="item.Type">
+    @switch (item.Type) {
 
-        <mat-form-field *ngSwitchCase="'verify-email'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'verify-sms'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'Currency'">
-          <mat-label>{{'selectCurrency' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title">
-            <mat-option *ngFor="let currency of partnerCurrencies" [value]="currency.CurrencyId">{{currency.CurrencyId}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'Title'">
-          <mat-label>{{'Title' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title">
-            <mat-option *ngFor="let title of titles" [value]="title.Id">{{title.Name}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'text'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-checkbox color="primary" *ngSwitchCase="'checkbox'" [formControlName]="item.Title">{{item.Title}}</mat-checkbox>
-
-        <mat-form-field *ngSwitchCase="'MobileData'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput type="number" [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'mobileNumber'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput type="text" [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'Gender'">
-          <mat-label>{{'Clients.SelectGender' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title">
-            <mat-option [value]="0">{{'Clients.SelectGender' | translate}}</mat-option>
-            <mat-option *ngFor="let gender of commonDataService.genders" [value]="gender.Id">{{gender.Name}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-         <mat-form-field *ngSwitchCase="'BirthDate'">
-          <mat-label>{{'Clients.ChooseDate' | translate}}</mat-label>
-          <input matInput  [matDatepicker]="pickerEnd" [formControlName]="item.Title" >
-          <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-            <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-          </mat-datepicker-toggle>
-          <mat-datepicker #pickerEnd></mat-datepicker>
-        </mat-form-field> 
-
-        <mat-form-field *ngSwitchCase="'password'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput type="password" [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.pattern">
-            {{'Clients.EnterValidPassword' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'confirm'">
-          <mat-label>{{item.Title}}</mat-label>
-          <input matInput type="password" [placeholder]="item.Title" [formControlName]="item.Title">
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.pattern">
-            {{'Clients.EnterValidConfirmPassword' | translate}}
-          </mat-error>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.MatchPassword">
-            {{'Clients.PasswordAndConfirmPasswordDoNotMatch' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'Region'">
-          <mat-label>{{'Clients.SelectCountry' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title" #region (selectionChange)="onCountryChange(region.value)">
-            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'Region2'">
-          <mat-label>{{'Clients.SelectCountry' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title" #region1 (selectionChange)="onCountryChange(region1.value)">
-            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'Region1'">
-          <mat-label>{{'Clients.Citizenship' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title" #region1 (selectionChange)="onCountryChange(region1.value)">
-            <mat-option *ngFor="let country of countries" [value]="country.Id">{{country.Name}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field *ngSwitchCase="'city'">
-          <mat-label>{{'Clients.SelectCity' | translate}}</mat-label>
-          <mat-select [formControlName]="item.Title">
-            <mat-option *ngFor="let selectedCiti of selectedCities" [value]="selectedCiti.Id">{{selectedCiti.Name}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-            {{item.Title}} {{'Errors.Required' | translate}}
-          </mat-error>
-        </mat-form-field>
-
-        <ng-container *ngIf="item.Title === 'JobArea'">
-          <mat-form-field *ngSwitchCase="'select'">
-            <mat-label>{{'Clients.SelectJobArea' | translate}}</mat-label>
-            <mat-select [formControlName]="item.Title">
-              <mat-option *ngFor="let jobArea of jobAreas" [value]="jobArea.Id">{{jobArea.NickName}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-              {{item.Title}} {{'Errors.Required' | translate}}
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
-
-        <ng-container *ngIf="item.Title === 'DocumentType'">
-          <mat-form-field *ngSwitchCase="'select'">
-            <mat-label>{{'Clients.SelectDocumentType' | translate}}</mat-label>
-            <mat-select [formControlName]="item.Title">
-              <mat-option *ngFor="let docType of commonDataService.documentTypes" [value]="docType.Id">{{docType.Name}}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required">
-              {{item.Title}} {{'Errors.Required' | translate}}
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
-
-
-      </ng-container>
-    </ng-container>
-
-    @if (formGroup.get('VerifyEmail')) {
-      <mat-checkbox color="primary" [formControlName]="'VerifyEmail'" required>{{'Clients.VerifyEmail' | translate}}</mat-checkbox>
+    @case ('verify-email') {
+    <mat-form-field>
+      <mat-label>{{item.Title}}</mat-label>
+      <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+    }
+    @case ('verify-sms') {
+    <mat-form-field>
+      <mat-label>{{item.Title}}</mat-label>
+      <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
     }
 
-    <mat-checkbox color="primary" [formControlName]="'SendMail'">{{'Clients.SendEmail' | translate}}</mat-checkbox>
-    <mat-checkbox color="primary" [formControlName]="'SendSms'">{{'Clients.SendSms' | translate}}</mat-checkbox>
-    <mat-checkbox color="primary" [formControlName]="'IsAffiliateManager'">{{'Clients.IsAffiliateManager' | translate}}</mat-checkbox>
+    @case ('Currency') {
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+      <mat-select [formControlName]="item.Title">
+        <mat-option [value]="null">{{'Clients.SelectCurrency' | translate }}</mat-option>
+        @for (currency of partnerCurrencies(); track $index) {
+        <mat-option [value]="currency.CurrencyId">{{currency.CurrencyId}}</mat-option>
+        }
+      </mat-select>
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+    }
 
+    <!-- @case ('Title') {
+    <mat-form-field>
+      <mat-label>{{'Title' | translate}}</mat-label>
+      <mat-select [formControlName]="item.Title">
+        @for (title of titles; track $index) {
+        <mat-option [value]="title.Id">{{title.Name}}</mat-option>
+        }
+      </mat-select>
+      @if (errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+    } -->
+
+    @case ('text') {
+    <mat-form-field>
+      <mat-label>{{item.Title}}</mat-label>
+      <input matInput [placeholder]="item.Title" [formControlName]="item.Title">
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+    }
+
+    @case ('checkbox') {
+      <mat-checkbox color="primary" [formControlName]="item.Title">
+        {{ item.Title }}
+        @if(isRequired(item.Title)) {
+          <span>*</span>
+        }
+      </mat-checkbox>
+    }
+
+    @case ('MobileData') {
+    <mobile-number-register [field]="item" [style.order]="item.Order" />
+    }
+
+    @case ('Gender') {
+
+      <mat-form-field>
+        <mat-label>{{'Clients.SelectGender' | translate}}</mat-label>
+        <mat-select [formControlName]="item.Title">
+          <mat-option [value]="null">{{'Clients.SelectGender' | translate }}</mat-option>
+          @for (gender of commonDataService.genders; track $index) {
+          <mat-option [value]="gender.Id">{{gender.Name}}</mat-option>
+          }
+        </mat-select>
+        @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+        <mat-error>
+          {{item.Title}} {{'Errors.Required' | translate}}
+        </mat-error>
+        }
+      </mat-form-field>
+
+    <!-- <app-custom-select label="Clients.SelectGender" placeholder="Clients.SelectGender"
+      [options]="commonDataService.genders" [formControl]="formGroup.get(item.Title)"
+      [errorControl]="formGroup.get(item.Title)"></app-custom-select> -->
+    }
+
+    @case ('BirthDate') {
+
+    <!-- <mat-form-field *ngSwitchCase="'BirthDate'">
+        <mat-label>{{'Clients.ChooseDate' | translate}}</mat-label>
+        <input matInput  [matDatepicker]="pickerEnd" [formControlName]="item.Title" >
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>  -->
+    <!-- <app-birth-date [field]="item" [style.order]="item.Order"/> -->
+    <div>
+      <mat-form-field class="mat-form-field">
+        <mat-label>{{ item.Title }}</mat-label>
+        <input matInput [matDatepicker]="pickerEnd" formControlName="{{ item.Title }}" [max]="minDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
+          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
+        </mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+        @if(formGroup.get(item.Title)?.invalid && formGroup.get(item.Title)?.touched) {
+        <mat-error>
+          {{ item.Title }} {{ 'Errors.IsRequired' | translate }}
+        </mat-error>
+        }
+      </mat-form-field>
+    </div>
+    }
+
+    @case ('password') {
+    <div>
+      <mat-form-field class="mat-form-field">
+        <mat-label>{{'Clients.Password' | translate}}</mat-label>
+        <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="Password">
+        <mat-icon matSuffix class="eye-icon" (click)="togglePasswordVisibility()">
+          {{ showPassword ? 'visibility_off' : 'visibility' }}
+        </mat-icon>
+        @if (formGroup.get('Password')?.invalid && formGroup.get('Password')?.touched) {
+
+        }
+        <mat-error>
+          {{'Clients.Password' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="mat-form-field">
+        <mat-label>{{'Clients.ConfirmPassword' | translate }}</mat-label>
+        <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="confirmPassword"
+          (blur)="updateErrorMessage()">
+        <mat-icon matSuffix class="eye-icon" (click)="togglePasswordVisibility()">
+          {{ showPassword ? 'visibility_off' : 'visibility' }}
+        </mat-icon>
+        @if ((
+        formGroup.get('confirmPassword').dirty ||
+        formGroup.get('confirmPassword').touched
+        ) &&
+        formGroup.get('confirmPassword').invalid) {
+        <mat-error>
+          {{'Errors.PasswordsDoNotMatch' | translate}}
+        </mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    }
+
+
+    @case ('Region1') {
+    <app-set-region [field]="item" [style.order]="item.Order" />
+    }
+
+    @case ('Region2') {
+    <app-set-region [field]="item" [style.order]="item.Order" />
+    }
+
+    @case('Region3') {
+    <app-set-region [field]="item" [style.order]="item.Order" />
+    }
+
+    }
+
+
+    @if (item.Title === 'JobArea') {
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectJobArea' | translate}}</mat-label>
+      <mat-select [formControlName]="item.Title">
+        @for (jobArea of jobAreas(); track $index) {
+        <mat-option [value]="jobArea.Id">{{jobArea.NickName}}</mat-option>
+        }
+      </mat-select>
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+    }
+
+    @if(item.Title === 'DocumentType') {
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectDocumentType' | translate}}</mat-label>
+      <mat-select [formControlName]="item.Title">
+        @for (docType of commonDataService.documentTypes; track $index) {
+        <mat-option [value]="docType.Id">{{docType.Name}}
+        </mat-option>
+        }
+      </mat-select>
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+    }
+    }
+
+    }
   </form>
 </div>
 
 <div mat-dialog-actions>
   <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button mat-raised-button class="modal-primary-btn"
-    [class.disabled]="formGroup.invalid || partnerId === 0 || isSendingRequest" 
-    (click)="onSubmit()">
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="formGroup.invalid" (click)="onSubmit()">
     {{'Common.Save' |translate}}
   </button>
 </div>
-
-

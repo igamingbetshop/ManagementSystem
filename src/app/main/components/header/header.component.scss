@@ -93,7 +93,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    padding-left: 32px;
+    // padding-left: 16px;
     font-family: "Roboto", sans-serif !important;
     color: #3E4D66;
     &::before {
@@ -102,6 +102,35 @@
       color: #3E4D66;
       margin-right: 12px;
       font-size: 24px;
+    }
+  }
+
+  .mat-bulk-btn {
+    position: relative; // Make the button a positioning context for the span
+  
+    &::before {
+      content: "\e914"; // Icon code
+      font-family: "iq-soft-icon" !important;
+      color: #3E4D66;
+      // margin-right: 12px;
+      font-size: 24px;
+    }
+  
+    .notification-count {
+      position: absolute;
+      top: -20px;
+      right: -8px;
+      background-color: $red;
+      color: $white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      border: 2px solid $white;
     }
   }
 

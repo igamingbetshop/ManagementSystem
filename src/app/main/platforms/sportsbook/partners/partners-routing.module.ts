@@ -11,10 +11,6 @@ const routes: Routes = [
     component: PartnersComponent,
     children: [
       {
-        path: 'partner',
-        loadChildren: () => import('./partner/partner.module').then(m => m.PartnerModule)
-      },
-      {
         path: 'all-partners',
         loadChildren: () => import('./all-partners/all-partners.module').then(m => m.AllPartnersModule),
         resolve: { commonData: CommonDataResolver, filterData: SportFilterOptionsResolver },

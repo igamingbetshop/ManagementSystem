@@ -1,6 +1,5 @@
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { CoreApiService } from '../../services/core-api.service';
 import { CommonDataService, LocalStorageService } from 'src/app/core/services';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,20 +13,20 @@ import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { ACTIVITY_STATUSES, VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
 import { ActivatedRoute } from '@angular/router';
 import { PromotionsService } from './core-promotions.service';
+import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 
 @Component({
   selector: 'app-core-promotions',
   templateUrl: './core-promotions.component.html',
   styleUrls: ['./core-promotions.component.scss']
 })
-export class CorePromotionsComponent extends BasePaginatedGridComponent implements OnInit, OnDestroy {
+export class CorePromotionsComponent extends BaseGridComponent implements OnInit, OnDestroy {
 
   partners: any[] = [];
   partnerId = null;
   rowData = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   filter: any = {};
-  promotionTypes: any[] = [];
   public defaultColDef = {
     flex: 1,
     editable: false,
@@ -127,7 +126,6 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
     this.getDeviceTypes();
     this.gridStateName = 'core-promotions-grid-state';
     this.partners = this.localStorageService.get('core_partners');
-    this.getPromotionTypesEnum();
     this.subscribeToCurrentUpdate();
   }
 
@@ -172,19 +170,6 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
     syncColumnReset();
   }
 
-  getPromotionTypesEnum() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.filter,
-      true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.promotionTypes = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-
-  }
 
   async cellDoubleClicked(event: CellDoubleClickedEvent, typeId) {
     const id = event.data.Id;
@@ -265,7 +250,6 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
           if (!!parentId) {
             const _data = data.ResponseObject;
             _data.forEach((element) => {
-              element['TypeName'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
               element.Visibility = element.Visibility.map((visibilityId) => {
                 const visibilityType = this.visibilityTypes[visibilityId];
@@ -274,11 +258,14 @@ export class CorePromotionsComponent extends BasePaginatedGridComponent implemen
               });
             });
             this.tableData = _data;
+            this.tableData.forEach((element) => {
+              element.StartDate = element.StartDate ? new Date(element.StartDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : null;
+              element.FinishDate = element.FinishDate ? new Date(element.FinishDate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : null;
+            });
           } else {
             this.rowData = data.ResponseObject;
             this.rowData.forEach((element) => {
               element['PartnerName'] = this.partners.find((partner) => partner.Id == element.PartnerId)?.Name;
-              element['TypeName'] = this.promotionTypes.find((type) => type.Id == element.Type)?.Name;
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
               element['DeviceType'] = this.deviceTypes.find((elem) => elem.Id == element?.DeviceType)?.Name;
             });

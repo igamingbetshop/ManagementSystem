@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from "@ngx-translate/core";
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
 
@@ -37,9 +37,11 @@ import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 })
 export class CreateDepositComponent implements OnInit {
   formGroup: UntypedFormGroup;
-  isSendingRequest = false; 
+  isSendingRequest = false;
   paymentSystems = [];
   currencyId;
+  filteredPaymentSystems: any[] = [];
+  availableCurrencies: string[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { clientId: number, partnerId: number, accountId: number, },
@@ -63,20 +65,35 @@ export class CreateDepositComponent implements OnInit {
   featchPaymentSystems() {
     const data = {
       Status: 1,
-      CurrencyId: this.currencyId,
       Type: 2,
       PartnerId: this.data.partnerId,
-    }
-    this.apiService.apiPost(this.configService.getApiUrl, data, true, Controllers.PAYMENT,
-      Methods.GET_PARTNER_PAYMENT_SETTINGS).pipe(take(1)).subscribe((data) => {
-      this.paymentSystems = data.ResponseObject;
-    })
+    };
+    this.apiService.apiPost(this.configService.getApiUrl, data, true, Controllers.PAYMENT, Methods.GET_PARTNER_PAYMENT_SETTINGS)
+      .pipe(take(1))
+      .subscribe((response) => {
+        this.paymentSystems = response.ResponseObject;
+        this.filteredPaymentSystems = this.paymentSystems.filter((system, index, self) =>
+          index === self.findIndex((s) => s.PaymentSystemId === system.PaymentSystemId)
+        );
+      });
   }
+
+  onPaymentSystemChange(paymentSystemId: number) {
+    const selectedPaymentSystem = this.paymentSystems.find(payment => payment.PaymentSystemId === paymentSystemId);
+
+    if (selectedPaymentSystem) {
+      this.availableCurrencies = this.paymentSystems
+        .filter(payment => payment.PaymentSystemId === paymentSystemId)
+        .map(payment => payment.CurrencyId);
+    }
+  }
+  
 
   public createForm() {
     this.formGroup = this.fb.group({
       ClientId: [null, [Validators.required]],
-      PaymentSystemId: [null, [Validators.required]],
+      PaymentSystemId: [null],
+      CurrencyId: [this.currencyId],
       Amount: [null, [Validators.required]],
       ExternalTransactionId: [null,],
       AccountId: [this.data.accountId],
@@ -95,7 +112,7 @@ export class CreateDepositComponent implements OnInit {
     if (this.formGroup.invalid || this.isSendingRequest) {
       return;
     }
-    this.isSendingRequest = true; 
+    this.isSendingRequest = true;
     const obj = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.PAYMENT, Methods.CREATE_MANUAL_DEPOSIT).pipe(take(1)).subscribe(data => {
@@ -104,7 +121,7 @@ export class CreateDepositComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
-        this.isSendingRequest = false; 
+        this.isSendingRequest = false;
       });
   }
 

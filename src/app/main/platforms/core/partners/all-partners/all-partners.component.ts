@@ -9,12 +9,12 @@ import { MatDialog } from "@angular/material/dialog";
 import { Paging } from "../../../../../core/models";
 import { AgBooleanFilterComponent } from "../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
 import { CoreApiService } from "../../services/core-api.service";
-import { DatePipe } from "@angular/common";
-import { syncColumnSelectPanel } from "src/app/core/helpers/ag-grid.helper";
+import { syncColumnReset, syncColumnSelectPanel } from "src/app/core/helpers/ag-grid.helper";
 import { ValueFormatterParams } from "ag-grid-enterprise";
 import { SnackBarHelper } from "src/app/core/helpers/snackbar.helper";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ExportService } from "../../services/export.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'all-partners',
@@ -42,6 +42,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
   constructor(
     protected injector: Injector,
     public dialog: MatDialog,
+    public activateRoute: ActivatedRoute,
     private apiService: CoreApiService,
     private _snackBar: MatSnackBar,
     private exportService: ExportService
@@ -106,22 +107,12 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
         headerName: 'Clients.CreationTime',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CreationTime',
-        cellRenderer: function (params: { data: { CreationTime: any; }; }) {
-          let datePipe = new DatePipe('en-US');
-          let dat = datePipe.transform(params.data.CreationTime, 'medium');
-          return `${dat}`;
-        },
 
       },
       {
         headerName: 'Common.LastUpdateTime',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'LastUpdateTime',
-        cellRenderer: function (params: { data: { LastUpdateTime: any; }; }) {
-          let datePipe = new DatePipe('en-US');
-          let dat = datePipe.transform(params.data.LastUpdateTime, 'medium');
-          return `${dat}`;
-        },
       },
       {
         headerName: 'Common.View',
@@ -129,9 +120,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
         cellRenderer: OpenerComponent,
         filter: false,
         valueGetter: params => {
-          let data = { path: '', queryParams: null };
-          let replacedPart = this.route.parent.snapshot.url[this.route.parent.snapshot.url.length - 1].path;
-          data.path = this.router.url.replace(replacedPart, 'partner');
+          let data = { path: 'partner', queryParams: null };
           data.queryParams = { partnerId: params.data.Id, partnerName: params.data.Name };
           return data;
         },
@@ -154,6 +143,7 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
   onGridReady(params) {
     super.onGridReady(params);
     syncColumnSelectPanel();
+    syncColumnReset()
   }
 
   getSelectedRows(): void {
@@ -169,6 +159,10 @@ export class AllPartnersComponent extends BasePaginatedGridComponent {
       true, Controllers.PARTNER, Methods.GET_PARTNERS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           const mappedRows = data.ResponseObject.Entities;
+          mappedRows.forEach((row) => {
+            row.CreationTime = row.CreationTime ? new Date(row.CreationTime).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : null;
+            row.LastUpdateTime = row.LastUpdateTime ? new Date(row.LastUpdateTime).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : null;
+          });
           this.rowData = mappedRows;
         }
       });

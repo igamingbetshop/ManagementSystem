@@ -18,6 +18,7 @@ import { RECEIVER_TYPES } from 'src/app/core/constantes/statuses';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { AnnouncementsService } from './announcements.service';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 const states = [
   { "Name": 'Active', "Id": 1 },
@@ -35,8 +36,8 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
   public announcementTypes: any[] = [];
   public partnerId;
   public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public receiverTypeIds = RECEIVER_TYPES;
   frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
@@ -220,8 +221,8 @@ export class AnnouncementsComponent extends BasePaginatedGridComponent implement
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

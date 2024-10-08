@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewEncapsulation, inject, input } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewEncapsulation, inject, input, InputSignal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +18,6 @@ import { SportPartnersSelectComponent } from './sport-partners-select.component'
 import { SportSelectComponent } from './sport-select.component';
 import { DateTimePickerComponent } from "../data-time-picker/data-time-picker.component";
 import { BetShopsesComponent } from "./bet-shops-select.component";
-import { DateHelperGTM0 } from './data-helper-gtm0.class';
 
 @Component({
     selector: 'app-partner-date-filter',
@@ -49,7 +48,7 @@ import { DateHelperGTM0 } from './data-helper-gtm0.class';
 })
 export class PartnerDateFilterComponent implements OnInit {
 
-  title = input<string>();
+  title: InputSignal<string> = input<string>();
   partners = input<string>();
   hasPeyments = input<boolean>();
   sportChange = input<boolean>();
@@ -78,8 +77,8 @@ export class PartnerDateFilterComponent implements OnInit {
   @Output() onLiveUpdateBTN = new EventEmitter<boolean>();
   @Output() betShopChange = new EventEmitter<number>();
   titleName: string = '';
-  fromDate: Date | undefined;
-  toDate: Date | undefined;
+  fromDate: Date | string | undefined;
+  toDate: Date | string | undefined;
   partnerId: number | undefined;
   selectedItem: string = 'today';
   checkBoxTextTranslated: string = '';
@@ -109,38 +108,26 @@ export class PartnerDateFilterComponent implements OnInit {
       const day = date.getDate().toString().padStart(2, '0');
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
     }
     return '';
   }
 
   startDate() {
 
-    if(this.dataTimeHelperInput() != false) {
       const [fromDate, toDate] = DateHelper.startDate();
       this.fromDate = fromDate;
       this.toDate = toDate;
-    } else {
-      const [fromDate, toDate] = DateHelperGTM0.startDate();
-      this.fromDate = fromDate;
-      this.toDate = toDate;
-    }
+
   }
 
   selectTime(time: string): void {
-    if(this.dataTimeHelperInput() !== true) {
       const [fromDate, toDate] = DateHelper.selectTime(time);
       this.fromDate = fromDate;
-      this.toDate = toDate;
+      this.toDate =  toDate;
       this.selectedItem = time;
       this.getCurrentPage();
-    } else {
-      const [fromDate, toDate] = DateHelperGTM0.selectTime(time);
-      this.fromDate = fromDate;
-      this.toDate = toDate;
-      this.selectedItem = time;
-      this.getCurrentPage();
-    }
+
   }
 
   onStartDateChange(event: any) {
@@ -167,12 +154,11 @@ export class PartnerDateFilterComponent implements OnInit {
       const [datePart, timePart] = dateTimeParts;
       const [year, month, day] = datePart.split('-').map(Number);
       const [hours, minutes] = timePart.split(':').map(Number);
-  
-      return new Date(Date.UTC(year, month - 1, day, hours, minutes));
+
+      return new Date(year, month - 1, day, hours, minutes);
     }
     return new Date();
   }
-  
 
   getByPartnerData(event: any) {
     this.partnerId = event;
@@ -183,9 +169,10 @@ export class PartnerDateFilterComponent implements OnInit {
     this.toSportChange.emit(event);
   }
 
-  getCurrentPage()
-  {
-    this.toDateChange.emit({ fromDate: this.fromDate, toDate: this.toDate, partnerId: this.partnerId });
+  getCurrentPage() {
+    const formattedFromDate = this.formatDateTime(this.fromDate);
+    const formattedToDate = this.formatDateTime(this.toDate);
+    this.toDateChange.emit({ fromDate: formattedFromDate, toDate: formattedToDate, partnerId: this.partnerId });
   }
 
   onDropdownOpen(ev: any, dropdownContent: any) {
@@ -228,5 +215,4 @@ export class PartnerDateFilterComponent implements OnInit {
     this.isLiveUpdateOn = !this.isLiveUpdateOn;
     this.onLiveUpdateBTN.emit(this.isLiveUpdateOn);
   }
-
 }

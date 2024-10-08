@@ -10,6 +10,7 @@ import {SnackBarHelper} from "../../../../../core/helpers/snackbar.helper";
 import {DateAdapter} from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-log',
@@ -19,8 +20,8 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 export class ReportByLogComponent extends BasePaginatedGridComponent implements OnInit {
   public path: string = 'report/log';
   public rowData;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public selected = false;
   public selectedItem = 'today';
 
@@ -100,8 +101,8 @@ export class ReportByLogComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

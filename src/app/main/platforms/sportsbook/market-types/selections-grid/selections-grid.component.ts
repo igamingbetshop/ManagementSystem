@@ -75,20 +75,20 @@ export class SelectionsGridComponent extends BaseGridComponent implements OnInit
         resizable: true,
       },
       {
-        headerName: 'Bonuses.Priority',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Priority',
-        resizable: true,
-        editable: true,
-        cellEditor: NumericEditorComponent,
-      },
-      {
         headerName: 'Common.CalculationFormula',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'CalculationFormula',
         resizable: true,
         editable: true,
         cellEditor: 'textEditor',
+      },
+      {
+        headerName: 'Bonuses.Priority',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Priority',
+        resizable: true,
+        editable: true,
+        cellEditor: NumericEditorComponent,
       },
       {
         headerName: 'Clients.CalculationTime',
@@ -121,6 +121,7 @@ export class SelectionsGridComponent extends BaseGridComponent implements OnInit
   onGridReady(params: any): void {
     super.onGridReady(params);
     this.gridReady = true;
+
   }
 
   getSelectionsData(id: number) {
@@ -157,6 +158,8 @@ export class SelectionsGridComponent extends BaseGridComponent implements OnInit
     }
   }
 
+
+
   saveSecondGridRow(params) {
     const row = params.data;    
     this.apiService.apiPost(this.updateSelectionType, row).subscribe(data => {
@@ -189,5 +192,21 @@ export class SelectionsGridComponent extends BaseGridComponent implements OnInit
         this.isSendingRequest = false;
       }
     });
+  }
+
+  exportToCsv() {
+    this.apiService.apiPost('/markettypes/exportselectiontypes', this.filter).pipe(take(1)).subscribe((data) => {
+      if (data.Code === 0) {
+        let iframe = document.createElement("iframe");
+        iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
+        iframe.setAttribute("style", "display: none");
+        document.body.appendChild(iframe);
+      } else {
+        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+      }
+    });
+  }
+  filter(arg0: string, filter: any) {
+    throw new Error('Method not implemented.');
   }
 }

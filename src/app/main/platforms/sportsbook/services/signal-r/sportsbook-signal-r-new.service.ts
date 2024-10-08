@@ -13,8 +13,8 @@ export class SportsbookSignalRNewService extends SportsbookSignalRService {
     super();
   }
 
-  init() {
-    const url = `${this.configService.getSBApiUrl}/` + 'api/signalr/reporthub';
+  init(hubName: string) {
+    const url = `${this.configService.getSBApiUrl}/api/signalr/${hubName}`;
     this.connection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Information)
       .withUrl(url)

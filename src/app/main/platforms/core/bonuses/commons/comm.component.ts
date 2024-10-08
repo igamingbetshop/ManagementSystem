@@ -27,7 +27,6 @@ export class CommComponent implements OnInit {
       label:'Products.Products',
       route:'products'
     },
-
   ];
 
   ngOnInit() {

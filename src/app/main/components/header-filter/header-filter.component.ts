@@ -8,6 +8,7 @@ import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { CommonDataService } from 'src/app/core/services';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
+import { formatDate } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-header-filter',
@@ -27,8 +28,8 @@ import { MatNativeDateModule } from "@angular/material/core";
 export class HeaderFilterComponent implements OnInit{
   title = input<string>();
   partners;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   selectedItem = 'week';
   partnerId: number | undefined;
   @Output() toDateChange = new EventEmitter<any>();
@@ -47,17 +48,16 @@ export class HeaderFilterComponent implements OnInit{
     }); 
   }
 
-
   startDate() {
     DateTimeHelper.startDate();
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+    this.fromDate = (DateTimeHelper.getFromDate());
+    this.toDate = (DateTimeHelper.getToDate());
   }
 
   selectTime(time: string): void {
     DateTimeHelper.selectTime(time);
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+    this.fromDate = (DateTimeHelper.getFromDate());
+    this.toDate = (DateTimeHelper.getToDate());
     this.selectedItem = time;
     this.getCurrentPage();
   }
@@ -78,7 +78,7 @@ export class HeaderFilterComponent implements OnInit{
   }
 
   getCurrentPage() {
-    this.toDateChange.emit({ fromDate: this.fromDate, toDate: this.toDate, partnerId: this.partnerId });
+    this.toDateChange.emit({ fromDate: formatDate(this.fromDate), toDate: formatDate(this.toDate), partnerId: this.partnerId });
   }
   
 }

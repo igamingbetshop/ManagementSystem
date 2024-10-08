@@ -1,0 +1,43 @@
+
+<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+  <form class="bulk-editor-content" [formGroup]="formGroup"  (keydown.tab)="$event.stopPropagation()">
+
+      @for (field of fieldKeys; track $index) {
+        <mat-form-field *ngIf="fields[field] === 'Number'">
+          <mat-label>{{ field | translate }}</mat-label>
+          <input matInput type="number" [placeholder]="field | translate"
+                 [formControlName]="field" tabindex="1">
+          <mat-error *ngIf="formGroup.get(field)?.touched && formGroup.get(field)?.hasError('required')">
+            {{ field | translate }} {{ 'Errors.Required' | translate }}
+          </mat-error>
+        </mat-form-field>
+  
+        @if(fields[field] === 'ProductState') {
+          <app-custom-select
+            label="Common.States"
+            placeholder="Select State"
+            [options]="statuses"
+            [formControl]="formGroup.get('State')"
+            [errorControl]="formGroup.get('State')"
+          ></app-custom-select>
+        }
+  
+        @if(fields[field] === 'ProductCategory') {
+          <app-custom-select
+            label="Clients.Category"
+            placeholder="Partners.SelectCategory"
+            multiple="true"
+            [options]="productCategories"
+            [formControl]="formGroup.get('CategoryIds')"
+            [errorControl]="formGroup.get('CategoryIds')"
+        ></app-custom-select>
+        }
+      }
+
+  </form>
+
+  <div class="bulk-editor-actions">
+    <button mat-button class="bulk-cancel-btn" (click)="onCancelBtn($event)" tabindex="6">{{ 'Common.Cancel' | translate }}</button>
+    <button mat-button class="bulk-primary-btn" (click)="openConfirmDialog()" tabindex="7">{{ 'Common.Save' | translate }}</button>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<mat-form-field class="code">
+  <mat-label>{{"Common.Code" | translate}}</mat-label>
+  <mat-select formControlName="MobileCode">
+    <mat-option [value]="null">{{'Common.SelectCode' | translate }}</mat-option>
+    @for(code of codes(); track code.Value)
+    {
+      <mat-option [value]="code.Value">{{code.Value}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<mat-form-field >
+  <mat-label >{{"Clients.MobileNumber" | translate}}</mat-label>
+  <input matInput [formControlName]="'MobileNumber'" type="number">
+  @if(parentFormGroup.get("MobileNumber")?.hasError('required'))
+  {
+    <mat-error>
+      {{"Clients.MobileNumber" | translate}} {{"Errors.Required" | translate}}
+    </mat-error>
+  }
+  @if(parentFormGroup.get("MobileNumber")?.hasError('pattern'))
+  {
+    <mat-error>
+      {{"Clients.MobileNumber" | translate}} {{"Errors.NotValid" | translate}}
+    </mat-error>
+  }
+</mat-form-field>

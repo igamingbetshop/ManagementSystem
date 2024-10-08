@@ -28,7 +28,6 @@ export class CorePromotionComponent implements OnInit {
   LanguageType;
   Segments = [];
   LanguageNames = [];
-  promotionTypes: any = [];
   languages: any = [];
   languageEntites = [];
   segmentesEntites = [];
@@ -65,25 +64,11 @@ export class CorePromotionComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
-    this.getPromotionTypes();
     this.id = +this.activateRoute.snapshot.queryParams.Id;
     this.childe = this.activateRoute.snapshot.queryParams.Childe;
     this.languages = this.commonDataService.languages;
     this.getPromotionById();
     this.getDate();
-  }
-
-  getPromotionTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId,
-      true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.promotionTypes = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
   }
 
   getPromotionById() {
@@ -97,7 +82,6 @@ export class CorePromotionComponent implements OnInit {
           this.imageSmall = "https://" + this.promotion?.SiteUrl + '/assets/images/promotions/small/' + this.promotion?.ImageName;
           this.promotion.StatusName = this.promotion.State === 1 ? 'Active' : this.promotion.State === 2 ? 'Inactive' : '';
           this.promotion.DeviceName = this.deviceTypes.find(x => x.Id === this.promotion.DeviceType)?.Name || 'All';
-          this.promotion.TypeName = this.promotionTypes.find(x => x.Id === this.promotion.Type)?.Name;
           this.partnerId = this.promotion.PartnerId;
           this.formGroup.patchValue(this.promotion);
           this.startDates = this.promotion?.StartDate;
@@ -281,5 +265,5 @@ export class CorePromotionComponent implements OnInit {
     this.promotionsService.update(this.promotion);
     this.router.navigate(['/main/platform/cms/promotions'])
   }
-
+  
 }

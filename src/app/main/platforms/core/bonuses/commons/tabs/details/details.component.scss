@@ -14,21 +14,81 @@
     }
   }
 
-  // .content-edit gets from helpers/_form-edit.scss
-
 }
 
-.mat-table {
-  width: 50%;
+.mat-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
   background-color: $content-bg-color;
+  gap: 16px; 
 
   .content-action {
     @include action-style;
     height: 68px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      flex: 1; 
+    }
 
     .mat-btn {
       @include mat-btn-style;
+      flex: 0 0 auto; 
     }
+  }
+
+  .left-content {
+    grid-column: 1 / 2; 
+  }
+
+  .right-content {
+    grid-column: 2 / 3;
+
+    .title {
+      display: block;
+    }
+
+    .mat-elevation-z8 {
+      width: 100%;
+      margin: 0 auto; 
+      box-shadow: none;
+    }
+    
+    .mat-table {
+      width: 100%;  
+      text-align: left;
+    }
+
+    tr {
+      height: 38px !important;
+    }
+    
+    th {
+      background-color: $bg-color;
+      margin: 0;
+      text-align: left;
+      padding-left: 4px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      box-sizing: border-box;
+      padding: 4px 20px;
+      text-overflow: ellipsis;
+    }
+
+    td {
+      position: relative;
+      color: $black-3;
+      background-color: $white;
+      text-align: left;
+      height: 49px;
+
+    }
+    
+    
   }
 }
 
@@ -144,10 +204,29 @@
   // width: 200%!important;
 }
 
-.add-value-btn {
-  margin-left: 10px;
-  @include mat-btn-style;
-  background-color: $bg-color !important;
-  color: $white !important;
-}
+// .add-value-btn {
+//   margin-left: 10px;
+//   @include mat-btn-style;
+//   background-color: $bg-color !important;
+//   color: $white !important;
+// }
 
+// .form-fields {
+//   padding-top: 10px;
+//   display: grid;
+//   grid-template-columns: 1fr 1fr 1fr;
+//   grid-gap: 5px;
+// }
+
+// .campaign-button {
+//   position: relative;
+//   .campaign-icon {
+//     position: absolute;
+//     top: 10px;
+//     right: 12px;
+//   }
+// }
+.campaign-container {
+  width: 64%;
+  margin-top: 10px;
+}

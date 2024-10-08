@@ -72,7 +72,6 @@
         }
       
         @include calendar-picker-style;
-      
         @media screen and (max-width: 600px) {
           width: calc(40% - 8px);
           margin: 0;
@@ -100,4 +99,9 @@
 }
 .contianer-wrap::-webkit-scrollbar {
   height: 0;
+}
+
+::ng-deep .icon-calendar {
+  top: 13px;
+  right: 0px;
 }

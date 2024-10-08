@@ -11,6 +11,7 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { Paging } from 'src/app/core/models';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-by-matches',
@@ -25,8 +26,8 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
   public path = "report/matches";
   public rowData = [];
   public filter: any = {};
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public selectedItem = 'today';
   filteredData: Paging;
 
@@ -157,8 +158,8 @@ export class ByMatchesComponent extends BasePaginatedGridComponent implements On
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

@@ -15,7 +15,8 @@ import { CoreApiService } from "../../services/core-api.service";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
-import {ExportService} from "../../services/export.service";
+import { ExportService } from "../../services/export.service";
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -40,12 +41,11 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
     public commonDataService: CommonDataService,
-    private exportService:ExportService,
+    private exportService: ExportService,
     public dialog: MatDialog,
   ) {
     super(injector);
     this.adminMenuId = GridMenuIds.USERS;
-    this.initialTypes();
 
 
     this.frameworkComponents = {
@@ -57,31 +57,34 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
   ngOnInit() {
     this.partners = this.commonDataService.partners;
     this.genders = this.commonDataService.genders;
-    this.initialStates();
     this.gridStateName = 'users-grid-state';
+    this.initialData();
   }
 
-  initialStates() {
-    this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION, Methods.GET_USER_STATES_ENUM)
-      .pipe(take(1)).subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.userStates = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
+  initialData() {
+    const statesRequest = this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION, Methods.GET_USER_STATES_ENUM);
+    const typesRequest = this.apiService.apiPost(this.configService.getApiUrl, {}, true, Controllers.ENUMERATION, Methods.GET_USER_TYPES_ENUM);
 
-  initialTypes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_USER_TYPES_ENUM).pipe(take(1)).subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.userTypes = data.ResponseObject;
-          this.setColDefs();
+    forkJoin([statesRequest, typesRequest]).pipe(take(1)).subscribe(
+      ([statesResponse, typesResponse]) => {
+        if (statesResponse.ResponseCode === 0 && typesResponse.ResponseCode === 0) {
+          this.userStates = statesResponse.ResponseObject;
+          this.userTypes = typesResponse.ResponseObject;
+          this.setColDefs(); // Call setColDefs() after both API responses are successful
         } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+          if (statesResponse.ResponseCode !== 0) {
+            SnackBarHelper.show(this._snackBar, { Description: statesResponse.Description, Type: "error" });
+          }
+          if (typesResponse.ResponseCode !== 0) {
+            SnackBarHelper.show(this._snackBar, { Description: typesResponse.Description, Type: "error" });
+          }
         }
-      });
+      },
+      (error) => {
+        // Handle error case
+        SnackBarHelper.show(this._snackBar, { Description: 'Error fetching data', Type: 'error' });
+      }
+    );
   }
 
   setColDefs() {
@@ -169,11 +172,10 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
         field: 'Gender',
         sortable: true,
         resizable: true,
-        filter: 'agTextColumnFilter',
+        filter: 'agDropdownFilter',
         filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.textOptions
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.commonDataService.genders,
         },
       },
       {
@@ -183,13 +185,12 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
         headerTooltip: 'CurrencyId',
         resizable: true,
         sortable: true,
-        filter: 'agSetColumnFilter',
+        filter: 'agTextColumnFilter',
         filterParams: {
           buttons: ['apply', 'reset'],
           closeOnApply: true,
-          defaultToNothingSelected: true,
-          values: this.commonDataService.currencyNames
-        },
+          filterOptions: this.filterService.textOptions
+        }
       },
       {
         headerName: 'Currency.Language',
@@ -208,7 +209,12 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
         headerName: 'Common.State',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'State',
-        sortable: true
+        sortable: true,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.userStates,
+        },
       },
       {
         headerName: 'Common.Type',
@@ -293,7 +299,7 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
         paging.TakeCount = Number(this.cacheBlockSize);
         paging.partnerId = this.partnerId;
         this.changeFilerName(params.request.filterModel,
-          ['Type'], ['UserType']);
+          ['Type', 'State'], ['UserType', 'UserState']);
         this.setSort(params.request.sortModel, paging);
         this.setFilterDropdown(params);
         this.setFilter(params.request.filterModel, paging);
@@ -357,7 +363,7 @@ export class AllUsersComponent extends BasePaginatedGridComponent implements OnI
   }
 
   exportToCsv() {
-    this.exportService.exportToCsv( Controllers.USER, Methods.EXPORT_USERS, {...this.filteredData, adminMenuId: this.adminMenuId});
+    this.exportService.exportToCsv(Controllers.USER, Methods.EXPORT_USERS, { ...this.filteredData, adminMenuId: this.adminMenuId });
   }
 
 }

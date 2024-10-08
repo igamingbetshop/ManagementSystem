@@ -3,8 +3,8 @@ export class Paging {
   TakeCount: number;
   OrderBy: number;
   FieldNameToOrderBy: string;
-  CreatedFrom: Date;
-  CreatedBefore: Date;
+  CreatedFrom: Date | string;
+  CreatedBefore: Date | string;
   [name:string]:any
 }
 

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.partnerId}">
 
   <div class="content-action">
     <div class="title">{{'Partners.Partners' | translate}}</div>
@@ -38,3 +38,7 @@
     </ag-grid-angular>
   </div>
 </div>
+
+@if(this.activateRoute.snapshot.queryParams.partnerId) {
+  <router-outlet ></router-outlet>
+}

@@ -25,6 +25,8 @@ import { ResultsComponent } from './results/results.component';
 export class CalculationComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
   @ViewChild(ResultsComponent) results;
+  title: string = 'Sport.ActiveMatches';
+  routerLink: string = '../../../all-active';
   path: string = 'matches/uncalculatedselections';
   name: string = '';
   number: number;
@@ -32,8 +34,6 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   partnerId: number;
   sportId: number;
   rowData;
-  rowData1;
-  columnDefs2;
   frameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
@@ -48,10 +48,11 @@ export class CalculationComponent extends BasePaginatedGridComponent implements 
   statusModel = BET_SELECTION_STATUSES;
   rowStyle;
 
-  constructor(protected injector: Injector,
-    private apiService: SportsbookApiService,
-    private _snackBar: MatSnackBar,
-    private activateRoute: ActivatedRoute) {
+  constructor(
+    protected injector: Injector,
+    protected apiService: SportsbookApiService,
+    protected _snackBar: MatSnackBar,
+    protected activateRoute: ActivatedRoute) {
     super(injector);
     this.columnDefs = [
       {

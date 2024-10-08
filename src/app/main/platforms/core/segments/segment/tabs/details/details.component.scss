@@ -5,59 +5,6 @@
   @include container-style;
   height: auto;
   background-color: $content-bg-color;
-  .wraper {
-    display: grid;
-    align-items: center;
-    padding: 0px 5;
-
-    //border: 1px solid rgb(218, 27, 27) !important;
-
-    // div {
-    //   flex: 1;
-    // }
-
-    .mat-mdc-form-field, .mat-mdc-radio-group {
-      flex: 1;
-    }
-
-    .nested {
-      display: flex;
-      align-items: center;
-    }
-
-
-    .add-box-second {
-      position: absolute;
-      right: 941px;
-    }
-
-    .mat-mdc-radio-group {
-      margin-bottom: 10px;
-    }
-
-    .check-box {
-      flex: 2;
-
-      ul li {
-        display: inline;
-        margin-left: 5px;
-      }
-    }
-
-    mat-radio-button {
-      margin-left: 10px;
-    }
-  }
-
-  .wraper:first-child {
-    font-size: 16px !important;
-    font-weight: 500 !important;
-  }
-
-  .modal-wrap-div {
-    overflow-y: auto;
-  }
-
 
   .content-action {
     @include action-style;
@@ -159,12 +106,6 @@
   }
 }
 
-mat-icon {
-  cursor: pointer;
-  color: #076192;
-  margin-bottom: 15px;
-  transform: scale(0.8);
-}
 
 .mr-15 {
   margin-right: 15px !important;
@@ -172,155 +113,6 @@ mat-icon {
 
 .picker {
   width: 250px!important;
-}
-
-.main-main {
-  background: #EFEFEF;
-  padding: 0 15px 15px 15px;
-  height: 100%;
-
-  .edit-icon {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 10px;
-
-    button {
-      margin-left: 10px;
-    }
-  }
-
-  .modal-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 50px;
-    grid-row-gap: 25px;
-
-    width: 90%;
-    padding: 0 20px;
-    margin: 0 auto;
-
-    .wraper {
-      display: flex;
-      // justify-content: space-between;
-      align-items: center;
-      padding: 0px 5;
-
-
-      //border: 1px solid rgb(218, 27, 27) !important;
-
-      div {
-        flex: 1;
-
-      }
-
-      .mat-mdc-form-field, .mat-mdc-radio-group {
-        flex: 2;
-      }
-
-      .nested {
-        display: flex;
-        align-items: center;
-      }
-
-      .add-box {
-        position: absolute;
-        right: 75px;
-      }
-
-      .add-box-second {
-        position: absolute;
-        right: 941px;
-      }
-
-      .mat-mdc-radio-group {
-        margin-bottom: 10px;
-      }
-
-      .check-box {
-        flex: 2;
-
-        ul li {
-          display: inline;
-          margin-left: 5px;
-        }
-      }
-
-      mat-radio-button {
-        margin-left: 10px;
-      }
-    }
-
-    .wraper:first-child {
-      font-size: 16px !important;
-      font-weight: 500 !important;
-    }
-
-    .modal-wrap-div {
-      overflow-y: auto;
-    }
-  }
-
-  .grid-history {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    align-items: center;
-
-    div {
-      display: flex;
-      background: white;
-      height: 32px;
-      padding: 0 10px;
-      align-items: center;
-
-
-      .first-hand {
-        width: 20%;
-        border-right: 1px solid rgb(216, 216, 216);
-      }
-
-
-      .second-hand {
-        width: 40%;
-        padding: 10px 10px;
-        border-right: 1px solid #d8d8d8;
-      }
-
-      .third-hand {
-        width: 40%;
-        .mat-mdc-radio-button {
-          margin-left: 5px;
-        }
-      }
-      .third-hande {
-        width: 60%;
-      }
-    }
-  }
-
-  .btn-btn-btn {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    button:first-child {
-      margin-right: 10px;
-    }
-  }
-
-  .nested-data { 
-    height: 50px!important;
-  }
 }
 
 .mat-datepicker-input {
@@ -365,12 +157,14 @@ mat-icon {
     align-items: center;
 
     .close-icon {
-      color: rgb(96, 96, 98);
-      margin-left: 8px;
-      font-size: 20px;
-      width: unset;
-      height: unset;
-      padding-top: 15px;
+      .mat-icon{
+        color: rgb(96, 96, 98);
+        margin-left: 8px;
+        font-size: 20px;
+        width: unset;
+        height: unset;
+      }
+      // padding-top: 15px;
       cursor: pointer;
     }
   }
@@ -380,14 +174,19 @@ mat-icon {
   .mat-datepicker-toggle {
     position: absolute !important;
     right: -8px !important;
-    top: -25px !important;
+    top: -24px !important;
   }
 
-  .mat-mdc-input-element {
+  .conditional-input {
     position: absolute !important;
-    top: -3px !important;
+    top: -2px !important;
     background: rgba(239, 240, 246, 1) !important;
   }
+}
+
+.sign-up-input {
+  position: absolute;
+  bottom: 11px;
 }
 
 

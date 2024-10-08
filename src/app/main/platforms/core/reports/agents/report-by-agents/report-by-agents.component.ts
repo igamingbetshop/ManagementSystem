@@ -1,19 +1,20 @@
-import {Component, Injector, OnInit, ViewChild} from '@angular/core';
-import {BasePaginatedGridComponent} from "../../../../../components/classes/base-paginated-grid-component";
-import {DateHelper} from "../../../../../components/partner-date-filter/data-helper.class";
-import {AgGridAngular} from "ag-grid-angular";
-import {CoreApiService} from "../../../services/core-api.service";
-import {CommonDataService, ConfigService} from "../../../../../../core/services";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ExportService} from "../../../services/export.service";
-import {syncColumnReset, syncColumnSelectPanel} from "../../../../../../core/helpers/ag-grid.helper";
-import {Paging} from "../../../../../../core/models";
-import {Controllers, GridMenuIds, Methods} from "../../../../../../core/enums";
-import {take} from "rxjs/operators";
-import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
-import {CellClickedEvent, GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup} from "ag-grid-community";
-import {AgBooleanFilterComponent} from "../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
-import {AgDropdownFilter} from "../../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
+import { DateHelper } from "../../../../../components/partner-date-filter/data-helper.class";
+import { AgGridAngular } from "ag-grid-angular";
+import { CoreApiService } from "../../../services/core-api.service";
+import { CommonDataService, ConfigService } from "../../../../../../core/services";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ExportService } from "../../../services/export.service";
+import { syncColumnReset, syncColumnSelectPanel } from "../../../../../../core/helpers/ag-grid.helper";
+import { Paging } from "../../../../../../core/models";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../core/enums";
+import { take } from "rxjs/operators";
+import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
+import { CellClickedEvent, GetServerSideGroupKey, ICellRendererParams, IsServerSideGroup } from "ag-grid-community";
+import { AgBooleanFilterComponent } from "../../../../../components/grid-common/ag-boolean-filter/ag-boolean-filter.component";
+import { AgDropdownFilter } from "../../../../../components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
+import { formatDateTime, formattedCount, formattedNumber } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-agents',
@@ -21,10 +22,9 @@ import {AgDropdownFilter} from "../../../../../components/grid-common/ag-dropdow
   styleUrl: './report-by-agents.component.scss'
 })
 export class ReportByAgentsComponent extends BasePaginatedGridComponent implements OnInit {
-  // @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public selectedItem;
@@ -84,8 +84,8 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {
@@ -158,6 +158,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.countFormatter,
       },
       {
         headerName: 'Common.TotalWithdrawCount',
@@ -172,6 +173,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.countFormatter,
       },
       {
         headerName: 'Common.TotalDepositAmount',
@@ -186,6 +188,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalWithdrawAmount',
@@ -200,6 +203,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalBetsCount',
@@ -214,6 +218,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.countFormatter,
       },
       {
         headerName: 'Common.TotalBetsAmount',
@@ -228,6 +233,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalUnsettledBetsCount',
@@ -242,6 +248,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.countFormatter,
       },
       {
         headerName: 'Common.TotalDeletedBetsCount',
@@ -256,6 +263,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.countFormatter,
       },
       {
         headerName: 'Common.TotalWinAmount',
@@ -270,6 +278,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalProfit',
@@ -284,6 +293,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalProfitPercent',
@@ -298,6 +308,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalGGRCommission',
@@ -312,6 +323,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.TotalTurnoverCommission',
@@ -326,6 +338,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         },
         sortable: false,
         minWidth: 80,
+        valueFormatter: this.numberFormatter,
       },
       {
         headerName: 'Common.View',
@@ -338,6 +351,20 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
         onCellClicked: (event: CellClickedEvent) => this.onRedirectToProducts(event),
       },
     ];
+  }
+
+  private numberFormatter(params: any): string {
+    if (params.value != null) {
+      return formattedNumber(params.value);
+    }
+    return '';
+  }
+
+  private countFormatter(params: any): string {
+    if (params.value != null) {
+      return formattedCount(params.value);
+    }
+    return '';
   }
 
   createServerSideDatasource() {
@@ -372,18 +399,18 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
   getAgents(paging, params) {
     this.apiService.apiPost(this.configService.getApiUrl, paging, true,
       Controllers.AGENT, Methods.GET_REPORT_BY_AGENTS).pipe(take(1)).subscribe(data => {
-      if (data.ResponseCode === 0) {
-        const mappedRows = data.ResponseObject.Entities;
+        if (data.ResponseCode === 0) {
+          const mappedRows = data.ResponseObject.Entities;
 
-        this.rowData = mappedRows;
-        mappedRows.forEach((entity) => {
-          entity.group = true;
-        })
-        params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
-      } else {
-        SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-      }
-    });
+          this.rowData = mappedRows;
+          mappedRows.forEach((entity) => {
+            entity.group = true;
+          })
+          params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Count });
+        } else {
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+        }
+      });
   }
 
   onPageSizeChanged() {

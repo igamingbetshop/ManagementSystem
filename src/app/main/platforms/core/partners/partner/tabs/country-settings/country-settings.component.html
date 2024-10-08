@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.CountrySettings' | translate}}</div>
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.CountrySettings' | translate}}</div>
 
     <div class="custom-dropdown">
       <mat-select
@@ -23,6 +23,7 @@
       [headerHeight]="33"
       [rowHeight]="42"
       [rowData]="rowData"
+      [class.hide-grid]="loadingUserState"
       [rowModelType]="rowModelType"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
@@ -30,13 +31,21 @@
       [cacheBlockSize]="cacheBlockSize"
       [suppressCopyRowsToClipboard]="true"
       (gridReady)="onGridReady($event)"
+      [sideBar]="sideBar"
+      [pagination]="true"
+      [paginationPageSize]="5000"
       (cellValueChanged)="onCellValueChanged($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
       rowSelection="single">
     </ag-grid-angular>
   </div>
+  <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 </div>
 
 

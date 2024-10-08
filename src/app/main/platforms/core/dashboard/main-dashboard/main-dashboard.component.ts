@@ -7,7 +7,6 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { Chart, ChartModule } from "angular-highcharts";
-import { DateTimeHelper } from "../../../../../core/helpers/datetime.helper";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule, DatePipe } from "@angular/common";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -22,7 +21,8 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { HeaderFilterComponent } from "../../../../components/header-filter/header-filter.component";
 import * as Highcharts from "highcharts";
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDate } from 'src/app/core/utils';
 
 
 @Component({
@@ -54,8 +54,8 @@ export class MainDashboardComponent implements OnInit, AfterViewInit {
   allSelected = false;
   selectedItem = 'week';
   selectedGrid = 0;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   filteredData;
   options: any;
   partners = [];
@@ -169,6 +169,7 @@ export class MainDashboardComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef,
     private datePipe: DatePipe) {
     this.dateAdapter.setLocale('en-GB');
+    this.setTime();
   }
   ngAfterViewInit(): void {
     
@@ -177,10 +178,8 @@ export class MainDashboardComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.selectedGrid = 0;
     this.partners = this.commonDataService.partners;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
     this.getPaymentRequestStatesEnum();
-    this.startDate();
-    this.getDashboardApiCalls();
+
     this.selectedGridName = 'Dashboard.PlacedBets';
     this.setCart();
     if (window.matchMedia("(max-width: 1200px)").matches) {
@@ -213,6 +212,10 @@ export class MainDashboardComponent implements OnInit, AfterViewInit {
         series: [],
       }
     }
+    setTimeout(() => {
+      this.getDashboardApiCalls();
+    }, 100);
+
   }
 
   getDashboardApiCalls() {
@@ -221,7 +224,6 @@ export class MainDashboardComponent implements OnInit, AfterViewInit {
     this.getWithdrawals();
     this.getPlayersInfo();
     this.getProviderBets();
-    // this.providerBetsChart = [];
   }
 
   setCart(): void {
@@ -246,15 +248,15 @@ export class MainDashboardComponent implements OnInit, AfterViewInit {
       });
   }
 
-  startDate(): void {
-    DateTimeHelper.selectTime('week');
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = formatDate(fromDate);
+    this.toDate = formatDate(toDate);    
   }
 
   onDateChange(event: any) {
-    this.fromDate = event.fromDate;
-    this.toDate = event.toDate;
+    this.fromDate = (event.fromDate);
+    this.toDate = (event.toDate);
     if (event.partnerId) {
       this.partnerId = event.partnerId;
     } else {

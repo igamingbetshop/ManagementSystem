@@ -18,6 +18,7 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 import { ExportService } from "../../../../services/export.service";
 import { DatePipe } from '@angular/common';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
+import { formatDateTime } from 'src/app/core/utils';
 
 export const CommissionTypes = [
   { Id: 1, Name: 'FixedFee' },
@@ -39,8 +40,8 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
   rowData = [];
   statusNames = [];
   partnerId?: number;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   pageFilter = {};
   partners = [];
   savedFilterModel;
@@ -76,8 +77,8 @@ export class TransactionsComponent extends BasePaginatedGridComponent implements
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

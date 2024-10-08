@@ -39,7 +39,7 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
   view: string = 'tree'
   path = 'matches/activematchestree';
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  fromDate: Date;
+  fromDate: any;
   defaultColDef = {
     flex: 1,
     editable: false,

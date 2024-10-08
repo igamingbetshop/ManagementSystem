@@ -24,6 +24,7 @@ import { DialogModule } from "@angular/cdk/dialog";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { IdToNamePipe } from "../../../../../core/pipes/id-to-name-pipe";
+import { CampaignSelectorComponent } from "../commons/tabs/details/campaign-selector/campaign-selector.component";
 
 @NgModule({
     declarations: [CommonsesComponent, GeneralSetupComponent],
@@ -32,27 +33,28 @@ import { IdToNamePipe } from "../../../../../core/pipes/id-to-name-pipe";
         BonusesService
     ],
     imports: [
-        CommonModule,
-        CommonsesRoutingModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatSnackBarModule,
-        TranslateModule,
-        AgBooleanFilterModule,
-        AgGridModule,
-        MatIconModule,
-        MatInputModule,
-        MatDatepickerModule,
-        FormsModule,
-        MatNativeDateModule,
-        MatCheckboxModule,
-        DialogModule,
-        DateTimePickerComponent,
-        MatChipsModule,
-        IdToNamePipe
-    ]
+    CommonModule,
+    CommonsesRoutingModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    TranslateModule,
+    AgBooleanFilterModule,
+    AgGridModule,
+    MatIconModule,
+    MatInputModule,
+    MatDatepickerModule,
+    FormsModule,
+    MatNativeDateModule,
+    MatCheckboxModule,
+    DialogModule,
+    DateTimePickerComponent,
+    MatChipsModule,
+    IdToNamePipe,
+    CampaignSelectorComponent
+]
 })
 export class CommonsesModule { }

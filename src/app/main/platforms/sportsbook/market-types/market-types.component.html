@@ -1,5 +1,4 @@
-<div class="container">
-
+<div class="container"  [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.marketTypeId }">
   <div class="main-content">
     <div class="left-panel">
       <div class="action-content">
@@ -29,7 +28,9 @@
 
         <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
-        <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+        <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv('exportmarkettypes')">{{'Common.ExportToCSV' | translate}}</button>
+        <button mat-stroked-button class="mat-export-btns" (click)="exportToCsv('exportselectiontypes')">{{'Sport.ExportToCSVSelections' | translate}}</button>
+
       </div>
       <div class="grid-content">
         <ag-grid-angular
@@ -81,5 +82,9 @@
     </div>
   </div>
 </div>
+
+@if(this.activateRoute.snapshot.queryParams.marketTypeId) {
+  <router-outlet ></router-outlet>
+}
 
 

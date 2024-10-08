@@ -41,7 +41,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class AddKeyComponent implements OnInit {
   public formGroup: UntypedFormGroup;
   public partnerId;
-  public fromDate = new Date();
+  fromDate: any;
   isSendingRequest = false;
 
   constructor(

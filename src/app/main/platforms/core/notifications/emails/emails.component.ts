@@ -14,6 +14,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { TranslateService } from '@ngx-translate/core';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 
 @Component({
@@ -26,8 +27,8 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
   rowData = [];
   partners: any[] = [];
   selectedItem = 'today';
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   partnerId;
   title = "Notifications.ClientEmails";
   states:any[] = [];
@@ -183,8 +184,8 @@ export class EmailsComponent extends BasePaginatedGridComponent implements OnIni
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

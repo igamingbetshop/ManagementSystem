@@ -52,6 +52,11 @@ const routes: Routes = [
         resolve: { filterData: SportFilterOptionsResolver },
       },
       {
+        path: 'player-limits',
+        loadChildren: () => import('./by-player-limits/by-player-limits.module').then(m => m.ByPlayerLimitsModule),
+        resolve: { filterData: SportFilterOptionsResolver },
+      },
+      {
         path: '',
         redirectTo: 'by-bets',
         pathMatch: 'full'

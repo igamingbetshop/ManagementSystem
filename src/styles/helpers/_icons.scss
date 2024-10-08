@@ -1,9 +1,15 @@
 @font-face {
+  font-family: 'arial-am';
+  src: url('../../assets/fonts/Arial_am.ttf') format('truetype');
+}
+
+@font-face {
   font-family: 'iq-soft-icon';
   src: url("../../assets/fonts/iq_soft_icon.woff") format("woff"),
   url('../../assets/fonts/iq_soft_icon.ttf') format('truetype'),
   url('../../assets/fonts/iq_soft_icon.svg') format('svg');
 }
+
 
 [class^="icon-"], [class*="icon- "] {
   font-family: "iq-soft-icon" !important;
@@ -127,5 +133,13 @@
 }
 .icon-user-suspended:before {
   content: "\e930";
+}
+
+.notification {
+  content: "\e914";
+}
+
+.notifications {
+  content: "\e91a";
 }
 //TODO add icon name from svg file

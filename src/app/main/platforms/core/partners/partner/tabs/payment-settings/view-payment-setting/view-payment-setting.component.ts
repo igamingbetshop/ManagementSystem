@@ -37,9 +37,7 @@ export class ViewPaymentSettingComponent implements OnInit {
   enableEditIndex;
   extensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
   countriesList: [] = [];
-  countriesEntites = [];
   segments;
-  segmentesEntites = [];
 
 
   constructor(private activateRoute: ActivatedRoute,
@@ -67,16 +65,8 @@ export class ViewPaymentSettingComponent implements OnInit {
       Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.segments = data.ResponseObject;
-          this.segmentesEntites.length = 0;
-          this.setSegmentsEntytes();
         }
       });
-  }
-
-  setSegmentsEntytes() {
-    this.segmentesEntites.push(this.formGroup.value.Segments?.Ids?.map(elem => {
-      return this.segments.find((item) => elem === item.Id).Name
-    }))
   }
 
   getPartnerPaymentCurrency() {
@@ -135,15 +125,6 @@ export class ViewPaymentSettingComponent implements OnInit {
           this.paymentSystem.StateName = this.statusName.find((item => item.Id === this.paymentSystem.State))?.Name;
           this.paymentSystem.TypeName = this.typeNames.find((item => item.Id === this.paymentSystem.Type))?.Name;
           this.formGroup.patchValue(this.paymentSystem);
-          this.countriesEntites.length = 0;
-          this.countriesEntites.push(this.paymentSystem?.Countries.Ids.map(elem => {
-            return this.countries.find((item) => elem === item.Id).Name
-          }))
-          this.segmentesEntites.length = 0;
-          this.setSegmentsEntytes();
-          this.countriesList = this.paymentSystem?.Countries?.map((item) => {
-              return this.countries.find((country) => country.Id === item)?.Name + ','; 
-            });
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -240,7 +221,7 @@ export class ViewPaymentSettingComponent implements OnInit {
   }
 
   onRedirectToPaymentSettings() {
-    this.router.navigate(['/main/platform/partners/partner/payment-settings'], {
+    this.router.navigate(['/main/platform/partners/all-partners/partner/payment-settings'], {
       queryParams: { "partnerId": this.parentId, "partnerName": this.partnerName }
     });
   }

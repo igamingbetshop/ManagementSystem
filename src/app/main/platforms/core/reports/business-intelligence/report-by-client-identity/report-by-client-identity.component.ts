@@ -21,11 +21,11 @@ import { NumericEditorComponent } from "../../../../../components/grid-common/nu
 import { ImageRendererComponent } from "../../../../../components/grid-common/image-renderer.component";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import {ExportService} from "../../../services/export.service";
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-client-identity',
@@ -38,8 +38,8 @@ export class ReportByClientIdentityComponent extends BasePaginatedGridComponent 
   public rowData = [];
   public documentStateName = [];
   public documentTypeName = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   private stateFilters = [];
   public documentStates = [];
@@ -101,8 +101,8 @@ export class ReportByClientIdentityComponent extends BasePaginatedGridComponent 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

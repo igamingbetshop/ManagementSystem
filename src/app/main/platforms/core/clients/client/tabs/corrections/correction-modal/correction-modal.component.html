@@ -5,30 +5,52 @@
 
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup">
+
+    @if(showSelectAccountType) {
+      <mat-form-field>
+        <mat-label>{{'Clients.SelectCurrency' | translate}}</mat-label>
+        <mat-select [formControlName]="'CurrencyId'">
+          @for (Currency of currences; track $index) {
+            <mat-option [value]="Currency.Id">{{Currency.Name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
     <mat-form-field>
       <mat-label>{{'Clients.Amount' | translate}}</mat-label>
       <input type="number" matInput [formControlName]="'Amount'" required>
-      <mat-error *ngIf="errorControl['Amount'].touched && errorControl['Amount'].hasError('required')">
-        {{'Clients.Amount' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if (errorControl['Amount'].touched && errorControl['Amount'].hasError('required')) {
+        <mat-error>
+          {{'Clients.Amount' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field>
 
-    <mat-form-field *ngIf="showSelectAccountType">
-      <mat-label>{{'Clients.SelectAccountType' | translate}}</mat-label>
-      <mat-select [formControlName]="'AccountTypeId'">
-        <mat-option *ngFor="let account of accountTypes" [value]="account.Id">{{account.Name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    @if(showSelectAccountType) {
+      <mat-form-field>
+        <mat-label>{{'Clients.SelectAccountType' | translate}}</mat-label>
+        <mat-select [formControlName]="'AccountTypeId'">
+          @for (account of accountTypes; track $index) {
+            <mat-option [value]="account.Id">{{account.Name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
     <mat-form-field>
       <mat-label>{{'Clients.SelectOperationType' | translate}}</mat-label>
       <mat-select [formControlName]="'OperationTypeId'">
-        <mat-option *ngFor="let operation of operations" [value]="operation.Id">{{'Client.' + operation.Name | translate}}</mat-option>
+        @for (operation of operations; track $index) {
+          <mat-option [value]="operation.Id">{{'Client.' + operation.Name | translate}}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Clients.SelectProduct' | translate}}</mat-label>
       <mat-select [formControlName]="'ProductId'">
-        <mat-option *ngFor="let product of products" [value]="product.Id">{{product.Name}}</mat-option>
+        @for (product of products; track $index) {
+          <mat-option [value]="product.Id">{{product.Name}}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <mat-form-field>

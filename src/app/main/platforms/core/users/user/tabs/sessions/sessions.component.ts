@@ -18,6 +18,7 @@ import { CoreApiService } from '../../../../services/core-api.service';
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 import { ActivatedRoute } from '@angular/router';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-sessions',
@@ -27,8 +28,8 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 export class SessionsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   rowData = [];
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   filteredData;
   selectedItem = 'today';
@@ -237,8 +238,8 @@ export class SessionsComponent extends BasePaginatedGridComponent implements OnI
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onGridReady(params) {

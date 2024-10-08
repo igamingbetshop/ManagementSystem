@@ -1,0 +1,51 @@
+<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+
+  <div class="title">{{"Notifications.Notifications" | translate}}
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </div>
+
+  <mat-menu #menu="matMenu">
+    <div class="title settings-title">{{"Notifications.NotificationsSettings" | translate}}</div>
+    <div class="config-buttons">
+    </div>
+    @if(!!user()) {
+    @for (config of user()['Configurations']; track config) {
+    @if(config.Id !== 0 && config.Name !== 'CorrectonMaxAmount') {
+    <div class="config-item">
+      <span class="config-text">{{config.Name}}</span>
+      <mat-slide-toggle class="toggle-btn" [color]="'background: #000000'" [checked]="config.BooleanValue"
+        labelPosition="before" (change)="onChangeConfig($event, config)" (click)="$event.stopPropagation()">
+      </mat-slide-toggle>
+    </div>
+    }
+    }
+    }
+  </mat-menu>
+
+  <div class="filter-buttons">
+    <button mat-button (click)="setFilter('all')" [class.active]="filter === 'all'">
+      {{ "See All" | translate }}
+    </button>
+    <button mat-button (click)="setFilter('unread')" [class.active]="filter === 'unread'">
+      {{ "Unread" | translate }}
+    </button>
+  </div>
+
+  @for (note of filteredNotifications(); track $index) {
+  <div [ngClass]="{'avtive-note': note.Status === 1}">
+    <div class="note-item">
+      <span class="note-type" (click)="onReadNote(note)">
+        {{ notificationTypes[note.TypeId] }}
+      </span>
+      {{ notificationsStatuses[note.Status] }}
+    </div>
+    <div class="note-time">
+      {{ note.CreationTime | date: 'dd MMM yyyy · hh:mm a' }}
+    </div>
+  </div>
+  }
+
+
+</div>

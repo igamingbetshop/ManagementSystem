@@ -31,7 +31,7 @@ export class HtmlEditorComponent implements OnInit {
         [{ 'direction': 'rtl' }],
         [{ 'size': ['small', false, 'large'] }],
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'font': [] }],
+        [{ 'font': ['sans-serif'] }], 
         [{ 'color': [] }, { 'background': [] }],
         [{ 'align': [] }],
         ['link', 'image', 'video'],

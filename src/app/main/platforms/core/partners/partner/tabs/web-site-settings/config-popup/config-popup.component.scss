@@ -9,7 +9,7 @@
 
 .mat-mdc-table {
     width: 100%;
-    max-height: 500px;
+    max-height: 780px;
     overflow: auto;
 }
   
@@ -39,4 +39,8 @@
 
 .icno-btn{
   color: $gray-light-6;
+}
+
+.modal-primary-btn {
+  margin-left: auto;
 }

@@ -16,6 +16,8 @@ import {SnackBarHelper} from "../../../../../../../../core/helpers/snackbar.help
 })
 export class EventsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid', {static: false}) agGrid: AgGridAngular;
+  public title: string = 'Sport.ActiveMatches';
+  public routerLink: string = '../../../all-active';
   public path: string = 'report/matchevents';
   public name: string = '';
   public matchId: number;
@@ -25,9 +27,9 @@ export class EventsComponent extends BasePaginatedGridComponent implements OnIni
   public liveUpdatesState = false;
 
   constructor(protected injector: Injector,
-              private apiService: SportsbookApiService,
-              private _snackBar: MatSnackBar,
-              private activateRoute: ActivatedRoute) {
+              protected apiService: SportsbookApiService,
+              protected _snackBar: MatSnackBar,
+              protected activateRoute: ActivatedRoute) {
     super(injector);
     this.columnDefs = [
       {

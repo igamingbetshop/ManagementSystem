@@ -22,6 +22,7 @@ import { ViewPaymentSettingComponent } from './view-payment-setting/view-payment
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { AddCurrencyRateComponent } from './add-currency-rate/add-currency-rate.component';
 import {TranslateModule} from "@ngx-translate/core";
+import { IdToNamePipe } from "../../../../../../../core/pipes/id-to-name-pipe";
 
 const routes: Routes = [
   {
@@ -43,23 +44,24 @@ const routes: Routes = [
 @NgModule({
   declarations: [PaymentSettingsComponent, AddPaymentSettingComponent, ViewPaymentSettingComponent, AddCurrencyRateComponent],
     imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        RouterModule.forChild(routes),
-        MatSnackBarModule,
-        AgGridModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatOptionModule,
-        MatSelectModule,
-        MatCheckboxModule,
-        TranslateModule
-    ],
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule.forChild(routes),
+    MatSnackBarModule,
+    AgGridModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    TranslateModule,
+    IdToNamePipe
+],
   providers: [DatePipe]
 })
 

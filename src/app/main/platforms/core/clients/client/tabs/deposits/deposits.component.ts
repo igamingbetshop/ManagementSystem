@@ -23,6 +23,7 @@ import { DateAdapter } from "@angular/material/core";
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-deposits',
@@ -33,8 +34,8 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
   @ViewChild('agGrid') agGrid: AgGridAngular;
   clientId: number;
   rowData = [];
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   filteredClientId;
   statusName = [];
   masterDetail;
@@ -171,8 +172,8 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   featchPaymentSystems() {
@@ -664,7 +665,7 @@ export class DepositsComponent extends BasePaginatedGridComponent implements OnI
     const dialogRef = this.dialog.open(
       CreateDepositComponent,
       {
-        width: ModalSizes.LARGE,
+        width: ModalSizes.MEDIUM,
         data: {
           clientId: this.clientId,
           currencyId: this.currencyId,

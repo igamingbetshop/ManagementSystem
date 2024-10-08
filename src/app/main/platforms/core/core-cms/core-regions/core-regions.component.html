@@ -26,6 +26,10 @@
       [getServerSideGroupKey]="getServerSideGroupKey"
       (gridReady)="onGridReady($event)"
       [ensureDomOrder]="true"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
       [enableCellTextSelection]="true">
     </ag-grid-angular>
 

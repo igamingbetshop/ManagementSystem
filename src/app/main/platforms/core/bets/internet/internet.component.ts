@@ -19,7 +19,7 @@ import { LocalStorageService } from "../../../../../core/services";
 import { OddsTypePipe } from "../../../../../core/pipes/odds-type.pipe";
 import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes, GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
-import { formattedNumber } from "../../../../../core/utils";
+import { formatDateTime, formattedNumber } from "../../../../../core/utils";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
@@ -54,8 +54,8 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
   TotalProfit;
   private detailGridParams: any;
   selectedItem = 'today';
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   private oddsType: number;
   private stateFilters = [];
@@ -88,7 +88,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
         this.setEvalutionColumnDefs();
       }
 
-      if (params &&  params?.data.ProductName == "pregame") {
+      if (params && params?.data.ProductName == "pregame") {
         this.setBGGamesColdefs();
       }
 
@@ -624,8 +624,8 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {
@@ -703,19 +703,14 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
 
 
   handleClientDate() {
+    this.clientData = {
+      CreatedFrom: this.fromDate,
+      CreatedBefore: this.toDate,
+    };
     if (this.partnerId) {
-      this.clientData = {
-        CreatedFrom: this.fromDate,
-        CreatedBefore: new Date(this.toDate.setDate(this.toDate.getDate() + 1)),
-        PartnerId: this.partnerId
+      this.clientData['PartnerId'] = this.partnerId
       };
-    } else {
-      this.clientData = {
-        CreatedFrom: this.fromDate,
-        CreatedBefore: new Date(this.toDate.setDate(this.toDate.getDate() + 1))
-      };
-    }
-  }
+    } 
 
   go() {
     this.getCurrentPage();
@@ -822,6 +817,8 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
             BetAmount: `${formattedNumber(this.totalBetAmount)}  ${this.Currency}`,
             WinAmount: `${formattedNumber(this.TotalWinAmount)} ${this.Currency}`,
             Profit: `${formattedNumber(this.totalProfit)} ${this.Currency}`,
+            BonusWinAmount: `${formattedNumber(data.ResponseObject.TotalBonusWinAmount)} ${this.Currency}`,
+            BonusAmount: `${formattedNumber(data.ResponseObject.TotalBonusBetAmount)} ${this.Currency}`,
           }
           ]);
           params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Bets.Count });

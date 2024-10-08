@@ -33,6 +33,11 @@
     {
       font-size: 1.9vh;
       font-weight: bold;
+      width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
       .client-id{margin-left: 4px}
     }
     .amount,.session-time

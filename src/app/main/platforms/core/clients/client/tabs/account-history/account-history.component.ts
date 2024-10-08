@@ -13,6 +13,7 @@ import { syncColumnNestedSelectPanel, syncColumnSelectPanel, syncNestedColumnRes
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { ExportService } from "../../../../services/export.service";
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-account-history',
@@ -24,8 +25,8 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
   clientId: number;
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   rowData = [];
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   selectedItem = 'today';
   accounts = [];
@@ -164,8 +165,8 @@ export class AccountHistoryComponent extends BaseGridComponent implements OnInit
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getClientAccounts() {

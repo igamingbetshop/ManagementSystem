@@ -34,10 +34,10 @@
 
       <div>
         <div class="first-hand">{{'Common.Name' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.Name}}</div>
-        <div class="form-field form-input">
-            <input matInput [formControlName]="'Name'">
-        </div>
+        <div class="static-hand">{{commonSettings?.Name}}</div>
+        <!-- <div class="form-field form-input">
+          <input matInput [formControlName]="'Name'">
+        </div> -->
       </div>
 
       @if (commonSettings?.BonusTypeId >= 10 && commonSettings?.BonusTypeId <= 14) {
@@ -52,10 +52,10 @@
 
       <div>
         <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
-        <div class="second-hand">{{commonSettings?.PartnerName}}</div>
-        <div class="form-field form-input">
+        <div class="static-hand">{{commonSettings?.PartnerName}}</div>
+        <!-- <div class="form-field form-input">
             <input matInput [formControlName]="'PartnerName'" readonly>
-        </div>
+        </div> -->
       </div>
 
       @if(commonSettings?.BonusTypeId == 5) {
@@ -321,20 +321,18 @@
         </div>
       }
 
+      <div>
+        <div class="first-hand">{{'Bonuses.Collor' | translate}}</div>
+        <div class="second-hand" [style.background-color]="commonSettings?.Color">
+          {{commonSettings?.Color}}
+        </div>
+        <div class="form-field form-input">
+          <input type="color" class="color-input" [(ngModel)]="color" [formControlName]="'Color'"/>
+      </div>
+      </div>
+
       @if(bonusTypeId == 4) {
-        @if(isEdit) {
-          <div>
-            <div class="first-hand">{{'Clients.SelectType' | translate}}</div>
-            <div class="second-hand"></div>
-            <div class="form-field form-dropdown">
-              <mat-select required (selectionChange)="onTypeChange($event.value)">
-                @for (campaign of campaignTypes; track $index) {
-                  <mat-option [value]="campaign.Id">{{campaign.Name}}</mat-option>
-                }
-              </mat-select>
-            </div>
-          </div>
-        }
+
         <div style="height: auto;">
           <div class="first-hand">{{'Bonuses.Info' | translate}}</div>
           <div class="second-hand" style="height: auto;">
@@ -344,26 +342,20 @@
               }
             }
           </div>
-          <div class="form-field form-dropdown">
-            <mat-select [formControl]="campaignControl" (selectionChange)="onCampaignChange($event.value)">
-              @for (campaign of campaigns; track $index)  {
-                <mat-option [value]="campaign.Id">
-                  {{ campaign.Name }}
-                </mat-option>
-              }
-            </mat-select>
+          <div class="form-field campaign-container">
+
+            <app-campaign-selector
+              [campaignTypes]="campaignTypes"
+              [campaigns]="campaigns"
+              [selectedCampaignIds]="selectedCampaignIds"
+              (typeChange)="onTypeChange($event)"
+              (campaignChange)="onCampaignChange($event)"
+              (valueAdded)="handleValueAdded($event)"
+            ></app-campaign-selector>
           </div>
         </div>
 
         @if(isEdit) {
-          <div>
-            <div class="first-hand">{{'Clients.SelectValue' | translate}}</div>
-            <div class="second-hand"></div>
-            <div class="form-field form-input">
-              <input matInput [formControl]="valueControl" type="number">
-              <button mat-raised-button class="mat-btn add-value-btn" (click)="addValue()">Add Value</button>
-          </div>
-        </div>
 
         <div class="selected-items-area">
           @for ( info of infoArray.controls; track $index) {
@@ -424,7 +416,6 @@
           </div>
         </div>
       }
-      
 
       <div style="height: auto;">
         <div class="first-hand">{{'Bonuses.ChooseCountries' | translate}}</div>
@@ -786,18 +777,67 @@
     </form>
   </div>
 
+  
+
   <br>
 
-  <div class="mat-table">
-    <div class="content-action">
-      <div class="title">{{'Bonuses.BonusCurrencySettings' | translate}}</div>
-      <button mat-stroked-button class="mat-btn" (click)="onOpenCurrencySettings()">{{'Partners.AddCurrencySettings' |
-        translate}}</button>
-    </div>
+  <div class="mat-tables grid-layout">
 
-    <app-currency-settings-component [dataSource]="this.commonSettings?.AmountSettings" [isNotUptoAmmount]="true"
-      (dataSourceChange)="onAmmountSettingsChange($event)"></app-currency-settings-component>
+    <div class="left-content">
+      <div class="content-action">
+        <div class="title">{{ 'Bonuses.BonusCurrencySettings' | translate }}</div>
+        <button mat-stroked-button class="mat-btn" (click)="onOpenCurrencySettings()">
+          {{ 'Partners.AddCurrencySettings' | translate }}
+        </button>
+      </div>
+  
+      <app-currency-settings-component
+        [dataSource]="this.commonSettings?.AmountSettings"
+        [isNotUptoAmmount]="true"
+        (dataSourceChange)="onAmmountSettingsChange($event)"
+      ></app-currency-settings-component>
+    </div>
+  
+    @if (commonSettings?.BonusTypeId == 5) {
+      <div class="right-content">
+        <div class="content-action">
+          <div class="title">{{ 'Bonuses.TournamentLeaderboard' | translate }}</div>
+        </div>
+          <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="tournamentData()" class="mat-table" matSort>
+
+              <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Name' | translate }}</th>
+                <td mat-cell *matCellDef="let element">{{ element.Name }}</td>
+              </ng-container>
+          
+
+              <ng-container matColumnDef="Order">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Order' | translate }}</th>
+                <td mat-cell *matCellDef="let element">{{ element.Order }}</td>
+              </ng-container>
+          
+
+              <ng-container matColumnDef="Points">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'Points' | translate }}</th>
+                <td mat-cell *matCellDef="let element">{{ element.Points }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          
+            </table>
+          </div>
+          
+        
+        
+
+      </div>
+    }
   </div>
+  
+  
 
   <div class="content-action">
     <div class="title">{{'Common.History' | translate}}</div>

@@ -1,6 +1,6 @@
 <div class="container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.id }">
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Clients.PaymentSettings' | translate}}</div>
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Clients.PaymentSettings' | translate}}</div>
     <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="addPaymentSettings()">{{'Partners.AddPaymentSetting' | translate}}</button>
   </div>
@@ -10,6 +10,7 @@
       id="paymnets settings"
       #agGrid
       class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
       [headerHeight]="33"
       [rowHeight]="42"
       [rowData]="rowData"
@@ -20,6 +21,9 @@
       [suppressRowClickSelection]="true"
       [enableBrowserTooltips]="enableBrowserTooltips"
       [sideBar]="sideBar"
+      [accentedSort]="true"
+      [pagination]="true"
+      [paginationPageSize]="5000"
       [components]="frameworkComponents"
       [animateRows]="true"
       [cacheBlockSize]="cacheBlockSize"
@@ -28,10 +32,16 @@
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
       (cellValueChanged)="onCellValueChanged($event)"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
       rowSelection="single">
     </ag-grid-angular>
   </div>
 </div>
+
+<button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
 @if(this.activateRoute.snapshot.queryParams.id) {
   <router-outlet ></router-outlet>

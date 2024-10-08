@@ -2,8 +2,8 @@
   <form class="grid-edit" [formGroup]="formGroupFixedFee">
 
     <div class="content-action">
-      <div class="title"><a [routerLink]="['../../all-affiliates']">{{'Providers.Affiliates' | translate}}</a> / {{affiliate?.Id}}
-        : {{'Fixed Fee Commition'}}</div>
+      <div class="title"><a [routerLink]="['../../all-affiliates']">{{'Providers.Affiliates' | translate}} / {{affiliate?.Id}}
+        : {{'Fixed Fee Commition'}}</a></div>
       <button mat-stroked-button class="edit-btn" (click)="isEdit = !isEdit">{{'Common.Edit' | translate}}</button>
 
     </div>

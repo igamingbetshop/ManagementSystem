@@ -62,6 +62,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     public configService: ConfigService,
     protected injector: Injector,
     public dialog: MatDialog,
+    private datePipe: DatePipe,
     public dateAdapter: DateAdapter<Date>) {
     super(injector);
     this.dateAdapter.setLocale('en-GB');
@@ -265,12 +266,20 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
     });
   }
 
+  setFormattedDate(value: string) {
+    if (value) {
+      const formattedDate = this.datePipe.transform(value, 'dd/MM/yyyy');
+      this.formGroup.controls['BirthDate'].setValue(formattedDate);
+    }
+  }
+
   public onSubmit() {
     const client = this.formGroup.getRawValue();
-    if (typeof client.BirthDate === 'object') {
-      const tomeZone = -1 * client.BirthDate.getTimezoneOffset() / 60;
-      client.BirthDate = new Date(client.BirthDate.setHours(client.BirthDate.getHours() + tomeZone));
-    }
+    client.BirthDate = this.datePipe.transform(client.BirthDate, 'yyyy-MM-dd');
+    // if (typeof client.BirthDate === 'object') {
+    //   const tomeZone = -1 * client.BirthDate.getTimezoneOffset() / 60;
+    //   client.BirthDate = new Date(client.BirthDate.setHours(client.BirthDate.getHours() + tomeZone));
+    // }
     client.MobileNumber = client.MobileCode + client.MobileNumber;
     this.apiService.apiPost(this.configService.getApiUrl, client, true,
       Controllers.CLIENT, Methods.CHANGE_CLIENT_DETAILS).pipe(take(1)).subscribe(data => {
@@ -427,7 +436,6 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       });
-
   }
 
   onRowClick(event: any, account: any) {

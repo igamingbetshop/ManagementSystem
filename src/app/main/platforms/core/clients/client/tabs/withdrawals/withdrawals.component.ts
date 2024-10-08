@@ -24,6 +24,7 @@ import {syncColumnSelectPanel, syncNestedColumnReset, syncPaginationWithoutBtn} 
 import {DateTimeHelper} from "../../../../../../../core/helpers/datetime.helper";
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-withdrawals',
@@ -34,8 +35,8 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
   @ViewChild('agGrid') agGrid: AgGridAngular;
   clientId: number;
   rowData = [];
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   filteredClientId;
   statusName = [];
   masterDetail;
@@ -141,8 +142,8 @@ export class WithdrawalsComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getPaymentStates() {

@@ -7,19 +7,16 @@
   <form class="modal-form" [formGroup]="formGroup">
 
     @if (isParent) {
-      <mat-form-field>
-        <mat-label>{{'Common.StartDate' | translate}}</mat-label>
-        <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>{{'Common.EndDate' | translate}}</mat-label>
-        <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
+
+    <div class="calendar-content">
+      <div class="calendar-picker">
+        <app-date-time-picker formControlName="StartDate"></app-date-time-picker>
+      </div>
+
+      <div class="calendar-picker field-content-seccond-child">
+        <app-date-time-picker formControlName="FinishDate"></app-date-time-picker>
+      </div>
+    </div>
     }
 
     <mat-form-field>
@@ -27,20 +24,23 @@
       <mat-select #part (selectionChange)="GetPartnerEnvironments(part.value)" [formControlName]="'PartnerId'">
         <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
       </mat-select>
-      <mat-error *ngIf="errorControl?.['PartnerId']?.touched && errorControl?.['PartnerId'].errors?.required">
+      @if(errorControl?.['PartnerId']?.touched && errorControl?.['PartnerId'].errors?.required) {
+      <mat-error>
         {{'Partners.Partner' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>{{'Cms.SelectEnvironment' | translate}}</mat-label>
-      <mat-select [formControlName]="'EnvironmentTypeId'">
+      <mat-select formControlName="EnvironmentTypeId">
         <mat-option *ngFor="let environment of environments" [value]="environment.Id">{{environment.Name}}</mat-option>
       </mat-select>
-      <mat-error
-        *ngIf="errorControl?.['EnvironmentTypeId']?.touched && errorControl?.['EnvironmentTypeId'].errors?.required">
+      @if(errorControl?.['EnvironmentTypeId']?.touched && errorControl?.['EnvironmentTypeId'].errors?.required) {
+      <mat-error>
         {{'Cms.Environment' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
+      }
     </mat-form-field>
 
     @if (!this.data?.ParentId) {
@@ -49,27 +49,32 @@
       <mat-select [formControlName]="'DeviceType'">
         <mat-option *ngFor="let type of deviceTypes" [value]="type.Id">{{type.Name}}</mat-option>
       </mat-select>
-      <mat-error *ngIf="errorControl?.['DeviceType']?.touched && errorControl?.['DeviceType'].errors?.required">
+      @if (errorControl?.['DeviceType']?.touched && errorControl?.['DeviceType'].errors?.required) {
+      <mat-error>
         {{'Common.DeviceType' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
+      }
     </mat-form-field>
     }
 
-    <mat-form-field *ngIf="promotionTypes && !isParent">
-      <mat-label>{{'Clients.SelectType' | translate}}</mat-label>
-      <mat-select [formControlName]="'Type'">
-        <mat-option *ngFor="let promo of promotionTypes" [value]="promo.Id">{{promo.Name}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="errorControl?.['Type']?.touched && errorControl?.['Type'].errors?.required">
+    @if (promotionTypes && !isParent) {
+    <mat-form-field>
+      <input matInput [placeholder]="'Common.Type' | translate" formControlName="Type">
+      @if(errorControl?.['Type']?.touched && errorControl?.['Type'].errors?.required) {
+      <mat-error>
         {{'Common.Type' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
+      }
     </mat-form-field>
+    }
 
     <mat-form-field>
-      <input matInput [placeholder]="'Clients.NickName' | translate" [formControlName]="'NickName'">
-      <mat-error *ngIf="errorControl?.['NickName']?.touched && errorControl?.['NickName'].errors?.required">
+      <input matInput [placeholder]="'Clients.NickName' | translate" formControlName="NickName">
+      @if(errorControl?.['NickName']?.touched && errorControl?.['NickName'].errors?.required) {
+      <mat-error>
         {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field>
@@ -77,53 +82,56 @@
       <mat-select [formControlName]="'State'">
         <mat-option *ngFor="let state of states" [value]="state.Id">{{state.Name}}</mat-option>
       </mat-select>
-      <mat-error *ngIf="errorControl?.['State']?.touched && errorControl?.['State'].errors?.required">
+      @if(errorControl?.['State']?.touched && errorControl?.['State'].errors?.required) {
+      <mat-error>
         {{'Common.State' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="number" [placeholder]="'Common.Order' | translate" formControlName="Order">
+      @if(errorControl?.['Order']?.touched && errorControl?.['Order'].errors?.required) {
+      <mat-error>
+        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
+    @if(isParent) {
+    <div>
+      <label>{{'Cms.ImageData' | translate}} </label>
+      <input type="file" (change)="uploadFile($event)">
+    </div>
+    <div>
+      <label>{{'Cms.ImageDataSmall' | translate}} </label>
+      <input type="file" (change)="uploadFile1($event)">
+    </div>
+    <div>
+      <label>{{'Cms.ImageDataMedium' | translate}}</label>
+      <input type="file" (change)="uploadFile2($event)">
+    </div>
+
+    <mat-form-field>
+      <input matInput [placeholder]="'Cms.Image' | translate" formControlName="ImageName">
+      <mat-error *ngIf="errorControl?.['ImageName']?.touched && errorControl?.['ImageName'].errors?.required">
+        {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'">
-      <mat-error *ngIf="errorControl?.['Order']?.touched && errorControl?.['Order'].errors?.required">
-        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      <mat-label>{{'Common.Visibility' | translate}}</mat-label>
+      <mat-select formControlName="Visibility" placeholder="{{'Common.Visibility' | translate}}" multiple>
+        <mat-option *ngFor="let banVisType of visibilityTypes" [value]="banVisType.id">{{banVisType.name |
+          translate}}</mat-option>
+      </mat-select>
     </mat-form-field>
-    <ng-container *ngIf="isParent">
-      <div>
-        <label>{{'Cms.ImageData' | translate}} </label>
-        <input type="file" (change)="uploadFile($event)">
-      </div>
-      <div>
-        <label>{{'Cms.ImageDataSmall' | translate}} </label>
-        <input type="file" (change)="uploadFile1($event)">
-      </div>
-      <div>
-        <label>{{'Cms.ImageDataMedium' | translate}}</label>
-        <input type="file" (change)="uploadFile2($event)">
-      </div>
-
-      <mat-form-field>
-        <input matInput [placeholder]="'Cms.Image' | translate" [formControlName]="'ImageName'">
-        <mat-error *ngIf="errorControl?.['ImageName']?.touched && errorControl?.['ImageName'].errors?.required">
-          {{'Cms.Image' | translate}} {{'Errors.Required' | translate}}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field>
-        <mat-label>{{'Common.Visibility' | translate}}</mat-label>
-        <mat-select [formControlName]="'Visibility'" placeholder="{{'Common.Visibility' | translate}}" multiple>
-          <mat-option *ngFor="let banVisType of visibilityTypes"
-            [value]="banVisType.id">{{banVisType.name | translate}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </ng-container>
+    }
   </form>
 
 </div>
 
 <div mat-dialog-actions>
   <button mat-raised-button class="modal-cancel-btn" (click)="close()">{{'Common.Cancel' | translate}}</button>
-  <button mat-raised-button class="modal-primary-btn" 
-    [class.disabled]="this.formGroup.invalid" 
+  <button mat-raised-button class="modal-primary-btn" [class.disabled]="this.formGroup.invalid"
     (click)="onSubmit()">{{'Common.Create'| translate}}</button>
 </div>

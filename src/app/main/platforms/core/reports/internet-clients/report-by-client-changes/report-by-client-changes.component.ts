@@ -24,8 +24,8 @@ import { DateHelper } from 'src/app/main/components/partner-date-filter/data-hel
 export class ReportByClientChangesComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public partnerId;

@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgGridAngular } from "ag-grid-angular";
 import 'ag-grid-enterprise';
 import { CommonDataService } from 'src/app/core/services';
-import { IRowNode } from "ag-grid-community";
+import { CellClickedEvent, IRowNode } from "ag-grid-community";
 
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
 import { SportsbookApiService } from '../services/sportsbook-api.service';
@@ -18,11 +18,11 @@ import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/c
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
 import { GridMenuIds, GridRowModelTypes, ModalSizes } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../core/helpers/snackbar.helper";
-import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
+import { syncColumnNestedSelectPanel, syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { ArrayEditorComponent } from 'src/app/main/components/grid-common/array-editor/array-editor.component';
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
-
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-market-types',
@@ -202,7 +202,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
             bgColor: '#3E4D66',
             textColor: '#FFFFFF'
           }
-        }
+        },
       ],
       onGridReady: params => {
         // params.api.setDomLayout('autoHeight');
@@ -247,6 +247,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     private _snackBar: MatSnackBar,
     public commonDataService: CommonDataService,
     public dialog: MatDialog,
+    public activateRoute: ActivatedRoute,
     private ref: ChangeDetectorRef
   ) {
     super(injector);
@@ -457,7 +458,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'save',
         resizable: true,
-        minWidth: 150,
+        minWidth: 80,
         sortable: false,
         filter: false,
         cellRenderer: 'buttonRenderer',
@@ -468,12 +469,22 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
           bgColor: '#3E4D66',
           textColor: '#FFFFFF'
         }
-      }
+      },
+      {
+        headerName: 'Common.View',
+        headerValueGetter: this.localizeHeader.bind(this),
+        cellRenderer: function (params) {
+          return `<i style=" color:#076192; padding-left: 20px; cursor: pointer;" class="material-icons">
+           visibility
+           </i>`
+        },
+        onCellClicked: (event: CellClickedEvent) => this.onRedirectToMarket(event),
+      },
     ];
   }
 
   ngAfterContentChecked() {
-    this.ref.detectChanges();
+    // this.ref.detectChanges();
   }
 
   onPartnerChange(val) {
@@ -558,8 +569,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     })
   }
 
-
-
   onAddPartnerSettings() {
     if (!this.partnerId) {
       SnackBarHelper.show(this._snackBar, { Description: 'Select Partner', Type: "error" });
@@ -611,18 +620,12 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     }
   }
 
-  // onGridReady1(params) {
-  //   super.onGridReady(params);
-  // }
-
   onGridReady(params) {
     super.onGridReady(params);
+    syncColumnNestedSelectPanel();
     syncColumnSelectPanel();
     syncColumnReset();
-
   }
-
-
 
   getPage() {
     if (this.sportId) {
@@ -649,8 +652,8 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
     this.onCellValueChanged(event);
   }
 
-  exportToCsv() {
-    this.apiService.apiPost('/markettypes/exportmarkettypes', this.filter).pipe(take(1)).subscribe((data) => {
+  exportToCsv(method) {
+    this.apiService.apiPost(`/markettypes/${method}`,  {...this.filteredData, adminMenuId: this.adminMenuId}).pipe(take(1)).subscribe((data) => {
       if (data.Code === 0) {
         let iframe = document.createElement("iframe");
         iframe.setAttribute("src", this.configService.defaultOptions.SBApiUrl + '/' + data.ResponseObject.ExportedFilePath);
@@ -659,6 +662,13 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       } else {
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
+    });
+  }
+
+  onRedirectToMarket(ev) {
+    const row = ev.data;
+    this.router.navigate(['/main/sportsbook/market-types/market-type'], {
+      queryParams: { "marketTypeId": row.Id, "partnerId": this.partnerId,}
     });
   }
 

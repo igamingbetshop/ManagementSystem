@@ -10,6 +10,7 @@ import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateAdapter } from "@angular/material/core";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-withdrawal',
@@ -20,8 +21,8 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public partners = [];
   public paymentSystems = [];
@@ -112,8 +113,8 @@ export class ReportByWithdrawalComponent extends BasePaginatedGridComponent impl
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

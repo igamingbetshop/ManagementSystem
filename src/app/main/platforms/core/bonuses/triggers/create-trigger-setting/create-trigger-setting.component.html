@@ -76,7 +76,7 @@
     @if(type != 5 && type != 9 && type != 12 && type != 15) {
       <mat-form-field>
         <mat-label>{{'Bonuses.Percent' | translate}}</mat-label>
-        <input matInput type="number" min="0" [placeholder]="'Bonuses.Percent' | translate" [formControlName]="'Percent'" required>
+        <input matInput type="number" min="0" [placeholder]="'Bonuses.Percent' | translate" [formControlName]="'Percent'">
         @if(errorControl['Percent']?.touched && errorControl['Percent'].errors?.required) {
           <mat-error>
             {{'Bonuses.Percent' | translate}} {{'Errors.Required' | translate}}

@@ -1,0 +1,39 @@
+<div class="form-containers">
+    <mat-form-field>
+      <mat-label>{{ 'Clients.SelectType' | translate }}</mat-label>
+      <mat-select required (selectionChange)="onTypeChange($event.value)">
+        <mat-option *ngFor="let campaign of campaignTypes()" [value]="campaign.Id">
+          {{ campaign.Name | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field>
+      <mat-label>{{ 'Clients.SelectCampaign' | translate }}</mat-label>
+      <mat-select [formControl]="campaignControl" (selectionChange)="onCampaignChange($event.value)">
+        <mat-option *ngFor="let campaign of campaigns()" [value]="campaign.Id">
+          {{ campaign.Name }}
+        </mat-option>
+      </mat-select>
+      @if (campaignControl.touched && campaignControl.hasError('required')) {
+        <mat-error >
+          {{ 'Common.Campaign' | translate }} {{ 'Errors.Required' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+  
+    <mat-form-field class="value-input">
+      <mat-label>{{ 'Bonuses.Value' | translate }}</mat-label>
+      <input matInput [formControl]="valueControl" type="number" >
+      @if (valueControl.hasError('required')) {
+        <mat-error>
+          {{ 'Common.Value' | translate }} {{ 'Errors.Required' | translate }}
+        </mat-error>
+      }
+    </mat-form-field>
+  
+    <button mat-icon-button class="campaign-button" (click)="addValue()">
+      <mat-icon class="campaign-icon">add</mat-icon>
+    </button>
+  </div>
+  

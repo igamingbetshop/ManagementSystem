@@ -1,0 +1,169 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['/main/sportsbook/market-types']">{{'Sport.MarketTypes' | translate}}</a> / {{marketTypeId}} :{{'Partners.Main' | translate}}</div>
+    <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+  </div>
+
+  <div class="content-edit">
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
+
+      <div>
+        
+        <div class="first-hand">{{ 'Common.Id' | translate }}</div>
+        <!-- <div class="second-hand">{{ marketEntity().Id }}</div> -->
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.Id' | translate" [formControlName]="'Id'">
+        </div>
+      
+<!--         
+        <div class="first-hand">{{ 'Common.Name' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().Name }}</div>
+        <div class="form-field form-input">
+          <input matInput type="text" readonly [placeholder]="'Common.Name' | translate" [formControlName]="'Name'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.SportId' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().SportId }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.SportId' | translate" [formControlName]="'SportId'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.SportName' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().SportName }}</div>
+        <div class="form-field form-input">
+          <input matInput type="text" readonly [placeholder]="'Common.SportName' | translate" [formControlName]="'SportName'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.GroupIds' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().GroupIds.join(', ') }}</div>
+        <div class="form-field form-input">
+          <input matInput type="text" readonly [placeholder]="'Common.GroupIds' | translate" [formControlName]="'GroupIds'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.CombinationalNumber' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().CombinationalNumber }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.CombinationalNumber' | translate" [formControlName]="'CombinationalNumber'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.Enabled' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().Enabled ? 'Yes' : 'No' }}</div>
+        <div class="form-field form-input">
+          <input matInput type="text" readonly [placeholder]="'Common.Enabled' | translate" [formControlName]="'Enabled'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.Priority' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().Priority }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.Priority' | translate" [formControlName]="'Priority'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.Color' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().Color }}</div>
+        <div class="form-field form-input">
+          <input matInput type="text" readonly [placeholder]="'Common.Color' | translate" [formControlName]="'Color'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.LineNumber' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().LineNumber }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.LineNumber' | translate" [formControlName]="'LineNumber'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.TranslationId' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().TranslationId }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.TranslationId' | translate" [formControlName]="'TranslationId'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.DisplayType' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().DisplayType }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.DisplayType' | translate" [formControlName]="'DisplayType'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.IsForFilter' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().IsForFilter ? 'Yes' : 'No' }}</div>
+        <div class="form-field form-input">
+          <input matInput type="text" readonly [placeholder]="'Common.IsForFilter' | translate" [formControlName]="'IsForFilter'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.ResultTypeId' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().ResultTypeId }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.ResultTypeId' | translate" [formControlName]="'ResultTypeId'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.MatchPhaseId' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().MatchPhaseId }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.MatchPhaseId' | translate" [formControlName]="'MatchPhaseId'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.SelectionsCount' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().SelectionsCount }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.SelectionsCount' | translate" [formControlName]="'SelectionsCount'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'Common.SuccessOutcomeCount' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().SuccessOutcomeCount }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'Common.SuccessOutcomeCount' | translate" [formControlName]="'SuccessOutcomeCount'">
+        </div>
+      
+        
+        <div class="first-hand">{{ 'PartnerSetting.SettingId' | translate }}</div>
+        <div class="second-hand">{{ marketEntity().PartnerSetting.SettingId }}</div>
+        <div class="form-field form-input">
+          <input matInput type="number" readonly [placeholder]="'PartnerSetting.SettingId' | translate" [formControlName]="'PartnerSettingId'">
+        </div> -->
+      </div>
+      
+
+      <div class="form-actions">
+        <div class="actions" *ngIf="isEdit">
+          <button mat-stroked-button class="mat-cancel-btn" (click)="this.isEdit = false;">{{'Common.Cancel' | translate}}</button>
+          <button mat-stroked-button class="mat-btn" [disabled]="formGroup.invalid" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="sessions"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [suppressCopyRowsToClipboard]="true"
+    [defaultColDef]="defaultColDef"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+
+</div>

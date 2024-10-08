@@ -1137,20 +1137,24 @@
 
 ::ng-deep {
   .mdc-switch__icons {
-    display: none!important;
+    display: none !important;
   }
 
   .mdc-switch__handle {
-    height: 11px!important;
-    width: 11px!important;
+    height: 12px !important;
+    width: 12px !important;
   }
 
   .mdc-switch__track {
-    width: 29px!important;
+    width: 29px !important;
+  }
+
+  .mdc-elevation-overlay {
+    background: #FFFFFF !important;
   }
 
   .mdc-switch__track {
-    height: 16px!important;
+    height: 16px !important;
   }
 }
 

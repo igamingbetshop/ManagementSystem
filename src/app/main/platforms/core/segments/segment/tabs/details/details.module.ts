@@ -18,6 +18,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ClientStatesResolver } from '../../../../resolvers/client-states.resolver';
 import { IdToNamePipe } from "../../../../../../../core/pipes/id-to-name-pipe";
 import { ConditionInputComponent } from "../../../condition-input/condition-input.component";
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
+import { SignUpPeriodPipe } from "../../../../../../../core/pipes/sign-up-period.pipe";
 
 const routes: Routes = [
   {
@@ -49,7 +51,9 @@ const routes: Routes = [
     MatNativeDateModule,
     RouterModule.forChild(routes),
     IdToNamePipe,
-    ConditionInputComponent
+    ConditionInputComponent,
+    DateTimePickerComponent,
+    SignUpPeriodPipe
 ]
 })
 export class DetailsModule { }

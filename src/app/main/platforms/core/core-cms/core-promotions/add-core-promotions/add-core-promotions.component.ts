@@ -14,13 +14,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs/operators';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonDataService, ConfigService, LocalStorageService } from 'src/app/core/services';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { ACTIVITY_STATUSES, DEVICE_TYPES, VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
 import { compressImage } from 'src/app/core/utils';
+import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
   selector: 'app-add-core-promotions',
@@ -37,9 +36,8 @@ import { compressImage } from 'src/app/core/utils';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    DateTimePickerComponent,
   ],
 })
 export class AddCorePromotionsComponent implements OnInit {
@@ -58,7 +56,6 @@ export class AddCorePromotionsComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddCorePromotionsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { ParentId: number, Type: number },
-
     private fb: UntypedFormBuilder,
     private _snackBar: MatSnackBar,
     private apiService: CoreApiService,
@@ -66,35 +63,33 @@ export class AddCorePromotionsComponent implements OnInit {
     private localStorageService: LocalStorageService,
     public configService: ConfigService,
     private translate: TranslateService,
-    public dateAdapter: DateAdapter<Date>
   ) {
-    this.dateAdapter.setLocale('en-GB');
   }
 
   ngOnInit() {
     this.isParent = !!this.data?.ParentId;
     this.partners = this.localStorageService.get('core_partners');
-    this.getPromotionTypes(this.data?.ParentId);
+    // this.getPromotionTypes(this.data?.ParentId);
     this.createForm();
     this.getDate();
   }
 
-  getPromotionTypes(val) {
-    if (!this.isParent) {
-      this.partnerId = +val;
+  // getPromotionTypes(val) {
+  //   if (!this.isParent) {
+  //     this.partnerId = +val;
 
-    }
-    this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
-      true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.promotionTypes = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
+  //   }
+  //   this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
+  //     true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
+  //     .pipe(take(1))
+  //     .subscribe(data => {
+  //       if (data.ResponseCode === 0) {
+  //         this.promotionTypes = data.ResponseObject;
+  //       } else {
+  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+  //       }
+  //     });
+  // }
 
   getDate() {
     let fromDay = new Date();

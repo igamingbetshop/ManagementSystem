@@ -19,6 +19,7 @@ import { Controllers, Methods, OddsTypes, ModalSizes, GridMenuIds } from 'src/ap
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { ExportService } from "../../../services/export.service";
+import { formatDateTime, formattedNumber } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-bets',
@@ -32,8 +33,8 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
   public rowData1 = [];
   public columnDefs1;
   public gameId: string | null = null;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public partners = [];
   public partnerId;
@@ -416,20 +417,6 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
         },
       },
       {
-        headerName: 'Common.PossibleWin',
-        headerValueGetter: this.localizeHeader.bind(this),
-        field: 'PossibleWin',
-        sortable: true,
-        resizable: true,
-        filter: 'agNumberColumnFilter',
-        filterParams: {
-          buttons: ['apply', 'reset'],
-          closeOnApply: true,
-          filterOptions: this.filterService.numberOptions
-        },
-        // valueFormatter: params => params.data.PossibleWin.toFixed(2),
-      },
-      {
         headerName: 'Common.BetAmount',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'BetAmount',
@@ -456,6 +443,19 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
           filterOptions: this.filterService.numberOptions
         },
         // valueFormatter: params => params.data.BetAmount.toFixed(2),
+      },
+      {
+        headerName: 'Common.PossibleWin',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'PossibleWin',
+        sortable: true,
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
       },
       {
         headerName: 'Common.BetDate',
@@ -495,6 +495,19 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
         headerName: 'Clients.Rake',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'Rake',
+        resizable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
+        headerName: 'Clients.BonusAmount',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'BonusAmount',
+        sortable: true,
         resizable: true,
         filter: 'agNumberColumnFilter',
         filterParams: {
@@ -769,8 +782,8 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {
@@ -849,9 +862,13 @@ export class ReportByBetsComponent extends BasePaginatedGridComponent implements
               })
               params.success({ rowData: mappedRows, rowCount: data.ResponseObject.Bets.Count });
               this.gridApi?.setPinnedBottomRowData([{
-                PossibleWin: `${(data.ResponseObject.TotalPossibleWinAmount.toFixed(2))} ${this.playerCurrency}`,
-                BetAmount: `${(data.ResponseObject.TotalBetAmount.toFixed(2))} ${this.playerCurrency}`,
-                WinAmount: `${(data.ResponseObject.TotalWinAmount.toFixed(2))} ${this.playerCurrency}`
+                PossibleWin: `${formattedNumber(data.ResponseObject.TotalPossibleWinAmount)} ${this.playerCurrency}`,
+                BetAmount: `${formattedNumber(data.ResponseObject.TotalBetAmount)} ${this.playerCurrency}`,
+                WinAmount: `${formattedNumber(data.ResponseObject.TotalWinAmount)} ${this.playerCurrency}`,
+                Profit: `${formattedNumber(data.ResponseObject.TotalProfit)} ${this.playerCurrency}`,
+                BonusWinAmount: `${formattedNumber(data.ResponseObject.TotalBonusWinAmount)} ${this.playerCurrency}`,
+                BonusAmount: `${formattedNumber(data.ResponseObject.TotalBonusBetAmount)} ${this.playerCurrency}`,
+
               }
               ]);
             } else {

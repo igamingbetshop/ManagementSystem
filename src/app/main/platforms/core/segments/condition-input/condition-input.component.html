@@ -13,17 +13,21 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field class="mr-15">
-      <input matInput type="number" [pattern]="inputPattern" placeholder="{{ placeholder | translate }}"
+      <input matInput type="number" class="conditional-input" [pattern]="inputPattern" placeholder="{{ placeholder | translate }}"
         [(ngModel)]="selectedConditionValue">
     </mat-form-field>
-    <button mat-raised-button color="primary" [disabled]="!selectedConditionType || !selectedConditionValue"
-      (click)="addCondition()">+</button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      [disabled]="isButtonDisabled()"
+      (click)="addCondition()">+
+    </button>
   </div>
 
   <div class="condition-box">
     @for (condition of conditions; track $index) {
     <span class="condition-box-item">
-      {{ condition.ConditionType.Name }} {{ condition.ConditionValue }}
+      {{ condition?.ConditionType?.Name }} {{ condition?.ConditionValue }}
       <mat-icon class="close-icon" (click)="removeCondition($index)">close</mat-icon>
     </span>
     }

@@ -10,3 +10,4 @@ export * from './affiliatesStates';
 export * from './betStatuses';
 export * from './gridMenuIds';
 export * from './notifications-object-types.enum';
+export * from './notifications-messiges.enum';

@@ -28,8 +28,8 @@ export class PartnerEmailsComponent extends BasePaginatedGridComponent implement
   public rowData = [];
   public partners: any[] = [];
   public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public partnerId;
 
   public states:any[] = [];
@@ -158,8 +158,8 @@ export class PartnerEmailsComponent extends BasePaginatedGridComponent implement
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

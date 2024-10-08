@@ -2,7 +2,7 @@
 <div class="container">
 
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Clients.PaymentSettings' | translate}}</div>
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Clients.PaymentSettings' | translate}}</div>
     <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
     <button mat-stroked-button class="mat-btn" (click)="openDialog('Add', $event)">{{'Clients.AddAccount' | translate}}</button>
     <button mat-stroked-button class="mat-btn" [disabled]="isRowSelected()" (click)="openDialog('Edit', selectedRow)">Edit
@@ -15,6 +15,7 @@
       id="kyc"
       #agGrid
       class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
       [headerHeight]="33"
       [rowHeight]="42"
       [suppressCopyRowsToClipboard]="true"
@@ -23,14 +24,22 @@
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
       [cacheBlockSize]="cacheBlockSize"
+      [pagination]="true"
+      [paginationPageSize]="5000"
+      [sideBar]="sideBar"
       (gridReady)="onGridReady($event)"
       (rowSelected)="onRowSelected($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
       rowSelection="single">
     </ag-grid-angular>
   </div>
+  <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
 </div>
 

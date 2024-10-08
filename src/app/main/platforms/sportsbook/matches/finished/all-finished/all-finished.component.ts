@@ -14,6 +14,7 @@ import { MATCH_STATUSES } from 'src/app/core/constantes/statuses';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { CellClickedEvent } from 'ag-grid-community';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 
 @Component({
@@ -32,8 +33,8 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
   public path = 'matches';
   public matches: any[] = [];
   public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public Statuses = MATCH_STATUSES;
   public frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
@@ -60,8 +61,8 @@ export class AllFinishedComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

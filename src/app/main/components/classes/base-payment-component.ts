@@ -15,7 +15,7 @@ import { CoreApiService } from "../../platforms/core/services/core-api.service";
 import { AgGridAngular } from "ag-grid-angular";
 import { SnackBarHelper } from "../../../core/helpers/snackbar.helper";
 import { Controllers, Methods, OddsTypes, ModalSizes, ObjectTypes } from "src/app/core/enums";
-import { formattedNumber } from "../../../core/utils";
+import { formatDateTime, formattedNumber } from "../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel, syncPaginationWithBtn } from "src/app/core/helpers/ag-grid.helper";
 import { AgDropdownFilter } from "../grid-common/ag-dropdown-filter/ag-dropdown-filter.component";
 import { AgDateTimeFilter } from "../grid-common/ag-date-time-filter/ag-date-time-filter.component";
@@ -51,8 +51,8 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
   public dialog: MatDialog;
   protected apiService: CoreApiService;
   public rowClassRules;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public oldData;
   private playerCurrency: string;
   private paymentSystems = [];
@@ -187,8 +187,8 @@ export class BasePaymentComponent extends BasePaginatedGridComponent implements 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getpaymentRequestStates() {

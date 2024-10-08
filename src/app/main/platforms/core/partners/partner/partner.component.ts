@@ -9,62 +9,11 @@ import { ApiService, ConfigService } from "../../../../../core/services";
   templateUrl: './partner.component.html',
 })
 export class PartnerComponent implements OnInit {
-  tabs: RouteTabItem[] = [
-    {
-      label: 'Clients.Main',
-      route: 'main'
-    },
-    {
-      label: 'Clients.PaymentSettings',
-      route: 'payment-settings'
-    },
-    {
-      label: 'Partners.ProductSettings',
-      route: 'product-settings'
-    },
-    {
-      label: 'Partners.CurrencySettings',
-      route: 'currency-settings'
-    },
-    {
-      label: 'Partners.LanguageSettings',
-      route: 'language-settings'
-    },
-    {
-      label: 'Clients.ProviderSettings',
-      route: 'provider-settings'
-    },
-    {
-      label: 'Clients.ProductLimits',
-      route: 'product-limits'
-    },
-    {
-      label: 'Partners.PaymentLimits',
-      route: 'payment-limits'
-    },
-    {
-      label: 'Partners.ComplimentaryPointRates',
-      route: 'complimentary-point-rates'
-    },
-    {
-      label: 'Partners.PaymentInfo',
-      route: 'payment-info'
-    },
-    {
-      label: 'Partners.CountrySettings',
-      route: 'country-settings'
-    },
-    {
-      label: 'Partners.WebSiteSettings',
-      route: 'web-site-settings'
-    },
-    {
-      label: 'Partners.Keys',
-      route: 'keys'
-    },
-  ];
+  tabs: RouteTabItem[] = [];
   public partnerId;
   public partnerName;
+  public tabsData = JSON.parse(localStorage.getItem('adminMenu'))[0].Pages.find(item => item.Id === 18).Pages;
+
 
   constructor(private apiService: ApiService,
     private activateRoute: ActivatedRoute,
@@ -75,13 +24,19 @@ export class PartnerComponent implements OnInit {
   ngOnInit(): void {
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
+    this.setTabs(this.tabsData);
   }
 
-  onTabClick(tab: any, event: Event) {
-    event.preventDefault();
-    const queryParams = { ...this.activateRoute.snapshot.queryParams };
-    delete queryParams['id'];
-    this.router.navigate(['/main/platform/partners/partner', tab.route], { queryParams: queryParams });
+  setTabs(backendData: any[]) {
+    this.tabs = backendData.map(item => {
+      const parts = item.Route.split('/');
+      const lastPart = parts[parts.length - 1];
+
+      return {
+        label: item.Name,
+        route: lastPart,
+      };
+    });
   }
 
 }

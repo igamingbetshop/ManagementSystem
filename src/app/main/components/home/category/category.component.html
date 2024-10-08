@@ -1,10 +1,7 @@
 <div class="category-container">
   <div class="category-header">
     <div class="dark-effect" [ngClass]="categoryName"></div>
-    <div class="category-header-inner"
-      [ngClass]="categoryName"
-      [style.background]="categoryData.Color"
-      >
+    <div class="category-header-inner" [ngClass]="categoryName" [style.background]="categoryData.Color">
       <mat-icon>{{categoryData.Icon}}</mat-icon>
       <div class="title">{{categoryData.Name}}</div>
     </div>
@@ -13,65 +10,78 @@
 
   <div class="category-content" [ngClass]="categoryName">
     <ul class="category-items">
-      <li class="item"
-
-      [ngClass]="categoryName"
-      *ngFor="let category of categoryData.Pages"
-      (menuOpened)="menuOpened(category, item)"
-      (menuClosed)="menuClosed(item)"
-      mat-icon-button
-      [matMenuTriggerFor]="!!category?.Pages.length && !category.Route ? nestedMenu : null"
-      (click)="navigatePath(category, item); $event.stopPropagation()">
-
-        <span>
-          <span #item class="item-name" [class.dynamic] = "category?.ApiRequest" [class.has-arrow]="category?.Pages.length && !category?.Route || category?.ApiRequest && !category?.Route ">{{category.Name | translate}}</span>
-          <!-- <span class="icon-edit" aria-hidden="true" *ngIf = "category?.ApiRequest" (click)="navigateEditPath(category); $event.stopPropagation(); $event.preventDefault()"></span> -->
-        </span>
-
-        <mat-menu #nestedMenu="matMenu" class="nested-home-dropdown" xPosition="after" panelClass="overley-menu">
-          <div class="dropdown-item"
-               *ngFor="let nestedCategory of category?.Pages"
-               (click)="navigatePath(nestedCategory, nestedItem, showNestedItem); $event.stopPropagation();">
-            <span>
-              <span #nestedItem class="item-name nested"  [class.has-arrow]="(nestedCategory.Pages && nestedCategory.isDynamic) || (!nestedCategory.isDynamic && nestedCategory.Pages?.length > 0)">{{nestedCategory.Name | translate}}</span>
-            </span>
-
-            <div #showNestedItem class="nested-items">
+      @for (category of categoryData.Pages; track $index) {
+        <li class="item" [ngClass]="categoryName"
+          (menuOpened)="menuOpened(category, item)" (menuClosed)="menuClosed(item)" mat-icon-button
+          [matMenuTriggerFor]="!!category?.Pages.length && !category.Route ? nestedMenu : null"
+          (click)="navigatePath(category, item); $event.stopPropagation()">
+  
+          <span>
+            <span #item class="item-name" [class.dynamic]="category?.ApiRequest"
+            title="{{category.Name | translate}}"
+              [class.has-arrow]="category?.Pages.length && !category?.Route || category?.ApiRequest && !category?.Route ">
+              {{category.Name | translate}}</span>
+            <!-- <span class="icon-edit" aria-hidden="true" *ngIf = "category?.ApiRequest" (click)="navigateEditPath(category); $event.stopPropagation(); $event.preventDefault()"></span> -->
+          </span>
+  
+          <mat-menu #nestedMenu="matMenu" class="nested-home-dropdown" xPosition="after" panelClass="overley-menu">
+            @for (nestedCategory of category?.Pages; track $index) {
               <div class="dropdown-item"
-                   *ngFor="let secondNestedCategory of nestedCategory?.Pages"
-                   (click)="navigatePath(secondNestedCategory, nestedTwoItem, showTwoNestedItem); $event.stopPropagation();">
-                <div>
-                  <div #nestedTwoItem class="item-name nested" [class.has-arrow]="(secondNestedCategory.Pages && secondNestedCategory.isDynamic) || (!secondNestedCategory.isDynamic && secondNestedCategory.Pages?.length > 0)">{{secondNestedCategory.Name | translate}}</div>
-                </div>
-
-                <div #showTwoNestedItem class="nested-items">
-                  <div class="dropdown-item"
-                       *ngFor="let thirdNestedCategory of secondNestedCategory?.Pages"
-                       (click)="navigatePath(thirdNestedCategory, nestedThreeItem, showThreeNestedItem); $event.stopPropagation();">
-                    <div>
-                      <div  #nestedThreeItem class="item-name nested" [class.has-arrow]="(thirdNestedCategory.Pages && thirdNestedCategory.isDynamic) || (!thirdNestedCategory.isDynamic && thirdNestedCategory.Pages?.length > 0)">{{thirdNestedCategory.Name}}</div>
-                    </div>
-
-                    <div #showThreeNestedItem class="nested-items">
-                      <div class="dropdown-item"
-                           *ngFor="let FourNestedCategory of thirdNestedCategory?.Pages"
-                           (click)="navigatePath(FourNestedCategory, nestedFourItem, nestedFourItem); $event.stopPropagation();">
-                        <div>
-                          <div  #nestedFourItem class="item-name nested" [class.has-arrow]="(FourNestedCategory.Pages && FourNestedCategory.isDynamic) || (!FourNestedCategory.isDynamic && FourNestedCategory.Pages?.length > 0)">{{FourNestedCategory.Name}}</div>
-                        </div>
-
+                (click)="navigatePath(nestedCategory, nestedItem, showNestedItem); $event.stopPropagation();">
+                <span>
+                  <span #nestedItem class="item-name nested"
+                    [class.has-arrow]="(nestedCategory.Pages && nestedCategory.isDynamic) || (!nestedCategory.isDynamic && nestedCategory.Pages?.length > 0)">
+                    {{nestedCategory.Name | translate}}
+                  </span>
+                </span>
+    
+                <div #showNestedItem class="nested-items">
+                  @for (secondNestedCategory of nestedCategory?.Pages; track $index) {
+                    <div class="dropdown-item"
+                      (click)="navigatePath(secondNestedCategory, nestedTwoItem, showTwoNestedItem); $event.stopPropagation();">
+                      <div>
+                        <div #nestedTwoItem class="item-name nested"
+                          [class.has-arrow]="(secondNestedCategory.Pages && secondNestedCategory.isDynamic) || (!secondNestedCategory.isDynamic && secondNestedCategory.Pages?.length > 0)">
+                          {{secondNestedCategory.Name | translate}}</div>
                       </div>
+      
+                      <div #showTwoNestedItem class="nested-items">
+                        @for (thirdNestedCategory of secondNestedCategory?.Pages; track $index) {
+                          <div class="dropdown-item"
+                            (click)="navigatePath(thirdNestedCategory, nestedThreeItem, showThreeNestedItem); $event.stopPropagation();">
+                            <div>
+                              <div #nestedThreeItem class="item-name nested"
+                                [class.has-arrow]="(thirdNestedCategory.Pages && thirdNestedCategory.isDynamic) || (!thirdNestedCategory.isDynamic && thirdNestedCategory.Pages?.length > 0)">
+                                {{thirdNestedCategory.Name}}</div>
+                            </div>
+        
+                            <div #showThreeNestedItem class="nested-items">
+                              @for (FourNestedCategory of thirdNestedCategory?.Pages; track $index) {
+                                <div class="dropdown-item" 
+                                  (click)="navigatePath(FourNestedCategory, nestedFourItem, nestedFourItem); $event.stopPropagation();">
+                                  <div>
+                                    <div #nestedFourItem class="item-name nested"
+                                      [class.has-arrow]="(FourNestedCategory.Pages && FourNestedCategory.isDynamic) || (!FourNestedCategory.isDynamic && FourNestedCategory.Pages?.length > 0)">
+                                      {{FourNestedCategory.Name}}</div>
+                                  </div>
+          
+                                </div>
+                              }
+                            </div>
+        
+                          </div>
+                        }
+                      </div>
+      
                     </div>
-
-                  </div>
+                  }
                 </div>
-
+    
               </div>
-            </div>
-
-          </div>
-        </mat-menu>
-      </li>
+            }
+          </mat-menu>
+        </li>
+      } 
     </ul>
   </div>
 

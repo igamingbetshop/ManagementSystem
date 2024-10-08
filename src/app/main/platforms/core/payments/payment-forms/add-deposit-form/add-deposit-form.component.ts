@@ -21,7 +21,7 @@ export class AddDepositFormComponent implements OnInit {
   selectedBank = {
     Accounts: []
   };
-  fromDate = new Date();
+  fromDate: any;;
   formGroup: UntypedFormGroup;
   isSendingRequest = false; 
 

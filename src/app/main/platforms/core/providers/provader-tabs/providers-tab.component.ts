@@ -10,12 +10,12 @@ export class ProvidersTabComponent implements OnInit {
 
   tabs: RouteTabItem[] = [
     {
-      label: 'Main Info',
+      label: 'Agents.MainInfo',
       route: 'main'
     },
     {
-      label: 'Provider',
-      route: 'provider'
+      label: 'Products.Products',
+      route: 'product',
     },
   ];
 

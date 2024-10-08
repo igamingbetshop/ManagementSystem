@@ -4,7 +4,10 @@
       <mat-select (selectionChange)="onPartnerChange($event.value)"
         placeholder="{{'Partners.SelectPartner' | translate}}" panelClass="overlay-dropdown" disableOptionCentering>
         <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+        @for (partner of partners; track $index) {
+          <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
+
+        }
       </mat-select>
     </div>
     <div class="contianer-wrap">
@@ -20,15 +23,15 @@
       </div>
 
       <div class="calendar-picker start">
-        <input matInput  [matDatepicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
+        <input matInput [matDatepicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
         <mat-datepicker-toggle matSuffix [for]="pickerStart">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
         </mat-datepicker-toggle>
         <mat-datepicker #pickerStart></mat-datepicker>
       </div>
-
+      
       <div class="calendar-picker">
-        <input matInput  [matDatepicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
+        <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd">
           <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
         </mat-datepicker-toggle>

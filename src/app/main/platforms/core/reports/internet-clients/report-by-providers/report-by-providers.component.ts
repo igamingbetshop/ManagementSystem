@@ -9,6 +9,7 @@ import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-providers',
@@ -19,8 +20,8 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
   @ViewChild('agGrid') agGrid: AgGridAngular;
   rowData = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   partners = [];
   partnerId;
@@ -113,8 +114,8 @@ export class ReportByProvidersComponent extends BasePaginatedGridComponent imple
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

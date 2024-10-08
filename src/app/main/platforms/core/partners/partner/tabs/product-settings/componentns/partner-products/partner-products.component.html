@@ -1,6 +1,7 @@
 <div class="action-content">
   <div class="title">{{'Partners.PartnerProducts' | translate}}</div>
   <button mat-stroked-button class="mat-export-btn mat-export-btn-partner" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+  <button mat-stroked-button class="mat-resets-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 
   <div class="bulk-editor-dropdown">
     <button mat-stroked-button class="mat-bulk-btn"
@@ -54,6 +55,10 @@
     [ensureDomOrder]="true"
     [enableCellTextSelection]="true"
     [getContextMenuItems]="getContextMenuItems"
+    (columnPinned)="onColumnPinned($event)"
+    (columnMoved)="onColumnMoved($event)"
+    (columnResized)="onColumnResized($event)"
+    (columnVisible)="onColumnVisible($event)"
     rowSelection="multiple">
   </ag-grid-angular>
   <div class="pages-sizes">

@@ -16,7 +16,7 @@ import 'ag-grid-enterprise';
 import { DatePipe } from "@angular/common";
 import { TextEditorComponent } from "../../../../../components/grid-common/text-editor.component";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { formattedNumber } from "../../../../../../core/utils";
+import { formatDate, formattedNumber } from "../../../../../../core/utils";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
@@ -33,8 +33,8 @@ import { SelectRendererComponent } from 'src/app/main/components/grid-common/sel
 export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public partners = [];
   public partnersOption = [];
@@ -610,8 +610,8 @@ export class ReportByBonusDetailsComponent extends BasePaginatedGridComponent im
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDate(fromDate);
+    this.toDate = formatDate(toDate);    
   }
 
   onDateChange(event: any) {

@@ -1,109 +1,116 @@
 @import "mixins.scss";
 @import "variables.scss";
 
-.container {
-  @include container-style;
-  height: 100%;
-  .main-content {
-    width: 100%;
+
+:host {
+  .hide {
+    display: none;
+  }
+
+  .container {
+    @include container-style;
     height: 100%;
-    display: flex;
-    column-gap: 10px;
-
-    .left-panel {
-      width: 70%;
-    }
-
-    .right-panel {
-      width: 30%;
-    }
-
-  .action-content {
-      @include action-style;
-
-    .title {
-      &.right {
-        font-size: 17px;
-      }
-    }
-      .partner-dropdown {
-        margin-left: 8px;
-        @include dropdown-style;
-      }
-
-      .mat-export-btn {
-        margin-left: 8px;
-        @include mat-export-btn-style;
-      }
-    }
-
-    .grid-content {
+    .main-content {
       width: 100%;
-      height: calc(100% - 62px);
-      position: relative;
-      ::ng-deep {
-        ag-grid-angular {
-          width: 100%;
-          height: 100%;
-        }
+      height: 100%;
+      display: flex;
+      column-gap: 10px;
+  
+      .left-panel {
+        width: 70%;
       }
   
-      .custom-pagination {
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-  
-  
-        .pages-sizes {
-          padding-left: 10px;
-          padding-right: 10px;
-  
-          @include grid-dropdown-style;
-          
-        }
-  
-        .current-paging {
-          .input {
-            background-color: $grey-blue-4;
-            padding: 4.5px 0 !important;
-            border-radius: 4px;
-            color: $white;
-            outline: 0;
-            border: initial;
-            max-width: 38px;
-            width: 100%;
-            font-size: 14px;
-          }
-        }
+      .right-panel {
+        width: 30%;
       }
   
-      // .btn-action {
-      //   display: flex;
-      //   column-gap: 10px;
+    .action-content {
+        @include action-style;
   
-      //   .mat-btn {
-      //     @include mat-btn-style;
-      //   }
-      // }
-      .grid-action {
-        position: absolute;
-        right: 0;
-        bottom: 15px;
-        display: flex;
-        justify-content: flex-end;
+      .title {
+        &.right {
+          font-size: 17px;
+        }
+      }
         .partner-dropdown {
-          margin-right: 8px;
+          margin-left: 8px;
           @include dropdown-style;
         }
   
-        .mat-btn {
-          margin-right: 8px;
-          @include mat-btn-style;
+        .mat-export-btn {
+          margin-left: 8px;
+          @include mat-export-btn-style;
         }
-
       }
+  
+      .grid-content {
+        width: 100%;
+        height: calc(100% - 62px);
+        position: relative;
+        ::ng-deep {
+          ag-grid-angular {
+            width: 100%;
+            height: 100%;
+          }
+        }
+    
+        .custom-pagination {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+    
+    
+          .pages-sizes {
+            padding-left: 10px;
+            padding-right: 10px;
+    
+            @include grid-dropdown-style;
+            
+          }
+    
+          .current-paging {
+            .input {
+              background-color: $grey-blue-4;
+              padding: 4.5px 0 !important;
+              border-radius: 4px;
+              color: $white;
+              outline: 0;
+              border: initial;
+              max-width: 38px;
+              width: 100%;
+              font-size: 14px;
+            }
+          }
+        }
+    
+        // .btn-action {
+        //   display: flex;
+        //   column-gap: 10px;
+    
+        //   .mat-btn {
+        //     @include mat-btn-style;
+        //   }
+        // }
+        .grid-action {
+          position: absolute;
+          right: 0;
+          bottom: 15px;
+          display: flex;
+          justify-content: flex-end;
+          .partner-dropdown {
+            margin-right: 8px;
+            @include dropdown-style;
+          }
+    
+          .mat-btn {
+            margin-right: 8px;
+            @include mat-btn-style;
+          }
+  
+        }
+      }
+  
     }
-
   }
 }
 

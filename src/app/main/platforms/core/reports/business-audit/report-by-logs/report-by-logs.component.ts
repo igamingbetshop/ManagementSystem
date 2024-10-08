@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { BasePaginatedGridComponent } from "../../../../../components/classes/base-paginated-grid-component";
 import { AgGridAngular } from "ag-grid-angular";
 import { CoreApiService } from "../../../services/core-api.service";
@@ -13,7 +13,8 @@ import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { Subject } from 'rxjs';
 import { AgDateTimeFilter } from 'src/app/main/components/grid-common/ag-date-time-filter/ag-date-time-filter.component';
-import { DateHelperGTM0 } from 'src/app/main/components/partner-date-filter/data-helper-gtm0.class';
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-logs',
@@ -22,11 +23,11 @@ import { DateHelperGTM0 } from 'src/app/main/components/partner-date-filter/data
 })
 export class ReportByLogsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
-
+  title = 'Reports.ReportByLogs';
   rowData = [];
   filteredRowData = [];
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   filteredData;
   partners = [];
@@ -118,9 +119,9 @@ export class ReportByLogsComponent extends BasePaginatedGridComponent implements
   }
 
   setTime() {
-    const [fromDate, toDate] = DateHelperGTM0.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

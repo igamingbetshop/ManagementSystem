@@ -56,8 +56,8 @@ export class CreateTriggerSettingComponent implements OnInit {
     { Id: 2, Name: 'WinAmount' }
   ];
   formGroup: UntypedFormGroup;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   type;
   conditionTypes;
   isSendingRequest = false;
@@ -105,20 +105,19 @@ export class CreateTriggerSettingComponent implements OnInit {
       let validators = ['Name', 'PartnerId', 'Description'];
       switch (field.Id) {
         case 8:
-          validators.push('Percent');
           break;
         case 1:
-          validators.push('Percent', 'MinAmount', 'MinBetCount');
+          validators.push('MinAmount', 'MinBetCount');
           break;
         case 3:
         case 2:
-          validators.push('Percent', 'MinAmount', 'MinBetCount', 'BonusSettingCodes');
+          validators.push('MinAmount', 'MinBetCount', 'BonusSettingCodes');
           break;
         case 4:
           validators.push('BonusSettingCodes');
           break;
         case 7:
-          validators.push('Percent', 'Sequence');
+          validators.push('Sequence');
           break;
         case 11:
           validators.push('BonusSettingCodes');

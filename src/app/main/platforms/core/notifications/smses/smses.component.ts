@@ -13,6 +13,7 @@ import { CellDoubleClickedEvent } from "ag-grid-community";
 import { MatDialog } from "@angular/material/dialog";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 
 
@@ -28,8 +29,8 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
   title = "Notifications.ClientSmses";
   partners: any[] = [];
   selectedItem = 'today';
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   objectTypeId = NotificationsObjectType.Client;
   states = [
     {
@@ -155,8 +156,8 @@ export class SmsesComponent extends BasePaginatedGridComponent implements OnInit
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

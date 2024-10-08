@@ -1,4 +1,4 @@
-import { Component, Injector, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Injector, OnChanges, input, output } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { take } from 'rxjs/operators';
 
@@ -7,7 +7,6 @@ import { OpenerComponent } from 'src/app/main/components/grid-common/opener/open
 import { ButtonRendererComponent } from 'src/app/main/components/grid-common/button-renderer.component';
 import { CommonDataService } from 'src/app/core/services';
 import { CellDoubleClickedEvent } from 'ag-grid-community';
-import { DatePipe } from '@angular/common';
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { PromotionsService } from '../core-promotions.service';
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
@@ -18,9 +17,9 @@ import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
   styleUrls: ['./promotion-childs.component.scss']
 })
 export class PromotionChildsComponent extends BaseGridComponent implements OnChanges {
-  @Input() tableData: any[] = [];
-  @Output() childCharakterData: EventEmitter<any> = new EventEmitter<any>()
-  @Output() getParentData: EventEmitter<any> = new EventEmitter<any>()
+  tableData = input<[string]>() ;
+  childCharakterData = output()
+  getParentData= output()
   partnerId;
   frameworkComponents = {
     buttonRenderer: ButtonRendererComponent,
@@ -76,21 +75,11 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
       headerName: 'Common.StartDate',
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'StartDate',
-      cellRenderer: function (params) {
-        let datePipe = new DatePipe("en-US");
-        let dat = datePipe.transform(params.data.StartDate, 'medium');
-        return `${dat}`;
-      },
     },
     {
       headerName: 'Common.FinishDate',
       headerValueGetter: this.localizeHeader.bind(this),
       field: 'FinishDate',
-      cellRenderer: function (params) {
-        let datePipe = new DatePipe("en-US");
-        let dat = datePipe.transform(params.data.FinishDate, 'medium');
-        return `${dat}`;
-      },
     },
     {
       headerName: 'Partners.StyleType',
@@ -145,7 +134,7 @@ export class PromotionChildsComponent extends BaseGridComponent implements OnCha
   }
 
   ngOnChanges(): void {
-    this.rowData = this.tableData;
+    this.rowData = this.tableData();
   }
 
   subscribeToCurrentUpdate() {

@@ -2,22 +2,21 @@
 @import "mixins.scss";
 
 .home-container {
-  padding: 50px 36px 0 36px;
+  padding: 50px 15px 0 15px;
   box-sizing: border-box;
   @include desktop {
-    padding-top: fluidSizeOnly(50, 42, $media-desktop-size, $media-laptop-size);
+    padding-top: fluidSizeOnly(50, 30, $media-desktop-size, $media-laptop-size);
   }
 
   .categories {
     display: grid;
-    gap: 46px;
-    row-gap: 40px;
-    column-gap: 47px;
-    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    row-gap: 10px;
+    column-gap: 10px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 
     @include desktop {
-      row-gap: fluidSizeOnly(40, 30, $media-desktop-size, $media-laptop-size);
-      column-gap: fluidSizeOnly(47, 34, $media-desktop-size, $media-laptop-size);
+      gap: fluidSizeOnly(20, 15, $media-desktop-size, $media-laptop-size);
     }
 
     .category {
@@ -30,8 +29,7 @@
 @media screen and (max-width: $media-laptop) {
   .home-container {
     .categories {
-      row-gap: 30px;
-      column-gap: 34px;
+      gap: 30px;
       grid-template-columns: 1fr;
     }
   }

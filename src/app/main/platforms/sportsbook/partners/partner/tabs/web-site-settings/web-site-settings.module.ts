@@ -15,6 +15,8 @@ import { AddEditMenuComponent } from './add-edit-menu/add-edit-menu.component';
 import { AddEditSubMenuComponent } from './add-edit-sub-menu/add-edit-sub-menu.component';
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { TranslateModule } from "@ngx-translate/core";
+import { MenusGridComponent } from 'src/app/main/platforms/core/partners/partner/tabs/web-site-settings/menus-grid/menus-grid.component';
+import { AgGridModule } from 'ag-grid-angular';
 
 const routes: Routes = [
   {
@@ -39,8 +41,15 @@ const routes: Routes = [
     FormsModule,
     RouterModule.forChild(routes),
     MatCheckboxModule,
-    TranslateModule
-  ],
-  declarations: [WebSiteSettingsComponent, AddEditTranslationsComponent, AddEditMenuComponent, AddEditSubMenuComponent]
+    TranslateModule,
+    AgGridModule,
+    MenusGridComponent
+],
+  declarations: [
+    WebSiteSettingsComponent, 
+    AddEditTranslationsComponent, 
+    AddEditMenuComponent, 
+    AddEditSubMenuComponent,
+  ]
 })
 export class WebSiteSettingsModule { }

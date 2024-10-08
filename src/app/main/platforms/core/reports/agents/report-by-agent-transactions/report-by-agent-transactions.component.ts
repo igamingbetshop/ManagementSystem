@@ -13,6 +13,7 @@ import { DecimalPipe } from "@angular/common";
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import {ExportService} from "../../../services/export.service";
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-agent-transactions',
@@ -22,8 +23,8 @@ import {ExportService} from "../../../services/export.service";
 export class ReportByAgentTransactionsComponent extends BasePaginatedGridComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   public rowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public selectedItem;
@@ -169,8 +170,8 @@ export class ReportByAgentTransactionsComponent extends BasePaginatedGridCompone
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

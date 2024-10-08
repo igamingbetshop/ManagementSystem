@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
-import { ICellRendererParams } from "ag-grid-community";
+import { ICellRendererParams } from 'ag-grid-community';
+
 @Component({
   selector: 'app-select-renderer',
   template: `
@@ -14,13 +13,19 @@ import { ICellRendererParams } from "ag-grid-community";
       <mat-select #sel
                   (ngModelChange)="onChange(sel.value, $event)"
                   [(ngModel)]="params.value"
-                  [disabled]="disabled">
-        <mat-option *ngFor="let selection of selections" [value]="selection.Id">{{selection.Name}}</mat-option>
+                  [disabled]="disabled"
+                  [panelClass]="'custom-select-panel'"
+                  [ngStyle]="{'width.px': selectPanelWidth, 'min-width.px': selectPanelWidth}">
+                  @for(selection of selections; track $index) {
+                    <mat-option  [value]="selection.Id">
+                      {{ selection.Name }}
+                    </mat-option>
+                  }
       </mat-select>
     </div>
   `,
-    styles: [`
-      .mat-mdc-select {
+  styles: [`
+    .mat-mdc-select {
       height: 28px;
       border-radius: 6px;
       display: flex !important;
@@ -30,22 +35,21 @@ import { ICellRendererParams } from "ag-grid-community";
       background-color: #D1D1D2;
       color: $bg-color !important;
 
-        &[aria-expanded="true"] {
-          .mat-mdc-select-arrow {
-            background-color: #D1D1D2!important;
-            border-bottom: 5px solid #D1D1D2;
-            border-top: 5px solid transparent;
-            margin: 0 4px 4px 4px;
-            svg {
-              top: -200%;
-              left: 0;
-              transform: rotate(180deg);
-            }
+      &[aria-expanded="true"] {
+        .mat-mdc-select-arrow {
+          background-color: #D1D1D2 !important;
+          border-bottom: 5px solid #D1D1D2;
+          border-top: 5px solid transparent;
+          margin: 0 4px 4px 4px;
+          svg {
+            top: -200%;
+            left: 0;
+            transform: rotate(180deg);
           }
         }
+      }
 
       .mat-mdc-select-trigger {
-
         .mat-mdc-select-value {
           color: $bg-color;
 
@@ -67,7 +71,9 @@ import { ICellRendererParams } from "ag-grid-community";
         pointer-events: none;
       }
     }
-    `],
+
+
+  `],
   standalone: true,
   imports: [
     CommonModule,
@@ -75,14 +81,13 @@ import { ICellRendererParams } from "ag-grid-community";
     FormsModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
   ],
 })
 export class SelectRendererComponent implements ICellRendererAngularComp {
   public params;
   public selections: any[] = [];
   disabled: boolean = false;
+  selectPanelWidth: number = 100; 
   agInit(params: ICellRendererParams): void {
     this.params = params;
     this.selections = this.params.Selections || [];
@@ -91,6 +96,8 @@ export class SelectRendererComponent implements ICellRendererAngularComp {
     } else {
       this.disabled = this.params.disabled;
     }
+
+    this.calculateSelectPanelWidth();
   }
 
   refresh(params?: any): boolean {
@@ -101,5 +108,14 @@ export class SelectRendererComponent implements ICellRendererAngularComp {
     if (this.params.onchange instanceof Function) {
       this.params.onchange(this.params.data, val, this.params);
     }
+  }
+
+  calculateSelectPanelWidth() {
+    const longestWordLength = this.selections.reduce((longest, current) => {
+      const currentLength = current.Name.length;
+      return currentLength > longest ? currentLength : longest;
+    }, 0);
+
+    this.selectPanelWidth = longestWordLength * 8; 
   }
 }

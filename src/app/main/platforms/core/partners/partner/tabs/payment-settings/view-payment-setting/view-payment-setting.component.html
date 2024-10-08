@@ -160,9 +160,12 @@
             }
           </span>
           <span class="second-right">
-            @for (country of countriesEntites; track $index) {
+            <!-- @for (country of countriesEntites; track $index) {
               {{country}}
-            }
+            } -->
+
+            {{paymentSystem?.Countries.Ids | IdToName: this.countries}}
+
           </span>
         </div>
 
@@ -196,9 +199,8 @@
           </span>
 
           <span class="second-right">
-            @for (item of segmentesEntites; track $index) {
-              {{item}}
-            }
+            {{paymentSystem?.Segments?.Ids | IdToName: segments}}
+
           </span>
         </div>
 

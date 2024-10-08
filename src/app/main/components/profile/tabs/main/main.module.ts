@@ -12,6 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { MainComponent } from './main.component';
+import { ConfigurationsComponent } from "./configurations-grid/configurations-grid.component";
 
 const routes: Routes = [
   {
@@ -34,8 +35,9 @@ const routes: Routes = [
     TranslateModule,
     MatDialogModule,
     RouterModule.forChild(routes),
-
-  ],
-  declarations: [MainComponent]
+    ConfigurationsComponent
+],
+  declarations: [
+    MainComponent,]
 })
 export class MainModule { }

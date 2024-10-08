@@ -1,19 +1,10 @@
 <div class="container">
     <div class="content-action">
-      <div class="title"><a [routerLink]="['../../../all-active']">{{'Sport.ActiveMatches' | translate}}</a> / :{{'Sport.Calculation' | translate}}
+      <div class="title"><a [routerLink]="[routerLink]">{{title | translate}}</a> / :{{'Sport.Calculation' | translate}}
         <span class="title-span">{{matchId}}</span> &nbsp; {{name}}
       </div>
 
-    <!-- <div class="custom-dropdown">
-      <mat-select
-      #part  (selectionChange)="onPartnerChange(part.value)"
-        placeholder="{{'Partners.SelectPartner' | translate}}"
-        panelClass="overlay-dropdown"
-        disableOptionCentering>
-        <mat-option [value]='null'>{{'Partners.SelectPartner' | translate}}</mat-option>
-        <mat-option *ngFor="let partner of partners"  [value]="partner.Id">{{partner.Name}}</mat-option>
-      </mat-select>
-    </div> -->
+
     <button mat-stroked-button class="edit-btn" (click)="onEditChange()">{{'Common.Edit' | translate}}</button>
 
 

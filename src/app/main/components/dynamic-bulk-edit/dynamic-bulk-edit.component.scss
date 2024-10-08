@@ -1,0 +1,49 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.bulk-editor-container {
+  width: 245px;
+  padding: 20px 14px;
+  background-color: $gray-light-16;
+  border-radius: 4px;
+  z-index: 1;
+
+  .bulk-editor-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+    column-gap: 16px;
+
+    .mat-mdc-form-field {
+      width: 100%;
+      padding-bottom: 10px;
+    }
+
+
+  }
+
+  .bulk-editor-actions {
+    display: flex;
+    column-gap: 8px;
+    padding-top: 18px;
+
+    .bulk-primary-btn {
+      @include mat-btn-style;
+    }
+
+    .bulk-cancel-btn {
+      @include mat-cancel-btn-style;
+      margin-left: auto;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-mdc-menu-content {
+    background-color: $gray-light-16;
+  }
+
+  .mat-mdc-form-field-error-wrapper {
+    top: -5px!important;
+  }
+}

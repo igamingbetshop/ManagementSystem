@@ -16,32 +16,46 @@
 
   // .content-edit gets from helpers/_form-edit.scss
 
-  .accounts-container{
-    width: 49%;
-
-    .accounts-content {
-      width: 100%;
-
-      thead{
-        height: 40px;
-        margin-bottom: 20px ;
-        background-color:$blue-light-22;
-        th{
-          background-color:$blue-light-22;
-          padding: 0;
-          margin: 0;
-          color: #076192;
-        }
+  .accounts-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; // Optional: Add some space between the two sections
+  
+    .configurations-section, .accounts-section {
+      display: flex;
+      flex-direction: column;
+  
+      .title {
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: $title-color;
       }
-
-      tbody{
-        tr{
-          td{
-            color: $black-3;
-            background-color: $white;
-            height: 40px;
-            text-align: center;
-            margin-top: 7px;
+  
+      .accounts-content {
+        // width: 100%;
+  
+        thead {
+          height: 32px;
+          font-size: 14px;
+          background-color: $white;
+  
+          th {
+            background-color: $bg-color;
+            padding: 0;
+            margin: 0;
+            color: $white;
+          }
+        }
+  
+        tbody {
+          tr {
+            td {
+              color: $black-3;
+              background-color: $white;
+              height: 40px;
+              text-align: center;
+              // margin-top: 7px;
+            }
           }
         }
       }
@@ -51,7 +65,11 @@
 }
 
 .api-key-content {
-  padding-top: 16px;
+  padding-top: 8px;
+  display: flex;
+  div {
+    padding-left: 6px;
+  }
   .mat-btn {
     @include mat-btn-style;
   }

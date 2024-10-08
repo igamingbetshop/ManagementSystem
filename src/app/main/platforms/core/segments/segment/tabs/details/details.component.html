@@ -3,480 +3,460 @@
     <div class="title"><a [routerLink]="['../../../all-segments']">{{'Segments.Segments' | translate}}</a> /
       {{segmentId}} : {{'Segments.Details' |
       translate}}</div>
-    <button mat-stroked-button [class.disabled]="!PaymentSegment" class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
+    <button mat-stroked-button [class.disabled]="!PaymentSegment" class="edit-btn"
+      (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
   </div>
 
   <div class="content-edit">
-    @if (PaymentSegment) {
-      <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
 
-        <div>
-          <div class="first-hand">{{'Common.Id' | translate}}</div>
-          <div class="static-hand">{{PaymentSegment?.Id}}</div>
-        </div>
+    <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
 
-        <div>
-          <div class="first-hand">{{'Common.Status' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.State | IdToName: statuses}}</div>
-          <div class="form-field form-dropdown">
-            <mat-select [formControlName]="'State'">
-              @for (status of statuses; track $index) {
-                <mat-option [value]="status.Id">{{status.Name}}</mat-option>
-              }
-            </mat-select>
-          </div>
-        </div>
+      <div>
+        <div class="first-hand">{{'Common.Id' | translate}}</div>
+        <div class="static-hand">{{PaymentSegment()['Id']}}</div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Segments.SegmentMode' | translate}}</div>
-          <div class="static-hand">{{PaymentSegment?.Mode | IdToName: modes}}</div>
-
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
-          <div class="static-hand">{{PaymentSegment?.CreationTime | date: 'medium'}}</div>
-        </div>
-
-        <div style="height: auto">
-          <div class="first-hand" style="height: auto; min-height: 100%;">{{'LastUpdateTime' | translate}}</div>
-          <div class="static-hand ">{{PaymentSegment?.LastUpdateTime | date: 'medium'}}</div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Clients.Region' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.Region}}</div>
-          <div class="form-field form-input">
-            @if (PaymentSegment) {
-              <input matInput placeholder="{{'Clients.Region' | translate}}" formControlName="Region">
+      <div>
+        <div class="first-hand">{{'Common.Status' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment()['State'] | IdToName: statuses}}</div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'State'">
+            @for (status of statuses; track $index) {
+            <mat-option [value]="status.Id">{{status.Name}}</mat-option>
             }
-          </div>
+          </mat-select>
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.FirstName}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Clients.FirstName' | translate}}" formControlName="FirstName">
-          </div>
+      <div>
+        <div class="first-hand">{{'Segments.SegmentMode' | translate}}</div>
+        <div class="static-hand">{{PaymentSegment()['Mode'] | IdToName: modes}}</div>
+
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.CreationTime' | translate}}</div>
+        <div class="static-hand">{{PaymentSegment().CreationTime | date: 'medium'}}</div>
+      </div>
+
+      <div style="height: auto">
+        <div class="first-hand" style="height: auto; min-height: 100%;">{{'LastUpdateTime' | translate}}</div>
+        <div class="static-hand ">{{PaymentSegment().LastUpdateTime | date: 'medium'}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Region' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().Region}}</div>
+        <div class="form-field form-input">
+
+          <input matInput placeholder="{{'Clients.Region' | translate}}" [formControlName]="'Region'">
+
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Clients.LastName' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.LastName}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Clients.LastName' | translate}}" formControlName="LastName">
-          </div>
+      <div>
+        <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().FirstName}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Clients.FirstName' | translate}}" [formControlName]="'FirstName'">
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
-          <div class="static-hand">{{PaymentSegment?.PartnerId | IdToName: partners}}</div>
+      <div>
+        <div class="first-hand">{{'Clients.LastName' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().LastName}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Clients.LastName' | translate}}" formControlName="LastName">
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Common.Name' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.Name}}</div>
-          <div class="form-field form-input">
-            <input matInput [placeholder]="PaymentSegment?.Name" formControlName="Name">
-          </div>
+      <div>
+        <div class="first-hand">{{'Partners.PartnerName' | translate}}</div>
+        <div class="static-hand">{{PaymentSegment().PartnerId | IdToName: partners}}</div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Common.Name' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().Name}}</div>
+        <div class="form-field form-input">
+          <input matInput [placeholder]="PaymentSegment().Name" formControlName="Name">
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.SuccessWithdrawalPaymentSystem}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}" formControlName="SuccessWithdrawalPaymentSystem">
-          </div>
+      <div>
+        <div class="first-hand">{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().SuccessWithdrawalPaymentSystem}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Segments.SuccessWithdrawalPaymentSystem' | translate}}"
+            formControlName="SuccessWithdrawalPaymentSystem">
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Segments.IsKYCVerified' | translate}}</div>
-          <div class="second-hand">
-            @if( PaymentSegment.IsKYCVerified ) {
-              {{PaymentSegment?.IsKYCVerified | IdToName: commonStates}}
-            } @else {
-              {{'Common.All' | translate}}
+      <div>
+        <div class="first-hand">{{'Segments.IsKYCVerified' | translate}}</div>
+        <div class="second-hand">
+          @if( PaymentSegment().IsKYCVerified == true ) {
+            {{'Common.Yes' | translate}} 
+          } @else if( PaymentSegment().IsKYCVerified == false ) {
+            {{'Common.No' | translate}}
+          } @else {
+          {{'Common.All' | translate}}
+          }
+          
+        </div>
+        <div class="form-field form-dropdown">
+          <mat-select formControlName="IsKYCVerified" [placeholder]="'All'">
+            @for (KYC of commonStates; track $index) {
+            <mat-option [value]="KYC.Id">{{KYC.Name}}
+            </mat-option>
             }
-          </div>
-          <div class="form-field form-dropdown">
-            <mat-select formControlName="IsKYCVerified" [placeholder]="'All'">
-              @for (KYC of commonStates; track $index) {
-              <mat-option [value]="KYC.Id">{{KYC.Name}}
-              </mat-option>
-              }
-            </mat-select>
-          </div>
+          </mat-select>
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.IsEmailVerified' | translate}}</div>
+        <div class="second-hand">
+          @if( PaymentSegment().IsEmailVerified == true ) {
+            {{'Common.Yes' | translate}} 
+          } @else if( PaymentSegment().IsEmailVerified == false ) {
+            {{'Common.No' | translate}}
+          } @else {
+          {{'Common.All' | translate}}
+          }
         </div>
 
-        <div>
-          <div class="first-hand">{{'Clients.IsEmailVerified' | translate}}</div>
-          <div class="second-hand">
-            @if( PaymentSegment.IsEmailVerified ) {
-              {{PaymentSegment?.IsEmailVerified | IdToName: commonStates}}
-            } @else {
-              {{'Common.All' | translate}}
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'IsEmailVerified'" [placeholder]="'All'">
+            @for (state of commonStates; track $index) {
+            <mat-option [value]="state.Id">{{state.Name}}
+            </mat-option>
             }
-          </div>
-
-          <div class="form-field form-dropdown">
-            <mat-select formControlName="IsEmailVerified" [placeholder]="'All'">
-              @for (state of commonStates; track $index) {
-              <mat-option [value]="state.Id">{{state.Name}}
-              </mat-option>
-              }
-            </mat-select>
-          </div>
+          </mat-select>
         </div>
 
-        <div>
-          <div class="first-hand">{{'Clients.IsMobileNumberVerified' | translate}}</div>
-          <div class="second-hand">
-            @if( PaymentSegment.IsMobileNumberVerified ) {
-              {{PaymentSegment?.IsMobileNumberVerified | IdToName: commonStates}}
-            } @else {
-              {{'Common.All' | translate}}
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.IsMobileNumberVerified' | translate}}</div>
+        <div class="second-hand">
+          @if( PaymentSegment().IsMobileNumberVerified == true ) {
+            {{'Common.Yes' | translate}} 
+          } @else if( PaymentSegment().IsMobileNumberVerified == false ) {
+            {{'Common.No' | translate}}
+          } @else {
+          {{'Common.All' | translate}}
+          }
+
+        </div>
+
+        <div class="form-field form-dropdown">
+          <mat-select formControlName="IsMobileNumberVerified" [placeholder]="'All'">
+            @for (state of commonStates; track $index) {
+            <mat-option [value]="state.Id">{{state.Name}}
+            </mat-option>
             }
-          </div>
-
-          <div class="form-field form-dropdown">
-            <mat-select formControlName="IsMobileNumberVerified" [placeholder]="'All'">
-              @for (state of commonStates; track $index) {
-              <mat-option [value]="state.Id">{{state.Name}}
-              </mat-option>
-              }
-            </mat-select>
-          </div>
+          </mat-select>
         </div>
+      </div>
 
-        <div>
-          <div class="first-hand">{{'Common.Gender' | translate}}</div>
-          <div class="second-hand">
-            <div class="second-hand">
-              @if( PaymentSegment.Gender ) {
-                {{PaymentSegment.Gender | IdToName: genders}}
-              } @else {
-                {{'Common.All' | translate}}
-              }
-            </div>
-          </div>
-          <div class="form-field form-dropdown">
-            <mat-select [formControlName]="'Gender'" [placeholder]="'All'">
-              @for (gender of genders; track $index) {
-              <mat-option [value]="gender.Id">{{gender.Name}}
-              </mat-option>
-              }
-            </mat-select>
-          </div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Segments.Bonus' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.Bonus}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.Bonuses' | translate}}" formControlName="Bonuses">
-          </div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.ClientId}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.ClientIds' | translate}}" formControlName="ClientId">
-          </div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Segments.SuccessDepositPayment' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.SuccessDepositPaymentSystem}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Segments.SuccessDepositPaymentSystem' | translate}}"
-              [(ngModel)]="PaymentSegment.SuccessDepositPaymentSystem" formControlName="SuccessDepositPaymentSystem">
-          </div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Clients.Email' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.Email}}</div>
-          <div class="form-field form-input">
-            <input matInput placeholder="{{'Clients.Email' | translate}}" formControlName="Email">
-          </div>
-        </div>
-
-        <div>
-          <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.MobileCode}}</div>
-          <div class="form-field form-input">
-            <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}"
-              formControlName="MobileCode">
-          </div>
-        </div>
-
-        <div class="add-content group-row">
-          <div class="first-hand">{{'Segments.AffiliateId' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.AffiliateId}}</div>
-          @if(isEdit) {
-            <div class="form-field form-input wraper  hand-group">
-              <app-condition-input 
-                  [hasLabel]="false"
-                  [conditions]="addedConditions.AffiliateId.conditions" [operations]="operations"
-                  inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
-                  (conditionsChange)="addedConditions.AffiliateId.conditions = $event">
-                </app-condition-input>
-            </div>
+      <div>
+        <div class="first-hand">{{'Common.Gender' | translate}}</div>
+        <div class="second-hand">
+          @if( PaymentSegment().Gender ) {
+          {{PaymentSegment().Gender | IdToName: genders}}
+          } @else {
+          {{'Common.All' | translate}}
           }
         </div>
+        <div class="form-field form-dropdown">
+          <mat-select [formControlName]="'Gender'" [placeholder]="'All'">
+            @for (gender of genders; track $index) {
+            <mat-option [value]="gender.Id">{{gender.Name}}
+            </mat-option>
+            }
+          </mat-select>
+        </div>
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand">{{'Segments.AgentIds' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.AgentId}}</div>
-          @if(isEdit) {
-            <div class="form-field form-input wraper  hand-group">
-              <app-condition-input 
-                [hasLabel]="false"
-                [conditions]="addedConditions.AgentId.conditions" [operations]="operations"
-                inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
-                (conditionsChange)="addedConditions.AgentId.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div>
+        <div class="first-hand">{{'Clients.ClientId' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().ClientId}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Segments.ClientIds' | translate}}" formControlName="ClientId">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.SuccessDepositPayment' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment()['SuccessDepositPaymentSystem']}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Segments.SuccessDepositPaymentSystem' | translate}}"
+            [(ngModel)]="PaymentSegment()['SuccessDepositPaymentSystem']" formControlName="SuccessDepositPaymentSystem">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Clients.Email' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().Email}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Clients.Email' | translate}}" formControlName="Email">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Segments.MobileCode' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().MobileCode}}</div>
+        <div class="form-field form-input">
+          <input type="number" matInput placeholder="{{'Segments.MobileCode' | translate}}"
+            formControlName="MobileCode">
+        </div>
+      </div>
+
+      <div class="add-content group-row">
+        <div class="first-hand">{{'Segments.AffiliateId' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().AffiliateId}}</div>
+        <div class="form-field form-input">
+          <input matInput placeholder="{{'Segments.AffiliateId' | translate}}" formControlName="AffiliateId">
+        </div>
+      </div>
+
+      <div class="add-content group-row">
+        <div class="first-hand">{{'Segments.AgentIds' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().AgentId}}</div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper  hand-group">
+          <app-condition-input [hasLabel]="false" [conditions]="addedConditions.AgentId.conditions"
+            [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.AgentId.conditions = $event">
+          </app-condition-input>
+        </div>
+        }
+      </div>
+
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.SessionPeriod' | translate}}</div>
+        <div class="second-hand">
+          {{PaymentSegment().SessionPeriod}}
         </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.SessionPeriod' | translate}}</div>
-          <div class="second-hand">
-            {{PaymentSegment?.SessionPeriod}}
-          </div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper  hand-group">
+          <app-condition-input [hasLabel]="false" placeholder="{{ 'Common.InsertMinutes' | translate }}"
+            [conditions]="addedConditions.SessionPeriod.conditions" [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.SessionPeriod.conditions = $event">
+          </app-condition-input>
+        </div>
+        }
+      </div>
 
-          @if(isEdit) {
-            <div class="form-field form-input wraper  hand-group">
-              <app-condition-input 
-                [hasLabel]="false"
-                [conditions]="addedConditions.SessionPeriod.conditions" [operations]="operations"
-                inputPattern="^\d+$" placeholder="{{ 'Common.InsertMinutes' | translate }}"
-                (conditionsChange)="addedConditions.SessionPeriod.conditions = $event">
-              </app-condition-input>
-              </div>
-          }
+      <div class="add-content group-row" style="height: auto;">
+        <div class="first-hand hand-group" style="height: auto;">{{'Segments.SignUpPeriod' | translate}}</div>
+        <div class="second-hand">
+          {{PaymentSegment().SignUpPeriod | signUpPeriod }}
+        </div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper">
+
+          <div class="condition-content">
+            <div class="condition-row">
+                <mat-form-field class="mr-15">
+                    <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
+                    <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType"
+                        [ngModelOptions]="{'standalone': true}">
+                        <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
+                        @for (operation of operations; track $index) {
+                        <mat-option [value]="operation">{{operation.Name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="mr-15">
+                    <input matInput type="numbrer" class="sign-up-input" [matDatepicker]="picker1" #valueInput1="ngModel"
+                        [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue"
+                        [ngModelOptions]="{'standalone': true}">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+                <button [disabled]="valueInput1.invalid || !addedConditions.SignUpPeriod.selectedConditionType"
+                    mat-raised-button color="primary"
+                    (click)="addDateCondition(addedConditions.SignUpPeriod, true);">+</button>
+            </div>
+            <div class="condition-box">
+                @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
+                <span class="condition-box-item">
+                    {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'yyyy-MM-dd'}}
+                    <button mat-icon-button class="close-icon" (click)="removeCondition(addedConditions.SignUpPeriod, $index)">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                </span>
+                }
+            </div>
         </div>
 
-        <div class="add-content group-row" style="height: auto;">
-          <div class="first-hand hand-group" style="height: auto;">{{'Segments.SignUpPeriod' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.SignUpPeriod}}</div>
-            @if(isEdit) {
-            <div class="form-field form-input wraper">
-              <div class="condition-content">
-                <div class="condition-row">
-                    <mat-form-field class="mr-15">
-                        <mat-label>{{'Bonuses.SelectOperation' | translate}}</mat-label>
-                        <mat-select [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionType"
-                            [ngModelOptions]="{'standalone': true}">
-                            <mat-option [value]="">{{'Bonuses.SelectOperation' | translate}}</mat-option>
-                            @for (operation of operations; track $index) {
-                            <mat-option [value]="operation">{{operation.Name}}</mat-option>
-                            }
-                        </mat-select>
-                    </mat-form-field>
-                    <mat-form-field class="mr-15">
-                        <input matInput type="numbrer" [matDatepicker]="picker1" #valueInput1="ngModel"
-                            [(ngModel)]="addedConditions.SignUpPeriod.selectedConditionValue"
-                            [ngModelOptions]="{'standalone': true}">
-                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-                        <mat-datepicker #picker1></mat-datepicker>
-                    </mat-form-field>
-                    <button [disabled]="valueInput1.invalid || !addedConditions.SignUpPeriod.selectedConditionType"
-                        mat-raised-button color="primary"
-                        (click)="addDateCondition(addedConditions.SignUpPeriod, true);">+</button>
-                </div>
-                <div class="condition-box">
-                    @for (condition of addedConditions.SignUpPeriod.conditions; track $index) {
-                    <span class="condition-box-item">
-                        {{condition.ConditionType.Name}} {{condition.ConditionValue | date: 'short'}}
-                        <mat-icon class="close-icon"
-                            (click)="removeCondition(addedConditions.SignUpPeriod, $index)">close</mat-icon>
-                    </span>
-                    }
-                </div>
-            </div>
-
-            </div>
-          }
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.TotalBetsCount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.TotalBetsCount}}</div>
-          @if (isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input 
-                [hasLabel]="false"
-                [conditions]="addedConditions.TotalBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
-                (conditionsChange)="addedConditions.TotalBetsCount.conditions = $event">
-            </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.TotalBetsCount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().TotalBetsCount}}</div>
+        @if (isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input [hasLabel]="false" [conditions]="addedConditions.TotalBetsCount.conditions"
+            [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.TotalBetsCount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.SportBetsCount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.SportBetsCount}}</div>
-          @if(isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input 
-                [hasLabel]="false"
-                [conditions]="addedConditions.SportBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
-                (conditionsChange)="addedConditions.SportBetsCount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.SportBetsCount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().SportBetsCount}}</div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input [hasLabel]="false" [conditions]="addedConditions.SportBetsCount.conditions"
+            [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.SportBetsCount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.CasinoBetsCount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.CasinoBetsCount}}</div>
-          @if (isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input 
-                [hasLabel]="false"
-                [conditions]="addedConditions.CasinoBetsCount.conditions" [operations]="operations" inputPattern="^\d+$"
-                (conditionsChange)="addedConditions.CasinoBetsCount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.CasinoBetsCount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().CasinoBetsCount}}</div>
+        @if (isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input [hasLabel]="false" [conditions]="addedConditions.CasinoBetsCount.conditions"
+            [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.CasinoBetsCount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.TotalBetsAmount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.TotalBetsAmount}}</div>
-          @if(isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input 
-                [hasLabel]="false"
-                [conditions]="addedConditions.TotalBetsAmount.conditions" [operations]="operations" inputPattern="^\d+$"
-                (conditionsChange)="addedConditions.TotalBetsAmount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.TotalBetsAmount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().TotalBetsAmount}}</div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input [hasLabel]="false" [conditions]="addedConditions.TotalBetsAmount.conditions"
+            [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.TotalBetsAmount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.TotalDepositsCount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.TotalDepositsCount}}</div>
-          @if(isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input 
-                [conditions]="false"
-                [conditions]="addedConditions.TotalDepositsCount.conditions" [operations]="operations" inputPattern="^\d+$"
-                (conditionsChange)="addedConditions.TotalDepositsCount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.TotalDepositsCount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().TotalDepositsCount}}</div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input [conditions]="false" [conditions]="addedConditions.TotalDepositsCount.conditions"
+            [operations]="operations" inputPattern="^\d+$"
+            (conditionsChange)="addedConditions.TotalDepositsCount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-       <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.TotalDepositsAmount' | translate}}</div> 
-          <div class="second-hand">{{PaymentSegment?.TotalDepositsAmount}}</div>
-          @if(isEdit) {
-            <div  class="form-field form-input wraper hand-group">
-              <app-condition-input label="{{ 'Segments.TotalDepositsAmount' | translate }}"
-                [conditions]="addedConditions.TotalDepositsAmount.conditions" [operations]="operations"
-                inputPattern="^\d+(\.\d+)?$"
-                (conditionsChange)="addedConditions.TotalDepositsAmount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.TotalDepositsAmount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().TotalDepositsAmount}}</div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input label="{{ 'Segments.TotalDepositsAmount' | translate }}" [hasLabel]="false"
+            [conditions]="addedConditions.TotalDepositsAmount.conditions" [operations]="operations"
+            inputPattern="^\d+(\.\d+)?$" (conditionsChange)="addedConditions.TotalDepositsAmount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsCount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.TotalWithdrawalsCount}}</div>
-          @if (isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input label="{{ 'Segments.TotalWithdrawalsCount' | translate }}"
-                [conditions]="addedConditions.TotalWithdrawalsCount.conditions" [operations]="operations"
-                inputPattern="^\d+$"
-                (conditionsChange)="addedConditions.TotalWithdrawalsCount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsCount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().TotalWithdrawalsCount}}</div>
+        @if (isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input label="{{ 'Segments.TotalWithdrawalsCount' | translate }}" [hasLabel]="false"
+            [conditions]="addedConditions.TotalWithdrawalsCount.conditions" [operations]="operations"
+            inputPattern="^\d+$" (conditionsChange)="addedConditions.TotalWithdrawalsCount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-        <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsAmount' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.TotalWithdrawalsAmount}}</div>
-          @if(isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input label="{{ 'Segments.TotalWithdrawalsAmount' | translate }}"
-                [conditions]="addedConditions.TotalWithdrawalsAmount.conditions" [operations]="operations"
-                inputPattern="^\d+(\.\d+)?$"
-                (conditionsChange)="addedConditions.TotalWithdrawalsAmount.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.TotalWithdrawalsAmount' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().TotalWithdrawalsAmount}}</div>
+        @if(isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input label="{{ 'Segments.TotalWithdrawalsAmount' | translate }}" [hasLabel]="false"
+            [conditions]="addedConditions.TotalWithdrawalsAmount.conditions" [operations]="operations"
+            inputPattern="^\d+(\.\d+)?$"
+            (conditionsChange)="addedConditions.TotalWithdrawalsAmount.conditions = $event">
+          </app-condition-input>
         </div>
+        }
+      </div>
 
-         <div class="add-content group-row">
-          <div class="first-hand hand-group">{{'Segments.ComplimentaryPoint' | translate}}</div>
-          <div class="second-hand">{{PaymentSegment?.ComplimentaryPoint}}</div>
-          @if (isEdit) {
-            <div class="form-field form-input wraper hand-group">
-              <app-condition-input label="{{ 'Segments.ComplimentaryPoint' | translate }}"
-                [conditions]="addedConditions.ComplimentaryPoint.conditions" [operations]="operations"
-                inputPattern="^\d+(\.\d+)?$"
-                (conditionsChange)="addedConditions.ComplimentaryPoint.conditions = $event">
-              </app-condition-input>
-            </div>
-          }
-        </div> 
+      <div class="add-content group-row">
+        <div class="first-hand hand-group">{{'Segments.ComplimentaryPoint' | translate}}</div>
+        <div class="second-hand">{{PaymentSegment().ComplimentaryPoint}}</div>
+        @if (isEdit) {
+        <div class="form-field form-input wraper hand-group">
+          <app-condition-input label="{{ 'Segments.ComplimentaryPoint' | translate }}" [hasLabel]="false"
+            [conditions]="addedConditions.ComplimentaryPoint.conditions" [operations]="operations"
+            inputPattern="^\d+(\.\d+)?$" (conditionsChange)="addedConditions.ComplimentaryPoint.conditions = $event">
+          </app-condition-input>
+        </div>
+        }
+      </div>
 
-        <div></div>
-
-        <div style="max-width: 600px!important; height: 50px">
-          <div class="first-hand">{{'Segments.ClientStatuses' | translate}}</div>
-          <div class="second-hand" style="word-break: normal; overflow: visible; height: 35px;">
-            <ul
-              style="padding: 0; display: flex; list-style-type: none;  background: white; padding: 8px; height: 35px; background-color: white;">
-              @for (state of  clientStates; track $index) {
-                <li style="margin-right: 7px ;">
-                  <mat-checkbox disabled="true" labelPosition="before" [(ngModel)]="state.checked"
+      <div style="max-width: 700px!important; height: 50px; margin-top: 15px;">
+        <div class="first-hand" style="height: 70px;">{{'Segments.ClientStatuses' | translate}}</div>
+        <div class="second-hand" style="word-break: normal; overflow: visible; height: 70px;">
+          <ul
+            style="padding: 0; display: flex; list-style-type: none;  background: white; padding: 8px;  height: 54px; background-color: white;">
+            @for (state of clientStates; track $index) {
+            <li style="margin-right: 12px; ">
+              <mat-checkbox disabled="true" labelPosition="before" [(ngModel)]="state.checked"
+                [ngModelOptions]="{standalone: true}" color="primary">{{state.Name}}</mat-checkbox>
+            </li>
+            }
+          </ul>
+        </div>
+        @if (isEdit) {
+        <div class="form-field form-checkbox">
+          <ng-container class="check-box">
+            <ul style="padding: 0; display: flex;list-style-type: none; padding-top: 18px;">
+              @for (state of clientStates; track $index) {
+                <li style="margin-right: 12px; ">
+                  <mat-checkbox labelPosition="before" [(ngModel)]="state.checked"
                     [ngModelOptions]="{standalone: true}" color="primary">{{state.Name}}</mat-checkbox>
                 </li>
-              }
+                }
             </ul>
-          </div>
-          @if (isEdit) {
-            <div class="form-field form-checkbox">
-              <ng-container class="check-box">
-                <ul style="padding: 0; display: flex;list-style-type: none; padding-top: 18px;">
-                  @for (state of  clientStates; track $index) {
-                    <li style="margin-right: 7px;  padding-left: 10px;">
-                      <mat-checkbox labelPosition="before" formControlName="State"
-                        color="primary">{{state.Name}}</mat-checkbox>
-                    </li>
-                  }
-                </ul>
-              </ng-container>
-            </div>
-          }
+          </ng-container>
         </div>
+        }
+      </div>
 
-        <div></div>
-        <div></div>
+      <div></div>
+      <div></div>
 
-        <div class="form-actions">
-          @if(isEdit) {
-            <div class="actions">
-              <button mat-raised-button class="mat-cancel-btn" (click)="onCancle()">{{'Common.Cancel' |
-                translate}}</button>
-              <button mat-raised-button class="mat-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
-            </div>
-          }
+      <div class="form-actions">
+        @if(isEdit) {
+        <div class="actions">
+          <button mat-raised-button class="mat-cancel-btn" (click)="onCancle()">{{'Common.Cancel' |
+            translate}}</button>
+          <button mat-raised-button [class.disabled]="this.formGroup.invalid || isSendingRequest" class="mat-btn" (click)="onSubmit()">{{'Common.Save' | translate}}</button>
         </div>
-      </form>
-    }
+        }
+      </div>
+    </form>
+    
   </div>
 </div>
-
-
-
-

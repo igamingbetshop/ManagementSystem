@@ -5,9 +5,9 @@ import { CoreApiService } from '../../services/core-api.service';
 import { CommonDataService } from 'src/app/core/services';
 import { MatDialog } from '@angular/material/dialog';
 import 'ag-grid-enterprise';
-import { Controllers, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
+import { Controllers, GridMenuIds, GridRowModelTypes, Methods, ModalSizes } from 'src/app/core/enums';
 import { TextEditorComponent } from 'src/app/main/components/grid-common/text-editor.component';
-import { CellValueChangedEvent, ColDef, GetServerSideGroupKey, GridReadyEvent, ICellRendererParams, IsServerSideGroup } from 'ag-grid-community';
+import { CellValueChangedEvent, ColDef, GetServerSideGroupKey, GridReadyEvent, ICellRendererParams, IRowNode, IsServerSideGroup } from 'ag-grid-community';
 import { take } from 'rxjs/operators';
 import { NumericEditorComponent } from 'src/app/main/components/grid-common/numeric-editor.component';
 import { CheckboxRendererComponent } from 'src/app/main/components/grid-common/checkbox-renderer.component';
@@ -70,7 +70,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     public dialog: MatDialog,
   ) {
     super(injector);
-    // this.adminMenuId = GridMenuIds.CORE_REGIONS;
+    this.adminMenuId = GridMenuIds.CORE_REGIONS;
   }
 
   ngOnInit() {
@@ -78,7 +78,6 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     this.partners = this.commonDataService.partners;
     this.languages = this.commonDataService.languages;
     this.getRegions();
-    // this.getPage();
   }
 
   onGridReady(params: GridReadyEvent) {
@@ -157,6 +156,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         resizable: true,
         editable: true,
         filter: false,
+        onCellValueChanged: (event: CellValueChangedEvent) => this.onCellValueChanged(event.data),
       },
       {
         headerName: 'Common.Type',
@@ -181,6 +181,22 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
         cellEditor: 'textEditor',
       },
     ];
+  }
+
+  onValueChanged(event) {
+    console.log(event);
+    
+    if (event.oldValue !== event.value) {
+      let findedNode: IRowNode;
+      let node = event.node.rowIndex;
+      this.gridApi.forEachNode(nod => {
+        if (nod.rowIndex == node) {
+          findedNode = nod;
+        }
+      })
+      this.onCellValueChanged(event);
+      this.gridApi.redrawRows({ rowNodes: [findedNode] });
+    }
   }
 
   public getDataPath = (data: any) => {
@@ -262,6 +278,8 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
   }
 
   onCellValueChanged(request) {
+    console.log(request, "REQ");
+    
     this.apiService.apiPost(this.configService.getApiUrl, request, true, Controllers.REGION, Methods.SAVE_REGION)
       .pipe(take(1))
       .subscribe(data => {
@@ -285,28 +303,6 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     }
   };
 
-  // getPage() {
-  //   this.apiService.apiPost(this.configService.getApiUrl, {},
-  //     true, Controllers.REGION, Methods.GET_REGIONS)
-  //     .pipe(take(1))
-  //     .subscribe(data => {
-  //       if (data.ResponseCode === 0) {
-  //         let mappedData = [];
-  //         data.ResponseObject.forEach(field => {
-  //           if (field.ParentId === null) {
-  //             field.groupKey = [field.Id];
-  //             mappedData.push(field);
-  //             this.handleDataRecursively(data.ResponseObject, field, mappedData);
-  //           }
-  //         })
-  //         this.rowData = mappedData;
-
-
-  //       } else {
-  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-  //       }
-  //     });
-  // }
 
   getFormattedState(params) {
     const state = Number(params.value);

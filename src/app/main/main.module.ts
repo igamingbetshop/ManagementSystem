@@ -16,11 +16,16 @@ import {MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
 
 import {MatListModule} from "@angular/material/list";
-import {MatMenuModule} from "@angular/material/menu";
+import {MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
 import {MatExpansionModule} from '@angular/material/expansion';
 import {FormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
 import {LeftMenuItemsComponent,} from "./components/left-menu/left-menu-items/left-menu-items.component";
+import {CoreSignalRService} from './platforms/core/services/core-signal-r.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {SportsbookSignalRService} from './platforms/sportsbook/services/signal-r/sportsbook-signal-r.service';
+import {SignalRFactory} from './platforms/sportsbook/reports/business-intelligence/by-bets/by-bets.module';
+import {ConfigService} from '../core/services';
 
 
 @NgModule({
@@ -45,7 +50,15 @@ import {LeftMenuItemsComponent,} from "./components/left-menu/left-menu-items/le
     MatExpansionModule,
     FormsModule,
     TranslateModule,
-
+    MatMenuModule,
+    MatSnackBarModule,
+  ],
+  providers: [
+    {
+      provide: SportsbookSignalRService,
+      useFactory: SignalRFactory,
+      deps: [ConfigService]
+    }
   ]
 })
 export class MainModule {

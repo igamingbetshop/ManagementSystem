@@ -7,10 +7,10 @@
   <form class="modal-form" [formGroup]="formGroup">
 
     <mat-form-field>
-      <mat-label class="input-title">{{'Partners.Title' | translate}}*</mat-label>
+      <mat-label class="input-title">{{'Partners.Title' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Partners.Title' | translate" [formControlName]="'Title'" required>
       @if (errorControl['Title'].touched && errorControl['Title'].hasError('required')) {
-        <mat-error *ngIf="">
+        <mat-error>
           {{'Partners.Title' | translate}} {{'Errors.Required' | translate}}
         </mat-error>
 
@@ -59,11 +59,13 @@
     </div>
 
     <mat-form-field>
-      <mat-label class="input-title">{{'Common.Order' | translate}}*</mat-label>
+      <mat-label class="input-title">{{'Common.Order' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Common.Order' | translate" [formControlName]="'Order'" required>
-      <mat-error *ngIf="errorControl['Order'].touched && errorControl['Order'].hasError('required')">
-        {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
-      </mat-error>
+      @if(errorControl['Order'].touched && errorControl['Order'].hasError('required')) {
+        <mat-error>
+          {{'Common.Order' | translate}} {{'Errors.Required' | translate}}
+        </mat-error>
+      }
     </mat-form-field> 
 
     @if (showFile) {

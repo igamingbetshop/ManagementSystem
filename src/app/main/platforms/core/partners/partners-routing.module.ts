@@ -9,12 +9,6 @@ const routes: Routes = [
     component:PartnersComponent,
     children:[
       {
-        path: 'partner',
-        loadChildren: () => import('./partner/partner.module').then(m => m.PartnerModule),
-        resolve:{filterData:FilterOptionsResolver},
-
-      },
-      {
         path: 'all-partners',
         loadChildren: () => import('./all-partners/all-partners.module').then(m => m.AllPartnersModule),
         resolve:{filterData:FilterOptionsResolver},

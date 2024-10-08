@@ -13,6 +13,7 @@ import { Paging } from 'src/app/core/models';
 import { SportsbookApiService } from 'src/app/main/platforms/sportsbook/services/sportsbook-api.service';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-by-regions',
@@ -28,8 +29,8 @@ export class ByRegionsComponent extends BasePaginatedGridComponent implements On
   partnerId: number;
   rowData = [];
   pageIdName =  '';
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   selectedItem = 'today';
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   defaultColDef = {
@@ -135,8 +136,8 @@ export class ByRegionsComponent extends BasePaginatedGridComponent implements On
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

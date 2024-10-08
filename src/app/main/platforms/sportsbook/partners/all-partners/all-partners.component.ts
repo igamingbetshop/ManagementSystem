@@ -9,6 +9,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { SnackBarHelper } from "../../../../../core/helpers/snackbar.helper";
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { CellClickedEvent } from 'ag-grid-community';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-all-partners',
@@ -20,10 +21,21 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public path = 'partners';
 
+  defaultColDef = {
+    flex: 1,
+    editable: false,
+    sortable: true,
+    resizable: true,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    minWidth: 50,
+  };
+
   constructor(
     protected injector: Injector,
     private apiService: SportsbookApiService,
     private _snackBar: MatSnackBar,
+    public activateRoute: ActivatedRoute,
     public dialog: MatDialog,
   ) {
     super(injector);
@@ -114,16 +126,13 @@ export class AllPartnersComponent extends BasePaginatedGridComponent implements 
   }
 
   goToPartner(event) {
-    const url = this.router.serializeUrl(this.router.createUrlTree([`/main/sportsbook/partners/partner/main`],
-      {
-        queryParams: {
-          partnerId: event.data.Id, partnerName: event.data.Name
-        }
-      }));
-    if (url) {
-      window.open(url, '_blank');
-    } else {
-      console.error('Failed to construct URL');
-    }
+    this.router.navigate(['/main/sportsbook/partners/all-partners/partner/main'], {
+      queryParams: {
+        partnerId: event.data.Id,
+        partnerName: event.data.Name
+      }
+    }).catch(err => {
+      console.error('Failed to navigate', err);
+    });
   }
 }

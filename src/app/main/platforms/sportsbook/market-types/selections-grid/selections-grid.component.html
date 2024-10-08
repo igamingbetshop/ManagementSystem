@@ -17,10 +17,13 @@
     [cacheBlockSize]="5000"
     [ensureDomOrder]="true"
     [enableCellTextSelection]="true"
+
     rowSelection="single">
   </ag-grid-angular>
 
   <div class="grid-action">
     <button mat-stroked-button class="mat-btn" [class.disabled]="isSendingRequest" (click)="addSelectionType()">{{'Sport.AddSelectionType' | translate}}</button>
   </div>
+
+
 </div>

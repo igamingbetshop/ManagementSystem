@@ -5,6 +5,7 @@ import { CurrenciesRoutingModule } from './currencies-routing.module';
 import { AgGridModule } from 'ag-grid-angular';
 import {TranslateModule} from "@ngx-translate/core";
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
     CurrenciesRoutingModule,
     MatSelectModule,
     AgGridModule,
-    TranslateModule
+    TranslateModule,
+    MatSnackBarModule
   ],
   declarations: [CurrenciesComponent]
 })

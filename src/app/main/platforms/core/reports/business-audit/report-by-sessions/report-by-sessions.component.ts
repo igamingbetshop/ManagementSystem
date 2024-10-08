@@ -17,6 +17,7 @@ import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdow
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { ExportService } from "../../../services/export.service";
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-report-by-sessions',
@@ -28,8 +29,8 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
   @ViewChild('agGrid2') agGrid2: AgGridAngular;
   public rowData = [];
   public sessionInfoRowData = [];
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public clientData = {};
   public filteredData;
   public selectedItem = 'today';
@@ -271,8 +272,8 @@ export class ReportBySessionsComponent extends BasePaginatedGridComponent implem
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

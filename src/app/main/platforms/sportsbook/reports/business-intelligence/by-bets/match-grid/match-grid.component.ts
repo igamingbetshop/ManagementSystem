@@ -4,7 +4,6 @@ import { AgGridAngular } from 'ag-grid-angular';
 
 import { GridMenuIds, GridRowModelTypes } from 'src/app/core/enums';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
-import { OddsTypePipe } from 'src/app/core/pipes/odds-type.pipe';
 import { CellClickedEvent, GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-community';
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';

@@ -27,8 +27,6 @@ export class GeneralSetupComponent implements OnInit {
   clientType = [];
   finalAccountTypes = [];
   formGroup: UntypedFormGroup;
-  fromDate = new Date();
-  toDate = new Date();
   conditions = [];
   status = ACTIVITY_STATUSES;
   addedConditions = {
@@ -59,11 +57,8 @@ export class GeneralSetupComponent implements OnInit {
   selectedType: number;
   selectedCampaignsByType: { [key: number]: number[] } = {};
 
-
-  campaignControl: FormControl;
-  valueControl: FormControl;
   allBounuses: any;
-
+  color = '#000000';
   constructor(
     public dialogRef: MatDialogRef<GeneralSetupComponent>,
     private apiService: CoreApiService,
@@ -75,14 +70,6 @@ export class GeneralSetupComponent implements OnInit {
     public dateAdapter: DateAdapter<Date>,
     private bonusesService: BonusesService) {
     this.dateAdapter.setLocale('en-GB');
-
-    this.campaignControl = new FormControl('');
-    this.valueControl = new FormControl('', [
-      Validators.required,
-      Validators.min(1),
-      Validators.max(10),
-      this.integerValidator
-    ]);
   }
 
   ngOnInit(): void {
@@ -212,7 +199,6 @@ export class GeneralSetupComponent implements OnInit {
     if(bonus.BonusTypeId == 4) {
       bonus.Info = JSON.stringify(bonus.Info);
     }
-    
     this.createBonus(bonus);
   }
 
@@ -273,8 +259,8 @@ export class GeneralSetupComponent implements OnInit {
       MinAmount: [null],
       MaxAmount: [null],
       Status: [null],
-      StartTime: [this.fromDate],
-      FinishTime: [this.toDate],
+      StartTime: [null],
+      FinishTime: [null],
       MaxGranted: [null],
       MaxReceiversCount: [null],
       Period: [null],
@@ -299,6 +285,7 @@ export class GeneralSetupComponent implements OnInit {
       Regularity: [null],
       DayOfWeek: [null],
       ReusingMaxCountInPeriod: [null],
+      Color: [null],
     });
   }
 
@@ -361,29 +348,43 @@ export class GeneralSetupComponent implements OnInit {
 
   onTypeChange(type: number) {
     this.selectedType = type;
-    const obj = {
-      PartnerId: this.formGroup.get('PartnerId')?.value,
-      Status: 1,
-      Type: type
-    };
-    this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.BONUS, Methods.GET_BONUSES)
-      .pipe(take(1))
-      .subscribe((data) => {
-        if (data.ResponseCode === 0) {
-          this.campaigns = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
+    this.fetchCampaigns(type);
+  }
+
+  fetchCampaigns(type: number) {
+    let obj = {
+          PartnerId: this.formGroup.get('PartnerId').value,
+          Status: 1,
+          Type: type || null
         }
-      });
+        this.apiService.apiPost(this.configService.getApiUrl, obj, true, Controllers.BONUS,
+          Methods.GET_BONUSES).pipe(take(1)).subscribe((data) => {
+          if (data.ResponseCode === 0) {
+            const newCampaigns = data.ResponseObject;
+            this.campaigns = newCampaigns;        
+            if( this.selectedCampaignIds.length > 0) {
+              this.formGroup.get('Info').setValue(this.selectedCampaignIds);
+            }
+          } else {
+            SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          }
+        });
+  }
+  
+  onCampaignChange(selectedCampaignIds: number[]) {
+    this.selectedCampaignsByType[this.selectedType] = selectedCampaignIds;
+    const allSelectedCampaignIds = Object.values(this.selectedCampaignsByType).flat();
+  }
+  
+  handleValueAdded(newValue: any) {
+    this.addValue(newValue.BonusId, newValue.Periodicity);
   }
 
   get infoArray() {
     return this.formGroup.get('Info') as FormArray;
   }
 
-  addValue() {
-    const campaign = this.campaignControl.value;
-    const value = this.valueControl.value;
+  addValue(campaign, value) {
     if (campaign && value !== null && value !== undefined) {
       if (value > 10 || value < 1 ) {
         SnackBarHelper.show(this._snackBar, { Description: "Value must be between 1 and 10.", Type: "error" });
@@ -400,9 +401,6 @@ export class GeneralSetupComponent implements OnInit {
         this.infoArray.removeAt(0);
         this.infoArray.push(this.fb.group(newValue));
       }
-  
-      this.campaignControl.reset();
-      this.valueControl.reset();
   
       this.infoArray.updateValueAndValidity();
     } else {
@@ -423,23 +421,6 @@ export class GeneralSetupComponent implements OnInit {
     this.countsArray.updateValueAndValidity();
   }
 
-  onCampaignChange(selectedCampaignIds: number[]): void {
-    this.selectedCampaignsByType[this.selectedType] = selectedCampaignIds;
-    const allSelectedCampaignIds = Object.values(this.selectedCampaignsByType).flat();
-  }
 
-  updateInfoFormArray() {
-    const infoArray = this.infoArray;
-    const campaignIds = Object.values(this.selectedCampaignsByType).flat();
-    campaignIds.forEach(campaignId => {
-      const value = this.valueControl.value;
-      if (value !== null && value !== undefined) {
-        infoArray.push(this.fb.group({
-          Campaign: campaignId,
-          Value: value
-        }));
-      }
-    });
-  }
 
 }

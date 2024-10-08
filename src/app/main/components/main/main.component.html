@@ -10,8 +10,10 @@
       <div class="main-content" >
         <div class="content-inner">
           <router-outlet></router-outlet>
-          <mat-spinner *ngIf="loading" [diameter]="90"
-          mode="indeterminate"></mat-spinner>
+          @if (loading) {
+            <mat-spinner [diameter]="90"
+            mode="indeterminate"></mat-spinner>
+          }
         </div>
       </div>
     </mat-sidenav-content>

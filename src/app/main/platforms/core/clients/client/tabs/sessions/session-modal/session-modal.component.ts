@@ -6,6 +6,7 @@ import { Controllers, Methods } from 'src/app/core/enums';
 import { ConfigService } from 'src/app/core/services';
 import { CoreApiService } from 'src/app/main/platforms/core/services/core-api.service';
 import { SnackBarHelper } from "../../../../../../../../core/helpers/snackbar.helper";
+import { DEVICE_TYPES } from 'src/app/core/constantes/statuses';
 
 interface SessionData {
   Id: number;
@@ -24,9 +25,9 @@ interface SessionData {
   styleUrls: ['./session-modal.component.scss']
 })
 export class SessionModalComponent implements OnInit {
-  public displayedColumns: string[] = ['Id', 'ProductName', 'ProductId', 'State', 'LogoutDescription', 'Ip', 'StartTime', 'EndTime'];
-  public dataSource = new MatTableDataSource<SessionData>();
-  
+  displayedColumns: string[] = ['Id', 'ProductName', 'ProductId', 'State', 'LogoutDescription', 'Ip', 'Country', 'DeviceType', 'StartTime', 'EndTime'];
+  dataSource = new MatTableDataSource<SessionData>();
+  deviceTypes = DEVICE_TYPES;
   private sessionStates;
   private logOutType;
 
@@ -73,11 +74,13 @@ export class SessionModalComponent implements OnInit {
             Id: info.Id,
             ProductId: info.ProductId,
             ProductName: info.ProductName,
-            State: this.sessionStates.find((st) => st.Id === info.State)?.Name || 'Unknown',
-            LogoutDescription: this.logOutType.find((type) => type.Id === info.LogoutType)?.Name || 'Unknown',
+            State: this.sessionStates.find((st) => st.Id === info.State)?.Name || '',
+            LogoutDescription: this.logOutType.find((type) => type.Id === info.LogoutType)?.Name || '',
             Ip: info.Ip,
+            DeviceType: this.deviceTypes.find((type) => type.Id === info.DeviceType)?.Name || '',
+            Country: info.Country,
             StartTime: dateFormatter.format(new Date(info.StartTime)),
-            EndTime: dateFormatter.format(new Date(info.EndTime))  
+            EndTime: dateFormatter.format(new Date(info.EndTime))
           }));
 
           this.dataSource.data = formattedData;

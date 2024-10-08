@@ -8,6 +8,8 @@ import {Paging} from "../../../../../../../core/models";
 import {Controllers, Methods} from "../../../../../../../core/enums";
 import {take} from "rxjs/operators";
 import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-view-report-by-games',
@@ -18,8 +20,8 @@ export class ViewReportByGamesComponent extends BasePaginatedGridComponent imple
   public id;
   public rowData;
   public filteredData;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
 
   constructor(private activateRoute: ActivatedRoute,
               private apiService: CoreApiService,
@@ -177,7 +179,13 @@ export class ViewReportByGamesComponent extends BasePaginatedGridComponent imple
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate() + 1));
+    this.setTime();
+  }
+  
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onGridReady(params) {

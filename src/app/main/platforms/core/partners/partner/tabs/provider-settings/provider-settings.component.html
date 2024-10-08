@@ -1,7 +1,8 @@
 <div class="container">
 
+  
   <div class="content-action">
-    <div class="title"><a [routerLink]="['../../all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Provider' | translate}}</div>
+    <div class="title"><a [routerLink]="['/main/platform/partners/all-partners']">{{'Partners.Partners' | translate}}</a> / {{partnerName}} :{{'Partners.Provider' | translate}}</div>
     <button mat-stroked-button class="mat-copy-btn" (click)="copyPartnerSettings()">{{'Common.Copy' | translate}}</button>
 
 
@@ -10,6 +11,7 @@
   <div class="grid-content">
     <ag-grid-angular
       class="ag-theme-balham"
+      [class.hide-grid]="loadingUserState"
       [headerHeight]="33"
       [rowHeight]="42"
       [rowData]="rowData"
@@ -20,13 +22,21 @@
       [cacheBlockSize]="cacheBlockSize"
       [suppressCopyRowsToClipboard]="true"
       (gridReady)="onGridReady($event)"
+      [sideBar]="sideBar"
       (cellValueChanged)="onCellValueChanged($event)"
       [ensureDomOrder]="true"
       [enableCellTextSelection]="true"
       [getContextMenuItems]="getContextMenuItems"
+      (columnPinned)="onColumnPinned($event)"
+      (columnMoved)="onColumnMoved($event)"
+      (columnResized)="onColumnResized($event)"
+      (columnVisible)="onColumnVisible($event)"
       rowSelection="single">
     </ag-grid-angular>
   </div>
+
+  <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
+
 </div>
 
 

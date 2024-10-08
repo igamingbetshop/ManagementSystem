@@ -22,6 +22,10 @@ const routes: Routes = [
         path: 'report-by-logs',
         loadChildren: () => import('./report-by-logs/report-by-logs.module').then(m => m.ReportByLogsModule),
       },
+      {
+        path: 'report-by-job-logs',
+        loadChildren: () => import('./report-by-job-logs/report-by-job-logs.module').then(m => m.ReportByLogsModule),
+      }
     ]
   }
 ]

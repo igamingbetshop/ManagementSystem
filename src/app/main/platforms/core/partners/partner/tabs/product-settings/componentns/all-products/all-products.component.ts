@@ -24,10 +24,10 @@ import {
 } from "../../../../../../../../components/grid-common/array-selectable-editor/array-selectable-editor.component";
 import { CoreApiService } from "../../../../../../services/core-api.service";
 import { ConfigService } from "../../../../../../../../../core/services";
-import { Controllers, Methods } from "../../../../../../../../../core/enums";
+import { Controllers, GridMenuIds, Methods } from "../../../../../../../../../core/enums";
 import { SnackBarHelper } from "../../../../../../../../../core/helpers/snackbar.helper";
 import { Paging } from "../../../../../../../../../core/models";
-import { syncColumnSelectPanel } from "../../../../../../../../../core/helpers/ag-grid.helper";
+import { syncColumnNestedSelectPanel, syncColumnSelectPanel, syncNestedColumnReset } from "../../../../../../../../../core/helpers/ag-grid.helper";
 import { ExportService } from "../../../../../../services/export.service";
 import { AGCheckboxSelectedRendererComponent } from 'src/app/main/components/grid-common/ag-checkbox-seected-renderer.component';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -77,6 +77,9 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     private exportService: ExportService,
     private _snackBar: MatSnackBar) {
     super(injector);
+
+    this.adminMenuId = GridMenuIds.PARTNERS_PRODUCTS_SETTINGS;
+    
     this.autoGroupColumnDef = {
       headerName: 'BetShops.Group',
       headerValueGetter: this.localizeHeader.bind(this),
@@ -98,7 +101,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   ngOnInit(): void {
     this.partnerId = this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
-
     this.getAllProductStates();
     this.mergeProductApi();
   }
@@ -268,7 +270,8 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   onGridReady(params) {
     super.onGridReady(params);
-    syncColumnSelectPanel();
+    syncColumnNestedSelectPanel();
+    syncNestedColumnReset();
     this.gridApi.setServerSideDatasource(this.createServerSideDatasource());
   }
 
@@ -332,12 +335,10 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
             } else {
               SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
             }
-
           });
       }
     }
   }
-
 
   onSelectChange(params, val, event) {
     params.State = val;
@@ -345,7 +346,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
 
   onRowClicked(params) {
     this.selectedRowIds = params.api.getSelectedRows().map(field => field.Id);
-
   }
 
   onRowSelected(params) {
@@ -422,13 +422,17 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     if (this.bulkEditorRef) {
       this.bulkEditorRef.clear();
     }
-    const componentInstance = await import('./add-partners-product/add-partners-product.component').then(c => c.AddPartnersProductComponent);
+    const componentInstance = await import('../../../../../../../../components/dynamic-bulk-edit/dynamic-bulk-edit.component').then(c => c.DynamicBulkEditComponent);
     const componentRef = this.bulkEditorRef.createComponent(componentInstance);
     componentRef.instance.bulkMenuTrigger = this.bulkMenuTrigger;
     componentRef.instance.productCategories = this.productCategories;
     componentRef.instance.statuses = this.statuses;
     componentRef.instance.partnerId = +this.partnerId;
     componentRef.instance.productIds = this.selectedRowIds;
+    componentRef.instance.adminMenuId = GridMenuIds.PARTNERS_PRODUCTS_SETTINGS;
+    componentRef.instance.gridIndex = 0;
+    componentRef.instance.controler = Controllers.PRODUCT;
+    componentRef.instance.method = Methods.SAVE_PARTNER_PRODUCT_SETTINGS;
     componentRef.instance.afterClosed.subscribe((data) => {
       if (data) {
         this.cleanSelectedRowAll();

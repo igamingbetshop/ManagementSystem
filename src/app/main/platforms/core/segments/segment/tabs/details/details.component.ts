@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -18,22 +18,22 @@ import { ACTIVITY_STATUSES, MODES } from 'src/app/core/constantes/statuses';
 })
 export class DetailsComponent implements OnInit {
 
-  public PaymentSegment: any;
-
-  public clientStates: any[] = [];
-  public ClientStatus: any = {};
-  public partners: any[] = [];
-  public operations: any[] = [];
-  public segmentId;
-  public SegmentSetting;
-  public isEdit = false;
+  PaymentSegment: WritableSignal<any> = signal([]);
+  isSendingRequest = false;
+  clientStates: any[] = [];
+  ClientStatus: any = {};
+  partners: any[] = [];
+  operations: any[] = [];
+  segmentId;
+  SegmentSetting;
+  isEdit = false;
   statuses = ACTIVITY_STATUSES;
-  public modes = MODES;
-  public genders = [{ Id: null, Name: 'All' }, { Id: 1, Name: 'Male' }, { Id: 2, Name: 'Female' }];
-  public commonStates = [{ Id: null, Name: 'All' }, { Id: true, Name: 'Yes' }, { Id: false, Name: 'No' }];
-  public arrayTypeProps = ['AffiliateId', 'Bonus', 'ClientId', 'Email', 'FirstName', 'LastName', 'UserName', 'MobileCode', 'Region', 'SegmentId', 'SuccessDepositPaymentSystem', 'SuccessWithdrawalPaymentSystem'];
-  public rules = [{ Id: 1, Name: "TD" }, { Id: 2, Name: "DC" }, { Id: 3, Name: "SBC" }, { Id: 4, Name: "CBC" }];
-  public formGroup: UntypedFormGroup;
+  modes = MODES;
+  genders = [{ Id: null, Name: 'All' }, { Id: 1, Name: 'Male' }, { Id: 2, Name: 'Female' }];
+  commonStates = [{ Id: null, Name: 'All' }, { Id: true, Name: 'Yes' }, { Id: false, Name: 'No' }];
+  arrayTypeProps = ['AffiliateId', 'Bonus', 'ClientId', 'Email', 'FirstName', 'LastName', 'UserName', 'MobileCode', 'Region', 'SegmentId', 'SuccessDepositPaymentSystem', 'SuccessWithdrawalPaymentSystem', 'ClientStatus'];
+  rules = [{ Id: 1, Name: "TD" }, { Id: 2, Name: "DC" }, { Id: 3, Name: "SBC" }, { Id: 4, Name: "CBC" }];
+  formGroup: UntypedFormGroup;
   addedConditions = {
     SessionPeriod: {
       conditions: [],
@@ -103,12 +103,6 @@ export class DetailsComponent implements OnInit {
       selectedConditionValue: '',
       showNew: false
     },
-    AffiliateId: {
-      conditions: [],
-      selectedConditionType: null,
-      selectedConditionValue: '',
-      showNew: false
-    },
     AgentId: {
       conditions: [],
       selectedConditionType: null,
@@ -131,14 +125,16 @@ export class DetailsComponent implements OnInit {
       Id: [null],
       PartnerId: [null, [Validators.required]],
       Name: [null, [Validators.required]],
-      Mode: [2],
-      State: [1],
+      Mode: [null],
+      State: [null],
       Status: [null],
       Gender: [null],
       IsKYCVerified: [null],
       IsEmailVerified: [null],
       IsMobileNumberVerified: [null],
       ClientId: [null, [numbersAndCommas]],
+      AffiliateId: [null, [numbersAndCommas]],
+      ClientStatus: [null],
       SuccessDepositPaymentSystem: [null, [numbersAndCommas]],
       Email: [null, [emailsWithCommasValidator]],
       FirstName: [null, [stringAndCommaValidator]],
@@ -164,7 +160,6 @@ export class DetailsComponent implements OnInit {
 
   onCancle() {
     this.isEdit = false;
-    this.getPaymentSegmentById();
   }
 
   getFilterOperation() {
@@ -176,7 +171,6 @@ export class DetailsComponent implements OnInit {
           this.operations = data.ResponseObject.filter(el => {
             return el.NickName != "Contains" && el.NickName != "StartsWith" && el.NickName != "DoesNotContain" && el.NickName != "EndsWith";
           });
-
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -185,15 +179,24 @@ export class DetailsComponent implements OnInit {
 
   addDateCondition(item, resetToDate = false) {
     if (item.selectedConditionType && item.selectedConditionValue) {
+      const formattedDate = this.formatDateToYYYYMMDD(item.selectedConditionValue);
       item.conditions.push({
         ConditionType: item.selectedConditionType,
-        ConditionValue: item.selectedConditionValue
+        ConditionValue: formattedDate
       });
       item.selectedConditionType = null;
-      item.selectedConditionValue = resetToDate ? new Date() : null;
+      item.selectedConditionValue = resetToDate ? this.formatDateToYYYYMMDD(new Date()) : null;
       item.opened = false;
       item.showNew = false;
     }
+  }
+  
+  formatDateToYYYYMMDD(date: Date | string): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
   }
 
   removeCondition(item, index) {
@@ -211,32 +214,31 @@ export class DetailsComponent implements OnInit {
 
   getPaymentSegmentById() {
     this.apiService.apiPost(this.configService.getApiUrl, { Id: this.segmentId }, true,
-      Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe((data) => {
+      Controllers.CONTENT, Methods.GET_SEGMENTS).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.PaymentSegment = data.ResponseObject[0];
+          this.PaymentSegment.set(data.ResponseObject[0]);
           this.clientStates?.forEach(item => {
-            item.checked = this.PaymentSegment?.ClientStatus.includes(item.Id);
+            item.checked = this.PaymentSegment()['ClientStatus'].includes(item.Id);
           });
-
+  
           Object.keys(this.addedConditions).forEach(key => {
             const conditionObjectKey = `${key}Object`;
-            const conditionObject = this.PaymentSegment[conditionObjectKey];
+            const conditionObject = this.PaymentSegment()[conditionObjectKey];
   
             if (conditionObject && conditionObject.ConditionItems) {
               this.addedConditions[key].conditions = conditionObject.ConditionItems.map(condObj => ({
                 ConditionType: this.operations.find(item => item.Id === condObj.OperationTypeId),
                 ConditionValue: condObj.StringValue
-              })
-              );
+              }));
             } else {
               this.addedConditions[key].conditions = [];
             }
+          });
+  
+          this.SegmentSetting = this.PaymentSegment()['SegmentSetting'];
+          if (this.PaymentSegment()) {
+            this.formGroup.patchValue(this.PaymentSegment());
           }
-          );
-              
-          this.SegmentSetting = this.PaymentSegment.SegementSetting;
-          this.formGroup.patchValue(this.PaymentSegment);
-
           
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
@@ -244,43 +246,72 @@ export class DetailsComponent implements OnInit {
       });
   }
 
-  onSubmit() {
-    let requestObj = this.formGroup.getRawValue();
-    let oldData = this.formGroup.getRawValue();
-
-    this.arrayTypeProps.filter(prop => !!requestObj[prop]).forEach(key => {
-      requestObj[key] = {
-        ConditionItems: requestObj[key].split(',').map(item => {
+  transformArrayTypeProps(requestObj) {
+    if (requestObj.MobileCode != null) {
+      requestObj.MobileCode = {
+        ConditionItems: requestObj.MobileCode.toString().split(',').map(item => {
           return {
             OperationTypeId: 1,
             StringValue: item.trim()
-          }
+          };
         })
+      };
+    }
+
+    this.arrayTypeProps.filter(prop => !!requestObj[prop]).forEach(key => {
+      if (typeof requestObj[key] === 'string') {
+        requestObj[key] = {
+          ConditionItems: requestObj[key].split(',').map(item => {
+            return {
+              OperationTypeId: 1,
+              StringValue: item.trim()
+            };
+          })
+        };
       }
     });
+  }
 
+  transformAddedConditions(requestObj) {
     Object.keys(this.addedConditions).forEach(key => {
-      if (this.addedConditions[key].conditions) requestObj[key.replace('Object', '')] = {
-        ConditionItems: this.addedConditions[key].conditions.map(item => {
-          return {
-            OperationTypeId: item.ConditionType?.Id,
-            StringValue: item?.ConditionValue
-          }
-        })
+      if (this.addedConditions[key].conditions) {
+        requestObj[key.replace('Object', '')] = {
+          ConditionItems: this.addedConditions[key].conditions.map(item => {
+            return {
+              OperationTypeId: item.ConditionType?.Id,
+              StringValue: item?.ConditionValue != null ? item.ConditionValue.toString() : ''
+            };
+          })
+        };
       }
     });
+  }
 
-    requestObj.ClientStatus = {
+  transformClientStates() {
+    return {
       ConditionItems: this.clientStates.filter(item => item.checked).map(item => {
         return {
           OperationTypeId: 1,
           StringValue: item.Id
-        }
+        };
       })
     };
+  }
 
+  onSubmit() {
+    let requestObj = this.formGroup.getRawValue();
+
+    console.log(requestObj, "requestObj befor");
+
+    let oldData = this.formGroup.getRawValue();
+    this.isSendingRequest = true; 
+    this.transformArrayTypeProps(requestObj);
+    this.transformAddedConditions(requestObj);
+    requestObj.ClientStatus = this.transformClientStates();  
+
+    console.log(requestObj, "requestObj");
+    
     this.saveSegment(requestObj, oldData);
-
   }
 
   saveSegment(data, oldData) {
@@ -293,12 +324,14 @@ export class DetailsComponent implements OnInit {
           this.isEdit = false;
           this.getPaymentSegmentById();
         } else {
-          this.PaymentSegment = Object.assign({}, oldData);
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingRequest = false;
       });
   }
 
+  onConditionsChange(newConditions: any[], key: string) {
+    this.addedConditions[key].conditions = newConditions;
+  }
 
 }
-

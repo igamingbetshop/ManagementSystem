@@ -23,6 +23,7 @@ import { BETAVAILABLESTATUSES, BETSTATUSES } from 'src/app/core/constantes/statu
 import { syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-bets',
@@ -59,8 +60,8 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
   masterDetail;
   selectedItem = 'today';
   detailCellRendererParams: any;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   nestedFrameworkComponents = {
     agBooleanColumnFilter: AgBooleanFilterComponent,
     buttonRenderer: ButtonRendererComponent,
@@ -708,8 +709,8 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

@@ -23,6 +23,7 @@ import { GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-enterprise';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
 import { ExportService } from "../../services/export.service";
 import { forkJoin } from 'rxjs';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'all-clients',
@@ -41,8 +42,8 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
   clientStates;
   languages = [];
   partnerId;
-  fromDate = new Date();
-  toDate = new Date();
+  fromDate: any;;
+  toDate: any;
   clientData = {};
   selectedItem = 'today';
   paginationPage = 1;
@@ -69,7 +70,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
   }
 
   ngOnInit() {
-    this.setTime();
+    this.setTime();    
     this.gridStateName = 'clients-grid-state';
     this.currencies = this.commonDataService.currencyNames.map(data => { return { Id: data, Name: data }; });
     this.partners = this.commonDataService.partners;
@@ -94,8 +95,8 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getCountry() {
@@ -710,7 +711,6 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
           paging.IsDocumentVerified = paging.IsDocumentVerifieds.ApiOperationTypeList[0].BooleanValue;
           delete paging.IsDocumentVerifieds;
         }
-
         this.clientData = paging;
         this.apiService.apiPost(this.configService.getApiUrl, paging,
           true, Controllers.CLIENT, Methods.GET_CLIENTS).pipe(take(1)).subscribe(data => {
@@ -753,7 +753,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
 
   async createClient() {
     const { CreateClientComponent } = await import('../../clients/create-client/create-client.component');
-    const dialogRef = this.dialog.open(CreateClientComponent, { width: ModalSizes.LARGE });
+    const dialogRef = this.dialog.open(CreateClientComponent, { width: ModalSizes.SMALL });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
         this.getCurrentPage();

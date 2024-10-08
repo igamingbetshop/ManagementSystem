@@ -52,10 +52,8 @@ export class RegionsComponent extends BasePaginatedGridComponent implements OnIn
   private updateSettingsPath = 'regions/updatesettings';
 
   public detailCellRendererParams: any = {
-    // provide the Grid Options to use on the Detail Grid
     detailGridOptions: {
       rowHeight: 47,
-      // rowStyle: { color: 'white' },
       defaultColDef: {
         sortable: true,
         filter: true,

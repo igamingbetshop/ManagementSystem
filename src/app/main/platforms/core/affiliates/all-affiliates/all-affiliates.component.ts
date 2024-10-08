@@ -188,6 +188,9 @@ export class AllAffiliatesComponent extends BasePaginatedGridComponent implement
             payment.LanguageId = this.languages.find((language) => language.Id === payment.LanguageId)?.Name;
             payment.CategoryId = this.categories.find((category) => category.Id === payment.CategoryId)?.Name;
             payment.RegionId = this.countries.find((country) => country.Id === payment.RegionId)?.Name;
+            payment.CreationTime = payment.CreationTime ? new Date(payment.CreationTime).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : null;
+            payment.LastUpdate = payment.LastUpdate ? new Date(payment.LastUpdate).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true }) : null;
+
             payment.State = AffiliateStates[payment.State];
             return payment;
           });

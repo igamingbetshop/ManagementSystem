@@ -1,0 +1,146 @@
+@import "mixins.scss";
+@import "variables.scss";
+
+.bulk-editor-container {
+  width: 250px;
+  max-height: 500px;
+  border-radius: 4px;
+  z-index: 1;
+
+  .bulk-editor-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+    column-gap: 16px;
+
+    .mat-mdc-form-field {
+      width: 100%;
+      padding-bottom: 10px;
+    }
+  }
+
+
+}
+
+::ng-deep {
+  .mdc-switch__icons {
+    display: none !important;
+  }
+
+  .mdc-switch__handle {
+    height: 12px !important;
+    width: 12px !important;
+  }
+
+  .mdc-switch__track {
+    width: 29px !important;
+  }
+
+  .mdc-elevation-overlay {
+    background: #FFFFFF !important;
+  }
+
+  .mdc-switch__track {
+    height: 16px !important;
+  }
+
+
+  .mat-mdc-form-field-error-wrapper {
+    top: -5px !important;
+  }
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 23.44px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  padding: 10px;
+  padding-left: 20px;
+  position: relative;
+  color: $black;
+  display: flex;
+  border-bottom: 2px solid $gray-light-20;
+}
+
+.settings-title {
+  font-size: 18px;
+}
+
+.menu-btn {
+  margin-left: auto;
+  cursor: pointer;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.config-item {
+  padding: 8px;
+  padding-left: 20px;
+  padding-right: 10px;
+  display: flex;
+  justify-content: space-between;
+  .config-text {
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 18.75px;
+    letter-spacing: 0.04em;
+    text-align: left;
+  }
+}
+
+.note-item {
+  padding-top: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  .note-type {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 18.75px;
+    letter-spacing: 0.04em;
+    text-align: left;    
+  }
+}
+
+.note-time {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14.06px;
+  letter-spacing: 0.04em;
+  padding-left: 20px;
+  padding-bottom: 10px;
+}
+
+.avtive-note {
+  background-color: $gray-light-20;
+}
+
+.filter-buttons button {
+  font-size: 16px;
+  border: none;
+  background: none;
+  color: gray;
+  padding: 0;
+  margin: 0 20px;
+  cursor: pointer;
+}
+
+.filter-buttons button.active {
+  font-weight: bold;
+  color: #2c3e50;
+  border-bottom: 2px solid #2c3e50;
+}
+
+.filter-buttons button:not(.active) {
+  font-weight: normal;
+  color: #b0b0b0;
+}
+
+.filter-buttons button:hover {
+  color: #2c3e50;
+}

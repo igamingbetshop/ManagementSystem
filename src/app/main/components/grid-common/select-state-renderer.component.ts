@@ -17,6 +17,59 @@ import { ICellRendererParams } from "ag-grid-community";
           <mat-option *ngFor="let selection of selections" [value]="selection.Id">{{selection.Name}}</mat-option>
         </mat-select>
 </div>`,
+  styles: [`
+    .mat-mdc-select {
+    height: 28px;
+    border-radius: 6px;
+    display: flex !important;
+    align-items: center;
+    width: 100px !important;
+    padding: 0 8px 0 10px;
+    background-color: #D1D1D2;
+    color: $bg-color !important;
+
+      &[aria-expanded="true"] {
+        .mat-mdc-select-arrow {
+          background-color: #D1D1D2!important;
+          border-bottom: 5px solid #D1D1D2;
+          border-top: 5px solid transparent;
+          margin: 0 4px 4px 4px;
+          svg {
+            top: -200%;
+            left: 0;
+            transform: rotate(180deg);
+          }
+        }
+      }
+
+    .mat-mdc-select-trigger {
+      .mat-mdc-select-value {
+        color: $bg-color;
+
+        .mat--mdc-select-placeholder {
+          color: $bg-color;
+          opacity: 0.9;
+        }
+      }
+
+      .mat-mdc-select-arrow-wrapper {
+        .mat-mdc-select-arrow {
+          color: $bg-color;
+        }
+      }
+    }
+
+    &.mat-mdc-select-disabled {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  }
+
+  ::ng-deep .custom-select-panel {
+    width: 300px !important;
+    min-width: 300px !important;
+}
+  `],
   standalone: true,
   imports: [
     CommonModule,

@@ -1,6 +1,6 @@
 <div class="container">
   <div class="content-action">
-    <div class="title"> {{'Users.User' | translate }} / {{user?.UserName}} </div>
+    <div class="title"> {{'Users.User' | translate }} / {{user()['UserName']}} </div>
     <button mat-stroked-button class="edit-btn" (click)="isEdit = true">{{'Common.Edit' | translate}}</button>
   </div>
 
@@ -8,7 +8,7 @@
     <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
       <div>
         <div class="first-hand">{{'Common.Id' | translate}}</div>
-        <div class="second-hand">{{user?.Id}}</div>
+        <div class="second-hand">{{user()['Id']}}</div>
         <div class="form-field form-input">
             <input matInput [formControlName]="'Id'" readonly>
         </div>
@@ -16,17 +16,19 @@
 
       <div>
         <div class="first-hand">{{'Clients.Currency' | translate}}</div>
-        <div class="second-hand">{{user?.CurrencyId}}</div>
+        <div class="second-hand">{{user()['CurrencyId']}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'CurrencyId'">
-            <mat-option *ngFor="let currency of currencies" [value]="currency.Id">{{currency.Name}}</mat-option>
+            @for (currency of currencies; track $index) {
+              <mat-option [value]="currency.Id">{{currency.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Common.Name' | translate}}</div>
-        <div class="second-hand">{{user?.UserName}}</div>
+        <div class="second-hand">{{user()['UserName']}}</div>
         <div class="form-field form-input">
             <input matInput [formControlName]="'UserName'">
         </div>
@@ -37,14 +39,16 @@
         <div class="second-hand">{{getLanguageNameById()}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'LanguageId'">
-            <mat-option *ngFor="let language of languages" [value]="language.Id">{{language.Name}}</mat-option>
+            @for (language of languages; track $index) {
+              <mat-option [value]="language.Id">{{language.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Clients.FirstName' | translate}}</div>
-        <div class="second-hand">{{user?.FirstName}}</div>
+        <div class="second-hand">{{user()['FirstName']}}</div>
         <div class="form-field form-input">
             <input matInput [formControlName]="'FirstName'">
         </div>
@@ -55,14 +59,16 @@
         <div class="second-hand">{{getStateNameById()}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'State'">
-            <mat-option *ngFor="let st of States" [value]="st.Id">{{st.Name}}</mat-option>
+            @for (st of States; track $index) {
+              <mat-option [value]="st.Id">{{st.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Clients.LastName' | translate}}</div>
-        <div class="second-hand">{{user?.LastName}}</div>
+        <div class="second-hand">{{user()['LastName']}}</div>
         <div class="form-field form-input">
             <input matInput [formControlName]="'LastName'">
         </div>
@@ -73,7 +79,9 @@
         <div class="second-hand">{{getTypeNameById()}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Type'">
-            <mat-option *ngFor="let type of types" [value]="type.Id">{{type.Name}}</mat-option>
+            @for (type of types; track $index) {
+              <mat-option [value]="type.Id">{{type.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -83,7 +91,9 @@
         <div class="second-hand">{{getGenderNameById()}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Gender'">
-            <mat-option *ngFor="let gender of genders" [value]="gender.Id">{{gender.Name}}</mat-option>
+            @for (gender of genders; track $index) {
+              <mat-option [value]="gender.Id">{{gender.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -93,7 +103,9 @@
         <div class="second-hand">{{getOddTypeNameById()}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'OddsType'">
-            <mat-option *ngFor="let oddsType of oddsType" [value]="oddsType.Id">{{oddsType.Name}}</mat-option>
+            @for(oddsType of oddsType; track $index) {
+              <mat-option [value]="oddsType.Id">{{oddsType.Name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
@@ -109,21 +121,22 @@
       <div>
         <div class="first-hand">{{'Profile.TwoFactorAuthentication' | translate}}</div>
         <div class="static-hand">
-          <button mat-stroked-button class="mat-btn" [class.disabled]="isTwoFactorEnabled"
-            (click)="onRedirectToTwoFactor()">{{'Profile.Activate' | translate}}</button>
+          @if(isTwoFactorEnabled) {
+            <button mat-stroked-button class="mat-btn" [class.disabled]="!isTwoFactorEnabled"
+            (click)="onOpenToTwoFactorConfirm()">{{'Profile.Disable' | translate}}</button>
+          } @else {
+            <button mat-stroked-button class="mat-btn" [class.disabled]="isTwoFactorEnabled"
+              (click)="onRedirectToTwoFactor()">{{'Profile.Activate' | translate}}</button>
+          }
         </div>
       </div>
 
       <div>
-        <div class="first-hand">{{'Profile.DisableTwoFactorAuthentication' | translate}}</div>
-        <div class="static-hand">
-          <button mat-stroked-button class="mat-btn" [class.disabled]="!isTwoFactorEnabled"
-            (click)="onOpenToTwoFactorConfirm()">{{'Profile.Disable' | translate}}</button>
-        </div>
+        <!-- <div class="first-hand">{{'Profile.DisableTwoFactorAuthentication' | translate}}</div>
+        <div class="static-hand"> -->
+
       </div>
 
-      <div></div>
-      <div></div>
 
       <div class="form-actions">
 
@@ -139,7 +152,10 @@
   </div>
 
   <div class="api-key-content">
+      <mat-form-field class="api-key-input">
+        <mat-label>{{'Segments.ApiKey' | translate}}</mat-label>
       <input matInput [placeholder]="'Api Key'" [(ngModel)]="apiKeyString">
+      </mat-form-field>
 
     <div>
       <div class="first-hand"></div>
@@ -154,24 +170,35 @@
   <br>
   <br>
 
-
+  
   <div class="accounts-container">
-    <table class="accounts-content">
-      <thead>
-        <tr>
-          <th>{{'Common.Id' | translate}}</th>
-          <th>{{'Common.Balance' | translate}}</th>
-          <th>{{'Clients.Currency' | translate}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let account of user?.Accounts">
-          <td>{{account.Id}}</td>
-          <td>{{account.Balance}}</td>
-          <td>{{account.CurrencyId}}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="configurations-section">
+      <div class="title">{{'Users.Configurations' | translate}}</div>
+      <app-configurations-grid 
+        [rowData]="user()['Configurations']"
+        (changeValue)="onChangeConfig($event)">
+      </app-configurations-grid>
+    </div>
+  
+    <div class="accounts-section">
+      <div class="title">{{'Users.Accounts' | translate}}</div>
+      <table class="accounts-content">
+        <thead>
+          <tr>
+            <th>{{'Common.Id' | translate}}</th>
+            <th>{{'Common.Balance' | translate}}</th>
+            <th>{{'Clients.Currency' | translate}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let account of user()['Accounts']">
+            <td>{{account.Id}}</td>
+            <td>{{account.Balance}}</td>
+            <td>{{account.CurrencyId}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>

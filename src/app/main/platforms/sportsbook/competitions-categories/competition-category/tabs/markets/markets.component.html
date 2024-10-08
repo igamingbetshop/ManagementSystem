@@ -14,12 +14,10 @@
       </mat-menu>
     </div>
 
-    @if(sportId == 1) {
       <app-market-types-buttons 
       [sportId]="sportId"
       (onSelectedMarketEmit)="onSetSelectedMarket($event)"
       />
-    }
 
     <button mat-stroked-button class="mat-reset-btns" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
 

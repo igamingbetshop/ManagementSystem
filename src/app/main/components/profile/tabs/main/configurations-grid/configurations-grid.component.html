@@ -1,0 +1,27 @@
+<ag-grid-angular
+  class="ag-theme-balham"
+  [rowHeight]="rowHeight"
+  [headerHeight]="33"
+  [rowData]="rowData()"
+  [suppressCopyRowsToClipboard]="true"
+  [suppressRowClickSelection]="true"
+  [rowModelType]="rowModelType"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+  [sideBar]="sideBar"
+  [animateRows]="true"
+  [enableBrowserTooltips]="enableBrowserTooltips"
+  (gridReady)="onGridReady($event)"
+  [ensureDomOrder]="true"
+  [components]="frameworkComponents"
+  [enableCellTextSelection]="true"
+  [getContextMenuItems]="getContextMenuItems"
+  [pagination]="true"
+  [paginationPageSize]="5000"
+  rowSelection="single"
+  [domLayout]="'normal'"
+  (cellValueChanged)="onCellValueChanged($event)"
+  (columnResized)="onColumnResized($event)"
+  >
+</ag-grid-angular>
+

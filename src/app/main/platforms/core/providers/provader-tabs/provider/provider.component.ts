@@ -249,13 +249,7 @@ export class ProviderComponent extends BasePaginatedGridComponent implements OnI
         const paging = new Paging();
         paging.SkipCount = this.paginationPage - 1;
         paging.TakeCount = Number(this.cacheBlockSize);
-        paging.GameProviderIds = {
-          IsAnd: true,
-          ApiOperationTypeList: [{
-            OperationTypeId: 1,
-            IntValue: this.providerId,
-          }]
-        };
+        paging.GameProviderId = this.providerId;
         if (params.parentNode.level == -1) {
           paging.ProductId = 1;
         } else {

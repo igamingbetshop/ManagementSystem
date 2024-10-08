@@ -27,8 +27,8 @@ export class PaymentAnalyticsComponent implements OnInit{
   topDeposits  = signal([]);
   topWithdraws  = signal([]);
   public filteredData;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public partnerId;
   public percent;
 
@@ -83,7 +83,7 @@ export class PaymentAnalyticsComponent implements OnInit{
   getTopDepositMethods() {
     this.filteredData = this.getFilteredDate();
     this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
-      Controllers.DASHBOARD, Methods.GET_TOP_DEPOSIT_METHODS, null, false).pipe(take(1)).subscribe((data) => {
+      Controllers.DASHBOARD, Methods.GET_TOP_DEPOSIT_METHODS, null, true).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         let total = 0;
         this.topDeposits.set(data.ResponseObject.slice(0,5));

@@ -20,7 +20,6 @@ export class TicketComponent implements OnInit, OnDestroy {
 
   constructor(
     private activateRoute: ActivatedRoute,
-    private commonDataService: CommonDataService,
     private _signalR: CoreSignalRService,
     private localStorage: LocalStorageService,
     private _snackBar: MatSnackBar,

@@ -1,10 +1,11 @@
-<div class="partner-container">
+<div class="partner-container" [ngClass]="{ 'hide': this.activateRoute.snapshot.queryParams.partnerId}">
 
   <div class="partner-content action">
     <div class="title">{{'Partners.Partners' | translate}}</div>
     <button mat-stroked-button class="mat-btn"
             (click)="createPartner()">{{'Partners.AddPartner' | translate}}</button>
     <button mat-stroked-button class="mat-export-btn" (click)="exportToCsv()">{{'Common.ExportToCSV' | translate}}</button>
+    <button mat-stroked-button class="mat-reset-btn" (click)="resetState()">{{'Common.ResetColumns' | translate}}</button>
   </div>
 
   <div class="grid-content">
@@ -39,3 +40,6 @@
   </div>
 </div>
 
+@if(this.activateRoute.snapshot.queryParams.partnerId) {
+  <router-outlet ></router-outlet>
+}

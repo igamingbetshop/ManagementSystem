@@ -20,9 +20,12 @@
   .mdc-floating-label--float-above {
     top: 28px !important;
   }
+  
 
   .mat-mdc-form-field-infix {
     padding-top: 8px !important;
+    min-height: 30px!important;
+    height: 30px!important;
   }
 
   .mat-pseudo-checkbox {
@@ -353,10 +356,8 @@
 .mat-mdc-form-field {
   width: 98% !important;
   margin-bottom: 24px;
-  /*height:40px;*/
   background: rgba(239, 240, 246, 1);
   border-radius: 4px;
-  /*border: 1px solid rgba(148, 149, 152, 1)*/
 }
 
 .mat-mdc-text-field-wrapper {
@@ -441,7 +442,6 @@
 .icon-arrow {
   font-size: 4px !important;
   margin-left: auto !important;
-  // margin-top: 10px !important;
   vertical-align: middle;
 
   &.opened {
@@ -466,15 +466,15 @@
 }
 
 .status-div {
-  width: 430px !important; /* Set the width of the container */
+  width: 430px !important;
   overflow: hidden !important;
-  word-break: break-all !important; /* Hide overflow */
+  word-break: break-all !important;
 }
 
 .status-names.ellipsis {
-  display: block !important; /* Ensures it acts like a block element */
-  white-space: nowrap !important; /* Prevents text from wrapping to the next line */
-  overflow: hidden !important; /* Hides the overflowed text */
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important; 
   text-overflow: ellipsis !important;
-  // word-break: b !important;
 }
+

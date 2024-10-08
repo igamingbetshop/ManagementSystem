@@ -5,9 +5,10 @@ import {Controllers, Methods} from "../../../../../core/enums";
 import {take} from "rxjs/operators";
 import {CoreApiService} from "../../services/core-api.service";
 import {ConfigService} from "../../../../../core/services";
-import {DateTimeHelper} from "../../../../../core/helpers/datetime.helper";
 import {TranslateModule} from "@ngx-translate/core";
 import {ProgressBarComponent} from "../progress-bar/progress-bar.component";
+import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 
 @Component({
@@ -27,8 +28,8 @@ export class CountryAnalyticsComponent implements OnInit{
   topVisitors  = signal([]);
   topRegistrations  = signal([]);
   public filteredData;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public partnerId;
 
   #apiService = inject(CoreApiService);
@@ -36,7 +37,7 @@ export class CountryAnalyticsComponent implements OnInit{
 
 
   ngOnInit() {
-    this.startDate();
+    this.setTime();
   }
 
   onDateChange(event: any) {
@@ -51,10 +52,10 @@ export class CountryAnalyticsComponent implements OnInit{
     this.getApiCalls();
   }
 
-  startDate(): void {
-    DateTimeHelper.selectTime('week');
-    this.fromDate = DateTimeHelper.getFromDate();
-    this.toDate = DateTimeHelper.getToDate();
+  setTime() {
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   getApiCalls(){
@@ -80,7 +81,7 @@ export class CountryAnalyticsComponent implements OnInit{
   getTopVisitors() {
     this.filteredData = this.getFilteredDate();
     this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
-      Controllers.DASHBOARD, Methods.GET_TOP_VISITORS, null, false).pipe(take(1)).subscribe((data) => {
+      Controllers.DASHBOARD, Methods.GET_TOP_VISITORS, null, true).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.topVisitors.set(data.ResponseObject.slice(0,5));
         this.topVisitors().map(item => {
@@ -88,7 +89,6 @@ export class CountryAnalyticsComponent implements OnInit{
           item.Icon =  item.CountryCode ?  item.CountryCode.toLowerCase() : "";
           item.ImageUrl = '../../../../../../assets/images/flags/' + item.Icon + '.png';
           item.Amount = item.TotalCount;
-          return item;
         })
       }
     });
@@ -96,7 +96,7 @@ export class CountryAnalyticsComponent implements OnInit{
 
   getTopRegistrations() {
     this.#apiService.apiPost(this.#configService.getApiUrl, this.filteredData,true,
-      Controllers.DASHBOARD, Methods.GET_TOP_REGISTRATIONS, null, false).pipe(take(1)).subscribe((data) => {
+      Controllers.DASHBOARD, Methods.GET_TOP_REGISTRATIONS, null, true).pipe(take(1)).subscribe((data) => {
       if (data.ResponseCode === 0) {
         this.topRegistrations.set(data.ResponseObject.slice(0,5));
         this.topRegistrations().map(item => {

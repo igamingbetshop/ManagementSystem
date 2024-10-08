@@ -1,16 +1,14 @@
 <div class="container">
   <div class="content-action">
     <div class="title"><a [routerLink]="['../../all-competitions']">{{'Sport.Competitions' | translate}}</a> / :{{'Sport.Profit' | translate}} / {{name}} / {{partnerName}}</div>
-    <!-- <div></div> -->
 
-    @if(sportId == 1) {
+ 
       <app-market-types-buttons 
       [partnerId]="partnerId" 
       [sportId]="sportId"
       [matchId]="matchId"
       (onSelectedMarketEmit)="onSetSelectedMarket($event)"
       />
-    }
 
 
     <div class = "bulk-editor-dropdown">

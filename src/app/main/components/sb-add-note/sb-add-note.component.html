@@ -1,36 +1,35 @@
 <div mat-dialog-title>
   <span class="title">{{'Clients.AddNote' | translate}}</span>
-<mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
 </div>
 
 
 <div class="modal-wrap">
   <form class="modal-form" [formGroup]="formGroup" (ngSubmit)="submit()">
-  
-          <mat-form-field>
-            <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
-            <mat-select   [formControlName]="'TypeId'">
-              <mat-option *ngFor="let type of allCommentTypes"  [value]="type.Id">{{type.Name}}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="errorControl['TypeId']?.touched && errorControl['TypeId'].errors?.required">
-              {{'Errors.Required' | translate}}
-            </mat-error>
-          </mat-form-field>
-  
-          <mat-form-field>
-            <mat-label>{{'Clients.AddNote' | translate}}</mat-label>
-            <textarea matInput [formControlName]="'Comment'"
-                      cdkTextareaAutosize
-                      cdkAutosizeMinRows="1"
-                      cdkAutosizeMaxRows="5"></textarea>
-            <mat-error *ngIf="errorControl['Comment'].touched && errorControl['Comment'].hasError('required')">
-              {{'Clients.NoteRequired' | translate}}
-            </mat-error>
-          </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Sport.SelectSport' | translate}}</mat-label>
+      <mat-select [formControlName]="'TypeId'">
+        <mat-option *ngFor="let type of allCommentTypes" [value]="type.Id">{{type.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="errorControl['TypeId']?.touched && errorControl['TypeId'].errors?.required">
+        {{'Errors.Required' | translate}}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>{{'Clients.AddNote' | translate}}</mat-label>
+      <textarea matInput [formControlName]="'Comment'" cdkTextareaAutosize cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"></textarea>
+      <mat-error *ngIf="errorControl['Comment'].touched && errorControl['Comment'].hasError('required')">
+        {{'Clients.NoteRequired' | translate}}
+      </mat-error>
+    </mat-form-field>
   </form>
 
 </div>
 <div mat-dialog-actions>
-  <button mat-stroked-button class="mat-cancel-btn"  (click)="close()">Cancel</button>
-  <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Clients.AddNote' | translate}}</button>
+  <button mat-stroked-button class="mat-cancel-btn" (click)="close()">Cancel</button>
+  <button mat-stroked-button class="mat-btn" [class.disabled]="formGroup.invalid" (click)="submit()">{{'Clients.AddNote'
+    | translate}}</button>
 </div>

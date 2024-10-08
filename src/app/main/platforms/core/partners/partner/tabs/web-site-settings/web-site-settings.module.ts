@@ -24,6 +24,8 @@ import {AddEditMenuItemComponent} from './add-edit-menu-item/add-edit-menu-item.
 import {TranslateModule} from "@ngx-translate/core";
 import {ColorPickerModule} from "ngx-color-picker";
 import {HtmlEditorModule} from "../../../../../../components/html-editor/html-editor.component";
+import { AgGridModule } from 'ag-grid-angular';
+import { MenusGridComponent } from "./menus-grid/menus-grid.component";
 
 const routes: Routes = [
   {
@@ -39,8 +41,7 @@ const routes: Routes = [
     AddEditMenuComponent,
     AddEditMenuItemComponent,
     AddEditSubMenuComponent,
-    AddEditTranslationsComponent
-
+    AddEditTranslationsComponent,
   ],
   imports: [
     CommonModule,
@@ -57,8 +58,10 @@ const routes: Routes = [
     MatCheckboxModule,
     TranslateModule,
     ColorPickerModule,
-    HtmlEditorModule
-  ]
+    HtmlEditorModule,
+    AgGridModule,
+    MenusGridComponent
+]
 })
 
 export class WebSiteSettingsModule {

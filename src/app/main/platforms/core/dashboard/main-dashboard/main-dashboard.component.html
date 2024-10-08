@@ -20,8 +20,10 @@
           <mat-select (selectionChange)="changeCartType($event.value)"
             placeholder="{{'Dashboard.SelectChartType' | translate}}" panelClass="overlay-dropdown"
             disableOptionCentering>
-            <mat-option *ngFor="let cartType of cartTypes" [value]="cartType.value">{{cartType.id |
+            @for (cartType of cartTypes; track $index) {
+            <mat-option [value]="cartType.value">{{cartType.id |
               translate}}</mat-option>
+            }
           </mat-select>
         </div>
 
@@ -315,86 +317,93 @@
 
         <div class="table-content">
           <table class="table pointer deposit-table">
-            <tbody *ngFor="let key of deposits; index as i" class="status-{{key.totals?.Status}}">
-              <tr class="status-text status-text bolded-row" (click)="selectGrid(1, key.key)" style="cursor: pointer;" [class.selected-row]="chartItemName == key.key && selectedGrid == 1">
-                <td class="w-35 row-title">{{key.key}}</td>
-                <td>{{key.totals?.TotalAmount | number:'1.2-2'}}</td>
-                <td>{{key.totals?.TotalDepositsCount }}</td>
-                <td>
-                  {{key.totals?.TotalPlayersCount}}
-                  @if (chartItemName == key.key && selectedGrid == 1) {
-                    <i class="icon-stat-icon" ></i>
-                  }
-                </td>
-              </tr>
-              <tr class="status-text status-text soft-row" *ngFor="let item of key.pSystems;"
-                  (click)="selectGrid(5, item.PaymentSystemName, key)"
-                  [class.selected-row]="chartItemName === item.PaymentSystemName && this.selectedKey == key.key">
-                <td class="w-35 row-title" style="cursor: pointer;">{{item.PaymentSystemName}}</td>
-                <td>{{item.TotalAmount | number:'1.2-2'}}</td>
-                <td>{{item.TotalDepositsCount }}</td>
-                <td>
-                    {{item.TotalPlayersCount}}
-                    @if (chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key) {
+            @for (key of deposits; track key; let i = $index) {
+              <tbody class="status-{{key.totals?.Status}}">
+                <tr class="status-text status-text bolded-row" (click)="selectGrid(1, key.key)" style="cursor: pointer;" [class.selected-row]="chartItemName == key.key && selectedGrid == 1">
+                  <td class="w-35 row-title">{{key.key}}</td>
+                  <td>{{key.totals?.TotalAmount | number:'1.2-2'}}</td>
+                  <td>{{key.totals?.TotalDepositsCount }}</td>
+                  <td>
+                    {{key.totals?.TotalPlayersCount}}
+                    @if (chartItemName == key.key && selectedGrid == 1) {
                       <i class="icon-stat-icon" ></i>
                     }
-                </td>
-              </tr>
-            </tbody>
+                  </td>
+                </tr>
+                @for ( item of key.pSystems; track item) {
+                  <tr class="status-text status-text soft-row" 
+                      (click)="selectGrid(5, item.PaymentSystemName, key)"
+                      [class.selected-row]="chartItemName === item.PaymentSystemName && this.selectedKey == key.key">
+                    <td class="w-35 row-title" style="cursor: pointer;">{{item.PaymentSystemName}}</td>
+                    <td>{{item.TotalAmount | number:'1.2-2'}}</td>
+                    <td>{{item.TotalDepositsCount }}</td>
+                    <td>
+                        {{item.TotalPlayersCount}}
+                        @if (chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key) {
+                          <i class="icon-stat-icon" ></i>
+                        }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            }
           </table>
         </div>
 
         <ul class="compact-list deposit-list">
-          <ng-container *ngFor="let key of deposits">
-            <li class="status-{{key.totals?.Status}}">
-              <label  (click)="selectGrid(1, key.key)" [class.selected-row]="chartItemName == key.key && selectedGrid == 1">
-                <span>{{key.key}}</span>
-                @if (chartItemName == key.key && selectedGrid == 1) {
-                  <i class="icon-stat-icon" ></i>
-                }
-              </label>
-              <span class="icon-arrow" collapse></span>
-              <div class="list-content">
-                <div class="list-item">
-                  <span>{{'Dashboard.Amount' | translate}}</span>
-                  <span>{{key.totals?.TotalAmount | number:'1.2-2'}}</span>
-                </div>
-                <div class="list-item">
-                  <span>{{'Partners.Count' | translate}}</span>
-                  <span>{{key.totals?.TotalDepositsCount }}</span>
-                </div>
-                <div class="list-item">
-                  <span>{{'Dashboard.Players' | translate}}</span>
-                  <span>{{key.totals?.TotalPlayersCount}}</span>
-                </div>
-              </div>
-              <div class="pay-systems-block">
-                <div *ngFor="let item of key.pSystems" class="compact-list-content">
-                  <div class="list-item  bolded-row"  (click)="selectGrid(5, item.PaymentSystemName, key)"
-                       [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key">
-                    {{item.PaymentSystemName}}
-                    @if (chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key) {
-                      <i class="icon-stat-icon"></i>
-                    }
-                  </div>
+          @for (key of deposits; track $index) {
+  
+              <li class="status-{{key.totals?.Status}}">
+                <label  (click)="selectGrid(1, key.key)" [class.selected-row]="chartItemName == key.key && selectedGrid == 1">
+                  <span>{{key.key}}</span>
+                  @if (chartItemName == key.key && selectedGrid == 1) {
+                    <i class="icon-stat-icon" ></i>
+                  }
+                </label>
+                <span class="icon-arrow" collapse></span>
+                <div class="list-content">
                   <div class="list-item">
                     <span>{{'Dashboard.Amount' | translate}}</span>
-                    <span>{{item.TotalAmount | number:'1.2-2'}}</span>
+                    <span>{{key.totals?.TotalAmount | number:'1.2-2'}}</span>
                   </div>
                   <div class="list-item">
                     <span>{{'Partners.Count' | translate}}</span>
-                    <span>{{item.TotalDepositsCount }}</span>
+                    <span>{{key.totals?.TotalDepositsCount }}</span>
                   </div>
                   <div class="list-item">
                     <span>{{'Dashboard.Players' | translate}}</span>
-                    <span>{{item.TotalPlayersCount}}</span>
+                    <span>{{key.totals?.TotalPlayersCount}}</span>
                   </div>
                 </div>
-              </div>
-
-            </li>
-
-          </ng-container>
+                <div class="pay-systems-block">
+                  @for (item of key.pSystems; track $index) {
+                    <div class="compact-list-content">
+                      <div class="list-item  bolded-row"  (click)="selectGrid(5, item.PaymentSystemName, key)"
+                           [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key">
+                        {{item.PaymentSystemName}}
+                        @if (chartItemName === item.PaymentSystemName && selectedGrid == 5 && this.selectedKey == key.key) {
+                          <i class="icon-stat-icon"></i>
+                        }
+                      </div>
+                      <div class="list-item">
+                        <span>{{'Dashboard.Amount' | translate}}</span>
+                        <span>{{item.TotalAmount | number:'1.2-2'}}</span>
+                      </div>
+                      <div class="list-item">
+                        <span>{{'Partners.Count' | translate}}</span>
+                        <span>{{item.TotalDepositsCount }}</span>
+                      </div>
+                      <div class="list-item">
+                        <span>{{'Dashboard.Players' | translate}}</span>
+                        <span>{{item.TotalPlayersCount}}</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+  
+              </li>
+  
+          }
         </ul>
       </div>
     </div>
@@ -419,90 +428,93 @@
 
         <div class="table-content">
           <table class="table pointer withdraw-table">
-            <tbody *ngFor="let key of withdrawals; index as i" class="status-{{key.totals?.Status}}">
-              <tr class="status-text status-text bolded-row" (click)="selectGrid(2, key.key)" style="cursor: pointer;" [class.selected-row]="chartItemName === key.key && selectedGrid == 2">
-                <td class="w-35 row-title">{{key.key}}</td>
-                <td>{{key.totals?.TotalAmount | number:'1.2-2'}}</td>
-                <td>{{key.totals?.TotalWithdrawalsCount }}</td>
-                <td>{{key.totals?.TotalPlayersCount}}
-                  @if (chartItemName === key.key && selectedGrid == 2) {
-                    <i class="icon-stat-icon"></i>
-                  }
-                </td>
-                </tr>
-              <tr class="status-text status-text soft-row" *ngFor="let item of key.pSystems" (click)="selectGrid(6, item.PaymentSystemName, key)" style="cursor: pointer;"
-                [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key">
-                <td class="w-35 row-title">{{item.PaymentSystemName}}</td>
-                <td>{{item.TotalAmount | number:'1.2-2'}}</td>
-                <td>{{item.TotalWithdrawalsCount }}</td>
-                <td>{{item.TotalPlayersCount}}
-                  @if (chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key) {
-                    <i class="icon-stat-icon" ></i>
-                  }
-                </td>
-              </tr>
-            </tbody>
+            @for (key of withdrawals; track key; let i = $index) {
+              <tbody class="status-{{key.totals?.Status}}">
+                <tr class="status-text status-text bolded-row" (click)="selectGrid(2, key.key)" style="cursor: pointer;" [class.selected-row]="chartItemName === key.key && selectedGrid == 2">
+                  <td class="w-35 row-title">{{key.key}}</td>
+                  <td>{{key.totals?.TotalAmount | number:'1.2-2'}}</td>
+                  <td>{{key.totals?.TotalWithdrawalsCount }}</td>
+                  <td>{{key.totals?.TotalPlayersCount}}
+                    @if (chartItemName === key.key && selectedGrid == 2) {
+                      <i class="icon-stat-icon"></i>
+                    }
+                  </td>
+                  </tr>
+                  @for ( item of key.pSystems; track $index) {
+                    <tr class="status-text status-text soft-row" (click)="selectGrid(6, item.PaymentSystemName, key)" style="cursor: pointer;"
+                      [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key">
+                      <td class="w-35 row-title">{{item.PaymentSystemName}}</td>
+                      <td>{{item.TotalAmount | number:'1.2-2'}}</td>
+                      <td>{{item.TotalWithdrawalsCount }}</td>
+                      <td>{{item.TotalPlayersCount}}
+                        @if (chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key) {
+                          <i class="icon-stat-icon" ></i>
+                        }
+                      </td>
+                    </tr>
+                  } 
+              </tbody>
+            }
           </table>
         </div>
         <ul class="compact-list withdraw-list">
-          <ng-container *ngFor="let key of withdrawals; index as i">
-            <li class="status-{{key.totals?.Status}}">
-              <label  (click)="selectGrid(2, key.key)"
-                     [class.selected-row]="chartItemName === key.key && selectedGrid == 2">
-                <span>{{key.key}}</span>
-                @if (chartItemName === key.key && selectedGrid == 2) {
-                  <i class="icon-stat-icon" ></i>
-                }
-              </label>
-              <span class="icon-arrow" collapse></span>
-              <div class="list-content">
-                <div class="list-item">
-                  <span>{{'Dashboard.Amount' | translate}}</span>
-                  <span>{{key.totals?.TotalAmount | number:'1.2-2'}}</span>
-                </div>
-                <div class="list-item">
-                  <span>{{'Partners.Count' | translate}}</span>
-                  <span>{{key.totals?.TotalDepositsCount }}</span>
-                </div>
-                <div class="list-item">
-                  <span>{{'Dashboard.Players' | translate}}</span>
-                  <span>{{key.totals?.TotalPlayersCount}}</span>
-                </div>
-              </div>
-              <div class="pay-systems-block">
-                <div *ngFor="let item of key.pSystems" class="compact-list-content">
-                  <div class="list-item bolded-row " (click)="selectGrid(6, item.PaymentSystemName, key)"
-                       [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key">
-                    {{item.PaymentSystemName}}
-                    @if (chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key) {
-                      <i class="icon-stat-icon" ></i>
-                    }
-                  </div>
+          @for (key of withdrawals; track $index) {
+              <li class="status-{{key.totals?.Status}}">
+                <label  (click)="selectGrid(2, key.key)"
+                       [class.selected-row]="chartItemName === key.key && selectedGrid == 2">
+                  <span>{{key.key}}</span>
+                  @if (chartItemName === key.key && selectedGrid == 2) {
+                    <i class="icon-stat-icon" ></i>
+                  }
+                </label>
+                <span class="icon-arrow" collapse></span>
+                <div class="list-content">
                   <div class="list-item">
                     <span>{{'Dashboard.Amount' | translate}}</span>
-                    <span>{{item.TotalAmount | number:'1.2-2'}}</span>
+                    <span>{{key.totals?.TotalAmount | number:'1.2-2'}}</span>
                   </div>
                   <div class="list-item">
                     <span>{{'Partners.Count' | translate}}</span>
-                    <span>{{item.TotalDepositsCount }}</span>
+                    <span>{{key.totals?.TotalDepositsCount }}</span>
                   </div>
                   <div class="list-item">
                     <span>{{'Dashboard.Players' | translate}}</span>
-                    <span>{{item.TotalPlayersCount}}</span>
+                    <span>{{key.totals?.TotalPlayersCount}}</span>
                   </div>
                 </div>
-              </div>
-
-            </li>
-
-
-          </ng-container>
+                <div class="pay-systems-block">
+                  @for (item of key.pSystems; track $index) {
+                    <div class="compact-list-content">
+                      <div class="list-item bolded-row " (click)="selectGrid(6, item.PaymentSystemName, key)"
+                           [class.selected-row]="chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key">
+                        {{item.PaymentSystemName}}
+                        @if (chartItemName === item.PaymentSystemName && selectedGrid == 6 && this.selectedKey == key.key) {
+                          <i class="icon-stat-icon" ></i>
+                        }
+                      </div>
+                      <div class="list-item">
+                        <span>{{'Dashboard.Amount' | translate}}</span>
+                        <span>{{item.TotalAmount | number:'1.2-2'}}</span>
+                      </div>
+                      <div class="list-item">
+                        <span>{{'Partners.Count' | translate}}</span>
+                        <span>{{item.TotalDepositsCount }}</span>
+                      </div>
+                      <div class="list-item">
+                        <span>{{'Dashboard.Players' | translate}}</span>
+                        <span>{{item.TotalPlayersCount}}</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+  
+              </li>
+          }
         </ul>
       </div>
     </div>
   </div>
   <div class="chart-grid">
-    <!-- <mat-spinner class="mat-spinner" *ngIf="providersLoading"></mat-spinner> -->
     <div class="info pointer">
       <div class="panel-header clickable" collapse (click)="selectGrid(4, providerBets[0].SubProviderName,  0)">
         <span>{{'Dashboard.BetsByProviders' | translate}}</span>
@@ -550,82 +562,86 @@
                 <td>{{pbt?.TotalPlayersCount}}</td>
                 <td></td>
               </tr>
-              <tr *ngFor="let bet of providerBets  let i = index" [class.selected-row]="i === selectedRowIndex"
-                [ngClass]="{'select-grid, select-row': selectedGrid === 4}"
-                (click)="selectGrid(4, bet.SubProviderName,  i)" style="cursor: pointer;">
-                <td class="row-title">{{bet.GameProviderName}}</td>
-                <td>{{bet.SubProviderName}}</td>
-                <td [ngClass]="{'positive': bet.TotalBetsAmount >= 0, 'negative': bet.TotalBetsAmount < 0}">
-                  {{bet.TotalBetsAmount | number:'1.2-2'}} /
-                  <span>{{bet.TotalBetsAmount / pbt.TotalBetsAmount | percent:'1.1'}}</span>
-                </td>
-                <td [ngClass]="{'positive': bet.TotalWinsAmount >= 0, 'negative': bet.TotalWinsAmount < 0}">
-                  {{bet.TotalWinsAmount | number:'1.2-2'}} /
-                  <span>{{bet.TotalWinsAmount / pbt.TotalWinsAmount | percent:'1.1'}}</span>
-                </td>
-                <td>{{bet.TotalBetsCount | number:'.'}}</td>
-                <td [ngClass]="{'positive': bet.TotalGGR >= 0, 'negative': bet.TotalGGR < 0}">
-                  {{bet.TotalGGR | number:'.'}} /
-                  <span>{{bet.TotalGGR / pbt.TotalGGR | percent:'1.1'}}</span>
-                </td>
-                <td [ngClass]="{'positive': bet.TotalNGR >= 0, 'negative': bet.TotalNGR < 0}">
-                  {{bet.TotalNGR | number:'1.2-2'}}
-                  <span>{{bet.TotalNGR / pbt.TotalNGR | percent:'1.1'}}</span>
-
-                </td>
-
-                <td>{{bet.TotalPlayersCount | number:'.'}}</td>
-                <td>
-                  @if (i === selectedRowIndex) {
-                    <i class="icon-stat-icon"></i>
-                  }
-                </td>
-              </tr>
+              @for (bet of providerBets; track bet; let i = $index) {
+                <tr  [class.selected-row]="i === selectedRowIndex"
+                  [ngClass]="{'select-grid, select-row': selectedGrid === 4}"
+                  (click)="selectGrid(4, bet.SubProviderName,  i)" style="cursor: pointer;">
+                  <td class="row-title">{{bet.GameProviderName}}</td>
+                  <td>{{bet.SubProviderName}}</td>
+                  <td [ngClass]="{'positive': bet.TotalBetsAmount >= 0, 'negative': bet.TotalBetsAmount < 0}">
+                    {{bet.TotalBetsAmount | number:'1.2-2'}} /
+                    <span>{{bet.TotalBetsAmount / pbt.TotalBetsAmount | percent:'1.1'}}</span>
+                  </td>
+                  <td [ngClass]="{'positive': bet.TotalWinsAmount >= 0, 'negative': bet.TotalWinsAmount < 0}">
+                    {{bet.TotalWinsAmount | number:'1.2-2'}} /
+                    <span>{{bet.TotalWinsAmount / pbt.TotalWinsAmount | percent:'1.1'}}</span>
+                  </td>
+                  <td>{{bet.TotalBetsCount | number:'.'}}</td>
+                  <td [ngClass]="{'positive': bet.TotalGGR >= 0, 'negative': bet.TotalGGR < 0}">
+                    {{bet.TotalGGR | number:'.'}} /
+                    <span>{{bet.TotalGGR / pbt.TotalGGR | percent:'1.1'}}</span>
+                  </td>
+                  <td [ngClass]="{'positive': bet.TotalNGR >= 0, 'negative': bet.TotalNGR < 0}">
+                    {{bet.TotalNGR | number:'1.2-2'}}
+                    <span>{{bet.TotalNGR / pbt.TotalNGR | percent:'1.1'}}</span>
+  
+                  </td>
+  
+                  <td>{{bet.TotalPlayersCount | number:'.'}}</td>
+                  <td>
+                    @if (i === selectedRowIndex) {
+                      <i class="icon-stat-icon"></i>
+                    }
+                  </td>
+                </tr>
+              }
 
             </tbody>
           </table>
         </div>
         <ul class="compact-list">
-          <li *ngFor="let bet of providerBets  let i = index">
-            <label  class="provider-label" [ngClass]="{'selected-row': selectedGrid === 4}"
-                   (click)="selectGrid(4, bet.SubProviderName,  i)">
-              <span>{{bet.GameProviderName}}</span>
-              @if (i === selectedRowIndex) {
-                <i class="icon-stat-icon"></i>
-              }
-            </label>
-            <span class="icon-arrow" collapse></span>
-            <div class="list-content">
-              <div class="list-item">
-                <span>{{'Dashboard.SubProvider' | translate}}</span>
-                <span>{{bet.SubProviderName}}</span>
+          @for (bet of providerBets; track bet; let i = $index) {
+            <li >
+              <label  class="provider-label" [ngClass]="{'selected-row': selectedGrid === 4}"
+                     (click)="selectGrid(4, bet.SubProviderName,  i)">
+                <span>{{bet.GameProviderName}}</span>
+                @if (i === selectedRowIndex) {
+                  <i class="icon-stat-icon"></i>
+                }
+              </label>
+              <span class="icon-arrow" collapse></span>
+              <div class="list-content">
+                <div class="list-item">
+                  <span>{{'Dashboard.SubProvider' | translate}}</span>
+                  <span>{{bet.SubProviderName}}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Dashboard.TotalBets' | translate}}</span>
+                  <span>{{bet.TotalBetsAmount / pbt.TotalBetsAmount | percent:'1.1'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Dashboard.TotalWin' | translate}}</span>
+                  <span>{{bet.TotalWinsAmount / pbt.TotalWinsAmount | percent:'1.1'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>#{{'Dashboard.Bets' | translate}}</span>
+                  <span>{{bet.TotalBetsCount | number:'.'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>#{{'Dashboard.TotalGGR' | translate}}</span>
+                  <span>{{bet.TotalGGR / pbt.TotalGGR | percent:'1.1'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Dashboard.TotalNGR' | translate}}</span>
+                  <span>{{bet.TotalNGR | number:'1.2-2'}}</span>
+                </div>
+                <div class="list-item">
+                  <span>{{'Dashboard.UniquePlayers' | translate}}</span>
+                  <span>{{bet.TotalPlayersCount | number:'.'}}</span>
+                </div>
               </div>
-              <div class="list-item">
-                <span>{{'Dashboard.TotalBets' | translate}}</span>
-                <span>{{bet.TotalBetsAmount / pbt.TotalBetsAmount | percent:'1.1'}}</span>
-              </div>
-              <div class="list-item">
-                <span>{{'Dashboard.TotalWin' | translate}}</span>
-                <span>{{bet.TotalWinsAmount / pbt.TotalWinsAmount | percent:'1.1'}}</span>
-              </div>
-              <div class="list-item">
-                <span>#{{'Dashboard.Bets' | translate}}</span>
-                <span>{{bet.TotalBetsCount | number:'.'}}</span>
-              </div>
-              <div class="list-item">
-                <span>#{{'Dashboard.TotalGGR' | translate}}</span>
-                <span>{{bet.TotalGGR / pbt.TotalGGR | percent:'1.1'}}</span>
-              </div>
-              <div class="list-item">
-                <span>{{'Dashboard.TotalNGR' | translate}}</span>
-                <span>{{bet.TotalNGR | number:'1.2-2'}}</span>
-              </div>
-              <div class="list-item">
-                <span>{{'Dashboard.UniquePlayers' | translate}}</span>
-                <span>{{bet.TotalPlayersCount | number:'.'}}</span>
-              </div>
-            </div>
-          </li>
+            </li>
+          }
         </ul>
       </div>
     </div>

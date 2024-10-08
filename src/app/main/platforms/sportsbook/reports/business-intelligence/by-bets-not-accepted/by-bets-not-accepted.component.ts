@@ -15,6 +15,7 @@ import { AVAILABLEBETCATEGORIES, BETAVAILABLESTATUSES, BETSTATUSES } from 'src/a
 import { GridMenuIds } from 'src/app/core/enums';
 import { syncColumnReset, syncColumnSelectPanel } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-by-bets-not-accepted',
@@ -46,8 +47,8 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   public availableBetCategoriesStatus: number = -1;
   public availableStatusesStatus: number = -1;
   public show = true;
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
   public filteredData: any;
   public rowData = [];
   rowData1: any;
@@ -453,14 +454,14 @@ export class ByBetsNotAcceptedComponent extends BasePaginatedGridComponent imple
   }
 
   ngOnInit() {
-    this.gridStateName = 'report-by-bet-not-accepted-grid-state';
+    this.setTime();
     this.getCommentTypes();
   }
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

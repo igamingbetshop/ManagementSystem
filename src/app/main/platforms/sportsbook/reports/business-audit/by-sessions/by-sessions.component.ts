@@ -14,6 +14,7 @@ import {DateAdapter} from "@angular/material/core";
 import { DateTimeHelper } from 'src/app/core/helpers/datetime.helper';
 import { syncColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { DateHelper } from 'src/app/main/components/partner-date-filter/data-helper.class';
+import { formatDateTime } from 'src/app/core/utils';
 
 
 @Component({
@@ -27,8 +28,8 @@ export class BySessionsComponent extends BasePaginatedGridComponent implements O
   public commentTypes: any[] = [];
   public rowData = [];
   public selectedItem = 'today';
-  public fromDate = new Date();
-  public toDate = new Date();
+  fromDate: any;
+  public toDate: any;
 
   public sessionStates = [
     {Name: 'Active', Id: 1},
@@ -218,8 +219,8 @@ export class BySessionsComponent extends BasePaginatedGridComponent implements O
 
   setTime() {
     const [fromDate, toDate] = DateHelper.startDate();
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.fromDate = formatDateTime(fromDate);
+    this.toDate = formatDateTime(toDate);    
   }
 
   onDateChange(event: any) {

@@ -240,6 +240,7 @@ export enum Methods {
     GET_REPORT_BY_USER_SESSIONS = 'GetReportByUserSessions',
     GET_REPORT_BY_CLIENT_EXCLUSION = 'GetReportByClientExclusions',
     GET_REPORT_BY_LOGS = 'GetReportByLogs',
+    GET_REPORT_BY_JOB_LOGS = 'GetReportByJobLogs',
     GET_PARTNER_PAYMENTS_SUMMARY_REPORT = 'GetPartnerPaymentsSummaryReport',
     GET_REPORT_BY_PROVIDERS = 'GetReportByProviders',
     GET_REPORT_BY_PARTNERS = 'GetReportByPartners',
@@ -341,6 +342,7 @@ export enum Methods {
     CREATE_TICKET = 'CreateTicket',
     CREATE_MESSAGE = 'CreateMessage',
     GET_TICKET_MESSAGES = 'GetTicketMessages',
+    GET_NOTIFICATIONS = 'GetNotifications',
     CLOSE_TICKET = 'CloseTicket',
     CHANGE_BETSHOP_LIMIT = 'ChangeBetShopLimit',
     GET_AFFILIATE_PLATFORMS = 'GetAffiliatePlatforms',
@@ -412,7 +414,12 @@ export enum Methods {
     GET_AFFILIATE_ACCOUNTS = 'GetAffiliateAccounts',
     GET_VIP_LEVELS = 'GetVipLevels',
     GET_CLIENT_SEGMENTS = 'GetClientSegments',
-    APPROVE_CLIENT_CASHBACK_BOUNUS =  "ApproveClientCashbackBonus"
+    APPROVE_CLIENT_CASHBACK_BOUNUS =  "ApproveClientCashbackBonus",
+    GET_BULK_EDIT_FIELDS = 'GetBulkEditFields',
+    GET_CLIENT_REGISTRATION_FIELDS = 'GetClientRegistrationFields',
+    READ_NOTIFICATION = 'ReadNotification',
+    GET_PARTNER_MOBILE_CODES = "GetPartnerMobileCodes",
+    GET_TOURNAMENT_LEADERBOUARD = "GetTournamentLeaderboard",
   }
 
 
@@ -443,4 +450,6 @@ export enum PBMethods {
   BANNERS = 'banners',
   SAVE_BANNER = 'savebanner',
   DELETE_BANNER = 'deletebanner',
+  GET_CURRENCIES = 'getcurrencies',
+  CHANGE_CURRENCY = 'changecurrencyrate',
 }

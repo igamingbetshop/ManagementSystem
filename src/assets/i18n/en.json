@@ -31,6 +31,7 @@
     "PasswordAndConfirmPasswordDoNotMatch": "Password and ConfirmPassword do not match.",
     "SelectCountry": "Select Country",
     "SelectCity": "Select City",
+    "SelectDistrict": "Select District",
     "SelectJobArea": "Select JobArea",
     "SelectDocumentType": "Select Document Type",
     "SendEmail": "Send email",
@@ -981,7 +982,8 @@
     "Subject": "Subject",
     "Refresh": "Refresh",
     "PartnerEmailes": "Partner Emailes",
-    "AnnouncementCahnges": "Announcement Cahnges"
+    "AnnouncementCahnges": "Announcement Cahnges",
+    "NotificationsSettings": "Notifications Settings"
   },
   "Cms": {
     "Cms": "CMS",
@@ -1088,7 +1090,8 @@
     "ReportByClientGames": "Report By Client Games",
     "SearchByCaller": "Search By Caller",
     "ReportByAgentTransactions": "Report By Agent Transactions",
-    "ReportByAgents": "Report By Agents"
+    "ReportByAgents": "Report By Agents",
+    "ReportByJobLogs": "Report By Job Logs"
   },
   "Errors": {
     "Required": "required.",
@@ -1101,7 +1104,9 @@
     "InvalidImageExtension": "Invalid file extension",
     "TheSumOfCountsMustBeEqualTo100": "The Sum Of Counts Must Be Equal To 100.",
     "OnlyNumbersAreAllowed": "Only Numbers Are Allowed",
-    "SelectionIdIsRequired": "Selection Id is required"
+    "SelectionIdIsRequired": "Selection Id is required",
+    "PasswordsDoNotMatch": "Passwords do not match"
+
   },
   "Sport": {
     "AddSettings": "Add Settings",
@@ -1389,7 +1394,12 @@
     "AbsoluteProfitLiveRange5": "96-105 Minutes (AP)",
     "AbsoluteProfitLiveRange6": "106+ Minutes (AP)",
     "BetPercent": "Bet Percent",
-    "WinnerBetId": "Winner Bet Id"
+    "WinnerBetId": "Winner Bet Id",
+    "CampaignWagerCasino": "Campaign Wager Casino",
+    "CampaignCash": "Campaign Cash",
+    "CampaignFreeBet": "Campaign Free Bet",
+    "CampaignWagerSport": "Campaign Wager Sport",
+    "CampaignFreeSpin": "Campaign Free Spin"
   },
   "PoolBetting": {
     "PoolBetting": "Pool Betting",
@@ -1688,7 +1698,10 @@
     "VipLevel": "Vip Level",
     "ViewAll": "View All",
     "AddValue": "Add Value",
-    "OpenDocument": "Open Document"
+    "OpenDocument": "Open Document",
+    "SelectCode": "Select Code",
+    "ThisMonth": "This Month",
+    "ThisWeek": "This Week"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",

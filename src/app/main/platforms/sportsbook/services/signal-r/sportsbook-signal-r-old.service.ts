@@ -5,9 +5,7 @@ declare var $: any;
 
 @Injectable()
 export class SportsBookSignalROldService extends SportsbookSignalRService{
-  public hubConnection: any;
-  public reconnectPromise: any;
-
+  hubConnection: any;
 
   constructor(
     private configService: ConfigService
@@ -15,18 +13,17 @@ export class SportsBookSignalROldService extends SportsbookSignalRService{
     super();
   }
 
-  init() {
-    const url = `${this.configService.getSBApiUrl}/` + 'api/signalr/reporthub';
-
+  init(hubName: string) {
+    const url = `${this.configService.getSBApiUrl}/` + `api/signalr/${hubName}`;
     this.hubConnection = $.hubConnection(url, {useDefaultPath: false});
-    this.connection = this.hubConnection.createHubProxy('reporthub');
+    this.connection = this.hubConnection.createHubProxy(hubName);
     this.startSocket();
   }
 
   private startSocket() {
     this.hubConnection.start()
       .done(() => {
-
+        this.notifyConnection$.next(true);
     }).fail((error) => {
       console.error(error.toString());
     });
@@ -38,11 +35,14 @@ export class SportsBookSignalROldService extends SportsbookSignalRService{
         this.notifyReConnection$.next(true);
       }
     });
-
   }
 
   stop() {
     this.hubConnection.stop();
+  }
+
+  sendMessage(methodName: string,  ...args: any[]) {
+    return this.connection.invoke(methodName, ...args);
   }
 }
 

@@ -34,11 +34,14 @@ export function formattedNumber(value: number) {
   return value.toLocaleString('en', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }).replace(/,/g, ' ');
+  }).replace(/,/g, ',');
 }
 
-export function compressImage(imgToCompress, resizingFactor):any
-{
+export function formattedCount(value: number): string {
+  return value.toLocaleString('en').replace(/,/g, ' ');
+}
+
+export function compressImage(imgToCompress, resizingFactor): any {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
@@ -61,5 +64,26 @@ export function compressImage(imgToCompress, resizingFactor):any
   return canvas;
 }
 
+export function formatDateTime(date: any): string {
+  if (date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  }
+  return '';
+}
+
+export function formatDate(date: any): string {
+  if (date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  return '';
+}
 
 

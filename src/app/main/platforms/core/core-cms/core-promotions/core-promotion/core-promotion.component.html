@@ -12,26 +12,22 @@
     <form class="grid-edit" [class.can-edit]="isEdit" [formGroup]="formGroup">
       <div>
         <div class="first-hand">{{'Common.StartDate' | translate}}</div>
-        <div class="second-hand">{{promotion?.StartDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar-edit">
-            <input matInput [matDatepicker]="picker" [formControlName]="'StartDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+        <div class="second-hand">{{promotion?.StartDate | date:'dd/MM/yyyy HH:mm'}}</div>
+
+        <div class="form-field form-calendar">
+          <app-date-time-picker formControlName="StartDate"></app-date-time-picker>
         </div>
+
       </div>
 
       <div>
         <div class="first-hand">{{'Common.EndDate' | translate}}</div>
-        <div class="second-hand">{{promotion?.FinishDate | date:'dd/MM/yyyy'}}</div>
-        <div class="form-field form-calendar-edit">
-            <input matInput [matDatepicker]="picker1" [formControlName]="'FinishDate'">
-            <mat-datepicker-toggle matSuffix [for]="picker1">
-              <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true"></div>
-            </mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
+        <div class="second-hand">{{promotion?.FinishDate | date:'dd/MM/yyyy HH:mm'}}</div>
+
+        <div class="form-field form-calendar">
+          <app-date-time-picker formControlName="FinishDate"></app-date-time-picker>
         </div>
+
       </div>
 
       <div>
@@ -45,23 +41,17 @@
       @if (childe) {
       <div>
         <div class="first-hand">{{'Cms.Image' | translate}}</div>
-        <div class="second-hand">{{promotion?.ImageName}}</div>
-        <div class="form-field form-input">
-            <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'ImageName'" readonly>
-        </div>
+        <div class="static-hand">{{promotion?.ImageName}}</div>
+
       </div>
     }
 
       <div>
         <div class="first-hand">{{'Clients.SelectType' | translate}}</div>
-        <div class="second-hand">{{ promotion?.TypeName}}</div>
-        <div class="form-field form-dropdown">
-          <mat-select [formControlName]="'Type'">
-            @for (promo of promotionTypes; track $index) {
-              <mat-option [value]="promo.Id">{{promo.Name}}</mat-option>
-            }
-          </mat-select>
-        </div>
+        <div class="second-hand">{{ promotion?.Type}}</div>
+        <div class="form-field form-input">
+          <input matInput [placeholder]="'Cms.image' | translate" [formControlName]="'Type'">
+      </div>
       </div>
 
       <div>
@@ -262,28 +252,29 @@
   </div>
 
   @if (childe) {
-   <div class="card-content">
-     <mat-card>
-       <mat-card-header>
-         <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
-       </mat-card-header>
-         <img class="img" mat-card-image [src]="image" alt="Image">
-     </mat-card>
-   
-     <mat-card>
-       <mat-card-header>
-         <mat-card-title>{{"Cms.ImageMedum" | translate}}</mat-card-title>
-       </mat-card-header>
-         <img class="img" mat-card-image [src]="imageMedium" alt="Image">
-     </mat-card>
-   
-     <mat-card>
-       <mat-card-header>
-         <mat-card-title>{{"Cms.ImageSmall" | translate}}</mat-card-title>
-       </mat-card-header>
-         <img class="img" mat-card-image [src]="imageSmall" alt="Image">
-     </mat-card>
-   </div>
+    <div class="card-content">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.Image" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img class="img" mat-card-image [src]="image" alt="Image">
+      </mat-card>
+    
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.ImageMedum" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img class="img" mat-card-image [src]="imageMedium" alt="Image">
+      </mat-card>
+    
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{"Cms.ImageSmall" | translate}}</mat-card-title>
+        </mat-card-header>
+        <img class="img" mat-card-image [src]="imageSmall" alt="Image">
+      </mat-card>
+    </div>
+    
   }
 
 </div>

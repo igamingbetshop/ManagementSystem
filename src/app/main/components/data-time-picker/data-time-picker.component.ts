@@ -12,9 +12,9 @@ import { FocusMonitor } from '@angular/cdk/a11y';
     <input matInput type="datetime-local" [value]="dateTime" (input)="onDateTimeChange($event)" #inputElement>
   `,
   styles: [`
-  :host {
-    width: 100%;
-  }
+    :host {
+      width: 100%;
+    }
     .date-time-picker {
       width: 100%;
     }
@@ -64,18 +64,8 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
   userAriaDescribedBy?: string;
 
   ngOnInit() {
-    if (!this.dateTime) {
+    if (!this.dateTime || this.isDateTimeNow(this.dateTime)) {
       this.setCurrentDateTime();
-    } else {
-      // setTimeout(() => {
-      //   const event = new Event('input', {
-      //     bubbles: true,
-      //     cancelable: true
-      //   });
-      //   Object.defineProperty(event, 'target', { writable: false, value: { value: this.dateTime } });
-      //   this.onDateTimeChange(event);
-        
-      // }, 1000);
     }
   }
 
@@ -90,6 +80,12 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
     this.fm.stopMonitoring(this.inputElement.nativeElement);
     this.stateChanges.complete();
   }
+
+  private isDateTimeNow(dateTime: string): boolean {
+    const now = new Date();
+    const formattedNow = this.formatLocalDateTime(now);
+    return dateTime === formattedNow;
+}
 
   get empty() {
     return !this.dateTime;
@@ -113,29 +109,37 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
     const inputElement = event.target as HTMLInputElement;
     const value = inputElement.value;
     const localDate = new Date(value);
-    const localOffset = localDate.getTimezoneOffset();
-    const utcDate = new Date(localDate.getTime() + localOffset * 60000);
-    const formattedUtcDate = this.formatDate(utcDate);
-    this.dateTime = value;
-    this.dateTimeChange.emit(formattedUtcDate);
-    this.onChange(formattedUtcDate);
+    const formattedDate = this.formatLocalDateTime(localDate);
+    this.dateTime = formattedDate;
+    this.dateTimeChange.emit(formattedDate);
+    this.onChange(formattedDate);
     this.onTouched();
     this.stateChanges.next();
   }
-  
-  private formatDate(date: Date): string {
+
+  private formatLocalDateTime(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
+  
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
-  
 
-  writeValue(value: string): void {
+  private setCurrentDateTime() {
+    const now = new Date();
+    const formattedNow = this.formatLocalDateTime(now);
+    this.dateTime = formattedNow;
+    this.dateTimeChange.emit(formattedNow);
+    this.onChange(formattedNow);
+    this.stateChanges.next();
+  }
+
+  writeValue(value: string | null): void {
     if (value) {
-      this.dateTime = this.formatDateTime(value);
+      const date = new Date(value);
+      this.dateTime = this.formatLocalDateTime(date);
     } else {
       this.setCurrentDateTime();
     }
@@ -151,7 +155,9 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
   }
 
   setDisabledState(isDisabled: boolean): void {
-    // this.inputElement.nativeElement.disabled = isDisabled;
+    if (this.inputElement) {
+      this.inputElement.nativeElement.disabled = isDisabled;
+    }
   }
 
   onBlur() {
@@ -159,31 +165,4 @@ export class DateTimePickerComponent implements ControlValueAccessor, MatFormFie
     this.touched = true;
     this.stateChanges.next();
   }
-
-  private setCurrentDateTime() {
-    this.dateTime = this.getCurrentDateTime();
-    this.stateChanges.next();
-  }
-
-  private getCurrentDateTime(): string {
-    const now = new Date();
-    return this.formatLocalDateTime(now);
-  }
-  
-  private formatDateTime(dateTime: string): string {
-    const date = new Date(dateTime);
-    return this.formatLocalDateTime(date);
-  }
-  
-  private formatLocalDateTime(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-  
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  }
-
-  
 }

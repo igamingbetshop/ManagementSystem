@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {ConfigService} from './config.service';
+import { Injectable } from '@angular/core';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class UtilityService {
@@ -13,7 +13,6 @@ export class UtilityService {
       return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
   }
-
 
   public GetTimeZone() {
     const d = new Date();
@@ -32,7 +31,6 @@ export class UtilityService {
     }, 3000);
   }
 
-
   public showMessageWithDelay(source: any, args: any[], delay: number = 3) {
     args.forEach(item => {
       Object.keys(item).forEach(key => {
@@ -48,7 +46,5 @@ export class UtilityService {
       clearTimeout(timeoutId);
     }, delay * 1000);
   }
-
-
 
 }
