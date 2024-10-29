@@ -1,7 +1,6 @@
-import {EventEmitter, Injectable} from '@angular/core';
-import {ConfigService} from "../../../../core/services";
+import { Injectable, EventEmitter } from '@angular/core';
+import { ConfigService } from "../../../../core/services";
 declare var $: any;
-
 
 @Injectable({
   providedIn: 'root'
@@ -11,25 +10,26 @@ export class CoreSignalRService {
   public connection: any;
   public connectionEmitter: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(
-    private configService: ConfigService
-  ) {}
+  constructor(private configService: ConfigService) {}
 
   init() {
-    const url = this.configService.getApiUrl.slice(0, -4);
-    this.hubConnection = $.hubConnection(url + '/signalr/signalr', {
-      useDefaultPath: false,
-      transport: ['webSockets', 'serverSentEvents', 'longPolling']
+    const url = this.configService.getApiUrl.slice(0, -8);
+
+    this.hubConnection = $.hubConnection(url + '/apisignalr/baseHub', {
+      useDefaultPath: true,
+      transport: ['webSockets', 'serverSentEvents', 'longPolling'], // Order of transports matters
+      clientProtocol: '1.5',
+      connectionData: [] 
     });
 
     this.connection = this.hubConnection.createHubProxy('baseHub');
     this.hubConnection.logging = true;
-    this.startSocket();
 
-    // Example of listening for an event from the SignalR hub
     this.connection.on('eventName', (data: any) => {
       console.log('Received message from SignalR:', data);
     });
+
+    this.startSocket(); 
   }
 
   startSocket() {
@@ -42,12 +42,24 @@ export class CoreSignalRService {
         console.error('Error starting SignalR connection:', error);
         this.connectionEmitter.emit(false);
       });
+
+
+    this.hubConnection.disconnected(() => {
+      console.warn('SignalR connection closed. Attempting to reconnect...');
+      setTimeout(() => {
+        this.startSocket(); 
+      }, 5000);
+    });
   }
 
   stop() {
     if (this.hubConnection) {
-      this.hubConnection.stop();
-      console.log('SignalR connection stopped');
+      try {
+        return this.hubConnection.stop();
+      } catch (error) {
+        console.error('Error stopping SignalR connection:', error);
+      }
     }
+    return Promise.resolve();
   }
 }

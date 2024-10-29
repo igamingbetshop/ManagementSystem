@@ -134,11 +134,11 @@
     </div>
 
     <div class="field-content">
-      @if(bonusTypeId == 1 || bonusTypeId == 3) {
+      @if(bonusTypeId == 1 || bonusTypeId == 3 || bonusTypeId == 6) {
       <mat-form-field>
         <mat-label>{{'Bonuses.PeriodInHours' | translate}}</mat-label>
         <input matInput type="number" [placeholder]="'Bonuses.PeriodInHours' | translate" [formControlName]="'Period'"
-          [required]="bonusTypeId == 1 || bonusTypeId == 3">
+          [required]="bonusTypeId == 1 || bonusTypeId == 3 || bonusTypeId == 6">
         @if(errorControl['Period']?.touched && errorControl['Period'].errors?.required) {
         <mat-error>
           {{'Bonuses.PeriodInHours' | translate}} {{'Errors.Required' | translate}}
@@ -223,7 +223,6 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- <mat-checkbox [formControlName]="'Status'">{{'Bonuses.Active' | translate}}</mat-checkbox> -->
     @if(bonusTypeId == 12) {
     <mat-checkbox [formControlName]="'AllowSplit'">{{'Bonuses.AllowSplit' | translate}}</mat-checkbox>
     }
@@ -248,7 +247,7 @@
       <input matInput type="number" [placeholder]="'Bonuses.MaxReceiversCount' | translate"
         [formControlName]="'MaxReceiversCount'">
     </mat-form-field>
-    @if(bonusTypeId == 6 || bonusTypeId == 7 || bonusTypeId == 9 || bonusTypeId == 10 || bonusTypeId == 13) {
+    @if(bonusTypeId == 7 || bonusTypeId == 9 || bonusTypeId == 10 || bonusTypeId == 13) {
     <mat-form-field>
       <mat-label>{{'Bonuses.TurnoverCount' | translate}}</mat-label>
       <input matInput type="number" min="0" [placeholder]="'Bonuses.TurnoverCount' | translate"
@@ -265,7 +264,7 @@
       }
     </mat-form-field>
     }
-    @if(bonusTypeId == 1) {
+    @if(bonusTypeId == 1 || bonusTypeId == 6) {
     <mat-form-field>
       <mat-label>{{'Bonuses.LinkedBonusId' | translate}}</mat-label>
       <input matInput type="number" [placeholder]="'Bonuses.LinkedBonusId' | translate"
@@ -287,7 +286,7 @@
       }
     </mat-form-field>
     }
-    @if(bonusTypeId == 3 || bonusTypeId == 6 || bonusTypeId == 5) {
+    @if(bonusTypeId == 3 || bonusTypeId == 5) {
     <mat-form-field>
       <mat-label>{{'Bonuses.Percent' | translate}}</mat-label>
       <input matInput type="number" min="0" [placeholder]="'Bonuses.Percent' | translate" [formControlName]="'Percent'"
@@ -374,7 +373,7 @@
       <input matInput type="text" [placeholder]="'Common.Info' | translate" [formControlName]="'Info'">
     </mat-form-field>
     }
-    @if(bonusTypeId == 6 || bonusTypeId == 9) {
+    @if(bonusTypeId == 9) {
     <mat-form-field>
       <mat-label>{{'Bonuses.Sequence' | translate}}</mat-label>
       <input matInput type="text" [placeholder]="'Bonuses.Sequence' | translate" [formControlName]="'Sequence'">
@@ -398,10 +397,10 @@
     </mat-form-field>
     }
 
-    @if(bonusTypeId >= 10 && bonusTypeId <= 14 || bonusTypeId==4 || bonusTypeId==1) { <mat-form-field>
+    @if(bonusTypeId >= 10 && bonusTypeId <= 14 || bonusTypeId==4 || bonusTypeId==1 || bonusTypeId==6) { <mat-form-field>
       <mat-label>{{'Bonuses.ValidForAwarding' | translate}}</mat-label>
       <input matInput type="number" min="0" [placeholder]="'Bonuses.ValidForAwarding' | translate"
-        [formControlName]="'ValidForAwarding'" [required]="bonusTypeId >= 10 && bonusTypeId <= 14 || bonusTypeId == 4">
+        [formControlName]="'ValidForAwarding'" [required]="bonusTypeId >= 10 && bonusTypeId <= 14 || bonusTypeId == 4 || bonusTypeId==1 || bonusTypeId==6">
       @if(errorControl['ValidForAwarding']?.touched && errorControl['ValidForAwarding'].errors?.required) {
       <mat-error>
         {{'Bonuses.ValidForAwarding' | translate}} {{'Errors.Required' | translate}}
@@ -438,13 +437,26 @@
       </mat-form-field>
       }
 
-      <div class="color-row">
-        <mat-label>{{ 'Sport.Color' | translate }}</mat-label>
-        
-        <input type="color" class="color-input" [(ngModel)]="color" [formControlName]="'Color'"/>
-        
-        <div [style.background]="color" class="color-preview"></div>
-      </div>
+      <mat-form-field>
+        <mat-label>{{'Sport.Color' | translate}}</mat-label>
+        <input [style.background-color]="formGroup.get('Color')?.value" matInput type="text" [placeholder]="'Sport.Color' | translate" [formControlName]="'Color'">
+      </mat-form-field>
+
+      @if(bonusTypeId == 10 || bonusTypeId == 13) {
+        <mat-form-field>
+          <mat-label>{{'Bonuses.WageringSource' | translate}}</mat-label>
+          <mat-select placeholder="{{'Partners.SelectWageringSource' | translate}}" [formControlName]="'WageringSource'" required>
+            @for (source of wageringSources; track $index) {
+            <mat-option [value]="source.Id">{{'Reports.' + source.Name | translate}}</mat-option>
+            }
+          </mat-select>
+          @if(errorControl['WageringSource']?.touched && errorControl['WageringSource'].errors?.required) {
+          <mat-error>
+            {{'Partners.SelectWageringSource' | translate}} {{'Errors.Required' | translate}}
+          </mat-error>
+          }
+        </mat-form-field>
+      }
 
   </form>
 

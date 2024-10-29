@@ -365,13 +365,9 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
       });
   }
 
-  handleSubMenuItem(event) {
-    console.log(this.selectedMenu, "this.selectedMenu");
-    
+  handleSubMenuItem(event) {    
     if ((this.selectedMenu.Type == "Translations" && event.data.colId == 'Title')) {
       this.addEditTranslation(event.data);
-    // } else if (this.selectedMenu.Type == 'Config' && this.selectedMenuItem.Title == "CloudflareZoneId") {
-    //   this.addEditConfig(event);
     } else {
       this.addEditSubMenuItem('Edit', event.data);
     }

@@ -56,7 +56,7 @@ export class ProductsBulkEditorComponent {
         Type: [null],
         Ids: [null],
       }),
-      State: [null, [Validators.required]],
+      State: [null],
     });
   }
 

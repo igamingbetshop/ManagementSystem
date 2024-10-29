@@ -14,6 +14,8 @@ import { ACTIVITY_STATUSES, DAYS, REGULARITY } from 'src/app/core/constantes/sta
 import { MatChipInputEvent } from '@angular/material/chips';
 import { minSelectedItemsValidator } from 'src/app/core/validators';
 import { campaignTypes } from '../../commons/tabs/details/campaing-types';
+import { formatDateTime } from 'src/app/core/utils';
+import { WageringSources } from '../../bonuses.types'
 
 @Component({
   selector: 'app-general-setup',
@@ -56,6 +58,7 @@ export class GeneralSetupComponent implements OnInit {
   selectedCampaignIds: number[] = [];
   selectedType: number;
   selectedCampaignsByType: { [key: number]: number[] } = {};
+  wageringSources = WageringSources;
 
   allBounuses: any;
   color = '#000000';
@@ -105,18 +108,29 @@ export class GeneralSetupComponent implements OnInit {
       });
   }
 
-  onBonusChange(BonusTypeId) {
-    this.bonusTypeId = BonusTypeId;
+  onBonusChange(_bonusTypeId) {
+    this.bonusTypeId = _bonusTypeId;
+    this.formGroup.reset();
+    this.formGroup.get('BonusTypeId').setValue(this.bonusTypeId);
+
     this.handleValidators();
+
+    if(this.bonusTypeId == 13 ) {
+      this.conditions = this.bonusesService.getConditions();
+      this.formGroup.get('WageringSource').setValue(1);
+    }
+  
     if (this.bonusTypeId == 10) {
       this.conditions = this.conditions.filter(element => {
         return element.Id === 16;
       });
+      this.formGroup.get('WageringSource').setValue(1);
     }
+  
     if (this.bonusTypeId == 14) {
       this.formGroup.get('AccountTypeId').setValue(3);
     }
-
+  
     if (this.bonusTypeId == 4) {
       this.getBounuses();
       this.formGroup.setControl('Info', this.fb.array([]));
@@ -125,9 +139,9 @@ export class GeneralSetupComponent implements OnInit {
       this.formGroup.get('Info').setValue(null);
       this.formGroup.get('Info').clearValidators();
     }
-    
-    this.formGroup.get('Info').updateValueAndValidity();
+      this.formGroup.get('Info').updateValueAndValidity();
   }
+  
 
   handleValidators() {
     for (const fieldName in this.formGroup.controls) {
@@ -199,6 +213,8 @@ export class GeneralSetupComponent implements OnInit {
     if(bonus.BonusTypeId == 4) {
       bonus.Info = JSON.stringify(bonus.Info);
     }
+    bonus.StartTime = formatDateTime(bonus.StartTime);
+    bonus.FinishTime = formatDateTime(bonus.FinishTime);
     this.createBonus(bonus);
   }
 
@@ -286,7 +302,9 @@ export class GeneralSetupComponent implements OnInit {
       DayOfWeek: [null],
       ReusingMaxCountInPeriod: [null],
       Color: [null],
+      WageringSource: [null],
     });
+
   }
 
   onStartDateChange(event) {

@@ -17,7 +17,7 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { compressImage } from "../../../../../../core/utils";
+import { compressImage, formatDateTime } from "../../../../../../core/utils";
 import { ACTIVITY_STATUSES } from 'src/app/core/constantes/statuses';
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
@@ -236,6 +236,8 @@ export class AddPopupComponent implements OnInit {
       return;
     }
   
+    
+
     this.submitting = true;
   
     const request = this.formGroup.getRawValue();
@@ -247,7 +249,9 @@ export class AddPopupComponent implements OnInit {
     if( request.DeviceType == -1) {
       request.DeviceType = null;
     }
-  
+    
+    request.StartDate = formatDateTime(request.StartDate);
+    request.FinishDate = formatDateTime(request.FinishDate);
     this.apiService.apiPost(
       this.configService.getApiUrl,
       request,

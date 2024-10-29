@@ -9,7 +9,11 @@
     @include action-style;
     height: 68px;
 
-   
+   .mat-refresh-btn {
+    @include mat-btn-style;
+    margin-right: 10px;
+   }
+
   }
 
   .grid-content {

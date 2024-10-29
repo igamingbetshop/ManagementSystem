@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
@@ -50,7 +50,7 @@ export class CopySettingsComponent implements OnInit {
   myLable: string;
   method: string;
   controler: string = Controllers.PARTNER;
-
+  isSendingRequest = signal(false);
   constructor(
     public dialogRef: MatDialogRef<CopySettingsComponent>,
     private apiService: CoreApiService,
@@ -85,6 +85,7 @@ export class CopySettingsComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSendingRequest.set(true);
     const requestBody = this.formGroup.getRawValue();
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true,
      this.controler, Methods[this.method]).pipe(take(1)).subscribe((data) => {
@@ -93,6 +94,7 @@ export class CopySettingsComponent implements OnInit {
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
+        this.isSendingRequest.set(false);
       });
   }
 }

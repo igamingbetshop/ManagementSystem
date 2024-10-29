@@ -9,7 +9,7 @@ import { MatSelect } from "@angular/material/select";
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { SportsbookSignalRService } from '../../platforms/sportsbook/services/signal-r/sportsbook-signal-r.service';
+import { CoreSignalRService } from '../../platforms/core/services/core-signal-r.service';
 
 @Component({
   selector: 'app-header',
@@ -19,8 +19,9 @@ import { SportsbookSignalRService } from '../../platforms/sportsbook/services/si
 export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('matSelect') matSelect: MatSelect;
   @ViewChild('languageContainer', { static: false }) languageContainer: ElementRef;
-  @ViewChild('bulkMenuTrigger') bulkMenuTrigger: MatMenuTrigger;
-  @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;
+  @ViewChild('bulkMenuTrigger') menuTrigger!: MatMenuTrigger;  
+  @ViewChild('bulkEditorRef', { read: ViewContainerRef }) bulkEditorRef!: ViewContainerRef;  // For dynamic component loading
+
   public currentDateTime = new Date();
   public subscription: Subscription = new Subscription();
   public userName = '';
@@ -44,7 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private translate: TranslateService,
     private configService: ConfigService,
-    private _signalR: SportsbookSignalRService,
+    private _signalR: CoreSignalRService,
     private _snackBar: MatSnackBar,
   ) {
     this.searchService.searchState$.subscribe(showSearchBox => {
@@ -67,16 +68,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   initSignalR() {
-    this._signalR.init('basehub');
-
-    this.subscription.add(this._signalR.connectionState$.pipe(filter((data) => !!data)).subscribe(connected => {
-      this.listenForNotifications();
-    }));
-
-    this.subscription.add(this._signalR.reConnectionState$.subscribe(isReconnected => {
-      this.isReconnected = isReconnected;
-      this.listenForNotifications();
-    }));
+    this._signalR.init();
+    this.signalRSubscription = this._signalR.connectionEmitter.subscribe(connected => {
+      if (connected === true) {
+        console.log('SignalR connected successfully');
+        this.listenForNotifications();
+      } else {
+        console.error('SignalR connection failed');
+      }
+    });
   }
 
   listenForNotifications(): void {
@@ -169,6 +169,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     const componentInstance = await import('../notification/notification.component').then(c => c.NotificationComponent);
     const componentRef = this.bulkEditorRef.createComponent(componentInstance);
+    componentRef.instance.menuTrigger = this.menuTrigger;
+
   }
 
 }

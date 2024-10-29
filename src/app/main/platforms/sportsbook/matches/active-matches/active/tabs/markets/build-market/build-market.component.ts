@@ -112,13 +112,25 @@ export class BuildMarketComponent implements OnInit {
   }
 
   toggleSelection(market: any): void {
-      if (this.selectedMarkets.length < 2) {
-        this.selectedMarkets.push(market);
-      } else {
+    const index = this.selectedMarkets.findIndex((m: any) => m.N === market.N);
+
+    if (index >= 0) {
+
+      this.selectedMarkets.splice(index, 1);
+        market.selected = false;
+        
+    } else if (this.selectedMarkets.length < 2) {
+
+      this.selectedMarkets.push(market);
+        market.selected = true;
+    } else {
         market.selected = false;
         SnackBarHelper.show(this._snackBar, { Description: 'You can only select up to 2 markets.', Type: "error" });
-      }
-  }
+    }
+
+    console.log(this.selectedMarkets, "this.selectedMarkets");
+}
+
 
   getBuildMarketTypes() {
     this.apiService.apiPost('markettypes/buildermarkettypes', {

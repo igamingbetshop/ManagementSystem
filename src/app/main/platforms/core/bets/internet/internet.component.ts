@@ -631,11 +631,7 @@ export class InternetComponent extends BasePaginatedGridComponent implements OnI
   onDateChange(event: any) {
     this.fromDate = event.fromDate;
     this.toDate = event.toDate;
-    if (event.partnerId) {
-      this.partnerId = event.partnerId;
-    } else {
-      this.partnerId = null;
-    }
+    this.partnerId = event.partnerId ? event.partnerId : null;
     this.getCurrentPage();
   }
 

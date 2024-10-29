@@ -80,20 +80,20 @@
       .calendar-picker {
           margin-right: 8px;
 
-          input {
-              border: 1px solid $gray-light;
-              border-radius: 8px;
-              background-color: $gray-light-13;
-              border-radius: 8px;
-              color: $gray-light-15;
-              height: 34px;
-              transition: background-color 0.3s, color 0.3s;
-              font-size: 14px;
-          }
+          // input {
+          //     border: 1px solid $gray-light;
+          //     border-radius: 8px;
+          //     background-color: $gray-light-13;
+          //     border-radius: 8px;
+          //     color: $gray-light-15;
+          //     height: 32px;
+          //     transition: background-color 0.3s, color 0.3s;
+          //     font-size: 14px;
+          // }
 
           [dir="rtl"] & {
-            margin-right: 0; // Reset right margin for RTL
-            margin-left: 8px; // Apply left margin for RTL
+            margin-right: 0;
+            margin-left: 8px;
         }
       }
 

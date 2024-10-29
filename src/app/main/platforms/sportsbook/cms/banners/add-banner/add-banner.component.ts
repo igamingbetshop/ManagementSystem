@@ -15,7 +15,7 @@ import { SportsbookApiService } from '../../../services/sportsbook-api.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { compressImage } from "../../../../../../core/utils";
+import { compressImage, formatDateTime } from "../../../../../../core/utils";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
@@ -260,6 +260,8 @@ export class AddBannerComponent implements OnInit {
       requestBody.Visibility = null;
     }
 
+    requestBody.StartDate = formatDateTime(requestBody.StartDate);
+    requestBody.EndDate = formatDateTime(requestBody.EndDate);
     this.saveBanner(requestBody);
   }
 

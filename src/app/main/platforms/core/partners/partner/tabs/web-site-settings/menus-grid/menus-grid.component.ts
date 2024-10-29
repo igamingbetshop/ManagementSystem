@@ -26,14 +26,28 @@ export class MenusGridComponent extends BaseGridComponent implements OnInit {
         this.gridApi.setFilterModel(currentFilterModel);
       }
       if (value && value.length > 0) {
-        this.selectRow(value[0]);
         this.gridApi.setFilterModel(null);
 
       }
       return value;
     }
   });
-
+  _adminMenuId = input(null, {
+    transform: (value: any) => {
+      if (value) {
+        this.adminMenuId = value;
+      }
+      return value;
+    }
+  });
+  _gridIndex =  input(0, {
+    transform: (value: any) => {
+      if (value) {
+        this.gridIndex = value;
+      }
+      return value;
+    }
+  });
   removeStyle = input(false, {
     transform: (value: any) => {
       if (value) {
@@ -44,8 +58,27 @@ export class MenusGridComponent extends BaseGridComponent implements OnInit {
     }
   });
 
+  delatedItem = input('', {
+    transform: (value: any) => {
+      if (this.gridApi && value) {
+        const rowIdToDelete = value;
+        const rowNodeToDelete = this.gridApi.getRowNode(rowIdToDelete);  
+        if (rowNodeToDelete) {
+          this.gridApi.applyTransaction({ remove: [rowNodeToDelete.data] });
+        } else {
+          console.warn('Row not found with ID:', rowIdToDelete);
+          const allRowNodes = [];
+          this.gridApi.forEachNode((node) => {
+            allRowNodes.push(node.data.Id);
+          });
+        }
+      }
+      return value;
+    }
+  });
+
   gridOptions = {
-    getRowNodeId: (data) => data.Id,  // Use 'Id' field as the unique identifier for each row
+      getRowId: params => params.data.Id,
   };
 
   changeData = input('', {
@@ -68,7 +101,16 @@ export class MenusGridComponent extends BaseGridComponent implements OnInit {
       return value;
     }
   });
-  
+
+  addedData = input('', {
+    transform: (value: any) => {
+      if (this.gridApi && value?.Id) {
+        const transaction = { add: [value] };
+        this.gridApi.applyTransaction(transaction);
+      }
+      return value;
+    }
+  });
 
   icon = input('Icon', {
     transform: (value: any) => {
@@ -229,14 +271,14 @@ export class MenusGridComponent extends BaseGridComponent implements OnInit {
     observer.observe(document.body, { childList: true, subtree: true });
   }
 
-  selectRow(rowData) {
-    const rowNode = this.gridApi.getRowNode(rowData.Id);
-    if (rowNode) {
-      this.gridApi.ensureIndexVisible(rowNode.rowIndex);
-      this.gridApi.getSelectedNodes().forEach(node => node.setSelected(false));
-      rowNode.setSelected(true);
-    }
-  }
+  // selectRow(rowData) {
+  //   const rowNode = this.gridApi.getRowNode(rowData.Id);
+  //   if (rowNode) {
+  //     this.gridApi.ensureIndexVisible(rowNode.rowIndex);
+  //     this.gridApi.getSelectedNodes().forEach(node => node.setSelected(false));
+  //     rowNode.setSelected(true);
+  //   }
+  // }
 
   onMenuClicked(event) {
     this.menuClicked.emit(event);
@@ -267,7 +309,8 @@ export class MenusGridComponent extends BaseGridComponent implements OnInit {
     return this.rowHeight;
   }
 
-  onColumnResized(params) {
+  onColumnResizes(params) {
+    this.onColumnResized(params)
     if (params.finished) {
       params.api.refreshCells({ force: true });
     }

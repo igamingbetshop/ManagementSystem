@@ -1,10 +1,10 @@
 <div class="content-action">
-    <div class="title"> {{titleName}}</div>
+    <div class="title"> {{titleName()}}</div>
     <div class="custom-dropdown">
       <mat-select (selectionChange)="onPartnerChange($event.value)"
         placeholder="{{'Partners.SelectPartner' | translate}}" panelClass="overlay-dropdown" disableOptionCentering>
         <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
-        @for (partner of partners; track $index) {
+        @for (partner of partners(); track $index) {
           <mat-option [value]="partner.Id">{{partner.Name}}</mat-option>
 
         }
@@ -12,30 +12,31 @@
     </div>
     <div class="contianer-wrap">
       <div class="date-time-tabs">
-        <button class="tab-btn" [class.selected-time]="selectedItem === 'month'" mat-stroked-button
+        <button class="tab-btn" [class.selected-time]="selectedItem() === 'month'" mat-stroked-button
           (click)="selectTime('month')">{{'Common.LastThirtyDays' | translate}}</button>
-        <button class="tab-btn" [class.selected-time]="selectedItem === 'week'" mat-stroked-button
+        <button class="tab-btn" [class.selected-time]="selectedItem() === 'week'" mat-stroked-button
           (click)="selectTime('week')">{{'Common.LastSevenDays' | translate}}</button>
-        <button class="tab-btn" [class.selected-time]="selectedItem === 'yesterday'" mat-stroked-button
+        <button class="tab-btn" [class.selected-time]="selectedItem() === 'yesterday'" mat-stroked-button
           (click)="selectTime('yesterday')">{{'Common.Yesterday' | translate}}</button>
-        <button class="tab-btn" [class.selected-time]="selectedItem === 'today'" mat-stroked-button
+        <button class="tab-btn" [class.selected-time]="selectedItem() === 'today'" mat-stroked-button
           (click)="selectTime('today')">{{'Common.Today' | translate}}</button>
       </div>
 
-      <div class="calendar-picker start">
-        <input matInput [matDatepicker]="pickerStart" [(ngModel)]="fromDate" (dateChange)="onStartDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="pickerStart">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <mat-datepicker #pickerStart></mat-datepicker>
-      </div>
-      
       <div class="calendar-picker">
-        <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="toDate" (dateChange)="onEndDateChange($event)">
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <mat-datepicker #pickerEnd></mat-datepicker>
+        <app-date-time-picker
+         [dateTime]="formatDateTime(fromDate())"
+         [formatType]="'date-only'"
+         (dateTimeChange)="onStartDateChange($event)">
+         
+      </app-date-time-picker>
+      </div>
+  
+      <div class="calendar-picker">
+        <app-date-time-picker
+          [dateTime]="formatDateTime(toDate())"
+          [formatType]="'date-only'"
+          (dateTimeChange)="onEndDateChange($event)">
+        </app-date-time-picker>
       </div>
 
       <button mat-stroked-button class="mat-btn" (click)="getCurrentPage()">{{'Common.Go' | translate}}</button>

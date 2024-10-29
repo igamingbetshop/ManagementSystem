@@ -253,7 +253,6 @@ export class CorePromotionsComponent extends BaseGridComponent implements OnInit
               element['State'] = this.states.find((state) => state.Id == element.State)?.Name;
               element.Visibility = element.Visibility.map((visibilityId) => {
                 const visibilityType = this.visibilityTypes[visibilityId];
-                console.log(visibilityId, visibilityType);
                 return visibilityType ?this.translate.instant(visibilityType.name) : null;
               });
             });

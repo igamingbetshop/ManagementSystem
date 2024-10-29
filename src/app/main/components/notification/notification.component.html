@@ -1,6 +1,10 @@
-<div class="bulk-editor-container" (click)="$event.stopPropagation()">
+<div class="bulk-editor-container" 
+  (click)="$event.stopPropagation()" >
 
-  <div class="title">{{"Notifications.Notifications" | translate}}
+  <div class="title">
+    <span class="header-title">
+      {{"Notifications.Notifications" | translate}}
+    </span>
     <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -15,8 +19,8 @@
     @if(config.Id !== 0 && config.Name !== 'CorrectonMaxAmount') {
     <div class="config-item">
       <span class="config-text">{{config.Name}}</span>
-      <mat-slide-toggle class="toggle-btn" [color]="'background: #000000'" [checked]="config.BooleanValue"
-        labelPosition="before" (change)="onChangeConfig($event, config)" (click)="$event.stopPropagation()">
+      <mat-slide-toggle class="toggle-btn" [color]="'#fff'" [checked]="config.BooleanValue"
+        labelPosition="before" (change)="handleConfigChange($event, config)" (click)="$event.stopPropagation()">
       </mat-slide-toggle>
     </div>
     }
@@ -33,19 +37,42 @@
     </button>
   </div>
 
-  @for (note of filteredNotifications(); track $index) {
-  <div [ngClass]="{'avtive-note': note.Status === 1}">
+  <!-- @for (note of filteredNotifications(); track $index) {
+  <div 
+      [ngClass]="{'avtive-note': note.Status === 1}" 
+      class="note-item-container" 
+  >
     <div class="note-item">
-      <span class="note-type" (click)="onReadNote(note)">
+      <span class="note-type" (click)="markAsRead(note)">
         {{ notificationTypes[note.TypeId] }}
       </span>
-      {{ notificationsStatuses[note.Status] }}
+      <span class="type-info">
+        {{ notificationsStatuses[note.Status] }}
+      </span>
     </div>
     <div class="note-time">
       {{ note.CreationTime | date: 'dd MMM yyyy · hh:mm a' }}
     </div>
   </div>
-  }
+  } -->
+
+  <cdk-virtual-scroll-viewport itemSize="50" class="notification-viewport" (scroll)="onScroll($event)">
+    <ng-container *cdkVirtualFor="let note of filteredNotifications(); trackBy: trackByIndex">
+      <div [ngClass]="{'active-note': note.Status == 1}" class="note-item-container" (click)="markAsRead(note)">
+        <div class="note-item">
+          <span class="note-type" >
+            {{ notificationTypes[note.TypeId] }}
+          </span>
+          <span class="type-info">
+            {{ notificationsStatuses[note.Status] }}
+          </span>
+        </div>
+        <div class="note-time">
+          {{ note.CreationTime | date: 'dd MMM yyyy · hh:mm a' }}
+        </div>
+      </div>
+    </ng-container>
+  </cdk-virtual-scroll-viewport>
 
 
 </div>

@@ -25,7 +25,8 @@ export class SportsbookApiService
       LanguageId: user.LanguageId,
       TimeZone: getTimeZone(),
       UserId: user.UserId,
-      Loading: true
+      Loading: true,
+      SBPartnerId: this.configService.getSBPartnerId,
     };
     requestUrl = `${this.configService.getSBApiUrl}/` + path;
     if(data)

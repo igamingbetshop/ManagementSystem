@@ -69,7 +69,7 @@
     }
 
     <mat-form-field>
-      <input matInput [placeholder]="'Clients.NickName' | translate" formControlName="NickName">
+      <input matInput [placeholder]="'Clients.NickName' | translate" formControlName="NickName" required=>
       @if(errorControl?.['NickName']?.touched && errorControl?.['NickName'].errors?.required) {
       <mat-error>
         {{'Clients.NickName' | translate}} {{'Errors.Required' | translate}}

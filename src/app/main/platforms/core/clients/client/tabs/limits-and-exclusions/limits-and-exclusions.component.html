@@ -409,7 +409,7 @@
         <div class="first-hand">{{'Clients.SystemExcludedUntil' | translate}}</div>
         <div class="second-hand">{{systemExcludedUntil?.ExcludedUntil | date:'dd/MM/yyyy HH:mm:ss'}} {{ systemExcludedUntil?.Reason}}
 
-          <button mat-stroked-button class="mat-btn" [class.disabled]="!diactivateReasonType" type="button"
+          <button mat-stroked-button class="mat-btn" [class.disabled]="!systemExcludedUntil?.ExcludedUntil" type="button"
                   (click)="onDeactivate('REMOVE_SYSTEM_EXCLUSION')">{{'Clients.Deactivate' | translate}}
           </button>
         </div>

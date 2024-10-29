@@ -137,8 +137,12 @@
         <div class="static-hand">{{user?.LastUpdateTime | date:'dd/MM/yyyy HH:mm' }}</div>
 
       </div>
+
       <div>
+        <button mat-stroked-button class="edit-btn" (click)="editUserRole()">{{'Users.EditUserRoles' | translate}}</button>
+
       </div>
+
       <div class="form-actions">
 
         <div class="actions" *ngIf="isEdit">
@@ -154,5 +158,9 @@
     </form>
   </div>
 
+  <app-user-rols-grid
+    [editUserRoles]="editUserRoles"
+    [userId]="agentIds"
+  > </app-user-rols-grid>
 
 </div>

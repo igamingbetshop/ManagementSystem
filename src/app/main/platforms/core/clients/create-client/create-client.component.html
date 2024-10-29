@@ -90,51 +90,41 @@
     }
 
     @case ('checkbox') {
-      <mat-checkbox color="primary" [formControlName]="item.Title">
-        {{ item.Title }}
-        @if(isRequired(item.Title)) {
-          <span>*</span>
-        }
-      </mat-checkbox>
+    <mat-checkbox color="primary" [formControlName]="item.Title">
+      {{ item.Title }}
+      @if(isRequired(item.Title)) {
+      <span>*</span>
+      }
+    </mat-checkbox>
     }
 
     @case ('MobileData') {
-    <mobile-number-register [field]="item" [style.order]="item.Order" />
+    <mobile-number-register 
+      [partnerId]="partnerId" 
+      [field]="item" 
+      [style.order]="item.Order" />
     }
 
     @case ('Gender') {
 
-      <mat-form-field>
-        <mat-label>{{'Clients.SelectGender' | translate}}</mat-label>
-        <mat-select [formControlName]="item.Title">
-          <mat-option [value]="null">{{'Clients.SelectGender' | translate }}</mat-option>
-          @for (gender of commonDataService.genders; track $index) {
-          <mat-option [value]="gender.Id">{{gender.Name}}</mat-option>
-          }
-        </mat-select>
-        @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
-        <mat-error>
-          {{item.Title}} {{'Errors.Required' | translate}}
-        </mat-error>
+    <mat-form-field>
+      <mat-label>{{'Clients.SelectGender' | translate}}</mat-label>
+      <mat-select [formControlName]="item.Title">
+        <mat-option [value]="null">{{'Clients.SelectGender' | translate }}</mat-option>
+        @for (gender of commonDataService.genders; track $index) {
+        <mat-option [value]="gender.Id">{{gender.Name}}</mat-option>
         }
-      </mat-form-field>
-
-    <!-- <app-custom-select label="Clients.SelectGender" placeholder="Clients.SelectGender"
-      [options]="commonDataService.genders" [formControl]="formGroup.get(item.Title)"
-      [errorControl]="formGroup.get(item.Title)"></app-custom-select> -->
+      </mat-select>
+      @if(errorControl[item.Title]?.touched && errorControl[item.Title].errors?.required) {
+      <mat-error>
+        {{item.Title}} {{'Errors.Required' | translate}}
+      </mat-error>
+      }
+    </mat-form-field>
     }
 
     @case ('BirthDate') {
 
-    <!-- <mat-form-field *ngSwitchCase="'BirthDate'">
-        <mat-label>{{'Clients.ChooseDate' | translate}}</mat-label>
-        <input matInput  [matDatepicker]="pickerEnd" [formControlName]="item.Title" >
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd">
-          <div matDatepickerToggleIcon class="icon-calendar" aria-hidden="true" data-icon="&#xe909;"></div>
-        </mat-datepicker-toggle>
-        <mat-datepicker #pickerEnd></mat-datepicker>
-      </mat-form-field>  -->
-    <!-- <app-birth-date [field]="item" [style.order]="item.Order"/> -->
     <div>
       <mat-form-field class="mat-form-field">
         <mat-label>{{ item.Title }}</mat-label>

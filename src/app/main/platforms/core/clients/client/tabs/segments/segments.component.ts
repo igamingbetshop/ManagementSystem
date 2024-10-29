@@ -10,6 +10,8 @@ import { take } from "rxjs/operators";
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
 import { ACTIVITY_STATUSES, MODES } from 'src/app/core/constantes/statuses';
+import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-segments',
@@ -39,6 +41,7 @@ export class SegmentsComponent extends BaseGridComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     public commonDataService: CommonDataService,
     protected injector: Injector,
+    private _snackBar: MatSnackBar,
     public configService: ConfigService,
   ) {
     super(injector);
@@ -124,5 +127,14 @@ export class SegmentsComponent extends BaseGridComponent implements OnInit {
   onGridReady(params: any): void {
     syncNestedColumnReset();
     super.onGridReady(params);
+  }
+
+  onReconsiderClientSegments() {
+    this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
+      Controllers.CLIENT, Methods.RECONSIDER_CLIENT_SEGMENTS).pipe(take(1)).subscribe((data) => {
+        if (data.ResponseCode === 0) {
+          SnackBarHelper.show(this._snackBar, { Description: 'Your request will be submitted', Type: "success" });
+        }
+      });
   }
 }

@@ -2,10 +2,15 @@
   <form class="bulk-editor-content" [formGroup]="formGroup">
 
     <div class="b-input-content" [formGroupName]="'Countries'">
-      <input [value]="2" class="bulk-input" [formControlName]="'Type'" type="radio">
-      <span class="bulk-label"> {{'Bonuses.InSet' | translate}}</span>
-      <input [value]="1" class="bulk-input" [formControlName]="'Type'" type="radio">
-      <span class="bulk-label"> {{'Bonuses.OutOfSet' | translate}}</span>
+      <div class="b-input-continer">
+        <input [value]="2" class="bulk-input" [formControlName]="'Type'" type="radio">
+        <span class="bulk-label"> {{'Bonuses.InSet' | translate}}</span>
+      </div>
+      <div class="b-input-continer"> 
+        <input [value]="1" class="bulk-input" [formControlName]="'Type'" type="radio">
+        <span class="bulk-label"> {{'Bonuses.OutOfSet' | translate}}</span>
+
+      </div>
     </div>
 
 
@@ -16,7 +21,7 @@
     </div>
 
     <br>
-
+    <mat-label class="lable-select">{{'Common.SelectState' | translate}}</mat-label>
     <div class="custom-dropdown">
       <mat-select [formControlName]="'State'"[placeholder]="'Common.SelectState' | translate">
         <mat-option *ngFor="let state of productStates" [value]="state.Id">{{state.Name}}</mat-option>
@@ -26,7 +31,7 @@
   </form>
 
   <div class="bulk-editor-actions">
-    <button class="bulk-cancel-btn" (click)="onCancelBtn()">{{'Common.Cancel' | translate}}</button>
-    <button class="bulk-primary-btn" (click)="openConfirmDialog()" [class.disabled]="formGroup.invalid" >{{'Common.Save' |translate}}</button>
+    <button mat-button class="bulk-cancel-btn" (click)="onCancelBtn()">{{'Common.Cancel' | translate}}</button>
+    <button mat-button class="bulk-primary-btn" (click)="openConfirmDialog()" [class.disabled]="formGroup.invalid" >{{'Common.Save' |translate}}</button>
   </div>
 </div>

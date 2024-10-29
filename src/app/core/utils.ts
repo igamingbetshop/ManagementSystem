@@ -66,6 +66,9 @@ export function compressImage(imgToCompress, resizingFactor): any {
 
 export function formatDateTime(date: any): string {
   if (date) {
+    if (typeof date === 'string') {
+      date = new Date(date);
+    }
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
@@ -76,6 +79,8 @@ export function formatDateTime(date: any): string {
   return '';
 }
 
+
+
 export function formatDate(date: any): string {
   if (date) {
     const year = date.getFullYear();
@@ -84,6 +89,18 @@ export function formatDate(date: any): string {
     return `${year}-${month}-${day}`;
   }
   return '';
+}
+
+export function parseDateTimeString(dateTimeString: string): Date {
+  const dateTimeParts = dateTimeString.split('T');
+  if (dateTimeParts.length === 2) {
+    const [datePart, timePart] = dateTimeParts;
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes] = timePart.split(':').map(Number);
+
+    return new Date(year, month - 1, day, hours, minutes);
+  }
+  return new Date();
 }
 
 

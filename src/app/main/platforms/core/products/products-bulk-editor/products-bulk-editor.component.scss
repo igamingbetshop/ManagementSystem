@@ -3,7 +3,7 @@
 
 .bulk-editor-container {
   padding: 20px 14px 14px 14px;
-  background-color: $blue-light-10;
+  background-color: $gray-light-16;
   border-radius: 4px;
   z-index: 1;
   margin-top: 4px;
@@ -14,26 +14,33 @@
     row-gap: 6px;
 
     .b-input-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
       align-items: center;
       align-self: center;
       justify-content: space-between;
-      justify-items: center;
+      justify-items: left;
       align-items: baseline;
+      font-size: 13px;
     }
 
     .bulk-input-row {
       display: flex;
-      align-items: center;
     }
 
     .bulk-label {
       white-space: nowrap;
+      margin-right: 8px;
+    }
+
+    .b-input-continer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
     }
 
     .bulk-input {
-      width: 30px;
+      width: 20px;
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 4px;
       height: 24px;
@@ -42,6 +49,7 @@
       font-weight: 500;
       font-size: 12px;
       color: $blue-5;
+      padding-left: 4px;
     }
 
     .custom-dropdown {
@@ -56,51 +64,29 @@
     padding-top: 18px;
 
     .bulk-primary-btn {
-      border-radius: 4px;
-      color: rgba(255, 255, 255, 0.7);
-      padding: 0 10px;
-      background: linear-gradient(180deg, rgba(5, 115, 186, 0.7) 0%, rgba(37, 142, 205, 0.7) 50%, rgba(7, 97, 146, 0.7) 100%);;
-      border: 1px solid transparent !important;
-      height: 24px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 50%;
-
-      &.disabled {
-        color: $blue-5 !important;
-        background-color: $blue-light-7;
-        pointer-events: none;
-      }
-
-      &:hover {
-        cursor: pointer;
-        color: $white;
-      }
+      @include mat-btn-style;
     }
 
     .bulk-cancel-btn {
-      background-color: $blue-light-29;
-      padding: 0 10px;
-      border: 1px solid transparent;
-      height: 24px;
-      cursor: pointer;
-      color: $blue-light-28;
-      border-radius: 4px;
-      font-size: 16px;
-      width: 50%;
-
-      &.disabled {
-        opacity: 0.7;
-        pointer-events: none;
-      }
-
-      &:hover {
-        color: $blue-5;
-      }
+      @include mat-cancel-btn-style;
+      margin-left: auto;
     }
 
   }
 }
 
+.lable-select {
+  margin-left: 8px;
+}
+
+::ng-deep {
+  .mat-mdc-menu-content {
+    background-color: $gray-light-16;
+  }
+
+  .mat-mdc-form-field-error-wrapper {
+    top: -5px!important;
+  }
+}
 
 

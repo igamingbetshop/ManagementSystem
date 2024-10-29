@@ -18,7 +18,7 @@ import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { ACTIVITY_STATUSES, DEVICE_TYPES, VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
-import { compressImage } from 'src/app/core/utils';
+import { compressImage, formatDateTime } from 'src/app/core/utils';
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 
 @Component({
@@ -73,23 +73,6 @@ export class AddCorePromotionsComponent implements OnInit {
     this.createForm();
     this.getDate();
   }
-
-  // getPromotionTypes(val) {
-  //   if (!this.isParent) {
-  //     this.partnerId = +val;
-
-  //   }
-  //   this.apiService.apiPost(this.configService.getApiUrl, this.partnerId || this.data.ParentId,
-  //     true, Controllers.ENUMERATION, Methods.GET_PROMOTION_TYPES_ENUM)
-  //     .pipe(take(1))
-  //     .subscribe(data => {
-  //       if (data.ResponseCode === 0) {
-  //         this.promotionTypes = data.ResponseObject;
-  //       } else {
-  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-  //       }
-  //     });
-  // }
 
   getDate() {
     let fromDay = new Date();
@@ -242,6 +225,10 @@ export class AddCorePromotionsComponent implements OnInit {
     if (obj.Visibility === "null") {
       obj.Visibility = null;
     }
+
+    obj.StartDate = formatDateTime(obj.StartDate);
+    obj.FinishDate = formatDateTime(obj.FinishDate);
+
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_PROMOTION)
       .pipe(take(1))

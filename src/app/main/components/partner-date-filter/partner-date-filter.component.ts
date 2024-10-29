@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewEncapsulation, inject, input, InputSignal} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, inject, input, InputSignal, output, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +18,7 @@ import { SportPartnersSelectComponent } from './sport-partners-select.component'
 import { SportSelectComponent } from './sport-select.component';
 import { DateTimePickerComponent } from "../data-time-picker/data-time-picker.component";
 import { BetShopsesComponent } from "./bet-shops-select.component";
+import { parseDateTimeString } from 'src/app/core/utils';
 
 @Component({
     selector: 'app-partner-date-filter',
@@ -64,21 +65,22 @@ export class PartnerDateFilterComponent implements OnInit {
   lastYearFilter = input(false);
   betShopGroups = input();
   dataTimeHelperInput = input(false);
-  @Output() toDateChange = new EventEmitter<any>();
-  @Output() startDateChange = new EventEmitter<any>();
-  @Output() titleClick = new EventEmitter<any>();
-  @Output() checkBoxClick = new EventEmitter<any>();
-  @Output() accountTypeChange = new EventEmitter<any>();
-  @Output() paymentChange = new EventEmitter<any>();
-  @Output() toSportChange = new EventEmitter<number>();
-  @Output() providerChange = new EventEmitter<number>();
-  @Output() betCategoryChange = new EventEmitter<number>();
-  @Output() betStatusesChange = new EventEmitter<number>();
-  @Output() onLiveUpdateBTN = new EventEmitter<boolean>();
-  @Output() betShopChange = new EventEmitter<number>();
-  titleName: string = '';
-  fromDate: Date | string | undefined;
-  toDate: Date | string | undefined;
+  dateFormatType = input <'full' | 'date-only' | 'hour'>('full');
+  toDateChange = output<any>();
+  startDateChange = output<any>();
+  titleClick = output<any>();
+  checkBoxClick = output<any>();
+  accountTypeChange = output<any>();
+  paymentChange = output<any>();
+  toSportChange = output<any>();
+  providerChange = output<any>();
+  betCategoryChange = output<any>();
+  betStatusesChange = output<any>();
+  onLiveUpdateBTN = output<any>();
+  betShopChange = output<any>();
+  titleName = signal<string | null>(null);
+  fromDate = signal<Date | string | undefined> (undefined);
+  toDate = signal<Date | string | undefined> (undefined);
   partnerId: number | undefined;
   selectedItem: string = 'today';
   checkBoxTextTranslated: string = '';
@@ -88,9 +90,9 @@ export class PartnerDateFilterComponent implements OnInit {
   ngOnInit(): void {
     this.startDate();
     if (this.title) {
-      this.titleName = this.title();
-        this.translate.get(this.titleName).subscribe((translatedTitle: string) => {
-          this.titleName = translatedTitle;
+      this.titleName.set(this.title());
+        this.translate.get(this.titleName()).subscribe((translatedTitle: string) => {
+          this.titleName.set(translatedTitle);
         });
     }
     if (this.checkBoxText()) {
@@ -114,50 +116,35 @@ export class PartnerDateFilterComponent implements OnInit {
   }
 
   startDate() {
-
-      const [fromDate, toDate] = DateHelper.startDate();
-      this.fromDate = fromDate;
-      this.toDate = toDate;
-
+    const [fromDate, toDate] = DateHelper.startDate();
+    this.fromDate.set(fromDate);
+    this.toDate.set(toDate);
   }
 
   selectTime(time: string): void {
-      const [fromDate, toDate] = DateHelper.selectTime(time);
-      this.fromDate = fromDate;
-      this.toDate =  toDate;
-      this.selectedItem = time;
-      this.getCurrentPage();
-
+    const [fromDate, toDate] = DateHelper.selectTime(time);
+    this.fromDate.set(fromDate);
+    this.toDate.set(toDate);
+    this.selectedItem = time;
+    this.getCurrentPage();
   }
 
-  onStartDateChange(event: any) {
+  onStartDateChange(event: any) {    
     if (event instanceof Date) {
-      this.fromDate = event;
+      this.fromDate.set(event);
     } else {
       const formattedDateTime = event;
-      this.fromDate = this.parseDateTimeString(formattedDateTime);
+      this.fromDate.set(parseDateTimeString(formattedDateTime));
     }
   }
 
   onEndDateChange(event: any) {
     if (event instanceof Date) {
-      this.toDate = event;
+      this.toDate.set(event);
     } else {
       const formattedDateTime = event;
-      this.toDate = this.parseDateTimeString(formattedDateTime);
+      this.toDate.set(parseDateTimeString(formattedDateTime));
     }
-  }
-
-  private parseDateTimeString(dateTimeString: string): Date {
-    const dateTimeParts = dateTimeString.split('T');
-    if (dateTimeParts.length === 2) {
-      const [datePart, timePart] = dateTimeParts;
-      const [year, month, day] = datePart.split('-').map(Number);
-      const [hours, minutes] = timePart.split(':').map(Number);
-
-      return new Date(year, month - 1, day, hours, minutes);
-    }
-    return new Date();
   }
 
   getByPartnerData(event: any) {
@@ -170,8 +157,8 @@ export class PartnerDateFilterComponent implements OnInit {
   }
 
   getCurrentPage() {
-    const formattedFromDate = this.formatDateTime(this.fromDate);
-    const formattedToDate = this.formatDateTime(this.toDate);
+    const formattedFromDate = this.formatDateTime(this.fromDate());
+    const formattedToDate = this.formatDateTime(this.toDate());
     this.toDateChange.emit({ fromDate: formattedFromDate, toDate: formattedToDate, partnerId: this.partnerId });
   }
 

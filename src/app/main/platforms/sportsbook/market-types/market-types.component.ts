@@ -23,6 +23,7 @@ import { ArrayEditorComponent } from 'src/app/main/components/grid-common/array-
 import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
 import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdown-filter/ag-dropdown-filter.component';
 import { ActivatedRoute } from '@angular/router';
+import { MARKET_TYPE_STATUSES } from './market-type-common/market-type-statuses';
 
 @Component({
   selector: 'app-market-types',
@@ -37,12 +38,7 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
   partnerId: number;
   sportId: number;
   sports: any[] = [];
-  statuses = [
-    { Id: 1, Name: 'Yes' },
-    { Id: 0, Name: 'No' },
-    { Id: 2, Name: 'Prematch Only'},
-    { Id: 3, Name: 'LiveOnly'}
-  ];
+  statuses = MARKET_TYPE_STATUSES;
   selectedRowId= signal(0);
 
   frameworkComponents = {
@@ -512,7 +508,6 @@ export class MarketTypesComponent extends BasePaginatedGridComponent implements 
       this.selectedRowId.set(params.data.Id);
     }
   }
-  
 
   onCheckBoxChange1(params, val, event) {
     params.IsForFilter = val;

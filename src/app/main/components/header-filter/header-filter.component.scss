@@ -57,32 +57,7 @@
         }
       }
 
-      .calendar-picker {
-        width: 202px;
-        input {
-          background-color: transparent !important;
-        }
-        
-        &.start {
-          margin-right: 8px;
-      
-          @media screen and (max-width: 1200px) {
-            margin-left: 8px;
-          }
-        }
-      
-        @include calendar-picker-style;
-        @media screen and (max-width: 600px) {
-          width: calc(40% - 8px);
-          margin: 0;
-          padding: 0;
-        }
 
-        ::ng-deep [dir="rtl"] & {
-          margin-left: 8px;
-        }
-        
-      }
 
       .mat-btn {
         margin-left: 8px;
@@ -101,7 +76,54 @@
   height: 0;
 }
 
-::ng-deep .icon-calendar {
-  top: 13px;
-  right: 0px;
+.calendar-picker {
+  margin-right: 8px;
+  cursor: pointer;
+  input {
+      border: 1px solid $gray-light;
+      border-radius: 8px;
+      background-color: $gray-light-13;
+      border-radius: 8px;
+      color: $gray-light-15;
+      height: 34px;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 14px;
+  }
+
+  [dir="rtl"] & {
+    margin-right: 0; 
+    margin-left: 8px;
+}
+}
+
+.calendar-picker {
+  cursor: pointer;
+   input{
+    background-color: transparent!important;
+    border: none!important;
+    margin-top: 10px!important;
+  }
+  &.start {
+    margin-right: 8px;
+
+    @media screen and (max-width: 1200px) {
+      margin-left: 8px
+      input{
+        background-color: transparent!important;
+        border: none!important;
+        margin-top: 10px!important;
+      }
+    }
+  }
+
+  @include calendar-picker-style;
+  @media screen and (max-width: 600px) {
+    margin: 0;
+    padding: 0;
+  }
+
+}
+
+::ng-deep .data-time-input{
+  background-color: transparent;
 }

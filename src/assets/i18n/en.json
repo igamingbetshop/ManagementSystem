@@ -1081,6 +1081,7 @@
     "DeleteBet": "Delete Bet",
     "AcceptBet": "Accept Bet",
     "RejectBet": "Reject Bet",
+    "AllBets": "All Bets",
     "RealBets": "Real Bets",
     "BonusBets": "Bonus Bets",
     "LiveUpdatesOff": "Live Updates Off",
@@ -1701,7 +1702,13 @@
     "OpenDocument": "Open Document",
     "SelectCode": "Select Code",
     "ThisMonth": "This Month",
-    "ThisWeek": "This Week"
+    "ThisWeek": "This Week",
+    "ProductName": "Product Name",
+    "LogoutDescription": "Logout Description",
+    "Country": "Country",
+    "StartTime": "Start Time",
+    "EndTime": "End Time",
+    "Description": "Description"
   },
   "Profile": {
     "TwoFactorAuthentication": "Two Factor Authentication",

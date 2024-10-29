@@ -31,7 +31,7 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
   searchedResultTitle: string;
   showSearchedResult: boolean = false;
   deviceTypes = signal(DEVICE_TYPES);
-  deviceType = this.deviceTypes()[0].Id;
+  _deviceType = this.deviceTypes()[0].Id;
   rowData = signal([]);
   webSiteMenusRowData = signal([]);
   subMenusRowData = signal([]);
@@ -46,8 +46,12 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
     floatingFilter: true,
     minWidth: 50,
   };
-  changeMenuData: any;
+  changeMenuData = signal(null);
   changeSubMenuData: any;
+  addedMenu = signal(null);
+  addedSubMenu = signal(null);
+  delatedMenuRowId = signal(null);
+  delatedSubMenuRowId = signal(null);
 
   constructor(
     private apiService: CoreApiService,
@@ -108,14 +112,14 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
   }
 
   changeDeviceType(deviceType: number) {
-    this.deviceType = deviceType;
+    this._deviceType = deviceType;
     this.getWebsiteMenus();
   }
 
   getWebsiteMenus() {
     const data = {
       PartnerId: +this.partnerId,
-      DeviceType: this.deviceType,
+      DeviceType: this._deviceType,
     }
     this.apiService.apiPost(this.configService.getApiUrl, data, true,
       Controllers.CONTENT, Methods.GET_WEBSITE_MENU).pipe(take(1)).subscribe((data) => {
@@ -178,7 +182,7 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
     const dialogRef = this.dialog.open(CopyWebsiteSettingsComponent, {
       width: ModalSizes.MEDIUM,
       data: {
-        diviceType: this.deviceType,
+        diviceType: this._deviceType,
       }
     });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
@@ -206,12 +210,15 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         if (action === 'Edit') {
-          this.changeMenuData = result;
+          this.changeMenuData.set(result);
           setTimeout(() => {
-            this.changeMenuData = null;
-          }, 1000);
+            this.changeMenuData.set(null)
+          }, 10);
         } else {
-          this.getWebsiteMenuItems(this.selectedMenu.Id);
+          this.addedMenu.set(result);
+          setTimeout(() => {
+          this.addedMenu.set(null);
+        }, 10);
         }
         SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
       }
@@ -232,8 +239,11 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
           setTimeout(() => {
             this.changeSubMenuData = null;
           }, 1000);
-        } else {
-          this.getWebSiteSubMenuItems(this.selectedMenuItem.Id);
+        }  else {
+          this.addedSubMenu.set(result);
+          setTimeout(() => {
+          this.addedSubMenu.set(null);
+        }, 10);
         }
         SnackBarHelper.show(this._snackBar, { Description: 'Success', Type: "success" });
       }
@@ -250,7 +260,11 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
     this.apiService.apiPost(this.configService.getApiUrl, this.selectedMenuItem.Id, true,
       Controllers.CONTENT, Methods.REMOVE_WEBSITE_MENU_ITEM).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.getWebsiteMenuItems(this.selectedMenu.Id)
+          this.delatedMenuRowId.set(this.selectedMenuItem.Id);
+          
+          setTimeout(() => {
+            this.delatedMenuRowId.set(null);
+          }, 10);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -261,7 +275,10 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
     this.apiService.apiPost(this.configService.getApiUrl, this.selectedSubMenuItem.Id, true,
       Controllers.CONTENT, Methods.REMOVE_WEBSITE_SUB_MENU_ITEM).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.getWebSiteSubMenuItems(this.selectedMenuItem.Id)
+          this.delatedSubMenuRowId.set(this.selectedSubMenuItem.Id);
+          setTimeout(() => {
+            this.delatedSubMenuRowId.set(null);
+          }, 10);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -398,9 +415,9 @@ export class WebSiteSettingsComponent extends BaseGridComponent implements OnIni
   }
 
   handleSubMenuItem(event) {
-    if ((this.selectedMenu.Type == "Translations" && event.data.colId == 'Title')) {
+    if (((this.selectedMenu.Type == "Translations"  && event.data.colId == 'Title') || (this.selectedMenu.Type == "Translations"  && event.data.colId == 'Id') )) {
       this.addEditTranslation(event);
-    } else if (this.selectedMenu.Type == 'Config' && this.selectedMenuItem.Title == "CloudflareZoneId") {
+    } else if (this.selectedMenu.Type == 'Config' && this.selectedMenuItem.Title == "CloudflareZoneId" && event.data.colId == 'Title') {
       this.addEditConfig(event);
     } else {
       this.addEditSubMenuItem('Edit', event.data);

@@ -76,4 +76,9 @@
   }
 }
 
+.limit-btn {
+  @include mat-btn-style;
+  margin-left: auto;
+}
+
 

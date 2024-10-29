@@ -300,17 +300,11 @@ export class DetailsComponent implements OnInit {
 
   onSubmit() {
     let requestObj = this.formGroup.getRawValue();
-
-    console.log(requestObj, "requestObj befor");
-
     let oldData = this.formGroup.getRawValue();
     this.isSendingRequest = true; 
     this.transformArrayTypeProps(requestObj);
     this.transformAddedConditions(requestObj);
-    requestObj.ClientStatus = this.transformClientStates();  
-
-    console.log(requestObj, "requestObj");
-    
+    requestObj.ClientStatus = this.transformClientStates();      
     this.saveSegment(requestObj, oldData);
   }
 

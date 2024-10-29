@@ -16,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
+import { ViewMainLimitsComponent } from './view-profit-info/view-main-limits.component';
 
 
 const routes: Routes = [
@@ -45,7 +46,7 @@ const routes: Routes = [
     MatSlideToggleModule,
     DateTimePickerComponent
   ],
-  declarations: [MainComponent],
+  declarations: [MainComponent, ViewMainLimitsComponent],
   providers: [DatePipe],
 })
 export class MainModule { }

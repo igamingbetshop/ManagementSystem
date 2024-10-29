@@ -5,7 +5,7 @@
 </div>
 
 <div class="modal-wrap">
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" class="mat-table">
 
     @for (column of displayedColumns; track $index) {
     <ng-container [matColumnDef]="column">

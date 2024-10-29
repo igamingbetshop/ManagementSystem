@@ -3,6 +3,7 @@
     <mat-label>{{ "Common.SelectCountry" | translate }}</mat-label>
     <mat-select formControlName="Country"
       (selectionChange)="field().Type === 'Region2' ? fetchRegions('City') : field().Type === 'Region3' ? fetchRegions('District') : null">
+      <mat-option [value]="null">{{'Clients.SelectCountry' | translate }}</mat-option>
       @for (country of countries(); track $index) {
       <mat-option [value]="country.Id">
         {{ country.Name }}
@@ -15,6 +16,7 @@
   <mat-form-field class="mat-form-field">
     <mat-label>{{ "Clients.SelectDistrict" | translate }}</mat-label>
     <mat-select formControlName="District">
+      <mat-option [value]="null">{{'Clients.SelectDistrict' | translate }}</mat-option>
       @for (district of districts();; track $index) {
       <mat-option [value]="district.Id">
         {{ district.Name }}
@@ -29,6 +31,7 @@
   <mat-form-field class="mat-form-field">
     <mat-label>{{ "Clients.SelectCity" | translate }}</mat-label>
     <mat-select formControlName="City">
+      <mat-option [value]="null">{{'Clients.SelectCity' | translate }}</mat-option>
       @for (city of cities(); track $index) {
       <mat-option [value]="city.Id">
         {{ city.Name }}

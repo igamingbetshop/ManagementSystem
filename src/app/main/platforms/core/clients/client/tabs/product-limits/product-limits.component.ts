@@ -92,18 +92,27 @@ export class ProductLimitsComponent implements OnInit {
   onCellValueChanged(params) {
     const product = params.data.Settings;
     product.MaxLimit = params.newValue;
+
+    let maxLimitValue: number | null;
+    if (product.MaxLimit === '') {
+      maxLimitValue = null;
+    } else if (product.MaxLimit === '0') {
+      maxLimitValue = 0;
+    } else {
+      maxLimitValue = Number(product.MaxLimit);
+    }
+    
     const req = {
       Id: product.Id,
-      MaxLimit: Number(product.MaxLimit) || null,
+      MaxLimit: maxLimitValue,
       ProductId: product.ProductId,
       ObjectId: this.clientId,
       ObjectTypeId: 2
-    }
+    };
     this.apiService.apiPost(this.configService.getApiUrl, req,
       true, Controllers.UTIL, Methods.SAVE_PRODUCT_LIMIT).pipe(take(1)).subscribe(data => {
       if (data.ResponseCode === 0) {
         const products = data.ResponseObject;
-
         for (let i = 0; i < products.length; i++) {
           if (products[i].ProductId == params.data.Id) {
             params.data.MaxLimit = products[i];

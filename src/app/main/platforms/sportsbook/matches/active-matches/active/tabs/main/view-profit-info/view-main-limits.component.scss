@@ -1,0 +1,33 @@
+@import "variables";
+.table {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 20px 20px 20px;
+  border-spacing: 0;
+
+  thead > tr {
+    background-color: $blue-light-6;
+    th {
+      vertical-align: bottom;
+      border-bottom: 2px solid #ddd;
+      border-top: 0;
+    }
+  }
+  tbody {
+    tr:nth-child(odd) {
+      background-color: $blue-light-15;
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+
+    td {
+      text-align: center;
+      padding: 8px;
+      line-height: 1.42857143;
+      vertical-align: top;
+      border-top: 1px solid #ddd;
+    }
+  }
+}

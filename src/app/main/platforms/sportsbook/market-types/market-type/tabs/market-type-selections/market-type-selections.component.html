@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="content-action">
+    <div class="title"><a [routerLink]="['/main/sportsbook/market-types']">{{'Sport.MarketTypes' | translate}}</a> / {{marketTypeId}} :{{'Sport.Selections' | translate}}</div>
+  </div>
+
+  <div class="grid-content">
+  <ag-grid-angular
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="rowData()"
+    (rowClicked)="onRowClicked($event)"
+    [rowModelType]="rowModelType"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [components]="frameworkComponents"
+    [suppressCopyRowsToClipboard]="true"
+    [animateRows]="true"
+    [cacheBlockSize]="5000"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    rowSelection="single">
+  </ag-grid-angular>
+
+  </div>
+
+  <div class="content-action">
+    <div class="title">{{'Common.History' | translate}} : {{selectedRowId()}}</div>
+  </div>
+
+  <div class="grid-content">
+    <ag-grid-angular
+    id="sessions"
+    #agGrid
+    class="ag-theme-balham"
+    [headerHeight]="33"
+    [rowHeight]="42"
+    [rowData]="selectionHystoryData()"
+    [rowModelType]="rowModelType"
+    [columnDefs]="selectionColumnDefs"
+    [suppressCopyRowsToClipboard]="true"
+    [defaultColDef]="defaultColDef"
+    (gridReady)="onGridReady($event)"
+    [ensureDomOrder]="true"
+    [enableCellTextSelection]="true"
+    [getContextMenuItems]="getContextMenuItems"
+    rowSelection="single">
+  </ag-grid-angular>
+  </div>
+
+</div>

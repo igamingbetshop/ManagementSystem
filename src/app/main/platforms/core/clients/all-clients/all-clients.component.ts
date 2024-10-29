@@ -83,11 +83,9 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
       categories: this.getCategories()
     }).subscribe(
       () => {
-        // All API calls succeeded, call setColumnDefs()
         this.setColumnDefs();
       },
       error => {
-        // Handle error if any API call fails
         console.error('An error occurred:', error);
       }
     );
@@ -565,6 +563,18 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
         },
       },
       {
+        headerName: 'Clients.CharacterLevel',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'CharacterLevel',
+        sortable: true,
+        filter: 'agNumberColumnFilter',
+        filterParams: {
+          buttons: ['apply', 'reset'],
+          closeOnApply: true,
+          filterOptions: this.filterService.numberOptions
+        },
+      },
+      {
         headerName: 'Clients.SendPromotions',
         headerValueGetter: this.localizeHeader.bind(this),
         field: 'SendPromotions',
@@ -656,11 +666,7 @@ export class AllClientsComponent extends BasePaginatedGridComponent {
   onDateChange(event: any) {
     this.fromDate = event.fromDate;
     this.toDate = event.toDate;
-    if (event.partnerId) {
-      this.partnerId = event.partnerId;
-    } else {
-      this.partnerId = null;
-    }
+    this.partnerId = event.partnerId ? event.partnerId : null;
     this.getCurrentPage();
   }
 

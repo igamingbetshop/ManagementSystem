@@ -1,0 +1,36 @@
+<div mat-dialog-title>
+  <span class="title">{{'View' | translate}}</span>
+  <mat-icon alt="icon" class="icon" (click)="close()">close</mat-icon>
+</div>
+
+<div class="view-notes-panel">
+  <div class="panel-scroller">
+    <table class="table">
+      <thead>
+      <tr>
+        <th></th>
+        <th>{{'Sport.PlayerLimit' | translate}}</th>
+        <th>{{'Sport.Delay' | translate}}</th>
+        <th>{{'Sport.MaxWinPrematchSingle' | translate}}</th>
+        <th>{{'Sport.MaxWinPrematchMultiple' | translate}}</th>
+        <th>{{'Sport.MaxWinLiveSingle' | translate}}</th>
+        <th>{{'Sport.MaxWinLiveMultiple' | translate}}</th>
+       
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of profitInfo">
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[2]}}</td>
+        <td>{{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[5]}}</td>
+        <td>{{row[6]}}</td>
+        
+       
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

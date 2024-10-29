@@ -10,10 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from "@angular/material/grid-list";
-import { AgGridModule } from "ag-grid-angular";
 import { TranslateModule } from "@ngx-translate/core";
 import { InputMultiSelectComponent } from "./input-multi-select.component";
-import { RolsGridComponent } from './rols-grid/rols-grid.component';
+import { UserRolsGridComponent } from "./user-rols-grid/user-rols-grid.component";
 
 const routes: Routes = [
   {
@@ -34,10 +33,10 @@ const routes: Routes = [
     MatButtonModule,
     RouterModule.forChild(routes),
     MatGridListModule,
-    AgGridModule,
     TranslateModule,
-    FormsModule
-  ],
-  declarations: [MainComponent, InputMultiSelectComponent, RolsGridComponent]
+    FormsModule,
+    UserRolsGridComponent
+],
+  declarations: [MainComponent, InputMultiSelectComponent]
 })
 export class MainModule { }
