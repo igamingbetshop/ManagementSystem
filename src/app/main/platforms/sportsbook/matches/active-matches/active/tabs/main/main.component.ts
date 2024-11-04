@@ -1,5 +1,4 @@
-import { DatePipe } from '@angular/common';
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, signal, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +14,7 @@ import { ButtonRendererComponent } from 'src/app/main/components/grid-common/but
 import { MatDialog } from '@angular/material/dialog';
 import { MATCH_STATUSES, SETTELMENT_STATUSES } from 'src/app/core/constantes/statuses';
 import { ICellRendererParams } from 'ag-grid-community';
+import { ViewMainLimitsComponent } from './view-profit-info/view-main-limits.component';
 
 @Component({
   selector: 'app-main',
@@ -28,9 +28,9 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   public formGroup: UntypedFormGroup;
   public Providers: any[] = [];
   public MatchId: number;
-  public activeMatch: any = {};
+  public activeMatch: any = signal([]);
   public name: string = '';
-  public rowData = [];
+  public rowData: any = signal([]);
   public isEdit = false;
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public columnDefs = [];
@@ -208,7 +208,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   onResetMatch() {
     const sData = {
       MatchId: this.MatchId,
-      ServiceType: this.activeMatch.Status,
+      ServiceType: this.activeMatch().Status,
       PartnerId: this.partnerId,
     };
 
@@ -222,22 +222,31 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
       });
   }
 
+  viewLimits() {
+    const data = this.activeMatch();
+    const dialogRef = this.dialog.open(ViewMainLimitsComponent, {
+      width: ModalSizes.XXXL, data: {
+        MatchId: data.MatchId, PartnerId: this.partnerId, MarketTypeId: data.MarketTypeId
+      }
+    });
+  }
+
   getMatch() {
     this.apiService.apiPost('matches/match', { MatchId: this.MatchId, PartnerId: this.partnerId })
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          this.activeMatch = data.ResponseObject;
-          this.activeMatch.currentPhase = this.activeMatch.CurrentPhaseId + ' - ' + this.activeMatch.CurrentPhaseName;
-          this.formGroup.patchValue(this.activeMatch);
-          this.activeMatch.StatusName = this.Statuses?.find(p =>p.status == this.activeMatch?.Status).Name
-          this.activeMatch.AutoSettlementName = this.settlementStatuses?.find(p =>p.Id == this.activeMatch?.AutoSettlement).Name || 'None'
-          this.activeMatch.ProviderName = this.Providers?.find(p =>p.Id == this.activeMatch?.ProviderId).Name
-          this.rowData = this.activeMatch.Competitors;
-          if(this.rowData[1]?.TeamName) {
-            this.matchName = this.rowData[0]?.TeamName + ' vs ' +this.rowData[1]?.TeamName;
+          this.activeMatch.set(data.ResponseObject);
+          this.activeMatch().currentPhase = this.activeMatch().CurrentPhaseId + ' - ' + this.activeMatch().CurrentPhaseName;
+          this.formGroup.patchValue(this.activeMatch());
+          this.activeMatch().StatusName = this.Statuses?.find(p =>p.status == this.activeMatch()?.Status).Name
+          this.activeMatch().AutoSettlementName = this.settlementStatuses?.find(p =>p.Id == this.activeMatch()?.AutoSettlement).Name || 'None'
+          this.activeMatch().ProviderName = this.Providers?.find(p =>p.Id == this.activeMatch()?.ProviderId).Name
+          this.rowData.set(this.activeMatch().Competitors);
+          if(this.rowData()[1]?.TeamName) {
+            this.matchName = this.rowData()[0]?.TeamName + ' vs ' +this.rowData()[1]?.TeamName;
           } else {
-            this.matchName = this.rowData[0]?.TeamName;
+            this.matchName = this.rowData()[0]?.TeamName;
           }
 
           this.router.navigate([], {
@@ -246,8 +255,8 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
               MatchId: this.MatchId,
               name: this.matchName,
               partnerId: this.partnerId,
-              number: this.activeMatch.Number,
-              sportId: this.activeMatch.SportId,
+              number: this.activeMatch().Number,
+              sportId: this.activeMatch().SportId,
              },
             queryParamsHandling: 'merge'
           });

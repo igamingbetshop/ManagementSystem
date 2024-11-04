@@ -3,6 +3,11 @@
 
   <div class="content-action">
     <div class="title"><a [routerLink]="['../../../all-clients']">{{'Clients.Clients' | translate}}</a> / {{clientId}} :{{'Segments.Segments' | translate}}</div>
+
+    <button mat-stroked-button class="mat-refresh-btn" (click)="onReconsiderClientSegments()">{{'Clients.Reconsider' | translate}}</button>
+    <button mat-stroked-button class="mat-refresh-btn" (click)="featchSegments()">{{'Common.Go' | translate}}</button>
+
+
   </div>
 
   <div class="grid-content">

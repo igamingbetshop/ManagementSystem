@@ -13,17 +13,15 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
     MatIconModule
   ],
   template: `<div>
-    <ng-container *ngIf="!this.icon">
-  <button style="background-color: {{bgColor}}; color: {{textColor}}" [class.disabled]="isDisabled" mat-stroked-button (click)="onClick($event)" >
-    {{label}}
-  </button>
-</ng-container>
-
-<ng-container *ngIf="this.icon">
-  <button  mat-mini-fab style="background-color: {{bgColor}}; color: {{textColor}}" [class.disabled]="isDisabled" (click)="onClick($event)" >
-    <mat-icon>{{icon}}</mat-icon>
-  </button>
-</ng-container>
+    @if(!this.icon) {
+      <button style="background-color: {{bgColor}}; color: {{textColor}}" [class.disabled]="isDisabled" mat-stroked-button (click)="onClick($event)" >
+        {{label}}
+      </button>
+    } @else if (this.icon) {
+      <button  mat-mini-fab style="background-color: {{bgColor}}; color: {{textColor}}" [class.disabled]="isDisabled" (click)="onClick($event)" >
+        <mat-icon>{{icon}}</mat-icon>
+      </button>
+    }
 </div>
 
 

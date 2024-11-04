@@ -1,14 +1,11 @@
-import { Component, EventEmitter, Injector, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Injector, input, Input, Output, ViewChild } from '@angular/core';
 
-import { AgGridAngular } from 'ag-grid-angular';
+import { AgGridAngular, AgGridModule } from 'ag-grid-angular';
 
-import { Controllers, GridMenuIds, GridRowModelTypes, Methods } from 'src/app/core/enums';
+import { Controllers, GridRowModelTypes, Methods } from 'src/app/core/enums';
 import { BasePaginatedGridComponent } from 'src/app/main/components/classes/base-paginated-grid-component';
-import { CellClickedEvent, GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-community';
-import { SelectRendererComponent } from 'src/app/main/components/grid-common/select-renderer.component';
+import { GetContextMenuItemsParams, MenuItemDef } from 'ag-grid-community';
 import { syncNestedColumnReset } from 'src/app/core/helpers/ag-grid.helper';
-import { BET_SELECTION_STATUSES } from 'src/app/core/constantes/statuses';
-import { DatePipe } from '@angular/common';
 import { CoreApiService } from 'src/app/main/platforms/core/services/core-api.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { take } from 'rxjs';
@@ -19,14 +16,17 @@ import { InputMultiSelectComponent } from '../input-multi-select.component';
 @Component({
   selector: 'app-rols-grid',
   templateUrl: './rols-grid.component.html',
-  styleUrls: ['./rols-grid.component.scss']
+  styleUrls: ['./rols-grid.component.scss'],
+  standalone: true,
+  imports: [
+    AgGridModule,
+  ]
 })
 export class RolsGridComponent extends BasePaginatedGridComponent {
   @ViewChild('agGrid', { static: false }) agGrid: AgGridAngular;
-  @Output() finishedMatchesMarket: EventEmitter<any> = new EventEmitter<any>();
   partners = [];
-  @Input() rowData = [];
-  @Input() userId: number;
+  rowData = input([]);
+  userId = input<number>();
 
   public rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   public frameworkComponents = {
@@ -87,7 +87,7 @@ export class RolsGridComponent extends BasePaginatedGridComponent {
         sortable: false,
         filter: false,
         cellRenderer: params => {
-          let IsForAll = !params.data.IsForAll ? `<button style="padding: 10px 15px; color: #FFF; background-color: #076192; border: unset; cursor: pointer; border-radius: 4px" data-action-type="save-role">Save</button>` : `<span></span>`;
+          let IsForAll = !params.data.IsForAll ? `<button style="padding: 10px 15px; color: #FFF; background-color: #3E4D66; border: unset; cursor: pointer; border-radius: 4px" data-action-type="save-role">Save</button>` : `<span></span>`;
           return `${IsForAll}`;
         },
         cellRendererParams: {
@@ -140,7 +140,7 @@ export class RolsGridComponent extends BasePaginatedGridComponent {
       IsForAll: params.data.IsForAll,
       Permissionid: params.data.Permissionid,
       RoleId: params.data.RoleId,
-      UserId: this.userId,
+      UserId: this.userId(),
       AccessObjects: params.data.AccessObjects,
       AccessObjectsIds: null,
     };

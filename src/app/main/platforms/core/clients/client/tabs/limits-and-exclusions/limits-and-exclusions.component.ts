@@ -145,7 +145,7 @@ export class LimitsAndExclusionsComponent extends BaseGridComponent implements O
     this.apiService.apiPost(this.configService.getApiUrl, 6, true,
       Controllers.CONTENT, Methods.GET_COMMENT_TEMPLATES).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.diactivateReasons = data.ResponseObject;
+          this.diactivateReasons = data.ResponseObject;          
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }

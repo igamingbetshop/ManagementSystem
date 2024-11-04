@@ -13,6 +13,11 @@ const routes: Routes = [
         loadChildren: () => import('./report-by-user-transactions/report-by-user-transactions.module').then(m => m.ReportByUserTransactionsModule),
         resolve: { filterData: FilterOptionsResolver },
       },
+      {
+        path: 'report-by-user-corrections',
+        loadChildren: () => import('./report-by-user-corrections/report-by-user-corrections.module').then(m => m.ReportByUserCorrectionsModule),
+        resolve: { filterData: FilterOptionsResolver },
+      }
     ]
   }
 ]

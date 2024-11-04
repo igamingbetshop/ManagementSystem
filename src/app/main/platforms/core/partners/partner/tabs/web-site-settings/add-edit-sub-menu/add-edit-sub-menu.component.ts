@@ -136,6 +136,7 @@ export class AddEditSubMenuComponent implements OnInit {
     return (files.size < 900000) && (
     files.type === 'image/png' ||
     files.type === 'text/xml' ||
+    files.type === 'text/html' ||
     files.type === 'text/plain' ||
     files.type === '' ||
     files.type === 'image/jpg' ||

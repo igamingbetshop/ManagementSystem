@@ -71,7 +71,6 @@ export class CoreBannersComponent extends BasePaginatedGridComponent implements 
 
   setPartnerId() {
     const hasPartnerIdOtherThanOne = this.partners.some(partner => partner.Id == 1);
-
     if (hasPartnerIdOtherThanOne) {
       const partnerWithIdOtherThanOne = this.partners.find(partner => partner.Id == 1);
       this.partnerId = partnerWithIdOtherThanOne.Id;

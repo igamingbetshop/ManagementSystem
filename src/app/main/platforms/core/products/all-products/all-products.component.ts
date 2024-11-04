@@ -1,9 +1,9 @@
-import { Component, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Injector, OnInit, signal, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import 'ag-grid-enterprise';
 
 import { Controllers, Methods, ModalSizes } from 'src/app/core/enums';
@@ -18,6 +18,7 @@ import { AgDropdownFilter } from 'src/app/main/components/grid-common/ag-dropdow
 import { MatMenuTrigger } from '@angular/material/menu';
 import { GridOptions } from 'ag-grid-enterprise';
 import { ExportService } from "../../services/export.service";
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-all-products',
@@ -31,9 +32,9 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   partnerId: number;
   parentId: number;
   name: string;
-  gameProviders: any[] = [];
-  productStates: any[] = [];
-  languages: any[] = [];
+  gameProviders = signal(null);
+  productStates = signal(null);
+  languages = signal(null);
   filteredData;
   frameworkComponents = {
     agDropdownFilter: AgDropdownFilter,
@@ -41,10 +42,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   public checkedRowAll: boolean = false;
   active = this.translate.instant("Common.Active");
   inactive = this.translate.instant("Common.Inactive");
-  statuses = [
-    { Name: `${this.active}`, Id: 1 },
-    { Name: `${this.inactive}`, Id: 2 }
-  ];
   betId: any;
   gridOptions: GridOptions = {};
   allRowsSelected: boolean;
@@ -65,34 +62,27 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   ngOnInit() {
     this.name = this.activateRoute.snapshot.queryParams.Name;
     this.betId = this.activateRoute.snapshot.queryParams.BetId;
-    this.fetchProviders();
-    this.getAllProductStates();
-    this.featchPageData();
-    this.languages = this.commonDataService.languages;
-    this.getAllCountries();
-    this.getProductStates();
+    
+    forkJoin([
+      this.fetchProviders(),
+      this.getAllProductStates(),
+      this.featchPageData(),
+      this.getAllCountries()
+    ]).subscribe(() => {
+      this.setColdefs();
+      this.findId();
+      this.getCurrentPage();
+    });
   }
 
-  getProductStates() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
-      true, Controllers.ENUMERATION, Methods.GET_PRODUCT_STATES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.productStates = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-        }
-      });
-  }
 
   getAllCountries() {
-    this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
-      Controllers.REGION, Methods.GET_REGIONS).pipe(take(1)).subscribe(data => {
+    return this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
+      Controllers.REGION, Methods.GET_REGIONS).pipe(take(1), tap(data => {
         if (data.ResponseCode === 0) {
           this.countries = data.ResponseObject;
         }
-      });
+      }));
   }
 
   setColdefs() {
@@ -103,7 +93,6 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         maxWidth: 50,
         checkboxSelection: true,
         filter: false,
-        // onSelectionChanged: this.onSelectionChanged()
       },
       {
         headerName: 'Common.Id',
@@ -194,7 +183,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,
-          filterData: this.statuses,
+          filterData: this.productStates(),
           suppressAndOrCondition: true
         },
       },
@@ -207,7 +196,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,
-          filterData: this.gameProviders
+          filterData: this.gameProviders(),
         },
       },
       {
@@ -219,7 +208,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
         filter: 'agDropdownFilter',
         filterParams: {
           filterOptions: this.filterService.stateOptions,
-          filterData: this.gameProviders
+          filterData: this.gameProviders(),
         },
       },
       {
@@ -261,45 +250,40 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
   }
 
   findId() {
-    this.partnerId = this.gameProviders.find((partner) => partner.Name == this.name)?.Id;
+    this.partnerId = this.gameProviders().find((partner) => partner.Name == this.name)?.Id;
   };
 
   featchPageData() {
-    this.activateRoute.queryParams.pipe(take(1)).subscribe(query => {
+    return this.activateRoute.queryParams.pipe(take(1), tap(query => {
       this.parentId = query.BetId;
       this.name = query.Name;
-      setTimeout(() => {
-        this.getCurrentPage();
-      }, 50);
-    });
+    }));
   }
 
   fetchProviders() {
-    this.apiService.apiPost(this.configService.getApiUrl, { ParentId: this.betId }, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS)
-      .pipe(take(1))
-      .subscribe(data => {
+    return this.apiService.apiPost(this.configService.getApiUrl, { ParentId: this.betId }, true, Controllers.PRODUCT, Methods.GET_GAME_PROVIDERS)
+      .pipe(take(1), tap(data => {
         if (data.ResponseCode === 0) {
-          this.gameProviders = data.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1);
-
-          this.setColdefs();
-          this.findId();
+          this.gameProviders.set(data.ResponseObject.sort((a, b) => a.Name.toLowerCase() > b.Name.toLowerCase() ? 1 : -1));
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
         }
-      });
+      }));
   }
 
   getAllProductStates() {
-    this.apiService.apiPost(this.configService.getApiUrl, {},
+    return this.apiService.apiPost(this.configService.getApiUrl, {},
       true, Controllers.ENUMERATION, Methods.GET_PRODUCT_STATES_ENUM)
-      .pipe(take(1))
-      .subscribe(data => {
-        if (data.ResponseCode === 0) {
-          this.productStates = data.ResponseObject;
-        } else {
-          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
-        }
-      });
+      .pipe(
+        take(1), 
+        tap(data => {
+          if (data.ResponseCode === 0) {
+            this.productStates.set(data.ResponseObject);
+          } else {
+            SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: 'error' });
+          }
+        })
+      );
   }
 
   async AddProduct() {
@@ -307,8 +291,8 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     const dialogRef = this.dialog.open(AddComponent, {
       width: ModalSizes.MEDIUM,
       data: {
-        productStates: this.productStates,
-        languages: this.languages,
+        productStates: this.productStates(),
+        languages: this.languages(),
         parentProductName: this.name,
         parentId: this.parentId,
         partnerId: this.partnerId,
@@ -358,7 +342,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Entities;
               mappedRows.map((entity) => {
-                entity['State'] = this.productStates?.find((partner) => partner.Id == entity.State)?.Name;
+                entity['State'] = this.productStates()?.find((partner) => partner.Id == entity.State)?.Name;
                 entity['SubproviderId'] = entity.SubproviderName;
                 return entity;
               });
@@ -406,7 +390,7 @@ export class AllProductsComponent extends BasePaginatedGridComponent implements 
     componentRef.instance.method = Methods.SAVE_PRODUCTS_COUNTRY_SETTING;
     componentRef.instance.controller = Controllers.PRODUCT;
     componentRef.instance.countries = this.countries;
-    componentRef.instance.productStates = this.productStates;
+    componentRef.instance.productStates = this.productStates();
     componentRef.instance.afterClosed.subscribe(() => {
       this.getCurrentPage();
       this.bulkEditorRef.clear();

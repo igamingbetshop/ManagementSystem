@@ -70,8 +70,6 @@ export class ViewReportByBetshopsComponent extends BasePaginatedGridComponent im
 
   ngOnInit(): void {
     this.betShopId = this.activateRoute.snapshot.params.id;
-    this.toDate = new Date(this.activateRoute.snapshot.queryParams.toDate);
-    this.fromDate = new Date(this.activateRoute.snapshot.queryParams.fromDate);
     this.featchData();
   }
 

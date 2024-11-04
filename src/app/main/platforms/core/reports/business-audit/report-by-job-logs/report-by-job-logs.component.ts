@@ -286,9 +286,7 @@ export class ReportByJobLogsComponent extends BasePaginatedGridComponent impleme
       { model: this.messageModel, key: 'Message' }
     ];
   
-    filters.forEach(filter => {
-      console.log(filter);
-      
+    filters.forEach(filter => {      
       if (filter.model) {
         filteredData = filteredData.filter(item => 
           item[filter.key].toLowerCase().includes(filter.model.toLowerCase())

@@ -34,44 +34,4 @@
   }
 }
 
-.main-content {
-  background-color: $content-bg-color;
-  width: 100%!important;
-  display: flex!important;
-  column-gap: 10px!important;
-  .left-panel,
-  .right-panel {
-    width: 100%!important;
-  }
 
-  .mat-btn {
-    margin-left: 40%;
-    @include mat-btn-style;
-  }
-
-  .grid-content {
-    width: 100%!important;
-    height: 400px;
-    position: relative!important;
-    background-color: $content-bg-color!important;
-    ::ng-deep {
-      ag-grid-angular {
-        width: 100%;
-        height: 100%;
-      }
-    }    
-  }
-}
-
-.grid-content {
-  width: 100%;
-  height: 135px;
-  padding-top: 12px;
-  background-color: $content-bg-color!important;
-  ::ng-deep {
-    ag-grid-angular {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}

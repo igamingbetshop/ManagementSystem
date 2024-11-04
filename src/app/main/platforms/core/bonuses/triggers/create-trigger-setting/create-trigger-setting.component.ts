@@ -10,6 +10,7 @@ import { take } from "rxjs/operators";
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import { BonusesService } from "../../bonuses.service";
 import { DAYS } from 'src/app/core/constantes/statuses';
+import { formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-create-trigger-setting',
@@ -175,6 +176,8 @@ export class CreateTriggerSettingComponent implements OnInit {
     if (triggerSetting.Type == 1 || triggerSetting.Type == 2 || triggerSetting.Type == 3) {
       triggerSetting.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     }
+    triggerSetting.StartTime = formatDateTime(triggerSetting.StartTime);
+    triggerSetting.FinishTime = formatDateTime(triggerSetting.FinishTime);
     this.saveTriggerSettings(triggerSetting);
   }
 

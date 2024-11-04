@@ -20,7 +20,7 @@ import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
 import {ACTIVITY_STATUSES, NEWS_TYPES} from 'src/app/core/constantes/statuses';
-import { compressImage } from 'src/app/core/utils';
+import { compressImage, formatDateTime } from 'src/app/core/utils';
 
 @Component({
   selector: 'app-add-core-news',
@@ -223,6 +223,9 @@ export class AddCoreNewsComponent implements OnInit {
       return;
     }
     const obj = this.formGroup.getRawValue();
+    
+    obj.StartDate = formatDateTime(obj.StartDate);
+    obj.FinishDate = formatDateTime(obj.FinishDate);
     this.isSendingRequest = true;
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_NEWS)

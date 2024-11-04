@@ -144,8 +144,7 @@ export class AgDateTimeFilter implements AgFilterComponent {
   }
 
   onDropdownOpen(opened: boolean, dropdownContent: any, index: number) {
-    // Implement your logic for handling dropdown open event
-    console.log(`Dropdown ${index} opened: ${opened}`);
+    // console.log(`Dropdown ${index} opened: ${opened}`);
   }
 }
 

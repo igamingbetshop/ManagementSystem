@@ -5,6 +5,7 @@
   width: 250px;
   max-height: 500px;
   border-radius: 4px;
+  overflow: hidden;
   z-index: 1;
 
   .bulk-editor-content {
@@ -103,7 +104,8 @@
     font-weight: 600;
     line-height: 18.75px;
     letter-spacing: 0.04em;
-    text-align: left;    
+    text-align: left;  
+
   }
 }
 
@@ -114,9 +116,11 @@
   letter-spacing: 0.04em;
   padding-left: 20px;
   padding-bottom: 10px;
+  color: #858A93;
+  cursor: pointer;
 }
 
-.avtive-note {
+.active-note {
   background-color: $gray-light-20;
 }
 
@@ -127,6 +131,7 @@
   color: gray;
   padding: 0;
   margin: 0 20px;
+  margin-bottom: 10px;
   cursor: pointer;
 }
 
@@ -143,4 +148,26 @@
 
 .filter-buttons button:hover {
   color: #2c3e50;
+}
+
+.header-title {
+  padding-top: 6px;
+}
+
+.type-info {
+  font-size: 13px;
+}  
+
+.notification-viewport {
+  height: 400px;
+  overflow: auto;
+}
+
+.note-item-container {
+  border-top: 1px solid $gray-light;
+
+  &:hover {
+    background-color: $gray-light-14;
+    cursor: pointer;
+  }
 }

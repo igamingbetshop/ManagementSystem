@@ -33,7 +33,7 @@
     @for (deviceType of deviceTypes(); track deviceType.Id)
     {
     <button mat-stroked-button class="mat-btn" (click)="changeDeviceType(deviceType.Id)"
-      [class.active]="deviceType.Id === $index">{{'Common.' + deviceType.Name | translate}}</button>
+      [class.active]="deviceType.Id == _deviceType">{{'Common.' + deviceType.Name | translate}}</button>
     }
     <div class="input-container">
       <div class="input-content">
@@ -87,8 +87,11 @@
 
           <app-menus-grid 
             [rowData]="webSiteMenusRowData()"
-            [changeData]="changeMenuData"
+            [changeData]="changeMenuData()"
             [icon]="null" 
+            [_adminMenuId]="270"
+            [addedData]="addedMenu()"
+            [delatedItem]="delatedMenuRowId()"
             (menuClicked)="onMenuClicked($event)"
             (editMenuItem)="addEditMenuItem('Edit', $event.data)"
             ></app-menus-grid>
@@ -115,8 +118,12 @@
 
           <app-menus-grid 
             [rowData]="subMenusRowData()"   
-            [icon]="icon"    
+            [icon]="icon"   
+            [_adminMenuId]="270"
+            [_gridIndex]="1"
+            [addedData]="addedSubMenu()"
             [changeData]="changeSubMenuData"     
+            [delatedItem]="delatedSubMenuRowId()"
             (menuClicked)="onSubmenuRowClicked($event)"
             (editMenuItem)="handleSubMenuItem($event)"
           ></app-menus-grid>

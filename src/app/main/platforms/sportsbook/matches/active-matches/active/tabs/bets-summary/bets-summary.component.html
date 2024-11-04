@@ -3,11 +3,11 @@
     <div class="title"><a [routerLink]="[routerLink]">{{title | translate}}</a> /
       <span class="match-id">{{matchId}}</span> : {{'Sport.BetsSummary' | translate}} &nbsp; {{name}}  </div>
 
-    <div class="custom-dropdown">
-      <mat-select
+    <div class="custom-dropdown ">
+      <mat-select class="category-select"
         (selectionChange)="selectCategories($event.value)"
         placeholder="{{'Partners.SelectCategory' | translate}}"
-        panelClass="overlay-dropdown multiple"
+        panelClass="category-dropdown multiple"
         disableOptionCentering multiple>
         <mat-option *ngFor="let partner of categories" [value]="partner.Id">{{partner.Name}}</mat-option>
       </mat-select>
@@ -17,9 +17,9 @@
       <mat-select
         (selectionChange)="selectStatuses($event.value)"
         placeholder="{{'Bonuses.SelectStatus' | translate}}"
-        panelClass="overlay-dropdown multiple"
+        panelClass="category-dropdown multiple"
         disableOptionCentering multiple>
-        <mat-option *ngFor="let betStatus of betStatuses" [value]="betStatus.Id">{{betStatus.Name | translate}}</mat-option>
+        <mat-option *ngFor="let betStatus of betStatuses" [value]="betStatus.Id">{{'Sport.' + betStatus.Name | translate}}</mat-option>
       </mat-select>
     </div>
 
@@ -39,7 +39,7 @@
       <mat-select
         [(ngModel)]="marketConfig.LiveStatus"
         placeholder="{{'Bonuses.SelectStatus' | translate}}"
-        panelClass="overlay-dropdown middle"
+        panelClass="category-dropdown middle"
         disableOptionCentering>
         <mat-option *ngFor="let liveStatus of liveStatuses" [value]="liveStatus.Status">{{liveStatus.Name}}</mat-option>
       </mat-select>

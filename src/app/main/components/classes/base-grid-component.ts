@@ -107,7 +107,7 @@ export class BaseGridComponent implements OnInit, OnDestroy {
     }
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.gridApi.closeToolPanel();
+    this.gridApi?.closeToolPanel();
 
     this.restoreSavedGridState();
     let isFirstInvocation = true;

@@ -46,7 +46,13 @@
             [attr.id]="'accordion-body-' + index"
             [attr.aria-labelledby]="'accordion-header-' + index">
             <div>
-              <pre>betSelections</pre>
+              @for (item of selections; track $index) {
+                <div>
+                  {{item.SelectionId}} - {{item.Name}} - {{item.Coefficient}}
+                </div>
+              }
+
+              
             </div>
           </div>
       

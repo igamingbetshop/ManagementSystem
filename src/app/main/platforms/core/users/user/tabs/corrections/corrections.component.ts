@@ -188,10 +188,7 @@ export class CorrectionsComponent extends BasePaginatedGridComponent implements 
   getUserAccounts() {
     this.apiService.apiPost(this.configService.getApiUrl, this.userId, true,
       Controllers.USER, Methods.GET_USER_BY_ID).pipe(take(1)).subscribe((data) => {
-        console.log(data, 'data');
         if (data.ResponseCode === 0) {
-
-          
           this.accountsRowData = data.ResponseObject.Accounts;
           this.clientUnusedId = this.accountsRowData.find((item) => item.TypeId === 1);
         } else {

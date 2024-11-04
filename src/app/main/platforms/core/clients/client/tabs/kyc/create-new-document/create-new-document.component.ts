@@ -87,28 +87,35 @@ export class CreateNewDocumentComponent implements OnInit {
   }
 
   uploadFile(event) {
-    let files = event.target.files.length && event.target.files[0];
-    if (files)
-    {
-      this.validDocumentSize = files.size < 900000;
+    let files = event.target.files && event.target.files[0];  
+    if (files) {
+      this.validDocumentSize = files.size < 2000000; 
       this.validDocumentFormat = /^(image\/png|image\/jpg|image\/jpeg|image\/gif|application\/pdf)$/.test(files.type);
-      if (this.validDocumentFormat && this.validDocumentSize)
-      {
+  
+      if (this.validDocumentFormat && this.validDocumentSize) {
         this.checkDocumentSize = true;
+        
         const reader = new FileReader();
         reader.onload = () => {
           const binaryString = reader.result as string;
-          this.formGroup.get('ImageData').setValue(binaryString.substr(binaryString.indexOf(',') + 1));
+          this.formGroup.get('ImageData').setValue(binaryString.split(',')[1]);  // Extract base64 data
           this.formGroup.get('Name').setValue(files.name);
         };
-        reader.readAsDataURL(files);
+        reader.onerror = (error) => {
+          console.error("File could not be read: ", error);
+          SnackBarHelper.show(this._snackBar, {Description: 'File Read Error', Type: 'error'});
+        };
+  
+        reader.readAsDataURL(files);  // Read file as Data URL to handle base64 encoding
+  
       } else {
         this.checkDocumentSize = false;
-        files = null;
-        SnackBarHelper.show(this._snackBar, {Description : 'Failed', Type : "error"});
+        files = null;  // Reset the file if validation fails
+        SnackBarHelper.show(this._snackBar, {Description: 'Invalid file size or format', Type: "error"});
       }
     }
   }
+  
 
 
 }

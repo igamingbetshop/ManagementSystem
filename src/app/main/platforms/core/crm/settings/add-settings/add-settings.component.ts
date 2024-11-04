@@ -20,6 +20,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, MatNativeDateModule} from '@angular/material/core';
 import {SnackBarHelper} from "../../../../../../core/helpers/snackbar.helper";
+import { formatDateTime } from 'src/app/core/utils';
 
 
 @Component({
@@ -110,6 +111,8 @@ export class AddSettingsComponent implements OnInit {
     } else {
       obj.State = 1;
     }
+    obj.StartTime = formatDateTime(obj.StartTime);
+    obj.FinishTime = formatDateTime(obj.FinishTime);
     this.apiService.apiPost(this.configService.getApiUrl, obj,
       true, Controllers.CONTENT, Methods.SAVE_CRM_SETTINGS)
       .pipe(take(1))

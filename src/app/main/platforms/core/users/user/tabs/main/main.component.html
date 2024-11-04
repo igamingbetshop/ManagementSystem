@@ -167,72 +167,9 @@
     </form>
   </div>
 
-
-  <div class="main-content" *ngIf="editUserRoles">
-
-    <div class="left-panel">
-      <div class="grid-content">
-        <ag-grid-angular 
-          id="currency-settings" 
-          #agGrid 
-          class="ag-theme-balham" 
-          [suppressCopyRowsToClipboard]="true"
-          [headerHeight]="33" 
-          [rowHeight]="42" 
-          [rowData]="rowData" 
-          [rowModelType]="rowModelType" 
-          [columnDefs]="columnDefs"
-          [defaultColDef]="defaultColDef" 
-          [rowSelection]="rowSelection"
-          [cacheBlockSize]="cacheBlockSize" 
-          [components]="frameworkComponents" 
-          (gridReady)="onGridReady($event)"
-          [ensureDomOrder]="true" 
-          [enableCellTextSelection]="true" 
-          [getContextMenuItems]="getContextMenuItems"
-          rowSelection="single">
-      </ag-grid-angular>
-      </div>
-
-        <button 
-          mat-raised-button 
-          class="mat-btn" 
-          [disabled]="!enableEditRole"
-          (click)="saveUserRoles()">
-          {{'Users.SaveRoleChange' | translate}}
-        </button>
-
-    </div>
-
-    <div class="right-panel">
-       <div class="grid-content"> 
-      <app-rols-grid 
-        [rowData]="rowData1" 
-        [userId]="this.user?.Id" 
-        ></app-rols-grid>
-       <!--  <ag-grid-angular 
-          id="currency-settings2" 
-          #agGrid1 
-          class="ag-theme-balham" 
-          [headerHeight]="33" 
-          [rowHeight]="42"
-          [suppressCopyRowsToClipboard]="true" 
-          [rowData]="rowData1" 
-          [rowModelType]="rowModelType" 
-          [columnDefs]="columnDefs1"
-          [defaultColDef]="defaultColDef" 
-          [cacheBlockSize]="cacheBlockSize"
-          (rowClicked)="onRowClicked($event)" 
-          [components]="frameworkComponents" 
-          (gridReady)="onGridReady($event)"
-          [ensureDomOrder]="true" 
-          [enableCellTextSelection]="true" 
-          [getContextMenuItems]="getContextMenuItems"
-          rowSelection="single">
-      </ag-grid-angular>-->
-      </div> 
-    </div>
-    </div>
-
+  <app-user-rols-grid
+    [editUserRoles]="editUserRoles"
+    [userId]="userId"
+  > </app-user-rols-grid>
 
 </div>

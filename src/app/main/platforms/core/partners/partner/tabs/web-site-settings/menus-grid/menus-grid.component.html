@@ -21,8 +21,13 @@
   [paginationPageSize]="5000"
   rowSelection="single"
   [domLayout]="'normal'"
-  (columnResized)="onColumnResized($event)"
+  (columnResized)="onColumnResizes($event)"
   (gridSizeChanged)="onGridSizeChanged($event)"
+
+
+  (columnPinned)="onColumnPinned($event)"
+  (columnMoved)="onColumnMoved($event)"
+  (columnVisible)="onColumnVisible($event)"
   [getRowHeight]="getRowHeight.bind(this)">
 </ag-grid-angular>
 

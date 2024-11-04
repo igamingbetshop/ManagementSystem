@@ -1,15 +1,16 @@
-import {Component, Injector, OnInit, signal} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {take} from 'rxjs/operators';
-import {SportsbookApiService} from '../../../../services/sportsbook-api.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ConfigService} from "../../../../../../../core/services";
-import {SnackBarHelper} from "../../../../../../../core/helpers/snackbar.helper";
+import { Component, Injector, OnInit, signal, WritableSignal } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs/operators';
+import { SportsbookApiService } from '../../../../services/sportsbook-api.service';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ConfigService } from "../../../../../../../core/services";
+import { SnackBarHelper } from "../../../../../../../core/helpers/snackbar.helper";
 import { GridRowModelTypes } from 'src/app/core/enums';
 import { BaseGridComponent } from 'src/app/main/components/classes/base-grid-component';
 import { DatePipe } from '@angular/common';
-import {IMarketType} from '../../../../market-types/martet-type.interface'
+import { IMarketType } from '../../../../market-types/martet-type.interface'
+import { MARKET_TYPE_STATUSES } from '../../../market-type-common/market-type-statuses';
 
 @Component({
   selector: 'app-market-type-main',
@@ -17,17 +18,14 @@ import {IMarketType} from '../../../../market-types/martet-type.interface'
   styleUrls: ['./market-type-main.component.scss']
 })
 export class MarketTypeMainComponent extends BaseGridComponent implements OnInit {
-  public partnerId: number;
-  public marketTypeId: number;
-  marketEntyty = signal<any>(null);
-  public partnerName;
-  public formGroup: UntypedFormGroup;
-  public states = [
-    {Id: 1, Name: 'Active'},
-    {Id: 2, Name: 'Blocked'}
-  ]
-  public isEdit = false;
-  rowData = [];
+  partnerId: number;
+  marketTypeId: number;
+  marketEntity: WritableSignal<IMarketType | null> = signal<IMarketType | null>(null);
+  statuses = MARKET_TYPE_STATUSES;
+  partnerName;
+  formGroup: UntypedFormGroup;
+  isEdit = false;
+  rowData: WritableSignal<[]> = signal<[]>(null);
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   filter = {
     PageIndex: 0,
@@ -46,6 +44,7 @@ export class MarketTypeMainComponent extends BaseGridComponent implements OnInit
     protected injector: Injector
   ) {
     super(injector);
+    this.createForm();
     this.columnDefs = [
       {
         headerName: 'Common.Id',
@@ -82,13 +81,53 @@ export class MarketTypeMainComponent extends BaseGridComponent implements OnInit
       {
         headerName: 'Clients.Object',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'Object',
+        field: 'Object.Color',
       },
       {
-        headerName: 'Clients.ObjectId',
+        headerName: 'Clients.CombinationalNumber',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'ObjectId',
+        field: 'Object.CombinationalNumber',
       },
+      {
+        headerName: 'Clients.DisplayType',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Object.DisplayType',
+      },
+      {
+        headerName: 'Clients.GroupIds',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Object.GroupIds',
+      },
+      {
+        headerName: 'Clients.IsForFilter',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Object.IsForFilter',
+        cellRenderer: (params: { value: any; }) => {
+          const stateId = params.value;
+          const stateObject = this.statuses?.find((state) => state.Id === stateId);
+          if (stateObject) {
+            return stateObject.Name;
+          }
+          return params.value;
+        },
+
+      },
+      {
+        headerName: 'Clients.Priority',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Object.Priority',
+      },
+      {
+        headerName: 'Clients.ResultTypeId',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Object.ResultTypeId',
+      },
+      {
+        headerName: 'Clients.State',
+        headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Object.Enabled',
+      },
+
     ]
   }
 
@@ -97,7 +136,6 @@ export class MarketTypeMainComponent extends BaseGridComponent implements OnInit
     this.partnerId = +this.activateRoute.snapshot.queryParams.partnerId;
     this.partnerName = this.activateRoute.snapshot.queryParams.partnerName;
     this.getMarketTypeById();
-    // this.createForm();
     this.getObjectChangeHistory();
   }
 
@@ -106,32 +144,42 @@ export class MarketTypeMainComponent extends BaseGridComponent implements OnInit
   }
 
   public createForm() {
-
     this.formGroup = this.fb.group({
       Id: [null],
-      CurrencyId: [null],
-      State: [null, [Validators.required]],
       Name: [null],
-      RestrictMaxBet: [null],
+      SportId: [null],
+      SportName: [null],
+      GroupIds: [null],
+      CombinationalNumber: [null],
+      Enabled: [null],
+      Priority: [null],
+      Color: [null],
+      LineNumber: [null],
+      TranslationId: [null],
+      ValueType: [null],
+      DisplayType: [null],
+      IsForFilter: [null],
+      ResultTypeId: [null],
+      MatchPhaseId: [null],
+      SelectionsCount: [null],
+      SuccessOutcomeCount: [null],
+      PartnerSetting: [null],
+      Selections: [null],
     });
   }
+
 
   getMarketTypeById() {
     if (this.marketTypeId) {
       this.filter.Ids = { IsAnd: true, ApiOperationTypeList: [{ IntValue: this.marketTypeId, OperationTypeId: 1 }] }
     }
     this.filter.PartnerId = this.partnerId;
-
-    console.log(this.filter, "filter");
-    
     this.apiService.apiPost(this.path, this.filter)
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {
-          
-          this.marketEntyty.set(data.ResponseObject[0]);
-          console.log(this.marketEntyty(), "MARKET TYPE DATA");
-
+          this.marketEntity.set(data.ResponseObject[0]);
+          this.formGroup.patchValue(data.ResponseObject[0]);
         } else {
           SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
@@ -143,24 +191,15 @@ export class MarketTypeMainComponent extends BaseGridComponent implements OnInit
   getObjectChangeHistory() {
     this.apiService.apiPost('common/objectchangehistory', { ObjectId: String(this.marketTypeId), ObjectTypeId: 6 })
       .pipe(take(1)).subscribe((data) => {
-        console.log(data, "data");
-        
+
+
         if (data.Code === 0) {
-          this.rowData = data.ResponseObject.map((items) => {
-            // items.Object = JSON.parse(items.Object);
-            // items.CategoryName = this.Categories.find((item) => {
-            //   return item.Id === items.Object.CategoryId;
-            // }).Name;
-            // items.LimitPercent = items.Object.LimitPercent;
-            // items.DelayPercentPrematch = items.Object.DelayPercentPrematch;
-            // items.DelayPercentLive = items.Object.DelayPercentLive;
-            // items.DelayBetweenBetsPrematch = items.Object.DelayBetweenBetsPrematch;
-            // items.DelayBetweenBetsLive = items.Object.DelayBetweenBetsLive;
-            // items.RepeatBetMaxCount = items.Object.RepeatBetMaxCount;
-            // items.RestrictMaxBet = items.Object.RestrictMaxBet;
-            // items.AllowCashout = items.Object.AllowCashout;
+          this.rowData.set(data.ResponseObject.map((items) => {
+            items.Object = JSON.parse(items.Object);
+
+            items.LimitPercent = items.Object.LimitPercent;
             return items
-          });
+          }));
         }
       })
   }
@@ -170,17 +209,17 @@ export class MarketTypeMainComponent extends BaseGridComponent implements OnInit
       return;
     }
     const obj = this.formGroup.getRawValue();
-    this.apiService.apiPost('partners/update', obj)
-      .pipe(take(1))
-      .subscribe(data => {
+      this.apiService.apiPost('markettypes/update', obj).subscribe(data => {
         if (data.Code === 0) {
-          SnackBarHelper.show(this._snackBar, {Description : 'Partner successfully updated', Type : "success"});
+          SnackBarHelper.show(this._snackBar, { Description: "Updated", Type: "success" });
+          this.marketEntity.set(data.ResponseObject);
+          this.formGroup.patchValue(data.ResponseObject);
           this.isEdit = false;
-          // this.getPartner();
         } else {
-          SnackBarHelper.show(this._snackBar, {Description : data.Description, Type : "error"});
+          SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
         }
       })
-  }
+    }
+    
 
 }

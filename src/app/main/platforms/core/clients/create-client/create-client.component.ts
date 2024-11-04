@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, signal, 
 import { CommonModule } from "@angular/common";
 
 import { DateAdapter } from "@angular/material/core";
-import { take } from "rxjs/operators";
+import { debounceTime, filter, take } from "rxjs/operators";
 import { TranslateModule } from "@ngx-translate/core";
 import { MatIconModule } from "@angular/material/icon";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -70,6 +70,7 @@ export class CreateClientComponent implements OnInit {
   showPassword = false;
   passwordDosnetMutch: WritableSignal<boolean> = signal(false);
   minDate: Date;
+  private isProgrammaticUpdate = false;
 
   constructor(private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<CreateClientComponent>,
@@ -111,11 +112,8 @@ export class CreateClientComponent implements OnInit {
     this.formGroup.reset({
       PartnerId: val,
     });
-
     this.items.set([]);
-
     this.partnerId = val;
-
     this.apiService.apiPost(
       this.configService.getApiUrl,
       { PartnerId: val, DeviceType: 1 },
@@ -125,13 +123,11 @@ export class CreateClientComponent implements OnInit {
         const responseData = data.ResponseObject;
         responseData.sort((a, b) => a.Order - b.Order);
         const transformedItems = this.transformFields(responseData);
-
         this.items.set(transformedItems.fields);
         this.createForm();
         if (this.items().some(item => item.Type === 'JobArea')) {
           this.getJobAreas();
         }
-
         this.getPartnerCurrencySettings();
       } else {
         // Handle API error
@@ -172,7 +168,11 @@ export class CreateClientComponent implements OnInit {
     this.items().forEach(item => {
       const validators = [];
       if (item.Required) {
-        validators.push(Validators.required);
+        if (item.Type === 'checkbox') {
+          validators.push(Validators.requiredTrue);
+        } else {
+          validators.push(Validators.required);
+        }
       }
       if (item.RegExp) {
         validators.push(Validators.pattern(item.RegExp));
@@ -180,13 +180,10 @@ export class CreateClientComponent implements OnInit {
       this.formGroup.addControl(item.Title, this.fb.control('', validators));
     });
 
-    if (!this.formGroup.get('Password')) {
+    if (this.formGroup.get('Password')) {
       this.formGroup.addControl('Password', this.fb.control('', Validators.required));
+      this.formGroup.addControl('confirmPassword', this.fb.control('', [Validators.required, this.passwordMatchValidator()]));
     }
-    if (!this.formGroup.get('confirmPassword')) {
-      this.formGroup.addControl('confirmPassword', this.fb.control('', this.passwordMatchValidator()));
-    }
-
   }
 
   private getJobAreas() {
@@ -216,6 +213,7 @@ export class CreateClientComponent implements OnInit {
       delete requestData['BirthDay'];
     }
 
+
     this.apiService.apiPost(this.configService.getApiUrl, requestData,
       true, Controllers.CLIENT, Methods.REGISTER_CLIENT).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
@@ -234,6 +232,7 @@ export class CreateClientComponent implements OnInit {
   updateErrorMessage() {
     const password = this.formGroup.get('Password')?.value;
     const confirmPassword = this.formGroup.get('confirmPassword')?.value;
+
     if (password && confirmPassword && password !== confirmPassword) {
       this.formGroup.get('confirmPassword')?.setErrors({ passwordMismatch: true });
     } else {
@@ -245,13 +244,8 @@ export class CreateClientComponent implements OnInit {
     return (formGroup: AbstractControl): ValidationErrors | null => {
       const password = formGroup.get('Password')?.value;
       const confirmPassword = formGroup.get('confirmPassword')?.value;
-      if (!password || !confirmPassword) {
-        this.passwordDosnetMutch.set(false);
-        return null;
-      }
-      const mismatch = password !== confirmPassword;
-      return mismatch ? { passwordMismatch: true } : null;
-    }
+      return password === confirmPassword ? null : { passwordMismatch: true };
+    };
   }
 
   isRequired(controlName: string): boolean {
@@ -262,5 +256,32 @@ export class CreateClientComponent implements OnInit {
     }
     return false;
   }
+
+  subscribeToFormChanges() {
+    this.formGroup.valueChanges
+      .pipe(
+        debounceTime(300),
+        filter(() => !this.isProgrammaticUpdate)
+
+      )
+      .subscribe(() => {
+        this.checkFormValidation();
+      });
+  }
+
+  checkFormValidation() {
+    this.isProgrammaticUpdate = true;
+    Object.keys(this.formGroup.controls).forEach(key => {
+      const control = this.formGroup.get(key);
+      if (control) {
+        control.updateValueAndValidity();
+      }
+    });
+
+    this.formGroup.updateValueAndValidity();
+
+    this.isProgrammaticUpdate = false;
+  }
+
 
 }

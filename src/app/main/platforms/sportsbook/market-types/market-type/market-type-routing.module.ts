@@ -15,7 +15,10 @@ const routes: Routes = [
           path: 'main',
           loadChildren:() => import('./tabs/market-type-main/market-type-main.module').then(m => m.MarketTypeMainModule),
         },
-
+        {
+          path: 'selections',
+          loadChildren:() => import('./tabs/market-type-selections/market-type-selections.module').then(m => m.MarketTypeSelectionsModule),
+        },
         {
           path: '',
           redirectTo: 'main',

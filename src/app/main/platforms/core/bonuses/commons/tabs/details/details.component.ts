@@ -20,6 +20,7 @@ import { BonusesService } from "../../../bonuses.service";
 import { ACTIVITY_STATUSES, DAYS, REGULARITY } from 'src/app/core/constantes/statuses';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { campaignTypes } from './campaing-types';
+import { WageringSources } from '../../../bonuses.types';
 
 @Component({
   selector: 'app-details',
@@ -28,22 +29,19 @@ import { campaignTypes } from './campaing-types';
 })
 export class DetailsComponent extends BasePaginatedGridComponent implements OnInit {
   commonId;
-  rowData = [];
+  rowData = signal(null);
   @ViewChild('agGrid') agGrid: AgGridAngular;
   columnDefs = [];
   rowModelType: string = GridRowModelTypes.CLIENT_SIDE;
   formGroup: UntypedFormGroup;
   isEdit = false;
   enableEditIndex;
-  commonSettings;
+  commonSettings = signal(null);
   partners;
-  languages;
-  countries;
-  countriesEntites = [];
-  languageEntites = [];
-  segmentesEntites = [];
-  segments;
-  currencies;
+  languages = signal(null);
+  countries = signal(null);
+  segments  = signal(null);
+  currencies = signal(null);
   clientType: any[] = [];
   bonusTypes = [];
   validDocumentSize;
@@ -72,8 +70,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     selectedConditionValue: null
   };
   color = '';
-  // campaignControl: FormControl;
-  // valueControl: FormControl;
+  wageringSources = WageringSources;
   displayedColumns: string[] = [ 'Name', 'Order', 'Points'];
 
   conditionTypes;
@@ -160,8 +157,8 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.getAllCountries();
     this.commonId = this.activateRoute.snapshot.queryParams.commonId;
     this.partners = this.commonDataService.partners;
-    this.languages = this.commonDataService.languages;
-    this.currencies = this.commonDataService.currencies;
+    this.languages.set(this.commonDataService.languages);
+    this.currencies.set(this.commonDataService.currencies);
     this.conditions = this.bonusesService.getConditions();
     this.getOperationFilters();
     this.getClientType();
@@ -204,18 +201,18 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   setCommonSettings(data) {
-    this.commonSettings = data;
-    this.commonSettings.PartnerName = this.partners.find(item => this.commonSettings.PartnerId === item.Id).Name;
-    this.accountTypeId = this.commonSettings?.AccountTypeId;
+    this.commonSettings.set(data);
+    this.commonSettings().PartnerName = this.partners.find(item => this.commonSettings().PartnerId === item.Id).Name;
+    this.accountTypeId = this.commonSettings()?.AccountTypeId;
     this.accounttypeName = this.clientType.find(type => type.Id == this.accountTypeId)?.Name;
-    this.commonSettings['BonusTypeName'] = this.bonusTypes?.find(x => x.Id == this.commonSettings?.BonusTypeId)?.Name;
-    this.bonusTypeId = this.commonSettings?.BonusTypeId;
-    this.color = this.commonSettings?.Color;
-    this.getPartnerPaymentSegments(this.commonSettings.PartnerId);
-    this.formGroup.patchValue(this.commonSettings);
-    this.TypeConditions = this.commonSettings.Conditions;    
+    this.commonSettings['BonusTypeName'] = this.bonusTypes?.find(x => x.Id == this.commonSettings()?.BonusTypeId)?.Name;
+    this.bonusTypeId = this.commonSettings()?.BonusTypeId;
+    this.color = this.commonSettings()?.Color;
+    this.getPartnerPaymentSegments(this.commonSettings().PartnerId);
+    this.formGroup.patchValue(this.commonSettings());
+    this.TypeConditions = this.commonSettings().Conditions;    
     if (this.bonusTypeId === 5) {
-      this.counts = this.commonSettings.Info.split(", ").map(Number);
+      this.counts = this.commonSettings().Info.split(", ").map(Number);
       const countsFormArray = this.fb.array(
         this.counts.map(count => this.fb.control(count, [Validators.required, Validators.pattern(/^\d+$/)])),
         { validators: this.validateChipSum }
@@ -223,8 +220,8 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       this.formGroup.addControl('counts', countsFormArray);
       this.formGroup.get('counts').setValue(this.counts);
       this.fetchTournamentLeaderboard();
-    } else if ((this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) && this.commonSettings?.Conditions) {
-      this.addedConditions = this.bonusesService?.getResponseConditions(this.commonSettings?.Conditions, this.conditionTypes);
+    } else if ((this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) && this.commonSettings()?.Conditions) {
+      this.addedConditions = this.bonusesService?.getResponseConditions(this.commonSettings()?.Conditions, this.conditionTypes);
     } else if (this.bonusTypeId == 10) {
       this.conditions = this.conditions.filter(element => element.Id === 16);
     } else if (this.bonusTypeId == 4) {
@@ -237,9 +234,9 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       ]
       const infoControl = this.formGroup.get('Info') as FormArray;
 
-      if (this.commonSettings.Info) {
+      if (this.commonSettings().Info) {
           try {
-              const parsedInfo = JSON.parse(this.commonSettings.Info);
+              const parsedInfo = JSON.parse(this.commonSettings().Info);
               parsedInfo.forEach((item: any) => {
                   const newValue = {
                       BonusId: item.BonusId,
@@ -258,9 +255,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       this.formGroup.get('Info').updateValueAndValidity();
     }
 
-    this.countriesEntites.push(this.commonSettings?.Countries.Ids.map(elem => {
-      return this.countries.find(item => elem === item.Id).Name;
-    }));
   }
 
   minSelectedItemsValidator(min: number) {
@@ -282,7 +276,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
 
   fetchTournamentLeaderboard() {
     this.apiService.apiPost(this.configService.getApiUrl, 
-      { BonusId: this.commonSettings.Id, LanguageId: "en"}, true,
+      { BonusId: this.commonSettings().Id, LanguageId: "en"}, true,
       Controllers.BONUS, Methods.GET_TOURNAMENT_LEADERBOUARD).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
           this.tournamentData.set(data.ResponseObject);
@@ -350,30 +344,31 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       DayOfWeek: [null],
       FinalAccountTypeId: [null],
       ReusingMaxCountInPeriod: [null],
+      WageringSource: [null],
       Countries: this.fb.group({
         Ids: [null],
         Names: [null],
-        Type: [this.commonSettings?.Countries.Type],
+        Type: [this.commonSettings()?.Countries.Type],
       }),
       SegmentIds: this.fb.group({
         Ids: [null],
         Names: [null],
-        Type: [this.commonSettings?.SegmentIds.Type],
+        Type: [this.commonSettings()?.SegmentIds.Type],
       }),
       Languages: this.fb.group({
         Ids: [null],
         Names: [null],
-        Type: [this.commonSettings?.Languages.Type],
+        Type: [this.commonSettings()?.Languages.Type],
       }),
       Currencies: this.fb.group({
         Ids: [null],
         Names: [null],
-        Type: [this.commonSettings?.Currencies.Type],
+        Type: [this.commonSettings()?.Currencies.Type],
       }),
       PaymentSystemIds: this.fb.group({
         Ids: [null],
         Names: [null],
-        Type: [this.commonSettings?.PaymentSystemIds.Type],
+        Type: [this.commonSettings()?.PaymentSystemIds.Type],
       }),
       // Conditions: this.fb.group({
       //   Conditions: this.fb.group([
@@ -426,7 +421,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.apiService.apiPost(this.configService.getApiUrl, { ObjectId: this.commonId, ObjectTypeId: 65 }, true,
       Controllers.REPORT, Methods.GET_OBJECT_CHANGE_HISTORY).pipe(take(1)).subscribe((data) => {
         if (data.ResponseCode === 0) {
-          this.rowData = data.ResponseObject;
+          this.rowData.set(data.ResponseObject);
         }
       });
   }
@@ -435,7 +430,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.apiService.apiPost(this.configService.getApiUrl, { TypeId: 5 }, true,
       Controllers.REGION, Methods.GET_REGIONS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
-          this.countries = data.ResponseObject;
+          this.countries.set(data.ResponseObject);
         }
       });
   }
@@ -444,26 +439,11 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.apiService.apiPost(this.configService.getApiUrl, { PartnerId: partnerId }, true,
       Controllers.CONTENT, Methods.GET_SEGMENTS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
-          this.segments = data.ResponseObject;
-          this.setSegmentsEntytes();
-          this.setLanguageEntytes();
+          this.segments.set(data.ResponseObject);
         }
       });
   }
 
-  setSegmentsEntytes() {
-    // Set Segments Names
-    this.segmentesEntites.push(this.formGroup.value.SegmentIds.Ids.map(elem => {
-      return this.segments.find((item) => elem === item.Id).Name
-    }))
-  }
-
-  setLanguageEntytes() {
-    this.languageEntites.push(this.formGroup.value.Languages.Names.map(elem => {
-      return this.languages.find((item) => elem === item.Id).Name
-    }))
-
-  }
 
   uploadFile(event) {
     let files = event.target.files.length && event.target.files[0];
@@ -497,7 +477,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     const requestBody = this.formGroup.getRawValue();
     delete requestBody.PartnerName;
     requestBody.AccountTypeId = this.accountTypeId;
-    requestBody.AmountSettings = this.commonSettings.AmountSettings;
+    requestBody.AmountSettings = this.commonSettings().AmountSettings;
     if (this.bonusTypeId === 12 || this.bonusTypeId === 13 || this.bonusTypeId === 10) {
       requestBody.Conditions = this.bonusesService.getRequestConditions(this.addedConditions);
     } else if (this.bonusTypeId == 5) {
@@ -511,9 +491,6 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
     this.apiService.apiPost(this.configService.getApiUrl, requestBody, true,
       Controllers.BONUS, Methods.UPDATE_BONUS).pipe(take(1)).subscribe(data => {
         if (data.ResponseCode === 0) {
-          this.countriesEntites = [];
-          this.languageEntites = [];
-          this.segmentesEntites = [];
           this.getObjectHistory()
           this.getBonusInfo();
           this.isEdit = false;
@@ -523,30 +500,12 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
       });
   }
 
-  private normalizeDateTime(dateTime: string | null): string {
-    if (!dateTime) return '';
-  
-    const date = new Date(dateTime);
-    return date.toISOString().slice(0, 16); 
-  }
-  
-  private convertToUtc(dateTime: string | null): string {
-    if (!dateTime) return '';
-  
-    const date = new Date(dateTime);
-    const utcHours = date.getUTCHours().toString().padStart(2, '0');
-    const utcMinutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const utcDate = date.toISOString().slice(0, 10); // 'YYYY-MM-DD'
-  
-    return `${utcDate}T${utcHours}:${utcMinutes}`;
-  }
-
   async onOpenCurrencySettings() {
     const { AddCurrencySettingsComponent } = await import('../../../currency-settings/add-currency-settings/add-currency-settings.component');
     const dialogRef = this.dialog.open(AddCurrencySettingsComponent, { width: ModalSizes.MEDIUM, data: { isUpToAmmount: true } });
     dialogRef.afterClosed().pipe(take(1)).subscribe(data => {
       if (data) {
-        const payload = { ...this.commonSettings }
+        const payload = { ...this.commonSettings() }
         payload.AmountSettings.push(data);
         delete payload.Products;
         this.updateBounus(payload);
@@ -567,7 +526,7 @@ export class DetailsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   onAmmountSettingsChange(event) {
-    const payload = { ...this.commonSettings, AmountSettings: event };
+    const payload = { ...this.commonSettings(), AmountSettings: event };
     delete payload.Products;
     this.updateBounus(payload);
   }

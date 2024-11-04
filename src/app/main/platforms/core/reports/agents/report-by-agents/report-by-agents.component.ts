@@ -91,9 +91,7 @@ export class ReportByAgentsComponent extends BasePaginatedGridComponent implemen
   onDateChange(event: any) {
     this.fromDate = event.fromDate;
     this.toDate = event.toDate;
-    if (event.partnerId) {
-      this.partnerId = event.partnerId;
-    }
+    this.partnerId = event.partnerId ? event.partnerId : null;
     this.getCurrentPage();
   }
 

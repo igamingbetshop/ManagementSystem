@@ -12,6 +12,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {AgGridModule} from "ag-grid-angular";
 import {TranslateModule} from "@ngx-translate/core";
+import { UserRolsGridComponent } from "../../../../users/user/tabs/main/user-rols-grid/user-rols-grid.component";
 
 const routes: Routes = [
   {
@@ -34,8 +35,9 @@ const routes: Routes = [
     MatGridListModule,
     AgGridModule,
     TranslateModule,
-    FormsModule
-  ],
+    FormsModule,
+    UserRolsGridComponent
+],
   declarations: [MainComponent]
 })
 

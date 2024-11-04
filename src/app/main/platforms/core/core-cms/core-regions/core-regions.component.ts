@@ -184,8 +184,6 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
   }
 
   onValueChanged(event) {
-    console.log(event);
-    
     if (event.oldValue !== event.value) {
       let findedNode: IRowNode;
       let node = event.node.rowIndex;
@@ -277,9 +275,7 @@ export class CoreRegionsComponent extends BasePaginatedGridComponent implements 
     })
   }
 
-  onCellValueChanged(request) {
-    console.log(request, "REQ");
-    
+  onCellValueChanged(request) {    
     this.apiService.apiPost(this.configService.getApiUrl, request, true, Controllers.REGION, Methods.SAVE_REGION)
       .pipe(take(1))
       .subscribe(data => {

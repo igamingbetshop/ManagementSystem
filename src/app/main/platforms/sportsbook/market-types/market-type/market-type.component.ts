@@ -23,7 +23,6 @@ export class MarketTypeComponent implements OnInit {
   marketTypeId:number;
 
   constructor(private activateRoute:ActivatedRoute) { 
-    console.log('MarketTypeComponent');
     
   }
 

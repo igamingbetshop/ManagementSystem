@@ -51,6 +51,13 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     checkBoxRenderer: CheckboxRendererComponent,
     agDateTimeFilter: AgDateTimeFilter
   };
+  public betTypesModel = [
+    { "Name": this.translate.instant('Sport.Single'), "Id": 1 },
+    { "Name": this.translate.instant('Sport.Multiple'), "Id": 2 },
+    { "Name": this.translate.instant('Sport.System'), "Id": 3 },
+    { "Name": this.translate.instant('Sport.Chain'), "Id": 4 },
+    { "Name": this.translate.instant('Sport.Teaser'), "Id": 5 }
+  ];
 
   isRowMaster;
 
@@ -150,23 +157,19 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
           filterOptions: this.filterService.stateOptions,
           filterData: this.betStatuses,
         },
-        cellRenderer: (params: { value: any; }) => {
-          const betId = params.value;
-          const betObject = this.betStatuses?.find((bet) => bet.Id === betId);
-          if (betObject) {
-            return betObject.Name;
-          }
-          
-        },
 
       },
       {
         headerName: 'Clients.BetType',
         headerValueGetter: this.localizeHeader.bind(this),
-        field: 'BetInfo',
-        sortable: false,
+        field: 'BetTypeId',
+        sortable: true,
         resizable: true,
-        filter: false,
+        filter: 'agDropdownFilter',
+        filterParams: {
+          filterOptions: this.filterService.stateOptions,
+          filterData: this.betTypesModel,
+        },
         suppressMenu: true,
       },
       {
@@ -197,7 +200,11 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
         cellRenderer: (params) => {
           const oddsTypePipe = new OddsTypePipe();
           let data = oddsTypePipe.transform(params.data.Coefficient, this.oddsType);
-          return data ? `${data}` : '';
+          if (data !== null && data !== undefined && !isNaN(data)) {
+            return `${data}`;
+          } else {
+            return '';
+          }
         }
       },
       {
@@ -469,10 +476,9 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     this.setTime();
     this.pageIdName = `/ ${this.clientId} : ${this.translate.instant('Clients.Bets')}`;
     this.oddsType = this.localStorageService.get('user')?.OddsType !== null ? this.localStorageService.get('user').OddsType : OddsTypes.Decimal;
-    this.toDate = new Date(this.toDate.setDate(this.toDate.getDate()));
     this.getDocumenStatesEnum();
-    this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;
-    // this.getProviders();
+    this.playerCurrency = JSON.parse(localStorage.getItem('user'))?.CurrencyId;    
+
   }
 
   setTime() {
@@ -486,32 +492,6 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
     this.toDate = event.toDate;
     this.getCurrentPage();
   }
-
-  // getProviders() {
-  //   const paging = {
-  //     "SkipCount": 0,
-  //     "TakeCount": 100,
-  //     "OrderBy": null,
-  //     "FieldNameToOrderBy": "",
-  //     "GameProviderIds": {
-  //       "IsAnd": true,
-  //       "ApiOperationTypeList": [
-  //         {
-  //           "OperationTypeId": 1,
-  //           "IntValue": 100
-  //         }
-  //       ]
-  //     }
-  //   }
-  //   this.apiService.apiPost(this.configService.getApiUrl, paging,
-  //     true, Controllers.PRODUCT, Methods.GET_PRODUCTS).pipe(take(1)).subscribe(data => {
-  //       if (data.ResponseCode === 0) {
-  //         this.providers = data.ResponseObject.Entities.map(provider => provider.Id);
-  //       } else {
-  //         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
-  //       }
-  //     });
-  // }
 
   getClientAccounts() {
     this.apiService.apiPost(this.configService.getApiUrl, +this.clientId, true,
@@ -576,6 +556,8 @@ export class BetsComponent extends BasePaginatedGridComponent implements OnInit 
             if (data.ResponseCode === 0) {
               const mappedRows = data.ResponseObject.Bets.Entities;
               mappedRows.forEach((entity) => {
+                entity['BetTypeId'] = this.betTypesModel.find((betType) => betType.Id == entity.BetTypeId)?.Name;
+
                 let statusNames = this.statusNames.find((status) => {
                   return status.Id == entity.State;
                 })

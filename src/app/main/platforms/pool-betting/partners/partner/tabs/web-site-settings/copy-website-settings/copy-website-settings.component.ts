@@ -94,7 +94,7 @@ export class CopyWebsiteSettingsComponent implements OnInit {
     }
     const setting = this.formGroup.getRawValue();
     setting.ToPartnerId = +this.partnerId;
-    this.apiService.apiPost('cms/clonewebsitemenubypartnerId', setting)
+    this.apiService.apiPost(PBControllers.PARTNERS, PBMethods.CLONE_WEBSITE_MENU_BY_PARTNER_ID,  setting)
       .pipe(take(1))
       .subscribe(data => {
         if (data.Code === 0) {

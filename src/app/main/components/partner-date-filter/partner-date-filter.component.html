@@ -1,7 +1,7 @@
 <div class="content-action">
   <div class="title">
     <a (click)="onTitleClick()">
-      {{titleName }} {{pageIdName()}}
+      {{titleName() }} {{pageIdName()}}
     </a>
   </div>
   <div class="contianer-wrap">
@@ -81,14 +81,17 @@
 
     <div class="calendar-picker">
       <app-date-time-picker
-       [dateTime]="formatDateTime(fromDate)"
+       [dateTime]="formatDateTime(fromDate())"
+       [formatType]="dateFormatType()"
        (dateTimeChange)="onStartDateChange($event)">
+       
     </app-date-time-picker>
     </div>
 
     <div class="calendar-picker">
       <app-date-time-picker
-        [dateTime]="formatDateTime(toDate)"
+        [dateTime]="formatDateTime(toDate())"
+        [formatType]="dateFormatType()"
         (dateTimeChange)="onEndDateChange($event)">
       </app-date-time-picker>
     </div>

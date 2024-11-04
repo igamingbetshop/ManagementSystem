@@ -27,7 +27,7 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
   public partners: any[] = [];
   public isEdit = false;
   public passRegEx;
-  // agentLevelId;
+  public editUserRoles = false;
 
   constructor(
     private activateRoute: ActivatedRoute,
@@ -159,6 +159,10 @@ export class MainComponent extends BasePaginatedGridComponent implements OnInit 
         SnackBarHelper.show(this._snackBar, { Description: data.Description, Type: "error" });
       }
     });
+  }
+
+  editUserRole() {
+    this.editUserRoles = true;
   }
 
   cancel() {

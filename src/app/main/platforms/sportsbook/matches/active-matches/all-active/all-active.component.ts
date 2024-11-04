@@ -169,10 +169,11 @@ export class AllActiveComponent extends BasePaginatedGridComponent implements On
       {
         headerName: 'Sport.Supsend',
         headerValueGetter: this.localizeHeader.bind(this),
+        field: 'Enabled',
         resizable: true,
         minWidth: 150,
         sortable: false,
-        filter: false,
+        filter: true,
         cellRenderer: params => {
           if (params.node.rowPinned) {
             return '';

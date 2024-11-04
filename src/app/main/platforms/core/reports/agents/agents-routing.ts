@@ -18,6 +18,11 @@ const routes: Routes = [
         loadChildren: () => import('./report-by-agents/report-by-agents.module').then(m => m.ReportByAgentsModule),
         resolve: { filterData: FilterOptionsResolver },
       },
+      {
+        path: 'report-by-corrections',
+        loadChildren: () => import('./report-by-agent-corrections/report-by-agent-corrections.module').then(m => m.ReportByAgentCorrectionsModule),
+        resolve: { filterData: FilterOptionsResolver },
+      }
     ]
   }
 ]

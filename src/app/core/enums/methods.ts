@@ -420,6 +420,11 @@ export enum Methods {
     READ_NOTIFICATION = 'ReadNotification',
     GET_PARTNER_MOBILE_CODES = "GetPartnerMobileCodes",
     GET_TOURNAMENT_LEADERBOUARD = "GetTournamentLeaderboard",
+    RECONSIDER_CLIENT_SEGMENTS = "ReconsiderClientSegments",
+    GET_REPORT_BY_USER_CORRECTIONS = "GetReportByUserCorrections",
+    EXPORT_REPORT_BY_USER_CORRECTIONS = "ExportReportByUserCorrections",
+    GET_REPORT_BY_AGENT_CORRECTIONS = "GetReportByAgentCorrections",
+    EXPORT_REPORT_BY_AGENT_CORRECTIONS = "ExportReportByAgentCorrections",
   }
 
 
@@ -452,4 +457,5 @@ export enum PBMethods {
   DELETE_BANNER = 'deletebanner',
   GET_CURRENCIES = 'getcurrencies',
   CHANGE_CURRENCY = 'changecurrencyrate',
+  CLONE_WEBSITE_MENU_BY_PARTNER_ID = 'clonewebsitemenubypartnerId'
 }

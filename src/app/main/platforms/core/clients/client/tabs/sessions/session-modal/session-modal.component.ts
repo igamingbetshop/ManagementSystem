@@ -25,7 +25,7 @@ interface SessionData {
   styleUrls: ['./session-modal.component.scss']
 })
 export class SessionModalComponent implements OnInit {
-  displayedColumns: string[] = ['Id', 'ProductName', 'ProductId', 'State', 'LogoutDescription', 'Ip', 'Country', 'DeviceType', 'StartTime', 'EndTime'];
+  displayedColumns: string[] = ['Id', 'ProductName', 'ProductId', 'State', 'Description', 'Ip', 'Country', 'DeviceType', 'StartTime', 'EndTime'];
   dataSource = new MatTableDataSource<SessionData>();
   deviceTypes = DEVICE_TYPES;
   private sessionStates;
@@ -51,7 +51,7 @@ export class SessionModalComponent implements OnInit {
       hour: 'numeric', 
       minute: 'numeric',
       second: 'numeric',
-      hour12: true 
+      hour12: false 
     });
 
     this.apiService
@@ -75,12 +75,12 @@ export class SessionModalComponent implements OnInit {
             ProductId: info.ProductId,
             ProductName: info.ProductName,
             State: this.sessionStates.find((st) => st.Id === info.State)?.Name || '',
-            LogoutDescription: this.logOutType.find((type) => type.Id === info.LogoutType)?.Name || '',
+            Description: this.logOutType.find((type) => type.Id === info.LogoutType)?.Name || '',
             Ip: info.Ip,
             DeviceType: this.deviceTypes.find((type) => type.Id === info.DeviceType)?.Name || '',
             Country: info.Country,
-            StartTime: dateFormatter.format(new Date(info.StartTime)),
-            EndTime: dateFormatter.format(new Date(info.EndTime))
+            StartTime: info.StartTime ? dateFormatter.format(new Date(info.StartTime)) : null,
+            EndTime: info.EndTime ? dateFormatter.format(new Date(info.EndTime)) : null,
           }));
 
           this.dataSource.data = formattedData;

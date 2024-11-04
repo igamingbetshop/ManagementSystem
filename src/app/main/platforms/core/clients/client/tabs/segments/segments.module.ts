@@ -1,11 +1,12 @@
-import {RouterModule, Routes} from "@angular/router";
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {AgGridModule} from "ag-grid-angular";
-import {SegmentsComponent} from "./segments.component";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {TranslateModule} from "@ngx-translate/core";
-import {MatSelectModule} from '@angular/material/select';
+import { RouterModule, Routes } from "@angular/router";
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { AgGridModule } from "ag-grid-angular";
+import { SegmentsComponent } from "./segments.component";
+import { FormsModule } from "@angular/forms";
+import { TranslateModule } from "@ngx-translate/core";
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from "@angular/material/button";
 
 
 const routes: Routes = [
@@ -22,7 +23,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     AgGridModule,
     FormsModule,
-    ReactiveFormsModule,
+    MatButtonModule,
     TranslateModule,
     MatSelectModule
   ]

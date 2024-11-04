@@ -11,7 +11,9 @@
         panelClass="overlay-dropdown"
         disableOptionCentering>
         <mat-option [value]="null">{{'Partners.SelectPartner' | translate}}</mat-option>
-        <mat-option *ngFor="let partner of partners" [value]="partner.Id">{{partner.Name}}</mat-option>
+        @for (partner of partners; track $index) {
+          <mat-option  [value]="partner.Id">{{partner.Name}}</mat-option>
+        }
       </mat-select>
     </div>
 
@@ -25,7 +27,7 @@
 
       <div>
         <div class="first-hand">{{'Clients.Id' | translate}}</div>
-        <div class="second-hand">{{activeMatch.MatchId}}</div>
+        <div class="second-hand">{{activeMatch().MatchId}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Common.Id' | translate" readonly [formControlName]="'MatchId'">
         </div>
@@ -33,7 +35,7 @@
 
       <div>
         <div class="first-hand">{{'Sport.SportName' | translate}}</div>
-        <div class="second-hand">{{activeMatch.SportName}}</div>
+        <div class="second-hand">{{activeMatch().SportName}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Sport.SportName' | translate" readonly [formControlName]="'SportName'">
         </div>
@@ -41,7 +43,7 @@
 
       <div>
         <div class="first-hand">{{'Sport.Number' | translate}}</div>
-        <div class="second-hand">{{activeMatch.Number}}</div>
+        <div class="second-hand">{{activeMatch().Number}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Sport.Number' | translate" readonly [formControlName]="'Number'">
         </div>
@@ -49,7 +51,7 @@
 
       <div>
         <div class="first-hand">{{'Sport.RegionName' | translate}}</div>
-        <div class="second-hand">{{activeMatch.RegionName}}</div>
+        <div class="second-hand">{{activeMatch().RegionName}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Sport.RegionName' | translate" readonly [formControlName]="'RegionName'">
         </div>
@@ -57,7 +59,7 @@
 
       <div>
         <div class="first-hand">{{'Products.ExternalId' | translate}}</div>
-        <div class="second-hand">{{activeMatch.ExternalId}}</div>
+        <div class="second-hand">{{activeMatch().ExternalId}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Products.ExternalId' | translate" readonly [formControlName]="'ExternalId'">
         </div>
@@ -65,7 +67,7 @@
 
       <div>
         <div class="first-hand">{{'Sport.CompetitionName' | translate}}</div>
-        <div class="second-hand">{{activeMatch.CompetitionName}}</div>
+        <div class="second-hand">{{activeMatch().CompetitionName}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Sport.RegionName' | translate" readonly [formControlName]="'CompetitionName'">
         </div>
@@ -73,7 +75,7 @@
 
       <div>
         <div class="first-hand">{{'Clients.StartTime' | translate}}</div>
-        <div class="second-hand">{{activeMatch.StartTime  | date:'dd/MM/yyyy HH:mm'}}</div>
+        <div class="second-hand">{{activeMatch().StartTime  | date:'dd/MM/yyyy HH:mm'}}</div>
         <div class="form-field form-calendar">
           <div class="calendar-picker start">
             <app-date-time-picker formControlName="StartTime"></app-date-time-picker>
@@ -88,98 +90,20 @@
 
       <div>
         <div class="first-hand">{{'Sport.Competition' | translate}}</div>
-        <div class="second-hand">{{activeMatch.CompetitionId}}</div>
+        <div class="second-hand">{{activeMatch().CompetitionId}}</div>
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Sport.Competition' | translate" [formControlName]="'CompetitionId'">
-            <mat-error *ngIf="errorControl['CompetitionId']?.touched && errorControl['CompetitionId'].errors?.required">
-              {{'Sport.Competition' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Sport.MarketLimit' | translate}}</div>
-        <div class="second-hand">{{activeMatch.MarketLimit}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate"
-            [formControlName]="'MarketLimit'">
-        </div>
-      </div>
-      <div>
-        <div class="first-hand">{{'Sport.PlayerLimit' | translate}}</div>
-        <div class="second-hand">{{activeMatch.PlayerLimit}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate"
-            [formControlName]="'PlayerLimit'">
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Sport.Delay' | translate}}</div>
-        <div class="second-hand">{{activeMatch.Delay}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.Delay' | translate" [formControlName]="'Delay'">
-            <mat-error *ngIf="errorControl['Delay']?.touched && errorControl['Delay'].errors?.required">
-              {{'Sport.Delay' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Sport.MaxWinPrematchSingle' | translate}}</div>
-        <div class="second-hand">{{activeMatch.MaxWinPrematchSingle}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchSingle' | translate"
-                   [formControlName]="'MaxWinPrematchSingle'">
-            <mat-error
-              *ngIf="errorControl['MaxWinPrematchSingle']?.touched && errorControl['MaxWinPrematchSingle'].errors?.required">
-              {{'Sport.MaxWinPrematchSingle' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
-        </div>
-      </div>
-
-
-      <div>
-        <div class="first-hand">{{'Sport.MaxWinPrematchMultiple' | translate}}</div>
-        <div class="second-hand">{{activeMatch.MaxWinPrematchMultiple}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchMultiple' | translate"
-                   [formControlName]="'MaxWinPrematchMultiple'">
-            <mat-error
-              *ngIf="errorControl['MaxWinPrematchMultiple']?.touched && errorControl['MaxWinPrematchMultiple'].errors?.required">
-              {{'Sport.MaxWinPrematchMultiple' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Sport.MaxWinLiveSingle' | translate}}</div>
-        <div class="second-hand">{{activeMatch.MaxWinLiveSingle}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveSingle' | translate"
-                   [formControlName]="'MaxWinLiveSingle'">
-            <mat-error *ngIf="errorControl['MaxWinLiveSingle']?.touched && errorControl['MaxWinLiveSingle'].errors?.required">
-              {{'Sport.MaxWinLiveSingle' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
-        </div>
-      </div>
-
-      <div>
-        <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
-        <div class="second-hand">{{activeMatch.MaxWinLiveMultiple}}</div>
-        <div class="form-field form-input">
-            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveMultiple' | translate"
-                   [formControlName]="'MaxWinLiveMultiple'">
-            <mat-error
-              *ngIf="errorControl['MaxWinLiveMultiple']?.touched && errorControl['MaxWinLiveMultiple'].errors?.required">
-              {{'Sport.MaxWinLiveMultiple' | translate}} {{'Errors.Required' | translate}}
-            </mat-error>
+            @if(errorControl['CompetitionId']?.touched && errorControl['CompetitionId'].errors?.required) {
+              <mat-error>
+                {{'Sport.Competition' | translate}} {{'Errors.Required' | translate}}
+              </mat-error>
+            }
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Sport.ResultInfo' | translate}}</div>
-        <div class="second-hand">{{activeMatch.ResultInfo}}</div>
+        <div class="second-hand">{{activeMatch().ResultInfo}}</div>
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Sport.ResultInfo' | translate" readonly
                    [formControlName]="'ResultInfo'">
@@ -188,7 +112,7 @@
 
       <div>
         <div class="first-hand">{{'Common.Type' | translate}}</div>
-        <div class="second-hand">{{activeMatch.Type}}</div>
+        <div class="second-hand">{{activeMatch().Type}}</div>
         <div class="form-field form-input">
             <input matInput type="number" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
         </div>
@@ -196,27 +120,31 @@
 
       <div>
         <div class="first-hand">{{'Dashboard.Provider' | translate}}</div>
-        <div class="second-hand">{{activeMatch.ProviderName}}</div>
+        <div class="second-hand">{{activeMatch().ProviderName}}</div>
         <div class="form-field form-dropdown">
             <mat-select [formControlName]="'ProviderId'" #pr (selectionChange)="updateProviders(pr.value)">
-              <mat-option *ngFor="let Provider of Providers" [value]="Provider.Id">{{Provider.Name}}</mat-option>
+              @for (provider of Providers; track $index) {
+                <mat-option [value]="provider.Id">{{provider.Name}}</mat-option>
+              }
             </mat-select>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Common.Status' | translate}}</div>
-        <div class="second-hand">{{activeMatch.StatusName}}</div>
+        <div class="second-hand">{{activeMatch().StatusName}}</div>
         <div class="form-field form-dropdown">
           <mat-select [formControlName]="'Status'">
-            <mat-option *ngFor="let status of Statuses" [value]="status.status">{{status.name}}</mat-option>
+            @for (status of Statuses; track $index) {
+              <mat-option [value]="status.status">{{status.name}}</mat-option>
+            }
           </mat-select>
         </div>
       </div>
 
       <div>
         <div class="first-hand">{{'Sport.CurrentPhase' | translate}}</div>
-        <div class="second-hand">{{activeMatch.currentPhase}}</div>
+        <div class="second-hand">{{activeMatch().currentPhase}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Sport.CurrentPhase' | translate" readonly [formControlName]="'currentPhase'">
         </div>
@@ -224,7 +152,7 @@
 
       <div>
         <div class="first-hand">{{'Sport.LinkedMatches' | translate}}</div>
-        <div class="second-hand">{{activeMatch.LinkedMatches}}</div>
+        <div class="second-hand">{{activeMatch().LinkedMatches}}</div>
         <div class="form-field form-input">
             <input matInput [placeholder]="'Sport.LinkedMatches' | translate" readonly [formControlName]="'LinkedMatches'">
         </div>
@@ -232,7 +160,7 @@
 
       <div>
         <div class="first-hand">{{'Common.State' | translate}}</div>
-        <div class="second-hand">{{activeMatch.Enabled}}</div>
+        <div class="second-hand">{{activeMatch().Enabled}}</div>
         <div class="form-field form-checkbox">
           <mat-slide-toggle labelPosition="before" color="primary" [formControlName]="'Enabled'" (change)="onSubmit()" >{{'Common.State' | translate}}</mat-slide-toggle>
         </div>
@@ -240,32 +168,130 @@
 
       <div>
         <div class="first-hand">{{'Sport.FeedState' | translate}}</div>
-        <div class="static-hand">{{!activeMatch.BlockedByFeed}}</div>
+        <div class="static-hand">{{!activeMatch().BlockedByFeed}}</div>
       </div>
 
       <div>
         <div class="first-hand">{{'Sport.AutoSettlement' | translate}}</div>
-        <div class="second-hand">{{activeMatch.AutoSettlementName}}</div>
+        <div class="second-hand">{{activeMatch().AutoSettlementName}}</div>
         <div class="form-field form-dropdown">
             <mat-select [formControlName]="'AutoSettlement'" placeholder="{{'None'}}">
-              <mat-option
-                *ngFor="let status of settlementStatuses"
-                  [value]="status.Id">
-                  {{status.Name}}
-              </mat-option>
+              @for (status of settlementStatuses; track $index) {
+                <mat-option
+                    [value]="status.Id">
+                    {{status.Name}}
+                </mat-option>
+              }
             </mat-select>
         </div>
       </div>
 
+      <div>
+        <div class="first-hand">{{'Sport.MarketLimit' | translate}}</div>
+        <div class="second-hand">{{activeMatch().MarketLimit}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.MarketLimit' | translate"
+            [formControlName]="'MarketLimit'">
+        </div>
+      </div>
 
+      <div>
+        <div class="first-hand">{{'Sport.PlayerLimit' | translate}}</div>
+        <div class="second-hand">{{activeMatch().PlayerLimit}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.PlayerLimit' | translate"
+            [formControlName]="'PlayerLimit'">
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.Delay' | translate}}</div>
+        <div class="second-hand">{{activeMatch().Delay}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.Delay' | translate" [formControlName]="'Delay'">
+            @if(errorControl['Delay']?.touched && errorControl['Delay'].errors?.required) {
+              <mat-error>
+                {{'Sport.Delay' | translate}} {{'Errors.Required' | translate}}
+              </mat-error>
+            }
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinPrematchSingle' | translate}}</div>
+        <div class="second-hand">{{activeMatch().MaxWinPrematchSingle}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchSingle' | translate"
+                   [formControlName]="'MaxWinPrematchSingle'">
+                   @if(errorControl['MaxWinPrematchSingle']?.touched && errorControl['MaxWinPrematchSingle'].errors?.required) {
+                     <mat-error>
+                       {{'Sport.MaxWinPrematchSingle' | translate}} {{'Errors.Required' | translate}}
+                     </mat-error>
+                   }
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinPrematchMultiple' | translate}}</div>
+        <div class="second-hand">{{activeMatch().MaxWinPrematchMultiple}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinPrematchMultiple' | translate"
+                   [formControlName]="'MaxWinPrematchMultiple'">
+                   @if (errorControl['MaxWinPrematchMultiple']?.touched && errorControl['MaxWinPrematchMultiple'].errors?.required) {
+                     <mat-error>
+                       {{'Sport.MaxWinPrematchMultiple' | translate}} {{'Errors.Required' | translate}}
+                     </mat-error>
+                   }
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinLiveSingle' | translate}}</div>
+        <div class="second-hand">{{activeMatch().MaxWinLiveSingle}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveSingle' | translate"
+                   [formControlName]="'MaxWinLiveSingle'">
+                   @if(errorControl['MaxWinLiveSingle']?.touched && errorControl['MaxWinLiveSingle'].errors?.required) {
+                     <mat-error>
+                       {{'Sport.MaxWinLiveSingle' | translate}} {{'Errors.Required' | translate}}
+                     </mat-error>
+                   }
+        </div>
+      </div>
+
+      <div>
+        <div class="first-hand">{{'Sport.MaxWinLiveMultiple' | translate}}</div>
+        <div class="second-hand">{{activeMatch().MaxWinLiveMultiple}}</div>
+        <div class="form-field form-input">
+            <input matInput type="number" [placeholder]="'Sport.MaxWinLiveMultiple' | translate"
+                   [formControlName]="'MaxWinLiveMultiple'">
+                   @if(errorControl['MaxWinLiveMultiple']?.touched && errorControl['MaxWinLiveMultiple'].errors?.required) {
+                     <mat-error
+                       >
+                       {{'Sport.MaxWinLiveMultiple' | translate}} {{'Errors.Required' | translate}}
+                     </mat-error>
+                   }
+        </div>
+      </div>
+
+      <div>
+        <button 
+          mat-stroked-button 
+          class="limit-btn" 
+          (click)="viewLimits()"
+          >{{'Sport.ViewLimits' | translate}}</button>
+      </div>
+      <div></div>
 
 
       <div class="form-actions">
-        <div class="actions"  class="actions" *ngIf="isEdit">
-          <button mat-stroked-button class="mat-cancel-btn" (click)="isEdit = false">{{'Common.Cancel' | translate}}</button>
-          <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |
-            translate}}</button>
-        </div>
+        @if(isEdit) {
+          <div class="actions"  class="actions">
+            <button mat-stroked-button class="mat-cancel-btn" (click)="isEdit = false">{{'Common.Cancel' | translate}}</button>
+            <button mat-stroked-button class="mat-btn" type="submit" (click)="onSubmit()">{{'Common.Save' |
+              translate}}</button>
+          </div>
+        }
       </div>
     </form>
 
@@ -276,7 +302,7 @@
       <ag-grid-angular
         #agGrid class="ag-theme-balham"
         [headerHeight]="33" [rowHeight]="42"
-        [rowData]="rowData"
+        [rowData]="rowData()"
         [suppressCopyRowsToClipboard]="true"
         [rowModelType]="rowModelType"
         [columnDefs]="columnDefs"

@@ -413,9 +413,7 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   filterRowData() {
-    const selectedMarket = this.selectedMarket();
-    console.log(selectedMarket, 'selectedMarket');
-    
+    const selectedMarket = this.selectedMarket();    
     if (selectedMarket.Id) {
       const data = this.rowData().filter(element => 
         element.GroupIds?.includes(selectedMarket.Id)
@@ -428,8 +426,6 @@ export class MarketsComponent extends BasePaginatedGridComponent implements OnIn
   }
 
   onSetSelectedMarket(event) {
-    console.log(event, 'onSetSelectedMarket');
-    
     this.selectedMarket.set(event);
     this.filterRowData();
   }

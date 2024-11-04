@@ -13,7 +13,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Common.Type' | translate}}</mat-label>
-      <input matInput type="text" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
+      <input matInput [type]="type" [placeholder]="'Common.Type' | translate" [formControlName]="'Type'">
     </mat-form-field>
     <mat-form-field>
       <mat-label>{{'Partners.Icon' | translate}}</mat-label>
@@ -33,6 +33,8 @@
     <input type="file" (change)="uploadFile($event)" *ngIf="showFile">
 
     <mat-checkbox [formControlName]="'OpenInRouting'">{{'Partners.Desabled' | translate}}</mat-checkbox>
+
+
   </form>
 </div>
 <div mat-dialog-actions>

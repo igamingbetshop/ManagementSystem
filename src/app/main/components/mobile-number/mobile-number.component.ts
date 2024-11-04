@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { ControlContainer, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MatSelect, MatSelectModule } from "@angular/material/select";
-import { MatInput, MatInputModule } from "@angular/material/input";
+import { ControlContainer, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatSelectModule } from "@angular/material/select";
+import { MatInputModule } from "@angular/material/input";
 
 import { ConfigService } from 'src/app/core/services';
 import { getValidatorsFromField } from 'src/app/core/validators/validation-formfield.valodators';
@@ -10,7 +10,6 @@ import { Field } from 'src/app/core/models';
 import { TranslateModule } from '@ngx-translate/core';
 import { CoreApiService } from '../../platforms/core/services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
-import { take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SnackBarHelper } from 'src/app/core/helpers/snackbar.helper';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -45,6 +44,7 @@ type Code = {
 })
 export class MobileNumberRegComponent implements OnInit {
   codes = signal<Code[]>([]);
+  partnerId = input<number>(1);
   field = input.required<Field>();
   parentContainer = inject(ControlContainer);
   apiService = inject(CoreApiService);
@@ -62,7 +62,7 @@ export class MobileNumberRegComponent implements OnInit {
   }
 
   fetchCountryCodes() {
-    this.apiService.apiPost(this.configService.getApiUrl, {PartnerId: 1},
+    this.apiService.apiPost(this.configService.getApiUrl, {PartnerId: this.partnerId()},
       true, Controllers.PARTNER, Methods.GET_PARTNER_MOBILE_CODES).subscribe(data => {
         if (data.ResponseCode === 0) {
           let subMenuItems = data.ResponseObject;

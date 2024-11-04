@@ -42,6 +42,10 @@ export class ConfigService {
     return this._defaultOptions.SBApiUrl
   }
 
+  get getSBPartnerId(): number | null {
+    return this._defaultOptions.SBPartnerId
+  }
+
   get getPBApiUrl(): string {
     return this._defaultOptions.PBApiUrl
   }

@@ -20,7 +20,7 @@ import { DateAdapter, MatNativeDateModule } from '@angular/material/core';
 import { CoreApiService } from '../../../services/core-api.service';
 import { Controllers, Methods } from 'src/app/core/enums';
 import { SnackBarHelper } from "../../../../../../core/helpers/snackbar.helper";
-import { compressImage } from "../../../../../../core/utils";
+import { compressImage, formatDateTime } from "../../../../../../core/utils";
 import { DateTimePickerComponent } from 'src/app/main/components/data-time-picker/data-time-picker.component';
 import { VISIBILITY_TYPES } from 'src/app/core/constantes/statuses';
 
@@ -268,6 +268,9 @@ export class AddCoreBannerComponent implements OnInit {
     if (request.Visibility === "null") {
       request.Visibility = null;
     }
+    
+    request.StartDate = formatDateTime(request.StartDate);
+    request.EndDate = formatDateTime(request.EndDate);
 
     this.apiService.apiPost(this.configService.getApiUrl, request,
       true, Controllers.CONTENT, Methods.SAVE_WEB_SITE_BANNER)

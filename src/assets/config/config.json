@@ -1,6 +1,7 @@
 {
   "WebApiUrl": "https://adminweb-api.sftbldrz3.com",
   "SBApiUrl": "https://sportsbookadminwebapi.iqsoftllc.com",
+  "SBPartnerId": 1000,
   "PBApiUrl": "https://poolbettingadminwebapi.iqsoftllc.com",
   "VGApiUrl": "https://virtualgamesadminwebapi.iqsoftllc.com",
   "SGApiUrl": "https://skillgamesadminwebapi.iqsoftllc.com/",
